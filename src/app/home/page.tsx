@@ -7,17 +7,17 @@ export default function Home() {
 	return (
 		<>
 			<main className="home">
-				<section className="hero bg-[url(/nativity-icon.webp)] bg-cover md:bg-size-[40%] md:bg-right bg-no-repeat">
+				<section className="hero bg-[#DCB042] text-black bg-[url(/nativity-icon.webp)] bg-cover md:bg-size-[40%] md:bg-right bg-no-repeat">
 					<div className="hero-content flex flex-col justify-center items-center md:flex-row md:justify-start h-[30em] p-20 bg-black/60 md:bg-transparent">
 						<div className="hero-message flex flex-col md:w-[30em] md:max-w-1/2 gap-6">
 							<span
-								className={`heading text-6xl font-serif text-white ${ebGaramond.className}`}
+								className={`heading text-6xl font-serif text-white md:text-black ${ebGaramond.className}`}
 							>
 								Hello and welcome
 							</span>
-							<hr className="text-gray-200 my-4" />
+							<hr className="my-4 text-gray-300 md:text-black" />
 							<span
-								className={`${ebGaramond.className} text-lg text-gray-300`}
+								className={`${ebGaramond.className} text-lg text-gray-300 md:text-[#250203]`}
 							>
 								Official page of the Russian Orthodox Church in
 								Zimbabwe, run by its laymen, with the blessing
@@ -26,29 +26,29 @@ export default function Home() {
 						</div>
 					</div>
 				</section>
-				<section className="readings bg-[#250203] text-white">
+				<section className="readings bg-[antiquewhite] text-black">
 					<div className="readings-content flex flex-col gap-6 p-9 lg:px-20 md:py-10">
 						<span className="text-3xl font-serif md:w-1/2">
 							Daily Readings
 							<hr className="mt-4 mb-0" />
 						</span>
-						<div className="flex flex-col md:flex-wrap md:flex-row items-center gap-10">
+						<div className="flex flex-col md:flex-row lg:w-3/4 md:mt-4 items-center">
 							<Image
-								className="h-[20em] w-auto border-[#DCB042] border-12 hidden md:block"
+								className="h-[20em]  border-gray-900 border-16 min-h-full w-auto hidden md:block object-cover"
 								height={320}
 								width={1000}
 								alt="Saint of the day"
 								src="/st-nicholas.jpg"
 							/>
-							<div className="texts flex flex-col md:w-6/10 md:max-w-[30em] gap-4">
-								<span className="text-xl uppercase">
+							<div className="texts flex flex-col gap-4 md:p-6 md:px-8">
+								<span className="text-xl">
 									Friday, 19 December 2025
 								</span>
 								<div className="flex flex-col gap-2">
 									<span className="text-lg">
 										28th Week After Pentecost, Tone II
 									</span>
-									<p className="text-sm">
+									<p className="text-sm ">
 										St Nicholas the Wonderworker, Abp. of
 										Myra in Lycia; New Martyr Nicolas
 										Karamos of Smyrna (1657); St Maximus,
@@ -110,7 +110,7 @@ export default function Home() {
 					</div>
 				</section>
 				<section className="news bg-[antiquewhite] text-black">
-					<div className="news-content flex flex-col gap-6 p-9 lg:px-20">
+					<div className="news-content flex flex-col gap-8 p-9 lg:px-20">
 						<span className="text-3xl font-serif md:w-1/2">
 							Latest News
 							<hr className="mt-4" />
@@ -118,7 +118,7 @@ export default function Home() {
 						<div className="flex flex-row flex-wrap gap-x-12 gap-y-6">
 							<div className="featured flex flex-col gap-4 md:max-w-1/2">
 								<span className="uppercase">Featured</span>
-								<div className="featured-card flex flex-col lg:flex-row lg:items-center bg-gray-900 text-white lg:bg-transparent lg:text-black lg:hover:bg-gray-900 lg:hover:text-white">
+								<div className="featured-card flex flex-col lg:flex-row lg:items-center lg:bg-transparent lg:text-black lg:hover:bg-gray-900 lg:hover:text-white">
 									<Image
 										className="w-full h-auto md:h-[10em] lg:min-h-[15em] lg:h-full lg:w-[13em] object-cover"
 										height={500}
@@ -126,7 +126,7 @@ export default function Home() {
 										alt="Saint of the day"
 										src="/nativity.jpg"
 									/>
-									<div className="card-details p-6 flex flex-col gap-2">
+									<div className="card-details p-4 px-0 flex flex-col gap-2 lg:px-6">
 										<span className="title text-xl font-serif">
 											Fr. George Maximov church visit
 										</span>
@@ -237,8 +237,8 @@ export default function Home() {
 						</div>
 						<div className="other-stories flex flex-col gap-4">
 							<span className="uppercase">Other Stories</span>
-							<div className="grid md:grid-cols-2 gap-4 lg:w-9/10">
-								<div className="normal-card flex flex-col lg:flex-row lg:items-center bg-gray-900 text-white lg:bg-transparent lg:text-black lg:hover:bg-gray-900 lg:hover:text-white">
+							<div className="grid md:grid-cols-2 gap-6 lg:w-9/10">
+								<div className="normal-card flex flex-col lg:flex-row lg:items-center lg:bg-transparent lg:text-black lg:hover:bg-gray-900 lg:hover:text-white">
 									<Image
 										className="w-full h-[10em] lg:max-h-[8em] lg:min-h-full lg:h-full lg:w-[10em] object-cover"
 										height={500}
@@ -246,7 +246,7 @@ export default function Home() {
 										alt="Saint of the day"
 										src="/nativity-2.jpg"
 									/>
-									<div className="card-details p-6 flex flex-col gap-2">
+									<div className="card-details p-4 px-0 lg:px-6 flex flex-col gap-2">
 										<span className="title text-lg font-serif">
 											Fr Savva conducts liturgy
 										</span>
@@ -271,7 +271,7 @@ export default function Home() {
 										</p>
 									</div>
 								</div>
-								<div className="normal-card flex flex-col lg:flex-row lg:items-center bg-gray-900 text-white lg:bg-transparent lg:text-black lg:hover:bg-gray-900 lg:hover:text-white">
+								<div className="normal-card flex flex-col lg:flex-row lg:items-center lg:bg-transparent lg:text-black lg:hover:bg-gray-900 lg:hover:text-white">
 									<Image
 										className="w-full h-[10em] lg:max-h-[8em] lg:min-h-full lg:h-full lg:w-[10em] object-cover"
 										height={500}
@@ -279,7 +279,7 @@ export default function Home() {
 										alt="Saint of the day"
 										src="/nativity-3.jpg"
 									/>
-									<div className="card-details p-6 flex flex-col gap-2">
+									<div className="card-details p-4 px-0 lg:px-6 flex flex-col gap-2">
 										<span className="title text-lg font-serif">
 											Fr Savva conducts liturgy
 										</span>
@@ -304,7 +304,7 @@ export default function Home() {
 										</p>
 									</div>
 								</div>
-								<div className="normal-card flex flex-col lg:flex-row lg:items-center bg-gray-900 text-white lg:bg-transparent lg:text-black lg:hover:bg-gray-900 lg:hover:text-white">
+								<div className="normal-card flex flex-col lg:flex-row lg:items-center lg:bg-transparent lg:text-black lg:hover:bg-gray-900 lg:hover:text-white">
 									<Image
 										className="w-full h-[10em] lg:max-h-[8em] lg:min-h-full lg:h-full lg:w-[10em] object-cover"
 										height={500}
@@ -312,7 +312,7 @@ export default function Home() {
 										alt="Saint of the day"
 										src="/nativity-5.jpg"
 									/>
-									<div className="card-details p-6 flex flex-col gap-2">
+									<div className="card-details p-4 px-0 lg:px-6 flex flex-col gap-2">
 										<span className="title text-lg font-serif">
 											Fr Savva conducts liturgy
 										</span>
@@ -337,7 +337,7 @@ export default function Home() {
 										</p>
 									</div>
 								</div>
-								<div className="normal-card flex flex-col lg:flex-row lg:items-center bg-gray-900 text-white lg:bg-transparent lg:text-black lg:hover:bg-gray-900 lg:hover:text-white">
+								<div className="normal-card flex flex-col lg:flex-row lg:items-center lg:bg-transparent lg:text-black lg:hover:bg-gray-900 lg:hover:text-white">
 									<Image
 										className="w-full h-[10em] lg:max-h-[8em] lg:min-h-full lg:h-full lg:w-[10em] object-cover"
 										height={500}
@@ -345,7 +345,7 @@ export default function Home() {
 										alt="Saint of the day"
 										src="/nativity-2.jpg"
 									/>
-									<div className="card-details p-6 flex flex-col gap-2">
+									<div className="card-details p-4 px-0 lg:px-6 flex flex-col gap-2">
 										<span className="title text-lg font-serif">
 											Fr Savva conducts liturgy
 										</span>
@@ -374,6 +374,7 @@ export default function Home() {
 						</div>
 					</div>
 				</section>
+				<section className="news bg-[antiquewhite] text-black"></section>
 			</main>
 			<div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
 				<div className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
