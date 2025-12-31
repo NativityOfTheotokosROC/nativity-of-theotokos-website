@@ -1,5 +1,15 @@
+"use client";
+
 import Image from "next/image";
 import { EB_Garamond } from "next/font/google";
+import { Navigation, Autoplay } from "swiper/modules";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/autoplay";
 
 const ebGaramond = EB_Garamond({ subsets: ["latin", "cyrillic"] });
 
@@ -407,28 +417,75 @@ export default function Home() {
 							Gallery
 							<hr className="mt-4 mb-0" />
 						</span>
-						<div className="flex flex-col gap-6 w-full justify-center items-center md:flex-row">
-							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-9.jpg)] bg-cover bg-center">
-								<div className="flex size-full p-6 justify-center items-end text-center  text-white">
-									<span className="text-3xl mb-3 font-serif">
-										About our Parish
-									</span>
-								</div>
-							</div>
-							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-11.jpg)] bg-cover">
-								<div className="flex size-full p-6 justify-center items-end text-center  text-white">
-									<span className="text-3xl mb-3 font-serif">
-										Liturgical Resources
-									</span>
-								</div>
-							</div>
-							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-7.jpg)] bg-cover bg-center">
-								<div className="flex size-full p-6 justify-center items-end text-center  text-white">
-									<span className="text-3xl mb-3 font-serif">
-										What is Orthodoxy?
-									</span>
-								</div>
-							</div>
+						<div className="swiper-container w-full max-w-full">
+							<Swiper
+								modules={[Navigation, Autoplay]}
+								spaceBetween={30}
+								breakpoints={{ 768: { slidesPerView: 3 } }}
+								slidesPerView={"auto"}
+								navigation
+								autoplay
+								onSwiper={swiper => console.log(swiper)}
+								onSlideChange={() =>
+									console.log("slide change")
+								}
+							>
+								<SwiperSlide>
+									<div className="h-[20em] w-[30em]">
+										<Image
+											src="/nativity.jpg"
+											alt="gallery item"
+											fill
+											objectFit="cover"
+											objectPosition="center"
+										/>
+									</div>
+								</SwiperSlide>
+								<SwiperSlide>
+									<div className="h-[20em] w-[30em]">
+										<Image
+											src="/nativity-5.jpg"
+											alt="gallery item"
+											fill
+											objectFit="cover"
+											objectPosition="center"
+										/>
+									</div>
+								</SwiperSlide>
+								<SwiperSlide>
+									<div className="h-[20em] w-[30em]">
+										<Image
+											src="/nativity-2.jpg"
+											alt="gallery item"
+											fill
+											objectFit="cover"
+											objectPosition="center"
+										/>
+									</div>
+								</SwiperSlide>
+								<SwiperSlide>
+									<div className="h-[20em] w-[30em]">
+										<Image
+											src="/nativity-3.jpg"
+											alt="gallery item"
+											fill
+											objectFit="cover"
+											objectPosition="center"
+										/>
+									</div>
+								</SwiperSlide>
+								<SwiperSlide>
+									<div className="h-[20em] w-[30em]">
+										<Image
+											src="/nativity-4.jpg"
+											alt="gallery item"
+											fill
+											objectFit="cover"
+											objectPosition="center"
+										/>
+									</div>
+								</SwiperSlide>
+							</Swiper>
 						</div>
 					</div>
 				</section>
