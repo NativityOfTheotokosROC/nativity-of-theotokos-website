@@ -26,29 +26,29 @@ export default function Home() {
 						</div>
 					</div>
 				</section>
-				<section className="readings bg-[antiquewhite] text-black">
+				<section className="readings bg-[whitesmoke] text-black">
 					<div className="readings-content flex flex-col gap-6 p-9 lg:px-20 md:py-10">
 						<span className="text-3xl font-serif md:w-1/2">
 							Daily Readings
 							<hr className="mt-4 mb-0" />
 						</span>
-						<div className="flex flex-col md:flex-row lg:w-3/4 md:mt-4 items-center">
+						<div className="flex md:flex-row gap-6 lg:w-6/10 md:mt-4 items-center md:p-4.5 md:bg-gray-900 md:text-white">
 							<Image
-								className="h-[20em]  border-gray-900 border-16 min-h-full w-auto hidden md:block object-cover"
+								className="h-[18em] min-h-full w-auto hidden md:block object-cover"
 								height={320}
 								width={1000}
 								alt="Saint of the day"
 								src="/st-nicholas.jpg"
 							/>
-							<div className="texts flex flex-col gap-4 md:p-6 md:px-8">
-								<span className="text-xl">
+							<div className="texts flex flex-col gap-4">
+								<span className="text-2xl font-serif">
 									Friday, 19 December 2025
 								</span>
 								<div className="flex flex-col gap-2">
 									<span className="text-lg">
 										28th Week After Pentecost, Tone II
 									</span>
-									<p className="text-sm ">
+									<p className="text-sm">
 										St Nicholas the Wonderworker, Abp. of
 										Myra in Lycia; New Martyr Nicolas
 										Karamos of Smyrna (1657); St Maximus,
@@ -56,18 +56,18 @@ export default function Home() {
 									</p>
 								</div>
 								<div className="flex flex-col">
-									<span className="text-base">
+									<span className="text-sm">
 										John 10:9-16 (Matins Gospel)
 									</span>
-									<span className="text-base">
+									<span className="text-sm">
 										Hebrews 13:17-21 (Epistle, Saint
 										Nicholas)
 									</span>
-									<span className="text-base">
+									<span className="text-sm">
 										Luke 6:17-23 (Gospel, Saint Nicholas)
 									</span>
 								</div>
-								<span className="text-lg">
+								<span className="text-sm">
 									☦ Nativity Fast | Abstain from food with oil
 								</span>
 							</div>
@@ -109,7 +109,7 @@ export default function Home() {
 						</div>
 					</div>
 				</section>
-				<section className="news bg-[antiquewhite] text-black">
+				<section className="news bg-[whitesmoke] text-black">
 					<div className="news-content flex flex-col gap-8 p-9 lg:px-20">
 						<span className="text-3xl font-serif md:w-1/2">
 							Latest News
@@ -118,9 +118,9 @@ export default function Home() {
 						<div className="flex flex-row flex-wrap gap-x-12 gap-y-6">
 							<div className="featured flex flex-col gap-4 md:max-w-1/2">
 								<span className="uppercase">Featured</span>
-								<div className="featured-card flex flex-col lg:flex-row lg:items-center lg:bg-transparent lg:text-black lg:hover:bg-gray-900 lg:hover:text-white">
+								<div className="featured-card flex flex-col lg:flex-row lg:items-center lg:bg-transparent lg:text-black hover:cursor-pointer">
 									<Image
-										className="w-full h-auto md:h-[10em] lg:min-h-[15em] lg:h-full lg:w-[13em] object-cover"
+										className="w-full border-gray-900 border-10 h-auto md:h-[10em] lg:min-h-[15em] lg:h-full lg:w-[13em] object-cover"
 										height={500}
 										width={500}
 										alt="Saint of the day"
@@ -222,7 +222,7 @@ export default function Home() {
 										</div>
 										<div className="flex flex-col py-2 px-4">
 											<span className="text-base">
-												Theophany | Divine Liturgy
+												Nativity Feast | Divine Liturgy
 											</span>
 											<span className="text-sm">
 												Nativity of the Theotokos Parish
@@ -238,7 +238,7 @@ export default function Home() {
 						<div className="other-stories flex flex-col gap-4">
 							<span className="uppercase">Other Stories</span>
 							<div className="grid md:grid-cols-2 gap-6 lg:w-9/10">
-								<div className="normal-card flex flex-col lg:flex-row lg:items-center lg:bg-transparent lg:text-black lg:hover:bg-gray-900 lg:hover:text-white">
+								<div className="normal-card flex flex-col lg:flex-row lg:items-center lg:bg-transparent lg:text-black hover:cursor-pointer">
 									<Image
 										className="w-full h-[10em] lg:max-h-[8em] lg:min-h-full lg:h-full lg:w-[10em] object-cover"
 										height={500}
@@ -271,7 +271,7 @@ export default function Home() {
 										</p>
 									</div>
 								</div>
-								<div className="normal-card flex flex-col lg:flex-row lg:items-center lg:bg-transparent lg:text-black lg:hover:bg-gray-900 lg:hover:text-white">
+								<div className="normal-card flex flex-col lg:flex-row lg:items-center lg:bg-transparent lg:text-black hover:cursor-pointer">
 									<Image
 										className="w-full h-[10em] lg:max-h-[8em] lg:min-h-full lg:h-full lg:w-[10em] object-cover"
 										height={500}
@@ -304,7 +304,7 @@ export default function Home() {
 										</p>
 									</div>
 								</div>
-								<div className="normal-card flex flex-col lg:flex-row lg:items-center lg:bg-transparent lg:text-black lg:hover:bg-gray-900 lg:hover:text-white">
+								<div className="normal-card flex flex-col lg:flex-row lg:items-center lg:bg-transparent lg:text-black hover:cursor-pointer">
 									<Image
 										className="w-full h-[10em] lg:max-h-[8em] lg:min-h-full lg:h-full lg:w-[10em] object-cover"
 										height={500}
@@ -337,7 +337,7 @@ export default function Home() {
 										</p>
 									</div>
 								</div>
-								<div className="normal-card flex flex-col lg:flex-row lg:items-center lg:bg-transparent lg:text-black lg:hover:bg-gray-900 lg:hover:text-white">
+								<div className="normal-card flex flex-col lg:flex-row lg:items-center lg:bg-transparent lg:text-black hover:cursor-pointer">
 									<Image
 										className="w-full h-[10em] lg:max-h-[8em] lg:min-h-full lg:h-full lg:w-[10em] object-cover"
 										height={500}
@@ -374,7 +374,64 @@ export default function Home() {
 						</div>
 					</div>
 				</section>
-				<section className="news bg-[antiquewhite] text-black"></section>
+				<section className="resources bg-[#250203] text-white">
+					<div className="resources-content flex flex-col gap-8 p-9 py-14 lg:px-20">
+						<div className="flex flex-col gap-6 w-full justify-center items-center md:flex-row">
+							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-9.jpg)] bg-cover bg-center">
+								<div className="flex size-full p-6 justify-center items-end text-center  text-white">
+									<span className="text-3xl mb-3 font-serif">
+										About our Parish
+									</span>
+								</div>
+							</div>
+							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-11.jpg)] bg-cover">
+								<div className="flex size-full p-6 justify-center items-end text-center  text-white">
+									<span className="text-3xl mb-3 font-serif">
+										Liturgical Resources
+									</span>
+								</div>
+							</div>
+							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-7.jpg)] bg-cover bg-center">
+								<div className="flex size-full p-6 justify-center items-end text-center  text-white">
+									<span className="text-3xl mb-3 font-serif">
+										What is Orthodoxy?
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+				<section className="gallery bg-[whitesmoke] text-black">
+					<div className="gallery-content flex flex-col gap-8 p-9 py-14 lg:px-20">
+						<span className="text-3xl font-serif md:w-1/2">
+							Gallery
+							<hr className="mt-4 mb-0" />
+						</span>
+						<div className="flex flex-col gap-6 w-full justify-center items-center md:flex-row">
+							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-9.jpg)] bg-cover bg-center">
+								<div className="flex size-full p-6 justify-center items-end text-center  text-white">
+									<span className="text-3xl mb-3 font-serif">
+										About our Parish
+									</span>
+								</div>
+							</div>
+							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-11.jpg)] bg-cover">
+								<div className="flex size-full p-6 justify-center items-end text-center  text-white">
+									<span className="text-3xl mb-3 font-serif">
+										Liturgical Resources
+									</span>
+								</div>
+							</div>
+							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-7.jpg)] bg-cover bg-center">
+								<div className="flex size-full p-6 justify-center items-end text-center  text-white">
+									<span className="text-3xl mb-3 font-serif">
+										What is Orthodoxy?
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
 			</main>
 			<div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
 				<div className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
