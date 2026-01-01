@@ -35,7 +35,7 @@ export default function RootLayout({
 				<Footer
 					model={newReadonlyModel({
 						copyrightText:
-							"2025 Providence Universal Studios. All Rights Reserved.",
+							"2026 Nativity of the Theotokos Russian Orthodox Church. All Rights Reserved.",
 					})}
 				/>
 			</body>

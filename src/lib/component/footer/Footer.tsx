@@ -38,7 +38,7 @@ const Footer = function ({ model }) {
 									className="hover:underline"
 									href={"mailto:austinmkajawa@gmail.com"}
 								>
-									austinmkajawa@gmail.com
+									nativityoftheotokos@gmail.com
 								</Link>
 							</span>
 						</FooterSection>

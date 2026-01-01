@@ -37,17 +37,17 @@ export default function Home() {
 
 	return (
 		<main className="home">
-			<section className="hero bg-[#DCB042] text-black bg-[url(/nativity-icon.webp)] bg-cover md:bg-size-[40%] md:bg-right bg-no-repeat">
-				<div className="hero-content flex flex-col justify-center items-center md:flex-row md:justify-start h-[30em] p-20 bg-black/60 md:bg-transparent">
-					<div className="hero-message flex flex-col md:w-[30em] md:max-w-1/2 gap-6">
+			<section className="hero bg-[#DCB042] text-black bg-[url(/nativity-icon.webp)] bg-cover bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]">
+				<div className="hero-content flex flex-col justify-center items-center md:flex-row md:justify-start h-[30em] p-20 bg-black/70">
+					<div className="hero-message flex flex-col md:w-[35em] md:max-w-3/4 gap-6 md:p-8 justify-center">
 						<span
-							className={`heading text-6xl font-serif text-white md:text-black ${ebGaramond.className}`}
+							className={`heading text-6xl font-serif text-white ${ebGaramond.className}`}
 						>
 							Hello and welcome
 						</span>
-						<hr className="my-4 text-gray-300 md:text-black" />
+						<hr className="my-4 text-gray-300" />
 						<span
-							className={`${ebGaramond.className} text-lg text-gray-300 md:text-[#250203]`}
+							className={`${ebGaramond.className} text-lg text-gray-300`}
 						>
 							Official page of the Russian Orthodox Church in
 							Zimbabwe, run by its laymen, with the blessing of
@@ -56,7 +56,7 @@ export default function Home() {
 					</div>
 				</div>
 			</section>
-			<section className="readings bg-[whitesmoke] text-black">
+			<section className="readings bg-[antiquewhite] text-black">
 				<div className="readings-content flex flex-col gap-6 p-9 lg:px-20 md:py-10">
 					<span className="text-3xl font-serif md:w-1/2">
 						Daily Readings
@@ -137,7 +137,7 @@ export default function Home() {
 					</div>
 				</div>
 			</section>
-			<section className="news bg-[whitesmoke] text-black">
+			<section className="news bg-[antiquewhite] text-black">
 				<div className="news-content flex flex-col gap-8 p-9 lg:px-20">
 					<span className="text-3xl font-serif md:w-1/2">
 						Latest News
@@ -424,7 +424,7 @@ export default function Home() {
 					</div>
 				</div>
 			</section>
-			<section className="gallery bg-[whitesmoke] text-black">
+			<section className="gallery bg-[antiquewhite] text-black">
 				<div className="gallery-content flex flex-col gap-8 p-9 py-14 lg:px-20">
 					<span className="text-3xl font-serif md:w-1/2">
 						Gallery
@@ -493,7 +493,7 @@ export default function Home() {
 					</div>
 				</div>
 			</section>
-			<section className="mailing-list bg-[#DCB042] text-black">
+			<section className="mailing-list bg-gray-900 text-white">
 				<div className="mailing-list-content flex flex-col gap-8 p-9 py-14 md:w-3/4 lg:px-20">
 					<span className="text-3xl font-serif md:w-1/2">
 						Join our Mailing List
@@ -503,20 +503,23 @@ export default function Home() {
 						<>
 							<p>
 								{
-									"Stay up to date with the latest church news, announcements, and events straight from your mailbox. Enter your email below and subscribe if you haven't already"
+									"Stay up to date with the latest church news, announcements, and events straight from your mailbox. Enter your email below and subscribe if you haven't already."
 								}
 							</p>
 							<form
 								action={formData => {
-									setMailingListStatus("pending");
 									subscribe(
 										formData
 											.get("mailing-email")!
 											.toString()
+											.trim()
 									);
 								}}
+								onSubmit={() => {
+									setMailingListStatus("pending");
+								}}
 							>
-								<div className="flex flex-nowrap">
+								<div className="flex flex-nowrap text-black">
 									<input
 										className="grow p-4 bg-[whitesmoke]"
 										type="email"
@@ -526,7 +529,7 @@ export default function Home() {
 										required
 									/>
 									<button
-										className={`p-4 h-full w-[8em] bg-gray-900 text-white text-center disabled:bg-gray-500`}
+										className={`p-4 h-full w-[8em] bg-[#250203] text-white text-center disabled:bg-[#ac6c6e]`}
 										type="submit"
 										disabled={
 											mailingListStatus == "pending"
@@ -539,7 +542,7 @@ export default function Home() {
 						</>
 					) : (
 						<div>
-							<p className="text-lg">
+							<p className="text-xl">
 								Thank you for subscribing to our mailing list!
 								We will be keeping you up to date with the
 								latest news, updates, announcements and more.
