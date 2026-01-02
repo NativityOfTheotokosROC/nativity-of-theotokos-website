@@ -1,7 +1,7 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { NavigationMenuModel } from "../../model/navigation-menu";
 import Link from "next/link";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars as menuIcon } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dropdown, DropdownItem } from "flowbite-react";
 
@@ -25,12 +25,10 @@ const NavigationMenu = function ({ model }) {
 	) : (
 		<>
 			<Dropdown
-				className=""
 				renderTrigger={() => (
-					<FontAwesomeIcon
-						className="bg-transparent text-3xl"
-						icon={faBars}
-					/>
+					<button className="p-1 text-3xl bg-transparent hover:bg-black/45 hover:text-[#DCB042]">
+						<FontAwesomeIcon icon={menuIcon} />
+					</button>
 				)}
 			>
 				{[

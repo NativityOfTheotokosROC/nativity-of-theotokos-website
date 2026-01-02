@@ -37,8 +37,8 @@ export default function Home() {
 
 	return (
 		<main className="home">
-			<section className="hero bg-[#DCB042] text-black bg-[url(/nativity-icon.webp)] bg-cover bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]">
-				<div className="hero-content flex flex-col justify-center items-center md:flex-row md:justify-start h-[30em] p-20 bg-black/70">
+			<section className="hero bg-[#DCB042] text-black bg-[url(/nativity-icon.webp)] bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]">
+				<div className="hero-content flex flex-col justify-center items-center md:flex-row md:justify-start h-[30em] p-10 md:p-20 bg-black/70">
 					<div className="hero-message flex flex-col md:w-[35em] md:max-w-3/4 gap-6 md:p-8 justify-center">
 						<span
 							className={`heading text-6xl font-serif text-white ${ebGaramond.className}`}
@@ -49,9 +49,9 @@ export default function Home() {
 						<span
 							className={`${ebGaramond.className} text-lg text-gray-300`}
 						>
-							Official page of the Russian Orthodox Church in
-							Zimbabwe, run by its laymen, with the blessing of
-							Father Dimitri Polokov
+							Official website of the Nativity of the Theotokos
+							parish of the Russian Orthodox Church in Zimbabwe.
+							(est. 2025)
 						</span>
 					</div>
 				</div>

@@ -7,7 +7,7 @@ import Footer from "../lib/component/footer/Footer";
 export const metadata: Metadata = {
 	title: {
 		template: "%s | Nativity of the Theotokos Church",
-		default: "Welcome | Nativity of the Theotokos Church",
+		default: "Home | Nativity of the Theotokos Church",
 	},
 };
 
@@ -35,7 +35,7 @@ export default function RootLayout({
 				<Footer
 					model={newReadonlyModel({
 						copyrightText:
-							"2026 Nativity of the Theotokos Russian Orthodox Church. All Rights Reserved.",
+							"2026 Nativity of the Theotokos Parish. All Rights Reserved.",
 					})}
 				/>
 			</body>

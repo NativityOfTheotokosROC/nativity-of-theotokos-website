@@ -14,9 +14,15 @@ const Header = function ({ model }) {
 
 	return (
 		<header className="w-full max-w-full top-0 sticky z-10">
-			<div className="header-content flex flex-nowrap gap-8 justify-between p-3 px-4 lg:p-6 lg:px-9 items-center bg-gray-900/99 text-white">
-				<div className="logo flex gap-4 items-center justify-center md:max-w-[20em]">
-					<Image src="/logo.svg" alt="logo" height={50} width={50} />
+			<div className="header-content flex flex-nowrap gap-9 justify-between p-3 px-4 md:p-4 lg:px-7 items-center bg-gray-900/99 text-white">
+				<div className="logo flex gap-3 items-center justify-center max-w-[18em]">
+					<Image
+						className="h-11.25 w-11.25"
+						src="/logo-icon.svg"
+						alt="logo"
+						height={45}
+						width={45}
+					/>
 					<span className="text-base font-serif">{title}</span>
 				</div>
 				<NavigationMenu

@@ -15,7 +15,7 @@ const Footer = function ({ model }) {
 				<div className="footer-sections flex flex-col gap-x-16 gap-y-8 md:flex-row">
 					<div className="flex flex-col gap-6 md:flex-row md:items-center">
 						<Image
-							src="/logo.svg"
+							src="/logo-icon.svg"
 							alt="logo"
 							height={70}
 							width={70}
@@ -65,7 +65,7 @@ const Footer = function ({ model }) {
 									}
 									target="_blank"
 								>
-									{"South African Diocese"}
+									{"Southern African Diocese"}
 								</Link>
 								<Link
 									className="hover:underline"
@@ -76,17 +76,17 @@ const Footer = function ({ model }) {
 								</Link>
 								<Link
 									className="hover:underline"
+									href={"https://mospat.ru/en/patriarch"}
+									target="_blank"
+								>
+									{"His Holiness Patriarch Kirill"}
+								</Link>
+								<Link
+									className="hover:underline"
 									href={"https://mospat.ru"}
 									target="_blank"
 								>
 									{"Moscow Patriarchate"}
-								</Link>
-								<Link
-									className="hover:underline"
-									href={"https://mospat.ru/patriarch"}
-									target="_blank"
-								>
-									{"His Holiness Patriarch Kirill"}
 								</Link>
 							</div>
 						</FooterSection>
