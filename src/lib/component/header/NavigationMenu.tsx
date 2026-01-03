@@ -26,7 +26,7 @@ const NavigationMenu = function ({ model }) {
 		<>
 			<Dropdown
 				renderTrigger={() => (
-					<button className="p-1 text-3xl bg-transparent hover:bg-black/45 hover:text-[#DCB042]">
+					<button className="flex items-center justify-center p-1 text-3xl bg-transparent hover:bg-black/45 hover:text-[#DCB042]">
 						<FontAwesomeIcon icon={menuIcon} />
 					</button>
 				)}

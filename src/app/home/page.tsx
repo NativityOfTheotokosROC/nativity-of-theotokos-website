@@ -56,49 +56,57 @@ export default function Home() {
 					</div>
 				</div>
 			</section>
-			<section className="readings bg-[antiquewhite] text-black">
+			<section className="readings bg-[antiquewhite] text-black bg-[url(/ornament_3_tr.svg)] bg-no-repeat bg-size-[13em] md:bg-size-[30em] bg-position-[98%_0.5%] md:bg-position-[100%_0.5%]">
 				<div className="readings-content flex flex-col gap-6 p-9 lg:px-20 md:py-10">
 					<span className="text-3xl font-serif md:w-1/2">
 						Daily Readings
-						<hr className="mt-4 mb-0" />
+						<hr className="mt-4 mb-0 w-3/4 md:w-full" />
 					</span>
-					<div className="flex md:flex-row gap-6 lg:w-6/10 md:mt-4 items-center md:p-4.5 md:bg-gray-900 md:text-white">
-						<Image
-							className="h-[18em] min-h-full w-auto hidden md:block object-cover"
-							height={320}
-							width={1000}
-							alt="Saint of the day"
-							src="/st-nicholas.jpg"
-						/>
-						<div className="texts flex flex-col gap-4">
-							<span className="text-2xl font-serif">
-								Friday, 19 December 2025
-							</span>
-							<div className="flex flex-col gap-2">
-								<span className="text-lg">
-									28th Week After Pentecost, Tone II
+					<div className="flex md:flex-row md:h-fit lg:w-209.5 md:mt-4 items-stretch md:bg-white/70 md:border border-gray-900/20">
+						<div className="md:flex grow w-100 items-stretch justify-center p-3 hidden bg-gray-900">
+							<Image
+								className="hidden md:block object-cover object-center"
+								height={320}
+								width={240}
+								alt="Saint of the day"
+								src="/st-nicholas.jpg"
+							/>
+						</div>
+						<div className="info flex flex-col">
+							<div className="texts flex flex-col gap-4 md:p-4 md:pl-7">
+								<span className="text-2xl font-serif">
+									Friday, 19 December 2025
 								</span>
-								<p className="text-sm">
-									St Nicholas the Wonderworker, Abp. of Myra
-									in Lycia; New Martyr Nicolas Karamos of
-									Smyrna (1657); St Maximus, Metropolitan of
-									Kiev & Vladimir (1305)
-								</p>
+								<div className="flex flex-col gap-2">
+									<span className="text-lg">
+										28th Week After Pentecost, Tone II
+									</span>
+									<p className="text-base">
+										St Nicholas the Wonderworker, Abp. of
+										Myra in Lycia; New Martyr Nicolas
+										Karamos of Smyrna (1657); St Maximus,
+										Metropolitan of Kiev & Vladimir (1305)
+									</p>
+								</div>
+								<div className="flex flex-col">
+									<span className="text-base">
+										John 10:9-16 (Matins Gospel)
+									</span>
+									<span className="text-base">
+										Hebrews 13:17-21 (Epistle, Saint
+										Nicholas)
+									</span>
+									<span className="text-base">
+										Luke 6:17-23 (Gospel, Saint Nicholas)
+									</span>
+								</div>
 							</div>
-							<div className="flex flex-col">
-								<span className="text-sm">
-									John 10:9-16 (Matins Gospel)
-								</span>
-								<span className="text-sm">
-									Hebrews 13:17-21 (Epistle, Saint Nicholas)
-								</span>
-								<span className="text-sm">
-									Luke 6:17-23 (Gospel, Saint Nicholas)
+							<div className="fasting-info bg-[#250203]/70 text-white text-center md:text-left p-2 px-4 md:px-7 mt-4 md:mt-0">
+								<span className="text-base">
+									Nativity Fast | By strict monastic charter
+									(bread, vegetables, fruits)
 								</span>
 							</div>
-							<span className="text-sm">
-								☦ Nativity Fast | Abstain from food with oil
-							</span>
 						</div>
 					</div>
 				</div>
@@ -151,7 +159,7 @@ export default function Home() {
 									className="w-full border-gray-900 border-10 h-auto md:h-[10em] lg:min-h-[15em] lg:h-full lg:w-[13em] object-cover"
 									height={500}
 									width={500}
-									alt="Saint of the day"
+									alt="News article image"
 									src="/nativity.jpg"
 								/>
 								<div className="card-details p-4 px-0 flex flex-col gap-2 lg:px-6">
@@ -270,7 +278,7 @@ export default function Home() {
 									className="w-full h-[10em] lg:max-h-[8em] lg:min-h-full lg:h-full lg:w-[10em] object-cover"
 									height={500}
 									width={500}
-									alt="Saint of the day"
+									alt="News article image"
 									src="/nativity-2.jpg"
 								/>
 								<div className="card-details p-4 px-0 lg:px-6 flex flex-col gap-2">
@@ -302,7 +310,7 @@ export default function Home() {
 									className="w-full h-[10em] lg:max-h-[8em] lg:min-h-full lg:h-full lg:w-[10em] object-cover"
 									height={500}
 									width={500}
-									alt="Saint of the day"
+									alt="News article image"
 									src="/nativity-3.jpg"
 								/>
 								<div className="card-details p-4 px-0 lg:px-6 flex flex-col gap-2">
@@ -334,7 +342,7 @@ export default function Home() {
 									className="w-full h-[10em] lg:max-h-[8em] lg:min-h-full lg:h-full lg:w-[10em] object-cover"
 									height={500}
 									width={500}
-									alt="Saint of the day"
+									alt="News article image"
 									src="/nativity-5.jpg"
 								/>
 								<div className="card-details p-4 px-0 lg:px-6 flex flex-col gap-2">
@@ -366,7 +374,7 @@ export default function Home() {
 									className="w-full h-[10em] lg:max-h-[8em] lg:min-h-full lg:h-full lg:w-[10em] object-cover"
 									height={500}
 									width={500}
-									alt="Saint of the day"
+									alt="News article image"
 									src="/nativity-2.jpg"
 								/>
 								<div className="card-details p-4 px-0 lg:px-6 flex flex-col gap-2">
