@@ -143,16 +143,11 @@ export default function Home() {
 						className={`quote-box flex flex-col gap-4 items-center ${ebGaramond.className} md:w-1/2`}
 					>
 						<p className="quote text-lg">
-							The Fathers speak of prayer as consisting of a
-							single thought (monologistos euche). Strictly
-							speaking it is not even a thought, but rather an
-							awareness of being totally absorbed in the reality
-							of God. One can, nevertheless, call this conscious
-							experience ‘thought’, because it is not simply a
-							state of confused feeling or the sensation of being
-							lost in the ocean of inarticulate reality, but it is
-							awareness of encounter with the personal infinity of
-							God who loves us.
+							<span>“</span>
+							{
+								"The Fathers speak of prayer as consisting of a single thought (monologistos euche). Strictly speaking it is not even a thought, but rather an awareness of being totally absorbed in the reality of God. One can, nevertheless, call this conscious experience ‘thought’, because it is not simply a state of confused feeling or the sensation of being lost in the ocean of inarticulate reality, but it is awareness of encounter with the personal infinity of God who loves us."
+							}
+							<span>”</span>
 						</p>
 						<span className="author italic">
 							— Dumitru Staniloe, Prayer and Holiness: The Icon of
