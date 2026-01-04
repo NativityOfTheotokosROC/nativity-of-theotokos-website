@@ -5,6 +5,7 @@
 :root {
 	--background: #ffffff;
 	--foreground: #171717;
+	--swiper-navigation-color: #fce9b9;
 }
 
 @theme inline {

@@ -135,8 +135,9 @@ export default function Home() {
 					</div>
 				</div>
 			</section>
-			<section className="news bg-[antiquewhite] text-black">
-				<div className="news-content flex flex-col gap-8 pt-10">
+			<section className="news pt-4 bg-[antiquewhite] text-black">
+				<div className="ornament mb-4 md:mb-0 w-full h-[5em] bg-contain bg-center bg-no-repeat bg-[url(/ornament_1.svg)]"></div>
+				<div className="news-content flex flex-col gap-8">
 					<span className="text-3xl font-serif md:w-1/2 px-9 lg:px-20">
 						Latest News
 						<hr className="mt-4" />
@@ -261,17 +262,17 @@ export default function Home() {
 						</div>
 					</div>
 					<div className="other-stories flex flex-col gap-4 pt-6 pb-10 px-9 lg:px-20 bg-white/70">
-						<span className="text-xl">Other Stories</span>
-						<div className="grid lg:grid-cols-2 gap-6 md:w-3/4 lg:w-9/10">
-							<div className="normal-card flex flex-row items-center lg:bg-transparent lg:text-black hover:cursor-pointer">
+						<span className="text-xl mb-2">Other Stories</span>
+						<div className="grid lg:grid-cols-2 gap-8 md:gap-6 md:w-3/4 lg:w-9/10">
+							<div className="normal-card flex flex-row items-center gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer">
 								<Image
-									className="max-h-[8em] min-h-full h-full w-[10em] object-cover"
+									className="max-h-[8em] min-h-full h-full w-[6em] md:w-[10em] object-cover"
 									height={500}
 									width={500}
 									alt="News article image"
 									src="/nativity-2.jpg"
 								/>
-								<div className="card-details p-4 px-6 flex flex-col gap-1.5">
+								<div className="card-details py-4 md:px-6 flex flex-col gap-1.5">
 									<span className="title text-lg font-serif">
 										Fr Savva and Fr George Maximov conduct
 										liturgy
@@ -296,15 +297,15 @@ export default function Home() {
 									</p>
 								</div>
 							</div>
-							<div className="normal-card flex flex-row items-center lg:bg-transparent lg:text-black hover:cursor-pointer">
+							<div className="normal-card flex flex-row items-center gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer">
 								<Image
-									className="max-h-[8em] min-h-full h-full w-[10em] object-cover"
+									className="max-h-[8em] min-h-full h-full w-[6em] md:w-[10em] object-cover"
 									height={500}
 									width={500}
 									alt="News article image"
 									src="/nativity-3.jpg"
 								/>
-								<div className="card-details p-4 px-6 flex flex-col gap-1.5">
+								<div className="card-details py-4 md:px-6 flex flex-col gap-1.5">
 									<span className="title text-lg font-serif">
 										Fr Savva conducts liturgy
 									</span>
@@ -328,15 +329,15 @@ export default function Home() {
 									</p>
 								</div>
 							</div>
-							<div className="normal-card flex flex-row items-center lg:bg-transparent lg:text-black hover:cursor-pointer">
+							<div className="normal-card flex flex-row items-center gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer">
 								<Image
-									className="max-h-[8em] min-h-full h-full w-[10em] object-cover"
+									className="max-h-[8em] min-h-full h-full w-[6em] md:w-[10em] object-cover"
 									height={500}
 									width={500}
 									alt="News article image"
 									src="/nativity-5.jpg"
 								/>
-								<div className="card-details p-4 px-6 flex flex-col gap-1.5">
+								<div className="card-details py-4 md:px-6 flex flex-col gap-1.5">
 									<span className="title text-lg font-serif">
 										Fr Savva conducts liturgy
 									</span>
@@ -360,15 +361,15 @@ export default function Home() {
 									</p>
 								</div>
 							</div>
-							<div className="normal-card flex flex-row items-center lg:bg-transparent lg:text-black hover:cursor-pointer">
+							<div className="normal-card flex flex-row items-center gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer">
 								<Image
-									className="max-h-[8em] min-h-full h-full w-[10em] object-cover"
+									className="max-h-[8em] min-h-full h-full w-[6em] md:w-[10em] object-cover"
 									height={500}
 									width={500}
 									alt="News article image"
 									src="/nativity-2.jpg"
 								/>
-								<div className="card-details p-4 px-6 flex flex-col gap-1.5">
+								<div className="card-details py-4 md:px-6 flex flex-col gap-1.5">
 									<span className="title text-lg font-serif">
 										Fr Savva conducts liturgy
 									</span>
@@ -424,11 +425,7 @@ export default function Home() {
 				</div>
 			</section>
 			<section className="gallery bg-[antiquewhite] text-black">
-				<div className="gallery-content flex flex-col gap-8 p-9 py-14 lg:px-20">
-					<span className="text-3xl font-serif md:w-1/2">
-						Gallery
-						<hr className="mt-4 mb-0" />
-					</span>
+				<div className="gallery-content flex flex-col gap-8 p-9 py-14 lg:px-20 bg-[url(/ornament_4.svg)] bg-size-[15em] bg-bottom-left bg-no-repeat">
 					<div className="swiper-container w-full max-w-full">
 						<Swiper
 							modules={[Navigation, Autoplay]}
