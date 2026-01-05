@@ -20,6 +20,7 @@
     "@mvc-react/stateful": "^3.8.0",
     "autoprefixer": "^10.4.23",
     "cheerio": "^1.1.2",
+    "date-fns-tz": "^3.2.0",
     "flowbite-react": "^0.12.15",
     "next": "16.0.10",
     "react": "19.2.1",
