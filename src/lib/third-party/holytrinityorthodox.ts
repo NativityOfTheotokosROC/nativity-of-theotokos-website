@@ -9,7 +9,7 @@ interface HolyTrinityOrthodox {
 	getScriptures: (date: Date) => Promise<string[]>;
 	getFastingInfo: (date: Date) => Promise<string>;
 	getIconOfTheDay: (date: Date) => Promise<string>;
-	getReadingsLink: (date: Date) => string;
+	getHymnsLink: (date: Date) => string;
 }
 
 class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
@@ -28,7 +28,7 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 			scriptures: await this.getScriptures(date),
 			fastingInfo: await this.getFastingInfo(date),
 			iconOfTheDay: await this.getIconOfTheDay(date),
-			readingsLink: this.getReadingsLink(date),
+			hymnsLink: this.getHymnsLink(date),
 		};
 	}
 	async getLiturgicalWeek(date: Date) {
@@ -153,11 +153,8 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 		return link;
 	}
 
-	getReadingsLink(date: Date) {
+	getHymnsLink(date: Date) {
 		const requestURL = this._getDatedBaseURL(date);
-		requestURL.searchParams.set("header", "1");
-		requestURL.searchParams.set("scripture", "1");
-		requestURL.searchParams.set("lives", "1");
 		requestURL.searchParams.set("dt", "1");
 		requestURL.searchParams.set("trp", "1");
 

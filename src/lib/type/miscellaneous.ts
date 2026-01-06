@@ -10,5 +10,5 @@ export type DailyReadings = {
 	scriptures: string[];
 	fastingInfo: string;
 	iconOfTheDay: string;
-	readingsLink: string;
+	hymnsLink: string;
 };

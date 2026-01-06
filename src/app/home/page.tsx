@@ -20,6 +20,7 @@ import { useCallback, useLayoutEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/navigation";
+import Link from "next/link";
 
 type MailingListStatus = "subscribed" | "not_subscribed" | "pending";
 const ebGaramond = EB_Garamond({ subsets: ["latin", "cyrillic"] });
@@ -103,6 +104,15 @@ export default function Home() {
 									<div className="flex flex-col gap-2">
 										<span className="text-xl">
 											{dailyReadings.liturgicalWeek}
+										</span>
+										<span>
+											<Link
+												className="text-lg underline"
+												href={dailyReadings.hymnsLink}
+												target="_blank"
+											>
+												{"Hymns for the Day"}
+											</Link>
 										</span>
 										<p
 											className={`text-base [&_a]:underline`}
