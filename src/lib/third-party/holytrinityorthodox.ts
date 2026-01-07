@@ -6,7 +6,13 @@ interface HolyTrinityOrthodox {
 	getDailyReadings: (date: Date) => Promise<DailyReadings>;
 	getLiturgicalWeek: (date: Date) => Promise<string>;
 	getSaints: (date: Date) => Promise<string>;
-	getScriptures: (date: Date) => Promise<string[]>;
+	getScriptures: (date: Date) => Promise<
+		{
+			scriptureText: string;
+			designation: string;
+			link: string;
+		}[]
+	>;
 	getFastingInfo: (date: Date) => Promise<string>;
 	getIconOfTheDay: (date: Date) => Promise<string>;
 	getHymnsLink: (date: Date) => string;
@@ -45,6 +51,7 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 			.then(html => {
 				const $ = load(html);
 				$(".headerfast").remove();
+				$(".headernofast").remove();
 				return $.html();
 			})
 			.then(markedUpText => removeMarkup(markedUpText));
@@ -63,6 +70,9 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 			.then(html => {
 				const $ = load(html);
 				$(".cal-main").removeAttr("onclick");
+				$(".cal-main").each(function () {
+					$(this).attr("target", "_blank");
+				});
 				return $(".normaltext").html()!;
 			});
 	}
@@ -91,6 +101,10 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 						$(this).remove();
 					});
 				$(".cal-main").removeAttr("onclick");
+				$(".cal-main").each(function () {
+					$(this).removeClass();
+					$(this).addClass("scripture-text");
+				});
 				$(".normaltext")
 					.contents()
 					.filter(function () {
@@ -107,13 +121,24 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 					.toArray()
 					.join("");
 				const verses = childrenHtml.split("<br>");
-				const cleanedScriptures: string[] = [];
+				const markedUpScriptures: string[] = [];
 				verses.forEach(verse => {
+					// HACK
+					if (!verse.trim()) return;
+
 					const _$ = load(verse, null, false);
 					_$("*").wrapAll('<span class="scripture"></span>');
-					cleanedScriptures.push(_$(".scripture").html()!);
+					markedUpScriptures.push(_$(".scripture").html()!);
 				});
-				return cleanedScriptures;
+				const scriptures = markedUpScriptures.map(scripture => {
+					const _$ = load(scripture, null, false);
+					return {
+						scriptureText: _$(".scripture-text").text().trim(),
+						designation: _$(".designation").text().trim(),
+						link: _$(".scripture-text").attr("href")!.trim(),
+					};
+				});
+				return scriptures;
 			});
 	}
 	async getFastingInfo(date: Date) {
@@ -129,10 +154,12 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 			})
 			.then(html => {
 				const $ = load(html);
-				return $(".headerfast").text();
+				const fastText = $(".headerfast").text();
+				console.log(fastText ?? $(".headernofast").text());
+				return (fastText ? fastText : $(".headernofast").text()).trim();
 			})
 			.then(markedUpText => removeMarkup(markedUpText))
-			.then(info => (info.trim().length == 0 ? "No Fast" : info));
+			.then(info => (info.length == 0 ? "No Fast" : info));
 	}
 
 	async getIconOfTheDay(date: Date) {

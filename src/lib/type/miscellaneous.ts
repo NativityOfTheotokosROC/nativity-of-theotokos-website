@@ -7,7 +7,11 @@ export type DailyReadings = {
 	currentDate: string;
 	liturgicalWeek: string;
 	saints: string;
-	scriptures: string[];
+	scriptures: {
+		scriptureText: string;
+		designation: string;
+		link: string;
+	}[];
 	fastingInfo: string;
 	iconOfTheDay: string;
 	hymnsLink: string;

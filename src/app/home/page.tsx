@@ -105,7 +105,14 @@ export default function Home() {
 										<span className="text-xl">
 											{dailyReadings.liturgicalWeek}
 										</span>
-										<span>
+										<div className="flex gap-2 items-center mb-1">
+											<Image
+												className="h-10 w-10"
+												src={"/ornament_9.svg"}
+												alt={"Hymns icon"}
+												height={32}
+												width={40}
+											/>
 											<Link
 												className="text-lg underline"
 												href={dailyReadings.hymnsLink}
@@ -113,7 +120,7 @@ export default function Home() {
 											>
 												{"Hymns for the Day"}
 											</Link>
-										</span>
+										</div>
 										<p
 											className={`text-base [&_a]:underline`}
 											dangerouslySetInnerHTML={{
@@ -122,16 +129,34 @@ export default function Home() {
 										/>
 									</div>
 									<hr className="md:w-3/4 text-black/60" />
-									<div className="flex flex-col">
+									<div className="flex flex-col w-fit max-w-full">
 										{[
 											...dailyReadings.scriptures.map(
 												(scripture, index) => (
-													<span
+													<div
 														key={index}
-														dangerouslySetInnerHTML={{
-															__html: scripture,
-														}}
-													/>
+														className="grid grid-cols-2"
+													>
+														<span>
+															<Link
+																href={
+																	scripture.link
+																}
+																target="_blank"
+															>
+																{
+																	scripture.scriptureText
+																}
+															</Link>
+														</span>
+														{scripture.designation && (
+															<span>
+																{
+																	scripture.designation
+																}
+															</span>
+														)}
+													</div>
 												)
 											),
 										]}
@@ -145,7 +170,10 @@ export default function Home() {
 							</div>
 						</div>
 					) : (
-						<span>Please Wait...</span>
+						<div className="flex md:flex-row gap-2 animate-pulse h-[20em] lg:w-9/10 md:mt-4 items-stretch">
+							<div className="md:flex min-w-60 w-60 lg:min-w-70 lg:w-70 items-stretch justify-center p-3 hidden bg-black/20" />
+							<div className="info flex flex-col grow bg-black/20" />
+						</div>
 					)}
 				</div>
 			</section>
