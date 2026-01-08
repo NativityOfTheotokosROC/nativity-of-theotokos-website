@@ -135,9 +135,9 @@ export default function Home() {
 												(scripture, index) => (
 													<div
 														key={index}
-														className="grid grid-cols-2 gap-x-3"
+														className="grid grid-cols-2 gap-x-2"
 													>
-														<span>
+														<span className="w-fit">
 															<Link
 																href={
 																	scripture.link
