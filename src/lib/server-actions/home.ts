@@ -7,14 +7,16 @@ import { toZonedTime } from "date-fns-tz";
 import { PrismaClient } from "@/src/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
-const prismaAdapter = new PrismaPg({
-	connectionString: process.env.DATABASE_URL,
-});
-
 export type HomeSnapshot = {
 	dailyReadings: DailyReadings;
 	dailyQuote: DailyQuote;
 };
+
+const prismaAdapter = new PrismaPg({
+	connectionString: process.env.DATABASE_URL,
+});
+
+console.log(process.env.DATABASE_URL);
 
 export async function getHomeSnapshot(): Promise<HomeSnapshot> {
 	const prismaClient = new PrismaClient({
