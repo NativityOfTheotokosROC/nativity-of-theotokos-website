@@ -16,7 +16,7 @@ const prismaAdapter = new PrismaPg({
 	connectionString: process.env.DATABASE_URL,
 });
 
-console.log(process.env.DATABASE_URL);
+console.error(process.env.DATABASE_URL);
 
 export async function getHomeSnapshot(): Promise<HomeSnapshot> {
 	const prismaClient = new PrismaClient({
