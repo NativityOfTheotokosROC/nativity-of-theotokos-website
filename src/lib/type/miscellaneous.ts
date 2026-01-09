@@ -22,5 +22,5 @@ export type DailyReadings = {
 export type DailyQuote = {
 	quote: string;
 	author: string;
-	source?: string;
+	source: string | null;
 };

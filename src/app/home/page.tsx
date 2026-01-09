@@ -6,29 +6,25 @@ import { Autoplay, Navigation } from "swiper/modules";
 
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Fragment } from "react";
 // import { faEnvelope as Email } from "@fortawesome/free-regular-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Import Swiper styles
-import { DailyReadings } from "@/src/lib/type/miscellaneous";
-import {
-	getDailyReadings,
-	subscribeToMailingList,
-} from "@/src/lib/utility/server-actions";
-import { useCallback, useLayoutEffect, useState } from "react";
+import { subscribeToMailingList } from "@/src/lib/server-actions/home";
+import { useCallback, useState } from "react";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/navigation";
 import Link from "next/link";
+import { useHome } from "@/src/lib/model-implementation/home";
 
 type MailingListStatus = "subscribed" | "not_subscribed" | "pending";
 const ebGaramond = EB_Garamond({ subsets: ["latin", "cyrillic"] });
 
 export default function Home() {
+	const { modelView } = useHome();
 	const [mailingListStatus, setMailingListStatus] =
 		useState<MailingListStatus>("not_subscribed");
-	const [dailyReadings, setDailyReadings] = useState<DailyReadings>();
 	const subscribe = useCallback((email: string) => {
 		subscribeToMailingList(email)
 			.then(() => {
@@ -41,617 +37,689 @@ export default function Home() {
 			});
 	}, []);
 
-	useLayoutEffect(() => {
-		if (!dailyReadings) {
-			getDailyReadings().then(dailyReadings =>
-				setDailyReadings(dailyReadings)
-			);
-		}
-	}, [dailyReadings]);
-
 	return (
-		<main className="home bg-[whitesmoke]">
-			<section className="hero bg-[#DCB042] text-black bg-[url(/nativity-icon.webp)] bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]">
-				<div className="hero-content flex flex-col justify-center items-center md:flex-row h-[30em] p-10 md:p-20 bg-black/70">
-					<div className="hero-message flex flex-col md:w-[35em] md:max-w-1/2 gap-6 md:p-8 justify-center">
-						<span
-							className={`heading text-6xl font-serif text-white ${ebGaramond.className}`}
-						>
-							Hello and welcome
-						</span>
-						<hr className="my-4 text-gray-300" />
-						<span
-							className={`${ebGaramond.className} text-lg text-gray-300`}
-						>
-							Official website of the Nativity of the Theotokos
-							parish of the Russian Orthodox Church in Zimbabwe.
-							(est. 2025)
-						</span>
-					</div>
-					<div className="icon md:flex md:w-1/2 hidden justify-center items-center">
-						<Image
-							className="h-[20em] w-[15em]"
-							src="/nativity-icon.webp"
-							alt="Icon of the Nativity of the Theotokos"
-							height={400}
-							width={300}
-						/>
+		<>
+			{!modelView ? (
+				<div className="splash flex absolute w-screen h-screen z-30 top-0 overflow-hidden">
+					<div className="bg-gray-900 flex items-center justify-center grow p-9">
+						<div className="logo flex gap-3 items-center justify-center max-w-[25em] animate-pulse">
+							<Image
+								className="h-20 w-20"
+								src="/logo-icon.svg"
+								alt="logo"
+								height={80}
+								width={80}
+							/>
+							<span className="text-xl font-serif">
+								{
+									"Nativity of the Theotokos Russian Orthodox Church"
+								}
+							</span>
+						</div>
 					</div>
 				</div>
-			</section>
-			<section className="readings bg-[antiquewhite] text-black bg-[url(/ornament_3_tr.svg)] bg-no-repeat bg-size-[13em] md:bg-size-[30em] bg-position-[98%_0.5%] md:bg-position-[100%_0.5%]">
-				<div className="readings-content flex flex-col gap-6 p-9 lg:px-20 md:py-10">
-					<span className="text-3xl font-serif md:w-1/2">
-						Daily Readings
-						<hr className="mt-4 mb-0 w-3/4 md:w-full" />
-					</span>
-					{dailyReadings ? (
-						<div className="flex md:flex-row md:h-fit lg:w-9/10 md:mt-4 items-stretch bg-white/70 border border-gray-900/20">
-							<div className="md:flex min-w-60 w-60 lg:min-w-70 lg:w-70 items-stretch justify-center p-3 hidden bg-gray-900">
+			) : (
+				<main className="home bg-[whitesmoke]">
+					<section className="hero bg-[#DCB042] text-black bg-[url(/nativity-icon.webp)] bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]">
+						<div className="hero-content flex flex-col justify-center items-center md:flex-row h-[30em] p-10 md:p-20 bg-black/70">
+							<div className="hero-message flex flex-col md:w-[35em] md:max-w-1/2 gap-6 md:p-8 justify-center">
+								<span
+									className={`heading text-6xl font-serif text-white ${ebGaramond.className}`}
+								>
+									Hello and welcome
+								</span>
+								<hr className="my-4 text-gray-300" />
+								<span
+									className={`${ebGaramond.className} text-lg text-gray-300`}
+								>
+									Official website of the Nativity of the
+									Theotokos parish of the Russian Orthodox
+									Church in Zimbabwe. (est. 2025)
+								</span>
+							</div>
+							<div className="icon md:flex md:w-1/2 hidden justify-center items-center">
 								<Image
-									className="hidden md:block grow object-cover object-center"
-									height={320}
-									width={240}
-									alt="Icon of the day"
-									src={dailyReadings.iconOfTheDay}
+									className="h-[20em] w-[15em]"
+									src="/nativity-icon.webp"
+									alt="Icon of the Nativity of the Theotokos"
+									height={400}
+									width={300}
 								/>
 							</div>
-							<div className="info flex flex-col grow">
-								<div className="texts flex flex-col md:justify-center grow gap-4 p-5 md:p-4 md:px-7 [&_a]:text-red-900">
-									<span className="text-2xl font-serif">
-										{dailyReadings.currentDate}
-									</span>
-									<div className="flex flex-col gap-2">
-										<span className="text-xl">
-											{dailyReadings.liturgicalWeek}
-										</span>
-										<div className="flex gap-2 items-center mb-1">
-											<Image
-												className="h-10 w-10"
-												src={"/ornament_9.svg"}
-												alt={"Hymns icon"}
-												height={32}
-												width={40}
-											/>
-											<Link
-												className="text-lg underline"
-												href={dailyReadings.hymnsLink}
-												target="_blank"
-											>
-												{"Hymns for the Day"}
-											</Link>
-										</div>
-										<p
-											className={`text-base [&_a]:underline`}
-											dangerouslySetInnerHTML={{
-												__html: dailyReadings.saints,
-											}}
+						</div>
+					</section>
+					<section className="readings bg-[antiquewhite] text-black bg-[url(/ornament_3_tr.svg)] bg-no-repeat bg-size-[13em] md:bg-size-[30em] bg-position-[98%_0.5%] md:bg-position-[100%_0.5%]">
+						<div className="readings-content flex flex-col gap-6 p-9 lg:px-20 md:py-10">
+							<span className="text-3xl font-serif md:w-1/2">
+								Daily Readings
+								<hr className="mt-4 mb-0 w-3/4 md:w-full" />
+							</span>
+							{modelView?.dailyReadings ? (
+								<div className="flex md:flex-row md:h-fit lg:w-9/10 md:mt-4 items-stretch bg-white/70 border border-gray-900/20">
+									<div className="md:flex min-w-60 w-60 lg:min-w-70 lg:w-70 items-stretch justify-center p-3 hidden bg-gray-900">
+										<Image
+											className="hidden md:block grow object-cover object-center"
+											height={320}
+											width={240}
+											alt="Icon of the day"
+											src={
+												modelView.dailyReadings
+													.iconOfTheDay
+											}
 										/>
 									</div>
-									<hr className="md:w-3/4 text-black/60" />
-									<div className="flex flex-col w-fit max-w-full">
-										{[
-											...dailyReadings.scriptures.map(
-												(scripture, index) => (
-													<div
-														key={index}
-														className="grid grid-cols-2 gap-x-2"
+									<div className="info flex flex-col grow">
+										<div className="texts flex flex-col md:justify-center grow gap-4 p-5 md:p-4 md:px-7 [&_a]:text-red-900">
+											<span className="text-2xl font-serif">
+												{
+													modelView.dailyReadings
+														.currentDate
+												}
+											</span>
+											<div className="flex flex-col gap-2">
+												<span className="text-xl">
+													{
+														modelView.dailyReadings
+															.liturgicalWeek
+													}
+												</span>
+												<div className="flex gap-2 items-center mb-1">
+													<Image
+														className="h-10 w-10"
+														src={"/ornament_9.svg"}
+														alt={"Hymns icon"}
+														height={32}
+														width={40}
+													/>
+													<Link
+														className="text-lg underline"
+														href={
+															modelView
+																.dailyReadings
+																.hymnsLink
+														}
+														target="_blank"
 													>
-														<span className="w-fit">
-															<Link
-																href={
-																	scripture.link
-																}
-																target="_blank"
+														{"Hymns for the Day"}
+													</Link>
+												</div>
+												<p
+													className={`text-base [&_a]:underline`}
+													dangerouslySetInnerHTML={{
+														__html: modelView
+															.dailyReadings
+															.saints,
+													}}
+												/>
+											</div>
+											<hr className="md:w-3/4 text-black/60" />
+											<div className="flex flex-col w-fit max-w-full">
+												{[
+													...modelView.dailyReadings.scriptures.map(
+														(scripture, index) => (
+															<div
+																key={index}
+																className="grid grid-cols-2 gap-x-2"
 															>
-																{
-																	scripture.scriptureText
-																}
-															</Link>
-														</span>
-														{scripture.designation && (
-															<span>
-																{
-																	scripture.designation
-																}
-															</span>
-														)}
-													</div>
-												)
-											),
-										]}
+																<span className="w-fit">
+																	<Link
+																		href={
+																			scripture.link
+																		}
+																		target="_blank"
+																	>
+																		{
+																			scripture.scriptureText
+																		}
+																	</Link>
+																</span>
+																{scripture.designation && (
+																	<span>
+																		{
+																			scripture.designation
+																		}
+																	</span>
+																)}
+															</div>
+														)
+													),
+												]}
+											</div>
+										</div>
+										<div className="fasting-info bg-[#250203]/80 text-white text-center md:text-left p-2 px-4 md:px-7 md:mt-0">
+											<span className="text-base">
+												{
+													modelView.dailyReadings
+														.fastingInfo
+												}
+											</span>
+										</div>
 									</div>
 								</div>
-								<div className="fasting-info bg-[#250203]/80 text-white text-center md:text-left p-2 px-4 md:px-7 md:mt-0">
-									<span className="text-base">
-										{dailyReadings.fastingInfo}
-									</span>
+							) : (
+								<div className="flex md:flex-row gap-2 animate-pulse h-[20em] lg:w-9/10 md:mt-4 items-stretch">
+									<div className="md:flex min-w-60 w-60 lg:min-w-70 lg:w-70 items-stretch justify-center p-3 hidden bg-black/20" />
+									<div className="info flex flex-col grow bg-black/20" />
 								</div>
-							</div>
+							)}
 						</div>
-					) : (
-						<div className="flex md:flex-row gap-2 animate-pulse h-[20em] lg:w-9/10 md:mt-4 items-stretch">
-							<div className="md:flex min-w-60 w-60 lg:min-w-70 lg:w-70 items-stretch justify-center p-3 hidden bg-black/20" />
-							<div className="info flex flex-col grow bg-black/20" />
-						</div>
-					)}
-				</div>
-			</section>
-			<section className="daily-thought  border-t-15 border-b-15 border-t-gray-900/85 border-b-[#250203]/85">
-				<div className="daily-thought-content flex items-center p-9 md:p-20 min-h-[25em] bg-[#0a0a0a] md:bg-[linear-gradient(to_right,#0a0a0a,transparent),url(/daily-thought-bg.jpg)] text-white bg-no-repeat bg-contain bg-right">
-					<div
-						className={`quote-box flex flex-col gap-4 items-center ${ebGaramond.className} md:w-1/2`}
-					>
-						<p className="quote text-lg">
-							<span>“</span>
-							{
-								"That I am a monk and you are a layman is of no importance ... rather that we are both in the light of the Holy Spirit ... Acquire peace, and thousands around you will be saved."
-							}
-							<span>”</span>
-						</p>
-						<span className="author italic w-full text-right">
-							— St. Seraphim of Sarov
-						</span>
-					</div>
-				</div>
-			</section>
-			<section className="news pt-4 bg-[antiquewhite] text-black">
-				<div className="ornament mb-4 md:mb-0 w-full h-[5em] bg-contain bg-center bg-no-repeat bg-[url(/ornament_1.svg)]"></div>
-				<div className="news-content flex flex-col gap-8">
-					<span className="text-3xl font-serif md:w-1/2 px-9 lg:px-20">
-						Latest News
-						<hr className="mt-4" />
-					</span>
-					<div className="flex flex-row flex-wrap gap-x-12 gap-y-6 px-9 pb-8 lg:px-20">
-						<div className="featured flex flex-col gap-4 md:max-w-1/2">
-							<span className="text-xl">Featured</span>
-							<div
-								className="featured-card flex flex-col lg:flex-row lg:items-center lg:text-black hover:cursor-pointer bg-white/70 border border-gray-900/20"
-								onClick={() =>
-									alert("Content to be added soon!")
-								}
-							>
-								<Image
-									className="w-full h-auto md:h-[10em] lg:min-h-[15em] lg:h-full lg:w-[13em] object-cover"
-									height={500}
-									width={500}
-									alt="News article image"
-									src="/nativity.jpg"
-								/>
-								<div className="card-details p-4 flex flex-col gap-1.5 lg:px-6">
-									<span className="title text-xl font-serif">
-										Fr. George Maximov church visit
-									</span>
-									<span className="timestamp text-sm text-gray-600">
-										Vasily Greyling | 23 September 2025
-									</span>
-									<p className="text-base line-clamp-6">
-										Lorem ipsum dolor sit amet consectetur,
-										adipisicing elit. Dolorem ipsum, maxime
-										minima blanditiis eum rem est minus fuga
-										praesentium explicabo exercitationem
-										excepturi esse harum nam perferendis
-										pariatur, nesciunt assumenda dolore.
-										Lorem ipsum dolor sit amet consectetur
-										adipisicing elit. Qui expedita
-										perspiciatis nihil minima dolorum
-										sapiente in iure facere ipsa ex
-										doloremque fugiat atque incidunt
-										possimus assumenda quo, fugit asperiores
-										maiores!
+					</section>
+					<section className="daily-thought  border-t-15 border-b-15 border-t-gray-900/85 border-b-[#250203]/85">
+						{modelView?.dailyQuote && (
+							<div className="daily-thought-content flex items-center p-9 md:p-20 min-h-[25em] bg-[#0a0a0a] md:bg-[linear-gradient(to_right,#0a0a0a,transparent),url(/daily-thought-bg.jpg)] text-white bg-no-repeat bg-contain bg-right">
+								<div
+									className={`quote-box flex flex-col gap-4 items-center ${ebGaramond.className} md:w-1/2`}
+								>
+									<p className="quote text-lg">
+										<span>“</span>
+										{modelView.dailyQuote.quote}
+										<span>”</span>
 									</p>
-								</div>
-							</div>
-						</div>
-						<div className="schedule flex flex-col gap-4 flex-1">
-							<span className="text-xl">Schedule</span>
-							<div className="schedule-list flex flex-col w-full gap-4 pr-6 max-h-[20em] lg:max-h-[15em] overflow-y-auto">
-								<div className="latest-scheduled flex items-center">
-									<div className="flex flex-col gap-2 items-center text-center p-4 bg-gray-900 text-white font-serif">
-										<span className="text-4xl">04</span>
-										<span className="uppercase">
-											Jan 26
-										</span>
-									</div>
-									<div className="flex flex-col py-3 px-6 gap-1">
-										<span className="text-xl">
-											Divine Liturgy
-										</span>
-										<span>
-											Nativity of the Theotokos Parish
-										</span>
-										<span className="text-sm">
-											12:00 PM
-										</span>
-									</div>
-								</div>
-								<hr className="my-2" />
-								<div className="scheduled-item flex items-center">
-									<div className="flex flex-col gap-1 items-center text-center p-4 bg-gray-900 text-white font-serif">
-										<span className="text-xl">11</span>
-										<span className="text-xs uppercase">
-											Jan 26
-										</span>
-									</div>
-									<div className="flex flex-col py-2 px-4">
-										<span className="text-base">
-											Typika Service
-										</span>
-										<span className="text-sm">
-											St. Sergius Parish
-										</span>
-										<span className="text-xs">9:00 AM</span>
-									</div>
-								</div>
-								<div className="scheduled-item flex items-center">
-									<div className="flex flex-col gap-1 items-center text-center p-4 bg-gray-900 text-white font-serif">
-										<span className="text-xl">18</span>
-										<span className="text-xs uppercase">
-											Jan 26
-										</span>
-									</div>
-									<div className="flex flex-col py-2 px-4">
-										<span className="text-base">
-											Typika Service
-										</span>
-										<span className="text-sm">
-											St. Sergius Parish
-										</span>
-										<span className="text-xs">9:00 AM</span>
-									</div>
-								</div>
-								<div className="scheduled-item flex items-center">
-									<div className="flex flex-col gap-1 items-center text-center p-4 bg-gray-900 text-white font-serif">
-										<span className="text-xl">25</span>
-										<span className="text-xs uppercase">
-											Jan 26
-										</span>
-									</div>
-									<div className="flex flex-col py-2 px-4">
-										<span className="text-base">
-											Typika Service
-										</span>
-										<span className="text-sm">
-											St. Sergius Parish
-										</span>
-										<span className="text-xs">9:00 AM</span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div className="other-stories flex flex-col gap-4 pt-6 pb-10 px-9 lg:px-20 bg-white/70">
-						<span className="text-xl mb-2">Other Stories</span>
-						<div className="grid lg:grid-cols-2 gap-8 md:gap-6 md:w-3/4 lg:w-9/10">
-							<div
-								className="normal-card flex flex-row items-center gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer"
-								onClick={() =>
-									alert("Content to be added soon!")
-								}
-							>
-								<Image
-									className="max-h-[8em] min-h-full h-full w-[6em] md:w-[10em] object-cover"
-									height={500}
-									width={500}
-									alt="News article image"
-									src="/nativity-5.jpg"
-								/>
-								<div className="card-details py-4 md:px-6 flex flex-col gap-1.5">
-									<span className="title text-lg font-serif">
-										Liturgy on December 7 with Fr Savva
+									<span className="author italic w-full text-right">
+										— {modelView.dailyQuote.author},{" "}
+										{modelView.dailyQuote.source}
 									</span>
-									<span className="byline text-sm text-gray-600">
-										Vasily Greyling | 08 December 2025
-									</span>
-									<p className="line-clamp-2 max-lg:hidden">
-										Lorem ipsum dolor sit amet consectetur,
-										adipisicing elit. Dolorem ipsum, maxime
-										minima blanditiis eum rem est minus fuga
-										praesentium explicabo exercitationem
-										excepturi esse harum nam perferendis
-										pariatur, nesciunt assumenda dolore.
-										Lorem ipsum dolor sit amet consectetur
-										adipisicing elit. Qui expedita
-										perspiciatis nihil minima dolorum
-										sapiente in iure facere ipsa ex
-										doloremque fugiat atque incidunt
-										possimus assumenda quo, fugit asperiores
-										maiores!
-									</p>
 								</div>
 							</div>
-							<div
-								className="normal-card flex flex-row items-center gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer"
-								onClick={() =>
-									alert("Content to be added soon!")
-								}
-							>
-								<Image
-									className="max-h-[8em] min-h-full h-full w-[6em] md:w-[10em] object-cover"
-									height={500}
-									width={500}
-									alt="News article image"
-									src="/nativity-3.jpg"
-								/>
-								<div className="card-details py-4 md:px-6 flex flex-col gap-1.5">
-									<span className="title text-lg font-serif">
-										Fr Savva celebrates liturgy with us on
-										the 1st of November
-									</span>
-									<span className="byline text-sm text-gray-600">
-										Vasily Greyling | 03 November 2025
-									</span>
-									<p className="line-clamp-2 max-lg:hidden">
-										Lorem ipsum dolor sit amet consectetur,
-										adipisicing elit. Dolorem ipsum, maxime
-										minima blanditiis eum rem est minus fuga
-										praesentium explicabo exercitationem
-										excepturi esse harum nam perferendis
-										pariatur, nesciunt assumenda dolore.
-										Lorem ipsum dolor sit amet consectetur
-										adipisicing elit. Qui expedita
-										perspiciatis nihil minima dolorum
-										sapiente in iure facere ipsa ex
-										doloremque fugiat atque incidunt
-										possimus assumenda quo, fugit asperiores
-										maiores!
-									</p>
-								</div>
-							</div>
-							<div
-								className="normal-card flex flex-row items-center gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer"
-								onClick={() =>
-									alert("Content to be added soon!")
-								}
-							>
-								<Image
-									className="max-h-[8em] min-h-full h-full w-[6em] md:w-[10em] object-cover"
-									height={500}
-									width={500}
-									alt="News article image"
-									src="/nativity-4.jpg"
-								/>
-								<div className="card-details py-4 md:px-6 flex flex-col gap-1.5">
-									<span className="title text-lg font-serif">
-										Nativity of the Theotokos parish holds
-										its first official liturgy
-									</span>
-									<span className="byline text-sm text-gray-600">
-										Vasily Greyling | 05 October 2025
-									</span>
-									<p className="line-clamp-2 max-lg:hidden">
-										Lorem ipsum dolor sit amet consectetur,
-										adipisicing elit. Dolorem ipsum, maxime
-										minima blanditiis eum rem est minus fuga
-										praesentium explicabo exercitationem
-										excepturi esse harum nam perferendis
-										pariatur, nesciunt assumenda dolore.
-										Lorem ipsum dolor sit amet consectetur
-										adipisicing elit. Qui expedita
-										perspiciatis nihil minima dolorum
-										sapiente in iure facere ipsa ex
-										doloremque fugiat atque incidunt
-										possimus assumenda quo, fugit asperiores
-										maiores!
-									</p>
-								</div>
-							</div>
-							<div
-								className="normal-card flex flex-row items-center gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer"
-								onClick={() =>
-									alert("Content to be added soon!")
-								}
-							>
-								<Image
-									className="max-h-[8em] min-h-full h-full w-[6em] md:w-[10em] object-cover"
-									height={500}
-									width={500}
-									alt="News article image"
-									src="/nativity-2.jpg"
-								/>
-								<div className="card-details py-4 md:px-6 flex flex-col gap-1.5">
-									<span className="title text-lg font-serif">
-										Fr George Maximov celebrates liturgy
-										with our community
-									</span>
-									<span className="byline text-sm text-gray-600">
-										Vasily Greyling | 22 September 2025
-									</span>
-									<p className="line-clamp-2 max-lg:hidden">
-										Lorem ipsum dolor sit amet consectetur,
-										adipisicing elit. Dolorem ipsum, maxime
-										minima blanditiis eum rem est minus fuga
-										praesentium explicabo exercitationem
-										excepturi esse harum nam perferendis
-										pariatur, nesciunt assumenda dolore.
-										Lorem ipsum dolor sit amet consectetur
-										adipisicing elit. Qui expedita
-										perspiciatis nihil minima dolorum
-										sapiente in iure facere ipsa ex
-										doloremque fugiat atque incidunt
-										possimus assumenda quo, fugit asperiores
-										maiores!
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-			<section
-				id="resources"
-				className="resources bg-[#250203] text-white"
-			>
-				<div className="resources-content flex flex-col gap-8 p-9 py-14 lg:px-20">
-					<div className="flex flex-col gap-6 w-full justify-center items-center md:flex-row">
-						<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-11.jpg)] bg-cover">
-							<div
-								className="flex size-full p-6 justify-center items-end text-center  text-white hover:cursor-pointer"
-								onClick={() =>
-									window.open(
-										"https://eadiocese.org/litresource",
-										"_blank"
-									)
-								}
-							>
-								<span className="text-3xl mb-3 font-serif">
-									Liturgical Resources
-								</span>
-							</div>
-						</div>
-						<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-7.jpg)] bg-cover bg-center">
-							<div
-								className="flex size-full p-6 justify-center items-end text-center  text-white hover:cursor-pointer"
-								onClick={() =>
-									window.open(
-										"https://www.oca.org/orthodoxy/the-orthodox-faith",
-										"_blank"
-									)
-								}
-							>
-								<span className="text-3xl mb-3 font-serif">
-									What is Orthodoxy?
-								</span>
-							</div>
-						</div>
-						<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-9.jpg)] bg-cover bg-center">
-							<div
-								className="flex size-full p-6 justify-center items-end text-center  text-white hover:cursor-pointer"
-								onClick={() =>
-									alert("Content to be added soon!")
-								}
-							>
-								<span className="text-3xl mb-3 font-serif">
-									About our Parish
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-			<section
-				id="media"
-				className="gallery bg-[antiquewhite] text-black"
-			>
-				<div className="gallery-content flex flex-col gap-8 p-9 py-14 lg:px-20 bg-[url(/ornament_4.svg)] bg-size-[15em] bg-bottom-left bg-no-repeat">
-					<div className="swiper-container w-full max-w-full">
-						<Swiper
-							modules={[Navigation, Autoplay]}
-							spaceBetween={30}
-							breakpoints={{ 768: { slidesPerView: 3 } }}
-							slidesPerView={"auto"}
-							navigation
-							autoplay
-						>
-							<SwiperSlide>
-								<div className="h-[20em] w-[30em]">
-									<Image
-										className="object-cover object-center"
-										src="/nativity.jpg"
-										alt="gallery item"
-										fill
-									/>
-								</div>
-							</SwiperSlide>
-							<SwiperSlide>
-								<div className="h-[20em] w-[30em]">
-									<Image
-										className="object-cover object-center"
-										src="/nativity-5.jpg"
-										alt="gallery item"
-										fill
-									/>
-								</div>
-							</SwiperSlide>
-							<SwiperSlide>
-								<div className="h-[20em] w-[30em]">
-									<Image
-										className="object-cover object-center"
-										src="/nativity-2.jpg"
-										alt="gallery item"
-										fill
-									/>
-								</div>
-							</SwiperSlide>
-							<SwiperSlide>
-								<div className="h-[20em] w-[30em]">
-									<Image
-										className="object-cover object-center"
-										src="/nativity-3.jpg"
-										alt="gallery item"
-										fill
-									/>
-								</div>
-							</SwiperSlide>
-							<SwiperSlide>
-								<div className="h-[20em] w-[30em]">
-									<Image
-										className="object-cover object-center"
-										src="/nativity-4.jpg"
-										alt="gallery item"
-										fill
-									/>
-								</div>
-							</SwiperSlide>
-						</Swiper>
-					</div>
-				</div>
-			</section>
-			<section className="mailing-list bg-gray-900 text-white">
-				<div className="mailing-list-content flex flex-col gap-8 p-9 py-14 md:w-3/4 lg:px-20">
-					<span className="text-3xl font-serif md:w-1/2">
-						Join our Mailing List
-						<hr className="mt-4 mb-0" />
-					</span>
-					{mailingListStatus != "subscribed" ? (
-						<>
-							<p>
-								{
-									"Stay up to date with the latest church news, announcements, and events straight from your mailbox. Enter your email below and subscribe if you haven't already."
-								}
-							</p>
-							<form
-								action={formData => {
-									subscribe(
-										formData.get("email")!.toString().trim()
-									);
-								}}
-								onSubmit={() => {
-									setMailingListStatus("pending");
-								}}
-							>
-								<div className="flex flex-nowrap text-black">
-									<input
-										className="grow p-4 bg-[whitesmoke]"
-										type="email"
-										placeholder="you@example.com"
-										name="email"
-										id="mailing-email"
-										required
-									/>
-									<button
-										className={`p-4 h-full w-[8em] bg-gray-700 text-white text-center disabled:bg-gray-400`}
-										type="submit"
-										disabled={
-											mailingListStatus == "pending"
+						)}
+					</section>
+					<section className="news pt-4 bg-[antiquewhite] text-black">
+						<div className="ornament mb-4 md:mb-0 w-full h-[5em] bg-contain bg-center bg-no-repeat bg-[url(/ornament_1.svg)]"></div>
+						<div className="news-content flex flex-col gap-8">
+							<span className="text-3xl font-serif md:w-1/2 px-9 lg:px-20">
+								Latest News
+								<hr className="mt-4" />
+							</span>
+							<div className="flex flex-row flex-wrap gap-x-12 gap-y-6 px-9 pb-8 lg:px-20">
+								<div className="featured flex flex-col gap-4 md:max-w-1/2">
+									<span className="text-xl">Featured</span>
+									<div
+										className="featured-card flex flex-col lg:flex-row lg:items-center lg:text-black hover:cursor-pointer bg-white/70 border border-gray-900/20"
+										onClick={() =>
+											alert("Content to be added soon!")
 										}
 									>
-										Subscribe
-									</button>
+										<Image
+											className="w-full h-auto md:h-[10em] lg:min-h-[15em] lg:h-full lg:w-[13em] object-cover"
+											height={500}
+											width={500}
+											alt="News article image"
+											src="/nativity.jpg"
+										/>
+										<div className="card-details p-4 flex flex-col gap-1.5 lg:px-6">
+											<span className="title text-xl font-serif">
+												Fr. George Maximov church visit
+											</span>
+											<span className="timestamp text-sm text-gray-600">
+												Vasily Greyling | 23 September
+												2025
+											</span>
+											<p className="text-base line-clamp-6">
+												Lorem ipsum dolor sit amet
+												consectetur, adipisicing elit.
+												Dolorem ipsum, maxime minima
+												blanditiis eum rem est minus
+												fuga praesentium explicabo
+												exercitationem excepturi esse
+												harum nam perferendis pariatur,
+												nesciunt assumenda dolore. Lorem
+												ipsum dolor sit amet consectetur
+												adipisicing elit. Qui expedita
+												perspiciatis nihil minima
+												dolorum sapiente in iure facere
+												ipsa ex doloremque fugiat atque
+												incidunt possimus assumenda quo,
+												fugit asperiores maiores!
+											</p>
+										</div>
+									</div>
 								</div>
-							</form>
-						</>
-					) : (
-						<div>
-							<p className="text-xl">
-								Thank you for subscribing to our mailing list!
-								We will be keeping you up to date with the
-								latest news, updates, announcements and more.
-							</p>
+								<div className="schedule flex flex-col gap-4 flex-1">
+									<span className="text-xl">Schedule</span>
+									<div className="schedule-list flex flex-col w-full gap-4 pr-6 max-h-[20em] lg:max-h-[15em] overflow-y-auto">
+										<div className="latest-scheduled flex items-center">
+											<div className="flex flex-col gap-2 items-center text-center p-4 bg-gray-900 text-white font-serif">
+												<span className="text-4xl">
+													04
+												</span>
+												<span className="uppercase">
+													Jan 26
+												</span>
+											</div>
+											<div className="flex flex-col py-3 px-6 gap-1">
+												<span className="text-xl">
+													Divine Liturgy
+												</span>
+												<span>
+													Nativity of the Theotokos
+													Parish
+												</span>
+												<span className="text-sm">
+													12:00 PM
+												</span>
+											</div>
+										</div>
+										<hr className="my-2" />
+										<div className="scheduled-item flex items-center">
+											<div className="flex flex-col gap-1 items-center text-center p-4 bg-gray-900 text-white font-serif">
+												<span className="text-xl">
+													11
+												</span>
+												<span className="text-xs uppercase">
+													Jan 26
+												</span>
+											</div>
+											<div className="flex flex-col py-2 px-4">
+												<span className="text-base">
+													Typika Service
+												</span>
+												<span className="text-sm">
+													St. Sergius Parish
+												</span>
+												<span className="text-xs">
+													9:00 AM
+												</span>
+											</div>
+										</div>
+										<div className="scheduled-item flex items-center">
+											<div className="flex flex-col gap-1 items-center text-center p-4 bg-gray-900 text-white font-serif">
+												<span className="text-xl">
+													18
+												</span>
+												<span className="text-xs uppercase">
+													Jan 26
+												</span>
+											</div>
+											<div className="flex flex-col py-2 px-4">
+												<span className="text-base">
+													Typika Service
+												</span>
+												<span className="text-sm">
+													St. Sergius Parish
+												</span>
+												<span className="text-xs">
+													9:00 AM
+												</span>
+											</div>
+										</div>
+										<div className="scheduled-item flex items-center">
+											<div className="flex flex-col gap-1 items-center text-center p-4 bg-gray-900 text-white font-serif">
+												<span className="text-xl">
+													25
+												</span>
+												<span className="text-xs uppercase">
+													Jan 26
+												</span>
+											</div>
+											<div className="flex flex-col py-2 px-4">
+												<span className="text-base">
+													Typika Service
+												</span>
+												<span className="text-sm">
+													St. Sergius Parish
+												</span>
+												<span className="text-xs">
+													9:00 AM
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div className="other-stories flex flex-col gap-4 pt-6 pb-10 px-9 lg:px-20 bg-white/70">
+								<span className="text-xl mb-2">
+									Other Stories
+								</span>
+								<div className="grid lg:grid-cols-2 gap-8 md:gap-6 md:w-3/4 lg:w-9/10">
+									<div
+										className="normal-card flex flex-row items-center gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer"
+										onClick={() =>
+											alert("Content to be added soon!")
+										}
+									>
+										<Image
+											className="max-h-[8em] min-h-full h-full w-[6em] md:w-[10em] object-cover"
+											height={500}
+											width={500}
+											alt="News article image"
+											src="/nativity-5.jpg"
+										/>
+										<div className="card-details py-4 md:px-6 flex flex-col gap-1.5">
+											<span className="title text-lg font-serif">
+												Liturgy on December 7 with Fr
+												Savva
+											</span>
+											<span className="byline text-sm text-gray-600">
+												Vasily Greyling | 08 December
+												2025
+											</span>
+											<p className="line-clamp-2 max-lg:hidden">
+												Lorem ipsum dolor sit amet
+												consectetur, adipisicing elit.
+												Dolorem ipsum, maxime minima
+												blanditiis eum rem est minus
+												fuga praesentium explicabo
+												exercitationem excepturi esse
+												harum nam perferendis pariatur,
+												nesciunt assumenda dolore. Lorem
+												ipsum dolor sit amet consectetur
+												adipisicing elit. Qui expedita
+												perspiciatis nihil minima
+												dolorum sapiente in iure facere
+												ipsa ex doloremque fugiat atque
+												incidunt possimus assumenda quo,
+												fugit asperiores maiores!
+											</p>
+										</div>
+									</div>
+									<div
+										className="normal-card flex flex-row items-center gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer"
+										onClick={() =>
+											alert("Content to be added soon!")
+										}
+									>
+										<Image
+											className="max-h-[8em] min-h-full h-full w-[6em] md:w-[10em] object-cover"
+											height={500}
+											width={500}
+											alt="News article image"
+											src="/nativity-3.jpg"
+										/>
+										<div className="card-details py-4 md:px-6 flex flex-col gap-1.5">
+											<span className="title text-lg font-serif">
+												Fr Savva celebrates liturgy with
+												us on the 1st of November
+											</span>
+											<span className="byline text-sm text-gray-600">
+												Vasily Greyling | 03 November
+												2025
+											</span>
+											<p className="line-clamp-2 max-lg:hidden">
+												Lorem ipsum dolor sit amet
+												consectetur, adipisicing elit.
+												Dolorem ipsum, maxime minima
+												blanditiis eum rem est minus
+												fuga praesentium explicabo
+												exercitationem excepturi esse
+												harum nam perferendis pariatur,
+												nesciunt assumenda dolore. Lorem
+												ipsum dolor sit amet consectetur
+												adipisicing elit. Qui expedita
+												perspiciatis nihil minima
+												dolorum sapiente in iure facere
+												ipsa ex doloremque fugiat atque
+												incidunt possimus assumenda quo,
+												fugit asperiores maiores!
+											</p>
+										</div>
+									</div>
+									<div
+										className="normal-card flex flex-row items-center gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer"
+										onClick={() =>
+											alert("Content to be added soon!")
+										}
+									>
+										<Image
+											className="max-h-[8em] min-h-full h-full w-[6em] md:w-[10em] object-cover"
+											height={500}
+											width={500}
+											alt="News article image"
+											src="/nativity-4.jpg"
+										/>
+										<div className="card-details py-4 md:px-6 flex flex-col gap-1.5">
+											<span className="title text-lg font-serif">
+												Nativity of the Theotokos parish
+												holds its first official liturgy
+											</span>
+											<span className="byline text-sm text-gray-600">
+												Vasily Greyling | 05 October
+												2025
+											</span>
+											<p className="line-clamp-2 max-lg:hidden">
+												Lorem ipsum dolor sit amet
+												consectetur, adipisicing elit.
+												Dolorem ipsum, maxime minima
+												blanditiis eum rem est minus
+												fuga praesentium explicabo
+												exercitationem excepturi esse
+												harum nam perferendis pariatur,
+												nesciunt assumenda dolore. Lorem
+												ipsum dolor sit amet consectetur
+												adipisicing elit. Qui expedita
+												perspiciatis nihil minima
+												dolorum sapiente in iure facere
+												ipsa ex doloremque fugiat atque
+												incidunt possimus assumenda quo,
+												fugit asperiores maiores!
+											</p>
+										</div>
+									</div>
+									<div
+										className="normal-card flex flex-row items-center gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer"
+										onClick={() =>
+											alert("Content to be added soon!")
+										}
+									>
+										<Image
+											className="max-h-[8em] min-h-full h-full w-[6em] md:w-[10em] object-cover"
+											height={500}
+											width={500}
+											alt="News article image"
+											src="/nativity-2.jpg"
+										/>
+										<div className="card-details py-4 md:px-6 flex flex-col gap-1.5">
+											<span className="title text-lg font-serif">
+												Fr George Maximov celebrates
+												liturgy with our community
+											</span>
+											<span className="byline text-sm text-gray-600">
+												Vasily Greyling | 22 September
+												2025
+											</span>
+											<p className="line-clamp-2 max-lg:hidden">
+												Lorem ipsum dolor sit amet
+												consectetur, adipisicing elit.
+												Dolorem ipsum, maxime minima
+												blanditiis eum rem est minus
+												fuga praesentium explicabo
+												exercitationem excepturi esse
+												harum nam perferendis pariatur,
+												nesciunt assumenda dolore. Lorem
+												ipsum dolor sit amet consectetur
+												adipisicing elit. Qui expedita
+												perspiciatis nihil minima
+												dolorum sapiente in iure facere
+												ipsa ex doloremque fugiat atque
+												incidunt possimus assumenda quo,
+												fugit asperiores maiores!
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
-					)}
-				</div>
-			</section>
-		</main>
+					</section>
+					<section
+						id="resources"
+						className="resources bg-[#250203] text-white"
+					>
+						<div className="resources-content flex flex-col gap-8 p-9 py-14 lg:px-20">
+							<div className="flex flex-col gap-6 w-full justify-center items-center md:flex-row">
+								<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-11.jpg)] bg-cover">
+									<div
+										className="flex size-full p-6 justify-center items-end text-center  text-white hover:cursor-pointer"
+										onClick={() =>
+											window.open(
+												"https://eadiocese.org/litresource",
+												"_blank"
+											)
+										}
+									>
+										<span className="text-3xl mb-3 font-serif">
+											Liturgical Resources
+										</span>
+									</div>
+								</div>
+								<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-7.jpg)] bg-cover bg-center">
+									<div
+										className="flex size-full p-6 justify-center items-end text-center  text-white hover:cursor-pointer"
+										onClick={() =>
+											window.open(
+												"https://www.oca.org/orthodoxy/the-orthodox-faith",
+												"_blank"
+											)
+										}
+									>
+										<span className="text-3xl mb-3 font-serif">
+											What is Orthodoxy?
+										</span>
+									</div>
+								</div>
+								<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-9.jpg)] bg-cover bg-center">
+									<div
+										className="flex size-full p-6 justify-center items-end text-center  text-white hover:cursor-pointer"
+										onClick={() =>
+											alert("Content to be added soon!")
+										}
+									>
+										<span className="text-3xl mb-3 font-serif">
+											About our Parish
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+					<section
+						id="media"
+						className="gallery bg-[antiquewhite] text-black"
+					>
+						<div className="gallery-content flex flex-col gap-8 p-9 py-14 lg:px-20 bg-[url(/ornament_4.svg)] bg-size-[15em] bg-bottom-left bg-no-repeat">
+							<div className="swiper-container w-full max-w-full">
+								<Swiper
+									modules={[Navigation, Autoplay]}
+									spaceBetween={30}
+									breakpoints={{ 768: { slidesPerView: 3 } }}
+									slidesPerView={"auto"}
+									navigation
+									autoplay
+								>
+									<SwiperSlide>
+										<div className="h-[20em] w-[30em]">
+											<Image
+												className="object-cover object-center"
+												src="/nativity.jpg"
+												alt="gallery item"
+												fill
+											/>
+										</div>
+									</SwiperSlide>
+									<SwiperSlide>
+										<div className="h-[20em] w-[30em]">
+											<Image
+												className="object-cover object-center"
+												src="/nativity-5.jpg"
+												alt="gallery item"
+												fill
+											/>
+										</div>
+									</SwiperSlide>
+									<SwiperSlide>
+										<div className="h-[20em] w-[30em]">
+											<Image
+												className="object-cover object-center"
+												src="/nativity-2.jpg"
+												alt="gallery item"
+												fill
+											/>
+										</div>
+									</SwiperSlide>
+									<SwiperSlide>
+										<div className="h-[20em] w-[30em]">
+											<Image
+												className="object-cover object-center"
+												src="/nativity-3.jpg"
+												alt="gallery item"
+												fill
+											/>
+										</div>
+									</SwiperSlide>
+									<SwiperSlide>
+										<div className="h-[20em] w-[30em]">
+											<Image
+												className="object-cover object-center"
+												src="/nativity-4.jpg"
+												alt="gallery item"
+												fill
+											/>
+										</div>
+									</SwiperSlide>
+								</Swiper>
+							</div>
+						</div>
+					</section>
+					<section className="mailing-list bg-gray-900 text-white">
+						<div className="mailing-list-content flex flex-col gap-8 p-9 py-14 md:w-3/4 lg:px-20">
+							<span className="text-3xl font-serif md:w-1/2">
+								Join our Mailing List
+								<hr className="mt-4 mb-0" />
+							</span>
+							{mailingListStatus != "subscribed" ? (
+								<>
+									<p>
+										{
+											"Stay up to date with the latest church news, announcements, and events straight from your mailbox. Enter your email below and subscribe if you haven't already."
+										}
+									</p>
+									<form
+										action={formData => {
+											subscribe(
+												formData
+													.get("email")!
+													.toString()
+													.trim()
+											);
+										}}
+										onSubmit={() => {
+											setMailingListStatus("pending");
+										}}
+									>
+										<div className="flex flex-nowrap text-black">
+											<input
+												className="grow p-4 bg-[whitesmoke]"
+												type="email"
+												placeholder="you@example.com"
+												name="email"
+												id="mailing-email"
+												required
+											/>
+											<button
+												className={`p-4 h-full w-[8em] bg-gray-700 text-white text-center disabled:bg-gray-400`}
+												type="submit"
+												disabled={
+													mailingListStatus ==
+													"pending"
+												}
+											>
+												Subscribe
+											</button>
+										</div>
+									</form>
+								</>
+							) : (
+								<div>
+									<p className="text-xl">
+										Thank you for subscribing to our mailing
+										list! We will be keeping you up to date
+										with the latest news, updates,
+										announcements and more.
+									</p>
+								</div>
+							)}
+						</div>
+					</section>
+				</main>
+			)}
+		</>
 	);
 }

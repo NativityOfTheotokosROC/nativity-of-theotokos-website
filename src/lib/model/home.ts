@@ -1,4 +1,4 @@
-import { ReadonlyModel } from "@mvc-react/mvc";
+import { InteractiveModel, ModelInteraction } from "@mvc-react/mvc";
 import { DailyQuote, DailyReadings } from "../type/miscellaneous";
 
 export interface HomeModelView {
@@ -6,4 +6,6 @@ export interface HomeModelView {
 	dailyQuote: DailyQuote;
 }
 
-export type HomeModel = ReadonlyModel<HomeModelView>;
+export type HomeModelInteraction = ModelInteraction<"REFRESH">;
+
+export type HomeModel = InteractiveModel<HomeModelView, HomeModelInteraction>;

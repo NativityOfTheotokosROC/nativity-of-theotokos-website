@@ -33,6 +33,10 @@ body {
 	font-family: Helvetica, Arial, sans-serif;
 }
 
+body:has(.splash) {
+	overflow-y: hidden;
+}
+
 ::-webkit-scrollbar {
 	width: 5px;
 	height: 5px;
