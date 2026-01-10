@@ -163,11 +163,11 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 			const markedUpHymns = $(".normaltext p");
 			markedUpHymns.each(function () {
 				const _$ = load(this);
-				const title = _$("b").text().replace(" —", "");
-				_$("b").remove();
+				const title = _$("b").first().text().replace(" —", "");
+				_$("b").first().remove();
 				_$("br").remove();
 				const text = _$("*").html()!.trim().replaceAll("\n", "");
-				hymns.push({ title, text });
+				hymns.push({ title, text: removeMarkup(text) });
 			});
 			return hymns;
 		});

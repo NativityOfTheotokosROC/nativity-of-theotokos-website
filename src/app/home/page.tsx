@@ -65,31 +65,35 @@ export default function Home() {
 					<ModalBody
 						className={`bg-[whitesmoke] text-black ${ebGaramond.className}`}
 					>
-						<div className="flex flex-col justify-center items-center gap-5">
-							{modelView.dailyReadings.hymns.map(
-								(hymn, index) => (
-									<div
-										className="flex flex-col gap-1 text-center"
-										key={index}
-									>
-										<span className="font-serif">
-											{hymn.title}
-										</span>
-										<p className="whitespace-pre-line">
-											{hymn.text.replaceAll(
-												/\/\s+/g,
-												"/\n"
-											)}
-										</p>
-									</div>
-								)
-							)}
+						<div className="flex flex-col">
+							<div className="sticky top-0 z-10 ornament mb-4 w-full h-[5em] bg-contain bg-center bg-no-repeat bg-[url(/ornament_21.svg)] bg-[whitesmoke]" />
+							<div className="flex flex-col justify-center items-center">
+								{modelView.dailyReadings.hymns.map(
+									(hymn, index) => (
+										<div
+											className="flex flex-col gap-1 text-center items-center justify-center"
+											key={index}
+										>
+											<span className="font-serif">
+												{hymn.title}
+											</span>
+											<p className="whitespace-pre-line">
+												{hymn.text.replaceAll(
+													/\/\s+/g,
+													"/\n"
+												)}
+											</p>
+											<hr className="w-3/4 my-5 text-black/50" />
+										</div>
+									)
+								)}
+							</div>
 						</div>
 					</ModalBody>
-					<ModalFooter className={`bg-[#250203]/50 text-white`}>
+					<ModalFooter className={`bg-[#250203] text-black border-0`}>
 						<div className="flex justify-center items-center w-full">
 							<button
-								className="border border-white p-3 w-[8em]"
+								className="border-white border text-white p-3 w-[8em]"
 								onClick={() => {
 									setHymnsModalOpen(false);
 								}}
@@ -262,7 +266,7 @@ export default function Home() {
 					)}
 				</section>
 				<section className="news pt-4 bg-[antiquewhite] text-black">
-					<div className="ornament mb-4 md:mb-0 w-full h-[5em] bg-contain bg-center bg-no-repeat bg-[url(/ornament_1.svg)]"></div>
+					<div className="ornament mb-4 md:mb-0 w-full h-[5em] bg-contain bg-center bg-no-repeat bg-[url(/ornament_1.svg)]" />
 					<div className="news-content flex flex-col gap-8">
 						<span className="text-3xl font-serif md:w-1/2 px-9 lg:px-20">
 							Latest News
