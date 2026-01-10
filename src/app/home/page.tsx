@@ -64,27 +64,29 @@ export default function Home() {
 				<Modal
 					show={hymnsModalOpen}
 					onClose={() => setHymnsModalOpen(false)}
+					theme={{
+						content: {
+							inner: "border border-[#CECBCA]/30 rounded-none",
+						},
+					}}
+					position="center"
 				>
 					<ModalHeader
 						as={() => (
-							<div className="ornament w-full h-[4em] bg-contain bg-center bg-no-repeat bg-[url(/ornament_21.svg)]" />
+							<div className="ornament w-full mt-5 h-[4em] bg-contain bg-center bg-no-repeat bg-[url(/ornament_21.svg)]" />
 						)}
-						className="bg-[whitesmoke] text-black border-0 p-0 pt-5 rounded-none"
-					>
-						<div className="ornament w-full h-[4em] bg-contain bg-center bg-no-repeat bg-[url(/ornament_21.svg)]" />
-					</ModalHeader>
-					<ModalBody
-						className={`bg-[whitesmoke] text-black ${ebGaramond.className}`}
-					>
-						<div className="flex flex-col">
-							<div className="flex flex-col justify-center items-center">
+						className="bg-[#FEF8F3] text-black border-0 p-0 rounded-none"
+					/>
+					<ModalBody className={`bg-[#FEF8F3] text-black p-0`}>
+						<div className="flex justify-center items-center p-5">
+							<div className="flex flex-col justify-center items-center px-2 max-w-[25em]">
 								{modelView.dailyReadings.hymns.map(
 									(hymn, index) => (
 										<div
-											className="flex flex-col gap-1 text-center items-center justify-center"
+											className="flex flex-col gap-3 text-center items-center justify-center"
 											key={index}
 										>
-											<span className="font-serif">
+											<span className="text-lg font-semibold font-serif">
 												{hymn.title}
 											</span>
 											<p className="whitespace-pre-line">
@@ -101,9 +103,9 @@ export default function Home() {
 						</div>
 					</ModalBody>
 					<ModalFooter
-						className={`bg-[#250203] text-black border-0 rounded-none`}
+						className={`bg-[#513433] text-black border-0 rounded-none p-0`}
 					>
-						<div className="flex justify-center items-center w-full">
+						<div className="flex justify-center items-center w-full p-4.5">
 							<button
 								className="border-white border text-white p-3 w-[8em]"
 								onClick={() => {
