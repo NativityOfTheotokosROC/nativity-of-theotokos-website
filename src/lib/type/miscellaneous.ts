@@ -15,7 +15,7 @@ export type Hymn = {
 };
 
 export type DailyReadings = {
-	currentDate: string;
+	currentDate: Date;
 	liturgicalWeek: string;
 	saints: string;
 	scriptures: DailyReadingsScripture[];

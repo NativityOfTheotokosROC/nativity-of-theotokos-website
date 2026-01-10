@@ -21,11 +21,28 @@ const prismaClient = new PrismaClient({
 
 export async function getHomeSnapshot(): Promise<HomeSnapshot> {
 	const dailyReadings = await getDailyReadings();
-	const dailyQuote = await prismaClient.quote.findFirst();
+	let dailyQuote = await prismaClient.dailyQuote
+		.findFirst({
+			where: {
+				date: dailyReadings.currentDate,
+			},
+		})
+		.quote();
+	if (!dailyQuote) {
+		console.log(`Which is it: ${dailyQuote}`);
+		const quotes = await prismaClient.quote.findMany()!;
+		dailyQuote = quotes[Math.round(Math.random() * (quotes.length - 1))];
+		await prismaClient.dailyQuote.create({
+			data: {
+				date: dailyReadings.currentDate,
+				quoteId: dailyQuote.id,
+			},
+		});
+	}
 
 	return {
 		dailyReadings,
-		dailyQuote: dailyQuote!,
+		dailyQuote,
 	};
 }
 

@@ -170,10 +170,12 @@ export default function Home() {
 								<div className="info flex flex-col grow">
 									<div className="texts flex flex-col md:justify-center grow gap-4 p-5 md:p-4 md:px-7 [&_a]:text-red-900">
 										<span className="text-2xl font-serif">
-											{
-												modelView.dailyReadings
-													.currentDate
-											}
+											{modelView.dailyReadings.currentDate.toLocaleDateString(
+												"en-uk",
+												{
+													dateStyle: "full",
+												}
+											)}
 										</span>
 										<div className="flex flex-col gap-2">
 											<span className="text-xl">
@@ -272,8 +274,9 @@ export default function Home() {
 									<span>”</span>
 								</p>
 								<span className="author italic w-full text-right">
-									— {modelView.dailyQuote.author},{" "}
-									{modelView.dailyQuote.source}
+									— {modelView.dailyQuote.author}
+									{modelView.dailyQuote.source &&
+										`, ${modelView.dailyQuote.source}`}
 								</span>
 							</div>
 						</div>
@@ -412,7 +415,7 @@ export default function Home() {
 							</div>
 						</div>
 						<div className="other-stories flex flex-col gap-4 pt-6 pb-10 px-9 lg:px-20 bg-white/70">
-							<span className="text-xl mb-2">Other Stories</span>
+							<span className="text-xl mb-2">More News</span>
 							<div className="grid lg:grid-cols-2 gap-8 md:gap-6 md:w-3/4 lg:w-9/10">
 								<div
 									className="normal-card flex flex-row items-center gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer"

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "DailyQuote" ALTER COLUMN "day" SET DATA TYPE DATE;

@@ -26,9 +26,7 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 
 	async getDailyReadings(date: Date) {
 		return {
-			currentDate: date.toLocaleDateString("en-uk", {
-				dateStyle: "full",
-			}),
+			currentDate: date,
 			liturgicalWeek: await this.getLiturgicalWeek(date),
 			saints: await this.getSaints(date),
 			scriptures: await this.getScriptures(date),

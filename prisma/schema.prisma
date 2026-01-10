@@ -24,7 +24,7 @@ model Quote {
 }
 
 model DailyQuote {
-    day     DateTime @unique
+    date    DateTime @id @default(now()) @db.Date
     quote   Quote    @relation(fields: [quoteId], references: [id])
     quoteId Int
 }
