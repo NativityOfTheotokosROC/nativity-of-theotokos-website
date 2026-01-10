@@ -11,13 +11,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import { subscribeToMailingList } from "@/src/lib/server-actions/home";
-import { useCallback, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/navigation";
 import Link from "next/link";
 import { useHome } from "@/src/lib/model-implementation/home";
-import { Modal, ModalBody, ModalFooter } from "flowbite-react";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "flowbite-react";
 
 type MailingListStatus = "subscribed" | "not_subscribed" | "pending";
 const ebGaramond = EB_Garamond({ subsets: ["latin", "cyrillic"] });
@@ -37,6 +37,10 @@ export default function Home() {
 				alert(error);
 				setMailingListStatus("not_subscribed");
 			});
+	}, []);
+
+	useLayoutEffect(() => {
+		window.history.scrollRestoration = "manual";
 	}, []);
 
 	return (
@@ -60,13 +64,19 @@ export default function Home() {
 				<Modal
 					show={hymnsModalOpen}
 					onClose={() => setHymnsModalOpen(false)}
-					dismissible
 				>
+					<ModalHeader
+						as={() => (
+							<div className="ornament w-full h-[4em] bg-contain bg-center bg-no-repeat bg-[url(/ornament_21.svg)]" />
+						)}
+						className="bg-[whitesmoke] text-black border-0 p-0 pt-5 rounded-none"
+					>
+						<div className="ornament w-full h-[4em] bg-contain bg-center bg-no-repeat bg-[url(/ornament_21.svg)]" />
+					</ModalHeader>
 					<ModalBody
 						className={`bg-[whitesmoke] text-black ${ebGaramond.className}`}
 					>
 						<div className="flex flex-col">
-							<div className="sticky top-0 z-10 ornament mb-4 w-full h-[5em] bg-contain bg-center bg-no-repeat bg-[url(/ornament_21.svg)] bg-[whitesmoke]" />
 							<div className="flex flex-col justify-center items-center">
 								{modelView.dailyReadings.hymns.map(
 									(hymn, index) => (
@@ -90,7 +100,9 @@ export default function Home() {
 							</div>
 						</div>
 					</ModalBody>
-					<ModalFooter className={`bg-[#250203] text-black border-0`}>
+					<ModalFooter
+						className={`bg-[#250203] text-black border-0 rounded-none`}
+					>
 						<div className="flex justify-center items-center w-full">
 							<button
 								className="border-white border text-white p-3 w-[8em]"
