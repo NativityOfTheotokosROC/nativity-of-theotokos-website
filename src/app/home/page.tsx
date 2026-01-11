@@ -70,6 +70,7 @@ export default function Home() {
 						},
 					}}
 					position="center"
+					size="xl"
 				>
 					<ModalHeader
 						as={() => (
@@ -158,17 +159,24 @@ export default function Home() {
 							<div className="flex md:flex-row md:h-fit lg:w-9/10 md:mt-4 items-stretch bg-white/70 border border-gray-900/20">
 								<div className="md:flex min-w-60 w-60 lg:min-w-70 lg:w-70 items-stretch justify-center p-3 hidden bg-gray-900">
 									<Image
-										className="hidden md:block grow object-cover object-center"
+										className="grow object-cover object-center hover:cursor-pointer"
 										height={320}
 										width={240}
 										alt="Icon of the day"
 										src={
 											modelView.dailyReadings.iconOfTheDay
 										}
+										onClick={() => {
+											window.open(
+												modelView.dailyReadings
+													.iconOfTheDay,
+												"_blank"
+											);
+										}}
 									/>
 								</div>
 								<div className="info flex flex-col grow">
-									<div className="texts flex flex-col md:justify-center grow gap-4 p-5 md:p-4 md:px-7 [&_a]:text-red-900">
+									<div className="texts flex flex-col md:justify-center grow gap-4 p-5 md:p-4 md:px-7 [&_a]:text-red-900 [&_a]:hover:underline [&_a]:hover:text-[#DCB042]">
 										<span className="text-2xl font-serif">
 											{modelView.dailyReadings.currentDate.toLocaleDateString(
 												"en-uk",
@@ -244,7 +252,7 @@ export default function Home() {
 											]}
 										</div>
 									</div>
-									<div className="fasting-info bg-[#250203]/80 text-white text-center md:text-left p-2 px-4 md:px-7 md:mt-0">
+									<div className="fasting-info bg-[#250203]/80 text-white text-center md:text-left p-2.5 px-4 md:px-7 md:mt-0">
 										<span className="text-base">
 											{
 												modelView.dailyReadings
