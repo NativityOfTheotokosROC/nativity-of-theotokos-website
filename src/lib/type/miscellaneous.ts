@@ -29,3 +29,13 @@ export type DailyQuote = {
 	author: string;
 	source: string | null;
 };
+
+export type ScheduleItem = {
+	date: Date;
+	title: string;
+	location: string;
+	times: {
+		time: Date;
+		designation: string;
+	}[];
+};

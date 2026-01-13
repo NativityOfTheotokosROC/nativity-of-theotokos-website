@@ -18,6 +18,8 @@ import "swiper/css/navigation";
 import Link from "next/link";
 import { useHome } from "@/src/lib/model-implementation/home";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "flowbite-react";
+import ScheduleItem from "@/src/lib/component/schedule-item/ScheduleItem";
+import { newReadonlyModel } from "@mvc-react/mvc";
 
 type MailingListStatus = "subscribed" | "not_subscribed" | "pending";
 const ebGaramond = EB_Garamond({ subsets: ["latin", "cyrillic"] });
@@ -142,6 +144,7 @@ export default function Home() {
 								className="h-[20em] w-[15em]"
 								src="/nativity-icon.webp"
 								alt="Icon of the Nativity of the Theotokos"
+								title="Icon of the Nativity of the Theotokos"
 								height={400}
 								width={300}
 								loading="eager"
@@ -163,6 +166,7 @@ export default function Home() {
 										height={320}
 										width={240}
 										alt="Icon of the day"
+										title="Icon of the day"
 										src={
 											modelView.dailyReadings.iconOfTheDay
 										}
@@ -297,11 +301,11 @@ export default function Home() {
 							Latest News
 							<hr className="mt-4" />
 						</span>
-						<div className="flex flex-row flex-wrap gap-x-12 gap-y-6 px-9 pb-8 lg:px-20">
+						<div className="flex flex-row flex-wrap gap-x-12 gap-y-6 px-9 pb-6 lg:px-20">
 							<div className="featured flex flex-col gap-4 md:max-w-1/2">
 								<span className="text-xl">Featured</span>
 								<div
-									className="featured-card flex flex-col lg:flex-row lg:items-center lg:text-black hover:cursor-pointer bg-white/70 border border-gray-900/20"
+									className="featured-card flex flex-col lg:flex-row lg:items-center lg:text-black hover:cursor-pointer bg-[#FEF8F3] border border-gray-900/20"
 									onClick={() =>
 										alert("Content to be added soon!")
 									}
@@ -339,88 +343,37 @@ export default function Home() {
 									</div>
 								</div>
 							</div>
-							<div className="schedule flex flex-col gap-4 flex-1">
-								<span className="text-xl">Schedule</span>
-								<div className="schedule-list flex flex-col w-full gap-4 pr-6 max-h-[20em] lg:max-h-[15em] overflow-y-auto">
-									<div className="latest-scheduled flex items-center">
-										<div className="flex flex-col gap-2 items-center text-center p-4 bg-gray-900 text-white font-serif">
-											<span className="text-4xl">04</span>
-											<span className="uppercase">
-												Jan 26
-											</span>
-										</div>
-										<div className="flex flex-col py-3 px-6 gap-1">
-											<span className="text-xl">
-												Divine Liturgy
-											</span>
-											<span>
-												Nativity of the Theotokos Parish
-											</span>
-											<span className="text-sm">
-												12:00 PM
-											</span>
-										</div>
-									</div>
-									<hr className="my-2" />
-									<div className="scheduled-item flex items-center">
-										<div className="flex flex-col gap-1 items-center text-center p-4 bg-gray-900 text-white font-serif">
-											<span className="text-xl">11</span>
-											<span className="text-xs uppercase">
-												Jan 26
-											</span>
-										</div>
-										<div className="flex flex-col py-2 px-4">
-											<span className="text-base">
-												Typika Service
-											</span>
-											<span className="text-sm">
-												St. Sergius Parish
-											</span>
-											<span className="text-xs">
-												9:00 AM
-											</span>
-										</div>
-									</div>
-									<div className="scheduled-item flex items-center">
-										<div className="flex flex-col gap-1 items-center text-center p-4 bg-gray-900 text-white font-serif">
-											<span className="text-xl">18</span>
-											<span className="text-xs uppercase">
-												Jan 26
-											</span>
-										</div>
-										<div className="flex flex-col py-2 px-4">
-											<span className="text-base">
-												Typika Service
-											</span>
-											<span className="text-sm">
-												St. Sergius Parish
-											</span>
-											<span className="text-xs">
-												9:00 AM
-											</span>
-										</div>
-									</div>
-									<div className="scheduled-item flex items-center">
-										<div className="flex flex-col gap-1 items-center text-center p-4 bg-gray-900 text-white font-serif">
-											<span className="text-xl">25</span>
-											<span className="text-xs uppercase">
-												Jan 26
-											</span>
-										</div>
-										<div className="flex flex-col py-2 px-4">
-											<span className="text-base">
-												Typika Service
-											</span>
-											<span className="text-sm">
-												St. Sergius Parish
-											</span>
-											<span className="text-xs">
-												9:00 AM
-											</span>
+							{modelView && (
+								<div className="schedule flex flex-col gap-4 flex-1">
+									<span className="text-xl">Schedule</span>
+									<div className="schedule-list flex flex-col w-full gap-4 pr-4 max-h-[20em] lg:max-h-[19em] overflow-y-auto">
+										<ScheduleItem
+											model={newReadonlyModel({
+												scheduleItem:
+													modelView.scheduleItems[0],
+												isFeatured: true,
+											})}
+										/>
+										<hr className="my-2 text-black/50" />
+										<div className="flex flex-col gap-3 md:w-3/4">
+											{modelView.scheduleItems
+												.slice(1)
+												.map((scheduleItem, index) => (
+													<ScheduleItem
+														key={index}
+														model={newReadonlyModel(
+															{
+																scheduleItem,
+																isFeatured:
+																	false,
+															}
+														)}
+													/>
+												))}
 										</div>
 									</div>
 								</div>
-							</div>
+							)}
 						</div>
 						<div className="other-stories flex flex-col gap-4 pt-6 pb-10 px-9 lg:px-20 bg-white/70">
 							<span className="text-xl mb-2">More News</span>

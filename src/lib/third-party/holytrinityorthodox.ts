@@ -77,7 +77,7 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 			$(".normaltext")
 				.contents()
 				.filter(function () {
-					return this.nodeType === 3 && this.nodeValue == "\n";
+					return this.nodeType === 3 && this.nodeValue.includes("\n");
 				})
 				.each(function () {
 					$(this).remove();

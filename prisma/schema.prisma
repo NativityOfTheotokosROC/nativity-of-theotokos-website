@@ -28,3 +28,29 @@ model DailyQuote {
     quote   Quote    @relation(fields: [quoteId], references: [id])
     quoteId Int
 }
+
+model ScheduleItem {
+    id                  Int                  @id @default(autoincrement())
+    date                DateTime             @db.Date
+    location            String
+    title               String
+    scheduleItemTimes   ScheduleItemTime[]
+    removedScheduleItem RemovedScheduleItem?
+
+    @@unique([date, location])
+}
+
+model ScheduleItemTime {
+    id             Int          @id @default(autoincrement())
+    time           DateTime     @db.Time
+    designation    String
+    scheduleItem   ScheduleItem @relation(fields: [scheduleItemId], references: [id])
+    scheduleItemId Int
+
+    @@unique([time, scheduleItemId])
+}
+
+model RemovedScheduleItem {
+    scheduleItemId Int          @id
+    scheduleItem   ScheduleItem @relation(fields: [scheduleItemId], references: [id])
+}

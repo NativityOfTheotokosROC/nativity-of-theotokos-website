@@ -1,9 +1,10 @@
 import { InteractiveModel, ModelInteraction } from "@mvc-react/mvc";
-import { DailyQuote, DailyReadings } from "../type/miscellaneous";
+import { DailyQuote, DailyReadings, ScheduleItem } from "../type/miscellaneous";
 
 export interface HomeModelView {
 	dailyReadings: DailyReadings;
 	dailyQuote: DailyQuote;
+	scheduleItems: ScheduleItem[];
 }
 
 export type HomeModelInteraction = ModelInteraction<"REFRESH">;

@@ -11,10 +11,12 @@ export function useHome(): HomeModel {
 		async produceModelView(interaction) {
 			switch (interaction.type) {
 				case "REFRESH": {
-					const snapshot = await getHomeSnapshot();
+					const { dailyReadings, dailyQuote, scheduleItems } =
+						await getHomeSnapshot();
 					return {
-						dailyReadings: snapshot.dailyReadings,
-						dailyQuote: snapshot.dailyQuote,
+						dailyReadings,
+						dailyQuote,
+						scheduleItems,
 					};
 				}
 			}
