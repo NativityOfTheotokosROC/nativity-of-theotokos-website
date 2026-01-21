@@ -1,6 +1,7 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { NewsArticlePreviewModel } from "../../model/news-article-preview";
 import Image from "next/image";
+import { georgia } from "../../third-party/fonts";
 
 const NewsArticlePreview = function ({ model }) {
 	const { articlePreview: article, isFeatured } = model.modelView;
@@ -30,7 +31,9 @@ const NewsArticlePreview = function ({ model }) {
 				/>
 			</div>
 			<div className="card-details p-4 flex flex-col gap-1.5">
-				<span className="title text-xl">{title}</span>
+				<span className={`title text-xl mb-1 ${georgia.className}`}>
+					{title}
+				</span>
 				<span className="timestamp text-sm text-gray-600">
 					{author} | {dateString}
 				</span>

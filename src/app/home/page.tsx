@@ -13,7 +13,7 @@ import { useHome } from "@/src/lib/model-implementation/home";
 import ScheduleItem from "@/src/lib/component/schedule-item/ScheduleItem";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import NewsArticlePreview from "@/src/lib/component/news-article-preview/NewsArticlePreview";
-import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
+import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
 import { hymnsModalVIInterface } from "@/src/lib/model-implementation/hymns-modal";
 import HymnsModal from "@/src/lib/component/hymns-modal/HymnsModal";
 import SplashScreen from "@/src/lib/component/splash-screen/SplashScreen";
@@ -26,7 +26,10 @@ type MailingListStatus = "subscribed" | "not_subscribed" | "pending";
 
 export default function Home() {
 	const { modelView } = useHome();
-	const hymnsModal = useNewStatefulInteractiveModel(hymnsModalVIInterface());
+	const hymnsModal = useInitializedStatefulInteractiveModel(
+		hymnsModalVIInterface(),
+		{ isOpen: false, hymns: [] },
+	);
 	const [mailingListStatus, setMailingListStatus] =
 		useState<MailingListStatus>("not_subscribed");
 	const subscribe = useCallback((email: string) => {
@@ -50,10 +53,10 @@ export default function Home() {
 			<SplashScreen model={newReadonlyModel({ isShown: !modelView })} />
 			<main className={`home bg-[whitesmoke] ${!modelView && "hidden"}`}>
 				<section className="hero bg-[#DCB042] text-black bg-[url(/nativity-icon.webp)] bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]">
-					<div className="hero-content flex flex-col justify-center items-center md:flex-row h-[30em] p-8 md:p-20 bg-black/70">
+					<div className="hero-content flex flex-col justify-center items-center md:flex-row h-[30em] p-8 lg:p-20 bg-black/70">
 						<div className="hero-message flex flex-col md:w-[35em] md:max-w-1/2 lg:w-full gap-5 md:p-8 justify-center">
 							<span
-								className={`heading text-6xl ${georgia.className} text-white`}
+								className={`heading text-7xl ${georgia.className} text-white`}
 							>
 								Hello and welcome
 							</span>
@@ -80,10 +83,10 @@ export default function Home() {
 				<section className="readings bg-[antiquewhite] text-black bg-[url(/ornament_3_tr.svg)] bg-no-repeat bg-size-[13em,60em] md:bg-size-[30em,80em] bg-position-[98%_0.5%,40%_-30em] lg:bg-position-[100%_0.5%,750%_-40em]">
 					<div className="readings-content flex flex-col gap-6 p-8 py-9 lg:px-20 md:py-10">
 						<span
-							className={`text-3xl md:text-black md:w-1/2 ${georgia.className}`}
+							className={`text-[2.75rem]/tight w-3/4 mb-2 font-semibold md:text-black md:w-1/2 ${georgia.className}`}
 						>
 							Daily Readings
-							<hr className="mt-4 mb-0 w-3/4 md:w-full" />
+							<hr className="mt-4 mb-0 md:w-full" />
 						</span>
 						{modelView?.dailyReadings ? (
 							<>
@@ -298,15 +301,15 @@ export default function Home() {
 						<div className="ornament flex justify-center items-center mb-4 md:mb-0 w-full ">
 							<LatestNewsOrnament
 								className="h-[6em] w-[25em] max-w-9/10"
-								fill="#88815885"
+								fill="#88815899"
 							/>
 						</div>
 						<div className="news-content flex flex-col gap-8">
 							<span
-								className={`text-3xl ${georgia.className} md:w-1/2 px-8 lg:px-20`}
+								className={`px-8 lg:px-20 text-[2.75rem]/tight w-full mb-2 font-semibold md:text-black md:w-1/2 ${georgia.className}`}
 							>
 								Latest News
-								<hr className="mt-4" />
+								<hr className="mt-4 mb-0 md:w-full" />
 							</span>
 							<div className="flex flex-row flex-wrap lg:justify-between gap-x-12 gap-y-6 px-8 pb-6 lg:px-20">
 								<div className="featured flex flex-col gap-4 md:max-w-1/2 lg:max-w-[45%]">
@@ -350,7 +353,7 @@ export default function Home() {
 									</div>
 								</div>
 							</div>
-							<div className="other-stories flex flex-col gap-4 pt-6 pb-10 px-8 lg:px-20 bg-white/70">
+							<div className="other-stories flex flex-col gap-4 pt-6 pb-10 px-8 lg:px-20 bg-white/70  border-t border-t-[#dcb042]">
 								<span className="text-xl mb-1">More News</span>
 								<div className="grid lg:grid-cols-2 gap-8 md:gap-6 md:w-3/4 lg:w-9/10">
 									{[
@@ -487,10 +490,10 @@ export default function Home() {
 				<section className="mailing-list bg-gray-900 text-white">
 					<div className="mailing-list-content flex flex-col gap-8 p-8 py-14 md:w-3/4 lg:w-6/10 lg:px-20">
 						<span
-							className={`text-3xl ${georgia.className} md:w-1/2`}
+							className={`text-[2.75rem]/tight w-3/4 mb-2 font-semibold ${georgia.className}`}
 						>
 							Join our Mailing List
-							<hr className="mt-4 mb-0" />
+							<hr className="mt-4 mb-0 md:w-full" />
 						</span>
 						{mailingListStatus != "subscribed" ? (
 							<>

@@ -8,18 +8,13 @@ import NavigationMenu from "./NavigationMenu";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { useRouter } from "next/navigation";
 import LogoIcon from "@/public/logo-icon.svg";
-import {
-	DM_Serif_Display,
-	EB_Garamond,
-	Playfair_Display,
-} from "next/font/google";
 import { georgia } from "../../third-party/fonts";
 
-const playfair = Playfair_Display({ subsets: ["latin", "cyrillic"] });
-const dmSerif = DM_Serif_Display({ subsets: ["latin"], weight: "400" });
+// const playfair = Playfair_Display({ subsets: ["latin", "cyrillic"] });
+// const dmSerif = DM_Serif_Display({ subsets: ["latin"], weight: "400" });
 
 const Header = function ({ model }) {
-	const { title, navlinks } = model.modelView;
+	const { navlinks } = model.modelView;
 	const isWideScreen = useMediaQuery({ minWidth: 768 });
 	const router = useRouter();
 
@@ -32,15 +27,24 @@ const Header = function ({ model }) {
 						router.push("/");
 					}}
 				>
-					<div className="size-11.25 max-w-11.25 max-h-11.25">
+					<div className="size-12">
 						<LogoIcon
 							className="grow object-center object-contain"
 							viewBox="0 0 430 430"
-							width={45}
-							height={45}
+							width={48}
+							height={48}
 						/>
 					</div>
-					<span className={`${georgia.className}`}>{title}</span>
+					<div
+						className={`logo-text flex flex-col gap-1 ${georgia.className}`}
+					>
+						<span className={`text-lg`}>
+							{"Nativity of the Theotokos"}
+						</span>
+						<span className={`text-sm`}>
+							{"Russian Orthodox Church "}
+						</span>
+					</div>
 				</div>
 				<NavigationMenu
 					model={newReadonlyModel({
