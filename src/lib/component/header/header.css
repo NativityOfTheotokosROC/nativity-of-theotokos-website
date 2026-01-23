@@ -1,0 +1,15 @@
+.header-border {
+	scale: 0 1;
+	opacity: 0;
+	width: 100%;
+	animation: expandout linear forwards;
+	animation-timeline: scroll(root);
+	animation-range: 0 350px;
+}
+
+@keyframes expandout {
+	to {
+		scale: 1 1;
+		opacity: 1;
+	}
+}

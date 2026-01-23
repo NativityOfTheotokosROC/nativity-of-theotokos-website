@@ -80,7 +80,7 @@ export default function Home() {
 						</div>
 					</div>
 				</section>
-				<section className="readings bg-[antiquewhite] text-black bg-[url(/ornament_3_tr.svg)] bg-no-repeat bg-size-[13em,60em] md:bg-size-[30em,80em] bg-position-[98%_0.5%,40%_-30em] lg:bg-position-[100%_0.5%,750%_-40em]">
+				<section className="readings bg-[antiquewhite] text-black border-t-15 border-t-[#976029] bg-[url(/ornament_3_tr.svg)] bg-no-repeat bg-size-[13em,60em] md:bg-size-[30em,80em] bg-position-[98%_0.5%,40%_-30em] lg:bg-position-[100%_0.5%,750%_-40em]">
 					<div className="readings-content flex flex-col gap-6 p-8 py-9 lg:px-20 md:py-10">
 						<span
 							className={`text-[2.75rem]/tight w-3/4 mb-2 font-semibold md:text-black md:w-1/2 ${georgia.className}`}
@@ -211,19 +211,19 @@ export default function Home() {
 											</div>
 										</div>
 									</div>
-									<div className="h-fit flex flex-col bg-white/70 border border-gray-900/30 md:max-w-[75%] lg:min-w-[35%] rounded-lg overflow-clip">
-										<div className="flex gap-4 w-full items-center p-3 px-6 text-white bg-gray-900">
+									<div className="h-fit flex flex-col bg-white/70 border border-gray-900/30 md:max-w-[70%] lg:min-w-[35%] rounded-lg overflow-clip">
+										<div className="flex gap-6 w-full items-center justify-center lg:justify-center md:items-center lg:items-center p-2 px-10 text-white bg-gray-900">
 											<ReadingsOrnament
-												className={`object-contain object-center h-[5em]`}
+												className={`object-contain object-center h-[5em] w-[8em]`}
 												fill="#fff"
 											/>
-											{/* <span
-												className={`text-3xl ${georgia.className}`}
+											<span
+												className={`grow w-full hidden md:inline lg:hidden text-4xl ${georgia.className}`}
 											>
 												Readings
-											</span> */}
+											</span>
 										</div>
-										<div className="fasting-info bg-gray-950 text-white text-center p-2.5 px-4 md:px-7 md:mt-0">
+										<div className="fasting-info bg-gray-950 text-white text-center md:text-left lg:text-center p-2.5 px-4 md:px-7 md:mt-0">
 											<span className="text-base">
 												{
 													modelView.dailyReadings
@@ -231,7 +231,7 @@ export default function Home() {
 												}
 											</span>
 										</div>
-										<div className="flex p-6 bg-gray-700 text-white [&_a]:underline [&_a]:hover:underline [&_a]:hover:text-[#DCB042] max-h-[15em] md:max-h-[10em]">
+										<div className="flex p-6 bg-gray-700 text-white [&_a]:underline [&_a]:hover:underline [&_a]:hover:text-[#DCB042] max-h-[15em] md:max-h-[11em]">
 											<div className="scriptures grow flex flex-col gap-1 pr-3 overflow-y-auto">
 												{[
 													...modelView.dailyReadings.scriptures.map(

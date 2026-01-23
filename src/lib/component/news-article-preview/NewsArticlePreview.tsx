@@ -18,7 +18,7 @@ const NewsArticlePreview = function ({ model }) {
 			className="featured-card flex flex-col hover:cursor-pointer bg-[#FEF8F3] border border-gray-900/20 rounded-lg overflow-clip"
 			onClick={() => alert("Content to be added soon!")}
 		>
-			<div className="flex justify-stretch items-stretch w-full h-[15em] max-h-[75dvh]">
+			<div className="flex justify-stretch items-stretch w-full h-[15em] max-h-[80dvh]">
 				<Image
 					className="grow object-cover object-center"
 					height={500}

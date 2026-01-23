@@ -9,6 +9,7 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { useRouter } from "next/navigation";
 import LogoIcon from "@/public/logo-icon.svg";
 import { georgia } from "../../third-party/fonts";
+import "./header.css";
 
 // const playfair = Playfair_Display({ subsets: ["latin", "cyrillic"] });
 // const dmSerif = DM_Serif_Display({ subsets: ["latin"], weight: "400" });
@@ -19,8 +20,10 @@ const Header = function ({ model }) {
 	const router = useRouter();
 
 	return (
-		<header className={`w-full max-w-full top-0 sticky z-10`}>
-			<div className="header-content flex flex-nowrap gap-9 justify-between p-4 lg:p-6 lg:px-7 items-center bg-gray-900/99 text-white">
+		<header
+			className={`header flex flex-col w-full max-w-full top-0 sticky z-10  bg-gray-900/99 h-fit`}
+		>
+			<div className="header-content flex flex-nowrap gap-9 justify-between p-4 lg:p-6 lg:px-7 items-center text-white">
 				<div
 					className="logo flex gap-3 items-center justify-center max-w-[18em] hover:cursor-pointer"
 					onClick={() => {
@@ -53,6 +56,7 @@ const Header = function ({ model }) {
 					})}
 				/>
 			</div>
+			<hr className="header-border self-center text-gray-600" />
 		</header>
 	);
 } as ModeledVoidComponent<HeaderModel>;
