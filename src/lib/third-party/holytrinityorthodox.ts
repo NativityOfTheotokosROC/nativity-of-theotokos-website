@@ -1,5 +1,5 @@
 import { toZonedTime } from "date-fns-tz";
-import { DailyReadings, Hymn } from "../type/miscellaneous";
+import { DailyReadings, Hymn, Image } from "../type/miscellaneous";
 import { julianDate, removeMarkup } from "../utility/miscellaneous";
 import { load } from "cheerio";
 
@@ -15,7 +15,7 @@ interface HolyTrinityOrthodox {
 		}[]
 	>;
 	getFastingInfo: (date: Date) => Promise<string>;
-	getIconOfTheDay: (date: Date) => Promise<string>;
+	getIconOfTheDay: (date: Date) => Promise<unknown>;
 	getHymns: (date: Date) => Promise<Hymn[]>;
 }
 
@@ -59,6 +59,8 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 			for (let i = 0; i < 10; i++) {
 				$(`.typicon-${i}`).remove();
 			}
+			$("i").wrapInner("<span class='emphasized'></span>");
+			$(".emphasized").unwrap();
 			$(".cal-main").removeAttr("onclick");
 			$(".cal-main").each(function () {
 				$(this).attr("target", "_blank");
@@ -152,7 +154,7 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 		if (response.ok) {
 			link = saintOfTheDayLink;
 		}
-		return link;
+		return { source: link } as Pick<Image, "source"> & Partial<Image>;
 	}
 
 	async getHymns(date: Date) {
@@ -180,11 +182,11 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 			.then(response => {
 				if (response.ok) return response.arrayBuffer();
 				return Promise.reject(
-					`${response.status}: ${response.statusText}`
+					`${response.status}: ${response.statusText}`,
 				);
 			})
 			.then(encodedResponse =>
-				new TextDecoder("windows-1251").decode(encodedResponse)
+				new TextDecoder("windows-1251").decode(encodedResponse),
 			);
 	}
 

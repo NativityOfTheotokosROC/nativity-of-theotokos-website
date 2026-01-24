@@ -1,6 +1,5 @@
 "use client";
 
-import "@fortawesome/fontawesome-svg-core/styles.css";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { HeaderModel } from "../../model/header";
 import { useMediaQuery } from "react-responsive";
@@ -56,7 +55,7 @@ const Header = function ({ model }) {
 					})}
 				/>
 			</div>
-			<hr className="header-border self-center text-gray-600" />
+			<hr className="header-border self-center text-gray-500" />
 		</header>
 	);
 } as ModeledVoidComponent<HeaderModel>;

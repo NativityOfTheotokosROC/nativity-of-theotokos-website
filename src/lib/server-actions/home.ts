@@ -61,9 +61,15 @@ export async function getHomeSnapshot(
 		dailyGalleryImagesCount,
 		currentDate,
 	);
+	const modifiedDailyReadings = await getPlaceholder(
+		dailyReadings.iconOfTheDay.source,
+	).then(placeholder => ({
+		...dailyReadings,
+		iconOfTheDay: { ...dailyReadings.iconOfTheDay, placeholder },
+	}));
 
 	return {
-		dailyReadings,
+		dailyReadings: modifiedDailyReadings,
 		dailyQuote,
 		scheduleItems,
 		newsArticles,

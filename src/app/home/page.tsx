@@ -51,7 +51,9 @@ export default function Home() {
 	return (
 		<>
 			<SplashScreen model={newReadonlyModel({ isShown: !modelView })} />
-			<main className={`home bg-[whitesmoke] ${!modelView && "hidden"}`}>
+			<main
+				className={`home bg-[linear-gradient(135deg,#F7DAC1,whitesmoke)] ${!modelView && "hidden"}`}
+			>
 				<section className="hero bg-[#DCB042] text-black bg-[url(/nativity-icon.webp)] bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]">
 					<div className="hero-content flex flex-col justify-center items-center md:flex-row h-[30em] p-8 lg:p-20 bg-black/70">
 						<div className="hero-message flex flex-col md:w-[35em] md:max-w-1/2 lg:w-full gap-5 md:p-8 justify-center">
@@ -80,7 +82,7 @@ export default function Home() {
 						</div>
 					</div>
 				</section>
-				<section className="readings bg-[antiquewhite] text-black border-t-15 border-t-[#976029] bg-[url(/ornament_3_tr.svg)] bg-no-repeat bg-size-[13em,60em] md:bg-size-[30em,80em] bg-position-[98%_0.5%,40%_-30em] lg:bg-position-[100%_0.5%,750%_-40em]">
+				<section className="readings text-black border-t-15 border-t-[#976029] bg-[url(/ornament_3_tr.svg)] bg-no-repeat bg-size-[13em,60em] md:bg-size-[30em,80em] bg-position-[98%_0.5%,40%_-30em] lg:bg-position-[100%_0.5%,750%_-40em]">
 					<div className="readings-content flex flex-col gap-6 p-8 py-9 lg:px-20 md:py-10">
 						<span
 							className={`text-[2.75rem]/tight w-3/4 mb-2 font-semibold md:text-black md:w-1/2 ${georgia.className}`}
@@ -107,22 +109,35 @@ export default function Home() {
 												width={240}
 												alt="Icon of the day"
 												title="Icon of the day"
-												src={
+												placeholder={
 													modelView.dailyReadings
 														.iconOfTheDay
+														.placeholder && "blur"
+												}
+												blurDataURL={
+													modelView.dailyReadings
+														.iconOfTheDay
+														.placeholder
+												}
+												src={
+													modelView.dailyReadings
+														.iconOfTheDay.source
 												}
 												onClick={() => {
 													window.open(
 														modelView.dailyReadings
-															.iconOfTheDay,
+															.iconOfTheDay
+															.source,
 														"_blank",
 													);
 												}}
 											/>
 										</div>
 										<div className="info flex flex-col grow">
-											<div className="texts flex flex-col md:justify-center grow gap-4 py-6 px-5 md:px-7 [&_a]:text-red-900 [&_a]:hover:underline [&_a]:hover:text-[#DCB042]">
-												<span className={`text-2xl`}>
+											<div className="texts flex flex-col md:justify-center grow gap-4 py-6 [&_a]:underline [&_a]:hover:text-[#DCB042]">
+												<span
+													className={`text-2xl px-5 md:px-7`}
+												>
 													{modelView.dailyReadings.currentDate.toLocaleDateString(
 														"en-uk",
 														{
@@ -131,18 +146,17 @@ export default function Home() {
 													)}
 												</span>
 												<div className="flex flex-col gap-2">
-													<span className="text-xl">
+													<span className="text-xl px-5 md:px-7">
 														{
 															modelView
 																.dailyReadings
 																.liturgicalWeek
 														}
 													</span>
-													<hr className="my-1.5 text-black/30" />
-													<div className="flex gap-2 items-center mb-1">
-														<HymnsOrnament className="h-10 w-10" />
+													<div className="flex gap-2 items-center p-1 px-5 md:px-7 my-2 bg-[#250203]/80 text-white">
+														<HymnsOrnament className="h-10 w-10 fill-white" />
 														<Link
-															className="text-lg underline"
+															className="text-lg "
 															href="#"
 															onClick={async () =>
 																await hymnsModal.interact(
@@ -163,51 +177,17 @@ export default function Home() {
 															}
 														</Link>
 													</div>
-													<p
-														className={`text-base/relaxed [&_a]:underline max-h-[15em] md:max-h-[10em] pr-3 overflow-y-auto`}
-														dangerouslySetInnerHTML={{
-															__html: modelView
-																.dailyReadings
-																.saints,
-														}}
-													/>
+													<div className="px-5 md:px-7 max-h-[15em] md:max-h-[10em]">
+														<p
+															className={`h-full text-base/relaxed [&_a]:text-red-900 pr-3 overflow-y-auto`}
+															dangerouslySetInnerHTML={{
+																__html: modelView
+																	.dailyReadings
+																	.saints,
+															}}
+														/>
+													</div>
 												</div>
-												{/* <hr className="md:w-3/4 text-black/60" />
-												<div className="flex flex-col w-fit max-w-full">
-													{[
-														...modelView.dailyReadings.scriptures.map(
-															(
-																scripture,
-																index,
-															) => (
-																<div
-																	key={index}
-																	className="grid grid-cols-2 gap-x-2"
-																>
-																	<span className="w-fit">
-																		<Link
-																			href={
-																				scripture.link
-																			}
-																			target="_blank"
-																		>
-																			{
-																				scripture.scriptureText
-																			}
-																		</Link>
-																	</span>
-																	{scripture.designation && (
-																		<span>
-																			{
-																				scripture.designation
-																			}
-																		</span>
-																	)}
-																</div>
-															),
-														),
-													]}
-												</div> */}
 											</div>
 										</div>
 									</div>
@@ -297,7 +277,7 @@ export default function Home() {
 					)}
 				</section>
 				{modelView && (
-					<section className="news pt-4 bg-[antiquewhite] text-black">
+					<section className="news pt-4 text-black">
 						<div className="ornament flex justify-center items-center mb-4 md:mb-0 w-full ">
 							<LatestNewsOrnament
 								className="h-[6em] w-[25em] max-w-9/10"
@@ -430,12 +410,10 @@ export default function Home() {
 						</div>
 					</div>
 				</section>
-				<section
-					id="media"
-					className="gallery bg-[antiquewhite] text-black"
-				>
+				<section id="media" className="gallery text-black">
+					<div className="h-3.75 w-full bg-[#250203] bg-[url(/ornament_14.svg)] bg-position-[50%_50%] bg-size-[100%] md:bg-size-[50%] bg-repeat-x rotate-180" />
 					{modelView && (
-						<div className="gallery-content flex flex-col gap-8 p-8 py-14 lg:px-20 bg-[url(/ornament_4.svg)] bg-size-[15em] bg-bottom-left bg-no-repeat">
+						<div className="gallery-content flex flex-col gap-8 p-8 py-14 lg:px-20">
 							<div className="swiper-container w-full max-w-full h-[20em] max-h-[20em]">
 								<Swiper
 									className="h-full"

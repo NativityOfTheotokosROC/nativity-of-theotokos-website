@@ -5,6 +5,7 @@ import { faBars as menuIcon } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { Fragment } from "react/jsx-runtime";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 
 const NavigationMenu = function ({ model }) {
 	const { navlinks, menuType } = model.modelView;
