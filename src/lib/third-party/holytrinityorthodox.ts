@@ -84,6 +84,7 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 				.each(function () {
 					$(this).remove();
 				});
+			$("em").remove();
 			$(".cal-main").removeAttr("onclick");
 			$(".cal-main").each(function () {
 				$(this).removeClass();

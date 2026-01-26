@@ -16,7 +16,7 @@ const Footer = function ({ model }) {
 				<div className="footer-sections flex flex-col gap-x-14 gap-y-8 md:flex-row">
 					<div className="flex flex-col gap-6 md:flex-row">
 						<LogoIcon
-							className="md:self-center size-17.5"
+							className="md:self-center size-17.5 min-w-17.5"
 							viewBox="0 0 430 430"
 						/>
 						<FooterSection

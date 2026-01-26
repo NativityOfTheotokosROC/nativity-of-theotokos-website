@@ -1,3 +1,7 @@
+:root {
+	scroll-padding-top: 4em;
+}
+
 .header {
 	scale: 1 1;
 	animation: shrink-header linear forwards;

@@ -3,8 +3,6 @@
 :root {
 	--background: #ffffff;
 	--foreground: #171717;
-	--swiper-navigation-color: #fce9b9;
-	scroll-padding-top: 4em;
 }
 
 html {
@@ -15,10 +13,6 @@ body {
 	background: var(--background);
 	color: var(--foreground);
 	font-family: Georgia, Helvetica, sans-serif;
-}
-
-body:has(.splash) {
-	overflow-y: hidden;
 }
 
 body *::-webkit-scrollbar {

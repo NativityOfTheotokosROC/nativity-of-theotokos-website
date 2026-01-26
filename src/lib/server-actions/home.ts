@@ -136,7 +136,7 @@ export async function getScheduleItems(
 			times: record.scheduleItemTimes,
 		}),
 	);
-	let nextScheduleItemDate = new Date(currentDate);
+	let nextScheduleItemDate = new Date(localDate);
 	while (scheduleItems.length < count) {
 		const nextScheduleItem =
 			await _getNextDefaultScheduleItem(nextScheduleItemDate);
@@ -362,7 +362,7 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<ScheduleItem> {
 		if (nextSundayDate.getMonth() != previousSundayDate.getMonth())
 			return {
 				date: scheduleItemDate,
-				location: "Nativity of Theotokos Parish",
+				location: "Nativity of the Theotokos Parish",
 				title: "Divine Liturgy",
 				times: [
 					{
@@ -392,19 +392,19 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<ScheduleItem> {
 			times: [
 				{
 					time: new Date(
-						new Date(nextSundayDate).setHours(9, 0, 0, 0),
+						new Date(nextSundayDate.toDateString()).setHours(9, 0, 0, 0), // TODO: Fix these
 					),
 					designation: "Hours",
 				},
 				{
 					time: new Date(
-						new Date(nextSundayDate).setHours(9, 30, 0, 0),
+						new Date(nextSundayDate.toDateString()).setHours(9, 30, 0, 0),
 					),
 					designation: "Typika",
 				},
 				{
 					time: new Date(
-						new Date(nextSundayDate).setHours(10, 30, 0, 0),
+						new Date(nextSundayDate.toDateString()).setHours(10, 30, 0, 0),
 					),
 					designation: "Catechism",
 				},
@@ -422,19 +422,19 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<ScheduleItem> {
 				times: [
 					{
 						time: new Date(
-							new Date(scheduleItemDate).setHours(9, 0, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(9, 0, 0, 0),
 						),
 						designation: "Hours",
 					},
 					{
 						time: new Date(
-							new Date(scheduleItemDate).setHours(9, 30, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(9, 30, 0, 0),
 						),
 						designation: "Confessions",
 					},
 					{
 						time: new Date(
-							new Date(scheduleItemDate).setHours(10, 0, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(10, 0, 0, 0),
 						),
 						designation: "Liturgy",
 					},

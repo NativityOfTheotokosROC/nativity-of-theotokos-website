@@ -17,6 +17,7 @@ import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
 import { hymnsModalVIInterface } from "@/src/lib/model-implementation/hymns-modal";
 import HymnsModal from "@/src/lib/component/hymns-modal/HymnsModal";
 import SplashScreen from "@/src/lib/component/splash-screen/SplashScreen";
+import { motion } from "motion/react";
 import ReadingsOrnament from "@/public/ornament_1.svg";
 import HymnsOrnament from "@/public/ornament_9.svg";
 import LatestNewsOrnament from "@/public/ornament_11.svg";
@@ -33,6 +34,7 @@ export default function Home() {
 	);
 	const [mailingListStatus, setMailingListStatus] =
 		useState<MailingListStatus>("not_subscribed");
+	const [splashExited, setSplashExited] = useState(false);
 	const subscribe = useCallback((email: string) => {
 		subscribeToMailingList(email)
 			.then(() => {
@@ -51,13 +53,27 @@ export default function Home() {
 
 	return (
 		<>
-			<SplashScreen model={newReadonlyModel({ isShown: !modelView })} />
+			<SplashScreen
+				model={newReadonlyModel({
+					isShown: !modelView,
+					exitedCallback: () => setSplashExited(true),
+				})}
+			/>
 			<main
-				className={`home bg-[linear-gradient(135deg,#F7DAC1,whitesmoke)] ${!modelView && "hidden"}`}
+				className={`home bg-[linear-gradient(135deg,#F7DAC1,whitesmoke)] ${!modelView && "visible"}`}
 			>
 				<section className="hero bg-[#DCB042] text-black bg-[url(/nativity-icon.webp)] bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]">
-					<div className="hero-content flex flex-col justify-center items-center md:flex-row h-[30em] p-8 lg:p-20 bg-black/70">
-						<div className="hero-message flex flex-col md:w-[35em] md:max-w-1/2 lg:w-full gap-5 md:p-8 justify-center">
+					<div className="hero-content flex flex-col justify-center items-center md:flex-row h-[75vh] md:h-[30em] p-8 lg:p-20 bg-black/70 md:bg-none md:items-center">
+						<motion.div
+							initial={{ opacity: 0, y: 10 }}
+							animate={{
+								opacity: splashExited ? 1 : 0,
+								y: splashExited ? 0 : 10,
+							}}
+							viewport={{ once: true }}
+							transition={{ duration: 0.4, ease: "easeOut" }}
+							className={`${!modelView && "hidden"} hero-message flex flex-col md:w-[35em] md:max-w-1/2 lg:w-full gap-5 md:p-8 justify-center`}
+						>
 							<span
 								className={`heading text-7xl ${georgia.className} text-white`}
 							>
@@ -69,8 +85,17 @@ export default function Home() {
 								Theotokos parish of the Russian Orthodox Church
 								in Zimbabwe. (est. 2025)
 							</span>
-						</div>
-						<div className="icon md:flex md:w-1/2 hidden justify-center items-center">
+						</motion.div>
+						<motion.div
+							initial={{ opacity: 0, y: 10 }}
+							animate={{
+								opacity: splashExited ? 1 : 0,
+								y: splashExited ? 0 : 10,
+							}}
+							viewport={{ once: true }}
+							transition={{ ease: "easeOut" }}
+							className={`${!modelView && "md:hidden"} hero-icon md:flex md:w-1/2 hidden justify-center items-center`}
+						>
 							<Image
 								className="h-[20em] w-[15em]"
 								src="/nativity-icon.webp"
@@ -80,11 +105,11 @@ export default function Home() {
 								width={300}
 								loading="eager"
 							/>
-						</div>
+						</motion.div>
 					</div>
 				</section>
 				<section className="readings text-black border-t-15 border-t-[#976029] bg-[url(/ornament_3_tr.svg)] bg-no-repeat bg-size-[13em,60em] md:bg-size-[30em,80em] bg-position-[98%_0.5%,40%_-30em] lg:bg-position-[100%_0.5%,750%_-40em]">
-					<div className="readings-content flex flex-col gap-6 p-8 py-9 lg:px-20 md:py-10 max-w-345">
+					<div className="readings-content flex flex-col gap-6 p-8 py-9 lg:px-20 md:py-10 max-w-360">
 						<span
 							className={`text-[2.75rem]/tight w-3/4 mb-2 font-semibold md:text-black md:w-1/2 ${georgia.className}`}
 						>
@@ -102,7 +127,15 @@ export default function Home() {
 									/>
 								)}
 								<div className="flex flex-col gap-y-6 gap-x-8 lg:flex-row">
-									<div className="flex md:flex-row md:h-fit items-stretch bg-[#FEF8F3] border text-black border-gray-900/20 rounded-lg overflow-clip">
+									<motion.div
+										initial={{ opacity: 0, y: 50 }}
+										whileInView={{ opacity: 1, y: 0 }}
+										viewport={{ once: true, amount: 0.2 }}
+										transition={{
+											ease: "easeOut",
+										}}
+										className="daily-saints flex md:flex-row md:h-fit items-stretch bg-[#FEF8F3] border text-black border-gray-900/20 rounded-lg overflow-clip"
+									>
 										<div className="md:flex min-w-60 w-60 lg:min-w-60 lg:w-60 items-stretch justify-center p-2 hidden bg-gray-800">
 											<Image
 												className="grow object-cover object-center hover:cursor-pointer"
@@ -191,8 +224,16 @@ export default function Home() {
 												</div>
 											</div>
 										</div>
-									</div>
-									<div className="h-fit flex flex-col bg-white/70 border border-gray-900/30 md:max-w-[70%] lg:min-w-[35%] rounded-lg overflow-clip">
+									</motion.div>
+									<motion.div
+										initial={{ opacity: 0, y: 50 }}
+										whileInView={{ opacity: 1, y: 0 }}
+										viewport={{ once: true, amount: 0.2 }}
+										transition={{
+											ease: "easeOut",
+										}}
+										className="scripture-readings h-fit flex flex-col bg-white/70 border border-gray-900/30 md:max-w-[70%] lg:min-w-[35%] rounded-lg overflow-clip"
+									>
 										<div className="flex gap-6 w-full items-center justify-center lg:justify-center md:items-center lg:items-center p-2 px-10 text-white bg-gray-900">
 											<ReadingsOrnament
 												className={`object-contain object-center h-[5em] w-[8em]`}
@@ -246,7 +287,7 @@ export default function Home() {
 												]}
 											</div>
 										</div>
-									</div>
+									</motion.div>
 								</div>
 							</>
 						) : (
@@ -295,19 +336,35 @@ export default function Home() {
 							<div className="flex flex-row flex-wrap lg:justify-between gap-x-12 gap-y-6 px-8 pb-6 lg:px-20">
 								<div className="featured flex flex-col gap-4 md:max-w-1/2 lg:max-w-[45%]">
 									<span className="text-xl">Featured</span>
-									<NewsArticlePreview
-										model={newReadonlyModel({
-											isFeatured: true,
-											articlePreview:
-												modelView.newsArticles
-													.featuredArticle,
-										})}
-									/>
+									<motion.div
+										initial={{ opacity: 0, y: 50 }}
+										whileInView={{ opacity: 1, y: 0 }}
+										viewport={{ once: true, amount: 0.15 }}
+										transition={{
+											ease: "easeOut",
+										}}
+									>
+										<NewsArticlePreview
+											model={newReadonlyModel({
+												isFeatured: true,
+												articlePreview:
+													modelView.newsArticles
+														.featuredArticle,
+											})}
+										/>
+									</motion.div>
 								</div>
-
 								<div className="schedule flex flex-col gap-4 flex-1 lg:max-w-5/10 ">
 									<span className="text-xl">Schedule</span>
-									<div className="schedule-list flex flex-col w-full gap-4 pr-3 lg:pr-6 max-h-[25em] lg:max-h-[28em] overflow-y-auto">
+									<motion.div
+										initial={{ opacity: 0, y: 50 }}
+										whileInView={{ opacity: 1, y: 0 }}
+										viewport={{ once: true, amount: 0.15 }}
+										transition={{
+											ease: "easeOut",
+										}}
+										className="schedule-list flex flex-col w-full gap-4 pr-3 lg:pr-6 max-h-[25em] lg:max-h-[28em] overflow-y-auto"
+									>
 										<ScheduleItem
 											model={newReadonlyModel({
 												scheduleItem:
@@ -331,7 +388,7 @@ export default function Home() {
 													/>
 												))}
 										</div>
-									</div>
+									</motion.div>
 								</div>
 							</div>
 							<div className="other-stories flex flex-col gap-4 pt-6 pb-10 px-8 lg:px-20 bg-white/70  border-t border-t-[#dcb042]">
@@ -412,7 +469,7 @@ export default function Home() {
 					</div>
 				</section>
 				<section id="media" className="gallery text-black">
-					<div className="h-3.75 w-full bg-[#250203] bg-[url(/ornament_14.svg)] bg-position-[50%_50%] bg-size-[100%] md:bg-size-[50%] bg-repeat-x rotate-180" />
+					<div className="h-6 w-full bg-[#250203] bg-[url(/border-1.webp)] bg-position-[50%_50%] bg-size-[30%] md:bg-size-[10%] bg-repeat-x" />
 					{modelView && (
 						<div className="gallery-content flex flex-col gap-8 p-8 py-14 lg:px-20">
 							<div className="swiper-container w-full max-w-full h-[20em] max-h-[20em]">
@@ -475,7 +532,13 @@ export default function Home() {
 							<hr className="mt-4 mb-0 md:w-full" />
 						</span>
 						{mailingListStatus != "subscribed" ? (
-							<>
+							<motion.div
+								initial={{ opacity: 0, y: 50 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true, amount: 0.3 }}
+								transition={{ ease: "easeOut" }}
+								className="flex flex-col gap-8"
+							>
 								<p>
 									{
 										"Stay up to date with the latest church news, announcements, and events straight from your mailbox. Enter your email below and subscribe if you haven't already."
@@ -515,7 +578,7 @@ export default function Home() {
 										</button>
 									</div>
 								</form>
-							</>
+							</motion.div>
 						) : (
 							<div>
 								<p className="text-xl">
