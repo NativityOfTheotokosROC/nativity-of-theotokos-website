@@ -52,7 +52,7 @@ model ScheduleItemTime {
     time           DateTime     @db.Time
     designation    String
     designationRu  String?
-    scheduleItem   ScheduleItem @relation(fields: [scheduleItemId], references: [id])
+    scheduleItem   ScheduleItem @relation(fields: [scheduleItemId], references: [id], onDelete: Cascade)
     scheduleItemId Int
 
     @@unique([time, scheduleItemId])
@@ -60,7 +60,7 @@ model ScheduleItemTime {
 
 model RemovedScheduleItem {
     scheduleItemId Int          @id
-    scheduleItem   ScheduleItem @relation(fields: [scheduleItemId], references: [id])
+    scheduleItem   ScheduleItem @relation(fields: [scheduleItemId], references: [id], onDelete: Cascade)
 }
 
 model NewsArticle {

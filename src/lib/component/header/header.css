@@ -4,7 +4,7 @@
 
 .header {
 	scale: 1 1;
-	animation: shrink-header linear forwards;
+	animation: shrink-header ease-out forwards;
 	transform-origin: top;
 	animation-timeline: scroll(root);
 	animation-range: 350px 460px;
@@ -14,7 +14,7 @@
 .header .logo {
 	transform-origin: top left;
 	scale: 1 1;
-	animation: shrink-header-content linear forwards;
+	animation: shrink-header-content ease-out forwards;
 	animation-timeline: scroll(root);
 	animation-range: 350px 460px;
 }
@@ -22,7 +22,7 @@
 .header .nav-menu {
 	transform-origin: top right;
 	scale: 1 1;
-	animation: shrink-header-content linear forwards;
+	animation: shrink-header-content ease-out forwards;
 	animation-timeline: scroll(root);
 	animation-range: 350px 460px;
 }
@@ -31,7 +31,7 @@
 	scale: 0 1;
 	opacity: 0;
 	width: 100%;
-	animation: expandout linear forwards;
+	animation: expandout ease-out forwards;
 	animation-timeline: scroll(root);
 	animation-range: 0 350px;
 }

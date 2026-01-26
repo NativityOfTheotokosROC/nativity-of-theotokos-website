@@ -137,7 +137,7 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 				return (fastText ? fastText : $(".headernofast").text()).trim();
 			})
 			.then(markedUpText => removeMarkup(markedUpText))
-			.then(info => (info.length == 0 ? "No Fast" : info));
+			.then(info => (info.length == 0 ? "No Fast Today" : info));
 	}
 
 	async getIconOfTheDay(date: Date) {

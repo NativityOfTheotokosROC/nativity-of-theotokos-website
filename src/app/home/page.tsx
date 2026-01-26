@@ -130,7 +130,7 @@ export default function Home() {
 									<motion.div
 										initial={{ opacity: 0, y: 50 }}
 										whileInView={{ opacity: 1, y: 0 }}
-										viewport={{ once: true, amount: 0.2 }}
+										viewport={{ once: true, amount: 0.1 }}
 										transition={{
 											ease: "easeOut",
 										}}
@@ -228,7 +228,7 @@ export default function Home() {
 									<motion.div
 										initial={{ opacity: 0, y: 50 }}
 										whileInView={{ opacity: 1, y: 0 }}
-										viewport={{ once: true, amount: 0.2 }}
+										viewport={{ once: true, amount: 0.1 }}
 										transition={{
 											ease: "easeOut",
 										}}
@@ -339,7 +339,7 @@ export default function Home() {
 									<motion.div
 										initial={{ opacity: 0, y: 50 }}
 										whileInView={{ opacity: 1, y: 0 }}
-										viewport={{ once: true, amount: 0.15 }}
+										viewport={{ once: true, amount: 0.1 }}
 										transition={{
 											ease: "easeOut",
 										}}
@@ -359,7 +359,7 @@ export default function Home() {
 									<motion.div
 										initial={{ opacity: 0, y: 50 }}
 										whileInView={{ opacity: 1, y: 0 }}
-										viewport={{ once: true, amount: 0.15 }}
+										viewport={{ once: true, amount: 0.1 }}
 										transition={{
 											ease: "easeOut",
 										}}
@@ -469,7 +469,7 @@ export default function Home() {
 					</div>
 				</section>
 				<section id="media" className="gallery text-black">
-					<div className="h-6 w-full bg-[#250203] bg-[url(/border-1.webp)] bg-position-[50%_50%] bg-size-[30%] md:bg-size-[10%] bg-repeat-x" />
+					<div className="h-5 w-full bg-[#250203] bg-[url(/border-4.jpg)] bg-position-[50%_50%] bg-contain bg-repeat-x" />
 					{modelView && (
 						<div className="gallery-content flex flex-col gap-8 p-8 py-14 lg:px-20">
 							<div className="swiper-container w-full max-w-full h-[20em] max-h-[20em]">
@@ -535,7 +535,7 @@ export default function Home() {
 							<motion.div
 								initial={{ opacity: 0, y: 50 }}
 								whileInView={{ opacity: 1, y: 0 }}
-								viewport={{ once: true, amount: 0.3 }}
+								viewport={{ once: true, amount: 0.2 }}
 								transition={{ ease: "easeOut" }}
 								className="flex flex-col gap-8"
 							>
