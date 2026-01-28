@@ -62,13 +62,13 @@ export default function Home() {
 			<main
 				className={`home bg-[linear-gradient(135deg,#F7DAC1,whitesmoke)] ${!modelView && "visible"}`}
 			>
-				<section className="hero bg-[#DCB042] text-black bg-[url(/nativity-icon.webp)] bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]">
+				<section className="hero bg-[#DCB042] text-black bg-[url(/nativity-icon.jpg)] bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]">
 					<motion.div
 						animate={
 							splashExited && {
 								backgroundColor: [
 									"rgba(0,0,0,0)",
-									"rgba(0,0,0,0.7)",
+									"rgba(0,0,0,0.75)",
 								],
 							}
 						}
@@ -102,17 +102,19 @@ export default function Home() {
 						</motion.div>
 						<motion.div
 							initial={{ opacity: 0, y: 10 }}
-							animate={{
-								opacity: splashExited ? 1 : 0,
-								y: splashExited ? 0 : 10,
-							}}
+							animate={
+								splashExited && {
+									opacity: 1,
+									y: 0,
+								}
+							}
 							viewport={{ once: true }}
 							transition={{ ease: "easeOut" }}
 							className={`${!modelView && "md:hidden"} hero-icon md:flex md:w-1/2 hidden justify-center items-center`}
 						>
 							<Image
 								className="h-[20em] w-[15em]"
-								src="/nativity-icon.webp"
+								src="/nativity-icon.jpg"
 								alt="Icon of the Nativity of the Theotokos"
 								title="Icon of the Nativity of the Theotokos"
 								height={400}
@@ -267,7 +269,7 @@ export default function Home() {
 												}
 											</span>
 										</div>
-										<div className="flex p-6 md:px-10 lg:px-6 bg-gray-700 text-white [&_a]:underline [&_a]:hover:underline [&_a]:hover:text-[#DCB042] max-h-[15em] md:max-h-[11em]">
+										<div className="flex p-6 md:px-10 lg:px-6 bg-gray-700 text-white [&_a]:underline [&_a]:hover:underline [&_a]:hover:text-[#DCB042] max-h-[15em] min-h-[9em] md:max-h-[11em]">
 											<div className="scriptures grow flex flex-col gap-1 pr-3 overflow-y-auto">
 												{[
 													...modelView.dailyReadings.scriptures.map(

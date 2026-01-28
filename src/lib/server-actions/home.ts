@@ -120,13 +120,13 @@ export async function getScheduleItems(
 	const data = await prismaClient.scheduleItem.findMany({
 		where: {
 			date: { gte: localDate },
-			removedScheduleItem: { is: null },
+			AND: { removedScheduleItem: { is: null } },
 		},
 		orderBy: {
 			date: "asc",
 		},
 		take: count,
-		include: { scheduleItemTimes: true },
+		include: { scheduleItemTimes: { orderBy: { time: "asc" } } },
 	});
 	const scheduleItems = data.map(
 		(record): ScheduleItem => ({
@@ -143,7 +143,7 @@ export async function getScheduleItems(
 		const isPresent = await prismaClient.scheduleItem.count({
 			where: {
 				date: { equals: nextScheduleItem.date },
-				removedScheduleItem: { is: null },
+				AND: { removedScheduleItem: { is: null } },
 			},
 		});
 		if (!isPresent) {
@@ -392,19 +392,34 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<ScheduleItem> {
 			times: [
 				{
 					time: new Date(
-						new Date(nextSundayDate.toDateString()).setHours(9, 0, 0, 0), // TODO: Fix these
+						new Date(nextSundayDate.toDateString()).setHours(
+							9,
+							0,
+							0,
+							0,
+						), // TODO: Fix these
 					),
 					designation: "Hours",
 				},
 				{
 					time: new Date(
-						new Date(nextSundayDate.toDateString()).setHours(9, 30, 0, 0),
+						new Date(nextSundayDate.toDateString()).setHours(
+							9,
+							30,
+							0,
+							0,
+						),
 					),
 					designation: "Typika",
 				},
 				{
 					time: new Date(
-						new Date(nextSundayDate.toDateString()).setHours(10, 30, 0, 0),
+						new Date(nextSundayDate.toDateString()).setHours(
+							10,
+							30,
+							0,
+							0,
+						),
 					),
 					designation: "Catechism",
 				},
@@ -422,19 +437,34 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<ScheduleItem> {
 				times: [
 					{
 						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(9, 0, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(
+								9,
+								0,
+								0,
+								0,
+							),
 						),
 						designation: "Hours",
 					},
 					{
 						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(9, 30, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(
+								9,
+								30,
+								0,
+								0,
+							),
 						),
 						designation: "Confessions",
 					},
 					{
 						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(10, 0, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(
+								10,
+								0,
+								0,
+								0,
+							),
 						),
 						designation: "Liturgy",
 					},

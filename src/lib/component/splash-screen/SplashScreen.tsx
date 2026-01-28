@@ -15,7 +15,7 @@ const SplashScreen = function ({ model }) {
 					initial={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
 					transition={{ duration: 0.4, ease: "easeOut" }}
-					className="splash flex absolute w-screen h-full z-30 top-0 overflow-hidden "
+					className="splash flex absolute w-screen h-dvh z-30 top-0 overflow-hidden "
 				>
 					<div className="bg-gray-900 flex items-center justify-center grow p-9">
 						<motion.div
