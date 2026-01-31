@@ -1,12 +1,16 @@
+"use client";
+
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { NavigationMenuModel } from "../../model/navigation-menu";
-import Link from "next/link";
+import { Link } from "@/src/i18n/navigation";
 import { TextAlignJustifyIcon as MenuIcon } from "lucide-react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { Fragment } from "react/jsx-runtime";
+import { useLocale } from "next-intl";
 
 const NavigationMenu = function ({ model }) {
 	const { navlinks, menuType } = model.modelView;
+	const locale = useLocale();
 
 	return (
 		<nav className="nav-menu">
@@ -17,6 +21,7 @@ const NavigationMenu = function ({ model }) {
 							<Link
 								key={index}
 								href={navlink.link}
+								locale={locale != "en" ? locale : undefined}
 								className="navlink text-base uppercase no-underline hover:text-[#DCB042]"
 								replace={navlink.isInteractive}
 							>
@@ -42,6 +47,7 @@ const NavigationMenu = function ({ model }) {
 								<Link
 									className="block"
 									href={navlink.link}
+									locale={locale}
 									replace={navlink.isInteractive}
 								>
 									{navlink.text}

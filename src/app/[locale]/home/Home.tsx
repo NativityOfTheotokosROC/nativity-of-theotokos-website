@@ -117,7 +117,10 @@ export default function Home() {
 							className={`${!modelView && "md:hidden"} hero-icon md:flex md:w-1/2 hidden justify-center items-center`}
 						>
 							<Image
-								className="h-[20em] w-[15em]"
+								className="h-[20em] w-[15em] hover:cursor-pointer"
+								onClick={() => {
+									window.open("/nativity-icon.jpg", "_blank");
+								}}
 								src="/nativity-icon.jpg"
 								alt="Icon of the Nativity of the Theotokos"
 								title="Icon of the Nativity of the Theotokos"

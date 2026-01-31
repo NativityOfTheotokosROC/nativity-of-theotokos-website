@@ -6,18 +6,25 @@ import Footer from "../../lib/component/footer/Footer";
 import { Google_Sans, Google_Sans_Flex } from "next/font/google";
 import LanguageSwitcher from "../../lib/component/language-switcher/LanguageSwitcher";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import {getTranslations} from 'next-intl/server';
+import { getTranslations } from "next-intl/server";
 import { routing } from "@/src/i18n/routing";
 import { notFound } from "next/navigation";
 
-export const metadata: Metadata = {
-	title: {
-		template: "%s | Nativity of the Theotokos Church",
-		default: "Home | Nativity of the Theotokos Church",
-	},
-	description:
-		"Official website of the Nativity of the Theotokos parish of the Russian Orthodox Church in Zimbabwe. (est. 2025)",
-};
+export async function generateMetadata({
+	params,
+}: {
+	params: { locale: string };
+}): Promise<Metadata> {
+	const { locale } = await params;
+	const t = await getTranslations({ locale, namespace: "metadata" });
+
+	return {
+		title: {
+			template: `%s | ${t("templateTitle")}`,
+			default: `${t("templateDefault")}`,
+		},
+	};
+}
 
 const googleSansFlex = Google_Sans_Flex({
 	subsets: ["latin"],
@@ -52,27 +59,27 @@ export default async function RootLayout({
 				<NextIntlClientProvider>
 					<Header
 						model={newReadonlyModel({
-							title: `${h('headerTitle')} ${h('headerSubtitle')}`,
+							title: `${h("headerTitle")} ${h("headerSubtitle")}`,
 							navlinks: [
-								{ link: "/", text: h('home') },
+								{ link: "/", text: h("home") },
 								{
 									link: "/#resources",
-									text: h('resources'),
+									text: h("resources"),
 									isInteractive: true,
 								},
 								{
 									link: "/#media",
-									text: h('media'),
+									text: h("media"),
 									isInteractive: true,
 								},
 								{
 									link: "/#resources",
-									text: h('aboutUs'),
+									text: h("aboutUs"),
 									isInteractive: true,
 								},
 								{
 									link: "/#footer",
-									text: h('contact'),
+									text: h("contact"),
 									isInteractive: true,
 								},
 							],
@@ -81,8 +88,7 @@ export default async function RootLayout({
 					{children}
 					<Footer
 						model={newReadonlyModel({
-							copyrightText:
-								f('copyright'),
+							copyrightText: f("copyright"),
 						})}
 					/>
 					<LanguageSwitcher

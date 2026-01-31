@@ -88,6 +88,7 @@ export async function getDailyReadings(currentDate: Date = new Date()) {
 }
 
 export async function getDailyQuote(currentDate: Date = new Date()) {
+	const locale = await getLocale();
 	const localDate = new Date(
 		formatInTimeZone(currentDate, "CAT", "yyyy-MM-dd"),
 	);
@@ -109,7 +110,14 @@ export async function getDailyQuote(currentDate: Date = new Date()) {
 			},
 		});
 	}
-	return dailyQuote;
+	return locale == "ru"
+		? {
+				...dailyQuote,
+				quote: dailyQuote.quoteRu ?? dailyQuote.quote,
+				author: dailyQuote.authorRu ?? dailyQuote.author,
+				source: dailyQuote.sourceRu ?? dailyQuote.source,
+			}
+		: dailyQuote;
 }
 
 export async function getScheduleItems(
@@ -135,28 +143,26 @@ export async function getScheduleItems(
 		(record): ScheduleItem => ({
 			date: record.date,
 			title:
-				locale == "en"
-					? record.title
-					: (record.titleRu ?? record.title),
+				locale == "ru"
+					? (record.titleRu ?? record.title)
+					: record.title,
 			location:
-				locale == "en"
-					? record.location
-					: (record.locationRu ?? record.location),
+				locale == "ru"
+					? (record.locationRu ?? record.location)
+					: record.location,
 			times: record.scheduleItemTimes.map(time => ({
 				time: time.time,
 				designation:
-					locale == "en"
-						? time.designation
-						: (time.designationRu ?? time.designation),
+					locale == "ru"
+						? (time.designationRu ?? time.designation)
+						: time.designation,
 			})),
 		}),
 	);
 	let nextScheduleItemDate = new Date(localDate);
 	while (scheduleItems.length < count) {
-		const nextScheduleItem = await _getNextDefaultScheduleItem(
-			nextScheduleItemDate,
-			locale,
-		);
+		const nextScheduleItem =
+			await _getNextDefaultScheduleItem(nextScheduleItemDate);
 		const isPresent = await prismaClient.scheduleItem.count({
 			where: {
 				date: { equals: nextScheduleItem.date },
@@ -164,12 +170,13 @@ export async function getScheduleItems(
 			},
 		});
 		if (!isPresent) {
-			const { date, location, title, times } = nextScheduleItem;
+			const { date, location, title, times, titleRu } = nextScheduleItem;
 			await prismaClient.scheduleItem.create({
 				data: {
 					date,
 					location,
 					title,
+					titleRu,
 					scheduleItemTimes: { createMany: { data: times } },
 				},
 			});
@@ -366,9 +373,17 @@ export async function getDailyGalleryImages(
 // TODO: To be refactored to something less ... static
 async function _getNextDefaultScheduleItem(
 	date: Date,
-	locale: string = "en",
-): Promise<ScheduleItem> {
-	const t = await getTranslations({ locale, namespace: "scheduleItem" });
+): Promise<
+	ScheduleItem & { titleRu: string; times: { designationRu: string }[] }
+> {
+	const tEn = await getTranslations({
+		locale: "en",
+		namespace: "scheduleItem",
+	});
+	const tRu = await getTranslations({
+		locale: "ru",
+		namespace: "scheduleItem",
+	});
 	const scheduleItemDate = new Date(date);
 	while (scheduleItemDate.getDay() > 0 && scheduleItemDate.getDay() < 6) {
 		scheduleItemDate.setDate(scheduleItemDate.getDate() + 1);
@@ -383,33 +398,38 @@ async function _getNextDefaultScheduleItem(
 		if (nextSundayDate.getMonth() != previousSundayDate.getMonth())
 			return {
 				date: scheduleItemDate,
-				location: t("mainLocation"),
-				title: t("liturgyService"),
+				location: tEn("mainLocation"),
+				title: tEn("liturgyService"),
+				titleRu: tRu("liturgyService"),
 				times: [
 					{
 						time: new Date(
 							new Date(scheduleItemDate).setHours(12, 0, 0, 0),
 						),
-						designation: t("orthros"),
+						designation: tEn("orthros"),
+						designationRu: tRu("orthros"),
 					},
 					{
 						time: new Date(
 							new Date(scheduleItemDate).setHours(12, 30, 0, 0),
 						),
-						designation: t("confessions"),
+						designation: tEn("confessions"),
+						designationRu: tRu("confessions"),
 					},
 					{
 						time: new Date(
 							new Date(scheduleItemDate).setHours(13, 0, 0, 0),
 						),
-						designation: t("liturgy"),
+						designation: tEn("liturgy"),
+						designationRu: tRu("liturgy"),
 					},
 				],
 			};
 		return {
 			date: nextSundayDate,
-			location: t("secondaryLocation"),
-			title: t("typikaService"),
+			location: tEn("secondaryLocation"),
+			title: tEn("typikaService"),
+			titleRu: tRu("typikaService"),
 			times: [
 				{
 					time: new Date(
@@ -420,7 +440,8 @@ async function _getNextDefaultScheduleItem(
 							0,
 						), // TODO: Fix these
 					),
-					designation: t("orthros"),
+					designation: tEn("orthros"),
+					designationRu: tRu("orthros"),
 				},
 				{
 					time: new Date(
@@ -431,7 +452,8 @@ async function _getNextDefaultScheduleItem(
 							0,
 						),
 					),
-					designation: t("typika"),
+					designation: tEn("typika"),
+					designationRu: tRu("typika"),
 				},
 				{
 					time: new Date(
@@ -442,7 +464,8 @@ async function _getNextDefaultScheduleItem(
 							0,
 						),
 					),
-					designation: t("catechism"),
+					designation: tEn("catechism"),
+					designationRu: tRu("catechism"),
 				},
 			],
 		};
@@ -453,41 +476,30 @@ async function _getNextDefaultScheduleItem(
 		if (scheduleItemDate.getMonth() != previousSundayDate.getMonth())
 			return {
 				date: scheduleItemDate,
-				location: t("secondaryLocation"),
-				title: t("liturgyService"),
+				location: tEn("secondaryLocation"),
+				title: tEn("liturgyService"),
+				titleRu: tRu("liturgyService"),
 				times: [
 					{
 						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(
-								9,
-								0,
-								0,
-								0,
-							),
+							new Date(scheduleItemDate).setHours(9, 0, 0, 0),
 						),
-						designation: t("orthros"),
+						designation: tEn("orthros"),
+						designationRu: tRu("orthros"),
 					},
 					{
 						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(
-								9,
-								30,
-								0,
-								0,
-							),
+							new Date(scheduleItemDate).setHours(9, 30, 0, 0),
 						),
-						designation: t("confessions"),
+						designation: tEn("confessions"),
+						designationRu: tRu("confessions"),
 					},
 					{
 						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(
-								10,
-								0,
-								0,
-								0,
-							),
+							new Date(scheduleItemDate).setHours(10, 30, 0, 0),
 						),
-						designation: t("liturgy"),
+						designation: tEn("liturgy"),
+						designationRu: tRu("liturgy"),
 					},
 				],
 			};
