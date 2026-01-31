@@ -30,7 +30,8 @@ type MailingListStatus = "subscribed" | "not_subscribed" | "pending";
 export default function Home() {
 	const { modelView } = useHome();
 	const t = useTranslations("home");
-	const tl = useTranslations("links");
+	const tLinks = useTranslations("links");
+	const tMisc = useTranslations("miscellaneous");
 	const locale = useLocale();
 	const dateLocale = locale == "en" ? "en-uk" : "ru-RU";
 	const hymnsModal = useInitializedStatefulInteractiveModel(
@@ -259,7 +260,7 @@ export default function Home() {
 											<span
 												className={`grow w-full hidden md:inline lg:hidden text-4xl ${georgia.className}`}
 											>
-												Readings
+												{t("readings")}
 											</span>
 										</div>
 										<div className="fasting-info bg-gray-950 text-white text-center md:text-left lg:text-center p-2.5 px-4 md:px-10 md:mt-0">
@@ -444,7 +445,7 @@ export default function Home() {
 									className="flex size-full p-6 justify-center items-end text-center  text-white hover:cursor-pointer"
 									onClick={() =>
 										window.open(
-											tl("liturgicalResources"),
+											tLinks("liturgicalResources"),
 											"_blank",
 										)
 									}
@@ -461,7 +462,7 @@ export default function Home() {
 									className="flex size-full p-6 justify-center items-end text-center  text-white hover:cursor-pointer"
 									onClick={() =>
 										window.open(
-											tl("whatIsOrthodoxy"),
+											tLinks("whatIsOrthodoxy"),
 											"_blank",
 										)
 									}
@@ -477,7 +478,7 @@ export default function Home() {
 								<div
 									className="flex size-full p-6 justify-center items-end text-center  text-white hover:cursor-pointer"
 									onClick={() =>
-										alert("Content to be added soon!")
+										alert(tMisc("futureContent"))
 									}
 								>
 									<span

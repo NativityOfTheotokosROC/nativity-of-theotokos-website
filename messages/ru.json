@@ -31,8 +31,9 @@
 	"home": {
 		"heroTitle": "Привет и добро пожаловать",
 		"heroSubtitle": "Официальный сайт прихода Рождества Пресвятой Богородицы Русской Православной Церкви в Зимбабве. (осн. 2025)",
-		"dailyReadingsHeader": "Ежедневные чтения",
+		"dailyReadingsHeader": "Ежедневные Чтения",
 		"dailyHymns": "Тропари и кондаки дня",
+		"readings": "Чтения",
 		"latestNewsHeader": "Последние новости",
 		"featured": "Главная новость",
 		"schedule": "Расписание",
@@ -71,5 +72,8 @@
 		"patriarch": "https://mospat.ru/ru/patriarch",
 		"patriarchate": "https://mospat.ru/ru",
 		"holyTrinityChurch": "https://holytrinityorthodox.com/ru"
+	},
+	"miscellaneous": {
+		"futureContent": "Контент будет добавлен в ближайшее время!"
 	}
 }

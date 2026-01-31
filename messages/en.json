@@ -33,6 +33,7 @@
 		"heroSubtitle": "Official website of the Nativity of the Theotokos parish of the Russian Orthodox Church in Zimbabwe. (est. 2025)",
 		"dailyReadingsHeader": "Daily Readings",
 		"dailyHymns": "Hymns for the Day",
+		"readings": "Readings",
 		"latestNewsHeader": "Latest News",
 		"featured": "Featured",
 		"schedule": "Schedule",
@@ -71,5 +72,8 @@
 		"patriarch": "https://mospat.ru/en/patriarch",
 		"patriarchate": "https://mospat.ru/en",
 		"holyTrinityChurch": "https://holytrinityorthodox.com/"
+	},
+	"miscellaneous": {
+		"futureContent": "Content to be added soon!"
 	}
 }
