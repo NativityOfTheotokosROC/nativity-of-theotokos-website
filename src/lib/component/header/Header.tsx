@@ -21,7 +21,7 @@ const Header = function ({ model }) {
 		>
 			<div className="header-content flex flex-nowrap gap-9 justify-between p-4 lg:p-6 lg:px-7 items-center text-white">
 				<div
-					className="logo flex gap-3 items-center justify-center max-w-[18em] hover:cursor-pointer"
+					className="logo flex gap-3 items-center justify-center w-fit min-w-fit hover:cursor-pointer"
 					onClick={() => {
 						router.push("/");
 					}}

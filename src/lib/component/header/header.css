@@ -7,7 +7,7 @@
 	animation: shrink-header ease-out forwards;
 	transform-origin: top;
 	animation-timeline: scroll(root);
-	animation-range: 350px 460px;
+	animation-range: 500px 610px;
 	will-change: transform;
 }
 
@@ -16,7 +16,7 @@
 	scale: 1 1;
 	animation: shrink-header-content ease-out forwards;
 	animation-timeline: scroll(root);
-	animation-range: 350px 460px;
+	animation-range: 500px 610px;
 }
 
 .header .nav-menu {
@@ -24,7 +24,7 @@
 	scale: 1 1;
 	animation: shrink-header-content ease-out forwards;
 	animation-timeline: scroll(root);
-	animation-range: 350px 460px;
+	animation-range: 500px 610px;
 }
 
 .header-border {
@@ -33,7 +33,7 @@
 	width: 100%;
 	animation: expandout ease-out forwards;
 	animation-timeline: scroll(root);
-	animation-range: 0 350px;
+	animation-range: 0 500px;
 }
 
 @keyframes expandout {

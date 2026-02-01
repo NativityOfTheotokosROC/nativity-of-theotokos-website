@@ -1,7 +1,7 @@
 .language-switcher {
 	animation: hide-switcher ease-out forwards;
 	animation-timeline: scroll(root);
-	animation-range: 350px 460px;
+	animation-range: 500px 610px;
 }
 
 @keyframes hide-switcher {

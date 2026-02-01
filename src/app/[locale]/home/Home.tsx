@@ -80,7 +80,7 @@ export default function Home() {
 						}
 						viewport={{ once: true }}
 						transition={{ duration: 0.4, ease: "easeOut" }}
-						className="hero-content flex flex-col justify-center items-center md:flex-row h-[75vh] md:h-[30em] p-8 lg:p-20 md:bg-none md:items-center"
+						className="hero-content flex flex-col justify-center items-center md:flex-row h-[76vh] md:h-[max(30em,78vh)] lg:h-[81vh] p-8 lg:p-20 md:bg-none md:items-center"
 					>
 						<motion.div
 							initial={{ opacity: 0, y: 10 }}
@@ -117,7 +117,7 @@ export default function Home() {
 							className={`${!modelView && "md:hidden"} hero-icon md:flex md:w-1/2 hidden justify-center items-center`}
 						>
 							<Image
-								className="h-[20em] w-[15em] hover:cursor-pointer"
+								className="h-[21.333em] w-[16em] hover:cursor-pointer"
 								onClick={() => {
 									window.open("/nativity-icon.jpg", "_blank");
 								}}

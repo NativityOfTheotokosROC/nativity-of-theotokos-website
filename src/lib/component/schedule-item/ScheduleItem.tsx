@@ -15,7 +15,7 @@ const ScheduleItem = function ({ model }) {
 	return isFeatured ? (
 		<div className="featured-schedule-item flex items-center bg-[#FEF8F3] border border-gray-900/20 rounded-lg overflow-clip">
 			<div
-				className={`grow self-stretch flex flex-col w-fit max-w-[6em] gap-2 items-center text-center p-4 px-5 bg-gray-900 text-white ${georgia.className}`}
+				className={`grow self-stretch flex flex-col min-w-24 max-w-25 gap-2 items-center text-center p-4 px-5 bg-gray-900 text-white ${georgia.className}`}
 			>
 				<span className="text-4xl">
 					{date.toLocaleDateString(dateLocale, { day: "2-digit" })}
