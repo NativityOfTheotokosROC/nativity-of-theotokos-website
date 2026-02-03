@@ -8,7 +8,7 @@ import {
 	DialogPanel,
 	DialogTitle,
 } from "@headlessui/react";
-import HymnsModalOrnament from "@/public/ornament_9_white.svg";
+import HymnsModalOrnament from "@/public/ui/ornament_9.svg";
 import { georgia } from "../../third-party/fonts";
 import { useTranslations } from "next-intl";
 

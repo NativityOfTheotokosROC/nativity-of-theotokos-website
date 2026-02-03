@@ -1,6 +1,6 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { SplashScreenModel } from "../../model/splash-screen";
-import LogoIcon from "@/public/logo-icon.svg";
+import LogoIcon from "@/public/ui/logo-icon.svg";
 import { motion, AnimatePresence } from "motion/react";
 import "./splash-screen.css";
 

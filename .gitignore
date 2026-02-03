@@ -37,7 +37,7 @@ next-env.d.ts
 
 # user-defined
 .fttemplates
-/public/favicon.svg
+/public/ui/favicon.svg
 /better-auth_migrations
 
 /src/generated/prisma

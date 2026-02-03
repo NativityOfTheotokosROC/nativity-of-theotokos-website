@@ -18,9 +18,9 @@ import { hymnsModalVIInterface } from "@/src/lib/model-implementation/hymns-moda
 import HymnsModal from "@/src/lib/component/hymns-modal/HymnsModal";
 import SplashScreen from "@/src/lib/component/splash-screen/SplashScreen";
 import { motion } from "motion/react";
-import ReadingsOrnament from "@/public/ornament_1.svg";
-import HymnsOrnament from "@/public/ornament_9.svg";
-import LatestNewsOrnament from "@/public/ornament_11.svg";
+import ReadingsOrnament from "@/public/ui/ornament_1.svg";
+import HymnsOrnament from "@/public/ui/ornament_9.svg";
+import LatestNewsOrnament from "@/public/ui/ornament_11.svg";
 import { georgia } from "@/src/lib/third-party/fonts";
 import "./home.css";
 import { useTranslations, useLocale } from "next-intl";
@@ -69,7 +69,7 @@ export default function Home() {
 			<main
 				className={`home bg-[linear-gradient(135deg,#F7DAC1,whitesmoke)] ${!modelView && "visible"}`}
 			>
-				<section className="hero bg-[#DCB042] text-black bg-[url(/nativity-icon.jpg)] bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]">
+				<section className="hero bg-[#DCB042] text-black bg-[url(/ui/nativity-icon.jpg)] bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]">
 					<motion.div
 						animate={
 							splashExited && {
@@ -120,9 +120,12 @@ export default function Home() {
 							<Image
 								className="h-[21.333em] w-[16em] hover:cursor-pointer"
 								onClick={() => {
-									window.open("/nativity-icon.jpg", "_blank");
+									window.open(
+										"/ui/nativity-icon.jpg",
+										"_blank",
+									);
 								}}
-								src="/nativity-icon.jpg"
+								src="/ui/nativity-icon.jpg"
 								alt="Icon of the Nativity of the Theotokos"
 								title="Icon of the Nativity of the Theotokos"
 								height={400}
@@ -132,7 +135,7 @@ export default function Home() {
 						</motion.div>
 					</motion.div>
 				</section>
-				<section className="readings text-black border-t-15 border-t-[#976029] bg-[url(/ornament_3_tr.svg)] bg-no-repeat bg-size-[13em,60em] md:bg-size-[30em,80em] bg-position-[98%_0.5%,40%_-30em] lg:bg-position-[100%_0.5%,750%_-40em]">
+				<section className="readings text-black border-t-15 border-t-[#976029] bg-[url(/ui/ornament_3_tr.svg)] bg-no-repeat bg-size-[13em,60em] md:bg-size-[30em,80em] bg-position-[98%_0.5%,40%_-30em] lg:bg-position-[100%_0.5%,750%_-40em]">
 					<div className="readings-content flex flex-col gap-6 p-8 py-9 lg:px-20 md:py-10 max-w-360">
 						<span
 							className={`text-[2.75rem]/tight w-3/4 mb-2 font-semibold md:text-black md:w-1/2 ${georgia.className}`}
@@ -322,7 +325,7 @@ export default function Home() {
 				</section>
 				<section className="daily-thought  border-t-15 border-b-15 border-t-gray-900/85 border-b-[#250203]/85">
 					{modelView?.dailyQuote && (
-						<div className="daily-thought-content flex items-center p-8 py-14 md:p-20 min-h-[25em] bg-[#0a0a0a] md:bg-[linear-gradient(to_right,#0a0a0a,transparent),url(/daily-thought-bg.jpg)] text-white bg-no-repeat bg-contain bg-right">
+						<div className="daily-thought-content flex items-center p-8 py-14 md:p-20 min-h-[25em] bg-[#0a0a0a] md:bg-[linear-gradient(to_right,#0a0a0a,transparent),url(/ui/daily-thought.jpg)] text-white bg-no-repeat bg-contain bg-right">
 							<div
 								className={`quote-box flex flex-col gap-4 items-center md:w-1/2`}
 							>
@@ -444,7 +447,7 @@ export default function Home() {
 				>
 					<div className="resources-content flex flex-col gap-8 p-8 py-14 lg:px-20">
 						<div className="flex flex-col gap-6 w-full justify-center items-center md:flex-row">
-							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-11.jpg)] bg-cover bg-center rounded-lg overflow-clip">
+							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/ui/liturgical-resources.jpg)] bg-cover bg-center rounded-lg overflow-clip">
 								<div
 									className="flex size-full p-6 justify-center items-end text-center  text-white hover:cursor-pointer"
 									onClick={() =>
@@ -461,7 +464,7 @@ export default function Home() {
 									</span>
 								</div>
 							</div>
-							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-7.jpg)] bg-cover bg-center rounded-lg overflow-clip">
+							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/ui/what-is-orthodoxy.jpg)] bg-cover bg-center rounded-lg overflow-clip">
 								<div
 									className="flex size-full p-6 justify-center items-end text-center  text-white hover:cursor-pointer"
 									onClick={() =>
@@ -478,7 +481,7 @@ export default function Home() {
 									</span>
 								</div>
 							</div>
-							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/nativity-9.jpg)] bg-cover bg-center rounded-lg overflow-clip">
+							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/ui/about-our-parish.jpg)] bg-cover bg-center rounded-lg overflow-clip">
 								<div
 									className="flex size-full p-6 justify-center items-end text-center  text-white hover:cursor-pointer"
 									onClick={() =>
@@ -496,7 +499,7 @@ export default function Home() {
 					</div>
 				</section>
 				<section id="media" className="gallery text-black">
-					<div className="h-5 w-full bg-[#250203] bg-[url(/border-4.jpg)] bg-position-[50%_50%] bg-contain bg-repeat-x" />
+					<div className="h-5 w-full bg-[#250203] bg-[url(/ui/border-4.jpg)] bg-position-[50%_50%] bg-contain bg-repeat-x" />
 					{modelView && (
 						<div className="gallery-content flex flex-col gap-8 p-8 py-14 lg:px-20">
 							<div className="swiper-container w-full max-w-full h-[20em] max-h-[20em]">

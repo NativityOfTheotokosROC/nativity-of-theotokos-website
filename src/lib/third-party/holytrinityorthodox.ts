@@ -165,7 +165,7 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 			.getDate()
 			.toString()
 			.padStart(2, "0");
-		let link = "/theotokos.webp";
+		let link = "/ui/saint-of-the-day-fallback.webp";
 		const saintOfTheDayLink = `${this.iconOfTheDayBaseURL}/${month}/${month}${day}.jpg`;
 		const response = await fetch(saintOfTheDayLink, { method: "HEAD" });
 		if (response.ok) {

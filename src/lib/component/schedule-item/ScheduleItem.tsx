@@ -1,6 +1,6 @@
 "use client";
 
-import FeaturedItemOrnament from "@/public/ornament_12.svg";
+import FeaturedItemOrnament from "@/public/ui/ornament_12.svg";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ScheduleItemModel } from "../../model/schedule-item";
 import { georgia } from "../../third-party/fonts";

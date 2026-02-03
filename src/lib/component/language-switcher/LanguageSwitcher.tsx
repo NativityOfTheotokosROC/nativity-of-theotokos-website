@@ -1,7 +1,7 @@
 "use client";
 
-import EnglishIcon from "@/public/english.svg";
-import RussianIcon from "@/public/russian.svg";
+import EnglishIcon from "@/public/ui/english.svg";
+import RussianIcon from "@/public/ui/russian.svg";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
 import { JSX } from "react";

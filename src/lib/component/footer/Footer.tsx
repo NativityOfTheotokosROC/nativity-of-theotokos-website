@@ -6,7 +6,7 @@ import Link from "next/link";
 import SocialLink from "../social-link/SocialLink";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import FooterSection from "./FooterSection";
-import LogoIcon from "@/public/logo-icon.svg";
+import LogoIcon from "@/public/ui/logo-icon.svg";
 import { georgia } from "../../third-party/fonts";
 import { useTranslations } from "next-intl";
 

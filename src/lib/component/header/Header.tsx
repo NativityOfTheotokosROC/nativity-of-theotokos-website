@@ -5,7 +5,7 @@ import { HeaderModel } from "../../model/header";
 import { useMediaQuery } from "react-responsive";
 import NavigationMenu from "./NavigationMenu";
 import { newReadonlyModel } from "@mvc-react/mvc";
-import LogoIcon from "@/public/logo-icon.svg";
+import LogoIcon from "@/public/ui/logo-icon.svg";
 import { georgia } from "../../third-party/fonts";
 import "./header.css";
 import { useRouter } from "@/src/i18n/navigation";
