@@ -21,8 +21,8 @@ export default async function Page({
 }: {
 	params: { article: string };
 }) {
-	const { article: articleString } = params;
-	const article = await getArticle(articleString);
+	const { article: articleId } = await params;
+	const article = await getArticle(articleId);
 
 	return <NewsArticle model={newReadonlyModel({ article })} />;
 }
