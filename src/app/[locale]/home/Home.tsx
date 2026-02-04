@@ -219,8 +219,8 @@ export default function Home() {
 																.liturgicalWeek
 														}
 													</span>
-													<div className="flex gap-2 items-center p-1 px-5 md:px-7 my-2 bg-[#250203]/80 text-white">
-														<HymnsOrnament className="h-10 w-10 fill-white" />
+													<div className="flex gap-2 items-center p-1 px-5 md:px-7 my-2 bg-[#250203]/80 text-[#FEF8F3]">
+														<HymnsOrnament className="h-10 w-10 fill-[#FEF8F3]" />
 														<Link
 															className="text-lg "
 															href="#"

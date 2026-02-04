@@ -38,9 +38,9 @@ const HymnsModal = function ({ model }) {
 					<DialogTitle className="sr-only">
 						{t("hymnsForToday")}
 					</DialogTitle>
-					<div className="bg-gray-800 text-white border-0 p-4 rounded-none">
+					<div className="bg-gray-800 text-[#FEF8F3] border-0 p-4 rounded-none">
 						<div className="ornament flex justify-center items-center w-full h-[4em] ">
-							<HymnsModalOrnament className="object-contain object-center h-[4em] w-[8em]" />
+							<HymnsModalOrnament className="object-contain object-center h-[4em] w-[8em] fill-[#FEF8F3]" />
 						</div>
 					</div>
 					<div className="px-5 pt-6">

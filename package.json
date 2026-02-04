@@ -10,7 +10,7 @@
 		"postinstall": "prisma generate"
 	},
 	"dependencies": {
-		"@grod56/placeholder": "^1.0.1",
+		"@grod56/placeholder": "^1.0.3",
 		"@headlessui/react": "^2.2.9",
 		"@icons-pack/react-simple-icons": "^13.8.0",
 		"@mailerlite/mailerlite-nodejs": "^1.5.0",
