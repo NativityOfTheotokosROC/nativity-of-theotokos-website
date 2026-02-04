@@ -5,6 +5,7 @@ import { NewsArticlePreviewModel } from "../../model/news-article-preview";
 import Image from "next/image";
 import { georgia } from "../../third-party/fonts";
 import { useLocale, useTranslations } from "next-intl";
+import { toZonedTime } from "date-fns-tz";
 
 const NewsArticlePreview = function ({ model }) {
 	const { articlePreview: article, isFeatured } = model.modelView;
@@ -13,11 +14,14 @@ const NewsArticlePreview = function ({ model }) {
 	const tMisc = useTranslations("miscellaneous");
 	const locale = useLocale();
 	const dateLocale = locale == "en" ? "en-uk" : "ru-RU";
-	const dateString = dateCreated.toLocaleDateString(dateLocale, {
-		day: "2-digit",
-		month: "long",
-		year: "numeric",
-	});
+	const dateString = toZonedTime(dateCreated, "CAT").toLocaleDateString(
+		dateLocale,
+		{
+			day: "2-digit",
+			month: "long",
+			year: "numeric",
+		},
+	);
 
 	return isFeatured ? (
 		<div

@@ -5,12 +5,18 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { ScheduleItemModel } from "../../model/schedule-item";
 import { georgia } from "../../third-party/fonts";
 import { useLocale } from "next-intl";
+import { toZonedTime } from "date-fns-tz";
 
 const ScheduleItem = function ({ model }) {
 	const { scheduleItem, isFeatured } = model.modelView;
-	const { date, location, times, title } = scheduleItem;
+	const { date: rawDate, location, times: rawTimes, title } = scheduleItem;
 	const locale = useLocale();
 	const dateLocale = locale == "en" ? "en-uk" : "ru-RU";
+	const date = toZonedTime(rawDate, "CAT");
+	const times = rawTimes.map(time => ({
+		...time,
+		time: toZonedTime(time.time, "CAT"),
+	}));
 
 	return isFeatured ? (
 		<div className="featured-schedule-item flex items-center bg-[#FEF8F3] border border-gray-900/20 rounded-lg overflow-clip">

@@ -24,6 +24,7 @@ import LatestNewsOrnament from "@/public/ui/ornament_11.svg";
 import { georgia } from "@/src/lib/third-party/fonts";
 import "./home.css";
 import { useTranslations, useLocale } from "next-intl";
+import { toZonedTime } from "date-fns-tz";
 
 type MailingListStatus = "subscribed" | "not_subscribed" | "pending";
 
@@ -199,7 +200,11 @@ export default function Home() {
 												<span
 													className={`text-2xl px-5 md:px-7`}
 												>
-													{modelView.dailyReadings.currentDate.toLocaleDateString(
+													{toZonedTime(
+														modelView.dailyReadings
+															.currentDate,
+														"CAT",
+													).toLocaleDateString(
 														dateLocale,
 														{
 															dateStyle: "full",
