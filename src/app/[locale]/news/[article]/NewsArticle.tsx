@@ -1,20 +1,25 @@
+"use client";
 import { NewsArticleModel } from "@/src/lib/model/news-article";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { toZonedTime } from "date-fns-tz";
+import { useLocale } from "next-intl";
 import Image from "next/image";
 
 const NewsArticle = function ({ model }) {
 	const { title, author, articleImage, dateCreated, dateUpdated, body } =
 		model.modelView.article;
 	const { source, about, placeholder } = articleImage;
+	const locale = useLocale();
+	const dateLocale = locale == "ru" ? "ru-RU" : "en-uk";
+
 	return (
 		<main className="newsarticle bg-[#FEF8F3] text-black">
 			<div className="newsarticle-content flex flex-col p-8 md:p-12 gap-6 border-t-15 border-[#250203]/80">
 				<div className="metadata flex flex-col gap-6 md:flex-row md:gap-x-8 lg:max-w-full">
 					<div className="headline flex flex-col gap-6 md:w-1/2">
 						<span
-							className={`title text-4xl/tight md:text-5xl/tight  lg:text-6xl/tight ${georgia.className} font-semibold`}
+							className={`title text-4xl/tight md:text-5xl/tight lg:text-6xl/tight ${georgia.className} font-semibold`}
 						>
 							{title}
 						</span>
@@ -26,14 +31,14 @@ const NewsArticle = function ({ model }) {
 								{`${toZonedTime(
 									dateCreated,
 									"CAT",
-								).toLocaleDateString("en-uk", {
+								).toLocaleDateString(dateLocale, {
 									dateStyle: "short",
 								})}${
 									dateUpdated
 										? ` (Updated: ${toZonedTime(
 												dateUpdated,
 												"CAT",
-											).toLocaleDateString("en-uk", {
+											).toLocaleDateString(dateLocale, {
 												dateStyle: "short",
 											})})`
 										: ""
@@ -44,8 +49,8 @@ const NewsArticle = function ({ model }) {
 					<div className="flex justify-stretch items-stretch w-full h-[15em] rounded-lg overflow-clip md:w-1/2 md:h-fit md:grow md:self-stretch md:max-h-[25em]">
 						<Image
 							className="grow object-cover object-center"
-							height={538}
-							width={538}
+							height={600}
+							width={600}
 							alt={about ?? "News article image"}
 							title={about}
 							src={source}

@@ -7,7 +7,7 @@ import { InitializedModel } from "@mvc-react/mvc";
 import { JSX } from "react";
 import { Language, LanguageSwitcherModel } from "../../model/language-switcher";
 import "./language-switcher.css";
-import { Link, usePathname } from "@/src/i18n/navigation";
+import { usePathname, useRouter } from "@/src/i18n/navigation";
 
 const languageToRenderedMap = new Map<Language, JSX.Element>([
 	[
@@ -30,22 +30,27 @@ const LanguageSwitcher = function ({ model }) {
 	const { modelView } = model;
 	const { displayedLanguage } = modelView;
 	const pathName = usePathname();
+	const router = useRouter();
 
 	return (
-		<div className="language-switcher sticky bottom-[-1] right-1/20 float-end self-end z-20 p-3 w-[5em] rounded-t-lg min-w-fit bg-gray-900 hover:underline text-white text-sm md:text-base border border-white/20">
-			{/* TODO: Something more elegant in the future maybe */}
-			<Link
-				href={pathName.slice(
-					undefined,
-					pathName.lastIndexOf("#") != -1
-						? pathName.lastIndexOf("#")
-						: undefined,
-				)}
-				locale={displayedLanguage}
-			>
-				{languageToRenderedMap.get(displayedLanguage)}
-			</Link>
-		</div>
+		/* TODO: Something more elegant in the future maybe */
+		<button
+			className="language-switcher sticky bottom-[-1] right-1/20 float-end self-end z-20 p-3 w-[5em] rounded-t-lg min-w-fit bg-gray-900 hover:underline text-white text-sm md:text-base border border-white/20"
+			onClick={() => {
+				router.replace(
+					pathName.slice(
+						undefined,
+						pathName.lastIndexOf("#") != -1
+							? pathName.lastIndexOf("#")
+							: undefined,
+					),
+					{ locale: displayedLanguage },
+				);
+				router.refresh();
+			}}
+		>
+			{languageToRenderedMap.get(displayedLanguage)}
+		</button>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<LanguageSwitcherModel>>;
 

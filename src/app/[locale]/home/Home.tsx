@@ -219,28 +219,26 @@ export default function Home() {
 																.liturgicalWeek
 														}
 													</span>
-													<div className="flex gap-2 items-center p-1 px-5 md:px-7 my-2 bg-[#250203]/80 text-[#FEF8F3]">
-														<HymnsOrnament className="h-10 w-10 fill-[#FEF8F3]" />
-														<Link
-															className="text-lg "
-															href="#"
-															onClick={async () =>
-																await hymnsModal.interact(
-																	{
-																		type: "OPEN",
-																		input: {
-																			hymns: modelView
-																				.dailyReadings
-																				.hymns,
-																		},
+													<button
+														className="flex gap-2 items-center p-1 px-5 md:px-7 my-2 bg-[#250203]/82 text-[#FEF8F3] text-left hover:bg-[#250203]/92 active:bg-[#250203]"
+														onClick={async () =>
+															await hymnsModal.interact(
+																{
+																	type: "OPEN",
+																	input: {
+																		hymns: modelView
+																			.dailyReadings
+																			.hymns,
 																	},
-																)
-															}
-															replace
-														>
+																},
+															)
+														}
+													>
+														<HymnsOrnament className="h-10 w-10 fill-[#FEF8F3]" />
+														<span className="text-lg underline">
 															{t("dailyHymns")}
-														</Link>
-													</div>
+														</span>
+													</button>
 													<div className="px-5 md:px-7 max-h-[15em] md:max-h-[10em]">
 														<p
 															className={`h-full text-base/relaxed [&_a]:text-red-900 pr-3 overflow-y-auto`}
@@ -262,12 +260,13 @@ export default function Home() {
 										transition={{
 											ease: "easeOut",
 										}}
-										className="scripture-readings h-fit flex flex-col bg-white/70 border border-gray-900/30 md:max-w-[70%] lg:min-w-[35%] rounded-lg overflow-clip"
+										className="scripture-readings h-fit flex flex-col bg-[#FEF8F3] border border-gray-900/30 md:max-w-[70%] lg:min-w-[35%] rounded-lg overflow-clip"
 									>
 										<div className="flex gap-6 w-full items-center justify-center lg:justify-center md:items-center lg:items-center p-2 px-10 text-white bg-gray-900">
 											<ReadingsOrnament
 												className={`object-contain object-center h-[5em] w-[8em]`}
 												fill="#fff"
+												opacity={0.9}
 											/>
 											<span
 												className={`grow w-full hidden md:inline lg:hidden text-4xl ${georgia.className}`}
@@ -424,7 +423,7 @@ export default function Home() {
 									</div>
 								</motion.div>
 							</div>
-							<div className="other-stories flex flex-col gap-4 pt-6 pb-10 px-8 lg:px-20 bg-white/70  border-t border-t-[#dcb042]">
+							<div className="other-stories flex flex-col gap-4 pt-6 pb-15 px-8 lg:px-20 bg-white/70 border-t-2 border-t-[#dcb042]">
 								<span className="text-xl mb-1">
 									{t("moreNews")}
 								</span>
@@ -448,9 +447,10 @@ export default function Home() {
 				)}
 				<section
 					id="resources"
-					className="resources bg-[#250203] text-white"
+					className="resources bg-gray-900 text-white"
 				>
-					<div className="resources-content flex flex-col gap-8 p-8 py-14 lg:px-20">
+					<div className="h-3.75 w-full bg-[#250203] bg-[url(/ui/border-5.jpg)] bg-position-[50%_50%] bg-size-[60%] md:bg-size-[40%] lg:bg-size-[25%] bg-repeat-x" />
+					<div className="resources-content flex flex-col gap-8 p-8 py-14 lg:p-20">
 						<div className="flex flex-col gap-6 w-full justify-center items-center md:flex-row">
 							<div className="flex size-[20em] bg-[linear-gradient(to_bottom,transparent,black),url(/ui/liturgical-resources.jpg)] bg-cover bg-center rounded-lg overflow-clip">
 								<div
@@ -502,9 +502,9 @@ export default function Home() {
 							</div>
 						</div>
 					</div>
+					<div className="h-3.75 w-full bg-[#250203] bg-[url(/ui/border-5.jpg)] bg-position-[50%_50%] bg-size-[60%] md:bg-size-[40%] lg:bg-size-[25%] bg-repeat-x" />
 				</section>
 				<section id="media" className="gallery text-black">
-					<div className="h-5 w-full bg-[#250203] bg-[url(/ui/border-4.jpg)] bg-position-[50%_50%] bg-contain bg-repeat-x" />
 					{modelView && (
 						<div className="gallery-content flex flex-col gap-8 p-8 py-14 lg:px-20">
 							<div className="swiper-container w-full max-w-full h-[20em] max-h-[20em]">

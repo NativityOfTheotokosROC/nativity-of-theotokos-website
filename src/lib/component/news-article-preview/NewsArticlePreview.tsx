@@ -55,11 +55,11 @@ const NewsArticlePreview = function ({ model }) {
 			className="normal-card flex flex-row items-center gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer"
 			onClick={() => alert(tMisc("futureContent"))}
 		>
-			<div className="flex justify-stretch items-stretch w-[7em] min-w-[7em] h-[6em] max-h-[6em] md:w-[10em] md:min-w-[10em] md:h-[8em] md:max-h-[8em] rounded-lg overflow-clip">
+			<div className="flex justify-stretch items-stretch w-[7em] min-w-[7em] h-[6em] max-h-[6em] md:w-[8em] md:min-w-[8em] md:h-[6.4em] md:max-h-[6.4em] rounded-lg overflow-clip">
 				<Image
 					className="grow object-cover object-center"
-					height={500}
-					width={500}
+					height={128}
+					width={128}
 					alt={about ?? "News article image"}
 					title={about}
 					src={source}
@@ -68,7 +68,7 @@ const NewsArticlePreview = function ({ model }) {
 				/>
 			</div>
 			<div className="card-details py-4 md:px-6 flex flex-col gap-1.5">
-				<span className="title text-sm md:text-lg">{title}</span>
+				<span className="title text-sm md:text-base">{title}</span>
 				<span className="byline text-xs md:text-sm text-gray-600">
 					{author} | {dateString}
 				</span>

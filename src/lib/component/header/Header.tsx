@@ -16,6 +16,7 @@ const Header = function ({ model }) {
 	const isWideScreen = useMediaQuery({ minWidth: 768 });
 	const locale = useLocale();
 	const router = useRouter();
+	// const t = useTranslations('header')
 
 	return (
 		<header
