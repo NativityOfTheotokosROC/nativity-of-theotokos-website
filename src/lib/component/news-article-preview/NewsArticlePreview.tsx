@@ -4,14 +4,15 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { NewsArticlePreviewModel } from "../../model/news-article-preview";
 import Image from "next/image";
 import { georgia } from "../../third-party/fonts";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import { toZonedTime } from "date-fns-tz";
+import { useRouter } from "@/src/i18n/navigation";
 
 const NewsArticlePreview = function ({ model }) {
 	const { articlePreview: article, isFeatured } = model.modelView;
 	const { title, author, dateCreated, snippet, articleImage } = article;
 	const { placeholder, source, about } = articleImage;
-	const tMisc = useTranslations("miscellaneous");
+	const router = useRouter();
 	const locale = useLocale();
 	const dateLocale = locale == "en" ? "en-uk" : "ru-RU";
 	const dateString = toZonedTime(dateCreated, "CAT").toLocaleDateString(
@@ -26,7 +27,7 @@ const NewsArticlePreview = function ({ model }) {
 	return isFeatured ? (
 		<div
 			className="featured-card flex flex-col hover:cursor-pointer bg-[#FEF8F3] border border-gray-900/20 rounded-lg overflow-clip"
-			onClick={() => alert(tMisc("futureContent"))}
+			onClick={() => router.push("/news")}
 		>
 			<div className="flex justify-stretch items-stretch w-full h-[15em] max-h-[80dvh]">
 				<Image
@@ -53,7 +54,7 @@ const NewsArticlePreview = function ({ model }) {
 	) : (
 		<div
 			className="normal-card flex flex-row items-center gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer"
-			onClick={() => alert(tMisc("futureContent"))}
+			onClick={() => router.push("/news")}
 		>
 			<div className="flex justify-stretch items-stretch w-[7em] min-w-[7em] h-[6em] max-h-[6em] md:w-[8em] md:min-w-[8em] md:h-[6.4em] md:max-h-[6.4em] rounded-lg overflow-clip">
 				<Image

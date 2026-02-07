@@ -46,7 +46,13 @@ export async function getArticle(articleId: string): Promise<NewsArticle> {
 				placeholder,
 			},
 		};
-	} catch {
-		notFound();
+	} catch (error) {
+		if (
+			error instanceof Object &&
+			"code" in error &&
+			error["code"] == "P2025"
+		)
+			notFound();
+		throw error;
 	}
 }

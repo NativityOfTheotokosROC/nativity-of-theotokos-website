@@ -45,6 +45,9 @@ const nextConfig: NextConfig = {
 
 		return config;
 	},
+	experimental: {
+		authInterrupts: true,
+	},
 };
 
 const withNextIntl = createNextIntlPlugin();

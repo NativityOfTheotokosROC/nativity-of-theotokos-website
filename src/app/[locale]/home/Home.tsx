@@ -25,14 +25,15 @@ import { georgia } from "@/src/lib/third-party/fonts";
 import "./home.css";
 import { useTranslations, useLocale } from "next-intl";
 import { toZonedTime } from "date-fns-tz";
+import { useRouter } from "@/src/i18n/navigation";
 
 type MailingListStatus = "subscribed" | "not_subscribed" | "pending";
 
 export default function Home() {
 	const { modelView } = useHome();
+	const router = useRouter();
 	const t = useTranslations("home");
 	const tLinks = useTranslations("links");
-	const tMisc = useTranslations("miscellaneous");
 	const tQuote = useTranslations("quote");
 	const locale = useLocale();
 	const dateLocale = locale == "en" ? "en-uk" : "ru-RU";
@@ -70,7 +71,7 @@ export default function Home() {
 			<main
 				className={`home bg-[linear-gradient(135deg,#F7DAC1,whitesmoke)] ${!modelView && "visible"}`}
 			>
-				<section className="hero bg-[#DCB042] text-black bg-[url(/ui/nativity-icon.jpg)] bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]">
+				<section className="hero bg-gray-950 text-black bg-[url(/ui/nativity-icon.jpg)] bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]">
 					<motion.div
 						animate={
 							splashExited && {
@@ -490,7 +491,7 @@ export default function Home() {
 								<div
 									className="flex size-full p-6 justify-center items-end text-center  text-white hover:cursor-pointer"
 									onClick={() =>
-										alert(tMisc("futureContent"))
+										router.push("/about-us", { locale })
 									}
 								>
 									<span

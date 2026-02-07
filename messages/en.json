@@ -1,8 +1,32 @@
 {
 	"metadata": {
 		"templateTitle": "Nativity of the Theotokos Church",
-		"templateDefault": "Home | Nativity of the Theotokos Church",
+		"templateDefault": "Nativity of the Theotokos Church",
 		"home": "Home"
+	},
+	"error": {
+		"metaTitle": "Something went Wrong",
+		"title": "Something went Wrong",
+		"description": "An unexpected error occured on our end. Please try again in a few moments. If the problem persists",
+		"contactUs": "contact us",
+		"tryAgain": "Try Again"
+	},
+	"notFound": {
+		"metaTitle": "Page not Found",
+		"title": "Page not Found",
+		"description": "The page you are looking for does not exist, was moved, or was deleted.",
+		"goHome": "Go Home"
+	},
+	"unauthorized": {
+		"metaTitle": "Unauthorized",
+		"title": "Unauthorized",
+		"description": "You are not authorized to access this resource.",
+		"goHome": "Go Home"
+	},
+	"maintenance": {
+		"title": "We're working on it...",
+		"description": "The page is currently under maintenance. Please check back later. You may explore our other pages in the meantime.",
+		"goHome": "Go Home"
 	},
 	"header": {
 		"headerTitle": "Nativity of the Theotokos",
@@ -50,6 +74,12 @@
 		"mailingListDescription": "Stay up to date with the latest church news, announcements, and events straight from your mailbox. Enter your email below and subscribe if you haven't already.",
 		"mailingListButton": "Subscribe",
 		"mailingListSuccessMessage": "Thank you for subscribing to our mailing list! We will be keeping you up to date with the latest news, updates, announcements and more."
+	},
+	"aboutUs": {
+		"metaTitle": "About Us"
+	},
+	"news": {
+		"metaTitle": "News"
 	},
 	"dailyReadings": {
 		"noFast": "No Fast Today"
