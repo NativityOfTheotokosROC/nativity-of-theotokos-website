@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import NewsArticle from "./NewsArticle";
-import { getArticle } from "@/src/lib/server-actions/news-article";
+import { getArticle } from "@/src/lib/server-action/news-article";
 import { newReadonlyModel } from "@mvc-react/mvc";
 
 export async function generateMetadata({

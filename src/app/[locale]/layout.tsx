@@ -9,6 +9,8 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { routing } from "@/src/i18n/routing";
 import { notFound } from "next/navigation";
+import LoadingBar from "@/src/lib/component/loading-bar/LoadingBar";
+import ClientProviders from "./client-providers";
 
 export async function generateMetadata({
 	params,
@@ -57,50 +59,54 @@ export default async function RootLayout({
 				className={`antialiased ${googleSansFlex.variable} ${googleSans.variable}`}
 			>
 				<NextIntlClientProvider>
-					<Header
-						model={newReadonlyModel({
-							title: `${tHeader("headerTitle")} ${tHeader("headerSubtitle")}`,
-							navlinks: [
-								{ link: "/", text: tHeader("home") },
-								{
-									link: "/#resources",
-									text: tHeader("resources"),
-									isInteractive: true,
+					<ClientProviders model={newReadonlyModel({ locale })}>
+						<LoadingBar />
+						<Header
+							model={newReadonlyModel({
+								title: `${tHeader("headerTitle")} ${tHeader("headerSubtitle")}`,
+								navlinks: [
+									{ link: "/", text: tHeader("home") },
+									{
+										link: "/#resources",
+										text: tHeader("resources"),
+										isInteractive: true,
+									},
+									{
+										link: "/#media",
+										text: tHeader("media"),
+										isInteractive: true,
+									},
+									{
+										link: "/#resources",
+										text: tHeader("aboutUs"),
+										isInteractive: true,
+									},
+									{
+										link: "/#footer",
+										text: tHeader("contact"),
+										isInteractive: true,
+									},
+								],
+							})}
+						/>
+						{children}
+						<Footer
+							model={newReadonlyModel({
+								copyrightText: tFooter("copyright"),
+							})}
+						/>
+						<LanguageSwitcher
+							model={{
+								modelView: {
+									displayedLanguage:
+										locale == "en" ? "ru" : "en",
 								},
-								{
-									link: "/#media",
-									text: tHeader("media"),
-									isInteractive: true,
+								interact: async () => {
+									"use server";
 								},
-								{
-									link: "/#resources",
-									text: tHeader("aboutUs"),
-									isInteractive: true,
-								},
-								{
-									link: "/#footer",
-									text: tHeader("contact"),
-									isInteractive: true,
-								},
-							],
-						})}
-					/>
-					{children}
-					<Footer
-						model={newReadonlyModel({
-							copyrightText: tFooter("copyright"),
-						})}
-					/>
-					<LanguageSwitcher
-						model={{
-							modelView: {
-								displayedLanguage: locale == "en" ? "ru" : "en",
-							},
-							interact: async () => {
-								"use server";
-							},
-						}}
-					/>
+							}}
+						/>
+					</ClientProviders>
 				</NextIntlClientProvider>
 			</body>
 		</html>

@@ -1,6 +1,6 @@
 import { HomeModel, HomeModelInteraction, HomeModelView } from "../model/home";
 import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
-import { getHomeSnapshot } from "../server-actions/home";
+import { getHomeSnapshot } from "../server-action/home";
 import { useEffect } from "react";
 
 export function useHome(): HomeModel {

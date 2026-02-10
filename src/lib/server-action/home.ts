@@ -416,21 +416,36 @@ async function _getNextDefaultScheduleItem(
 				times: [
 					{
 						time: new Date(
-							new Date(scheduleItemDate).setHours(12, 0, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(
+								12,
+								0,
+								0,
+								0,
+							),
 						),
 						designation: tEn("orthros"),
 						designationRu: tRu("orthros"),
 					},
 					{
 						time: new Date(
-							new Date(scheduleItemDate).setHours(12, 30, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(
+								12,
+								30,
+								0,
+								0,
+							),
 						),
 						designation: tEn("confessions"),
 						designationRu: tRu("confessions"),
 					},
 					{
 						time: new Date(
-							new Date(scheduleItemDate).setHours(13, 0, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(
+								13,
+								0,
+								0,
+								0,
+							),
 						),
 						designation: tEn("liturgy"),
 						designationRu: tRu("liturgy"),
@@ -494,21 +509,36 @@ async function _getNextDefaultScheduleItem(
 				times: [
 					{
 						time: new Date(
-							new Date(scheduleItemDate).setHours(9, 0, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(
+								9,
+								0,
+								0,
+								0,
+							),
 						),
 						designation: tEn("orthros"),
 						designationRu: tRu("orthros"),
 					},
 					{
 						time: new Date(
-							new Date(scheduleItemDate).setHours(9, 30, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(
+								9,
+								30,
+								0,
+								0,
+							),
 						),
 						designation: tEn("confessions"),
 						designationRu: tRu("confessions"),
 					},
 					{
 						time: new Date(
-							new Date(scheduleItemDate).setHours(10, 30, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(
+								10,
+								30,
+								0,
+								0,
+							),
 						),
 						designation: tEn("liturgy"),
 						designationRu: tRu("liturgy"),

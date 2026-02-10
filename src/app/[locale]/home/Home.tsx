@@ -1,37 +1,38 @@
 "use client";
 
+import ReadingsOrnament from "@/public/ui/ornament_1.svg";
+import LatestNewsOrnament from "@/public/ui/ornament_11.svg";
+import HymnsOrnament from "@/public/ui/ornament_9.svg";
+import { useRouter } from "@/src/i18n/navigation";
+import HymnsModal from "@/src/lib/component/hymns-modal/HymnsModal";
+import { useLoadingBarRouter } from "@/src/lib/component/loading-bar/LoadingBar";
+import NewsArticlePreview from "@/src/lib/component/news-article-preview/NewsArticlePreview";
+import ScheduleItem from "@/src/lib/component/schedule-item/ScheduleItem";
+import SplashScreen from "@/src/lib/component/splash-screen/SplashScreen";
+import { useHome } from "@/src/lib/model-implementation/home";
+import { hymnsModalVIInterface } from "@/src/lib/model-implementation/hymns-modal";
+import { subscribeToMailingList } from "@/src/lib/server-action/home";
+import { georgia } from "@/src/lib/third-party/fonts";
+import { newReadonlyModel } from "@mvc-react/mvc";
+import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
+import { toZonedTime } from "date-fns-tz";
+import { motion } from "motion/react";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import { Autoplay, Navigation } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { subscribeToMailingList } from "@/src/lib/server-actions/home";
+import Link from "next/link";
 import { useCallback, useLayoutEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/navigation";
-import Link from "next/link";
-import { useHome } from "@/src/lib/model-implementation/home";
-import ScheduleItem from "@/src/lib/component/schedule-item/ScheduleItem";
-import { newReadonlyModel } from "@mvc-react/mvc";
-import NewsArticlePreview from "@/src/lib/component/news-article-preview/NewsArticlePreview";
-import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
-import { hymnsModalVIInterface } from "@/src/lib/model-implementation/hymns-modal";
-import HymnsModal from "@/src/lib/component/hymns-modal/HymnsModal";
-import SplashScreen from "@/src/lib/component/splash-screen/SplashScreen";
-import { motion } from "motion/react";
-import ReadingsOrnament from "@/public/ui/ornament_1.svg";
-import HymnsOrnament from "@/public/ui/ornament_9.svg";
-import LatestNewsOrnament from "@/public/ui/ornament_11.svg";
-import { georgia } from "@/src/lib/third-party/fonts";
+import { Autoplay, Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import "./home.css";
-import { useTranslations, useLocale } from "next-intl";
-import { toZonedTime } from "date-fns-tz";
-import { useRouter } from "@/src/i18n/navigation";
 
 type MailingListStatus = "subscribed" | "not_subscribed" | "pending";
 
 export default function Home() {
 	const { modelView } = useHome();
-	const router = useRouter();
+	const router = useLoadingBarRouter(useRouter);
 	const t = useTranslations("home");
 	const tLinks = useTranslations("links");
 	const tQuote = useTranslations("quote");
@@ -454,7 +455,7 @@ export default function Home() {
 					<div className="h-3.75 w-full bg-[#250203] bg-[url(/ui/border-8.jpg)] bg-position-[50%_50%] bg-size-[25%] md:bg-size-[15%] lg:bg-size-[15%] bg-repeat-x" />
 					<div className="resources-content flex flex-col gap-8 p-8 py-14 lg:p-20">
 						<div className="flex flex-col gap-6 w-full justify-center items-center md:flex-row">
-							<div className="flex md:size-[22em] w-full h-[22em] bg-[linear-gradient(to_bottom,transparent,black),url(/ui/liturgical-resources.jpg)] bg-cover bg-center bg-no-repeat rounded-lg overflow-clip border border-black/70 text-white hover:text-[#dcb042] hover:scale-[1.03]  active:border-[#dcb042] transition ease-out duration-200">
+							<div className="flex md:size-[22em] w-full h-[22em] bg-[linear-gradient(to_bottom,transparent,black),url(/ui/liturgical-resources.jpg)] bg-cover bg-center bg-no-repeat rounded-lg overflow-clip border border-black/70 text-white hover:text-[#dcb042] hover:scale-[1.03]  active:border-[#dcb042] transition ease-out duration-200 select-none">
 								<div
 									className="flex size-full p-6 justify-center items-end text-center hover:cursor-pointer"
 									onClick={() =>
@@ -464,14 +465,12 @@ export default function Home() {
 										)
 									}
 								>
-									<span
-										className={`text-3xl mb-3`}
-									>
+									<span className={`text-3xl mb-3`}>
 										{t("liturgicalResources")}
 									</span>
 								</div>
 							</div>
-							<div className="flex md:size-[22em] w-full h-[22em] bg-[linear-gradient(to_bottom,transparent,black),url(/ui/what-is-orthodoxy.jpg)] bg-cover bg-center bg-no-repeat rounded-lg overflow-clip border border-black/70 text-white hover:text-[#dcb042] hover:scale-[1.03]  active:border-[#dcb042] transition ease-out duration-200">
+							<div className="flex md:size-[22em] w-full h-[22em] bg-[linear-gradient(to_bottom,transparent,black),url(/ui/what-is-orthodoxy.jpg)] bg-cover bg-center bg-no-repeat rounded-lg overflow-clip border border-black/70 text-white hover:text-[#dcb042] hover:scale-[1.03]  active:border-[#dcb042] transition ease-out duration-200 select-none">
 								<div
 									className="flex size-full p-6 justify-center items-end text-center hover:cursor-pointer"
 									onClick={() =>
@@ -481,23 +480,22 @@ export default function Home() {
 										)
 									}
 								>
-									<span
-										className={`text-3xl mb-3`}
-									>
+									<span className={`text-3xl mb-3`}>
 										{t("whatIsOrthodoxy")}
 									</span>
 								</div>
 							</div>
-							<div className="flex md:size-[22em] w-full h-[22em] bg-[linear-gradient(to_bottom,transparent,black),url(/ui/about-our-parish.jpg)] bg-cover bg-center bg-no-repeat rounded-lg overflow-clip border border-black/70 text-white hover:text-[#dcb042] hover:scale-[1.03]  active:border-[#dcb042] transition ease-out duration-200">
+							<div className="flex md:size-[22em] w-full h-[22em] bg-[linear-gradient(to_bottom,transparent,black),url(/ui/about-our-parish.jpg)] bg-cover bg-center bg-no-repeat rounded-lg overflow-clip border border-black/70 text-white hover:text-[#dcb042] hover:scale-[1.03]  active:border-[#dcb042] transition ease-out duration-200 select-none">
 								<div
 									className="flex size-full p-6 justify-center items-end text-center hover:cursor-pointer"
 									onClick={() =>
-										router.push("/about-us", { locale })
+										router.push("/about-us", {
+											locale,
+											scroll: true,
+										})
 									}
 								>
-									<span
-										className={`text-3xl mb-3`}
-									>
+									<span className={`text-3xl mb-3`}>
 										{t("aboutOurParish")}
 									</span>
 								</div>

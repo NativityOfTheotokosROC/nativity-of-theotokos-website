@@ -5,9 +5,10 @@ import { georgia } from "@/src/lib/third-party/fonts";
 import { useLocale, useTranslations } from "next-intl";
 import ForbiddenGraphic from "@/public/ui/icon-3.svg";
 import { useLayoutEffect } from "react";
+import { useLoadingBarRouter } from "@/src/lib/component/loading-bar/LoadingBar";
 
 export default function Forbidden() {
-	const router = useRouter();
+	const router = useLoadingBarRouter(useRouter);
 	const locale = useLocale();
 	const t = useTranslations("unauthorized");
 

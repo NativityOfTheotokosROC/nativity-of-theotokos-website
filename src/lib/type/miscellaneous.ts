@@ -62,3 +62,7 @@ export type NewsArticle = {
 export type GalleryImage = {
 	image: Image;
 };
+
+export interface Notification<T> {
+	type: T;
+}

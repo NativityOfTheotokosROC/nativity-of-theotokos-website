@@ -1,0 +1,12 @@
+.loading-bar {
+	animation: load ease-in-out 1s forwards;
+}
+
+@keyframes load {
+	from {
+		width: 0;
+	}
+	to {
+		width: 90%;
+	}
+}

@@ -4,16 +4,15 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { NewsArticlePreviewModel } from "../../model/news-article-preview";
 import Image from "next/image";
 import { georgia } from "../../third-party/fonts";
-import { useLocale } from "next-intl";
 import { toZonedTime } from "date-fns-tz";
 import { useRouter } from "@/src/i18n/navigation";
+import { useLoadingBarRouter } from "../loading-bar/LoadingBar";
 
 const NewsArticlePreview = function ({ model }) {
 	const { articlePreview: article, isFeatured } = model.modelView;
 	const { title, author, dateCreated, snippet, articleImage } = article;
 	const { placeholder, source, about } = articleImage;
-	const router = useRouter();
-	const locale = useLocale();
+	const router = useLoadingBarRouter(useRouter);
 	const dateLocale = "ru-RU";
 	const dateString = toZonedTime(dateCreated, "CAT").toLocaleDateString(
 		dateLocale,
@@ -24,7 +23,7 @@ const NewsArticlePreview = function ({ model }) {
 
 	return isFeatured ? (
 		<div
-			className="featured-card flex flex-col hover:cursor-pointer bg-[#FEF8F3] border border-gray-900/20 rounded-lg overflow-clip  hover:border-[#dcb042] hover:[&_.title]:underline hover:scale-[1.03] transition ease-out duration-150"
+			className="featured-card flex flex-col select-none hover:cursor-pointer bg-[#FEF8F3] border border-gray-900/20 rounded-lg overflow-clip  hover:border-[#dcb042] hover:[&_.title]:underline hover:scale-[1.03] transition ease-out duration-150"
 			onClick={() => {
 				router.push("/news");
 				router.refresh();
@@ -36,7 +35,6 @@ const NewsArticlePreview = function ({ model }) {
 					height={538}
 					width={538}
 					alt={about ?? "News article image"}
-					title={about}
 					src={source}
 					placeholder="blur"
 					blurDataURL={placeholder}
@@ -54,7 +52,7 @@ const NewsArticlePreview = function ({ model }) {
 		</div>
 	) : (
 		<div
-			className="normal-card flex flex-row items-center max-w-[27em] gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer hover:[&_.title]:underline"
+			className="normal-card flex flex-row items-center max-w-[27em] gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer hover:[&_.title]:underline select-none"
 			onClick={() => {
 				router.push("/news");
 				router.refresh();
@@ -66,7 +64,6 @@ const NewsArticlePreview = function ({ model }) {
 					height={128}
 					width={128}
 					alt={about ?? "News article image"}
-					title={about}
 					src={source}
 					placeholder="blur"
 					blurDataURL={placeholder}

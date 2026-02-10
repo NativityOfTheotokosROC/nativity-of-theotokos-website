@@ -5,7 +5,11 @@ import { useRouter } from "@/src/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
+import {
+	LoadingBarContext,
+	useLoadingBarRouter,
+} from "@/src/lib/component/loading-bar/LoadingBar";
 
 export async function generateMetadata({
 	params,
@@ -21,8 +25,9 @@ export async function generateMetadata({
 }
 
 export default function NotFoundPage() {
-	const router = useRouter();
+	const router = useLoadingBarRouter(useRouter);
 	const locale = useLocale();
+	const loadingBar = useContext(LoadingBarContext);
 	const t = useTranslations("notFound");
 
 	useLayoutEffect(() => {
@@ -48,7 +53,9 @@ export default function NotFoundPage() {
 					<button
 						className="text-white rounded-lg bg-[#250203]/82 p-4 w-30 hover:bg-[#250203]/92 active:bg-[#250203]"
 						onClick={() => {
-							router.push("/", { locale });
+							if (loadingBar.modelView)
+								router.push("/", { locale });
+							else window.open("/", "_self");
 						}}
 					>
 						{t("goHome")}

@@ -5,7 +5,7 @@ import {
 	GalleryImage,
 	ScheduleItem,
 } from "../type/miscellaneous";
-import { LatestNews } from "../server-actions/home";
+import { LatestNews } from "../server-action/home";
 
 export interface HomeModelView {
 	dailyReadings: DailyReadings;
