@@ -430,7 +430,7 @@ export default function Home() {
 								<span className="text-xl mb-1">
 									{t("moreNews")}
 								</span>
-								<div className="grid lg:grid-cols-2 gap-8 md:gap-6 md:w-3/4 lg:w-85/100">
+								<div className="grid md:grid-cols-2 gap-8 md:gap-6 md:w-3/4 lg:w-85/100">
 									{[
 										...modelView.newsArticles
 											.otherNewsArticles,
