@@ -5,7 +5,7 @@ import LatestNewsOrnament from "@/public/ui/ornament_11.svg";
 import HymnsOrnament from "@/public/ui/ornament_9.svg";
 import { useRouter } from "@/src/i18n/navigation";
 import HymnsModal from "@/src/lib/component/hymns-modal/HymnsModal";
-import { useLoadingBarRouter } from "@/src/lib/component/loading-bar/LoadingBar";
+import { useLoadingBarRouter } from "@/src/lib/component/loading-bar/navigation";
 import NewsArticlePreview from "@/src/lib/component/news-article-preview/NewsArticlePreview";
 import ScheduleItem from "@/src/lib/component/schedule-item/ScheduleItem";
 import SplashScreen from "@/src/lib/component/splash-screen/SplashScreen";

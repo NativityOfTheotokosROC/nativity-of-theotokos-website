@@ -2,7 +2,7 @@
 
 import { LoadingBarModel } from "../../model/loading-bar";
 import "./loading-bar.css";
-import { usePathname, useRouter } from "@/src/i18n/navigation";
+import { usePathname } from "@/src/i18n/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export const LoadingBarContext = createContext<LoadingBarModel>({
@@ -11,24 +11,6 @@ export const LoadingBarContext = createContext<LoadingBarModel>({
 	},
 	modelView: null,
 });
-
-export function useLoadingBarRouter<T extends typeof useRouter>(
-	useRouterHook: T,
-) {
-	const router = useRouterHook();
-	const { interact } = useContext(LoadingBarContext);
-	return {
-		...router,
-		push(href, options?) {
-			router.push(href, options);
-			interact({ type: "SET_LOADING", input: { value: true } });
-		},
-		replace(href, options?) {
-			router.replace(href, options);
-			interact({ type: "SET_LOADING", input: { value: true } });
-		},
-	} satisfies typeof router;
-}
 
 const LoadingBar = function () {
 	const { modelView, interact } = useContext(LoadingBarContext);

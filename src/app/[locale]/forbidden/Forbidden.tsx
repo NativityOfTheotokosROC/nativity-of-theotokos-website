@@ -1,15 +1,14 @@
 "use client";
 
-import { useRouter } from "@/src/i18n/navigation";
-import { georgia } from "@/src/lib/third-party/fonts";
-import { useLocale, useTranslations } from "next-intl";
 import ForbiddenGraphic from "@/public/ui/icon-3.svg";
+import { useRouter } from "@/src/i18n/navigation";
+import { useLoadingBarRouter } from "@/src/lib/component/loading-bar/navigation";
+import { georgia } from "@/src/lib/third-party/fonts";
+import { useTranslations } from "next-intl";
 import { useLayoutEffect } from "react";
-import { useLoadingBarRouter } from "@/src/lib/component/loading-bar/LoadingBar";
 
 export default function Forbidden() {
 	const router = useLoadingBarRouter(useRouter);
-	const locale = useLocale();
 	const t = useTranslations("unauthorized");
 
 	useLayoutEffect(() => {
@@ -35,7 +34,7 @@ export default function Forbidden() {
 					<button
 						className="text-white rounded-lg bg-[#250203]/82 p-4 w-30 hover:bg-[#250203]/92 active:bg-[#250203]"
 						onClick={() => {
-							router.push("/", { locale });
+							router.push("/");
 						}}
 					>
 						{t("goHome")}

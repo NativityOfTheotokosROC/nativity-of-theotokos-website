@@ -8,7 +8,7 @@ import { JSX } from "react";
 import { Language, LanguageSwitcherModel } from "../../model/language-switcher";
 import "./language-switcher.css";
 import { usePathname, useRouter } from "@/src/i18n/navigation";
-import { useLoadingBarRouter } from "../loading-bar/LoadingBar";
+import { useLoadingBarRouter } from "../loading-bar/navigation";
 
 const languageToRenderedMap = new Map<Language, JSX.Element>([
 	[

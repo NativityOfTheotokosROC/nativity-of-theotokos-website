@@ -2,14 +2,13 @@
 
 import MaintenanceGraphic from "@/public/ui/ornament_36.svg";
 import { useRouter } from "@/src/i18n/navigation";
-import { useLoadingBarRouter } from "@/src/lib/component/loading-bar/LoadingBar";
+import { useLoadingBarRouter } from "@/src/lib/component/loading-bar/navigation";
 import { georgia } from "@/src/lib/third-party/fonts";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useLayoutEffect } from "react";
 
 export default function Maintenance() {
 	const router = useLoadingBarRouter(useRouter);
-	const locale = useLocale();
 	const t = useTranslations("maintenance");
 
 	useLayoutEffect(() => {
@@ -35,7 +34,7 @@ export default function Maintenance() {
 					<button
 						className="text-white rounded-lg bg-[#250203]/82 p-4 w-30 hover:bg-[#250203]/92 active:bg-[#250203]"
 						onClick={() => {
-							router.push("/", { locale });
+							router.push("/");
 						}}
 					>
 						{t("goHome")}

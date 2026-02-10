@@ -1,8 +1,5 @@
 import { PrismaClient } from "@/src/generated/prisma/client";
-import { useRouter } from "@/src/i18n/navigation";
 import { ImagePlaceholder, PlaceholderRepository } from "@grod56/placeholder";
-import { Locale } from "next-intl";
-import { NavigateOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export function julianDate(date: Date) {
 	return new Date(new Date().setDate(date.getDate() - 13));
@@ -66,24 +63,3 @@ export const getPrismaPlaceholderRepository = (
 		},
 	};
 };
-
-export function useModifiedRouter(pushCallback: () => void) {
-	const router = useRouter();
-	return {
-		...router,
-		push(
-			href:
-				| string
-				| {
-						pathname: string;
-						query?: import("next-intl/navigation").QueryParams;
-				  },
-			options:
-				| (Partial<NavigateOptions> & { locale?: Locale })
-				| undefined,
-		) {
-			pushCallback();
-			router.push(href, options);
-		},
-	};
-}

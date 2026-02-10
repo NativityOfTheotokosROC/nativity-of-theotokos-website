@@ -9,14 +9,12 @@ import LogoIcon from "@/public/ui/logo-icon.svg";
 import { georgia } from "../../third-party/fonts";
 import "./header.css";
 import { useRouter } from "@/src/i18n/navigation";
-import { useLocale } from "next-intl";
+import { useLoadingBarRouter } from "../loading-bar/navigation";
 
 const Header = function ({ model }) {
 	const { navlinks } = model.modelView;
 	const isWideScreen = useMediaQuery({ minWidth: 768 });
-	const locale = useLocale();
-	const router = useRouter();
-	// const t = useTranslations('header')
+	const router = useLoadingBarRouter(useRouter);
 
 	return (
 		<header
@@ -24,9 +22,9 @@ const Header = function ({ model }) {
 		>
 			<div className="header-content flex flex-nowrap gap-9 justify-between p-4 lg:p-6 lg:px-7 items-center text-white">
 				<div
-					className="logo flex gap-3 items-center justify-center w-fit min-w-fit hover:cursor-pointer"
+					className="logo flex gap-3 items-center justify-center w-fit min-w-fit hover:cursor-pointer select-none"
 					onClick={() => {
-						router.push("/", { locale });
+						router.push("/");
 					}}
 				>
 					<div className="size-12">

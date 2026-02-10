@@ -6,7 +6,7 @@ import Image from "next/image";
 import { georgia } from "../../third-party/fonts";
 import { toZonedTime } from "date-fns-tz";
 import { useRouter } from "@/src/i18n/navigation";
-import { useLoadingBarRouter } from "../loading-bar/LoadingBar";
+import { useLoadingBarRouter } from "../loading-bar/navigation";
 
 const NewsArticlePreview = function ({ model }) {
 	const { articlePreview: article, isFeatured } = model.modelView;
