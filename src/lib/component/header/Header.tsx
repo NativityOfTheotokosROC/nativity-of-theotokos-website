@@ -9,9 +9,7 @@ import LogoIcon from "@/public/ui/logo-icon.svg";
 import { georgia } from "../../third-party/fonts";
 import "./header.css";
 import { useRouter } from "@/src/i18n/navigation";
-import LoadingBar from "@/src/lib/component/loading-bar/LoadingBar";
 import { useLoadingBarRouter } from "../loading-bar/navigation";
-
 
 const Header = function ({ model }) {
 	const { navlinks } = model.modelView;
@@ -22,7 +20,6 @@ const Header = function ({ model }) {
 		<header
 			className={`header flex flex-col w-full max-w-full top-0 sticky z-10  bg-gray-900/99 h-fit`}
 		>
-			<LoadingBar />
 			<div className="header-content flex flex-nowrap gap-9 justify-between p-4 lg:p-6 lg:px-7 items-center text-white">
 				<div
 					className="logo flex gap-3 items-center justify-center w-fit min-w-fit hover:cursor-pointer select-none"

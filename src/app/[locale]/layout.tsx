@@ -10,6 +10,7 @@ import { getTranslations } from "next-intl/server";
 import { routing } from "@/src/i18n/routing";
 import { notFound } from "next/navigation";
 import ClientProviders from "./client-providers";
+import LoadingBar from "@/src/lib/component/loading-bar/LoadingBar";
 
 export async function generateMetadata({
 	params,
@@ -59,6 +60,7 @@ export default async function RootLayout({
 			>
 				<NextIntlClientProvider>
 					<ClientProviders model={newReadonlyModel({ locale })}>
+						<LoadingBar />
 						<Header
 							model={newReadonlyModel({
 								title: `${tHeader("headerTitle")} ${tHeader("headerSubtitle")}`,
