@@ -23,7 +23,7 @@ const NewsArticlePreview = function ({ model }) {
 
 	return isFeatured ? (
 		<div
-			className="featured-card flex flex-col select-none hover:cursor-pointer bg-[#FEF8F3] border border-gray-900/20 rounded-lg overflow-clip  hover:border-[#dcb042] hover:[&_.title]:underline hover:scale-[1.03] transition ease-out duration-150"
+			className="featured-card flex flex-col select-none hover:cursor-pointer bg-[#FEF8F3] border border-gray-900/20 rounded-lg overflow-clip hover:border-[#dcb042] hover:[&_.title]:underline hover:scale-[1.03] active:border-[#dcb042] active:[&_.title]:underline active:scale-[1.03] transition ease-out duration-150"
 			onClick={() => {
 				router.push("/news");
 				router.refresh();
@@ -52,7 +52,7 @@ const NewsArticlePreview = function ({ model }) {
 		</div>
 	) : (
 		<div
-			className="normal-card flex flex-row items-center max-w-[27em] gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer hover:[&_.title]:underline select-none"
+			className="normal-card flex flex-row items-center max-w-[27em] gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer hover:[&_.title]:underline active:[&_.title]:underline select-none"
 			onClick={() => {
 				router.push("/news");
 				router.refresh();
