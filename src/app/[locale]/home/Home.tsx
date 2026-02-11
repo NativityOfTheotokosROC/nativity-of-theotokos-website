@@ -470,7 +470,7 @@ export default function Home() {
 									</span>
 								</div>
 							</div>
-							<div className="flex md:size-[22em] w-full h-[22em] bg-[linear-gradient(to_bottom,transparent,black),url(/ui/what-is-orthodoxy.jpg)] bg-cover bg-center bg-no-repeat rounded-lg overflow-clip border border-black/70 text-white hover:text-[#dcb042] hover:scale-[1.03]  active:border-[#dcb042] active:text-[#dcb042] transition ease-out duration-200 select-none">
+							<div className="flex md:size-[22em] w-full h-[22em] bg-[linear-gradient(to_bottom,transparent,black),url(/ui/what-is-orthodoxy.jpg)] bg-cover bg-center bg-no-repeat rounded-lg overflow-clip border border-black/70 text-white hover:text-[#dcb042] hover:scale-[1.03]  active:border-[#dcb042] active:text-[#dcb042] active:scale-[1.03] transition ease-out duration-200 select-none">
 								<div
 									className="flex size-full p-6 justify-center items-end text-center hover:cursor-pointer"
 									onClick={() =>
@@ -485,7 +485,7 @@ export default function Home() {
 									</span>
 								</div>
 							</div>
-							<div className="flex md:size-[22em] w-full h-[22em] bg-[linear-gradient(to_bottom,transparent,black),url(/ui/about-our-parish.jpg)] bg-cover bg-center bg-no-repeat rounded-lg overflow-clip border border-black/70 text-white hover:text-[#dcb042] hover:scale-[1.03]  active:border-[#dcb042] active:text-[#dcb042] transition ease-out duration-200 select-none">
+							<div className="flex md:size-[22em] w-full h-[22em] bg-[linear-gradient(to_bottom,transparent,black),url(/ui/about-our-parish.jpg)] bg-cover bg-center bg-no-repeat rounded-lg overflow-clip border border-black/70 text-white hover:text-[#dcb042] hover:scale-[1.03]  active:border-[#dcb042] active:text-[#dcb042] active:scale-[1.03] transition ease-out duration-200 select-none">
 								<div
 									className="flex size-full p-6 justify-center items-end text-center hover:cursor-pointer"
 									onClick={() =>

@@ -36,7 +36,7 @@ const LanguageSwitcher = function ({ model }) {
 	return (
 		/* TODO: Something more elegant in the future maybe */
 		<button
-			className="language-switcher sticky bottom-[-1] right-1/20 float-end self-end z-20 p-3 w-[5em] rounded-t-lg min-w-fit bg-gray-900 hover:underline text-white text-sm md:text-base border border-white/20"
+			className="language-switcher sticky bottom-[-1] right-1/20 float-end self-end z-20 p-3 w-[5em] rounded-t-lg min-w-fit bg-gray-900 hover:underline active:underline text-white text-sm md:text-base border border-white/20"
 			onClick={() => {
 				router.replace(
 					pathName.slice(

@@ -32,7 +32,7 @@ const LoadingBar = function () {
 
 	return (
 		<div
-			className={`loading-bar h-px bg-[#dcb042] sticky top-0 z-11 ${!modelView?.isLoading && "hidden"}`}
+			className={`loading-bar h-[1.5px] bg-[#dcb042] sticky top-0 z-11 ${!modelView?.isLoading && "hidden"}`}
 		/>
 	);
 };
