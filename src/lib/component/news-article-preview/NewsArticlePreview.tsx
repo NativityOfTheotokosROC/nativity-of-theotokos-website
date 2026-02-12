@@ -70,11 +70,10 @@ const NewsArticlePreview = function ({ model }) {
 				/>
 			</div>
 			<div className="card-details py-4 md:px-6 flex flex-col gap-1.5">
-				<span className="title text-sm md:text-base">{title}</span>
-				<span className="byline text-xs md:text-sm text-gray-600">
+				<span className="title text-sm lg:text-base">{title}</span>
+				<span className="byline text-xs lg:text-sm text-gray-600">
 					{author} — {dateString}
 				</span>
-				<p className="line-clamp-2 hidden">{snippet}</p>
 			</div>
 		</div>
 	);

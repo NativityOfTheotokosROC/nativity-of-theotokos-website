@@ -122,7 +122,7 @@ export default function Home() {
 							className={`${!modelView && "md:hidden"} hero-icon md:flex md:w-1/2 hidden justify-center items-center`}
 						>
 							<Image
-								className="h-[21.333em] w-[16em] hover:cursor-pointer"
+								className="h-[21.333em] w-[16em] hover:cursor-pointer hover:scale-[1.03] active:scale-[1.03] transition ease-out duration-200"
 								onClick={() => {
 									window.open(
 										"/ui/nativity-icon.jpg",
@@ -169,7 +169,7 @@ export default function Home() {
 									>
 										<div className="md:flex min-w-60 w-60 lg:min-w-60 lg:w-60 items-stretch justify-center p-2 hidden bg-gray-800">
 											<Image
-												className="grow object-cover object-center hover:cursor-pointer"
+												className="grow object-cover object-center hover:cursor-pointer hover:scale-[1.02] active:scale-[1.02] transition ease-out duration-200"
 												height={364}
 												width={240}
 												alt={
@@ -438,7 +438,7 @@ export default function Home() {
 								<span className="text-xl mb-1">
 									{t("moreNews")}
 								</span>
-								<div className="grid md:grid-cols-2 gap-8 md:gap-6 lg:w-85/100">
+								<div className="grid md:grid-cols-2 gap-8 md:gap-6 md:w-95/100 lg:w-85/100">
 									{[
 										...modelView.newsArticles
 											.otherNewsArticles,
@@ -514,13 +514,17 @@ export default function Home() {
 				</section>
 				<section id="media" className="gallery text-black">
 					{modelView && (
-						<div className="gallery-content flex flex-col gap-8 p-8 py-14 lg:px-20">
-							<div className="swiper-container w-full max-w-full h-[20em] max-h-[20em]">
+						<div className="gallery-content flex flex-col gap-8 p-8 px-4 py-14 lg:px-10">
+							<div className="swiper-container w-full max-w-full h-[23em] md:h-[20em] lg:h-[23em] max-h-[23em]">
 								<Swiper
 									className="h-full"
 									modules={[Navigation, Autoplay]}
-									spaceBetween={30}
-									breakpoints={{ 768: { slidesPerView: 3 } }}
+									spaceBetween={20}
+									breakpoints={{
+										768: {
+											slidesPerView: 3,
+										},
+									}}
 									slidesPerView={"auto"}
 									navigation
 									autoplay
