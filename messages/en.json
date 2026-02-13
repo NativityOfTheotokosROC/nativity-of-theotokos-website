@@ -28,9 +28,7 @@
 		"description": "The page is currently under maintenance. Please check back later. You may explore our other pages in the meantime.",
 		"goHome": "Go Home"
 	},
-	"header": {
-		"headerTitle": "Nativity of the Theotokos",
-		"headerSubtitle": "Russian Orthodox Church",
+	"navMenu": {
 		"home": "Home",
 		"resources": "Resources",
 		"media": "Media",
@@ -79,7 +77,9 @@
 		"metaTitle": "About Us"
 	},
 	"news": {
-		"metaTitle": "News"
+		"metaTitle": "News",
+		"author": "By",
+		"articleUpdated": "Updated"
 	},
 	"dailyReadings": {
 		"noFast": "No Fast Today"

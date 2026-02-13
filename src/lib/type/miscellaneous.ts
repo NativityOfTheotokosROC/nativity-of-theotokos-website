@@ -3,7 +3,7 @@ import { ImagePlaceholder } from "@grod56/placeholder";
 export type Navlink = {
 	text: string;
 	link: string;
-	isInteractive?: boolean;
+	isReplaceable?: boolean;
 };
 
 export type DailyReadingsScripture = {
@@ -66,3 +66,4 @@ export type GalleryImage = {
 export interface Notification<T> {
 	type: T;
 }
+export type Language = "en" | "ru";

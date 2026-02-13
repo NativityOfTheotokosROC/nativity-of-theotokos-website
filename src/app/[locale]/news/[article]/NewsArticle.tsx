@@ -12,6 +12,7 @@ const NewsArticle = function ({ model }) {
 	const { source, about, placeholder } = articleImage;
 	const locale = useLocale();
 	const dateLocale = locale == "ru" ? "ru-RU" : "en-uk";
+	const t = useTranslations("news");
 	const tCaptions = useTranslations("imageCaptions");
 
 	return (
@@ -26,7 +27,7 @@ const NewsArticle = function ({ model }) {
 						</span>
 						<div className="byline flex flex-col gap-1">
 							<div className="flex items-center gap-2 -ml-8 pl-8 md:-ml-12 md:pl-12 pr-3 text-white bg-gray-900/80 w-3/4 p-2">
-								<span className="author text-base md:text-xl">{`By ${author}`}</span>
+								<span className="author text-base md:text-xl">{`${t("author")} ${author}`}</span>
 							</div>
 							<span className="date text-lg">
 								{`${toZonedTime(
@@ -36,7 +37,7 @@ const NewsArticle = function ({ model }) {
 									dateStyle: "short",
 								})}${
 									dateUpdated
-										? ` (Updated: ${toZonedTime(
+										? ` (${t("articleUpdated")}: ${toZonedTime(
 												dateUpdated,
 												"CAT",
 											).toLocaleDateString(dateLocale, {

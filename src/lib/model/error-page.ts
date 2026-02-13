@@ -1,8 +1,18 @@
-import { ReadonlyModel } from "@mvc-react/mvc";
+import {
+	InputModelInteraction,
+	InteractiveModel,
+	ModelInteraction,
+} from "@mvc-react/mvc";
 
 export interface ErrorPageModelView {
 	message: string;
-	resetFunction: () => void;
 }
 
-export type ErrorPageModel = ReadonlyModel<ErrorPageModelView>;
+export type ErrorPageModelInteraction =
+	| ModelInteraction<"RETRY">
+	| InputModelInteraction<"REPORT_ERROR", { message: string }>;
+
+export type ErrorPageModel = InteractiveModel<
+	ErrorPageModelView,
+	ErrorPageModelInteraction
+>;

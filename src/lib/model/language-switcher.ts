@@ -1,15 +1,7 @@
-import { InteractiveModel, ModelInteraction } from "@mvc-react/mvc";
-
-export type Language = "en" | "ru";
+import { ReadonlyModel } from "@mvc-react/mvc";
 
 export interface LanguageSwitcherModelView {
-	displayedLanguage: Language;
+	locale: string;
 }
 
-export type LanguageSwitcherModelInteraction =
-	ModelInteraction<"SWITCH_LANGUAGE">;
-
-export type LanguageSwitcherModel = InteractiveModel<
-	LanguageSwitcherModelView,
-	LanguageSwitcherModelInteraction
->;
+export type LanguageSwitcherModel = ReadonlyModel<LanguageSwitcherModelView>;

@@ -2,11 +2,13 @@
 
 import { LoadingBarContext } from "@/src/lib/component/loading-bar/LoadingBar";
 import { loadingBarVIInterface } from "@/src/lib/model-implementation/loading-bar";
-import { ClientProvidersModel } from "@/src/lib/model/client-providers";
-import { ModeledContainerComponent } from "@mvc-react/components";
 import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
 
-export const ClientProviders = function ({ children }) {
+export const ClientProviders = function ({
+	children,
+}: {
+	children: React.ReactNode;
+}) {
 	const loadingBarModel = useNewStatefulInteractiveModel(
 		loadingBarVIInterface(),
 	);
@@ -16,6 +18,6 @@ export const ClientProviders = function ({ children }) {
 			{children}
 		</LoadingBarContext.Provider>
 	);
-} satisfies ModeledContainerComponent<ClientProvidersModel>;
+};
 
 export default ClientProviders;

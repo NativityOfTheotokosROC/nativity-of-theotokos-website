@@ -20,7 +20,7 @@ const NavigationMenu = function ({ model }) {
 								key={index}
 								href={navlink.link}
 								className="navlink text-base uppercase no-underline hover:text-[#DCB042]"
-								replace={navlink.isInteractive}
+								replace={navlink.isReplaceable}
 							>
 								{navlink.text}
 							</Link>
@@ -44,7 +44,7 @@ const NavigationMenu = function ({ model }) {
 								<Link
 									className="block"
 									href={navlink.link}
-									replace={navlink.isInteractive}
+									replace={navlink.isReplaceable}
 								>
 									{navlink.text}
 								</Link>

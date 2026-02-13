@@ -18,7 +18,10 @@ export const metadata: Metadata = {
 export default function NotFound() {
 	return (
 		<html>
-			<body className={`antialiased ${googleSansFlex.className}`}>
+			<body
+				className={`antialiased ${googleSansFlex.className}`}
+				suppressHydrationWarning
+			>
 				<NextIntlClientProvider>
 					<NotFoundPage />
 				</NextIntlClientProvider>

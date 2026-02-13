@@ -1,19 +1,17 @@
 "use client";
 
-import { ModeledVoidComponent } from "@mvc-react/components";
-import { FooterModel } from "../../model/footer";
-import Link from "next/link";
-import SocialLink from "../social-link/SocialLink";
-import { newReadonlyModel } from "@mvc-react/mvc";
-import FooterSection from "./FooterSection";
 import LogoIcon from "@/public/ui/logo-icon.svg";
-import { georgia } from "../../third-party/fonts";
+import { newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { georgia } from "../../third-party/fonts";
+import SocialLink from "../social-link/SocialLink";
+import FooterSection from "./FooterSection";
 
-const Footer = function ({ model }) {
-	const { copyrightText } = model.modelView;
+// TODO: Incorporate model
+const Footer = function () {
 	const t = useTranslations("footer");
-	const tl = useTranslations("links");
+	const tLinks = useTranslations("links");
 
 	return (
 		<footer id="footer" className="w-full max-w-full">
@@ -54,7 +52,7 @@ const Footer = function ({ model }) {
 								<span>
 									<Link
 										className="hover:underline"
-										href={tl("diocese")}
+										href={tLinks("diocese")}
 										target="_blank"
 									>
 										{t("diocese")}
@@ -63,7 +61,7 @@ const Footer = function ({ model }) {
 								<span>
 									<Link
 										className="hover:underline"
-										href={tl("jurisdiction")}
+										href={tLinks("jurisdiction")}
 										target="_blank"
 									>
 										{t("jurisdiction")}
@@ -72,7 +70,7 @@ const Footer = function ({ model }) {
 								<span>
 									<Link
 										className="hover:underline"
-										href={tl("patriarch")}
+										href={tLinks("patriarch")}
 										target="_blank"
 									>
 										{t("patriarch")}
@@ -81,7 +79,7 @@ const Footer = function ({ model }) {
 								<span>
 									<Link
 										className="hover:underline"
-										href={tl("patriarchate")}
+										href={tLinks("patriarchate")}
 										target="_blank"
 									>
 										{t("patriarchate")}
@@ -114,9 +112,9 @@ const Footer = function ({ model }) {
 								<span>
 									<Link
 										className="hover:underline"
-										href="tel:+263780292358"
+										href="tel:+263771389444"
 									>
-										+263 780 292 358
+										+263 771 389 444
 									</Link>
 								</span>
 								<span>{t("vasily")}</span>
@@ -161,14 +159,14 @@ const Footer = function ({ model }) {
 				</div>
 				<span className="copyright text-xs">
 					<span className={georgia.className}>&copy;</span>{" "}
-					{copyrightText}
+					{t("copyright")}
 				</span>
 				<div className="licenses flex flex-wrap gap-2 text-gray-400 text-xs">
 					<span>
 						{`${t("dailyReadingsLicense")} `}
 						<Link
 							className="underline hover:text-[#dcb042]"
-							href={tl("holyTrinityChurch")}
+							href={tLinks("holyTrinityChurch")}
 							target="_blank"
 						>
 							Holy Trinity Orthodox Church
@@ -189,6 +187,6 @@ const Footer = function ({ model }) {
 			</div>
 		</footer>
 	);
-} as ModeledVoidComponent<FooterModel>;
+};
 
 export default Footer;

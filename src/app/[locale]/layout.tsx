@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
-import "../globals.css";
-import Header from "../../lib/component/header/Header";
+import { routing } from "@/src/i18n/routing";
+import Footer from "@/src/lib/component/footer/Footer";
+import Header from "@/src/lib/component/header/Header";
+import LanguageSwitcher from "@/src/lib/component/language-switcher/LanguageSwitcher";
+import LoadingBar from "@/src/lib/component/loading-bar/LoadingBar";
 import { newReadonlyModel } from "@mvc-react/mvc";
-import Footer from "../../lib/component/footer/Footer";
-import { Google_Sans, Google_Sans_Flex } from "next/font/google";
-import LanguageSwitcher from "../../lib/component/language-switcher/LanguageSwitcher";
+import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import { routing } from "@/src/i18n/routing";
+import { Google_Sans, Google_Sans_Flex } from "next/font/google";
 import { notFound } from "next/navigation";
+import "@/src/app/globals.css";
 import ClientProviders from "./client-providers";
-import LoadingBar from "@/src/lib/component/loading-bar/LoadingBar";
 
 export async function generateMetadata({
 	params,
@@ -47,8 +47,8 @@ export default async function RootLayout({
 	params: Promise<{ locale: string }>;
 }>) {
 	const { locale } = await params;
-	const tHeader = await getTranslations("header");
-	const tFooter = await getTranslations("footer");
+	const tNavMenu = await getTranslations("navMenu");
+
 	if (!hasLocale(routing.locales, locale)) {
 		notFound();
 	}
@@ -57,54 +57,42 @@ export default async function RootLayout({
 		<html lang={locale}>
 			<body
 				className={`antialiased ${googleSansFlex.variable} ${googleSans.variable}`}
+				suppressHydrationWarning
 			>
 				<NextIntlClientProvider>
-					<ClientProviders model={newReadonlyModel({ locale })}>
+					<ClientProviders>
 						<LoadingBar />
 						<Header
 							model={newReadonlyModel({
-								title: `${tHeader("headerTitle")} ${tHeader("headerSubtitle")}`,
 								navlinks: [
-									{ link: "/", text: tHeader("home") },
+									{ link: "/", text: tNavMenu("home") },
 									{
 										link: "/#resources",
-										text: tHeader("resources"),
-										isInteractive: true,
+										text: tNavMenu("resources"),
+										isReplaceable: true,
 									},
 									{
 										link: "/#media",
-										text: tHeader("media"),
-										isInteractive: true,
+										text: tNavMenu("media"),
+										isReplaceable: true,
 									},
 									{
 										link: "/#resources",
-										text: tHeader("aboutUs"),
-										isInteractive: true,
+										text: tNavMenu("aboutUs"),
+										isReplaceable: true,
 									},
 									{
 										link: "/#footer",
-										text: tHeader("contact"),
-										isInteractive: true,
+										text: tNavMenu("contact"),
+										isReplaceable: true,
 									},
 								],
 							})}
 						/>
 						{children}
-						<Footer
-							model={newReadonlyModel({
-								copyrightText: tFooter("copyright"),
-							})}
-						/>
+						<Footer />
 						<LanguageSwitcher
-							model={{
-								modelView: {
-									displayedLanguage:
-										locale == "en" ? "ru" : "en",
-								},
-								interact: async () => {
-									"use server";
-								},
-							}}
+							model={newReadonlyModel({ locale })}
 						/>
 					</ClientProviders>
 				</NextIntlClientProvider>

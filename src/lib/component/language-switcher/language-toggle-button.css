@@ -1,10 +1,10 @@
-.language-switcher {
-	animation: hide-switcher ease-out forwards;
+.language-toggle-button {
+	animation: hide-button ease-out forwards;
 	animation-timeline: scroll(root);
 	animation-range: 500px 610px;
 }
 
-@keyframes hide-switcher {
+@keyframes hide-button {
 	to {
 		transform: translateY(100%);
 		display: none;

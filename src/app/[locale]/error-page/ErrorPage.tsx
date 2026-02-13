@@ -7,9 +7,11 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { CloudAlert } from "lucide-react";
 import { useLayoutEffect } from "react";
+import { InitializedModel } from "@mvc-react/mvc";
 
 const ErrorPage = function ({ model }) {
-	const { message, resetFunction } = model.modelView;
+	const { modelView, interact } = model;
+	const { message } = modelView;
 	const t = useTranslations("error");
 
 	useLayoutEffect(() => {
@@ -39,7 +41,7 @@ const ErrorPage = function ({ model }) {
 					<button
 						className="text-white rounded-lg bg-[#250203]/82 p-4 min-w-fit w-30 max-w-3/4 hover:bg-[#250203]/92 active:bg-[#250203]"
 						onClick={() => {
-							resetFunction();
+							interact({ type: "RETRY" });
 						}}
 					>
 						{t("tryAgain")}
@@ -48,6 +50,6 @@ const ErrorPage = function ({ model }) {
 			</div>
 		</main>
 	);
-} satisfies ModeledVoidComponent<ErrorPageModel>;
+} satisfies ModeledVoidComponent<InitializedModel<ErrorPageModel>>;
 
 export default ErrorPage;
