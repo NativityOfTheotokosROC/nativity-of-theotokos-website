@@ -7,6 +7,7 @@ import { georgia } from "../../third-party/fonts";
 import { toZonedTime } from "date-fns-tz";
 import { useRouter } from "@/src/i18n/navigation";
 import { useLoadingBarRouter } from "../loading-bar/navigation";
+import { useTranslations } from "next-intl";
 
 const NewsArticlePreview = function ({ model }) {
 	const { articlePreview: article, isFeatured } = model.modelView;
@@ -20,6 +21,7 @@ const NewsArticlePreview = function ({ model }) {
 			dateStyle: "short",
 		},
 	);
+	const tCaptions = useTranslations("imageCaptions");
 
 	return isFeatured ? (
 		<div
@@ -34,7 +36,7 @@ const NewsArticlePreview = function ({ model }) {
 					className="grow object-cover object-center"
 					height={538}
 					width={538}
-					alt={about ?? "News article image"}
+					alt={about ?? tCaptions("featuredArticleImage")}
 					src={source}
 					placeholder="blur"
 					blurDataURL={placeholder}
@@ -63,7 +65,7 @@ const NewsArticlePreview = function ({ model }) {
 					className="grow object-cover object-center"
 					height={128}
 					width={128}
-					alt={about ?? "News article image"}
+					alt={about ?? tCaptions("newsArticleImage")}
 					src={source}
 					placeholder="blur"
 					blurDataURL={placeholder}

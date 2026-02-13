@@ -23,6 +23,6 @@ export async function getGalleryImages() {
 	return [
 		...galleryImages.Contents.map(object => ({
 			imageLink: getObjectPublicURL(object),
-		})),
+		})).filter(galleryImage => !galleryImage.imageLink.endsWith(prefix)),
 	];
 }

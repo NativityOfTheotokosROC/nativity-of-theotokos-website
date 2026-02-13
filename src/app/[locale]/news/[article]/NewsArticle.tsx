@@ -3,7 +3,7 @@ import { NewsArticleModel } from "@/src/lib/model/news-article";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { toZonedTime } from "date-fns-tz";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 
 const NewsArticle = function ({ model }) {
@@ -12,6 +12,7 @@ const NewsArticle = function ({ model }) {
 	const { source, about, placeholder } = articleImage;
 	const locale = useLocale();
 	const dateLocale = locale == "ru" ? "ru-RU" : "en-uk";
+	const tCaptions = useTranslations("imageCaptions");
 
 	return (
 		<main className="newsarticle bg-[#FEF8F3] text-black">
@@ -51,7 +52,7 @@ const NewsArticle = function ({ model }) {
 							className="grow object-cover object-center"
 							height={600}
 							width={600}
-							alt={about ?? "News article image"}
+							alt={about ?? tCaptions("newsArticleImage")}
 							title={about}
 							src={source}
 							placeholder="blur"

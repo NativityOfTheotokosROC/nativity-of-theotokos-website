@@ -291,14 +291,12 @@ export async function getLatestNews(
 				placeholder: articlePlaceholders.get(
 					featuredArticle.newsArticle.imageLink,
 				) as ImagePlaceholder,
-				about: "Featured article image",
 			},
 		},
 		otherNewsArticles: otherArticles.map(article => ({
 			...article,
 			articleImage: {
 				source: article.imageLink,
-				about: "News article image",
 				placeholder: articlePlaceholders.get(
 					article.imageLink,
 				) as ImagePlaceholder,
@@ -369,7 +367,6 @@ export async function getDailyGalleryImages(
 		placeholderedGalleryImages.push({
 			image: {
 				source: imageLink,
-				about: "Gallery image",
 				placeholder: await getPlaceholder(imageURL, repository),
 			},
 		});

@@ -36,6 +36,7 @@ export default function Home() {
 	const t = useTranslations("home");
 	const tLinks = useTranslations("links");
 	const tQuote = useTranslations("quote");
+	const tCaptions = useTranslations("imageCaptions");
 	const locale = useLocale();
 	const dateLocale = locale == "en" ? "en-uk" : "ru-RU";
 	const hymnsModal = useInitializedStatefulInteractiveModel(
@@ -130,8 +131,8 @@ export default function Home() {
 									);
 								}}
 								src="/ui/nativity-icon.jpg"
-								alt="Icon of the Nativity of the Theotokos"
-								title="Icon of the Nativity of the Theotokos"
+								alt={tCaptions("iconOfTheNativity")}
+								title={tCaptions("iconOfTheNativity")}
 								height={400}
 								width={300}
 								loading="eager"
@@ -175,12 +176,12 @@ export default function Home() {
 												alt={
 													modelView.dailyReadings
 														.iconOfTheDay.about ??
-													"Icon of the day"
+													tCaptions("iconOfTheDay")
 												}
 												title={
 													modelView.dailyReadings
 														.iconOfTheDay.about ??
-													"Icon of the day"
+													tCaptions("iconOfTheDay")
 												}
 												placeholder={
 													modelView.dailyReadings
@@ -545,7 +546,9 @@ export default function Home() {
 																galleryImage
 																	.image
 																	.about ??
-																"gallery item"
+																tCaptions(
+																	"galleryImage",
+																)
 															}
 															title={
 																galleryImage

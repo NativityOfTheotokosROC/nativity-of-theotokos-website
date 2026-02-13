@@ -112,6 +112,13 @@
 		"patriarchate": "https://mospat.ru/en",
 		"holyTrinityChurch": "https://holytrinityorthodox.com/"
 	},
+	"imageCaptions": {
+		"iconOfTheDay": "Icon of the Day",
+		"iconOfTheNativity": "Icon of the Nativity of the Theotokos",
+		"featuredArticleImage": "Featured Article Image",
+		"newsArticleImage": "News Article Image",
+		"galleryImage": "Gallery Image"
+	},
 	"miscellaneous": {
 		"futureContent": "Content to be added soon!"
 	}

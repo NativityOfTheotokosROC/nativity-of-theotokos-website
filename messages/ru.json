@@ -112,6 +112,13 @@
 		"patriarchate": "https://mospat.ru/ru",
 		"holyTrinityChurch": "https://holytrinityorthodox.com/ru"
 	},
+	"imageCaptions": {
+		"iconOfTheDay": "Икона дня",
+		"iconOfTheNativity": "Икона Рождества Пресвятой Богородицы",
+		"featuredArticleImage": "Изображение главной статьи",
+		"newsArticleImage": "Изображение новостной статьи",
+		"galleryImage": "Изображение галереи"
+	},
 	"miscellaneous": {
 		"futureContent": "Контент будет добавлен в ближайшее время!"
 	}
