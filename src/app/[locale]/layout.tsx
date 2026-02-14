@@ -19,11 +19,40 @@ export async function generateMetadata({
 }): Promise<Metadata> {
 	const { locale } = await params;
 	const t = await getTranslations({ locale, namespace: "metadata" });
+	const titleTemplate = `%s | ${t("templateTitle")}`;
+	const titleDefault = t("templateDefault");
+	const description = t("description");
+	const localeMetaData =
+		locale == "en" ? "en-US" : locale == "ru" ? "ru-RU" : undefined;
 
 	return {
+		metadataBase: `https://nativityoftheotokos.com`,
+		alternates: {
+			canonical: "/",
+			languages: {
+				ru: "/ru",
+			},
+		},
 		title: {
-			template: `%s | ${t("templateTitle")}`,
-			default: `${t("templateDefault")}`,
+			template: titleTemplate,
+			default: titleDefault,
+		},
+		description,
+		openGraph: {
+			title: {
+				template: titleTemplate,
+				default: titleDefault,
+			},
+			url: "/",
+			description,
+			locale: localeMetaData,
+			type: "website",
+		},
+		twitter: {
+			card: "summary",
+			title: { template: titleTemplate, default: titleDefault },
+			description,
+			images: ["/opengraph-image.jpg"],
 		},
 	};
 }

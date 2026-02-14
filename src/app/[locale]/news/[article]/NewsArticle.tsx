@@ -7,8 +7,9 @@ import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 
 const NewsArticle = function ({ model }) {
+	const { article } = model.modelView;
 	const { title, author, articleImage, dateCreated, dateUpdated, body } =
-		model.modelView.article;
+		article;
 	const { source, about, placeholder } = articleImage;
 	const locale = useLocale();
 	const dateLocale = locale == "ru" ? "ru-RU" : "en-uk";
