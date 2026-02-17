@@ -1,8 +1,9 @@
+"use client";
 import { getBaseURL } from "../server-action/miscellaneous";
 
 const useOrigin = function (): Promise<string> {
-	if (window) return Promise.resolve(window.location.origin);
-	return getBaseURL();
+	if (typeof window == "undefined") return getBaseURL();
+	return Promise.resolve(window.location.origin);
 };
 
 export { useOrigin };
