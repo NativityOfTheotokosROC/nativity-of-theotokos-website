@@ -2,12 +2,14 @@
 import SocialLink from "@/src/lib/component/social-link/SocialLink";
 import { NewsArticleModel } from "@/src/lib/model/news-article";
 import { georgia } from "@/src/lib/third-party/fonts";
+import { useOrigin } from "@/src/lib/utility/hooks";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { toZonedTime } from "date-fns-tz";
 import { Share as Share } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
+import { use } from "react";
 
 const NewsArticle = function ({ model }) {
 	const { article } = model.modelView;
@@ -18,10 +20,11 @@ const NewsArticle = function ({ model }) {
 	const dateLocale = locale == "ru" ? "ru-RU" : "en-uk";
 	const t = useTranslations("news");
 	const tCaptions = useTranslations("imageCaptions");
+	const origin = use(useOrigin());
 	const articlePath = `/news/${uri}`;
 	const shareData = {
 		title,
-		url: `${window.location.origin}${articlePath}`,
+		url: `${origin}${articlePath}`,
 	};
 	const encodedShareData: typeof shareData = {
 		title: encodeURI(shareData.title),
