@@ -12,7 +12,8 @@ export type Details =
 	| SocialLinkTypeObject<"GitHub", `https://github.com/${string}`>
 	| SocialLinkTypeObject<"YouTube", `https://youtube.com/${string}`>
 	| SocialLinkTypeObject<"WhatsApp", `https://wa.me/${string}`>
-	| SocialLinkTypeObject<"Email", `mailto:${string}`>;
+	| SocialLinkTypeObject<"Email", `mailto:${string}`>
+	| SocialLinkTypeObject<"Telegram", `https://t.me/${string}`>;
 
 export interface SocialLinkModelView {
 	details: Details;
