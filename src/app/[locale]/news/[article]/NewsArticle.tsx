@@ -75,7 +75,9 @@ const NewsArticle = function ({ model }) {
 								src={source}
 								placeholder="blur"
 								blurDataURL={placeholder}
-								onClick={() => window.open(source, "_blank")}
+								onClick={() => {
+									if (window) window.open(source, "_blank");
+								}}
 							/>
 						</div>
 						{about && (
