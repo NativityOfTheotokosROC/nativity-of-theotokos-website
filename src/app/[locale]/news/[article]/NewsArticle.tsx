@@ -21,7 +21,11 @@ const NewsArticle = function ({ model }) {
 	const articlePath = `/news/${uri}`;
 	const shareData = {
 		title,
-		url: `${window.location.origin}/${articlePath}`,
+		url: `${window.location.origin}${articlePath}`,
+	};
+	const encodedShareData: typeof shareData = {
+		title: encodeURI(shareData.title),
+		url: encodeURI(shareData.url),
 	};
 
 	return (
@@ -93,7 +97,7 @@ const NewsArticle = function ({ model }) {
 						model={newReadonlyModel({
 							details: {
 								type: "WhatsApp",
-								link: `https://wa.me/?text=${shareData.title}\n\n${shareData.url}`,
+								link: `https://wa.me/?text=${encodedShareData.title}\n\n${encodedShareData.url}`,
 							},
 						})}
 					/>
@@ -101,15 +105,15 @@ const NewsArticle = function ({ model }) {
 						model={newReadonlyModel({
 							details: {
 								type: "Telegram",
-								link: `https://t.me/share/url?url=${shareData.url}&text=${shareData.title}`,
+								link: `https://t.me/share/url?url=${encodedShareData.url}&text=${encodedShareData.title}`,
 							},
 						})}
 					/>
 					<SocialLink
 						model={newReadonlyModel({
 							details: {
-								type: "X",
-								link: `https://x.com/intent/post?url=${shareData.url}&text=${shareData.title}`,
+								type: "Facebook",
+								link: `https://facebook.com/sharer/sharer.php?u=${encodedShareData.url}&text=${encodedShareData.title}`,
 							},
 						})}
 					/>
