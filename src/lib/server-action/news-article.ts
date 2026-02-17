@@ -36,7 +36,7 @@ export async function getArticle(articleId: string): Promise<NewsArticle> {
 		);
 		return {
 			uri: article.link.toString(),
-			url: `${baseUrl}news/${article.link.toString()}`,
+			url: `${baseUrl}/news/${article.link.toString()}`,
 			title: article.title,
 			author: article.author,
 			dateCreated: article.dateCreated,
