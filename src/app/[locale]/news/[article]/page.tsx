@@ -62,7 +62,7 @@ export default async function Page({
 	const { article: articleId } = await params;
 	const article = await getArticle(articleId);
 	const baseUrl = await getBaseURL();
-	const permalink = `${baseUrl}news/${article.uri.toString()}`;
+	const permalink = `${baseUrl}/news/${article.uri.toString()}`;
 	const jsonLd = articleJsonLd(article);
 
 	return (
