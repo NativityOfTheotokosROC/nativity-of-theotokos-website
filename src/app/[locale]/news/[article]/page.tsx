@@ -3,6 +3,7 @@ import NewsArticle from "./NewsArticle";
 import { getArticle } from "@/src/lib/server-action/news-article";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { NewsArticle as NewsArticleType } from "@/src/lib/type/miscellaneous";
+import { getBaseURL } from "@/src/lib/server-action/miscellaneous";
 
 function articleJsonLd(article: NewsArticleType) {
 	const { title, author, articleImage, dateCreated, snippet } = article;
@@ -60,6 +61,8 @@ export default async function Page({
 }) {
 	const { article: articleId } = await params;
 	const article = await getArticle(articleId);
+	const baseUrl = await getBaseURL();
+	const permalink = `${baseUrl}news/${article.uri.toString()}`;
 	const jsonLd = articleJsonLd(article);
 
 	return (
@@ -68,7 +71,7 @@ export default async function Page({
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 			/>
-			<NewsArticle model={newReadonlyModel({ article })} />
+			<NewsArticle model={newReadonlyModel({ article, permalink })} />
 		</>
 	);
 }

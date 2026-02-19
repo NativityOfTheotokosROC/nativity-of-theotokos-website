@@ -58,7 +58,6 @@ export type NewsArticle = {
 	dateUpdated?: Date;
 	snippet: string;
 	articleImage: Image;
-	url: string;
 };
 
 export type GalleryImage = {

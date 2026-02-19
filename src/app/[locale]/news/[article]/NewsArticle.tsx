@@ -10,8 +10,8 @@ import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 
 const NewsArticle = function ({ model }) {
-	const { article } = model.modelView;
-	const { title, author, articleImage, dateCreated, dateUpdated, body, url } =
+	const { article, permalink } = model.modelView;
+	const { title, author, articleImage, dateCreated, dateUpdated, body } =
 		article;
 	const { source, about, placeholder } = articleImage;
 	const locale = useLocale();
@@ -20,7 +20,7 @@ const NewsArticle = function ({ model }) {
 	const tCaptions = useTranslations("imageCaptions");
 	const shareData = {
 		title,
-		url,
+		url: permalink,
 	};
 	const encodedShareData: typeof shareData = {
 		title: encodeURI(shareData.title),

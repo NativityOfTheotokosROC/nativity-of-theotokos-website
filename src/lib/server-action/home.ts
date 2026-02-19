@@ -23,8 +23,8 @@ import {
 	getPrismaPlaceholderRepository,
 	isRemotePath,
 } from "../utility/miscellaneous";
-import { getBaseURL } from "./miscellaneous";
 import { getGalleryImages } from "./gallery";
+import { getBaseURL } from "./miscellaneous";
 
 export type LatestNews = {
 	featuredArticle: NewsArticlePreview;
@@ -168,8 +168,15 @@ export async function getScheduleItems(
 	);
 	let nextScheduleItemDate = new Date(localDate);
 	while (scheduleItems.length < count) {
-		const nextScheduleItem =
-			await _getNextDefaultScheduleItem(nextScheduleItemDate);
+		const nextScheduleItem = await _getNextDefaultScheduleItem(
+			nextScheduleItemDate,
+		).then(scheduleItem => ({
+			...scheduleItem,
+			times: scheduleItem.times.map(time => ({
+				...time,
+				time: toZonedTime(time.time, "CAT"), // This works!
+			})),
+		}));
 		const isPresent = await prismaClient.scheduleItem.count({
 			where: {
 				date: { equals: nextScheduleItem.date },
@@ -403,7 +410,7 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 		const previousSundayDate = new Date(
 			new Date(scheduleItemDate).setDate(scheduleItemDate.getDate() - 6),
 		);
-		if (nextSundayDate.getMonth() != previousSundayDate.getMonth())
+		if (nextSundayDate.getMonth() != previousSundayDate.getMonth()) {
 			scheduleItem = {
 				date: scheduleItemDate,
 				location: tEn("mainLocation"),
@@ -412,33 +419,44 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 				times: [
 					{
 						time: new Date(
-							new Date(
-								scheduleItemDate.toDateString(),
-							).setUTCHours(12, 0, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(
+								12,
+								0,
+								0,
+								0,
+							),
 						),
 						designation: tEn("orthros"),
 						designationRu: tRu("orthros"),
 					},
 					{
 						time: new Date(
-							new Date(
-								scheduleItemDate.toDateString(),
-							).setUTCHours(12, 30, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(
+								12,
+								30,
+								0,
+								0,
+							),
 						),
 						designation: tEn("confessions"),
 						designationRu: tRu("confessions"),
 					},
 					{
 						time: new Date(
-							new Date(
-								scheduleItemDate.toDateString(),
-							).setUTCHours(13, 0, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(
+								13,
+								0,
+								0,
+								0,
+							),
 						),
 						designation: tEn("liturgy"),
 						designationRu: tRu("liturgy"),
 					},
 				],
 			};
+			return scheduleItem;
+		}
 		scheduleItem = {
 			date: nextSundayDate,
 			location: tEn("secondaryLocation"),
@@ -447,7 +465,7 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 			times: [
 				{
 					time: new Date(
-						new Date(nextSundayDate.toDateString()).setUTCHours(
+						new Date(nextSundayDate.toDateString()).setHours(
 							9,
 							0,
 							0,
@@ -459,7 +477,7 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 				},
 				{
 					time: new Date(
-						new Date(nextSundayDate.toDateString()).setUTCHours(
+						new Date(nextSundayDate.toDateString()).setHours(
 							9,
 							30,
 							0,
@@ -471,7 +489,7 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 				},
 				{
 					time: new Date(
-						new Date(nextSundayDate.toDateString()).setUTCHours(
+						new Date(nextSundayDate.toDateString()).setHours(
 							10,
 							30,
 							0,
@@ -487,7 +505,7 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 		const previousSundayDate = new Date(
 			new Date(scheduleItemDate).setDate(scheduleItemDate.getDate() - 7),
 		);
-		if (scheduleItemDate.getMonth() != previousSundayDate.getMonth())
+		if (scheduleItemDate.getMonth() != previousSundayDate.getMonth()) {
 			scheduleItem = {
 				date: scheduleItemDate,
 				location: tEn("secondaryLocation"),
@@ -496,33 +514,44 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 				times: [
 					{
 						time: new Date(
-							new Date(
-								scheduleItemDate.toDateString(),
-							).setUTCHours(9, 0, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(
+								9,
+								0,
+								0,
+								0,
+							),
 						),
 						designation: tEn("orthros"),
 						designationRu: tRu("orthros"),
 					},
 					{
 						time: new Date(
-							new Date(
-								scheduleItemDate.toDateString(),
-							).setUTCHours(9, 30, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(
+								9,
+								30,
+								0,
+								0,
+							),
 						),
 						designation: tEn("confessions"),
 						designationRu: tRu("confessions"),
 					},
 					{
 						time: new Date(
-							new Date(
-								scheduleItemDate.toDateString(),
-							).setUTCHours(10, 30, 0, 0),
+							new Date(scheduleItemDate.toDateString()).setHours(
+								10,
+								30,
+								0,
+								0,
+							),
 						),
 						designation: tEn("liturgy"),
 						designationRu: tRu("liturgy"),
 					},
 				],
 			};
+			return scheduleItem;
+		}
 		scheduleItem = await _getNextDefaultScheduleItem(
 			new Date(
 				new Date(scheduleItemDate).setDate(
@@ -531,11 +560,5 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 			),
 		); // HACK
 	}
-	return {
-		...scheduleItem,
-		times: scheduleItem.times.map(time => ({
-			...time,
-			time: toZonedTime(time.time, "UTC"),
-		})),
-	};
+	return scheduleItem;
 }

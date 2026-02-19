@@ -18,7 +18,9 @@ const prismaClient = new PrismaClient({
 	adapter: prismaAdapter,
 });
 
-export async function getArticle(articleId: string): Promise<NewsArticle> {
+export async function getArticle(
+	articleId: string,
+): Promise<Omit<NewsArticle, "url">> {
 	try {
 		const article = await prismaClient.newsArticle.findUniqueOrThrow({
 			where: { link: articleId },
@@ -36,7 +38,6 @@ export async function getArticle(articleId: string): Promise<NewsArticle> {
 		);
 		return {
 			uri: article.link.toString(),
-			url: `${baseUrl}news/${article.link.toString()}`,
 			title: article.title,
 			author: article.author,
 			dateCreated: article.dateCreated,
