@@ -1,7 +1,7 @@
 import { load } from "cheerio";
 import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
-import { DailyReadings, Hymn, Image } from "../type/miscellaneous";
+import { DailyReadings, Hymn, Image, Language } from "../type/miscellaneous";
 import { removeMarkup } from "../utility/miscellaneous";
 
 interface HolyTrinityOrthodox {
@@ -25,7 +25,7 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 	private readonly locale;
 	private readonly iconOfTheDayBaseURL;
 
-	constructor(locale: string) {
+	constructor(locale: Language) {
 		if (locale == "ru") {
 			this.baseURL =
 				"https://www.holytrinityorthodox.com/htc/ocalendar/ru/v2calendar.php";
@@ -225,7 +225,7 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 	}
 }
 
-const holytrinityorthodox = (locale: string) => {
+const holytrinityorthodox = (locale: Language) => {
 	return new HolyTrinityOrthodoxImplementation(locale);
 };
 
