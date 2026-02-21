@@ -1,12 +1,14 @@
 "use client";
 
+import { routing } from "@/src/i18n/routing";
+import { PageLoadingBarContext } from "@/src/lib/component/page-loading-bar/PageLoadingBar";
 import { errorPageVIInterface } from "@/src/lib/model-implementation/error-page";
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
 import { Metadata } from "next";
+import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import { useContext, useEffect, useLayoutEffect } from "react";
+import { useContext, useEffect } from "react";
 import ErrorPage from "./error-page/ErrorPage";
-import { PageLoadingBarContext } from "@/src/lib/component/page-loading-bar/PageLoadingBar";
 
 export async function generateMetadata({
 	params,
@@ -14,7 +16,10 @@ export async function generateMetadata({
 	params: { locale: string };
 }): Promise<Metadata> {
 	const { locale } = await params;
-	const t = await getTranslations({ locale, namespace: "error" });
+	const t = await getTranslations({
+		locale: hasLocale(routing.locales, locale) ? locale : "en",
+		namespace: "error",
+	});
 
 	return {
 		title: t("metaTitle"),
@@ -23,7 +28,6 @@ export async function generateMetadata({
 
 export default function Page({
 	error,
-	reset,
 }: {
 	error: Error & { digest?: string };
 	reset: () => void;
@@ -32,7 +36,9 @@ export default function Page({
 	const pageLoadingBar = useContext(PageLoadingBarContext);
 	const { modelView: errorPageModelView, interact: errorPageInteract } =
 		useInitializedStatefulInteractiveModel(
-			errorPageVIInterface(reset, pageLoadingBar),
+			errorPageVIInterface(() => {
+				window.location.reload();
+			}, pageLoadingBar),
 			{ message },
 		);
 
@@ -40,20 +46,6 @@ export default function Page({
 		if (message != errorPageModelView.message)
 			errorPageInteract({ type: "REPORT_ERROR", input: { message } });
 	}, [errorPageInteract, errorPageModelView.message, message]);
-
-	useLayoutEffect(() => {
-		return () => {
-			// HACK
-			setTimeout(
-				() =>
-					pageLoadingBar.interact({
-						type: "SET_LOADING",
-						input: { value: false },
-					}),
-				1000,
-			);
-		};
-	}, [pageLoadingBar]);
 
 	return (
 		<ErrorPage

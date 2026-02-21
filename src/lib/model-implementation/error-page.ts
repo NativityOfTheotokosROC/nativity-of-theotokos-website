@@ -3,11 +3,11 @@ import {
 	ErrorPageModelInteraction,
 	ErrorPageModelView,
 } from "../model/error-page";
-import { LoadingBarModel } from "../model/loading-bar";
+import { PageLoadingBarModel } from "../model/page-loading-bar";
 
 export function errorPageVIInterface(
 	resetFunction: () => void,
-	loadingBar: LoadingBarModel,
+	loadingBar: PageLoadingBarModel,
 ): ViewInteractionInterface<ErrorPageModelView, ErrorPageModelInteraction> {
 	return {
 		produceModelView: async function (

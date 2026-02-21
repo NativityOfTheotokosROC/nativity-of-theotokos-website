@@ -38,17 +38,19 @@
 	},
 	"footer": {
 		"heading": "Nativity of the Theotokos Church",
-		"description": "Nativity of the Theotokos Parish of the Russian Orthodox Church in Zimbabwe. Located at Kingsmead Private Chapel, Cnr Rayl Road and Kingsmead Road, Borrowdale, Harare.",
 		"email": "Email",
 		"jurisdictional": "Jurisdictional",
+		"clergy": "Clergy",
+		"contact": "Contact"
+	},
+	"footer_variable": {
+		"description": "Nativity of the Theotokos Parish of the Russian Orthodox Church in Zimbabwe. Located at Kingsmead Private Chapel, Cnr Rayl Road and Kingsmead Road, Borrowdale, Harare.",
 		"diocese": "Southern African Diocese",
 		"jurisdiction": "Patriarchal Exarchate of Africa",
 		"patriarch": "His Holiness Patriarch Kirill",
 		"patriarchate": "Moscow Patriarchate",
-		"clergy": "Clergy",
 		"frDimitri": "Fr Dimitri Polokhov",
 		"frSavva": "Fr Savva Kajawa",
-		"contact": "Contact",
 		"phone": "Phone",
 		"larisa": "Larisa",
 		"vasily": "Vasily",

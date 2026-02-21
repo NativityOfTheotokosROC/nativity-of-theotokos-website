@@ -33,8 +33,8 @@
 		"swiper": "^12.0.3"
 	},
 	"devDependencies": {
-		"@prisma/adapter-pg": "^7.2.0",
-		"@prisma/client": "^7.2.0",
+		"@prisma/adapter-pg": "^7.4.1",
+		"@prisma/client": "^7.4.1",
 		"@svgr/webpack": "^8.1.0",
 		"@tailwindcss/postcss": "^4",
 		"@types/node": "^20",
@@ -43,7 +43,7 @@
 		"dotenv": "^17.2.3",
 		"eslint": "^9",
 		"eslint-config-next": "16.0.10",
-		"prisma": "^7.2.0",
+		"prisma": "^7.4.1",
 		"tailwindcss": "^4",
 		"tsx": "^4.21.0",
 		"typescript": "^5"

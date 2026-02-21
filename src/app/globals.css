@@ -22,7 +22,8 @@ body {
 	background: var(--background);
 	color: var(--foreground);
 	font-family:
-		var(--font-g-flex), var(--font-g-sans), Georgia, Helvetica, sans-serif;
+		var(--font-g-flex), var(--font-g-sans), Georgia, var(--font-georgia),
+		Helvetica, sans-serif;
 }
 
 body > main {

@@ -10,6 +10,14 @@ export function removeMarkup(markedUpText: string): string {
 	return markedUpText.replace(regex, "");
 }
 
+export function formatPhoneNumber(phoneNumber: `+${number}`) {
+	let formattedNumber = phoneNumber[0];
+	for (let i = 1; i <= phoneNumber.length; i += 3) {
+		formattedNumber += `${phoneNumber.slice(i, i + 3)} `;
+	}
+	return formattedNumber.trim();
+}
+
 export function isRemotePath(src: string) {
 	try {
 		new URL(src);

@@ -6,7 +6,14 @@ const googleSansFlex = LocalFont({
 			path: "../../../public/fonts/GoogleSansFlex/GoogleSansFlex-Var.ttf",
 		},
 	],
-	variable: "--font-google-sans-flex",
+	adjustFontFallback: false,
+	variable: "--font-g-flex",
+	display: "swap",
+});
+
+const googleSans = LocalFont({
+	src: [{ path: "../../../public/fonts/GoogleSans/GoogleSans-Var.ttf" }],
+	variable: "--font-g-sans",
 	display: "swap",
 });
 
@@ -16,4 +23,4 @@ const georgia = LocalFont({
 	display: "swap",
 });
 
-export { googleSansFlex, georgia };
+export { googleSansFlex, googleSans, georgia };

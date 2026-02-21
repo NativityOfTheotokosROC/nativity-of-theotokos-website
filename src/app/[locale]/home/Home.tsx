@@ -166,9 +166,9 @@ export default function Home() {
 										transition={{
 											ease: "easeOut",
 										}}
-										className="daily-saints flex md:flex-row md:h-fit md:max-h-[23em] items-stretch bg-[#FEF8F3] border text-black border-gray-900/20 rounded-lg overflow-clip"
+										className="daily-saints flex md:flex-row md:h-fit md:max-h-[max(fit-content,24.5em)] items-stretch bg-[#FEF8F3] border text-black border-gray-900/20 rounded-lg overflow-clip"
 									>
-										<div className="md:flex min-w-60 w-60 lg:min-w-60 lg:w-60 items-stretch justify-center p-2 hidden bg-gray-800">
+										<div className="md:flex max-h-full min-w-60 w-60 lg:min-w-60 lg:w-60 items-stretch justify-center p-2 hidden bg-gray-800">
 											<Image
 												className="grow object-cover object-center hover:cursor-pointer hover:scale-[1.02] active:scale-[1.02] transition ease-out duration-200"
 												height={364}
@@ -208,7 +208,7 @@ export default function Home() {
 											/>
 										</div>
 										<div className="info flex flex-col grow">
-											<div className="texts flex flex-col md:justify-center grow gap-4 py-6 [&_a]:underline [&_a]:hover:text-[#DCB042]">
+											<div className="texts flex flex-col md:justify-center md:min-h-fit grow gap-4 py-6 [&_a]:underline [&_a]:hover:text-[#DCB042]">
 												<span
 													className={`text-2xl px-5 md:px-7`}
 												>

@@ -55,7 +55,9 @@ const NewsArticlePreview = function ({ model }) {
 				<span className="timestamp text-sm text-gray-600">
 					{author} — {dateString}
 				</span>
-				<p className="text-base line-clamp-6">{snippet}</p>
+				<p className="text-base line-clamp-4 md:line-clamp-5">
+					{snippet}
+				</p>
 			</div>
 		</div>
 	) : (

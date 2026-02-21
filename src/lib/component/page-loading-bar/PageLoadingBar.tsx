@@ -2,10 +2,10 @@
 
 import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
-import { LoadingBarModel } from "../../model/loading-bar";
+import { PageLoadingBarModel } from "../../model/page-loading-bar";
 import LoadingBar from "../loading-bar/LoadingBar";
 
-export const PageLoadingBarContext = createContext<LoadingBarModel>({
+export const PageLoadingBarContext = createContext<PageLoadingBarModel>({
 	interact: async function () {
 		throw new Error("The context is uninitialized");
 	},
@@ -30,7 +30,7 @@ const PageLoadingBar = function () {
 		_();
 	}, [currentPathName, initialPathName, interact, modelView?.isLoading]);
 
-	return <LoadingBar model={{ modelView, interact }} />;
+	return <LoadingBar model={{ modelView }} />;
 };
 
 export default PageLoadingBar;

@@ -14,6 +14,7 @@ import { usePageLoadingBarRouter } from "../page-loading-bar/navigation";
 const Header = function ({ model }) {
 	const { navlinks } = model.modelView;
 	const isWideScreen = useMediaQuery({ minWidth: 768 });
+	const navigationMenuType = isWideScreen ? "spread" : "shelved";
 	const router = usePageLoadingBarRouter(useRouter);
 
 	return (
@@ -50,7 +51,7 @@ const Header = function ({ model }) {
 				<NavigationMenu
 					model={newReadonlyModel({
 						navlinks,
-						menuType: isWideScreen ? "spread" : "shelved",
+						menuType: navigationMenuType,
 					})}
 				/>
 			</div>
