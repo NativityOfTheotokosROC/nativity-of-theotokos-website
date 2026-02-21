@@ -137,8 +137,8 @@ export default async function RootLayout({
 			},
 			{
 				precedingText: tFooterVariable("logoIconLicense"),
-				linkLabel: "Logoicon.com",
-				link: new URL("https://logoicon.com").href,
+				linkLabel: "Lordicon.com",
+				link: new URL("https://lordicon.com").href,
 			},
 		],
 	});
