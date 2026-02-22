@@ -1,19 +1,19 @@
 import { LatestNewsOrnament } from "@/src/lib/component/miscellaneous/graphic";
 import NewsArticlePreview from "@/src/lib/component/news-article-preview/NewsArticlePreview";
+import SchedulePreviewWidget from "@/src/lib/component/schedule-preview-widget/SchedulePreviewWidget";
 import { BulletinSectionModel } from "@/src/lib/model/bulletin-section";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
-import SchedulePreviewWidget from "./SchedulePreviewWidget";
 
 const BulletinSection = function ({ model }) {
 	const { modelView } = model;
 	const t = useTranslations("home");
 
 	return (
-		<section className="news pt-4 text-black">
+		<section id="bulletin" className="news pt-4 text-black">
 			<div className="ornament flex justify-center items-center mb-4 md:mb-0 w-full ">
 				<LatestNewsOrnament
 					className="h-[6em] w-[25em] max-w-9/10"

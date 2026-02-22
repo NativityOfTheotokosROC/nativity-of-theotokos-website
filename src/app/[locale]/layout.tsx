@@ -161,13 +161,13 @@ export default async function RootLayout({
 								navlinks: [
 									{ link: "/", text: tNavMenu("home") },
 									{
-										link: "/#resources",
-										text: tNavMenu("resources"),
+										link: "/#bulletin",
+										text: tNavMenu("parishBulletin"),
 										isReplaceable: true,
 									},
 									{
 										link: "/#resources",
-										text: tNavMenu("aboutUs"),
+										text: tNavMenu("resources"),
 										isReplaceable: true,
 									},
 									{

@@ -1,6 +1,6 @@
 import { ResourcesSectionModel } from "@/src/lib/model/resources-section";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import ResourceWidget from "./ResourceWidget";
+import ResourceWidget from "../../../../lib/component/resource-widget/ResourceWidget";
 import { newReadonlyModel } from "@mvc-react/mvc";
 
 const ResourcesSection = function ({ model }) {

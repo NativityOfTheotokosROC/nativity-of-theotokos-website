@@ -12,7 +12,7 @@ export function useMailingListRepository(): MailingListRepositoryModel {
 	const notifier = useNewStatefulInteractiveModel(
 		notifierVIInterface<MailingListStatus>(),
 	);
-	const t = useTranslations("home");
+	const t = useTranslations("mailingList");
 	const successMessage = t("mailingListSuccessMessage");
 
 	const mailingListRepository: MailingListRepositoryModel = {
@@ -42,17 +42,18 @@ export function useMailingListRepository(): MailingListRepositoryModel {
 								},
 							}),
 						)
-						.catch(error =>
+						.catch(error => {
 							notifier.interact({
 								type: "NOTIFY",
 								input: {
 									notification: {
 										type: "failed",
-										message: String(error),
+										message: t("errorMessage"),
 									},
 								},
-							}),
-						);
+							});
+							console.error(error);
+						});
 				}
 			}
 		},

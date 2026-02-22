@@ -1,3 +1,4 @@
+import { routing } from "@/src/i18n/routing";
 import { ImagePlaceholder } from "@grod56/placeholder";
 
 export type Navlink = {
@@ -67,7 +68,8 @@ export type GalleryImage = {
 export interface Notification<T> {
 	type: T;
 }
-export type Language = "en" | "ru";
+
+export type Language = typeof routing.defaultLocale;
 
 export type Resource = {
 	label: string;

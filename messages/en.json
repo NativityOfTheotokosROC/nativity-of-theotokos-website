@@ -34,7 +34,8 @@
 		"resources": "Resources",
 		"media": "Gallery",
 		"aboutUs": "About Us",
-		"contact": "Contact"
+		"contact": "Contact",
+		"parishBulletin": "News"
 	},
 	"footer": {
 		"heading": "Nativity of the Theotokos Church",
@@ -70,11 +71,7 @@
 		"moreNews": "More News",
 		"liturgicalResources": "Liturgical Resources",
 		"whatIsOrthodoxy": "What is Orthodoxy?",
-		"aboutOurParish": "About our Parish",
-		"mailingListHeader": "Join our Mailing List",
-		"mailingListDescription": "Stay up to date with the latest church news, announcements, and events straight from your mailbox. Enter your email below and subscribe if you haven't already.",
-		"mailingListButton": "Subscribe",
-		"mailingListSuccessMessage": "Thank you for subscribing to our mailing list! We will be keeping you up to date with the latest news, updates, announcements and more."
+		"aboutOurParish": "About our Parish"
 	},
 	"aboutUs": {
 		"metaTitle": "About Us"
@@ -105,6 +102,13 @@
 		"liturgy": "Liturgy",
 		"typika": "Typika",
 		"catechism": "Catechism"
+	},
+	"mailingList": {
+		"mailingListHeader": "Join our Mailing List",
+		"mailingListDescription": "Stay up to date with the latest church news, announcements, and events straight from your mailbox. Enter your email below and subscribe if you haven't already.",
+		"mailingListButton": "Subscribe",
+		"mailingListSuccessMessage": "Thank you for subscribing to our mailing list! We will be keeping you up to date with the latest news, updates, announcements and more.",
+		"errorMessage": "There was a problem subscribing you to our mailing list. Please try again or check your internet connection."
 	},
 	"links": {
 		"liturgicalResources": "https://eadiocese.org/litresource",

@@ -6,7 +6,7 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { toZonedTime } from "date-fns-tz";
 import { Share } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 const NewsArticle = function ({ model }) {
@@ -14,8 +14,7 @@ const NewsArticle = function ({ model }) {
 	const { title, author, articleImage, dateCreated, dateUpdated, body } =
 		article;
 	const { source, about, placeholder } = articleImage;
-	const locale = useLocale();
-	const dateLocale = locale == "ru" ? "ru-RU" : "en-uk";
+	const shortDateStyle = "ru-RU";
 	const t = useTranslations("news");
 	const tCaptions = useTranslations("imageCaptions");
 	const shareData = {
@@ -45,16 +44,19 @@ const NewsArticle = function ({ model }) {
 								{`${toZonedTime(
 									dateCreated,
 									"CAT",
-								).toLocaleDateString(dateLocale, {
+								).toLocaleDateString(shortDateStyle, {
 									dateStyle: "short",
 								})}${
 									dateUpdated
 										? ` (${t("articleUpdated")}: ${toZonedTime(
 												dateUpdated,
 												"CAT",
-											).toLocaleDateString(dateLocale, {
-												dateStyle: "short",
-											})})`
+											).toLocaleDateString(
+												shortDateStyle,
+												{
+													dateStyle: "short",
+												},
+											)})`
 										: ""
 								}`}
 							</span>

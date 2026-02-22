@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 
 const MailingListSection = function ({ model }) {
-	const t = useTranslations("home");
+	const t = useTranslations("mailingList");
 	const { interact, modelView } = model.modelView.mailingListRepository;
 	const { mailingListStatus } = modelView;
 
@@ -39,9 +39,6 @@ const MailingListSection = function ({ model }) {
 									},
 								});
 							}}
-							// onSubmit={() => {
-							// 	setMailingListStatus("pending");
-							// }}
 						>
 							<div className="flex flex-nowrap items-stretch text-black rounded-lg overflow-clip md:max-w-[32em]">
 								<input
@@ -64,6 +61,11 @@ const MailingListSection = function ({ model }) {
 								</button>
 							</div>
 						</form>
+						{mailingListStatus?.type == "failed" && (
+							<span className="text-xs text-red-400">
+								{mailingListStatus.message}
+							</span>
+						)}
 					</div>
 				) : (
 					<div>

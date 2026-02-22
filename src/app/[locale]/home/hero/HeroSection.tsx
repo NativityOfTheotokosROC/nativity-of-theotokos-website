@@ -19,7 +19,7 @@ const HeroSection = function ({ model }) {
 				}
 				viewport={{ once: true }}
 				transition={{ duration: 0.4, ease: "easeOut" }}
-				className="hero-content flex flex-col justify-center items-center md:flex-row h-[76vh] md:h-[max(30em,78vh)] lg:h-[81vh] p-8 lg:p-20 md:bg-none md:items-center"
+				className="hero-content flex flex-col justify-center items-center md:flex-row h-[76vh] md:h-[max(30em,78vh)] md:min-h-fit lg:h-[81vh] p-8 lg:p-20 md:bg-none md:items-center"
 			>
 				<motion.div
 					initial={{ opacity: 0, y: 10 }}
@@ -34,7 +34,7 @@ const HeroSection = function ({ model }) {
 					className={`hero-message flex flex-col w-full md:w-[35em] md:max-w-1/2 lg:w-full gap-5 md:p-8 justify-center`}
 				>
 					<span
-						className={`heading text-7xl ${georgia.className} wrap-break-word hyphens-auto text-white`}
+						className={`heading ${title.length < 20 ? "text-7xl" : "text-6xl"} lg:text-7xl ${georgia.className} wrap-break-word hyphens-auto text-white`}
 					>
 						{title}
 					</span>
