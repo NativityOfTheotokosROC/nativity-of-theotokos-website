@@ -1,7 +1,7 @@
 "use client";
 
-import ForbiddenGraphic from "@/public/ui/icon-3.svg";
 import { useRouter } from "@/src/i18n/navigation";
+import { ForbiddenGraphic } from "@/src/lib/component/miscellaneous/graphic";
 import { usePageLoadingBarRouter } from "@/src/lib/component/page-loading-bar/navigation";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { useTranslations } from "next-intl";

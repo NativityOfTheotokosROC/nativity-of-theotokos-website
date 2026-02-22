@@ -23,7 +23,7 @@ const LanguageSwitcher = function ({ model }) {
 			currentPathName,
 			localeChangeEmitter,
 		),
-		{ displayedLanguage: displayedLanguage },
+		{ displayedLanguage },
 	);
 
 	useEffect(() => {

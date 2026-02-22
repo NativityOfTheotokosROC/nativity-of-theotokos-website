@@ -18,6 +18,7 @@ export function formatPhoneNumber(phoneNumber: `+${number}`) {
 	return formattedNumber.trim();
 }
 
+// TODO: More precise definition
 export function isRemotePath(src: string) {
 	try {
 		new URL(src);

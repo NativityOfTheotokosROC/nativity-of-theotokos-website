@@ -1,8 +1,8 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { SplashScreenModel } from "../../model/splash-screen";
-import LogoIcon from "@/public/ui/logo-icon.svg";
 import { motion, AnimatePresence } from "motion/react";
 import "./splash-screen.css";
+import { LogoIcon } from "../miscellaneous/graphic";
 
 const SplashScreen = function ({ model }) {
 	const { isShown, exitedCallback } = model.modelView;
@@ -22,13 +22,10 @@ const SplashScreen = function ({ model }) {
 							key="splash-logo"
 							initial={{ scale: 1, opacity: 1 }}
 							exit={{ scale: 7, opacity: 0 }}
-							transition={{ duration: 0.25, ease: "easeOut" }}
+							transition={{ duration: 0.3, ease: "easeIn" }}
 							className="logo flex gap-3 items-center justify-center max-w-[25em] animate-pulse"
 						>
-							<LogoIcon
-								className="size-20 object-center object-contain"
-								viewBox="0 0 430 430"
-							/>
+							<LogoIcon className="size-20 object-center object-contain" />
 						</motion.div>
 					</div>
 				</motion.div>

@@ -1,11 +1,11 @@
 "use client";
 
-import FeaturedItemOrnament from "@/public/ui/ornament_12.svg";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ScheduleItemModel } from "../../model/schedule-item";
 import { georgia } from "../../third-party/fonts";
 import { useLocale } from "next-intl";
 import { toZonedTime } from "date-fns-tz";
+import { FeaturedItemOrnament } from "../miscellaneous/graphic";
 
 const ScheduleItem = function ({ model }) {
 	const { scheduleItem, isFeatured } = model.modelView;

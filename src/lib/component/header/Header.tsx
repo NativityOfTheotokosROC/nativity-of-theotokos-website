@@ -5,11 +5,11 @@ import { HeaderModel } from "../../model/header";
 import { useMediaQuery } from "react-responsive";
 import NavigationMenu from "./NavigationMenu";
 import { newReadonlyModel } from "@mvc-react/mvc";
-import LogoIcon from "@/public/ui/logo-icon.svg";
 import { georgia } from "../../third-party/fonts";
 import "./header.css";
 import { useRouter } from "@/src/i18n/navigation";
 import { usePageLoadingBarRouter } from "../page-loading-bar/navigation";
+import { LogoIcon } from "../miscellaneous/graphic";
 
 const Header = function ({ model }) {
 	const { navlinks } = model.modelView;
@@ -31,7 +31,6 @@ const Header = function ({ model }) {
 					<div className="size-12">
 						<LogoIcon
 							className="object-center object-contain"
-							viewBox="0 0 430 430"
 							width={48}
 							height={48}
 							strokeWidth={9}

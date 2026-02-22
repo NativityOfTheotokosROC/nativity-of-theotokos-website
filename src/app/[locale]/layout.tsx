@@ -88,19 +88,19 @@ export default async function RootLayout({
 		jurisdictionInfo: {
 			diocese: {
 				name: tFooterVariable("diocese"),
-				link: new URL(tLinks("diocese")).href,
+				link: tLinks("diocese"),
 			},
 			metropolis: {
 				name: tFooterVariable("jurisdiction"),
-				link: new URL(tLinks("jurisdiction")).href,
+				link: tLinks("jurisdiction"),
 			},
 			patriarch: {
 				name: tFooterVariable("patriarch"),
-				link: new URL(tLinks("patriarch")).href,
+				link: tLinks("patriarch"),
 			},
 			patriarchate: {
 				name: tFooterVariable("patriarchate"),
-				link: new URL(tLinks("patriarchate")).href,
+				link: tLinks("patriarchate"),
 			},
 		},
 		contacts: [
@@ -133,12 +133,12 @@ export default async function RootLayout({
 			{
 				precedingText: tFooterVariable("dailyReadingsLicense"),
 				linkLabel: "Holy Trinity Orthodox",
-				link: new URL(tLinks("holyTrinityChurch")).href,
+				link: tLinks("holyTrinityChurch"),
 			},
 			{
 				precedingText: tFooterVariable("logoIconLicense"),
 				linkLabel: "Lordicon.com",
-				link: new URL("https://lordicon.com").href,
+				link: "https://lordicon.com",
 			},
 		],
 	});

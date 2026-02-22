@@ -68,3 +68,9 @@ export interface Notification<T> {
 	type: T;
 }
 export type Language = "en" | "ru";
+
+export type Resource = {
+	label: string;
+	link: string;
+	graphic: string;
+};

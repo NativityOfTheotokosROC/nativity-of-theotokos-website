@@ -8,9 +8,9 @@ import {
 	DialogPanel,
 	DialogTitle,
 } from "@headlessui/react";
-import HymnsModalOrnament from "@/public/ui/ornament_9.svg";
 import { georgia } from "../../third-party/fonts";
 import { useTranslations } from "next-intl";
+import { HymnsOrnament } from "../miscellaneous/graphic";
 
 const HymnsModal = function ({ model }) {
 	const { modelView, interact } = model;
@@ -40,7 +40,7 @@ const HymnsModal = function ({ model }) {
 					</DialogTitle>
 					<div className="bg-gray-800 text-[#FEF8F3] border-0 p-4 rounded-none">
 						<div className="ornament flex justify-center items-center w-full h-[4em] ">
-							<HymnsModalOrnament className="object-contain object-center h-[4em] w-[8em] fill-[#FEF8F3]" />
+							<HymnsOrnament className="object-contain object-center h-[4em] w-[8em] fill-[#FEF8F3]" />
 						</div>
 					</div>
 					<div className="px-5 pt-6">

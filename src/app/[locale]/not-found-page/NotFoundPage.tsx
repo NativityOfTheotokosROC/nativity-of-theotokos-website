@@ -1,7 +1,7 @@
 "use client";
-import NotFoundGraphic from "@/public/ui/ornament_35.svg";
 import { useRouter } from "@/src/i18n/navigation";
 import { routing } from "@/src/i18n/routing";
+import { NotFoundGraphic } from "@/src/lib/component/miscellaneous/graphic";
 import { usePageLoadingBarRouter } from "@/src/lib/component/page-loading-bar/navigation";
 import { PageLoadingBarContext } from "@/src/lib/component/page-loading-bar/PageLoadingBar";
 import { georgia } from "@/src/lib/third-party/fonts";

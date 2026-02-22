@@ -421,14 +421,14 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 		if (nextSundayDate.getMonth() != previousSundayDate.getMonth()) {
 			scheduleItem = {
 				date: scheduleItemDate,
-				location: tEn("mainLocation"),
+				location: tEn("secondaryLocation"),
 				title: tEn("liturgyService"),
 				titleRu: tRu("liturgyService"),
 				times: [
 					{
 						time: new Date(
 							new Date(scheduleItemDate.toDateString()).setHours(
-								12,
+								9,
 								0,
 								0,
 								0,
@@ -440,7 +440,7 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 					{
 						time: new Date(
 							new Date(scheduleItemDate.toDateString()).setHours(
-								12,
+								9,
 								30,
 								0,
 								0,
@@ -452,8 +452,8 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 					{
 						time: new Date(
 							new Date(scheduleItemDate.toDateString()).setHours(
-								13,
-								0,
+								10,
+								30,
 								0,
 								0,
 							),
@@ -516,14 +516,14 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 		if (scheduleItemDate.getMonth() != previousSundayDate.getMonth()) {
 			scheduleItem = {
 				date: scheduleItemDate,
-				location: tEn("secondaryLocation"),
+				location: tEn("mainLocation"),
 				title: tEn("liturgyService"),
 				titleRu: tRu("liturgyService"),
 				times: [
 					{
 						time: new Date(
 							new Date(scheduleItemDate.toDateString()).setHours(
-								9,
+								12,
 								0,
 								0,
 								0,
@@ -535,7 +535,7 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 					{
 						time: new Date(
 							new Date(scheduleItemDate.toDateString()).setHours(
-								9,
+								12,
 								30,
 								0,
 								0,
@@ -547,8 +547,8 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 					{
 						time: new Date(
 							new Date(scheduleItemDate.toDateString()).setHours(
-								10,
-								30,
+								13,
+								0,
 								0,
 								0,
 							),
