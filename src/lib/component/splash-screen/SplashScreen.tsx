@@ -21,8 +21,8 @@ const SplashScreen = function ({ model }) {
 						<motion.div
 							key="splash-logo"
 							initial={{ scale: 1, opacity: 1 }}
-							exit={{ scale: 9, opacity: 0 }}
-							transition={{ duration: 0.3, ease: "easeIn" }}
+							exit={{ scale: 8, opacity: 0 }}
+							transition={{ duration: 0.25, ease: "easeIn" }}
 							className={`logo flex gap-3 items-center justify-center max-w-[25em] ${isShown && "animate-pulse"}`}
 						>
 							<LogoIcon className="size-20 object-center object-contain" />
