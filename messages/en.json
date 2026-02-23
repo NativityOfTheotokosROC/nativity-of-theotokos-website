@@ -108,7 +108,7 @@
 		"mailingListDescription": "Stay up to date with the latest church news, announcements, and events straight from your mailbox. Enter your email below and subscribe if you haven't already.",
 		"mailingListButton": "Subscribe",
 		"mailingListSuccessMessage": "Thank you for subscribing to our mailing list! We will be keeping you up to date with the latest news, updates, announcements and more.",
-		"errorMessage": "There was a problem subscribing you to our mailing list. Please try again or check your internet connection."
+		"errorMessage": "There was a problem subscribing you to our mailing list. Please try again, cross-check your email, or check your internet connection."
 	},
 	"links": {
 		"liturgicalResources": "https://eadiocese.org/litresource",
