@@ -33,8 +33,10 @@ export default function NotFoundPage() {
 	const t = useTranslations("notFound");
 
 	useLayoutEffect(() => {
-		window.history.scrollRestoration = "manual";
-		window.scrollTo(0, 0);
+		if (typeof window !== "undefined") {
+			window.history.scrollRestoration = "manual";
+			window.scrollTo(0, 0);
+		}
 	}, []);
 
 	return (
