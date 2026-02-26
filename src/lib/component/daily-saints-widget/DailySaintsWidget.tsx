@@ -23,9 +23,9 @@ const DailySaintsWidget = function ({ model }) {
 			transition={{
 				ease: "easeOut",
 			}}
-			className="daily-saints flex md:flex-row md:h-fit md:max-h-[24.5em] items-stretch bg-[#FEF8F3] border text-black border-gray-900/20 rounded-lg overflow-clip"
+			className="daily-saints flex md:flex-row md:h-fit md:max-h-[26em] items-stretch bg-[#FEF8F3] border text-black border-gray-900/20 rounded-lg overflow-clip"
 		>
-			<div className="hidden md:flex max-h-full min-w-60 w-60 lg:min-w-60 lg:w-60 items-center justify-stretch p-2 bg-gray-800">
+			<div className="hidden md:flex min-w-60 w-60 lg:min-w-60 lg:w-60 items-stretch justify-stretch p-2 bg-gray-800">
 				<Image
 					className="grow max-h-full object-cover object-center hover:cursor-pointer hover:scale-[1.02] active:scale-[1.02] transition ease-out duration-200"
 					height={364}
@@ -40,44 +40,42 @@ const DailySaintsWidget = function ({ model }) {
 					}}
 				/>
 			</div>
-			<div className="info flex flex-col grow">
-				<div className="texts flex flex-col md:justify-center md:min-h-fit grow gap-4 py-6 [&_a]:underline [&_a]:hover:text-[#DCB042]">
-					<span className={`text-2xl px-5 md:px-7`}>
-						{toZonedTime(currentDate, "CAT").toLocaleDateString(
-							dateLocale,
-							{
-								dateStyle: "full",
-							},
-						)}
+			<div className="texts flex flex-col md:justify-center grow gap-4 py-6 [&_a]:underline [&_a]:hover:text-[#DCB042]">
+				<span className={`text-2xl px-5 md:px-7`}>
+					{toZonedTime(currentDate, "CAT").toLocaleDateString(
+						dateLocale,
+						{
+							dateStyle: "full",
+						},
+					)}
+				</span>
+				<div className="flex flex-col gap-2 grow">
+					<span className="text-xl px-5 md:px-7">
+						{liturgicalWeek}
 					</span>
-					<div className="flex flex-col gap-2">
-						<span className="text-xl px-5 md:px-7">
-							{liturgicalWeek}
+					<button
+						className="flex gap-2 items-center p-1 px-5 md:px-7 my-2 bg-[#250203]/82 text-[#FEF8F3] text-left hover:bg-[#250203]/92 active:bg-[#250203]"
+						onClick={async () =>
+							await hymnsModal.interact({
+								type: "OPEN",
+								input: {
+									hymns,
+								},
+							})
+						}
+					>
+						<HymnsOrnament className="h-10 w-10 fill-[#FEF8F3]" />
+						<span className="text-lg underline">
+							{t("dailyHymns")}
 						</span>
-						<button
-							className="flex gap-2 items-center p-1 px-5 md:px-7 my-2 bg-[#250203]/82 text-[#FEF8F3] text-left hover:bg-[#250203]/92 active:bg-[#250203]"
-							onClick={async () =>
-								await hymnsModal.interact({
-									type: "OPEN",
-									input: {
-										hymns,
-									},
-								})
-							}
-						>
-							<HymnsOrnament className="h-10 w-10 fill-[#FEF8F3]" />
-							<span className="text-lg underline">
-								{t("dailyHymns")}
-							</span>
-						</button>
-						<div className="px-5 md:px-7 max-h-[15em] md:max-h-[10em]">
-							<p
-								className={`h-full text-base/relaxed [&_a]:text-red-900 pr-3 overflow-y-auto`}
-								dangerouslySetInnerHTML={{
-									__html: saints,
-								}}
-							/>
-						</div>
+					</button>
+					<div className="grow px-5 md:px-7 h-[15em] max-h-[15em] md:h-[10em]">
+						<p
+							className={`max-h-full text-base/relaxed [&_a]:text-red-900 pr-3 overflow-y-auto`}
+							dangerouslySetInnerHTML={{
+								__html: saints,
+							}}
+						/>
 					</div>
 				</div>
 			</div>

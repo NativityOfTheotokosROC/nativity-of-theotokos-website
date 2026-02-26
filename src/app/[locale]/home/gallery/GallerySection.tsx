@@ -18,7 +18,7 @@ const GallerySection = function ({ model }) {
 				<div className="gallery-content flex flex-col gap-8 p-8 px-4 py-14 lg:px-10">
 					<div className="swiper-container w-full max-w-full h-[23em] md:h-[20em] lg:h-[23em] max-h-[23em]">
 						<Swiper
-							className="h-full"
+							className="h-full w-full"
 							modules={[Navigation, Autoplay]}
 							spaceBetween={20}
 							breakpoints={{
@@ -36,7 +36,7 @@ const GallerySection = function ({ model }) {
 										<SwiperSlide key={index}>
 											<div className="flex justify-stretch items-stretch w-full h-full rounded-lg overflow-clip">
 												<Image
-													className="grow object-cover object-center"
+													className="grow h-full w-full object-cover object-center"
 													src={
 														galleryImage.image
 															.source

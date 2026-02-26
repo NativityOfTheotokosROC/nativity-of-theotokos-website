@@ -30,7 +30,7 @@ const NewsArticlePreview = function ({ model }) {
 				window.open(articleLink, "_blank");
 			}}
 		>
-			<div className="flex justify-stretch items-stretch w-full h-[17em] max-h-[80dvh]">
+			<div className="flex justify-stretch items-stretch w-full h-[16em] lg:h-[18em]">
 				<Image
 					className="grow object-cover object-center"
 					height={538}

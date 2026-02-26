@@ -10,7 +10,7 @@ const SchedulePreviewWidget = function ({ model }) {
 	);
 
 	return (
-		<div className="schedule-list flex flex-col w-full gap-4 pr-3 lg:pr-6 max-h-[25em] lg:max-h-[28em] overflow-y-auto">
+		<div className="schedule-list flex flex-col w-full gap-4 pr-3 lg:pr-6 h-[27em] max-h-[27em] lg:h-[30em] lg:max-h-[30em] overflow-y-auto">
 			<ScheduleItem
 				model={newReadonlyModel({
 					scheduleItem: orderedScheduleItems[0],
