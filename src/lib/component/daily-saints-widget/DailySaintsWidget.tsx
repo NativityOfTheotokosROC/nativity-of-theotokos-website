@@ -23,11 +23,11 @@ const DailySaintsWidget = function ({ model }) {
 			transition={{
 				ease: "easeOut",
 			}}
-			className="daily-saints flex md:flex-row md:h-fit md:max-h-[max(fit-content,24.5em)] items-stretch bg-[#FEF8F3] border text-black border-gray-900/20 rounded-lg overflow-clip"
+			className="daily-saints flex md:flex-row md:h-fit md:max-h-[24.5em] items-stretch bg-[#FEF8F3] border text-black border-gray-900/20 rounded-lg overflow-clip"
 		>
-			<div className="md:flex max-h-full min-w-60 w-60 lg:min-w-60 lg:w-60 items-stretch justify-center p-2 hidden bg-gray-800">
+			<div className="hidden md:flex max-h-full min-w-60 w-60 lg:min-w-60 lg:w-60 items-center justify-stretch p-2 bg-gray-800">
 				<Image
-					className="grow object-cover object-center hover:cursor-pointer hover:scale-[1.02] active:scale-[1.02] transition ease-out duration-200"
+					className="grow max-h-full object-cover object-center hover:cursor-pointer hover:scale-[1.02] active:scale-[1.02] transition ease-out duration-200"
 					height={364}
 					width={240}
 					alt={iconOfTheDay.about ?? tCaptions("iconOfTheDay")}

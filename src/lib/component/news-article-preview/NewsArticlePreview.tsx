@@ -26,11 +26,11 @@ const NewsArticlePreview = function ({ model }) {
 		<div
 			className="featured-card flex flex-col select-none hover:cursor-pointer bg-[#FEF8F3] border border-gray-900/20 rounded-lg overflow-clip hover:border-[#dcb042] hover:[&_.title]:underline hover:scale-[1.03] active:border-[#dcb042] active:[&_.title]:underline active:scale-[1.03] transition ease-out duration-150"
 			onClick={() => {
-				// router.push(`/news/${uri}`); // TODO: Restored when home splash is fixed
+				// router.push(`/news/${uri}`); // TODO: Restored when home splash situation is fixed
 				window.open(articleLink, "_blank");
 			}}
 		>
-			<div className="flex justify-stretch items-stretch w-full h-[15em] max-h-[80dvh]">
+			<div className="flex justify-stretch items-stretch w-full h-[17em] max-h-[80dvh]">
 				<Image
 					className="grow object-cover object-center"
 					height={538}
