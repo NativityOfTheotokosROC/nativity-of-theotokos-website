@@ -14,7 +14,7 @@ const NewsArticlePreview = function ({ model }) {
 	const articleLink = `/news/${uri}`;
 	// const router = usePageLoadingBarRouter(useRouter);
 	const dateLocale = "ru-RU";
-	const dateString = toZonedTime(dateCreated, "CAT").toLocaleDateString(
+	const dateString = toZonedTime(dateCreated, "Africa/Harare").toLocaleDateString(
 		dateLocale,
 		{
 			dateStyle: "short",

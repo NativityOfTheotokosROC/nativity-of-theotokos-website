@@ -42,7 +42,7 @@ const DailySaintsWidget = function ({ model }) {
 			</div>
 			<div className="texts flex flex-col md:justify-center grow gap-4 py-6 [&_a]:underline [&_a]:hover:text-[#DCB042]">
 				<span className={`text-2xl px-5 md:px-7`}>
-					{toZonedTime(currentDate, "CAT").toLocaleDateString(
+					{toZonedTime(currentDate, "Africa/Harare").toLocaleDateString(
 						dateLocale,
 						{
 							dateStyle: "full",

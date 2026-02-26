@@ -19,6 +19,7 @@ const googleSans = LocalFont({
 
 const georgia = LocalFont({
 	src: [{ path: "../../../public/fonts/Georgia/georgia.ttf" }],
+	adjustFontFallback: false,
 	variable: "--font-georgia",
 	display: "swap",
 });

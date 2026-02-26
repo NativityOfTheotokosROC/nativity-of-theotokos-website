@@ -43,14 +43,14 @@ const NewsArticle = function ({ model }) {
 							<span className="date text-lg">
 								{`${toZonedTime(
 									dateCreated,
-									"CAT",
+									"Africa/Harare",
 								).toLocaleDateString(shortDateStyle, {
 									dateStyle: "short",
 								})}${
 									dateUpdated
 										? ` (${t("articleUpdated")}: ${toZonedTime(
 												dateUpdated,
-												"CAT",
+												"Africa/Harare",
 											).toLocaleDateString(
 												shortDateStyle,
 												{

@@ -12,11 +12,13 @@ const ScheduleItem = function ({ model }) {
 	const { date: rawDate, location, times: rawTimes, title } = scheduleItem;
 	const locale = useLocale();
 	const dateLocale = locale == "en" ? "en-uk" : "ru-RU";
-	const date = toZonedTime(rawDate, "CAT");
+	const date = toZonedTime(rawDate, "Africa/Harare");
 	const times = rawTimes.map(time => ({
 		...time,
-		time: toZonedTime(time.time, "CAT"),
+		time: toZonedTime(time.time, "Africa/Harare"),
 	}));
+	
+	console.log(rawTimes)
 
 	return isFeatured ? (
 		<div className="featured-schedule-item flex min-h-fit bg-[#FEF8F3] border border-gray-900/20 rounded-lg overflow-clip">
