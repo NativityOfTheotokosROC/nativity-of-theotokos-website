@@ -27,7 +27,7 @@ const DailySaintsWidget = function ({ model }) {
 		>
 			<div className="hidden md:flex min-w-60 w-60 lg:min-w-60 lg:w-60 items-stretch justify-stretch p-2 bg-gray-800">
 				<Image
-					className="grow max-h-full object-cover object-center hover:cursor-pointer hover:scale-[1.02] active:scale-[1.02] transition ease-out duration-200"
+					className="grow max-h-full object-cover object-top hover:cursor-pointer hover:scale-[1.02] active:scale-[1.02] transition ease-out duration-200"
 					height={364}
 					width={240}
 					alt={iconOfTheDay.about ?? tCaptions("iconOfTheDay")}

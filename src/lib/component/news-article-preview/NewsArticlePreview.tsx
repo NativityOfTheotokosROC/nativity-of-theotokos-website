@@ -32,7 +32,7 @@ const NewsArticlePreview = function ({ model }) {
 		>
 			<div className="flex justify-stretch items-stretch w-full h-[16em] lg:h-[18em]">
 				<Image
-					className="grow object-cover object-center"
+					className="grow object-cover object-top"
 					height={538}
 					width={538}
 					alt={about ?? tCaptions("featuredArticleImage")}
@@ -41,18 +41,18 @@ const NewsArticlePreview = function ({ model }) {
 					blurDataURL={placeholder}
 				/>
 			</div>
-			<div className="card-details p-4 flex flex-col gap-1.5">
+			<div className="card-details p-4 flex flex-col gap-2.5">
 				<a
 					className="no-underline"
 					href={articleLink}
 					target="_blank"
 					onClick={e => e.preventDefault()}
 				>
-					<span className={`title text-xl mb-1 ${georgia.className}`}>
+					<span className={`title text-2xl font-semibold mb-1 ${georgia.className}`}>
 						{title}
 					</span>
 				</a>
-				<span className="timestamp text-sm text-gray-600">
+				<span className="timestamp text-base text-gray-600">
 					{author} — {dateString}
 				</span>
 				<p className="text-base line-clamp-4 md:line-clamp-5">
