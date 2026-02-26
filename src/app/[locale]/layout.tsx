@@ -1,5 +1,5 @@
 import "@/src/app/globals.css";
-import "scroll-timeline-polyfill";
+import "scroll-timeline-polyfill/dist/scroll-timeline.js";
 import { routing } from "@/src/i18n/routing";
 import Footer from "@/src/lib/component/footer/Footer";
 import Header from "@/src/lib/component/header/Header";
