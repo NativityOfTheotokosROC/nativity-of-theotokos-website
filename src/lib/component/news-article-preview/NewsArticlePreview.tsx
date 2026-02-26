@@ -48,7 +48,7 @@ const NewsArticlePreview = function ({ model }) {
 					target="_blank"
 					onClick={e => e.preventDefault()}
 				>
-					<span className={`title text-2xl font-semibold mb-1 ${georgia.className}`}>
+					<span className={`title text-2xl md:font-semibold mb-1 ${georgia.className}`}>
 						{title}
 					</span>
 				</a>
