@@ -14,12 +14,12 @@ const NewsArticlePreview = function ({ model }) {
 	const articleLink = `/news/${uri}`;
 	// const router = usePageLoadingBarRouter(useRouter);
 	const dateLocale = "ru-RU";
-	const dateString = toZonedTime(dateCreated, "Africa/Harare").toLocaleDateString(
-		dateLocale,
-		{
-			dateStyle: "short",
-		},
-	);
+	const dateString = toZonedTime(
+		dateCreated,
+		"Africa/Harare",
+	).toLocaleDateString(dateLocale, {
+		dateStyle: "short",
+	});
 	const tCaptions = useTranslations("imageCaptions");
 
 	return isFeatured ? (
@@ -32,7 +32,7 @@ const NewsArticlePreview = function ({ model }) {
 		>
 			<div className="flex justify-stretch items-stretch w-full h-[16em] lg:h-[18em]">
 				<Image
-					className="grow object-cover object-top"
+					className="grow object-cover object-top max-w-full"
 					height={538}
 					width={538}
 					alt={about ?? tCaptions("featuredArticleImage")}
@@ -48,7 +48,9 @@ const NewsArticlePreview = function ({ model }) {
 					target="_blank"
 					onClick={e => e.preventDefault()}
 				>
-					<span className={`title text-2xl md:font-semibold mb-1 ${georgia.className}`}>
+					<span
+						className={`title text-2xl md:font-semibold mb-1 ${georgia.className}`}
+					>
 						{title}
 					</span>
 				</a>
@@ -70,7 +72,7 @@ const NewsArticlePreview = function ({ model }) {
 		>
 			<div className="flex justify-stretch items-stretch w-[7em] min-w-[7em] h-[6em] max-h-[6em] md:w-[8em] md:min-w-[8em] md:h-[6.4em] md:max-h-[6.4em] rounded-lg overflow-clip">
 				<Image
-					className="grow object-cover object-center"
+					className="grow object-cover object-center h-full w-full"
 					height={128}
 					width={128}
 					alt={about ?? tCaptions("newsArticleImage")}

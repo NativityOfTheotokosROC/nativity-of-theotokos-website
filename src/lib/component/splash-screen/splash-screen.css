@@ -1,3 +1,14 @@
+:root {
+	--splash-height: 100dvh;
+	--splash-background: #101828;
+}
+
+html:has(.splash) {
+	background: var(--splash-background);
+}
+
 body:has(.splash) {
-	overflow-y: hidden;
+	/* overflow-y: hidden; */
+	overflow: hidden; /* Happy now Safari? */
+	max-height: var(--splash-height);
 }

@@ -3,6 +3,7 @@
 :root {
 	--background: #0a0a0a;
 	--foreground: #ededed;
+	color-scheme: only light; /* TODO: To be revised */
 }
 
 html {
@@ -22,7 +23,7 @@ body {
 	background: var(--background);
 	color: var(--foreground);
 	font-family:
-		var(--font-g-flex), var(--font-g-sans), Georgia, var(--font-georgia),
+		var(--font-g-flex), var(--font-g-sans), var(--font-georgia), Arial,
 		Helvetica, sans-serif;
 }
 

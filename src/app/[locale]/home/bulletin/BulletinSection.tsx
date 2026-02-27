@@ -28,7 +28,7 @@ const BulletinSection = function ({ model }) {
 						{t("latestNewsHeader")}
 						<hr className="mt-4 mb-0 md:w-full" />
 					</span>
-					<div className="flex flex-row flex-wrap lg:justify-between gap-x-12 gap-y-6 px-8 pb-6 lg:px-20">
+					<div className="flex flex-col md:flex-row lg:justify-between gap-x-12 gap-y-6 px-8 pb-6 lg:px-20">
 						<motion.div
 							initial={{ opacity: 0, y: 50 }}
 							whileInView={{ opacity: 1, y: 0 }}
@@ -36,7 +36,7 @@ const BulletinSection = function ({ model }) {
 							transition={{
 								ease: "easeOut",
 							}}
-							className="featured flex flex-col gap-4 md:max-w-1/2 lg:max-w-[45%]"
+							className="featured flex flex-col gap-4 md:max-w-1/2 lg:max-w-[45%] [&_.featured-card]:max-w-full"
 						>
 							<span className="text-xl">{t("featured")}</span>
 							<NewsArticlePreview

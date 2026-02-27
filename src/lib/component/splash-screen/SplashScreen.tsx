@@ -3,9 +3,17 @@ import { SplashScreenModel } from "../../model/splash-screen";
 import { motion, AnimatePresence } from "motion/react";
 import "./splash-screen.css";
 import { LogoIcon } from "../miscellaneous/graphic";
+import { useLayoutEffect } from "react";
 
 const SplashScreen = function ({ model }) {
 	const { isShown, exitedCallback } = model.modelView;
+	
+	useLayoutEffect(() => {
+		window.onscroll = () => {
+			if (isShown)
+				window.scrollTo(0, 0);
+		}
+	}, [isShown])
 
 	return (
 		<AnimatePresence initial={false} onExitComplete={exitedCallback}>
