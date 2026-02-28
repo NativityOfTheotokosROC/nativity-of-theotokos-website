@@ -49,7 +49,7 @@ const Footer = function ({ model }) {
 							</span>
 						</FooterSection>
 					</div>
-					<div className="flex flex-col justify-between gap-x-16 gap-y-8 md:flex-row md:flex-wrap">
+					<div className="flex flex-col lg:justify-between gap-x-18 gap-y-8 md:flex-row md:flex-wrap">
 						<FooterSection
 							model={newReadonlyModel({
 								title: t("jurisdictional"),

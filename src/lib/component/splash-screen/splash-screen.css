@@ -8,7 +8,7 @@ html:has(.splash) {
 }
 
 body:has(.splash) {
+	height: var(--splash-height);
 	/* overflow-y: hidden; */
 	overflow: hidden; /* Happy now Safari? */
-	max-height: var(--splash-height);
 }

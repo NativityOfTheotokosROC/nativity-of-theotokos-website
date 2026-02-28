@@ -40,8 +40,11 @@ const ScheduleItem = function ({ model }) {
 				<span className="text-xl">{title}</span>
 				<span>{location}</span>
 				{times.map((time, index) => (
-					<div key={index} className="text-sm inline-flex gap-1">
-						<span className="w-17">
+					<div
+						key={index}
+						className="text-sm inline-flex flex-wrap gap-1 max-w-full "
+					>
+						<span className="w-17 ">
 							{time.time
 								.toLocaleTimeString(dateLocale, {
 									hour: "numeric",
