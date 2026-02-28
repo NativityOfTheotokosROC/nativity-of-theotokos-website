@@ -103,7 +103,7 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 			$(".cal-main").removeAttr("onclick");
 			$(".cal-main").each(function () {
 				$(this).removeClass();
-				$(this).addClass("scripture-text");
+				$(this).addClass("scripture");
 			});
 			$(".normaltext")
 				.contents()
@@ -127,15 +127,15 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 				if (!verse.trim()) return;
 
 				const _$ = load(verse, null, false);
-				_$("*").wrapAll('<span class="scripture"></span>');
-				markedUpScriptures.push(_$(".scripture").html()!);
+				_$("*").wrapAll('<span class="reading"></span>');
+				markedUpScriptures.push(_$(".reading").html()!);
 			});
 			const scriptures = markedUpScriptures.map(scripture => {
 				const _$ = load(scripture, null, false);
 				return {
-					scriptureText: _$(".scripture-text").text().trim(),
+					scriptureText: _$(".scripture").text().trim(),
 					designation: _$(".designation").text().trim(),
-					link: _$(".scripture-text").attr("href")!.trim(),
+					link: _$(".scripture").attr("href")!.trim(),
 				};
 			});
 			return scriptures;
@@ -170,11 +170,10 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 		return (await this._getMarkedUpText(requestURL, encoding).then(html => {
 			const $ = load(html);
 			const iconImage = $(".icon_img");
+			const src = iconImage.attr("src")!;
+			const imagePath = !src.startsWith("/htc/") ? `/htc/${src}` : src;
 			const about = iconImage.attr("alt")!.replace(/\&.+\;/, "");
-			const source = new URL(
-				iconImage.attr("src")!,
-				`${requestURL.origin}`,
-			).href;
+			const source = new URL(imagePath, `${requestURL.origin}`).href;
 			return { source, about };
 		})) satisfies Pick<Image, "source" | "about"> & Partial<Image>;
 	}

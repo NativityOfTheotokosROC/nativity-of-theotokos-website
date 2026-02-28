@@ -18,8 +18,6 @@ const ScheduleItem = function ({ model }) {
 		time: toZonedTime(time.time, "Africa/Harare"),
 	}));
 
-	console.log(rawTimes);
-
 	return isFeatured ? (
 		<div className="featured-schedule-item flex min-h-fit bg-[#FEF8F3] border border-gray-900/20 rounded-lg overflow-clip">
 			<div
@@ -53,7 +51,6 @@ const ScheduleItem = function ({ model }) {
 								})
 								.toUpperCase()}
 						</span>
-						{/* <span className="mr-1">{"—"}</span> */}
 						<span className="underline">{time.designation}</span>
 					</div>
 				))}

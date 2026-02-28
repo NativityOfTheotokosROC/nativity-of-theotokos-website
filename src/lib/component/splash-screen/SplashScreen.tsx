@@ -7,13 +7,12 @@ import { useLayoutEffect } from "react";
 
 const SplashScreen = function ({ model }) {
 	const { isShown, exitedCallback } = model.modelView;
-	
+
 	useLayoutEffect(() => {
 		window.onscroll = () => {
-			if (isShown)
-				window.scrollTo(0, 0);
-		}
-	}, [isShown])
+			if (isShown) window.scrollTo(0, 0);
+		};
+	}, [isShown]);
 
 	return (
 		<AnimatePresence initial={false} onExitComplete={exitedCallback}>
@@ -23,9 +22,9 @@ const SplashScreen = function ({ model }) {
 					initial={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
 					transition={{ duration: 0.4, ease: "easeIn" }}
-					className="splash flex absolute w-screen h-dvh z-30 top-0 overflow-hidden"
+					className="splash flex absolute w-full min-h-[110vh] h-full z-30 top-0 overflow-hidden bg-gray-900"
 				>
-					<div className="bg-gray-900 flex items-center justify-center grow p-9">
+					<div className="flex items-center justify-center max-h-dvh grow p-9">
 						<motion.div
 							key="splash-logo"
 							initial={{ scale: 1, opacity: 1 }}
