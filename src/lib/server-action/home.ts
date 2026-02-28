@@ -305,6 +305,7 @@ export async function getLatestNews(
 			uri: featuredArticle.newsArticle.link, // TODO: Alter schema
 			articleImage: {
 				source: featuredArticle.newsArticle.imageLink,
+				about: featuredArticle.newsArticle.imageCaption,
 				placeholder: articlePlaceholders.get(
 					featuredArticle.newsArticle.imageLink,
 				) as ImagePlaceholder,
@@ -315,6 +316,7 @@ export async function getLatestNews(
 			uri: article.link,
 			articleImage: {
 				source: article.imageLink,
+				about: featuredArticle.newsArticle.imageCaption,
 				placeholder: articlePlaceholders.get(
 					article.imageLink,
 				) as ImagePlaceholder,
