@@ -58,7 +58,8 @@ export type NewsArticle = {
 	dateCreated: Date;
 	dateUpdated?: Date;
 	snippet: string;
-	articleImage: Image;
+	articleImage: Required<Pick<Image, "source" | "about">> &
+		Partial<Pick<Image, "placeholder">>;
 };
 
 export type GalleryImage = {

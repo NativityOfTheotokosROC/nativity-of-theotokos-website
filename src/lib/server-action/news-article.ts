@@ -18,6 +18,23 @@ const prismaClient = new PrismaClient({
 	adapter: prismaAdapter,
 });
 
+export async function getAllArticles(): Promise<NewsArticle[]> {
+	const articles: NewsArticle[] = await prismaClient.newsArticle
+		.findMany()
+		.then(records =>
+			records.map(record => ({
+				...record,
+				uri: record.link,
+				dateUpdated: record.dateUpdated ?? undefined,
+				articleImage: {
+					source: record.imageLink,
+					about: record.imageCaption,
+				},
+			})),
+		);
+	return articles;
+}
+
 export async function getArticle(
 	articleId: string,
 ): Promise<Omit<NewsArticle, "url">> {
