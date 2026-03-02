@@ -1,12 +1,10 @@
 "use server";
 
-import { PrismaClient } from "@/src/generated/prisma/client";
 import {
 	getPlaceholder,
 	ImagePlaceholder,
 	PlaceholderRepository,
 } from "@grod56/placeholder";
-import { PrismaPg } from "@prisma/adapter-pg";
 import { arrayToShuffled } from "array-shuffle";
 import { formatInTimeZone } from "date-fns-tz";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -25,6 +23,7 @@ import {
 } from "../utility/miscellaneous";
 import { getGalleryImages } from "./gallery";
 import { getBaseURL } from "./miscellaneous";
+import prisma from "../third-party/prisma";
 
 export type LatestNews = {
 	featuredArticle: NewsArticlePreview;
@@ -39,13 +38,6 @@ export type HomeSnapshot = {
 	dailyGalleryImages: GalleryImage[];
 };
 
-const prismaAdapter = new PrismaPg({
-	connectionString: process.env.DATABASE_URL,
-});
-const prismaClient = new PrismaClient({
-	adapter: prismaAdapter,
-});
-
 export async function getHomeSnapshot(
 	scheduleItemCount: number = 4,
 	otherArticleCount: number = 4,
@@ -55,33 +47,34 @@ export async function getHomeSnapshot(
 	const baseUrl = await getBaseURL();
 	const placeholderRepository = getPrismaPlaceholderRepository(
 		baseUrl,
-		prismaClient,
+		prisma,
 	);
-	const scheduleItems = await getScheduleItems(
-		scheduleItemCount,
-		currentDate,
-	);
-	const newsArticles = await getLatestNews(otherArticleCount);
-	const dailyReadings = await getDailyReadings(currentDate);
-	const dailyQuote = await getDailyQuote(currentDate);
-	const dailyGalleryImages = await getDailyGalleryImages(
+	const scheduleItems = getScheduleItems(scheduleItemCount, currentDate);
+	const newsArticles = getLatestNews(otherArticleCount);
+	const dailyReadings = getDailyReadings(currentDate).then(readings => {
+		return getPlaceholder(
+			readings.iconOfTheDay.source,
+			placeholderRepository,
+		).then(placeholder => ({
+			...readings,
+			iconOfTheDay: {
+				...readings.iconOfTheDay,
+				placeholder,
+			},
+		}));
+	});
+	const dailyQuote = getDailyQuote(currentDate);
+	const dailyGalleryImages = getDailyGalleryImages(
 		dailyGalleryImagesCount,
 		currentDate,
 	);
-	const modifiedDailyReadings = await getPlaceholder(
-		dailyReadings.iconOfTheDay.source,
-		placeholderRepository,
-	).then(placeholder => ({
-		...dailyReadings,
-		iconOfTheDay: { ...dailyReadings.iconOfTheDay, placeholder },
-	}));
 
 	return {
-		dailyReadings: modifiedDailyReadings,
-		dailyQuote,
-		scheduleItems,
-		newsArticles,
-		dailyGalleryImages,
+		dailyReadings: await dailyReadings,
+		dailyQuote: await dailyQuote,
+		scheduleItems: await scheduleItems,
+		newsArticles: await newsArticles,
+		dailyGalleryImages: await dailyGalleryImages,
 	};
 }
 
@@ -100,7 +93,7 @@ export async function getDailyQuote(currentDate: Date = new Date()) {
 		formatInTimeZone(currentDate, "CAT", "yyyy-MM-dd"),
 	);
 
-	let dailyQuote = await prismaClient.dailyQuote
+	let dailyQuote = await prisma.dailyQuote
 		.findFirst({
 			where: {
 				date: localDate,
@@ -108,9 +101,9 @@ export async function getDailyQuote(currentDate: Date = new Date()) {
 		})
 		.quote();
 	if (!dailyQuote) {
-		const quotes = await prismaClient.quote.findMany()!;
+		const quotes = await prisma.quote.findMany()!;
 		dailyQuote = quotes[Math.round(Math.random() * (quotes.length - 1))];
-		await prismaClient.dailyQuote.create({
+		await prisma.dailyQuote.create({
 			data: {
 				date: localDate,
 				quoteId: dailyQuote.id,
@@ -135,7 +128,7 @@ export async function getScheduleItems(
 		formatInTimeZone(currentDate, "CAT", "yyyy-MM-dd"),
 	);
 	const locale = await getLocale();
-	const data = await prismaClient.scheduleItem.findMany({
+	const data = await prisma.scheduleItem.findMany({
 		where: {
 			date: { gte: localDate },
 			AND: { removedScheduleItem: { is: null } },
@@ -185,7 +178,7 @@ export async function getScheduleItems(
 				),
 			})),
 		}));
-		const isPresent = await prismaClient.scheduleItem.count({
+		const isPresent = await prisma.scheduleItem.count({
 			where: {
 				date: { equals: nextScheduleItem.date },
 				AND: { removedScheduleItem: { is: null } },
@@ -194,7 +187,7 @@ export async function getScheduleItems(
 		if (!isPresent) {
 			const { date, location, title, times, titleRu } = nextScheduleItem;
 
-			await prismaClient.scheduleItem.create({
+			await prisma.scheduleItem.create({
 				data: {
 					date,
 					location,
@@ -222,7 +215,7 @@ export async function getLatestNews(
 	otherArticlesCount: number,
 ): Promise<LatestNews> {
 	const baseURL = await getBaseURL();
-	const otherArticles = await prismaClient.newsArticle.findMany({
+	const otherArticles = await prisma.newsArticle.findMany({
 		// TODO: Reinstate when we have enough articles
 		// where: {
 		// 	featuredArticle: {
@@ -234,16 +227,14 @@ export async function getLatestNews(
 		},
 		take: otherArticlesCount,
 	});
-	const featuredArticle = await prismaClient.featuredArticle.findFirstOrThrow(
-		{
-			include: { newsArticle: true },
-		},
-	);
+	const featuredArticle = await prisma.featuredArticle.findFirstOrThrow({
+		include: { newsArticle: true },
+	});
 	const allArticles = [featuredArticle.newsArticle, ...otherArticles];
 	const unplaceholderedArticles: typeof allArticles = [];
 
 	for (let i = 0; i < allArticles.length; i++) {
-		const item = await prismaClient.imagePlaceholder.findFirst({
+		const item = await prisma.imagePlaceholder.findFirst({
 			where: {
 				imageLink: {
 					equals: allArticles[i].imageLink,
@@ -272,7 +263,7 @@ export async function getLatestNews(
 					if (!(error instanceof TypeError)) throw error;
 					processedSrc = src;
 				}
-				await prismaClient.imagePlaceholder.create({
+				await prisma.imagePlaceholder.create({
 					data: {
 						imageLink: processedSrc,
 						placeholder,
@@ -290,7 +281,7 @@ export async function getLatestNews(
 	}
 	const articlePlaceholders = new Map(
 		(
-			await prismaClient.imagePlaceholder.findMany({
+			await prisma.imagePlaceholder.findMany({
 				where: {
 					imageLink: {
 						in: allArticles.map(article => article.imageLink),
@@ -334,7 +325,7 @@ export async function getDailyGalleryImages(
 		formatInTimeZone(currentDate, "CAT", "yyyy-MM-dd"),
 	);
 	const allGalleryImages = await getGalleryImages();
-	let dailyGalleryImages = await prismaClient.dailyGalleryImage.findMany({
+	let dailyGalleryImages = await prisma.dailyGalleryImage.findMany({
 		where: {
 			date: localDate,
 		},
@@ -350,7 +341,7 @@ export async function getDailyGalleryImages(
 		const shuffledGalleryImages = arrayToShuffled(otherGalleryImages);
 		if (otherGalleryImages.length + dailyGalleryImages.length <= count) {
 			const newDailyGalleryImages =
-				await prismaClient.dailyGalleryImage.createManyAndReturn({
+				await prisma.dailyGalleryImage.createManyAndReturn({
 					data: shuffledGalleryImages.map(galleryImage => ({
 						date: localDate,
 						imageLink: galleryImage.imageLink,
@@ -362,7 +353,7 @@ export async function getDailyGalleryImages(
 			];
 		} else {
 			const newDailyGalleryImages =
-				await prismaClient.dailyGalleryImage.createManyAndReturn({
+				await prisma.dailyGalleryImage.createManyAndReturn({
 					data: shuffledGalleryImages
 						.slice(0, count - dailyGalleryImages.length)
 						.map(galleryImage => ({
@@ -377,7 +368,7 @@ export async function getDailyGalleryImages(
 		}
 	}
 	const placeholderedGalleryImages: GalleryImage[] = [];
-	const repository = getPrismaPlaceholderRepository(baseUrl, prismaClient);
+	const repository = getPrismaPlaceholderRepository(baseUrl, prisma);
 	// TODO: Optimize
 	for (let i = 0; i < dailyGalleryImages.length; i++) {
 		const imageLink = dailyGalleryImages[i].imageLink;

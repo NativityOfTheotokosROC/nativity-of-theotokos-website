@@ -1,7 +1,5 @@
 "use server";
 
-import { PrismaClient } from "@/src/generated/prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
 import { NewsArticle } from "../type/miscellaneous";
 import { notFound } from "next/navigation";
 import {
@@ -10,16 +8,10 @@ import {
 } from "../utility/miscellaneous";
 import { getBaseURL } from "./miscellaneous";
 import { getPlaceholder } from "@grod56/placeholder";
-
-const prismaAdapter = new PrismaPg({
-	connectionString: process.env.DATABASE_URL,
-});
-const prismaClient = new PrismaClient({
-	adapter: prismaAdapter,
-});
+import prisma from "../third-party/prisma";
 
 export async function getAllArticles(): Promise<NewsArticle[]> {
-	const articles: NewsArticle[] = await prismaClient.newsArticle
+	const articles: NewsArticle[] = await prisma.newsArticle
 		.findMany()
 		.then(records =>
 			records.map(record => ({
@@ -39,13 +31,13 @@ export async function getArticle(
 	articleId: string,
 ): Promise<Omit<NewsArticle, "url">> {
 	try {
-		const article = await prismaClient.newsArticle.findUniqueOrThrow({
+		const article = await prisma.newsArticle.findUniqueOrThrow({
 			where: { link: articleId },
 		});
 		const baseUrl = await getBaseURL();
 		const placeholderRepository = getPrismaPlaceholderRepository(
 			baseUrl,
-			prismaClient,
+			prisma,
 		);
 		const placeholder = await getPlaceholder(
 			isRemotePath(article.imageLink)

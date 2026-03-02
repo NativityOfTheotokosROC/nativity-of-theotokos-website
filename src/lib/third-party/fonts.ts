@@ -1,18 +1,15 @@
+import { Google_Sans, Google_Sans_Flex } from "next/font/google";
 import LocalFont from "next/font/local";
 
-const googleSansFlex = LocalFont({
-	src: [
-		{
-			path: "../../../public/fonts/GoogleSansFlex/GoogleSansFlex-Var.ttf",
-		},
-	],
+const googleSansFlex = Google_Sans_Flex({
+	subsets: ["latin"],
 	adjustFontFallback: false,
 	variable: "--font-g-flex",
 	display: "swap",
 });
 
-const googleSans = LocalFont({
-	src: [{ path: "../../../public/fonts/GoogleSans/GoogleSans-Var.ttf" }],
+const googleSans = Google_Sans({
+	subsets: ["cyrillic", "cyrillic-ext"],
 	variable: "--font-g-sans",
 	display: "swap",
 });
