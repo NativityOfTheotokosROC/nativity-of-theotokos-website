@@ -24,7 +24,7 @@ const SplashScreen = function ({ model }) {
 					transition={{ duration: 0.4, ease: "easeIn" }}
 					className="splash flex absolute w-full min-h-[110vh] h-full z-30 top-0 overflow-hidden bg-gray-900"
 				>
-					<div className="flex items-center justify-center max-h-dvh grow p-9">
+					<div className="flex sticky top-0 items-center justify-center h-full max-h-dvh grow p-9">
 						<motion.div
 							key="splash-logo"
 							initial={{ scale: 1, opacity: 1 }}

@@ -8,6 +8,7 @@ import { toZonedTime } from "date-fns-tz";
 import { Share } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import Link from "next/link";
 
 const NewsArticle = function ({ model }) {
 	const { article, permalink } = model.modelView;
@@ -64,17 +65,18 @@ const NewsArticle = function ({ model }) {
 					</div>
 					<div className="flex flex-col gap-3 w-full md:w-1/2 md:grow md:self-stretch">
 						<div className="flex justify-stretch items-stretch w-full h-[15em] rounded-lg overflow-clip md:h-fit md:max-h-[25em]">
-							<Image
-								className="grow object-cover object-center cursor-pointer"
-								height={600}
-								width={600}
-								alt={about ?? tCaptions("newsArticleImage")}
-								title={about}
-								src={source}
-								placeholder="blur"
-								blurDataURL={placeholder}
-								onClick={() => window.open(source, "_blank")}
-							/>
+							<Link href={source} target="_blank">
+								<Image
+									className="grow object-cover object-center cursor-pointer"
+									height={600}
+									width={600}
+									alt={about ?? tCaptions("newsArticleImage")}
+									title={about}
+									src={source}
+									placeholder="blur"
+									blurDataURL={placeholder}
+								/>
+							</Link>
 						</div>
 						{about && (
 							<span className={`text-xs/relaxed uppercase`}>

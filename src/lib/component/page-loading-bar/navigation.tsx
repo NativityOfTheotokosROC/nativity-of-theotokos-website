@@ -68,6 +68,7 @@ export function Link(props: ComponentProps<typeof LocalizedLink>) {
 			{...props}
 			onClick={e => {
 				if (
+					props.target !== "_blank" &&
 					triggerLoading(pathName, href.toString(), {
 						currentLocale,
 						targetLocale: locale,

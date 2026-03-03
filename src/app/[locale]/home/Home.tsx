@@ -18,6 +18,11 @@ import HeroSection from "./hero/HeroSection";
 import "./home.css";
 import MailingListSection from "./mailing-list/MailingListSection";
 import ResourcesSection from "./resources/ResourcesSection";
+import {
+	AboutOurParishGraphic,
+	LiturgicalResourcesGraphic,
+	WhatIsOrthodoxyGraphic,
+} from "@/src/lib/component/miscellaneous/graphic";
 
 const Home = function ({ model }) {
 	const { modelView } = model;
@@ -90,17 +95,17 @@ const Home = function ({ model }) {
 							{
 								label: t("liturgicalResources"),
 								link: tLinks("liturgicalResources"),
-								graphic: "/ui/liturgical-resources.jpg",
+								graphic: LiturgicalResourcesGraphic.src, // TODO: Refactor
 							},
 							{
 								label: t("whatIsOrthodoxy"),
 								link: tLinks("whatIsOrthodoxy"),
-								graphic: "/ui/what-is-orthodoxy.jpg",
+								graphic: WhatIsOrthodoxyGraphic.src,
 							},
 							{
 								label: t("aboutOurParish"),
 								link: "/about-us",
-								graphic: "/ui/about-our-parish.jpg",
+								graphic: AboutOurParishGraphic.src,
 							},
 						],
 					})}

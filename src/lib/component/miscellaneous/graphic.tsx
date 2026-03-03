@@ -8,6 +8,11 @@ import MaintenanceGraphic from "@/public/ui/ornament_36.svg";
 import NotFoundGraphic from "@/public/ui/ornament_35.svg";
 import EnglishIcon from "@/public/ui/english.svg";
 import RussianIcon from "@/public/ui/russian.svg";
+import NativityIcon from "@/public/ui/nativity-icon.jpg";
+import LiturgicalResourcesGraphic from "@/public/ui/liturgical-resources.jpg";
+import WhatIsOrthodoxyGraphic from "@/public/ui/what-is-orthodoxy.jpg";
+import AboutOurParishGraphic from "@/public/ui/about-our-parish.jpg";
+import ResourcesBorder from "@/public/ui/border-8.jpg";
 
 export {
 	LogoIcon,
@@ -20,4 +25,9 @@ export {
 	NotFoundGraphic,
 	EnglishIcon,
 	RussianIcon,
+	NativityIcon,
+	LiturgicalResourcesGraphic,
+	WhatIsOrthodoxyGraphic,
+	AboutOurParishGraphic,
+	ResourcesBorder,
 };

@@ -5,7 +5,7 @@ import { toZonedTime } from "date-fns-tz";
 import { motion } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import { HymnsOrnament } from "../miscellaneous/graphic";
-import { Link } from "../page-loading-bar/navigation";
+import Link from "next/link";
 
 const DailySaintsWidget = function ({ model }) {
 	const { details, hymnsModal } = model.modelView;

@@ -1,11 +1,11 @@
+import { NativityIcon } from "@/src/lib/component/miscellaneous/graphic";
 import { HeroSectionModel } from "@/src/lib/model/hero-section";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import NativityIcon from "@/public/ui/nativity-icon.jpg";
-import { Link } from "@/src/lib/component/page-loading-bar/navigation";
+import Link from "next/link";
 
 const HeroSection = function ({ model }) {
 	const { introduce, title, subtitle } = model.modelView;
@@ -14,7 +14,7 @@ const HeroSection = function ({ model }) {
 	return (
 		<section
 			className="hero bg-gray-950 text-black bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]"
-			style={{ backgroundImage: NativityIcon.src }}
+			style={{ backgroundImage: `url(${NativityIcon.src})` }}
 		>
 			<motion.div
 				animate={
