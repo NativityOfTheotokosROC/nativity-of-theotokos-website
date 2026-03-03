@@ -4,13 +4,18 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import NativityIcon from "@/public/ui/nativity-icon.jpg";
+import { Link } from "@/src/lib/component/page-loading-bar/navigation";
 
 const HeroSection = function ({ model }) {
 	const { introduce, title, subtitle } = model.modelView;
 	const tCaptions = useTranslations("imageCaptions");
 
 	return (
-		<section className="hero bg-gray-950 text-black bg-[url(/ui/nativity-icon.jpg)] bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]">
+		<section
+			className="hero bg-gray-950 text-black bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]"
+			style={{ backgroundImage: NativityIcon.src }}
+		>
 			<motion.div
 				animate={
 					introduce && {
@@ -53,18 +58,15 @@ const HeroSection = function ({ model }) {
 					transition={{ ease: "easeOut" }}
 					className={`hero-icon md:flex md:w-1/2 hidden justify-center items-center`}
 				>
-					<Image
-						className="h-[21.333em] w-[16em] hover:cursor-pointer hover:scale-[1.03] active:scale-[1.03] transition ease-out duration-200"
-						onClick={() => {
-							window.open("/ui/nativity-icon.jpg", "_blank");
-						}}
-						src="/ui/nativity-icon.jpg"
-						alt={tCaptions("iconOfTheNativity")}
-						title={tCaptions("iconOfTheNativity")}
-						height={400}
-						width={300}
-						loading="eager"
-					/>
+					<Link href={"/ui/nativity-icon.jpg"} target="_blank">
+						<Image
+							className="h-[21.333em] w-[16em] hover:cursor-pointer hover:scale-[1.03] active:scale-[1.03] transition ease-out duration-200"
+							src={NativityIcon}
+							alt={tCaptions("iconOfTheNativity")}
+							title={tCaptions("iconOfTheNativity")}
+							loading="eager"
+						/>
+					</Link>
 				</motion.div>
 			</motion.div>
 		</section>
