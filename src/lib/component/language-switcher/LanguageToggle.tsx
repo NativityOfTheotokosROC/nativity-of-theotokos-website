@@ -4,8 +4,8 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
 import { JSX } from "react";
 import { Language } from "../../type/miscellaneous";
-import { LanguageToggleButtonModel } from "../../model/language-toggle-button";
-import "./language-toggle-button.css";
+import { LanguageToggleModel } from "../../model/language-toggle";
+import "./language-toggle.css";
 import { EnglishIcon, RussianIcon } from "../miscellaneous/graphic";
 
 const languageToRenderedMap = new Map<Language, JSX.Element>([
@@ -27,16 +27,16 @@ const languageToRenderedMap = new Map<Language, JSX.Element>([
 
 const LanguageToggleButton = function ({ model }) {
 	const { modelView, interact } = model;
-	const { displayedLanguage } = modelView;
+	const { alternateLanguage } = modelView;
 
 	return (
 		<button
 			className="language-toggle-button sticky bottom-[-1] right-1/20 float-end self-end z-11 p-3 w-[5em] rounded-t-lg min-w-fit bg-gray-900 hover:underline active:underline text-white text-sm md:text-base border border-white/20"
 			onClick={() => interact({ type: "TOGGLE_LANGUAGE" })}
 		>
-			{languageToRenderedMap.get(displayedLanguage)}
+			{languageToRenderedMap.get(alternateLanguage)}
 		</button>
 	);
-} satisfies ModeledVoidComponent<InitializedModel<LanguageToggleButtonModel>>;
+} satisfies ModeledVoidComponent<InitializedModel<LanguageToggleModel>>;
 
 export default LanguageToggleButton;

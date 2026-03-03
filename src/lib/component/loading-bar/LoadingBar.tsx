@@ -9,8 +9,10 @@ const LoadingBar = function ({ model }) {
 
 	return (
 		<div
-			className={`loading-bar h-[1.5px] bg-[#dcb042] sticky top-0 z-12 ${!modelView?.isLoading && "hidden"}`}
-		/>
+			className={`loading-bar bg-gray-900 h-[1.5px] sticky top-0 z-12 ${!modelView?.isLoading && "hidden"}`}
+		>
+			<div className={`loading-bar-progress h-full bg-[#dcb042]`} />
+		</div>
 	);
 } satisfies ModeledVoidComponent<LoadingBarModel>;
 

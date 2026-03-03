@@ -1,4 +1,4 @@
-.loading-bar {
+.loading-bar-progress {
 	animation: load ease-in-out 1s forwards;
 }
 
@@ -7,6 +7,6 @@
 		width: 0;
 	}
 	to {
-		width: 90%;
+		width: 95%;
 	}
 }
