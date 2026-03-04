@@ -37,12 +37,12 @@ const NavigationMenu = function ({ model }) {
 					<MenuItems
 						anchor="bottom"
 						transition
-						className="min-w-fit w-40 flex flex-col gap-8 origin-top-right rounded-lg uppercase bg-gray-800/99 text-sm border border-white/5 p-4 text-white transition duration-200 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-92 data-closed:opacity-0 z-20"
+						className="min-w-fit w-40 flex flex-col origin-top-right rounded-lg bg-gray-800/99 text-sm border border-white/5 text-white transition duration-200 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-92 data-closed:opacity-0 z-20"
 					>
 						{navlinks.map((navlink, index) => (
 							<MenuItem key={index} as={Fragment}>
 								<Link
-									className="block"
+									className="block navlink uppercase no-underline px-4 py-4 active:bg-gray-950 active:text-[#DCB042] hover:text-[#DCB042]"
 									href={navlink.link}
 									replace={navlink.isReplaceable}
 								>
