@@ -16,6 +16,7 @@ import {
 	googleSans,
 	georgia,
 } from "@/src/lib/third-party/fonts";
+import { Toaster } from "react-hot-toast";
 
 export async function generateMetadata({
 	params,
@@ -151,7 +152,6 @@ export default async function RootLayout({
 		<html lang={locale}>
 			<body
 				className={`antialiased ${googleSansFlex.variable} ${googleSans.variable} ${georgia.variable}`}
-				suppressHydrationWarning
 			>
 				<NextIntlClientProvider>
 					<ClientProviders>
@@ -187,6 +187,10 @@ export default async function RootLayout({
 						<Footer model={footer} />
 						<LanguageSwitcher
 							model={newReadonlyModel({ locale })}
+						/>
+						<Toaster
+							position="bottom-center"
+							containerStyle={{ bottom: 25 }}
 						/>
 					</ClientProviders>
 				</NextIntlClientProvider>

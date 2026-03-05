@@ -49,7 +49,7 @@ const Footer = function ({ model }) {
 							</span>
 						</FooterSection>
 					</div>
-					<div className="flex flex-col lg:justify-between gap-x-18 gap-y-8 md:flex-row md:flex-wrap">
+					<div className="grow flex flex-col gap-x-18 gap-y-8 md:flex-row">
 						<FooterSection
 							model={newReadonlyModel({
 								title: t("jurisdictional"),
@@ -129,7 +129,7 @@ const Footer = function ({ model }) {
 											<span>{contact.name}</span>
 											<span>
 												<Link
-													className="hover:underline"
+													className="w-fit hover:underline"
 													href={`tel:${contact.phone}`}
 												>
 													{formatPhoneNumber(

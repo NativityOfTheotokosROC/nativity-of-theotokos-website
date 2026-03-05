@@ -13,7 +13,7 @@ const HeroSection = function ({ model }) {
 
 	return (
 		<section
-			className="hero bg-gray-950 text-black bg-cover bg-center bg-no-repeat md:bg-size-[100%] md:bg-position-[60%_85%]"
+			className="hero bg-gray-950 text-black bg-cover bg-center bg-no-repeat md:bg-position-[60%_85%]"
 			style={{ backgroundImage: `url(${NativityIcon.src})` }}
 		>
 			<motion.div
@@ -24,7 +24,7 @@ const HeroSection = function ({ model }) {
 				}
 				viewport={{ once: true }}
 				transition={{ duration: 0.4, ease: "easeOut" }}
-				className="hero-content flex flex-col justify-center items-center md:flex-row min-h-[76lvh] h-fit lg:min-h-[81lvh] p-8 lg:p-20 md:bg-none md:items-center"
+				className="hero-content flex flex-col justify-center items-center md:flex-row min-h-[76lvh] h-fit md:min-h-80 p-8 lg:p-20 md:items-center"
 			>
 				<motion.div
 					initial={{ opacity: 0, y: 10 }}
