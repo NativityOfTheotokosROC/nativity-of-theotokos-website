@@ -307,7 +307,7 @@ export async function getLatestNews(
 			uri: article.link,
 			articleImage: {
 				source: article.imageLink,
-				about: featuredArticle.newsArticle.imageCaption,
+				about: article.imageCaption,
 				placeholder: articlePlaceholders.get(
 					article.imageLink,
 				) as ImagePlaceholder,
