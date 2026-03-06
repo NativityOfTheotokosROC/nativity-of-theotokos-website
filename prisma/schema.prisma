@@ -5,101 +5,164 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-    provider = "prisma-client"
-    output   = "../src/generated/prisma"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
-    provider = "postgresql"
+  provider = "postgresql"
 }
 
 model Quote {
-    id          Int          @id @default(autoincrement())
-    quote       String
-    author      String
-    source      String?
-    quoteRu     String?
-    authorRu    String?
-    sourceRu    String?
-    dailyQuotes DailyQuote[]
+  id          Int          @id @default(autoincrement())
+  quote       String
+  author      String
+  source      String?
+  quoteRu     String?
+  authorRu    String?
+  sourceRu    String?
+  dailyQuotes DailyQuote[]
 
-    @@unique([author, quote])
-    @@unique([authorRu, quoteRu])
+  @@unique([author, quote])
+  @@unique([authorRu, quoteRu])
 }
 
 model DailyQuote {
-    date    DateTime @id @default(now()) @db.Date
-    quote   Quote    @relation(fields: [quoteId], references: [id])
-    quoteId Int
+  date    DateTime @id @default(now()) @db.Date
+  quote   Quote    @relation(fields: [quoteId], references: [id])
+  quoteId Int
 }
 
 model ScheduleItem {
-    id                  Int                  @id @default(autoincrement())
-    date                DateTime             @db.Date
-    location            String
-    title               String
-    locationRu          String?
-    titleRu             String?
-    scheduleItemTimes   ScheduleItemTime[]
-    removedScheduleItem RemovedScheduleItem?
+  id                  Int                  @id @default(autoincrement())
+  date                DateTime             @db.Date
+  location            String
+  title               String
+  locationRu          String?
+  titleRu             String?
+  scheduleItemTimes   ScheduleItemTime[]
+  removedScheduleItem RemovedScheduleItem?
 
-    @@unique([date, location])
-    @@unique([date, locationRu])
+  @@unique([date, location])
+  @@unique([date, locationRu])
 }
 
 model ScheduleItemTime {
-    id             Int          @id @default(autoincrement())
-    time           DateTime     @db.Timestamptz
-    designation    String
-    designationRu  String?
-    scheduleItem   ScheduleItem @relation(fields: [scheduleItemId], references: [id], onDelete: Cascade)
-    scheduleItemId Int
+  id             Int          @id @default(autoincrement())
+  time           DateTime     @db.Timestamptz
+  designation    String
+  designationRu  String?
+  scheduleItem   ScheduleItem @relation(fields: [scheduleItemId], references: [id], onDelete: Cascade)
+  scheduleItemId Int
 
-    @@unique([time, scheduleItemId])
+  @@unique([time, scheduleItemId])
 }
 
 model RemovedScheduleItem {
-    scheduleItemId Int          @id
-    scheduleItem   ScheduleItem @relation(fields: [scheduleItemId], references: [id], onDelete: Cascade)
+  scheduleItemId Int          @id
+  scheduleItem   ScheduleItem @relation(fields: [scheduleItemId], references: [id], onDelete: Cascade)
 }
 
 model NewsArticle {
-    id              Int              @id @default(autoincrement())
-    link            String           @unique
-    title           String
-    author          String
-    dateCreated     DateTime
-    dateUpdated     DateTime?
-    body            String
-    snippet         String
-    imageLink       String
-    imageCaption    String
-    titleRu         String?
-    authorRu        String?
-    bodyRu          String?
-    snippetRu       String?
-    featuredArticle FeaturedArticle?
+  id              Int              @id @default(autoincrement())
+  link            String           @unique
+  title           String
+  author          String
+  dateCreated     DateTime
+  dateUpdated     DateTime?
+  body            String
+  snippet         String
+  imageLink       String
+  imageCaption    String
+  titleRu         String?
+  authorRu        String?
+  bodyRu          String?
+  snippetRu       String?
+  featuredArticle FeaturedArticle?
 }
 
 model FeaturedArticle {
-    newsArticle   NewsArticle @relation(fields: [newsArticleId], references: [id], onDelete: Cascade)
-    newsArticleId Int         @id
+  newsArticle   NewsArticle @relation(fields: [newsArticleId], references: [id], onDelete: Cascade)
+  newsArticleId Int         @id
 }
 
 model GalleryImage {
-    id        Int    @id @default(autoincrement())
-    imageLink String
+  id        Int    @id @default(autoincrement())
+  imageLink String
 }
 
 model DailyGalleryImage {
-    id        Int      @id @default(autoincrement())
-    date      DateTime @db.Date
-    imageLink String
+  id        Int      @id @default(autoincrement())
+  date      DateTime @db.Date
+  imageLink String
 
-    @@unique([date, imageLink])
+  @@unique([date, imageLink])
 }
 
 model ImagePlaceholder {
-    imageLink   String @id
-    placeholder String
+  imageLink   String @id
+  placeholder String
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }

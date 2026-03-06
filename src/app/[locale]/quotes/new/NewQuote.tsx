@@ -109,13 +109,13 @@ const NewQuote = function ({ model }) {
 						<TabGroup className="flex flex-col gap-6">
 							<TabList className="flex gap-1 items-center">
 								<Tab
-									className="flex items-center p-4 py-2 text-sm uppercase border-b-5 border-gray-300 data-selected:border-gray-900 data-hover:border-gray-600"
+									className="flex items-center p-4 py-2 text-sm uppercase border-b-5 border-gray-300 data-selected:border-gray-900 data-hover:border-gray-600 focus:outline-none"
 									as={"button"}
 								>
 									English
 								</Tab>
 								<Tab
-									className="flex items-center p-4 py-2 text-sm uppercase border-b-5 border-gray-300 data-selected:border-gray-900 data-hover:border-gray-600"
+									className="flex items-center p-4 py-2 text-sm uppercase border-b-5 border-gray-300 data-selected:border-gray-900 data-hover:border-gray-600 focus:outline-none"
 									as={"button"}
 								>
 									Russian
