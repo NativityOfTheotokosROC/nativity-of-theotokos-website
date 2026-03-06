@@ -1,11 +1,14 @@
 "use server";
 
+import { toZonedTime } from "date-fns-tz";
 import { NewQuote } from "../model/new-quote";
 import prisma from "../third-party/prisma";
 
 export async function addNewQuote(payload: NewQuote) {
 	const { englishQuote, russianQuote, scheduledDate } = payload;
 	const { author, quote, source } = englishQuote;
+	const scheduledLocalDate =
+		scheduledDate && toZonedTime(scheduledDate, "Africa/Harare");
 	await prisma.quote.create({
 		data: {
 			author,
@@ -14,13 +17,13 @@ export async function addNewQuote(payload: NewQuote) {
 			authorRu: russianQuote?.author ?? null,
 			quoteRu: russianQuote?.quote ?? null,
 			sourceRu: russianQuote?.source ?? null,
-			dailyQuotes: scheduledDate && {
+			dailyQuotes: scheduledLocalDate && {
 				connectOrCreate: {
 					where: {
-						date: scheduledDate,
+						date: scheduledLocalDate,
 					},
 					create: {
-						date: scheduledDate,
+						date: scheduledLocalDate,
 					},
 				},
 			},

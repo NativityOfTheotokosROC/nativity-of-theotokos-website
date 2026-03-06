@@ -107,15 +107,15 @@ const NewQuote = function ({ model }) {
 				>
 					<div className="flex flex-col gap-6">
 						<TabGroup className="flex flex-col gap-6">
-							<TabList className="flex gap-1 justify-center items-center">
+							<TabList className="flex gap-1 items-center">
 								<Tab
-									className="flex justify-center items-center p-4 py-2 text-sm uppercase border-b-5 border-gray-300 data-selected:border-gray-900 data-hover:border-gray-600"
+									className="flex items-center p-4 py-2 text-sm uppercase border-b-5 border-gray-300 data-selected:border-gray-900 data-hover:border-gray-600"
 									as={"button"}
 								>
 									English
 								</Tab>
 								<Tab
-									className="flex justify-center items-center p-4 py-2 text-sm uppercase border-b-5 border-gray-300 data-selected:border-gray-900 data-hover:border-gray-600"
+									className="flex items-center p-4 py-2 text-sm uppercase border-b-5 border-gray-300 data-selected:border-gray-900 data-hover:border-gray-600"
 									as={"button"}
 								>
 									Russian
@@ -233,7 +233,7 @@ const NewQuote = function ({ model }) {
 							)}
 						</div>
 						<hr className="w-full mt-2" />
-						<div className="flex mt-2 gap-3 justify-end w-full">
+						<div className="flex mt-2 gap-3 justify-start w-full">
 							<button
 								type="button"
 								className="bg-[#513433] text-white p-4 w-[8em] rounded-lg hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
