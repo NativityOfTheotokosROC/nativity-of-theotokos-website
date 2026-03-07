@@ -1,8 +1,8 @@
-import { getTranslations } from "next-intl/server";
-import { Metadata } from "next";
 import { routing } from "@/src/i18n/routing";
+import { Metadata } from "next";
 import { hasLocale } from "next-intl";
-import ForbiddenClient from "./forbidden/client";
+import { getTranslations } from "next-intl/server";
+import SignInClient from "./client";
 import { newReadonlyModel } from "@mvc-react/mvc";
 
 export async function generateMetadata({
@@ -13,7 +13,7 @@ export async function generateMetadata({
 	const { locale } = await params;
 	const t = await getTranslations({
 		locale: hasLocale(routing.locales, locale) ? locale : "en",
-		namespace: "unauthorized",
+		namespace: "signIn",
 	});
 
 	return {
@@ -21,11 +21,18 @@ export async function generateMetadata({
 	};
 }
 
-export default function Page() {
+export default async function Page({
+	searchParams,
+}: {
+	searchParams: { [key: string]: string | undefined };
+}) {
+	const endpoint = (await searchParams).endpoint;
+
 	return (
-		<ForbiddenClient
+		<SignInClient
 			model={newReadonlyModel({
-				signOutEndpoint: "/",
+				endpoint: endpoint != undefined ? endpoint : "",
+				signInServices: ["google", "yandex"],
 			})}
 		/>
 	);

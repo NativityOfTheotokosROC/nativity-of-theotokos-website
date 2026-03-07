@@ -17,35 +17,54 @@ import { formatInTimeZone, toZonedTime } from "date-fns-tz";
 import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 
+type NewQuoteFields = {
+	authorField: string;
+	sourceField: string;
+	quoteField: string;
+	authorRuField: string;
+	sourceRuField: string;
+	quoteRuField: string;
+	isQuoteScheduledField: boolean;
+	scheduledDateField: string;
+};
+
+function getCurrentDate() {
+	return formatInTimeZone(new Date(), "Africa/Harare", "yyyy-MM-dd");
+}
+
+function getDefaultFields() {
+	const currentDate = getCurrentDate();
+	return {
+		authorField: "",
+		authorRuField: "",
+		quoteField: "",
+		quoteRuField: "",
+		sourceField: "",
+		sourceRuField: "",
+		isQuoteScheduledField: false,
+		scheduledDateField: currentDate,
+	} satisfies NewQuoteFields;
+}
+
 const NewQuote = function ({ model }) {
+	const currentDate = getCurrentDate();
 	const { modelView, interact } = model;
 	const { newQuoteNotification } = modelView;
-	const currentDate = formatInTimeZone(
-		new Date(),
-		"Africa/Harare",
-		"yyyy-MM-dd",
-	);
-	const [authorField, setAuthorField] = useState("");
-	const [sourceField, setSourceField] = useState("");
-	const [quoteField, setQuoteField] = useState("");
-	const [authorRuField, setAuthorRuField] = useState("");
-	const [sourceRuField, setSourceRuField] = useState("");
-	const [quoteRuField, setQuoteRuField] = useState("");
-	const [scheduledDateField, setScheduledDateField] =
-		useState<string>(currentDate);
-	const [isQuoteScheduled, setIsQuoteScheduled] = useState(false);
+	const [fields, setFields] = useState<NewQuoteFields>(getDefaultFields());
+	const {
+		authorField,
+		authorRuField,
+		quoteField,
+		quoteRuField,
+		sourceField,
+		sourceRuField,
+		isQuoteScheduledField,
+		scheduledDateField,
+	} = fields;
 
 	useEffect(() => {
 		if (newQuoteNotification?.type == "success") {
-			[
-				setAuthorField,
-				setSourceField,
-				setQuoteField,
-				setAuthorRuField,
-				setSourceRuField,
-				setQuoteRuField,
-			].forEach(setter => setter(""));
-			setIsQuoteScheduled(false);
+			setFields(getDefaultFields());
 			createToast({
 				type: "success",
 				message: newQuoteNotification.text,
@@ -83,7 +102,7 @@ const NewQuote = function ({ model }) {
 						const quoteRu = quoteRuField.trim()
 							? quoteRuField
 							: undefined;
-						const scheduledDate = isQuoteScheduled
+						const scheduledDate = isQuoteScheduledField
 							? toZonedTime(scheduledDateField, "Africa/Harare")
 							: undefined;
 
@@ -135,7 +154,10 @@ const NewQuote = function ({ model }) {
 										autoCapitalize="words"
 										value={authorField}
 										onChange={e =>
-											setAuthorField(e.target.value)
+											setFields({
+												...fields,
+												authorField: e.target.value,
+											})
 										}
 									/>
 									<input
@@ -145,7 +167,10 @@ const NewQuote = function ({ model }) {
 										id="quote-source"
 										value={sourceField}
 										onChange={e =>
-											setSourceField(e.target.value)
+											setFields({
+												...fields,
+												sourceField: e.target.value,
+											})
 										}
 									/>
 									<textarea
@@ -157,7 +182,10 @@ const NewQuote = function ({ model }) {
 										required
 										value={quoteField}
 										onChange={e =>
-											setQuoteField(e.target.value)
+											setFields({
+												...fields,
+												quoteField: e.target.value,
+											})
 										}
 									/>
 								</TabPanel>
@@ -173,7 +201,10 @@ const NewQuote = function ({ model }) {
 										autoCapitalize="words"
 										value={authorRuField}
 										onChange={e =>
-											setAuthorRuField(e.target.value)
+											setFields({
+												...fields,
+												authorRuField: e.target.value,
+											})
 										}
 									/>
 									<input
@@ -183,7 +214,10 @@ const NewQuote = function ({ model }) {
 										id="quote-source-ru"
 										value={sourceRuField}
 										onChange={e =>
-											setSourceRuField(e.target.value)
+											setFields({
+												...fields,
+												sourceRuField: e.target.value,
+											})
 										}
 									/>
 									<textarea
@@ -194,7 +228,10 @@ const NewQuote = function ({ model }) {
 										id="quote-ru"
 										value={quoteRuField}
 										onChange={e =>
-											setQuoteRuField(e.target.value)
+											setFields({
+												...fields,
+												quoteRuField: e.target.value,
+											})
 										}
 									/>
 								</TabPanel>
@@ -203,8 +240,13 @@ const NewQuote = function ({ model }) {
 						<div className="flex flex-col gap-3">
 							<Field className="flex items-center gap-3">
 								<Checkbox
-									checked={isQuoteScheduled}
-									onChange={setIsQuoteScheduled}
+									checked={isQuoteScheduledField}
+									onChange={value =>
+										setFields({
+											...fields,
+											isQuoteScheduledField: value,
+										})
+									}
 									className={`group flex justify-center items-center size-6 rounded bg-white data-checked:bg-gray-900 border border-gray-400`}
 								>
 									<Check
@@ -217,14 +259,17 @@ const NewQuote = function ({ model }) {
 									{"Display the quote on a specific date"}
 								</Label>
 							</Field>
-							{isQuoteScheduled && (
+							{isQuoteScheduledField && (
 								<input
 									className="p-4 bg-white w-full rounded-lg overflow-clip border border-gray-400"
 									type="date"
 									value={scheduledDateField}
 									min={currentDate}
 									onChange={e =>
-										setScheduledDateField(e.target.value)
+										setFields({
+											...fields,
+											scheduledDateField: e.target.value,
+										})
 									}
 									name="scheduledDate"
 									id="scheduled-date"

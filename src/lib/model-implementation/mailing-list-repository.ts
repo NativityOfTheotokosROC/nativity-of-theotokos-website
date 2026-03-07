@@ -54,6 +54,7 @@ export function useMailingListRepository(): MailingListRepositoryModel {
 							});
 							console.error(error);
 						});
+					break;
 				}
 			}
 		},

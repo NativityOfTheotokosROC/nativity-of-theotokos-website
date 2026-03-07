@@ -22,7 +22,8 @@
 		"metaTitle": "Unauthorized",
 		"title": "Unauthorized",
 		"description": "You are not authorized to access this resource.",
-		"goHome": "Go Home"
+		"goHome": "Go Home",
+		"signOut": "Sign Out"
 	},
 	"maintenance": {
 		"title": "We're working on it...",
@@ -80,6 +81,12 @@
 		"metaTitle": "News",
 		"author": "By",
 		"articleUpdated": "Updated"
+	},
+	"newQuote": {
+		"metaTitle": "New Quote"
+	},
+	"signIn": {
+		"metaTitle": "Sign In"
 	},
 	"dailyReadings": {
 		"noFast": "No Fast Today"

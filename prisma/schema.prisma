@@ -99,6 +99,14 @@ model DailyGalleryImage {
   @@unique([date, imageLink])
 }
 
+model Admin {
+  id    Int    @id @default(autoincrement())
+  email String
+  role  String
+
+  @@unique([email, role])
+}
+
 model ImagePlaceholder {
   imageLink   String @id
   placeholder String

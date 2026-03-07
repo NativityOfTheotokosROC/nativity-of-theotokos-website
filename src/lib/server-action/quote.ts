@@ -3,8 +3,11 @@
 import { toZonedTime } from "date-fns-tz";
 import { NewQuote } from "../model/new-quote";
 import prisma from "../third-party/prisma";
+import { getUser, protect } from "./auth";
 
 export async function addNewQuote(payload: NewQuote) {
+	const user = await getUser();
+	await protect(user);
 	const { englishQuote, russianQuote, scheduledDate } = payload;
 	const { author, quote, source } = englishQuote;
 	const scheduledLocalDate =

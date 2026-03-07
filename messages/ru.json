@@ -81,6 +81,12 @@
 		"author": "Автор:",
 		"articleUpdated": "Обновлено"
 	},
+	"newQuote": {
+		"metaTitle": "New Quote"
+	},
+	"signIn": {
+		"metaTitle": "Sign In"
+	},
 	"dailyReadings": {
 		"noFast": "Сегодня поста нет"
 	},

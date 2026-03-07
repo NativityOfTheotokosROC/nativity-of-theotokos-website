@@ -1,2 +1,6 @@
 import { createAuthClient } from "better-auth/react";
-export const { signIn, useSession, signOut } = createAuthClient();
+import { genericOAuthClient } from "better-auth/client/plugins";
+
+export const { signIn, useSession, signOut } = createAuthClient({
+	plugins: [genericOAuthClient()],
+});

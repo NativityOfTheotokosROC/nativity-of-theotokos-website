@@ -9,6 +9,7 @@ import NotFoundGraphic from "@/public/ui/ornament_35.svg";
 import EnglishIcon from "@/public/ui/english.svg";
 import RussianIcon from "@/public/ui/russian.svg";
 import NativityIcon from "@/public/ui/nativity-icon.jpg";
+import YandexIcon from "@/public/ui/yandex-icon.svg";
 import DailyQuoteGraphic from "@/public/ui/daily-thought.jpg";
 import LiturgicalResourcesGraphic from "@/public/ui/liturgical-resources.jpg";
 import WhatIsOrthodoxyGraphic from "@/public/ui/what-is-orthodoxy.jpg";
@@ -27,6 +28,7 @@ export {
 	EnglishIcon,
 	RussianIcon,
 	NativityIcon,
+	YandexIcon,
 	DailyQuoteGraphic,
 	LiturgicalResourcesGraphic,
 	WhatIsOrthodoxyGraphic,

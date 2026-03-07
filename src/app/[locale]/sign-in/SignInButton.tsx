@@ -1,0 +1,40 @@
+import { YandexIcon } from "@/src/lib/component/miscellaneous/graphic";
+import { SignInButtonModel } from "@/src/lib/model/sign-in-button";
+import { SiGoogle as Google } from "@icons-pack/react-simple-icons";
+import { ModeledVoidComponent } from "@mvc-react/components";
+import { InitializedModel } from "@mvc-react/mvc";
+
+const SignInButton = function ({ model }) {
+	const { modelView, interact } = model;
+	const { signInService, isEnabled } = modelView;
+	const buttonText = `Sign in with`;
+
+	switch (signInService) {
+		case "google": {
+			return (
+				<button
+					className="flex items-center gap-3 p-3 border border-gray-400 bg-gray-800 text-white rounded-lg overflow-clip hover:bg-gray-900 active:bg-gray-950 disabled:opacity-60"
+					disabled={!isEnabled}
+					onClick={() => interact({ type: "SIGN_IN" })}
+				>
+					<Google className="size-6 fill-[#4285F4]" />
+					{`${buttonText} Google`}
+				</button>
+			);
+		}
+		case "yandex": {
+			return (
+				<button
+					className="flex items-center gap-3 p-3 border border-gray-400 bg-gray-800 text-white rounded-lg overflow-clip hover:bg-gray-900 active:bg-gray-950 disabled:opacity-60"
+					disabled={!isEnabled}
+					onClick={() => interact({ type: "SIGN_IN" })}
+				>
+					<YandexIcon className="size-6" />
+					{`${buttonText} Yandex`}
+				</button>
+			);
+		}
+	}
+} satisfies ModeledVoidComponent<InitializedModel<SignInButtonModel>>;
+
+export default SignInButton;

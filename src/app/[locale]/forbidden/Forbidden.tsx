@@ -1,14 +1,16 @@
 "use client";
 
-import { useRouter } from "@/src/i18n/navigation";
 import { ForbiddenGraphic } from "@/src/lib/component/miscellaneous/graphic";
-import { usePageLoadingBarRouter } from "@/src/lib/component/page-loading-bar/navigation";
+import { ForbiddenModel } from "@/src/lib/model/forbidden";
 import { georgia } from "@/src/lib/third-party/fonts";
+import { ModeledVoidComponent } from "@mvc-react/components";
+import { InitializedModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 import { useLayoutEffect } from "react";
 
-export default function Forbidden() {
-	const router = usePageLoadingBarRouter(useRouter);
+const Forbidden = function ({ model }) {
+	const { modelView, interact } = model;
+	const { signOutStatus } = modelView;
 	const t = useTranslations("unauthorized");
 
 	useLayoutEffect(() => {
@@ -21,7 +23,7 @@ export default function Forbidden() {
 			<div className="forbidden-content flex items-center justify-center text-center p-8 py-15 pb-20 grow min-h-max h-full border-t-15 border-[#832C0B]/90">
 				<div className="flex flex-col items-center justify-center gap-6 w-md">
 					<ForbiddenGraphic
-						className="h-64 md:h-48 w-80"
+						className="h-72 md:h-60 w-80"
 						opacity={0.9}
 						fill="#000"
 					/>
@@ -31,16 +33,37 @@ export default function Forbidden() {
 						{t("title")}
 					</span>
 					<span className="text-lg">{t("description")}</span>
-					<button
-						className="text-white rounded-lg bg-[#250203]/82 p-4 w-30 hover:bg-[#250203]/92 active:bg-[#250203]"
-						onClick={() => {
-							router.push("/");
-						}}
-					>
-						{t("goHome")}
-					</button>
+					<div className="flex gap-4">
+						<button
+							className="text-white rounded-lg bg-[#250203]/82 p-4 w-30 hover:bg-[#250203]/92 active:bg-[#250203] disabled:opacity-60"
+							onClick={() => {
+								interact({ type: "GO_HOME" });
+							}}
+						>
+							{t("goHome")}
+						</button>
+						<button
+							className="text-white rounded-lg bg-[#250203]/82 p-4 w-30 hover:bg-[#250203]/92 active:bg-[#250203] disabled:opacity-60"
+							onClick={() => {
+								interact({ type: "SIGN_OUT" });
+							}}
+							disabled={
+								signOutStatus?.type == "pending" ||
+								signOutStatus?.type == "success"
+							}
+						>
+							{t("signOut")}
+						</button>
+					</div>
+					{signOutStatus?.type == "failed" && (
+						<span className="text-sm line-clamp-3 text-red-900">
+							{signOutStatus.message}
+						</span>
+					)}
 				</div>
 			</div>
 		</main>
 	);
-}
+} satisfies ModeledVoidComponent<InitializedModel<ForbiddenModel>>;
+
+export default Forbidden;

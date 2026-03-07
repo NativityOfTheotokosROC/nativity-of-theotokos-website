@@ -49,6 +49,7 @@ export function useNewQuote(quoteCharacterLimit: number) {
 								},
 							}),
 						);
+					break;
 				}
 			}
 		},
