@@ -7,7 +7,7 @@ import prisma from "@/src/lib/third-party/prisma";
 import { User } from "../type/miscellaneous";
 
 export async function isAuthorized(user: User, roles?: string[]) {
-	const record = await prisma.admin.findUnique({
+	const record = await prisma.admin.findFirst({
 		where: {
 			email: user.email,
 			AND: roles ? { role: { in: roles } } : undefined,
