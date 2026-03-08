@@ -1,12 +1,22 @@
+@import "tailwindcss";
+
 :root {
-	--splash-height: 100dvh;
-	--splash-background: #101828;
+	--splash-background: var(--color-gray-900);
+	--logo-color: white;
 }
 
-html:has(.splash) {
+.splash {
+	background-color: var(--splash-background);
+}
+
+.splash .logo-icon {
+	stroke: var(--logo-color);
+}
+
+html:has(.splash[data-fullscreen="true"]) {
 	background: var(--splash-background);
 }
 
-body:has(.splash) {
+body:has(.splash[data-fullscreen="true"]) {
 	overflow: hidden;
 }

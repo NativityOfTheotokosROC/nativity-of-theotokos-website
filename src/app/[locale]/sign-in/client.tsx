@@ -8,6 +8,7 @@ import SignIn from "./SignIn";
 const SignInClient = function ({ model }) {
 	const { endpoint, signInServices } = model.modelView;
 	const signIn = useSignIn(endpoint, signInServices);
+
 	return <SignIn model={signIn} />;
 } satisfies ModeledVoidComponent<SignInClientModel>;
 
