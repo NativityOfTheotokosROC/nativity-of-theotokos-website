@@ -1,5 +1,6 @@
 import { routing } from "@/src/i18n/routing";
 import { ImagePlaceholder } from "@grod56/placeholder";
+import { User as BetterAuthUser } from "better-auth";
 
 export type Navlink = {
 	text: string;
@@ -77,3 +78,5 @@ export type Resource = {
 	link: string;
 	graphic: string;
 };
+
+export type User = Pick<BetterAuthUser, "email" | "name">;

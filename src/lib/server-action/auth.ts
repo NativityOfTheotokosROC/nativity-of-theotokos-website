@@ -1,10 +1,10 @@
 "use server";
 
-import { User } from "better-auth";
 import { headers } from "next/headers";
 import { forbidden, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import prisma from "@/src/lib/third-party/prisma";
+import { User } from "../type/miscellaneous";
 
 export async function isAuthorized(user: User, roles?: string[]) {
 	const record = await prisma.admin.findUnique({
