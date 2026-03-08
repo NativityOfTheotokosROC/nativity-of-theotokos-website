@@ -152,6 +152,7 @@ const NewQuote = function ({ model }) {
 										id="quote-author"
 										required
 										autoCapitalize="words"
+										autoComplete="on"
 										value={authorField}
 										onChange={e =>
 											setFields({
@@ -165,6 +166,7 @@ const NewQuote = function ({ model }) {
 										placeholder="Source (optional)"
 										name="source"
 										id="quote-source"
+										autoComplete="on"
 										value={sourceField}
 										onChange={e =>
 											setFields({
@@ -179,6 +181,7 @@ const NewQuote = function ({ model }) {
 										name="quote"
 										rows={5}
 										id="quote"
+										autoComplete="off"
 										required
 										value={quoteField}
 										onChange={e =>
@@ -199,6 +202,7 @@ const NewQuote = function ({ model }) {
 										name="authorRu"
 										id="quote-author-ru"
 										autoCapitalize="words"
+										autoComplete="on"
 										value={authorRuField}
 										onChange={e =>
 											setFields({
@@ -212,6 +216,7 @@ const NewQuote = function ({ model }) {
 										placeholder="Source (optional)"
 										name="sourceRu"
 										id="quote-source-ru"
+										autoComplete="on"
 										value={sourceRuField}
 										onChange={e =>
 											setFields({
@@ -226,6 +231,7 @@ const NewQuote = function ({ model }) {
 										name="quoteRu"
 										rows={5}
 										id="quote-ru"
+										autoComplete="off"
 										value={quoteRuField}
 										onChange={e =>
 											setFields({

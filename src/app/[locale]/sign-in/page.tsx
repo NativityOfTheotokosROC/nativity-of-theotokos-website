@@ -4,6 +4,8 @@ import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import SignInClient from "./client";
 import { newReadonlyModel } from "@mvc-react/mvc";
+import PageLoading from "@/src/lib/component/page-loading/PageLoading";
+import { Suspense } from "react";
 
 export async function generateMetadata({
 	params,
@@ -23,10 +25,12 @@ export async function generateMetadata({
 
 export default function Page() {
 	return (
-		<SignInClient
-			model={newReadonlyModel({
-				signInServices: ["google", "yandex"],
-			})}
-		/>
+		<Suspense fallback={<PageLoading />}>
+			<SignInClient
+				model={newReadonlyModel({
+					signInServices: ["google", "yandex"],
+				})}
+			/>
+		</Suspense>
 	);
 }
