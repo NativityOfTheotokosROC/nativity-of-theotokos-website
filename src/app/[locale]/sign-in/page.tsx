@@ -21,17 +21,10 @@ export async function generateMetadata({
 	};
 }
 
-export default async function Page({
-	searchParams,
-}: {
-	searchParams: { [key: string]: string | undefined };
-}) {
-	const endpoint = (await searchParams).endpoint;
-
+export default function Page() {
 	return (
 		<SignInClient
 			model={newReadonlyModel({
-				endpoint: endpoint != undefined ? endpoint : "",
 				signInServices: ["google", "yandex"],
 			})}
 		/>
