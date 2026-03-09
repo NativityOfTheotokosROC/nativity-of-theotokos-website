@@ -1,4 +1,5 @@
 import { createToast } from "@/src/lib/component/miscellaneous/utility";
+import Spinner from "@/src/lib/component/spinner/Spinner";
 import { NewQuoteModel } from "@/src/lib/model/new-quote";
 import { georgia } from "@/src/lib/third-party/fonts";
 import {
@@ -12,7 +13,7 @@ import {
 	TabPanels,
 } from "@headlessui/react";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { InitializedModel } from "@mvc-react/mvc";
+import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { formatInTimeZone, toZonedTime } from "date-fns-tz";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -83,7 +84,7 @@ const NewQuote = function ({ model }) {
 		<main className="new-quote bg-[#FEF8F3] text-black border-t-15 border-t-[#976029]">
 			<div className="new-quote-content flex flex-col gap-6 p-8 py-9 lg:px-20 md:py-10">
 				<span
-					className={`text-[2.75rem]/tight w-3/4 mb-2 font-semibold md:text-black md:w-1/2 ${georgia.className}`}
+					className={`text-[2.75rem]/tight mb-2 font-semibold md:text-black md:w-1/2 ${georgia.className}`}
 				>
 					{t("title")}
 					<hr className="mt-4 mb-0 md:w-full" />
@@ -287,20 +288,29 @@ const NewQuote = function ({ model }) {
 						<div className="flex mt-2 gap-3 justify-start w-full">
 							<button
 								type="button"
-								className="bg-[#513433] text-white p-4 w-[8em] rounded-lg hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
-								onClick={async () => {}}
+								className="bg-[#513433] text-white p-4 min-w-[8em] w-fit max-w-1/2 rounded-lg hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
+								onClick={() => {}}
 								disabled
 							>
 								{t("preview")}
 							</button>
 							<button
 								type="submit"
-								className="bg-[#513433] text-white p-4 w-[8em] rounded-lg hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
+								className="bg-[#513433] text-white p-4 min-w-[8em] w-fit max-w-1/2 rounded-lg hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
 								disabled={
 									newQuoteNotification?.type == "pending"
 								}
 							>
-								{t("addQuote")}
+								{newQuoteNotification?.type == "pending" ? (
+									<Spinner
+										model={newReadonlyModel({
+											color: "white",
+											size: 24,
+										})}
+									/>
+								) : (
+									t("addQuote")
+								)}
 							</button>
 						</div>
 					</div>

@@ -8,13 +8,13 @@ import { useTranslations } from "next-intl";
 
 const SignIn = function ({ model }) {
 	const { modelView, interact } = model;
-	const { signInStatus, signInServices } = modelView;
+	const { signInStatus, signInServices, selectedService } = modelView;
 	const t = useTranslations("signIn");
 
 	return (
 		<main className="sign-in bg-[#FEF8F3] text-black border-t-15 border-t-red-900">
 			<motion.div
-				initial={{ opacity: 0, y: 10 }}
+				initial={{ opacity: 0, y: 20 }}
 				animate={{
 					opacity: 1,
 					y: 0,
@@ -24,7 +24,7 @@ const SignIn = function ({ model }) {
 				className="sign-in-content flex flex-col min-h-[70lvh] gap-6 p-8 py-9 lg:px-20 md:py-10"
 			>
 				<span
-					className={`text-[2.75rem]/tight w-3/4 mb-2 font-semibold md:text-black md:w-1/2 ${georgia.className}`}
+					className={`text-[2.75rem]/tight mb-2 font-semibold md:text-black md:w-1/2 ${georgia.className}`}
 				>
 					{t("title")}
 					<hr className="mt-4 mb-0 md:w-full" />
@@ -42,6 +42,7 @@ const SignIn = function ({ model }) {
 											signInStatus?.type == "pending" ||
 											signInStatus?.type == "success"
 										),
+										isSelected: service == selectedService,
 									},
 									interact: interaction => {
 										switch (interaction.type) {
@@ -63,7 +64,7 @@ const SignIn = function ({ model }) {
 				{(signInStatus?.type == "success" ||
 					signInStatus?.type == "failed") && (
 					<span
-						className={`text-sm/tight line-clamp-3 ${signInStatus.type == "failed" && "text-red-900"}`}
+						className={`mt-3 text-sm/tight line-clamp-3 ${signInStatus.type == "failed" && "text-red-900"}`}
 					>
 						{signInStatus.message}
 					</span>

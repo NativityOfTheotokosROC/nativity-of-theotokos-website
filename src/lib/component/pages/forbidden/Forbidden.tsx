@@ -4,9 +4,10 @@ import { ForbiddenGraphic } from "@/src/lib/component/miscellaneous/graphic";
 import { ForbiddenModel } from "@/src/lib/model/forbidden";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { InitializedModel } from "@mvc-react/mvc";
+import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 import { useLayoutEffect } from "react";
+import Spinner from "../../spinner/Spinner";
 
 const Forbidden = function ({ model }) {
 	const { modelView, interact } = model;
@@ -52,7 +53,16 @@ const Forbidden = function ({ model }) {
 								signOutStatus?.type == "success"
 							}
 						>
-							{t("signOut")}
+							{signOutStatus?.type == "pending" ? (
+								<Spinner
+									model={newReadonlyModel({
+										color: "white",
+										size: 24,
+									})}
+								/>
+							) : (
+								t("signOut")
+							)}
 						</button>
 					</div>
 					{signOutStatus?.type == "failed" && (

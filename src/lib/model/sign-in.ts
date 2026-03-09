@@ -9,6 +9,7 @@ export type SignInStatus =
 export interface SignInModelView {
 	signInServices: SignInService[];
 	signInStatus: SignInStatus | null;
+	selectedService: SignInService | null;
 }
 
 export type SignInModelInteraction = InputModelInteraction<

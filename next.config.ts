@@ -39,6 +39,9 @@ const nextConfig: NextConfig = {
 				rule.test?.test?.(".svg"),
 		);
 
+		// Modify the file loader rule to ignore *.svg, since we have it handled now.
+		fileLoaderRule.exclude = /\.svg$/i;
+
 		config.module.rules.push(
 			// Reapply the existing rule, but only for svg imports ending in ?url
 			{
@@ -56,9 +59,6 @@ const nextConfig: NextConfig = {
 				use: ["@svgr/webpack"],
 			},
 		);
-
-		// Modify the file loader rule to ignore *.svg, since we have it handled now.
-		fileLoaderRule.exclude = /\.svg$/i;
 
 		return config;
 	},

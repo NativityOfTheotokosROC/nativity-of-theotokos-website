@@ -40,14 +40,13 @@ export function languageToggleVIInterface(
 					);
 					const newAlternateLanguage =
 						alternateLanguage == "en" ? "ru" : "en";
-					const promise = new Promise<LanguageToggleModelView>(
-						resolve =>
-							localeChangeEmitter.on("locale-change", () => {
-								resolve({
-									alternateLanguage: newAlternateLanguage,
-								});
-							}),
-					);
+					const { promise, resolve } =
+						Promise.withResolvers<LanguageToggleModelView>();
+					localeChangeEmitter.on("locale-change", () => {
+						resolve({
+							alternateLanguage: newAlternateLanguage,
+						});
+					});
 					return await promise;
 				}
 			}

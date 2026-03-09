@@ -9,17 +9,21 @@ import {
 import { signIn } from "../third-party/better-auth";
 import { ErrorContext } from "better-auth/react";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 	const notifier = useNewStatefulInteractiveModel(
 		notifierVIInterface<SignInStatus>(),
 	);
+	const [selectedService, setSelectedService] =
+		useState<SignInService | null>(null);
 	const t = useTranslations("signIn");
 
 	return {
 		modelView: {
 			signInServices,
 			signInStatus: notifier.modelView?.notification ?? null,
+			selectedService,
 		},
 		interact: async function (interaction: SignInModelInteraction) {
 			switch (interaction.type) {
@@ -27,6 +31,7 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 					const { signInService } = interaction.input;
 					const callbacks = (serviceName: string) => ({
 						onRequest: async () => {
+							setSelectedService(signInService);
 							await notifier.interact({
 								type: "NOTIFY",
 								input: {
@@ -51,6 +56,7 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 							});
 						},
 						onError: async (context: ErrorContext) => {
+							setSelectedService(null);
 							await notifier.interact({
 								type: "NOTIFY",
 								input: {

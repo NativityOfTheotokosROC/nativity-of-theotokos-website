@@ -22,6 +22,10 @@ export function useForbidden(
 					break;
 				}
 				case "SIGN_OUT": {
+					await notifier.interact({
+						type: "NOTIFY",
+						input: { notification: { type: "pending" } },
+					});
 					await signOut().then(async response => {
 						if (response.error)
 							return notifier.interact({
@@ -41,6 +45,7 @@ export function useForbidden(
 							input: { notification: { type: "success" } },
 						});
 						router.push(signOutPath ?? "/");
+						router.refresh();
 					});
 					break;
 				}

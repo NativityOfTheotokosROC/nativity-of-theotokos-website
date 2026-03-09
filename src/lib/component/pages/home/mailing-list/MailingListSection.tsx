@@ -3,6 +3,8 @@ import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
+import Spinner from "../../../spinner/Spinner";
+import { newReadonlyModel } from "@mvc-react/mvc";
 
 const MailingListSection = function ({ model }) {
 	const t = useTranslations("mailingList");
@@ -51,13 +53,22 @@ const MailingListSection = function ({ model }) {
 									autoComplete="email"
 								/>
 								<button
-									className={`p-4 min-w-fit w-fit h-full md:w-[8em] bg-gray-600 text-white text-center disabled:bg-gray-400 hover:bg-gray-700 active:bg-gray-950`}
+									className={`p-4 min-w-fit w-[10em] h-full md:w-[8em] bg-gray-600 text-white text-center disabled:bg-gray-400 hover:bg-gray-700 active:bg-gray-950`}
 									type="submit"
 									disabled={
 										mailingListStatus?.type == "pending"
 									}
 								>
-									{t("mailingListButton")}
+									{mailingListStatus?.type == "pending" ? (
+										<Spinner
+											model={newReadonlyModel({
+												color: "white",
+												size: 24,
+											})}
+										/>
+									) : (
+										t("mailingListButton")
+									)}
 								</button>
 							</div>
 						</form>

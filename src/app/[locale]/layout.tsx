@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import ClientProviders from "../../lib/component/miscellaneous/client-providers";
+import ClientProviders from "@/src/lib/provider/client-providers";
 import { FooterModel } from "@/src/lib/model/footer";
 import {
 	googleSansFlex,

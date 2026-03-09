@@ -100,7 +100,7 @@
 	"signIn": {
 		"metaTitle": "Sign In",
 		"title": "Sign In",
-		"description": "Sign in to the website to access admin resources",
+		"description": "Sign in to the website to access admin resources.",
 		"successMessage": "Redirecting you to {serviceName} sign-in shortly. Please wait...",
 		"failureMessage": "Could not connect to {serviceName} sign-in:"
 	},
