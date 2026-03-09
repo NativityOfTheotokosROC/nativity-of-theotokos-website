@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import NotFoundPage from "./not-found-page/NotFoundPage";
+import NotFoundPage from "@/src/lib/component/pages/not-found/NotFound";
 import { routing } from "@/src/i18n/routing";
 import { hasLocale } from "next-intl";
 

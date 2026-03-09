@@ -15,6 +15,7 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
 import { formatInTimeZone, toZonedTime } from "date-fns-tz";
 import { Check } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 type NewQuoteFields = {
@@ -48,6 +49,7 @@ function getDefaultFields() {
 
 const NewQuote = function ({ model }) {
 	const currentDate = getCurrentDate();
+	const t = useTranslations("newQuote");
 	const { modelView, interact } = model;
 	const { newQuoteNotification } = modelView;
 	const [fields, setFields] = useState<NewQuoteFields>(getDefaultFields());
@@ -83,7 +85,7 @@ const NewQuote = function ({ model }) {
 				<span
 					className={`text-[2.75rem]/tight w-3/4 mb-2 font-semibold md:text-black md:w-1/2 ${georgia.className}`}
 				>
-					{"New Quote"}
+					{t("title")}
 					<hr className="mt-4 mb-0 md:w-full" />
 				</span>
 				<form
@@ -131,13 +133,13 @@ const NewQuote = function ({ model }) {
 									className="flex items-center p-4 py-2 text-sm uppercase border-b-5 border-gray-300 data-selected:border-gray-900 data-hover:border-gray-600 focus:outline-none"
 									as={"button"}
 								>
-									English
+									{t("english")}
 								</Tab>
 								<Tab
 									className="flex items-center p-4 py-2 text-sm uppercase border-b-5 border-gray-300 data-selected:border-gray-900 data-hover:border-gray-600 focus:outline-none"
 									as={"button"}
 								>
-									Russian
+									{t("russian")}
 								</Tab>
 							</TabList>
 							<TabPanels>
@@ -147,7 +149,7 @@ const NewQuote = function ({ model }) {
 								>
 									<input
 										className="p-4 bg-white w-full rounded-lg overflow-clip border border-gray-400"
-										placeholder="Author"
+										placeholder={t("author")}
 										name="author"
 										id="quote-author"
 										required
@@ -163,7 +165,7 @@ const NewQuote = function ({ model }) {
 									/>
 									<input
 										className="p-4 bg-white w-full rounded-lg overflow-clip border border-gray-400"
-										placeholder="Source (optional)"
+										placeholder={`${t("source")} (${t("optional")})`}
 										name="source"
 										id="quote-source"
 										autoComplete="on"
@@ -177,7 +179,7 @@ const NewQuote = function ({ model }) {
 									/>
 									<textarea
 										className="p-4 bg-white w-full rounded-lg border border-gray-400"
-										placeholder="Quote"
+										placeholder={t("quote")}
 										name="quote"
 										rows={5}
 										id="quote"
@@ -198,7 +200,7 @@ const NewQuote = function ({ model }) {
 								>
 									<input
 										className="p-4 bg-white w-full rounded-lg overflow-clip border border-gray-400"
-										placeholder="Author (optional)"
+										placeholder={`${t("author")} (${t("optional")})`}
 										name="authorRu"
 										id="quote-author-ru"
 										autoCapitalize="words"
@@ -213,7 +215,7 @@ const NewQuote = function ({ model }) {
 									/>
 									<input
 										className="p-4 bg-white w-full rounded-lg overflow-clip border border-gray-400"
-										placeholder="Source (optional)"
+										placeholder={`${t("source")} (${t("optional")})`}
 										name="sourceRu"
 										id="quote-source-ru"
 										autoComplete="on"
@@ -227,7 +229,7 @@ const NewQuote = function ({ model }) {
 									/>
 									<textarea
 										className="p-4 bg-white w-full rounded-lg border border-gray-400"
-										placeholder="Quote (optional)"
+										placeholder={`${t("quote")} (${t("optional")})`}
 										name="quoteRu"
 										rows={5}
 										id="quote-ru"
@@ -261,9 +263,7 @@ const NewQuote = function ({ model }) {
 										}
 									/>
 								</Checkbox>
-								<Label>
-									{"Display the quote on a specific date"}
-								</Label>
+								<Label>{t("schedulerCheckLabel")}</Label>
 							</Field>
 							{isQuoteScheduledField && (
 								<input
@@ -291,16 +291,16 @@ const NewQuote = function ({ model }) {
 								onClick={async () => {}}
 								disabled
 							>
-								Preview
+								{t("preview")}
 							</button>
 							<button
 								type="submit"
-								className="bg-[#513433] text-white p-4 w-[8em] rounded-lg hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/30"
+								className="bg-[#513433] text-white p-4 w-[8em] rounded-lg hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
 								disabled={
 									newQuoteNotification?.type == "pending"
 								}
 							>
-								Add Quote
+								{t("addQuote")}
 							</button>
 						</div>
 					</div>

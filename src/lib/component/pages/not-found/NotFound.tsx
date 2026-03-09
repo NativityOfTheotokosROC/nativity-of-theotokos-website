@@ -27,7 +27,7 @@ export async function generateMetadata({
 	};
 }
 
-export default function NotFoundPage() {
+export default function NotFound() {
 	const router = usePageLoadingBarRouter(useRouter);
 	const pageLoadingBar = useContext(PageLoadingBarContext);
 	const t = useTranslations("notFound");

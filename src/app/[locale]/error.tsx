@@ -8,7 +8,7 @@ import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { useContext, useEffect } from "react";
-import ErrorPage from "./error-page/ErrorPage";
+import Error from "@/src/lib/component/pages/error/Error";
 
 export async function generateMetadata({
 	params,
@@ -34,7 +34,7 @@ export default function Page({
 }) {
 	const message = error.digest ? `digest: ${error.digest}` : error.message;
 	const pageLoadingBar = useContext(PageLoadingBarContext);
-	const { modelView: errorPageModelView, interact: errorPageInteract } =
+	const { modelView: errorModelView, interact: errorInteract } =
 		useInitializedStatefulInteractiveModel(
 			errorPageVIInterface(() => {
 				window.location.reload();
@@ -43,15 +43,15 @@ export default function Page({
 		);
 
 	useEffect(() => {
-		if (message != errorPageModelView.message)
-			errorPageInteract({ type: "REPORT_ERROR", input: { message } });
-	}, [errorPageInteract, errorPageModelView.message, message]);
+		if (message != errorModelView.message)
+			errorInteract({ type: "REPORT_ERROR", input: { message } });
+	}, [errorInteract, errorModelView.message, message]);
 
 	return (
-		<ErrorPage
+		<Error
 			model={{
-				modelView: errorPageModelView,
-				interact: errorPageInteract,
+				modelView: errorModelView,
+				interact: errorInteract,
 			}}
 		/>
 	);

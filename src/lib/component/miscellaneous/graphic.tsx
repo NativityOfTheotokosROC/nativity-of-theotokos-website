@@ -1,20 +1,20 @@
-import LogoIcon from "@/public/ui/logo-icon.svg";
-import ReadingsOrnament from "@/public/ui/ornament_1.svg";
-import LatestNewsOrnament from "@/public/ui/ornament_11.svg";
-import HymnsOrnament from "@/public/ui/ornament_9.svg";
-import FeaturedItemOrnament from "@/public/ui/ornament_12.svg";
-import ForbiddenGraphic from "@/public/ui/icon-3.svg";
-import MaintenanceGraphic from "@/public/ui/ornament_36.svg";
-import NotFoundGraphic from "@/public/ui/ornament_35.svg";
-import EnglishIcon from "@/public/ui/english.svg";
-import RussianIcon from "@/public/ui/russian.svg";
-import NativityIcon from "@/public/ui/nativity-icon.jpg";
-import YandexIcon from "@/public/ui/yandex-icon.svg";
-import DailyQuoteGraphic from "@/public/ui/daily-thought.jpg";
-import LiturgicalResourcesGraphic from "@/public/ui/liturgical-resources.jpg";
-import WhatIsOrthodoxyGraphic from "@/public/ui/what-is-orthodoxy.jpg";
-import AboutOurParishGraphic from "@/public/ui/about-our-parish.jpg";
-import ResourcesBorder from "@/public/ui/border-8.jpg";
+import LogoIcon from "@/public/assets/logo-icon.svg";
+import ReadingsOrnament from "@/public/assets/ornament_1.svg";
+import LatestNewsOrnament from "@/public/assets/ornament_11.svg";
+import HymnsOrnament from "@/public/assets/ornament_9.svg";
+import FeaturedItemOrnament from "@/public/assets/ornament_12.svg";
+import ForbiddenGraphic from "@/public/assets/icon-3.svg";
+import MaintenanceGraphic from "@/public/assets/ornament_36.svg";
+import NotFoundGraphic from "@/public/assets/ornament_35.svg";
+import EnglishIcon from "@/public/assets/english.svg";
+import RussianIcon from "@/public/assets/russian.svg";
+import NativityIcon from "@/public/assets/nativity-icon.jpg";
+import YandexIcon from "@/public/assets/yandex-icon.svg";
+import DailyQuoteGraphic from "@/public/assets/daily-thought.jpg";
+import LiturgicalResourcesGraphic from "@/public/assets/liturgical-resources.jpg";
+import WhatIsOrthodoxyGraphic from "@/public/assets/what-is-orthodoxy.jpg";
+import AboutOurParishGraphic from "@/public/assets/about-our-parish.jpg";
+import ResourcesBorder from "@/public/assets/border-8.jpg";
 
 export {
 	LogoIcon,

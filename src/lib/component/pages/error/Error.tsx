@@ -9,7 +9,7 @@ import { CloudAlert } from "lucide-react";
 import { useLayoutEffect } from "react";
 import { InitializedModel } from "@mvc-react/mvc";
 
-const ErrorPage = function ({ model }) {
+const Error = function ({ model }) {
 	const { modelView, interact } = model;
 	const { message } = modelView;
 	const t = useTranslations("error");
@@ -52,4 +52,4 @@ const ErrorPage = function ({ model }) {
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ErrorPageModel>>;
 
-export default ErrorPage;
+export default Error;

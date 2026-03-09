@@ -3,11 +3,12 @@ import { SignInButtonModel } from "@/src/lib/model/sign-in-button";
 import { SiGoogle as Google } from "@icons-pack/react-simple-icons";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
+import { useTranslations } from "next-intl";
 
 const SignInButton = function ({ model }) {
 	const { modelView, interact } = model;
 	const { signInService, isEnabled } = modelView;
-	const buttonText = `Sign in with`;
+	const t = useTranslations("signInButton");
 
 	switch (signInService) {
 		case "google": {
@@ -18,7 +19,7 @@ const SignInButton = function ({ model }) {
 					onClick={() => interact({ type: "SIGN_IN" })}
 				>
 					<Google className="size-6 fill-[#4285F4]" />
-					{`${buttonText} Google`}
+					{t("buttonText", { serviceName: "Google" })}
 				</button>
 			);
 		}
@@ -30,7 +31,7 @@ const SignInButton = function ({ model }) {
 					onClick={() => interact({ type: "SIGN_IN" })}
 				>
 					<YandexIcon className="size-6" />
-					{`${buttonText} Yandex`}
+					{t("buttonText", { serviceName: "Yandex" })}
 				</button>
 			);
 		}

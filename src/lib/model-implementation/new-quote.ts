@@ -7,11 +7,14 @@ import {
 import { addNewQuote } from "../server-action/quote";
 import { notifierVIInterface } from "./notifier";
 import { InitializedModel } from "@mvc-react/mvc";
+import { useTranslations } from "next-intl";
 
 export function useNewQuote(quoteCharacterLimit: number) {
 	const notifier = useNewStatefulInteractiveModel(
 		notifierVIInterface<NewQuoteNotification>(),
 	);
+	const t = useTranslations("newQuote");
+
 	return {
 		modelView: {
 			newQuoteNotification: notifier.modelView?.notification ?? null,
@@ -33,7 +36,7 @@ export function useNewQuote(quoteCharacterLimit: number) {
 								input: {
 									notification: {
 										type: "success",
-										text: "Quote successfully added",
+										text: t("successMessage"),
 									},
 								},
 							}),
@@ -44,7 +47,7 @@ export function useNewQuote(quoteCharacterLimit: number) {
 								input: {
 									notification: {
 										type: "failure",
-										message: `Could not add the quote. Error: ${reason} `,
+										message: `${t("failureMessage")} ${reason} `,
 									},
 								},
 							}),

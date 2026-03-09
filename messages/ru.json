@@ -22,7 +22,8 @@
 		"metaTitle": "Нет доступа",
 		"title": "Нет доступа",
 		"description": "У вас нет прав для доступа к этому ресурсу.",
-		"goHome": "На главную"
+		"goHome": "На главную",
+		"signOut": "Выйти"
 	},
 	"maintenance": {
 		"title": "Мы работаем над этим...",
@@ -82,10 +83,29 @@
 		"articleUpdated": "Обновлено"
 	},
 	"newQuote": {
-		"metaTitle": "New Quote"
+		"metaTitle": "Новая цитата",
+		"title": "Новая цитата",
+		"english": "Английский",
+		"russian": "Русский",
+		"author": "Автор",
+		"source": "Источник",
+		"quote": "Цитата",
+		"optional": "необязательно",
+		"schedulerCheckLabel": "Показывать цитату в определённую дату",
+		"preview": "Предпросмотр",
+		"addQuote": "Добавить цитату",
+		"successMessage": "Цитата успешно добавлена",
+		"failureMessage": "Не удалось добавить цитату. Ошибка:"
 	},
 	"signIn": {
-		"metaTitle": "Sign In"
+		"metaTitle": "Вход",
+		"title": "Вход",
+		"description": "Войдите на сайт, чтобы получить доступ к административным ресурсам",
+		"successMessage": "Скоро вы будете перенаправлены на страницу входа {serviceName}. Пожалуйста, подождите...",
+		"failureMessage": "Не удалось подключиться к входу через {serviceName}:"
+	},
+	"signInButton": {
+		"buttonText": "Войти через {serviceName}"
 	},
 	"dailyReadings": {
 		"noFast": "Сегодня поста нет"

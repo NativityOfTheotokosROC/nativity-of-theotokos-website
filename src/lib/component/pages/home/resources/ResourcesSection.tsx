@@ -1,6 +1,6 @@
 import { ResourcesSectionModel } from "@/src/lib/model/resources-section";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import ResourceWidget from "../../../../lib/component/resource-widget/ResourceWidget";
+import ResourceWidget from "../../../resource-widget/ResourceWidget";
 import { ResourcesBorder } from "@/src/lib/component/miscellaneous/graphic";
 import { newReadonlyModel } from "@mvc-react/mvc";
 

@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 import { routing } from "@/src/i18n/routing";
 import { hasLocale } from "next-intl";
-import ForbiddenClient from "./forbidden/client";
+import ForbiddenClient from "../../lib/component/pages/forbidden/client";
 import { newReadonlyModel } from "@mvc-react/mvc";
 
 export async function generateMetadata({

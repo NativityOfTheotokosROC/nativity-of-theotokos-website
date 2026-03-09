@@ -83,10 +83,29 @@
 		"articleUpdated": "Updated"
 	},
 	"newQuote": {
-		"metaTitle": "New Quote"
+		"metaTitle": "New Quote",
+		"title": "New Quote",
+		"english": "English",
+		"russian": "Russian",
+		"author": "Author",
+		"source": "Source",
+		"quote": "Quote",
+		"optional": "optional",
+		"schedulerCheckLabel": "Display the quote on a specific date",
+		"preview": "Preview",
+		"addQuote": "Add Quote",
+		"successMessage": "Quote successfully added",
+		"failureMessage": "Could not add the quote. Error:"
 	},
 	"signIn": {
-		"metaTitle": "Sign In"
+		"metaTitle": "Sign In",
+		"title": "Sign In",
+		"description": "Sign in to the website to access admin resources",
+		"successMessage": "Redirecting you to {serviceName} sign-in shortly. Please wait...",
+		"failureMessage": "Could not connect to {serviceName} sign-in:"
+	},
+	"signInButton": {
+		"buttonText": "Sign in with {serviceName}"
 	},
 	"dailyReadings": {
 		"noFast": "No Fast Today"

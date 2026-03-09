@@ -58,7 +58,7 @@ const HeroSection = function ({ model }) {
 					transition={{ ease: "easeOut" }}
 					className={`hero-icon md:flex md:w-1/2 hidden justify-center items-center`}
 				>
-					<Link href={"/ui/nativity-icon.jpg"} target="_blank">
+					<Link href={"/assets/nativity-icon.jpg"} target="_blank">
 						<Image
 							className="h-[21.333em] w-[16em] hover:cursor-pointer hover:scale-[1.03] active:scale-[1.03] transition ease-out duration-200"
 							src={NativityIcon}

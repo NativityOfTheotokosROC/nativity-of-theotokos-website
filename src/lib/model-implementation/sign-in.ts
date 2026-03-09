@@ -8,11 +8,14 @@ import {
 } from "../model/sign-in";
 import { signIn } from "../third-party/better-auth";
 import { ErrorContext } from "better-auth/react";
+import { useTranslations } from "next-intl";
 
 export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 	const notifier = useNewStatefulInteractiveModel(
 		notifierVIInterface<SignInStatus>(),
 	);
+	const t = useTranslations("signIn");
+
 	return {
 		modelView: {
 			signInServices,
@@ -40,7 +43,9 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 								input: {
 									notification: {
 										type: "success",
-										message: `Redirecting you to ${serviceName} sign-in shortly. Please wait...`,
+										message: t("successMessage", {
+											serviceName: serviceName,
+										}),
 									},
 								},
 							});
@@ -51,7 +56,7 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 								input: {
 									notification: {
 										type: "failed",
-										message: `Could not connect to ${serviceName} sign-in: ${context.error.message}`,
+										message: `${t("failureMessage", { serviceName: serviceName })} ${context.error.message}`,
 									},
 								},
 							});

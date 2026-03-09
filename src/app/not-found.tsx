@@ -1,7 +1,7 @@
 import "./globals.css";
 
 import { NextIntlClientProvider } from "next-intl";
-import NotFoundPage from "./[locale]/not-found-page/NotFoundPage";
+import NotFound from "../lib/component/pages/not-found/NotFound";
 import { Google_Sans_Flex } from "next/font/google";
 import { Metadata } from "next";
 
@@ -23,7 +23,7 @@ export default function NotFound() {
 				suppressHydrationWarning
 			>
 				<NextIntlClientProvider>
-					<NotFoundPage />
+					<NotFound />
 				</NextIntlClientProvider>
 			</body>
 		</html>
