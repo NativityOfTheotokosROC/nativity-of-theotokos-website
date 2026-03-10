@@ -84,7 +84,7 @@ const NewQuote = function ({ model }) {
 		<main className="new-quote bg-[#FEF8F3] text-black border-t-15 border-t-[#976029]">
 			<div className="new-quote-content flex flex-col gap-6 p-8 py-9 lg:px-20 md:py-10">
 				<span
-					className={`text-[2.75rem]/tight mb-2 font-semibold md:text-black md:w-3/4 lg:w-6/10 ${georgia.className}`}
+					className={`text-[2.75rem]/tight mb-2 font-semibold md:text-black ${georgia.className}`}
 				>
 					{t("title")}
 					<hr className="mt-4 mb-0 md:w-full" />
@@ -127,7 +127,7 @@ const NewQuote = function ({ model }) {
 						});
 					}}
 				>
-					<div className="flex flex-col md:w-1/2 gap-6">
+					<div className="flex flex-col md:w-3/4 lg:w-6/10 gap-6">
 						<TabGroup className="flex flex-col gap-6">
 							<TabList className="flex gap-1 items-center">
 								<Tab
