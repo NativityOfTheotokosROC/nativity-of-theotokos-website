@@ -22,8 +22,14 @@ export async function generateMetadata({
 		title: t("metaTitle"),
 	};
 }
-export default async function Page() {
-	return <Suspense fallback={<PageLoading />}>
-		{await getProtectedResource(() => <NewQuoteClient />, "quotes/new")}
-	</Suspense>
+export default function Page() {
+    return (
+		<Suspense fallback={<PageLoading />}>
+		    <Protected />
+		</Suspense>
+	)
+}
+
+async function Protected() {
+    return await getProtectedResource(() => <NewQuoteClient />, "quotes/new")
 }
