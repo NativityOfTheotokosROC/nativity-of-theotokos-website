@@ -4,6 +4,8 @@ import { getProtectedResource } from "@/src/lib/server-action/auth";
 import { routing } from "@/src/i18n/routing";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
+import PageLoading from "@/src/lib/component/page-loading/PageLoading";
 
 export async function generateMetadata({
 	params,
@@ -21,5 +23,7 @@ export async function generateMetadata({
 	};
 }
 export default async function Page() {
-	return await getProtectedResource(() => <NewQuoteClient />, "quotes/new");
+	return <Suspense fallback={<PageLoading />}>
+		{await getProtectedResource(() => <NewQuoteClient />, "quotes/new")}
+	</Suspense>
 }
