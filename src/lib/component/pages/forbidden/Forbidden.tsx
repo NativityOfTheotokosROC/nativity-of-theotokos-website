@@ -36,7 +36,7 @@ const Forbidden = function ({ model }) {
 					<span className="text-lg">{t("description")}</span>
 					<div className="flex gap-4">
 						<button
-							className="text-white rounded-lg bg-[#250203]/82 p-4 w-30 hover:bg-[#250203]/92 active:bg-[#250203] disabled:opacity-60"
+							className="text-white rounded-lg bg-[#250203]/82 p-4 w-30 hover:bg-[#250203]/92 active:bg-[#250203] disabled:opacity-72"
 							onClick={() => {
 								interact({ type: "GO_HOME" });
 							}}
@@ -44,7 +44,7 @@ const Forbidden = function ({ model }) {
 							{t("goHome")}
 						</button>
 						<button
-							className="text-white rounded-lg bg-[#250203]/82 p-4 w-30 hover:bg-[#250203]/92 active:bg-[#250203] disabled:opacity-60"
+							className="flex justify-center items-center text-white rounded-lg bg-[#250203]/82 p-4 w-30 hover:bg-[#250203]/92 active:bg-[#250203] disabled:opacity-72"
 							onClick={() => {
 								interact({ type: "SIGN_OUT" });
 							}}
@@ -57,7 +57,7 @@ const Forbidden = function ({ model }) {
 								<Spinner
 									model={newReadonlyModel({
 										color: "white",
-										size: 24,
+										size: 20,
 									})}
 								/>
 							) : (

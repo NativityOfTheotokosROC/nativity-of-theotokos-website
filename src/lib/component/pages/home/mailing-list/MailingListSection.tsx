@@ -53,7 +53,7 @@ const MailingListSection = function ({ model }) {
 									autoComplete="email"
 								/>
 								<button
-									className={`p-4 min-w-fit w-[10em] h-full md:w-[8em] bg-gray-600 text-white text-center disabled:bg-gray-400 hover:bg-gray-700 active:bg-gray-950`}
+									className={`flex justify-center items-center p-4 min-w-fit w-[9em] h-full md:w-[8em] bg-gray-600 text-white text-center disabled:bg-gray-400 hover:bg-gray-700 active:bg-gray-950`}
 									type="submit"
 									disabled={
 										mailingListStatus?.type == "pending"
@@ -63,7 +63,7 @@ const MailingListSection = function ({ model }) {
 										<Spinner
 											model={newReadonlyModel({
 												color: "white",
-												size: 24,
+												size: 20,
 											})}
 										/>
 									) : (

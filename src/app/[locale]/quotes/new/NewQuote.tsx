@@ -127,7 +127,7 @@ const NewQuote = function ({ model }) {
 						});
 					}}
 				>
-					<div className="flex flex-col gap-6">
+					<div className="flex flex-col md:w-1/2 gap-6">
 						<TabGroup className="flex flex-col gap-6">
 							<TabList className="flex gap-1 items-center">
 								<Tab
@@ -145,7 +145,7 @@ const NewQuote = function ({ model }) {
 							</TabList>
 							<TabPanels>
 								<TabPanel
-									className="flex flex-col gap-4"
+									className="flex flex-col gap-3"
 									unmount={false}
 								>
 									<input
@@ -284,8 +284,8 @@ const NewQuote = function ({ model }) {
 								/>
 							)}
 						</div>
-						<hr className="w-full mt-2" />
-						<div className="flex mt-2 gap-3 justify-start w-full">
+						<hr className="w-full mt-1" />
+						<div className="flex mt-1 gap-3 justify-start w-full">
 							<button
 								type="button"
 								className="bg-[#513433] text-white p-4 min-w-[8em] w-fit max-w-1/2 rounded-lg hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
@@ -296,7 +296,7 @@ const NewQuote = function ({ model }) {
 							</button>
 							<button
 								type="submit"
-								className="bg-[#513433] text-white p-4 min-w-[8em] w-fit max-w-1/2 rounded-lg hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
+								className="flex justify-center items-center bg-[#513433] text-white p-4 min-w-[8em] w-fit max-w-1/2 rounded-lg hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
 								disabled={
 									newQuoteNotification?.type == "pending"
 								}
@@ -305,7 +305,7 @@ const NewQuote = function ({ model }) {
 									<Spinner
 										model={newReadonlyModel({
 											color: "white",
-											size: 24,
+											size: 20,
 										})}
 									/>
 								) : (
