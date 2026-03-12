@@ -22,31 +22,34 @@ export function useForbidden(
 					break;
 				}
 				case "SIGN_OUT": {
-					await notifier.interact({
-						type: "NOTIFY",
-						input: { notification: { type: "pending" } },
-					});
-					await signOut().then(async response => {
-						if (response.error)
-							return notifier.interact({
+					await notifier
+						.interact({
+							type: "NOTIFY",
+							input: { notification: { type: "pending" } },
+						})
+						.then(() => signOut())
+						.then(async response => {
+							if (response.error)
+								return notifier.interact({
+									type: "NOTIFY",
+									input: {
+										notification: {
+											type: "failed",
+											message:
+												response.error.message ??
+												response.error.statusText,
+										},
+									},
+								});
+							await notifier.interact({
 								type: "NOTIFY",
 								input: {
-									notification: {
-										type: "failed",
-										message:
-											response.error.message ??
-											response.error.statusText,
-									},
+									notification: { type: "success" },
 								},
 							});
-						// TODO: Tweak mvc-react
-						await notifier.interact({
-							type: "NOTIFY",
-							input: { notification: { type: "success" } },
+							router.push(signOutPath ?? "/");
+							router.refresh();
 						});
-						router.push(signOutPath ?? "/");
-						router.refresh();
-					});
 					break;
 				}
 			}

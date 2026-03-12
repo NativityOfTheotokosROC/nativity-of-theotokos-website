@@ -15,8 +15,8 @@ export async function protect(protectParams?: {
 
 	const user = await getUser();
 	if (!user && signInEndpoint)
-		redirect(`/sign-in?endpoint=${signInEndpoint}`);
-	if (!(user && (await isAuthorized(user, roles)))) forbidden();
+		return redirect(`/sign-in?endpoint=${signInEndpoint}`);
+	if (!(user && (await isAuthorized(user, roles)))) return forbidden();
 }
 
 async function isAuthorized(user: User, roles?: Role[]) {

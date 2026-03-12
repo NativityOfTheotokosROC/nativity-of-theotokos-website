@@ -6,8 +6,8 @@
 
 @keyframes hide-button {
 	to {
-		transform: translateY(100%);
-		display: none;
+		transform: translateY(101%);
+		/* display: none; */
 		opacity: 0;
 		position: absolute;
 	}

@@ -44,6 +44,14 @@ export function usePageLoadingBarRouter<T extends typeof useRouter>(
 			)
 				interact({ type: "SET_LOADING", input: { value: true } });
 		},
+		forward() {
+			router.forward();
+			interact({ type: "SET_LOADING", input: { value: true } });
+		},
+		back() {
+			router.back();
+			interact({ type: "SET_LOADING", input: { value: true } });
+		},
 		replace(href, options?) {
 			router.replace(href, options);
 			if (

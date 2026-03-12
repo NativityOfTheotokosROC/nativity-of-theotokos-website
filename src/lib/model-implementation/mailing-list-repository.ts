@@ -24,13 +24,16 @@ export function useMailingListRepository(): MailingListRepositoryModel {
 		): Promise<void> {
 			switch (interaction.type) {
 				case "SUBSCRIBE": {
-					await notifier.interact({
-						type: "NOTIFY",
-						input: {
-							notification: { type: "pending" },
-						},
-					});
-					await subscribeToMailingList(interaction.input.email)
+					await notifier
+						.interact({
+							type: "NOTIFY",
+							input: {
+								notification: { type: "pending" },
+							},
+						})
+						.then(() =>
+							subscribeToMailingList(interaction.input.email),
+						)
 						.then(() =>
 							notifier.interact({
 								type: "NOTIFY",
@@ -54,7 +57,6 @@ export function useMailingListRepository(): MailingListRepositoryModel {
 							});
 							console.error(error);
 						});
-					break;
 				}
 			}
 		},

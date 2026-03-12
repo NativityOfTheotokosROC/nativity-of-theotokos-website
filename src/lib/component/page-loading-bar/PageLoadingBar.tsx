@@ -30,7 +30,11 @@ const PageLoadingBar = function () {
 		_();
 	}, [currentPathName, initialPathName, interact, modelView?.isLoading]);
 
-	return <LoadingBar model={{ modelView }} />;
+	return (
+		<div className="bg-gray-900 h-fit w-full sticky top-0 z-12">
+			<LoadingBar model={{ modelView }} />
+		</div>
+	);
 };
 
 export default PageLoadingBar;

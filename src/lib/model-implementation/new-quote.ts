@@ -23,36 +23,38 @@ export function useNewQuote(quoteCharacterLimit: number) {
 		interact: async function (interaction: NewQuoteModelInteraction) {
 			switch (interaction.type) {
 				case "ADD_QUOTE": {
-					await notifier.interact({
-						type: "NOTIFY",
-						input: {
-							notification: { type: "pending" },
-						},
-					});
-					await addNewQuote(interaction.input)
+					await notifier
+						.interact({
+							type: "NOTIFY",
+							input: {
+								notification: { type: "pending" },
+							},
+						})
 						.then(() =>
-							notifier.interact({
-								type: "NOTIFY",
-								input: {
-									notification: {
-										type: "success",
-										text: t("successMessage"),
-									},
-								},
-							}),
-						)
-						.catch(reason =>
-							notifier.interact({
-								type: "NOTIFY",
-								input: {
-									notification: {
-										type: "failure",
-										message: `${t("failureMessage")} ${reason} `,
-									},
-								},
-							}),
+							addNewQuote(interaction.input)
+								.then(() =>
+									notifier.interact({
+										type: "NOTIFY",
+										input: {
+											notification: {
+												type: "success",
+												text: t("successMessage"),
+											},
+										},
+									}),
+								)
+								.catch(reason =>
+									notifier.interact({
+										type: "NOTIFY",
+										input: {
+											notification: {
+												type: "failure",
+												message: `${t("failureMessage")} ${reason} `,
+											},
+										},
+									}),
+								),
 						);
-					break;
 				}
 			}
 		},

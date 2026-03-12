@@ -6,7 +6,7 @@ import prisma from "../third-party/prisma";
 import { protect } from "./auth";
 
 export async function addNewQuote(payload: NewQuote) {
-	await protect();
+	await protect({ roles: ["quotes"] });
 	const { englishQuote, russianQuote, scheduledDate } = payload;
 	const { author, quote, source } = englishQuote;
 	const scheduledLocalDate =
