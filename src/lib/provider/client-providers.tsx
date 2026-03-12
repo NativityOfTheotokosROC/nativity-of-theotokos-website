@@ -19,11 +19,9 @@ export const ClientProviders = function ({
 	);
 
 	return (
-		<Polyfills>
-			<PageLoadingBarContext.Provider value={pageLoadingBar}>
-				{children}
-			</PageLoadingBarContext.Provider>
-		</Polyfills>
+		<PageLoadingBarContext.Provider value={pageLoadingBar}>
+			<Polyfills>{children}</Polyfills>
+		</PageLoadingBarContext.Provider>
 	);
 };
 

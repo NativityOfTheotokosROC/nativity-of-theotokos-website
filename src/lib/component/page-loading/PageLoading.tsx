@@ -1,3 +1,5 @@
+"use client";
+
 import { LogoIcon } from "../miscellaneous/graphic";
 
 export default function PageLoading() {

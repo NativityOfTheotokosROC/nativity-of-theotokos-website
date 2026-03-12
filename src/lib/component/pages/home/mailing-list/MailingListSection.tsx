@@ -42,7 +42,7 @@ const MailingListSection = function ({ model }) {
 								});
 							}}
 						>
-							<div className="flex flex-nowrap items-stretch text-black rounded-lg overflow-clip md:max-w-[32em]">
+							<div className="flex flex-nowrap items-stretch h-[3.5em] text-black rounded-lg overflow-clip md:max-w-[32em]">
 								<input
 									className="grow p-4 bg-[whitesmoke] w-full"
 									type="email"

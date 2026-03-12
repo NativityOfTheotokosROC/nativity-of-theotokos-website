@@ -1,7 +1,7 @@
 .language-toggle-button {
 	animation: hide-button ease-out forwards;
 	animation-timeline: scroll(root);
-	animation-range: 500px 610px;
+	animation-range: 50vh 60vh;
 }
 
 @keyframes hide-button {
@@ -9,5 +9,6 @@
 		transform: translateY(100%);
 		display: none;
 		opacity: 0;
+		position: absolute;
 	}
 }

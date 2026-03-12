@@ -1,0 +1,18 @@
+import React from "react";
+import { ProtectedComponentModel } from "../../model/protected-component";
+import { protect } from "../../server-action/auth";
+
+const ProtectedComponent = async function ({
+	model,
+	children,
+}: {
+	model: ProtectedComponentModel;
+	children: React.ReactNode;
+}) {
+	const { signInEndpoint, roles } = model.modelView;
+	await protect({ roles, signInEndpoint });
+
+	return children;
+};
+
+export default ProtectedComponent;

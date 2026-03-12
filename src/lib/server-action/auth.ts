@@ -4,34 +4,33 @@ import { headers } from "next/headers";
 import { forbidden, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import prisma from "@/src/lib/third-party/prisma";
-import { User } from "../type/miscellaneous";
+import { Role, User } from "../type/miscellaneous";
 
-export async function isAuthorized(user: User, roles?: string[]) {
+export async function protect(protectParams?: {
+	roles?: Role[];
+	signInEndpoint?: string;
+}) {
+	const signInEndpoint = protectParams?.signInEndpoint;
+	const roles = protectParams?.roles;
+
+	const user = await getUser();
+	if (!user && signInEndpoint)
+		redirect(`/sign-in?endpoint=${signInEndpoint}`);
+	if (!(user && (await isAuthorized(user, roles)))) forbidden();
+}
+
+async function isAuthorized(user: User, roles?: Role[]) {
+	const computedRoles: Role[] = ["admin", ...(roles ? roles : [])];
 	const record = await prisma.admin.findFirst({
 		where: {
 			email: user.email,
-			AND: roles ? { role: { in: roles } } : undefined,
+			AND: { role: { in: computedRoles } },
 		},
 	});
 	return record != null;
 }
 
-export async function getProtectedResource<T>(
-	resource: () => T,
-	resourceEndpoint: string,
-	roles?: string[],
-) {
-	const user = await getUser();
-	if (!user) redirect(`/sign-in?endpoint=${resourceEndpoint}`);
-	await protect(user, roles);
-	return resource();
-}
-
-export async function protect(user: User | null, roles?: string[]) {
-	if (!(user && (await isAuthorized(user, roles)))) forbidden();
-}
-
-export async function getUser() {
+async function getUser() {
 	const session = await auth.api.getSession({
 		headers: await headers(),
 	});
