@@ -30,7 +30,7 @@ async function isAuthorized(user: User, roles?: Role[]) {
 	return record != null;
 }
 
-async function getUser() {
+export async function getUser() {
 	const session = await auth.api.getSession({
 		headers: await headers(),
 	});

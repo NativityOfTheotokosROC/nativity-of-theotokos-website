@@ -21,7 +21,7 @@ const Footer = function ({ model }) {
 		contacts,
 		socials,
 		copyrightText,
-		licenses,
+		bottomLinks,
 	} = model.modelView;
 	const t = useTranslations("footer");
 
@@ -159,9 +159,9 @@ const Footer = function ({ model }) {
 					<span className={georgia.className}>&copy;</span>{" "}
 					{copyrightText}
 				</span>
-				<div className="licenses flex flex-wrap gap-2 text-gray-400 text-xs">
+				<div className="bottom-links flex flex-wrap gap-2 text-gray-400 text-xs">
 					{[
-						...licenses.map((license, index) => (
+						...bottomLinks.map((license, index) => (
 							<Fragment key={license.link}>
 								<span>
 									{`${license.precedingText} `}
@@ -173,7 +173,7 @@ const Footer = function ({ model }) {
 										{license.linkLabel}
 									</Link>
 								</span>
-								{index != licenses.length - 1 && "|"}
+								{index != bottomLinks.length - 1 && "|"}
 							</Fragment>
 						)),
 					]}

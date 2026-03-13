@@ -16,8 +16,8 @@ export type Contact = {
 	phone: `+${number}`;
 };
 
-export type License = {
-	precedingText: string;
+export type BottomLink = {
+	precedingText?: string;
 	linkLabel: string;
 	link: string;
 };
@@ -37,7 +37,7 @@ export interface FooterModelView {
 	clergy: Clergy[];
 	contacts: Contact[];
 	socials: SocialLinkModel[];
-	licenses: License[];
+	bottomLinks: BottomLink[];
 }
 
 export type FooterModel = ReadonlyModel<FooterModelView>;

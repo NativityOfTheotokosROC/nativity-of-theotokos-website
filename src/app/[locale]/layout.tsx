@@ -76,6 +76,10 @@ export default async function RootLayout({
 	params: Promise<{ locale: string }>;
 }>) {
 	const { locale } = await params;
+	if (!hasLocale(routing.locales, locale)) {
+		notFound();
+	}
+
 	const tNavMenu = await getTranslations("navMenu");
 	const tFooterVariable = await getTranslations("footer_variable");
 	const tLinks = await getTranslations("links");
@@ -130,7 +134,7 @@ export default async function RootLayout({
 			}),
 		],
 		copyrightText: tFooterVariable("copyright"),
-		licenses: [
+		bottomLinks: [
 			{
 				precedingText: tFooterVariable("dailyReadingsLicense"),
 				linkLabel: "Holy Trinity Orthodox",
@@ -141,12 +145,12 @@ export default async function RootLayout({
 				linkLabel: "Lordicon.com",
 				link: "https://lordicon.com",
 			},
+			{
+				linkLabel: tFooterVariable("admin"),
+				link: "/admin",
+			},
 		],
 	});
-
-	if (!hasLocale(routing.locales, locale)) {
-		notFound();
-	}
 
 	return (
 		<html lang={locale} data-scroll-behavior="smooth">

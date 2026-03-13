@@ -83,4 +83,4 @@ export type User = {
 	email: string;
 };
 
-export type Role = "admin" | "user" | "quotes";
+export type Role = "admin" | "staff" | "user" | "quotes";

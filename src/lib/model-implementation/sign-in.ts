@@ -73,7 +73,7 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 							await signIn.social(
 								{
 									provider: "google",
-									callbackURL: `/${endpoint}`,
+									callbackURL: endpoint,
 								},
 								callbacks("Google"),
 							);
@@ -83,7 +83,7 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 							await signIn.oauth2(
 								{
 									providerId: "yandex",
-									callbackURL: `/${endpoint}`,
+									callbackURL: endpoint,
 								},
 								callbacks("Yandex"),
 							);
