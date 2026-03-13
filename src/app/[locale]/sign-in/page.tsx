@@ -9,9 +9,7 @@ import { redirect } from "next/navigation";
 
 export async function generateMetadata({
 	params,
-}: {
-	params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+}: PageProps<"/[locale]/sign-in">): Promise<Metadata> {
 	const { locale } = await params;
 	const t = await getTranslations({
 		locale: hasLocale(routing.locales, locale) ? locale : "en",

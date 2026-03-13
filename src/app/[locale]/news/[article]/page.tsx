@@ -23,9 +23,7 @@ function articleJsonLd(article: NewsArticleType) {
 
 export async function generateMetadata({
 	params,
-}: {
-	params: { locale: string; article: string };
-}): Promise<Metadata> {
+}: PageProps<"/[locale]/news/[article]">): Promise<Metadata> {
 	const { article } = await params;
 	const { title, snippet, uri, articleImage } = await getArticle(article);
 
@@ -56,9 +54,7 @@ export async function generateMetadata({
 
 export default async function Page({
 	params,
-}: {
-	params: { article: string };
-}) {
+}: PageProps<"/[locale]/news/[article]">) {
 	const { article: articleId } = await params;
 	const article = await getArticle(articleId);
 	const baseUrl = await getBaseURL();

@@ -17,12 +17,11 @@ import {
 	georgia,
 } from "@/src/lib/third-party/fonts";
 import { Toaster } from "react-hot-toast";
+import { Navlink } from "@/src/lib/type/miscellaneous";
 
 export async function generateMetadata({
 	params,
-}: {
-	params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+}: LayoutProps<"/[locale]">): Promise<Metadata> {
 	const { locale } = await params;
 	if (!hasLocale(routing.locales, locale)) {
 		throw new Error("Invalid locale");
@@ -71,10 +70,7 @@ export async function generateMetadata({
 export default async function RootLayout({
 	children,
 	params,
-}: Readonly<{
-	children: React.ReactNode;
-	params: Promise<{ locale: string }>;
-}>) {
+}: LayoutProps<"/[locale]">) {
 	const { locale } = await params;
 	if (!hasLocale(routing.locales, locale)) {
 		notFound();
@@ -83,7 +79,30 @@ export default async function RootLayout({
 	const tNavMenu = await getTranslations("navMenu");
 	const tFooterVariable = await getTranslations("footer_variable");
 	const tLinks = await getTranslations("links");
-	const footer: FooterModel = newReadonlyModel({
+	const navlinks = [
+		{ link: "/", text: tNavMenu("home") },
+		{
+			link: "/#bulletin",
+			text: tNavMenu("parishBulletin"),
+			isReplaceable: true,
+		},
+		{
+			link: "/#resources",
+			text: tNavMenu("resources"),
+			isReplaceable: true,
+		},
+		{
+			link: "/#media",
+			text: tNavMenu("media"),
+			isReplaceable: true,
+		},
+		{
+			link: "/#footer",
+			text: tNavMenu("contact"),
+			isReplaceable: true,
+		},
+	] satisfies Navlink[];
+	const footer = newReadonlyModel({
 		description: tFooterVariable("description"),
 		parishEmail: "info@nativityoftheotokos.com",
 		clergy: [
@@ -150,7 +169,7 @@ export default async function RootLayout({
 				link: "/admin",
 			},
 		],
-	});
+	}) satisfies FooterModel;
 
 	return (
 		<html lang={locale} data-scroll-behavior="smooth">
@@ -162,29 +181,7 @@ export default async function RootLayout({
 						<PageLoadingBar />
 						<Header
 							model={newReadonlyModel({
-								navlinks: [
-									{ link: "/", text: tNavMenu("home") },
-									{
-										link: "/#bulletin",
-										text: tNavMenu("parishBulletin"),
-										isReplaceable: true,
-									},
-									{
-										link: "/#resources",
-										text: tNavMenu("resources"),
-										isReplaceable: true,
-									},
-									{
-										link: "/#media",
-										text: tNavMenu("media"),
-										isReplaceable: true,
-									},
-									{
-										link: "/#footer",
-										text: tNavMenu("contact"),
-										isReplaceable: true,
-									},
-								],
+								navlinks,
 							})}
 						/>
 						{children}

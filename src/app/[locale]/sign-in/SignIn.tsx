@@ -5,11 +5,16 @@ import { InitializedModel } from "@mvc-react/mvc";
 import SignInButton from "@/src/lib/component/sign-in-button/SignInButton";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
+import { useEffect } from "react";
 
 const SignIn = function ({ model }) {
 	const { modelView, interact } = model;
 	const { signInStatus, signInServices, selectedService } = modelView;
 	const t = useTranslations("signIn");
+
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, []);
 
 	return (
 		<main className="sign-in bg-[#FEF8F3] text-black border-t-15 border-t-red-900">

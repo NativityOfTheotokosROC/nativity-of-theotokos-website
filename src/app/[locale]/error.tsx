@@ -12,9 +12,7 @@ import Error from "@/src/lib/component/pages/error/Error";
 
 export async function generateMetadata({
 	params,
-}: {
-	params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+}: LayoutProps<"/[locale]">): Promise<Metadata> {
 	const { locale } = await params;
 	const t = await getTranslations({
 		locale: hasLocale(routing.locales, locale) ? locale : "en",
@@ -30,7 +28,6 @@ export default function Page({
 	error,
 }: {
 	error: Error & { digest?: string };
-	reset: () => void;
 }) {
 	const message = error.digest ? `digest: ${error.digest}` : error.message;
 	const pageLoadingBar = useContext(PageLoadingBarContext);
