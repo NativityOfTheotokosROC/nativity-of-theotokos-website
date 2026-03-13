@@ -1,16 +1,16 @@
 "use client";
 
+import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Fragment } from "react/jsx-runtime";
+import { FooterModel } from "../../model/footer";
 import { georgia } from "../../third-party/fonts";
+import { formatPhoneNumber, isRemotePath } from "../../utility/miscellaneous";
+import { LogoIcon } from "../miscellaneous/graphic";
+import { Link } from "../page-loading-bar/navigation";
 import SocialLink from "../social-link/SocialLink";
 import FooterSection from "./FooterSection";
-import { ModeledVoidComponent } from "@mvc-react/components";
-import { FooterModel } from "../../model/footer";
-import { Fragment } from "react/jsx-runtime";
-import { formatPhoneNumber } from "../../utility/miscellaneous";
-import { LogoIcon } from "../miscellaneous/graphic";
 
 const Footer = function ({ model }) {
 	const {
@@ -40,12 +40,12 @@ const Footer = function ({ model }) {
 							<br />
 							<span>
 								{`${t("email")}: `}
-								<Link
+								<a
 									className="hover:underline"
 									href={`mailto:${parishEmail}`}
 								>
 									{parishEmail}
-								</Link>
+								</a>
 							</span>
 						</FooterSection>
 					</div>
@@ -57,34 +57,34 @@ const Footer = function ({ model }) {
 						>
 							<div className="flex flex-col gap-2">
 								<span>
-									<Link
+									<a
 										className="hover:underline"
 										href={jurisdictionInfo.diocese.link}
 										target="_blank"
 									>
 										{jurisdictionInfo.diocese.name}
-									</Link>
+									</a>
 								</span>
 								<span>
-									<Link
+									<a
 										className="hover:underline"
 										href={jurisdictionInfo.metropolis.link}
 										target="_blank"
 									>
 										{jurisdictionInfo.metropolis.name}
-									</Link>
+									</a>
 								</span>
 								<span>
-									<Link
+									<a
 										className="hover:underline"
 										href={jurisdictionInfo.patriarch.link}
 										target="_blank"
 									>
 										{jurisdictionInfo.patriarch.name}
-									</Link>
+									</a>
 								</span>
 								<span>
-									<Link
+									<a
 										className="hover:underline"
 										href={
 											jurisdictionInfo.patriarchate.link
@@ -92,7 +92,7 @@ const Footer = function ({ model }) {
 										target="_blank"
 									>
 										{jurisdictionInfo.patriarchate.name}
-									</Link>
+									</a>
 								</span>
 							</div>
 						</FooterSection>
@@ -104,13 +104,13 @@ const Footer = function ({ model }) {
 									...clergy.map(cleric => (
 										<span key={cleric.name}>
 											{cleric.link ? (
-												<Link
+												<a
 													className="hover:underline"
 													href={cleric.link}
 													target="_blank"
 												>
 													{cleric.name}
-												</Link>
+												</a>
 											) : (
 												cleric.name
 											)}
@@ -128,14 +128,14 @@ const Footer = function ({ model }) {
 										<Fragment key={contact.phone}>
 											<span>{contact.name}</span>
 											<span>
-												<Link
+												<a
 													className="min-w-fit hover:underline"
 													href={`tel:${contact.phone}`}
 												>
 													{formatPhoneNumber(
 														contact.phone,
 													)}
-												</Link>
+												</a>
 											</span>
 										</Fragment>
 									)),
@@ -169,7 +169,11 @@ const Footer = function ({ model }) {
 									<Link
 										className="underline hover:text-[#dcb042]"
 										href={bottomLink.link}
-										target="_blank"
+										target={
+											isRemotePath(bottomLink.link)
+												? "_blank"
+												: undefined
+										}
 									>
 										{bottomLink.linkLabel}
 									</Link>
