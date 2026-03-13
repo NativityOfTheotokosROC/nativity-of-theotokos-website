@@ -161,16 +161,17 @@ const Footer = function ({ model }) {
 				</span>
 				<div className="bottom-links flex flex-wrap gap-2 text-gray-400 text-xs">
 					{[
-						...bottomLinks.map((license, index) => (
-							<Fragment key={license.link}>
+						...bottomLinks.map((bottomLink, index) => (
+							<Fragment key={bottomLink.link}>
 								<span>
-									{`${license.precedingText} `}
+									{bottomLink.precedingText &&
+										`${bottomLink.precedingText} `}
 									<Link
 										className="underline hover:text-[#dcb042]"
-										href={license.link}
+										href={bottomLink.link}
 										target="_blank"
 									>
-										{license.linkLabel}
+										{bottomLink.linkLabel}
 									</Link>
 								</span>
 								{index != bottomLinks.length - 1 && "|"}
