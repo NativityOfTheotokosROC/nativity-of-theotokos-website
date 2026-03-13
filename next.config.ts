@@ -62,6 +62,7 @@ const nextConfig: NextConfig = {
 
 		return config;
 	},
+	cacheComponents: true,
 	experimental: {
 		authInterrupts: true,
 	},
