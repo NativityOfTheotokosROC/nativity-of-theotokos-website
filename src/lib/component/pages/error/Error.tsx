@@ -6,18 +6,12 @@ import { ErrorPageModel } from "@/src/lib/model/error-page";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { CloudAlert } from "lucide-react";
-import { useLayoutEffect } from "react";
 import { InitializedModel } from "@mvc-react/mvc";
 
 const Error = function ({ model }) {
 	const { modelView, interact } = model;
 	const { message } = modelView;
 	const t = useTranslations("error");
-
-	useLayoutEffect(() => {
-		window.history.scrollRestoration = "manual";
-		window.scrollTo(0, 0);
-	}, []);
 
 	return (
 		<main className={`error bg-[#FEF8F3] text-black`}>

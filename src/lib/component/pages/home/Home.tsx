@@ -1,6 +1,11 @@
 "use client";
 
 import HymnsModal from "@/src/lib/component/hymns-modal/HymnsModal";
+import {
+	AboutOurParishGraphic,
+	LiturgicalResourcesGraphic,
+	WhatIsOrthodoxyGraphic,
+} from "@/src/lib/component/miscellaneous/graphic";
 import SplashScreen from "@/src/lib/component/splash-screen/SplashScreen";
 import { hymnsModalVIInterface } from "@/src/lib/model-implementation/hymns-modal";
 import { useMailingListRepository } from "@/src/lib/model-implementation/mailing-list-repository";
@@ -9,7 +14,7 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
 import { useTranslations } from "next-intl";
-import { useLayoutEffect, useState } from "react";
+import { useState } from "react";
 import BulletinSection from "./bulletin/BulletinSection";
 import DailyQuoteSection from "./daily-quote/DailyQuoteSection";
 import DailyReadingsSection from "./daily-readings/DailyReadingsSection";
@@ -18,11 +23,6 @@ import HeroSection from "./hero/HeroSection";
 import "./home.css";
 import MailingListSection from "./mailing-list/MailingListSection";
 import ResourcesSection from "./resources/ResourcesSection";
-import {
-	AboutOurParishGraphic,
-	LiturgicalResourcesGraphic,
-	WhatIsOrthodoxyGraphic,
-} from "@/src/lib/component/miscellaneous/graphic";
 
 const Home = function ({ model }) {
 	const { modelView } = model;
@@ -34,13 +34,6 @@ const Home = function ({ model }) {
 	const [splashExited, setSplashExited] = useState(false);
 	const t = useTranslations("home");
 	const tLinks = useTranslations("links");
-
-	useLayoutEffect(() => {
-		if (!modelView) {
-			window.history.scrollRestoration = "manual";
-			window.scrollTo(0, 0);
-		}
-	}, [modelView]);
 
 	return (
 		<>

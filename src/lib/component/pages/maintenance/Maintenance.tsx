@@ -5,16 +5,10 @@ import { MaintenanceGraphic } from "@/src/lib/component/miscellaneous/graphic";
 import { usePageLoadingBarRouter } from "@/src/lib/component/page-loading-bar/navigation";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { useTranslations } from "next-intl";
-import { useLayoutEffect } from "react";
 
 export default function Maintenance() {
 	const router = usePageLoadingBarRouter(useRouter);
 	const t = useTranslations("maintenance");
-
-	useLayoutEffect(() => {
-		window.history.scrollRestoration = "manual";
-		window.scrollTo(0, 0);
-	}, []);
 
 	return (
 		<main className={`maintenance bg-[#FEF8F3] text-black`}>

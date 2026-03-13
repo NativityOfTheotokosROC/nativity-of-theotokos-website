@@ -149,7 +149,7 @@ export default async function RootLayout({
 	}
 
 	return (
-		<html lang={locale}>
+		<html lang={locale} data-scroll-behavior="smooth">
 			<body
 				className={`antialiased ${googleSansFlex.variable} ${googleSans.variable} ${georgia.variable}`}
 			>

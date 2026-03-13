@@ -18,7 +18,7 @@ const MailingListSection = function ({ model }) {
 				whileInView={{ opacity: 1, y: 0 }}
 				viewport={{ once: true, amount: 0.5 }}
 				transition={{ ease: "easeOut" }}
-				className="mailing-list-content flex flex-col gap-8 p-8 py-14 md:w-3/4 lg:w-6/10 lg:px-20"
+				className="mailing-list-content flex flex-col min-h-[22em] gap-8 p-8 py-14 md:w-3/4 lg:w-6/10 lg:px-20"
 			>
 				<span
 					className={`text-[2.75rem]/tight w-3/4 mb-2 font-semibold ${georgia.className} wrap-break-word hyphens-auto`}

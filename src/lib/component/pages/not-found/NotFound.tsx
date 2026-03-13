@@ -8,7 +8,7 @@ import { georgia } from "@/src/lib/third-party/fonts";
 import { Metadata } from "next";
 import { hasLocale, useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import { useContext, useLayoutEffect } from "react";
+import { useContext } from "react";
 
 export async function generateMetadata({
 	params,
@@ -31,11 +31,6 @@ export default function NotFound() {
 	const router = usePageLoadingBarRouter(useRouter);
 	const pageLoadingBar = useContext(PageLoadingBarContext);
 	const t = useTranslations("notFound");
-
-	useLayoutEffect(() => {
-		window.history.scrollRestoration = "manual";
-		window.scrollTo(0, 0);
-	}, []);
 
 	return (
 		<main className={`not-found flex flex-col bg-[#FEF8F3] text-black`}>

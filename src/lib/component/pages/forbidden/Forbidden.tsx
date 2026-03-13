@@ -6,18 +6,12 @@ import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
-import { useLayoutEffect } from "react";
 import Spinner from "../../spinner/Spinner";
 
 const Forbidden = function ({ model }) {
 	const { modelView, interact } = model;
 	const { signOutStatus } = modelView;
 	const t = useTranslations("unauthorized");
-
-	useLayoutEffect(() => {
-		window.history.scrollRestoration = "manual";
-		window.scrollTo(0, 0);
-	}, []);
 
 	return (
 		<main className={`forbidden bg-[#FEF8F3] text-black`}>
