@@ -1,23 +1,23 @@
 import "@/src/app/globals.css";
 import { routing } from "@/src/i18n/routing";
-import Footer from "@/src/lib/component/footer/Footer";
-import Header from "@/src/lib/component/header/Header";
-import LanguageSwitcher from "@/src/lib/component/language-switcher/LanguageSwitcher";
-import PageLoadingBar from "@/src/lib/component/page-loading-bar/PageLoadingBar";
+import PageLoading from "@/src/lib/component/page-loading/PageLoading";
+import ClientProviders from "@/src/lib/provider/client-providers";
+import {
+	georgia,
+	googleSans,
+	googleSansFlex,
+} from "@/src/lib/third-party/fonts";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import ClientProviders from "@/src/lib/provider/client-providers";
-import { FooterModel } from "@/src/lib/model/footer";
-import {
-	googleSansFlex,
-	googleSans,
-	georgia,
-} from "@/src/lib/third-party/fonts";
-import { Toaster } from "react-hot-toast";
-import { Navlink } from "@/src/lib/type/miscellaneous";
+import { Suspense } from "react";
+import LocaleLayout from "./LocaleLayout";
+
+export function generateStaticParams() {
+	return routing.locales.map(locale => ({ locale }));
+}
 
 export async function generateMetadata({
 	params,
@@ -26,6 +26,8 @@ export async function generateMetadata({
 	if (!hasLocale(routing.locales, locale)) {
 		throw new Error("Invalid locale");
 	}
+	setRequestLocale(locale);
+
 	const t = await getTranslations({
 		locale,
 		namespace: "metadata",
@@ -76,101 +78,6 @@ export default async function RootLayout({
 		notFound();
 	}
 
-	const tNavMenu = await getTranslations("navMenu");
-	const tFooterVariable = await getTranslations("footer_variable");
-	const tLinks = await getTranslations("links");
-	const navlinks = [
-		{ link: "/", text: tNavMenu("home") },
-		{
-			link: "/#bulletin",
-			text: tNavMenu("parishBulletin"),
-			isReplaceable: true,
-		},
-		{
-			link: "/#resources",
-			text: tNavMenu("resources"),
-			isReplaceable: true,
-		},
-		{
-			link: "/#media",
-			text: tNavMenu("media"),
-			isReplaceable: true,
-		},
-		{
-			link: "/#footer",
-			text: tNavMenu("contact"),
-			isReplaceable: true,
-		},
-	] satisfies Navlink[];
-	const footer = newReadonlyModel({
-		description: tFooterVariable("description"),
-		parishEmail: "info@nativityoftheotokos.com",
-		clergy: [
-			{ name: tFooterVariable("frDimitri") },
-			{ name: tFooterVariable("frSavva") },
-		],
-		jurisdictionInfo: {
-			diocese: {
-				name: tFooterVariable("diocese"),
-				link: tLinks("diocese"),
-			},
-			metropolis: {
-				name: tFooterVariable("jurisdiction"),
-				link: tLinks("jurisdiction"),
-			},
-			patriarch: {
-				name: tFooterVariable("patriarch"),
-				link: tLinks("patriarch"),
-			},
-			patriarchate: {
-				name: tFooterVariable("patriarchate"),
-				link: tLinks("patriarchate"),
-			},
-		},
-		contacts: [
-			{ name: tFooterVariable("phone"), phone: "+263716063616" },
-			{ name: tFooterVariable("vasily"), phone: "+263772473317" },
-			{ name: tFooterVariable("larisa"), phone: "+263771389444" },
-		],
-		socials: [
-			newReadonlyModel({
-				details: {
-					type: "Facebook",
-					link: "https://facebook.com/people/Orthodox-Church-in-Zimbabwe-Moscow-Patriarchate/61577719142729",
-				},
-			}),
-			newReadonlyModel({
-				details: {
-					type: "Instagram",
-					link: "https://instagram.com/exarchate.mp",
-				},
-			}),
-			newReadonlyModel({
-				details: {
-					type: "WhatsApp",
-					link: "https://wa.me/263716063616",
-				},
-			}),
-		],
-		copyrightText: tFooterVariable("copyright"),
-		bottomLinks: [
-			{
-				precedingText: tFooterVariable("dailyReadingsLicense"),
-				linkLabel: "Holy Trinity Orthodox",
-				link: tLinks("holyTrinityChurch"),
-			},
-			{
-				precedingText: tFooterVariable("logoIconLicense"),
-				linkLabel: "Lordicon.com",
-				link: "https://lordicon.com",
-			},
-			{
-				linkLabel: tFooterVariable("admin"),
-				link: "/admin",
-			},
-		],
-	}) satisfies FooterModel;
-
 	return (
 		<html lang={locale} data-scroll-behavior="smooth">
 			<body
@@ -178,21 +85,11 @@ export default async function RootLayout({
 			>
 				<NextIntlClientProvider>
 					<ClientProviders>
-						<PageLoadingBar />
-						<Header
-							model={newReadonlyModel({
-								navlinks,
-							})}
-						/>
-						{children}
-						<Footer model={footer} />
-						<LanguageSwitcher
-							model={newReadonlyModel({ locale })}
-						/>
-						<Toaster
-							position="bottom-center"
-							containerStyle={{ bottom: 25 }}
-						/>
+						<Suspense fallback={<PageLoading />}>
+							<LocaleLayout model={newReadonlyModel({ locale })}>
+								{children}
+							</LocaleLayout>
+						</Suspense>
 					</ClientProviders>
 				</NextIntlClientProvider>
 			</body>
