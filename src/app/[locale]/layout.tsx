@@ -83,15 +83,15 @@ export default async function RootLayout({
 			<body
 				className={`antialiased ${googleSansFlex.variable} ${googleSans.variable} ${georgia.variable}`}
 			>
-				<NextIntlClientProvider>
-					<ClientProviders>
-						<Suspense fallback={<PageLoading />}>
+				<Suspense fallback={<PageLoading />}>
+					<NextIntlClientProvider>
+						<ClientProviders>
 							<LocaleLayout model={newReadonlyModel({ locale })}>
 								{children}
 							</LocaleLayout>
-						</Suspense>
-					</ClientProviders>
-				</NextIntlClientProvider>
+						</ClientProviders>
+					</NextIntlClientProvider>
+				</Suspense>
 			</body>
 		</html>
 	);
