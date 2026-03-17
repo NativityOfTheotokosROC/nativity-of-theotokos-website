@@ -50,16 +50,16 @@ export async function generateMetadata(
 			default: titleDefault,
 		},
 		description,
-		openGraph: {
-			title: {
-				template: titleTemplate,
-				default: titleDefault,
-			},
-			url: "/",
-			description,
-			// locale: localeMetaData,
-			type: "website",
-		},
+		// openGraph: {
+		// 	title: {
+		// 		template: titleTemplate,
+		// 		default: titleDefault,
+		// 	},
+		// 	url: "/",
+		// 	description,
+		// 	// locale: localeMetaData,
+		// 	type: "website",
+		// },
 		twitter: {
 			card: "summary",
 			title: { template: titleTemplate, default: titleDefault },
