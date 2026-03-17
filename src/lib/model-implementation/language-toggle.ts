@@ -29,6 +29,16 @@ export function languageToggleVIInterface(
 			const { alternateLanguage } = currentModelView;
 			switch (interaction.type) {
 				case "TOGGLE_LANGUAGE": {
+					const newAlternateLanguage =
+						alternateLanguage == "en" ? "ru" : "en";
+					const { promise, resolve } =
+						Promise.withResolvers<LanguageToggleModelView>();
+					localeChangeEmitter.once("locale-change", () => {
+						location.reload(); //TODO: Dirty workaround
+						resolve({
+							alternateLanguage: newAlternateLanguage,
+						});
+					});
 					localeRouter.replace(
 						currentPathName.slice(
 							undefined,
@@ -38,15 +48,7 @@ export function languageToggleVIInterface(
 						),
 						{ locale: alternateLanguage },
 					);
-					const newAlternateLanguage =
-						alternateLanguage == "en" ? "ru" : "en";
-					const { promise, resolve } =
-						Promise.withResolvers<LanguageToggleModelView>();
-					localeChangeEmitter.on("locale-change", () => {
-						resolve({
-							alternateLanguage: newAlternateLanguage,
-						});
-					});
+
 					return await promise;
 				}
 			}

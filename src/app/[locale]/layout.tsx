@@ -35,37 +35,37 @@ export async function generateMetadata(
 	const localeMetaData = locale == "en" ? "en-US" : "ru-RU";
 
 	return {
-		// metadataBase:
-		// 	process.env.NODE_ENV == "development"
-		// 		? "http:localhost:3000"
-		// 		: `https://nativityoftheotokos.com`,
-		// alternates: {
-		// 	canonical: "/",
-		// 	languages: {
-		// 		ru: "/ru",
-		// 	},
-		// },
+		metadataBase:
+			process.env.NODE_ENV == "development"
+				? "http:localhost:3000"
+				: `https://nativityoftheotokos.com`,
+		alternates: {
+			canonical: "/",
+			languages: {
+				ru: "/ru",
+			},
+		},
 		title: {
 			template: titleTemplate,
 			default: titleDefault,
 		},
-		// description,
-		// openGraph: {
-		// 	title: {
-		// 		template: titleTemplate,
-		// 		default: titleDefault,
-		// 	},
-		// 	url: "/",
-		// 	description,
-		// 	locale: localeMetaData,
-		// 	type: "website",
-		// },
-		// twitter: {
-		// 	card: "summary",
-		// 	title: { template: titleTemplate, default: titleDefault },
-		// 	description,
-		// 	images: ["/opengraph-image.jpg"],
-		// },
+		description,
+		openGraph: {
+			title: {
+				template: titleTemplate,
+				default: titleDefault,
+			},
+			url: "/",
+			description,
+			locale: localeMetaData,
+			type: "website",
+		},
+		twitter: {
+			card: "summary",
+			title: { template: titleTemplate, default: titleDefault },
+			description,
+			images: ["/opengraph-image.jpg"],
+		},
 	};
 }
 
