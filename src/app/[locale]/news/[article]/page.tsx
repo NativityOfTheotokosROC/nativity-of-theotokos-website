@@ -44,25 +44,25 @@ export async function generateMetadata({
 	return {
 		title,
 		description: snippet,
-		// alternates: {
-		// 	canonical: `/news/${uri}`,
-		// 	languages: {
-		// 		ru: `/ru/news/${uri}`,
-		// 	},
-		// },
-		// openGraph: {
-		// 	title,
-		// 	description: snippet,
-		// 	url: `/news/${uri}`,
-		// 	type: "article",
-		// 	images: [{ url: articleImage.source }],
-		// },
-		// twitter: {
-		// 	card: "summary_large_image",
-		// 	title,
-		// 	description: snippet,
-		// 	images: [{ url: articleImage.source }],
-		// },
+		alternates: {
+			canonical: `/news/${uri}`,
+			languages: {
+				ru: `/ru/news/${uri}`,
+			},
+		},
+		openGraph: {
+			title,
+			description: snippet,
+			url: `/news/${uri}`,
+			type: "article",
+			images: [{ url: articleImage.source }],
+		},
+		twitter: {
+			card: "summary_large_image",
+			title,
+			description: snippet,
+			images: [{ url: articleImage.source }],
+		},
 	};
 }
 
