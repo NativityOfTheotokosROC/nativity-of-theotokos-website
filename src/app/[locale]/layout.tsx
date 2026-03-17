@@ -64,7 +64,6 @@ export async function generateMetadata(
 			card: "summary",
 			title: { template: titleTemplate, default: titleDefault },
 			description,
-			images: ["/opengraph-image.jpg"],
 		},
 	};
 }
