@@ -39,12 +39,12 @@ export async function generateMetadata(
 			process.env.NODE_ENV == "development"
 				? "http:localhost:3000"
 				: `https://nativityoftheotokos.com`,
-		alternates: {
-			canonical: "/",
-			languages: {
-				ru: "/ru",
-			},
-		},
+		// alternates: {
+		// 	canonical: "/",
+		// 	languages: {
+		// 		ru: "/ru",
+		// 	},
+		// },
 		title: {
 			template: titleTemplate,
 			default: titleDefault,
