@@ -6,7 +6,7 @@ import { FooterModel } from "@/src/lib/model/footer";
 import { Language, Navlink } from "@/src/lib/type/miscellaneous";
 import { ModeledContainerComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Toaster } from "react-hot-toast";
 
 export interface LocaleLayoutModelView {
@@ -17,6 +17,8 @@ export type LocaleLayoutModel = ReadonlyModel<LocaleLayoutModelView>;
 
 const LocaleLayout = async function ({ model, children }) {
 	const { locale } = model.modelView;
+	setRequestLocale(locale);
+
 	const tNavMenu = await getTranslations("navMenu");
 	const tFooterVariable = await getTranslations("footer_variable");
 	const tLinks = await getTranslations("links");

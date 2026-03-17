@@ -14,22 +14,19 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import LocaleLayout from "./LocaleLayout";
+import { Language } from "@/src/lib/type/miscellaneous";
 
 export function generateStaticParams() {
 	return routing.locales.map(locale => ({ locale }));
 }
 
-export async function generateMetadata({
-	params,
-}: LayoutProps<"/[locale]">): Promise<Metadata> {
-	const { locale } = await params;
-	if (!hasLocale(routing.locales, locale)) {
-		throw new Error("Invalid locale");
-	}
-	setRequestLocale(locale);
+export async function generateMetadata(
+	props: Omit<LayoutProps<"/[locale]">, "children">,
+): Promise<Metadata> {
+	const { locale } = await props.params;
 
 	const t = await getTranslations({
-		locale,
+		locale: locale as Language,
 		namespace: "metadata",
 	});
 	const titleTemplate = `%s | ${t("templateTitle")}`;
@@ -38,34 +35,37 @@ export async function generateMetadata({
 	const localeMetaData = locale == "en" ? "en-US" : "ru-RU";
 
 	return {
-		metadataBase: `https://nativityoftheotokos.com`,
-		alternates: {
-			canonical: "/",
-			languages: {
-				ru: "/ru",
-			},
-		},
+		// metadataBase:
+		// 	process.env.NODE_ENV == "development"
+		// 		? "http:localhost:3000"
+		// 		: `https://nativityoftheotokos.com`,
+		// alternates: {
+		// 	canonical: "/",
+		// 	languages: {
+		// 		ru: "/ru",
+		// 	},
+		// },
 		title: {
 			template: titleTemplate,
 			default: titleDefault,
 		},
-		description,
-		openGraph: {
-			title: {
-				template: titleTemplate,
-				default: titleDefault,
-			},
-			url: "/",
-			description,
-			locale: localeMetaData,
-			type: "website",
-		},
-		twitter: {
-			card: "summary",
-			title: { template: titleTemplate, default: titleDefault },
-			description,
-			images: ["/opengraph-image.jpg"],
-		},
+		// description,
+		// openGraph: {
+		// 	title: {
+		// 		template: titleTemplate,
+		// 		default: titleDefault,
+		// 	},
+		// 	url: "/",
+		// 	description,
+		// 	locale: localeMetaData,
+		// 	type: "website",
+		// },
+		// twitter: {
+		// 	card: "summary",
+		// 	title: { template: titleTemplate, default: titleDefault },
+		// 	description,
+		// 	images: ["/opengraph-image.jpg"],
+		// },
 	};
 }
 
@@ -77,6 +77,7 @@ export default async function RootLayout({
 	if (!hasLocale(routing.locales, locale)) {
 		notFound();
 	}
+	setRequestLocale(locale);
 
 	return (
 		<html lang={locale} data-scroll-behavior="smooth">

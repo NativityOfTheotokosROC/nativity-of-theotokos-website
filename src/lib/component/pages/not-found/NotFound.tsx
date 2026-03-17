@@ -1,31 +1,12 @@
 "use client";
+
 import { useRouter } from "@/src/i18n/navigation";
-import { routing } from "@/src/i18n/routing";
 import { NotFoundGraphic } from "@/src/lib/component/miscellaneous/graphic";
 import { usePageLoadingBarRouter } from "@/src/lib/component/page-loading-bar/navigation";
 import { PageLoadingBarContext } from "@/src/lib/component/page-loading-bar/PageLoadingBar";
 import { georgia } from "@/src/lib/third-party/fonts";
-import { Metadata } from "next";
-import { hasLocale, useTranslations } from "next-intl";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 import { useContext } from "react";
-
-export async function generateMetadata({
-	params,
-}: {
-	params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-	const { locale } = await params;
-
-	const t = await getTranslations({
-		locale: hasLocale(routing.locales, locale) ? locale : "en",
-		namespace: "notFound",
-	});
-
-	return {
-		title: t("metaTitle"),
-	};
-}
 
 export default function NotFound() {
 	const router = usePageLoadingBarRouter(useRouter);
