@@ -30,8 +30,6 @@ export async function getAllArticles(): Promise<NewsArticle[]> {
 export async function getArticle(
 	articleId: string,
 ): Promise<Omit<NewsArticle, "url">> {
-	"use cache";
-
 	try {
 		const article = await prisma.newsArticle.findUniqueOrThrow({
 			where: { link: articleId },
