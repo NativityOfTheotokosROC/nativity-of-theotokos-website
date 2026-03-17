@@ -39,18 +39,18 @@ export async function generateMetadata(
 			process.env.NODE_ENV == "development"
 				? "http:localhost:3000"
 				: `https://nativityoftheotokos.com`,
-		// alternates: {
-		// 	canonical: "/",
-		// 	languages: {
-		// 		ru: "/ru",
-		// 	},
-		// },
+		alternates: {
+			canonical: "/",
+			languages: {
+				ru: "/ru",
+			},
+		},
 		title: {
 			template: titleTemplate,
 			default: titleDefault,
 		},
 		description,
-		// openGraph: {
+		// openGraph: { //TODO: Opengraph messes up prerendering for some reason
 		// 	title: {
 		// 		template: titleTemplate,
 		// 		default: titleDefault,
@@ -64,6 +64,7 @@ export async function generateMetadata(
 			card: "summary",
 			title: { template: titleTemplate, default: titleDefault },
 			description,
+			images: ["/opengraph-image.jpg"],
 		},
 	};
 }
