@@ -27,9 +27,41 @@ export async function getAllArticles(): Promise<NewsArticle[]> {
 	return articles;
 }
 
+export async function getArticleMetadata(
+	articleId: string,
+): Promise<Omit<NewsArticle, "url" | "dateCreated" | "dateUpdated">> {
+	"use cache";
+	try {
+		const article = await prisma.newsArticle.findUniqueOrThrow({
+			where: { link: articleId },
+			omit: { dateCreated: true, dateUpdated: true },
+		});
+		return {
+			uri: article.link.toString(),
+			title: article.title,
+			author: article.author,
+			body: article.body,
+			snippet: article.snippet,
+			articleImage: {
+				source: article.imageLink,
+				about: article.imageCaption ?? undefined,
+			},
+		};
+	} catch (error) {
+		if (
+			error instanceof Object &&
+			"code" in error &&
+			error["code"] == "P2025"
+		)
+			notFound();
+		throw error;
+	}
+};
+
 export async function getArticle(
 	articleId: string,
 ): Promise<Omit<NewsArticle, "url">> {
+	"use server";
 	try {
 		const article = await prisma.newsArticle.findUniqueOrThrow({
 			where: { link: articleId },
