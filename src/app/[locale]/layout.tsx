@@ -1,23 +1,26 @@
 import "@/src/app/globals.css";
 import { routing } from "@/src/i18n/routing";
-import PageLoading from "@/src/lib/component/page-loading/PageLoading";
 import ClientProviders from "@/src/lib/provider/client-providers";
 import {
 	georgia,
 	googleSans,
 	googleSansFlex,
 } from "@/src/lib/third-party/fonts";
+import { Language } from "@/src/lib/type/miscellaneous";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import {
+	getMessages,
+	getTranslations,
+	setRequestLocale,
+} from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import LocaleLayout from "./LocaleLayout";
-import { Language } from "@/src/lib/type/miscellaneous";
 
 export function generateStaticParams() {
-	return routing.locales.map(locale => ({ locale }));
+	return [{ locale: "en" }, { locale: "ru" }];
 }
 
 export async function generateMetadata(
@@ -39,7 +42,7 @@ export async function generateMetadata(
 			process.env.NODE_ENV == "development"
 				? "http:localhost:3000"
 				: `https://nativityoftheotokos.com`,
-		// alternates: { //TODO: Opengraph and alernates mess up prerendering for some reason
+		// alternates: { //TODO
 		// 	canonical: "/",
 		// 	languages: {
 		// 		ru: "/ru",
@@ -78,14 +81,15 @@ export default async function RootLayout({
 		notFound();
 	}
 	setRequestLocale(locale);
+	const messages = await getMessages({ locale }); //TODO: Fixes useTranslations for now
 
 	return (
 		<html lang={locale} data-scroll-behavior="smooth">
 			<body
 				className={`antialiased ${googleSansFlex.variable} ${googleSans.variable} ${georgia.variable}`}
 			>
-				<Suspense fallback={<PageLoading />}>
-					<NextIntlClientProvider>
+				<Suspense fallback={null}>
+					<NextIntlClientProvider locale={locale} messages={messages}>
 						<ClientProviders>
 							<LocaleLayout model={newReadonlyModel({ locale })}>
 								{children}

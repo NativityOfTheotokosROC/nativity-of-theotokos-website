@@ -29,26 +29,49 @@ export function languageToggleVIInterface(
 			const { alternateLanguage } = currentModelView;
 			switch (interaction.type) {
 				case "TOGGLE_LANGUAGE": {
-					const newAlternateLanguage =
+					const currentLanguage =
 						alternateLanguage == "en" ? "ru" : "en";
+
 					const { promise, resolve } =
 						Promise.withResolvers<LanguageToggleModelView>();
 					localeChangeEmitter.once("locale-change", () => {
-						location.reload(); //TODO: Dirty workaround
 						resolve({
-							alternateLanguage: newAlternateLanguage,
+							alternateLanguage: currentLanguage,
 						});
 					});
-					localeRouter.replace(
-						currentPathName.slice(
-							undefined,
-							currentPathName.lastIndexOf("#") != -1
-								? currentPathName.lastIndexOf("#")
-								: undefined,
-						),
-						{ locale: alternateLanguage },
-					);
 
+					let newPathName = ["/", "#", "?"]
+						.map(delimiter =>
+							currentPathName.replace(
+								`/${currentLanguage}${delimiter}`,
+								`/${alternateLanguage}${delimiter}`,
+							),
+						)
+						.filter(
+							candidate => !currentPathName.includes(candidate),
+						)[0];
+					if (
+						!newPathName &&
+						currentPathName.endsWith(`/${currentLanguage}`)
+					)
+						newPathName = currentPathName.replace(
+							new RegExp(`\\/${currentLanguage}$`),
+							`/${alternateLanguage}`,
+						);
+					if (!newPathName)
+						newPathName = `/${alternateLanguage}${currentPathName}`;
+
+					// localeRouter.replace( //TODO: Revisit once caching situation is figured out
+					// 	currentPathName.slice(
+					// 		undefined,
+					// 		currentPathName.lastIndexOf("#") != -1
+					// 			? currentPathName.lastIndexOf("#")
+					// 			: undefined,
+					// 	),
+					// 	{ locale: alternateLanguage, },
+					// );
+					// localeRouter.refresh();
+					location.replace(newPathName);
 					return await promise;
 				}
 			}

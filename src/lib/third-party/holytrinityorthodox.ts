@@ -42,14 +42,20 @@ class HolyTrinityOrthodoxImplementation implements HolyTrinityOrthodox {
 
 	async getDailyReadings(date: Date) {
 		const localDate = toZonedTime(date, "CAT");
+		const liturgicalWeek = this.getLiturgicalWeek(localDate);
+		const saints = this.getSaints(localDate);
+		const scriptures = this.getScriptures(localDate);
+		const fastingInfo = this.getFastingInfo(localDate);
+		const iconOfTheDay = this.getIconOfTheDay(localDate);
+		const hymns = this.getHymns(localDate);
 		return {
 			currentDate: date,
-			liturgicalWeek: await this.getLiturgicalWeek(localDate),
-			saints: await this.getSaints(localDate),
-			scriptures: await this.getScriptures(localDate),
-			fastingInfo: await this.getFastingInfo(localDate),
-			iconOfTheDay: await this.getIconOfTheDay(localDate),
-			hymns: await this.getHymns(localDate),
+			liturgicalWeek: await liturgicalWeek,
+			saints: await saints,
+			scriptures: await scriptures,
+			fastingInfo: await fastingInfo,
+			iconOfTheDay: await iconOfTheDay,
+			hymns: await hymns,
 		};
 	}
 	async getLiturgicalWeek(date: Date) {

@@ -19,9 +19,12 @@ const LocaleLayout = async function ({ model, children }) {
 	const { locale } = model.modelView;
 	setRequestLocale(locale);
 
-	const tNavMenu = await getTranslations("navMenu");
-	const tFooterVariable = await getTranslations("footer_variable");
-	const tLinks = await getTranslations("links");
+	const tNavMenu = await getTranslations({ locale, namespace: "navMenu" });
+	const tFooterVariable = await getTranslations({
+		locale,
+		namespace: "footer_variable",
+	});
+	const tLinks = await getTranslations({ locale, namespace: "links" });
 	const navlinks = [
 		{ link: "/", text: tNavMenu("home") },
 		{
