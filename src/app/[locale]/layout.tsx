@@ -18,6 +18,7 @@ import {
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import LocaleLayout from "./LocaleLayout";
+import PageLoading from "@/src/lib/component/page-loading/PageLoading";
 
 export function generateStaticParams() {
 	return [{ locale: "en" }, { locale: "ru" }];
@@ -88,7 +89,7 @@ export default async function RootLayout({
 			<body
 				className={`antialiased ${googleSansFlex.variable} ${googleSans.variable} ${georgia.variable}`}
 			>
-				<Suspense fallback={null}>
+				<Suspense fallback={<PageLoading />}>
 					<NextIntlClientProvider locale={locale} messages={messages}>
 						<ClientProviders>
 							<LocaleLayout model={newReadonlyModel({ locale })}>

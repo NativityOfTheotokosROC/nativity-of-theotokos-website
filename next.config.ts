@@ -65,6 +65,7 @@ const nextConfig: NextConfig = {
 	cacheComponents: true,
 	experimental: {
 		authInterrupts: true,
+		viewTransition: true,
 	},
 };
 
