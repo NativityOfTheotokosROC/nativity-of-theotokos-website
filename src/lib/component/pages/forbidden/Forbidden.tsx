@@ -15,8 +15,8 @@ const Forbidden = function ({ model }) {
 
 	return (
 		<main className={`forbidden bg-[#FEF8F3] text-black`}>
-			<div className="forbidden-content flex items-center justify-center text-center p-8 py-15 pb-20 grow min-h-max h-full border-t-15 border-[#832C0B]/90">
-				<div className="flex flex-col items-center justify-center gap-6 w-md">
+			<div className="forbidden-content flex justify-center text-center p-8 py-15 pb-20 grow min-h-[94svh] h-full border-t-15 border-[#832C0B]/90">
+				<div className="flex flex-col min-h-fit h-[70svh] items-center justify-center gap-6 w-md">
 					<ForbiddenGraphic
 						className="h-72 md:h-60 w-80"
 						opacity={0.9}

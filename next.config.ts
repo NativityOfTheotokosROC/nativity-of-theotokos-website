@@ -67,6 +67,7 @@ const nextConfig: NextConfig = {
 		authInterrupts: true,
 		viewTransition: true,
 	},
+	allowedDevOrigins: ["192.168.100.7"],
 };
 
 const withNextIntl = createNextIntlPlugin();

@@ -1,7 +1,18 @@
-import { protect } from "@/src/lib/server-action/auth";
-import { redirect } from "next/navigation";
+import ProtectedComponent from "@/src/lib/component/protected-component/ProtectedComponent";
+import { newReadonlyModel } from "@mvc-react/mvc";
+import Admin from "./Admin";
+import { connection } from "next/server";
 
 export default async function Page() {
-	await protect({ roles: ["staff"], signInEndpoint: "/admin" });
-	return redirect("/");
+	await connection(); //HACK
+	return (
+		<ProtectedComponent
+			model={newReadonlyModel({
+				roles: ["staff"],
+				signInEndpoint: "/admin",
+			})}
+		>
+			<Admin />
+		</ProtectedComponent>
+	);
 }

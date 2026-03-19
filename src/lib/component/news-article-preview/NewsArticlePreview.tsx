@@ -13,11 +13,10 @@ const NewsArticlePreview = function ({ model }) {
 	const { title, author, dateCreated, snippet, articleImage, uri } = article;
 	const { placeholder, source, about } = articleImage;
 	const articleLink = `/news/${uri}`;
-	const dateLocale = "ru-RU";
 	const dateString = toZonedTime(
 		dateCreated,
 		"Africa/Harare",
-	).toLocaleDateString(dateLocale, {
+	).toLocaleDateString("ru-RU", {
 		dateStyle: "short",
 	});
 	const tCaptions = useTranslations("imageCaptions");
@@ -52,7 +51,7 @@ const NewsArticlePreview = function ({ model }) {
 			</div>
 		</Link>
 	) : (
-		<Link href={articleLink} scroll>
+		<Link href={articleLink}>
 			<div className="normal-card flex flex-row items-center max-w-[27em] gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer hover:[&_.title]:underline active:[&_.title]:underline select-none">
 				<div className="flex justify-stretch items-stretch w-[7em] min-w-[7em] h-[6em] max-h-[6em] md:w-[8em] md:min-w-[8em] md:h-[6.4em] md:max-h-[6.4em] rounded-lg overflow-clip">
 					<Image

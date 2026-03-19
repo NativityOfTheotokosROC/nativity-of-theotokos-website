@@ -34,7 +34,7 @@ export function usePageLoadingBarRouter<T extends typeof useRouter>(
 	const { interact } = useContext(PageLoadingBarContext);
 	return {
 		...router,
-		push(href, options?) {
+		async push(href, options?) {
 			router.push(href, options);
 			if (
 				triggerLoading(pathName, href, {
@@ -42,17 +42,23 @@ export function usePageLoadingBarRouter<T extends typeof useRouter>(
 					targetLocale: options?.locale,
 				})
 			)
-				interact({ type: "SET_LOADING", input: { value: true } });
+				await interact({
+					type: "SET_LOADING",
+					input: { value: false },
+				});
+			await interact({ type: "SET_LOADING", input: { value: true } });
 		},
-		forward() {
+		async forward() {
 			router.forward();
-			interact({ type: "SET_LOADING", input: { value: true } });
+			await interact({ type: "SET_LOADING", input: { value: false } });
+			await interact({ type: "SET_LOADING", input: { value: true } });
 		},
-		back() {
+		async back() {
 			router.back();
-			interact({ type: "SET_LOADING", input: { value: true } });
+			await interact({ type: "SET_LOADING", input: { value: false } });
+			await interact({ type: "SET_LOADING", input: { value: true } });
 		},
-		replace(href, options?) {
+		async replace(href, options?) {
 			router.replace(href, options);
 			if (
 				triggerLoading(pathName, href, {
@@ -60,7 +66,11 @@ export function usePageLoadingBarRouter<T extends typeof useRouter>(
 					targetLocale: options?.locale,
 				})
 			)
-				interact({ type: "SET_LOADING", input: { value: true } });
+				await interact({
+					type: "SET_LOADING",
+					input: { value: false },
+				});
+			await interact({ type: "SET_LOADING", input: { value: true } });
 		},
 	} satisfies typeof router;
 }

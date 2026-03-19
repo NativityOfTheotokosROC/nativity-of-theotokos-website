@@ -26,7 +26,7 @@ const SignIn = function ({ model }) {
 				}}
 				viewport={{ once: true }}
 				transition={{ duration: 0.4, ease: "easeOut" }}
-				className="sign-in-content flex flex-col min-h-[70lvh] gap-6 p-8 py-9 lg:px-20 md:py-10"
+				className="sign-in-content flex flex-col min-h-[94svh] gap-6 p-8 py-9 lg:px-20 md:py-10"
 			>
 				<span
 					className={`text-[2.75rem]/tight mb-2 font-semibold md:text-black md:w-1/2 ${georgia.className}`}

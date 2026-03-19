@@ -15,8 +15,8 @@ const Error = function ({ model }) {
 
 	return (
 		<main className={`error bg-[#FEF8F3] text-black`}>
-			<div className="error-content flex items-center justify-center text-center p-8 py-15 pb-20 grow min-h-max h-full border-t-15 border-red-950/90">
-				<div className="flex flex-col items-center justify-center gap-6 w-md">
+			<div className="error-content flex justify-center text-center p-8 py-15 pb-20 grow min-h-[94svh] h-full border-t-15 border-red-950/90">
+				<div className="flex min-h-fit h-[70svh] flex-col items-center justify-center gap-6 w-md">
 					<CloudAlert
 						className="h-54 md:h-48 w-64"
 						opacity={0.9}
