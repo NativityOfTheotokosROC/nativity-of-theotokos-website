@@ -2,6 +2,7 @@ import { ModeledContainerComponent } from "@mvc-react/components";
 import React from "react";
 import { ProtectedComponentModel } from "../../model/protected-component";
 import { protect } from "../../server-action/auth";
+import { connection } from "next/server";
 
 const ProtectedComponent = async function ({
 	model,
@@ -11,8 +12,8 @@ const ProtectedComponent = async function ({
 	children: React.ReactNode;
 }) {
 	const { signInEndpoint, roles } = model.modelView;
-	const test = await protect({ roles, signInEndpoint });
-	console.log(test);
+	await connection(); //HACK
+	await protect({ roles, signInEndpoint });
 
 	return children;
 } satisfies ModeledContainerComponent<ProtectedComponentModel>;
