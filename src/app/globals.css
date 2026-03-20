@@ -6,9 +6,11 @@
 }
 
 html {
+	position: relative;
 	min-height: fit-content;
 	height: 100dvh;
 	scroll-behavior: smooth;
+	scrollbar-gutter: stable;
 }
 
 body {

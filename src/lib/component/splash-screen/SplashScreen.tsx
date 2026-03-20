@@ -14,19 +14,19 @@ const SplashScreen = function ({ model }) {
 	useLayoutEffect(() => {
 		// HACK: Revisit
 		window.onscroll = () => {
-			if (fullscreen && isShown) window.scrollTo(0, 0);
+			if (isShown && fullscreen) window.scrollTo(0, 0);
 		};
 	}, [isShown, fullscreen]);
 
 	return (
 		<AnimatePresence initial={false} onExitComplete={exitedCallback}>
-			{isShown ? (
+			{isShown && (
 				<motion.div
 					key="splash"
 					initial={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
 					transition={{ duration: 0.4, ease: "easeIn" }}
-					className={`splash flex flex-col w-full h-full bg-gray-900 overflow-hidden ${fullscreen && "absolute z-30 top-0 min-h-[110vh]"}`}
+					className={`splash flex flex-col w-full h-full overflow-hidden ${fullscreen && "absolute z-30 top-0 min-h-[110vh]"}`}
 					data-fullscreen={fullscreen}
 				>
 					<div className="flex flex-col sticky top-0 items-center justify-center h-full max-h-dvh grow p-9">
@@ -41,8 +41,6 @@ const SplashScreen = function ({ model }) {
 						</motion.div>
 					</div>
 				</motion.div>
-			) : (
-				<></>
 			)}
 		</AnimatePresence>
 	);

@@ -12,7 +12,7 @@ const NavigationMenu = function ({ model }) {
 
 	return (
 		<nav className="nav-menu">
-			{menuType == "spread" ? (
+			{menuType == "horizontal" ? (
 				<div className="flex gap-6 lg:gap-8 items-center justify-center flex-wrap px-4">
 					{[
 						...navlinks.map((navlink, index) => (

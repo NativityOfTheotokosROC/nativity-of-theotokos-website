@@ -15,8 +15,5 @@
 
 html:has(.splash[data-fullscreen="true"]) {
 	background: var(--splash-background);
-}
-
-body:has(.splash[data-fullscreen="true"]) {
 	overflow: hidden;
 }

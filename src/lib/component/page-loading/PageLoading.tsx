@@ -5,8 +5,8 @@ import { LogoIcon } from "../miscellaneous/graphic";
 
 export default function PageLoading() {
 	return (
-		<ViewTransition>
-			<div className="page-loading relative flex flex-col items-center h-fit min-h-screen w-full bg-[#fef8f3]">
+		<ViewTransition name="page-loading">
+			<div className="page-loading relative flex flex-col items-center h-fit min-h-screen w-full bg-[#fef8f3] z-12">
 				<div className="min-h-fit h-full max-h-[85vh] absolute items-center justify-center w-full">
 					<div
 						className={`flex gap-3 h-full my-auto mx-auto items-center justify-center max-w-[25em] animate-pulse`}
