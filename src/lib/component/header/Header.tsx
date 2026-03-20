@@ -14,7 +14,7 @@ import "./header.css";
 const Header = function ({ model }) {
 	const { navlinks } = model.modelView;
 	const isWideScreen = useMediaQuery({ minWidth: 1024 });
-	const navigationMenuType = isWideScreen ? "spread" : "shelved";
+	const navigationMenuType = isWideScreen ? "horizontal" : "vertical";
 	const router = usePageLoadingBarRouter(useRouter);
 
 	return (
