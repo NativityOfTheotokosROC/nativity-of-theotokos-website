@@ -1,11 +1,9 @@
 "use client";
 
 import HymnsModal from "@/src/lib/component/hymns-modal/HymnsModal";
-import {
-	AboutOurParishGraphic,
-	LiturgicalResourcesGraphic,
-	WhatIsOrthodoxyGraphic,
-} from "@/src/lib/component/miscellaneous/graphic";
+import AboutOurParishGraphic from "@/public/assets/about-our-parish.webp";
+import LiturgicalResourcesGraphic from "@/public/assets/liturgical-resources.webp";
+import WhatIsOrthodoxyGraphic from "@/public/assets/what-is-orthodoxy.webp";
 import SplashScreen from "@/src/lib/component/splash-screen/SplashScreen";
 import { hymnsModalVIInterface } from "@/src/lib/model-implementation/hymns-modal";
 import { useMailingListRepository } from "@/src/lib/model-implementation/mailing-list-repository";

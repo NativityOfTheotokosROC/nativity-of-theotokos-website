@@ -1,7 +1,7 @@
 "use client";
 
 import { ViewTransition } from "react";
-import { LogoIcon } from "../miscellaneous/graphic";
+import LogoIcon from "@/public/assets/logo-icon.svg";
 
 export default function PageLoading() {
 	return (

@@ -1,4 +1,4 @@
-import { LatestNewsOrnament } from "@/src/lib/component/miscellaneous/graphic";
+import LatestNewsOrnament from "@/public/assets/ornament_11.svg";
 import NewsArticlePreview from "@/src/lib/component/news-article-preview/NewsArticlePreview";
 import SchedulePreviewWidget from "@/src/lib/component/schedule-preview-widget/SchedulePreviewWidget";
 import { BulletinSectionModel } from "@/src/lib/model/bulletin-section";

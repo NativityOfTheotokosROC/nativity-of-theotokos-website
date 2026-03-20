@@ -1,6 +1,6 @@
 "use client";
 
-import { ForbiddenGraphic } from "@/src/lib/component/miscellaneous/graphic";
+import ForbiddenGraphic from "@/public/assets/icon-3.svg";
 import { ForbiddenModel } from "@/src/lib/model/forbidden";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";

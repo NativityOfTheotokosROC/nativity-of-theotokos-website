@@ -7,7 +7,7 @@ import { Fragment } from "react/jsx-runtime";
 import { FooterModel } from "../../model/footer";
 import { georgia } from "../../third-party/fonts";
 import { formatPhoneNumber, isRemotePath } from "../../utility/miscellaneous";
-import { LogoIcon } from "../miscellaneous/graphic";
+import LogoIcon from "@/public/assets/logo-icon.svg";
 import { Link } from "../page-loading-bar/navigation";
 import SocialLink from "../social-link/SocialLink";
 import FooterSection from "./FooterSection";
@@ -122,7 +122,7 @@ const Footer = function ({ model }) {
 						<FooterSection
 							model={newReadonlyModel({ title: t("contact") })}
 						>
-							<div className="grid grid-cols-2 gap-x-2">
+							<div className="grid grid-cols-2 gap-2">
 								{[
 									...contacts.map(contact => (
 										<Fragment key={contact.phone}>

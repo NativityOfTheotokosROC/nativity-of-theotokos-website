@@ -4,7 +4,7 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { SplashScreenModel } from "../../model/splash-screen";
 import { motion, AnimatePresence } from "motion/react";
 import "./splash-screen.css";
-import { LogoIcon } from "../miscellaneous/graphic";
+import LogoIcon from "@/public/assets/logo-icon.svg";
 import { useLayoutEffect } from "react";
 
 const SplashScreen = function ({ model }) {

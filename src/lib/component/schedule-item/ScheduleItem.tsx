@@ -5,7 +5,7 @@ import { ScheduleItemModel } from "../../model/schedule-item";
 import { georgia } from "../../third-party/fonts";
 import { useLocale } from "next-intl";
 import { toZonedTime } from "date-fns-tz";
-import { FeaturedItemOrnament } from "../miscellaneous/graphic";
+import FeaturedItemOrnament from "@/public/assets/ornament_12.svg";
 
 const ScheduleItem = function ({ model }) {
 	const { scheduleItem, isFeatured } = model.modelView;

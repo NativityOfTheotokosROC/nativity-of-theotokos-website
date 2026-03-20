@@ -1,6 +1,6 @@
-import { YandexIcon } from "@/src/lib/component/miscellaneous/graphic";
+import YandexIcon from "@/public/assets/yandex-icon.svg";
 import { SignInButtonModel } from "@/src/lib/model/sign-in-button";
-import { SiGoogle as Google } from "@icons-pack/react-simple-icons";
+import { SiGoogle as GoogleIcon } from "@icons-pack/react-simple-icons";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
@@ -27,7 +27,7 @@ const SignInButton = function ({ model }) {
 							})}
 						/>
 					) : (
-						<Google className="size-6 fill-[#4285F4]" />
+						<GoogleIcon className="size-6 fill-[#4285F4]" />
 					)}
 
 					{t("buttonText", { serviceName: "Google" })}

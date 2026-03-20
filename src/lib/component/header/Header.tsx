@@ -8,7 +8,7 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { georgia } from "../../third-party/fonts";
 import { useRouter } from "@/src/i18n/navigation";
 import { Link, usePageLoadingBarRouter } from "../page-loading-bar/navigation";
-import { LogoIcon } from "../miscellaneous/graphic";
+import LogoIcon from "@/public/assets/logo-icon.svg";
 import "./header.css";
 
 const Header = function ({ model }) {

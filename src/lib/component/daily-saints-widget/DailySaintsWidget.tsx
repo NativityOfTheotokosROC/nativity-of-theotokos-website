@@ -4,7 +4,7 @@ import Image from "next/image";
 import { toZonedTime } from "date-fns-tz";
 import { motion } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
-import { HymnsOrnament } from "../miscellaneous/graphic";
+import HymnsOrnament from "@/public/assets/ornament_9.svg";
 import Link from "next/link";
 
 const DailySaintsWidget = function ({ model }) {

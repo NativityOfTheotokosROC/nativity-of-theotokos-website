@@ -1,4 +1,4 @@
-import { NativityIcon } from "@/src/lib/component/miscellaneous/graphic";
+import NativityIcon from "@/public/assets/nativity-icon.webp";
 import { HeroSectionModel } from "@/src/lib/model/hero-section";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";

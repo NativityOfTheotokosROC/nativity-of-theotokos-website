@@ -10,7 +10,7 @@ import {
 } from "@headlessui/react";
 import { georgia } from "../../third-party/fonts";
 import { useTranslations } from "next-intl";
-import { HymnsOrnament } from "../miscellaneous/graphic";
+import HymnsOrnament from "@/public/assets/ornament_9.svg";
 
 const HymnsModal = function ({ model }) {
 	const { modelView, interact } = model;

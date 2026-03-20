@@ -8,7 +8,7 @@ import MaintenanceGraphic from "@/public/assets/ornament_36.svg";
 import NotFoundGraphic from "@/public/assets/ornament_35.svg";
 import EnglishIcon from "@/public/assets/english.svg";
 import RussianIcon from "@/public/assets/russian.svg";
-import NativityIcon from "@/public/assets/nativity-icon.jpg";
+import NativityIcon from "@/public/assets/nativity-icon.webp";
 import YandexIcon from "@/public/assets/yandex-icon.svg";
 import DailyQuoteGraphic from "@/public/assets/daily-thought.jpg";
 import LiturgicalResourcesGraphic from "@/public/assets/liturgical-resources.jpg";

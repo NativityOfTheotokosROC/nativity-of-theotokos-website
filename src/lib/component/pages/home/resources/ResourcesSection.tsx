@@ -1,7 +1,7 @@
 import { ResourcesSectionModel } from "@/src/lib/model/resources-section";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import ResourceWidget from "../../../resource-widget/ResourceWidget";
-import { ResourcesBorder } from "@/src/lib/component/miscellaneous/graphic";
+import ResourcesBorder from "@/public/assets/border-8.webp";
 import { newReadonlyModel } from "@mvc-react/mvc";
 
 const ResourcesSection = function ({ model }) {

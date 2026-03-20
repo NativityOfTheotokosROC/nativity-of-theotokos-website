@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { georgia } from "../../third-party/fonts";
-import { ReadingsOrnament } from "../miscellaneous/graphic";
+import ReadingsOrnament from "@/public/assets/ornament_1.svg";
 
 const ScripturesWidget = function ({ model }) {
 	const { fastingInfo, scriptures } = model.modelView.details;

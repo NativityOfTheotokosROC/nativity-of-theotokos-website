@@ -6,7 +6,8 @@ import { JSX } from "react";
 import { Language } from "../../type/miscellaneous";
 import { LanguageToggleModel } from "../../model/language-toggle";
 import "./language-toggle.css";
-import { EnglishIcon, RussianIcon } from "../miscellaneous/graphic";
+import EnglishIcon from "@/public/assets/english.svg";
+import RussianIcon from "@/public/assets/russian.svg";
 
 const languageToRenderedMap = new Map<Language, JSX.Element>([
 	[
