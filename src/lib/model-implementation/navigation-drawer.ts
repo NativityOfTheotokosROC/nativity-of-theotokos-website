@@ -4,7 +4,7 @@ import {
 	NavigationDrawerModel,
 	NavigationDrawerType,
 } from "../model/navigation-drawer";
-import { MenuItems } from "../model/navigation-menu";
+import { MenuItems } from "../type/miscellaneous";
 
 export function useNavigationDrawer(
 	menuItems: MenuItems,
