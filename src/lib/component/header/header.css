@@ -19,8 +19,16 @@
 	animation-range: 500px 610px;
 }
 
-.header .nav-menu {
+.header .header-interactive {
 	transform-origin: top right;
+	scale: 1 1;
+	animation: shrink-header-content ease-out forwards;
+	animation-timeline: scroll(root);
+	animation-range: 500px 610px;
+}
+
+.header .accordion-menu-content {
+	transform-origin: center;
 	scale: 1 1;
 	animation: shrink-header-content ease-out forwards;
 	animation-timeline: scroll(root);

@@ -30,6 +30,10 @@
 		"description": "The page is currently under maintenance. Please check back later. You may explore our other pages in the meantime.",
 		"goHome": "Go Home"
 	},
+	"header": {
+		"logoTop": "Nativity of the Theotokos",
+		"logoBottom": "Russian Orthodox Church"
+	},
 	"navMenu": {
 		"home": "Home",
 		"resources": "Resources",

@@ -83,4 +83,9 @@ export type User = {
 	email: string;
 };
 
+export type MenuItems = {
+	userDetails: User | null;
+	navlinks: Navlink[];
+};
+
 export type Role = "admin" | "staff" | "user" | "quotes";

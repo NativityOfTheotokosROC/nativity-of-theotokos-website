@@ -1,13 +1,19 @@
-import { ReadonlyModel } from "@mvc-react/mvc";
-import { Navlink, User } from "../type/miscellaneous";
+import { InteractiveModel, ModelInteraction } from "@mvc-react/mvc";
+import { MenuItems } from "../type/miscellaneous";
 
-type NavigationDrawerType = "sidebar" | "accordion";
+export type NavigationDrawerType = "sidebar" | "accordion";
 
 export interface NavigationDrawerModelView {
 	isDrawn: boolean;
 	type: NavigationDrawerType;
-	navlinks: Navlink[];
-	user: User;
+	navMenuItems: MenuItems;
 }
 
-export type NavigationDrawerModel = ReadonlyModel<NavigationDrawerModelView>;
+export type NavigationDrawerModelInteraction = ModelInteraction<
+	"OPEN" | "CLOSE" | "TOGGLE"
+>;
+
+export type NavigationDrawerModel = InteractiveModel<
+	NavigationDrawerModelView,
+	NavigationDrawerModelInteraction
+>;
