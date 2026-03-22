@@ -9,6 +9,6 @@
 		transform: translateY(101%);
 		display: none;
 		opacity: 0;
-		/* position: absolute; */
+		visibility: hidden; /* This one's for you, Firefox */
 	}
 }

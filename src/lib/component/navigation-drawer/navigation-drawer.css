@@ -1,0 +1,11 @@
+.sidebar-drawer::-webkit-scrollbar-track {
+	background: #4e5963;
+}
+
+.sidebar-drawer::-webkit-scrollbar-thumb {
+	background: #101828b9;
+}
+
+.sidebar-drawer::-webkit-scrollbar-thumb:hover {
+	background: #101828;
+}

@@ -1,6 +1,6 @@
 "use server";
 
-import { NavigationUserDetails } from "../model/user-navigation";
+import { NavigationUserDetails } from "../model/user-navigation-widget";
 import prisma from "../third-party/prisma";
 import { Role } from "../type/miscellaneous";
 import { getUser } from "./auth";

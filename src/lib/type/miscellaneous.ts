@@ -1,6 +1,6 @@
 import { routing } from "@/src/i18n/routing";
 import { ImagePlaceholder } from "@grod56/placeholder";
-import { NavigationUserDetails } from "../model/user-navigation";
+import { NavigationUserDetails } from "../model/user-navigation-widget";
 
 export type Navlink = {
 	text: string;

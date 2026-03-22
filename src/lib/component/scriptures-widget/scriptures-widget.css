@@ -1,0 +1,11 @@
+.scriptures::-webkit-scrollbar-track {
+	background: #4e5963;
+}
+
+.scriptures::-webkit-scrollbar-thumb {
+	background: #101828b9;
+}
+
+.scriptures::-webkit-scrollbar-thumb:hover {
+	background: #101828;
+}

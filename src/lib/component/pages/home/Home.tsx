@@ -18,7 +18,6 @@ import DailyQuoteSection from "./daily-quote/DailyQuoteSection";
 import DailyReadingsSection from "./daily-readings/DailyReadingsSection";
 import GallerySection from "./gallery/GallerySection";
 import HeroSection from "./hero/HeroSection";
-import "./home.css";
 import MailingListSection from "./mailing-list/MailingListSection";
 import ResourcesSection from "./resources/ResourcesSection";
 

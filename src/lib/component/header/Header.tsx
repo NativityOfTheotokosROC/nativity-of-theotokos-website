@@ -3,7 +3,11 @@
 import LogoIcon from "@/public/assets/logo-icon.svg";
 import { useRouter } from "@/src/i18n/navigation";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
+import {
+	InitializedModel,
+	newReadonlyModel,
+	ReadonlyModel,
+} from "@mvc-react/mvc";
 import { TextAlignJustifyIcon as MenuIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useMediaQuery } from "react-responsive";
@@ -14,31 +18,82 @@ import { georgia } from "../../third-party/fonts";
 import NavigationDrawer from "../navigation-drawer/NavigationDrawer";
 import { Link, usePageLoadingBarRouter } from "../page-loading-bar/navigation";
 import "./header.css";
-import { MenuItems } from "../../type/miscellaneous";
+import { Navlink } from "../../type/miscellaneous";
+import { UserNavigationWidgetModel } from "../../model/user-navigation-widget";
+import UserNavigationWidget from "../user-navigation-widget/UserNavigationWidget";
+import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
+import { userNavigationWidgetVIInterface } from "../../model-implementation/user-navigation-widget";
 
 const NavMenu = function ({ model }) {
 	const {
-		menuItems: { navlinks },
+		type,
+		menuItems: { navlinks, userNavigationWidget },
 	} = model.modelView;
 	return (
 		<nav className="nav-menu">
-			<div className="flex gap-6 lg:gap-8 items-center justify-center flex-wrap px-4">
-				{[
-					...navlinks.map((navlink, index) => (
+			{type == "horizontal" && (
+				<div className="flex gap-6 lg:gap-8 items-center justify-center flex-wrap px-4">
+					{[
+						...navlinks.map((navlink, index) => (
+							<Link
+								key={index}
+								href={navlink.link}
+								className="navlink text-base uppercase no-underline hover:text-[#DCB042]"
+								replace={navlink.isReplaceable}
+							>
+								{navlink.text}
+							</Link>
+						)),
+					]}
+				</div>
+			)}
+			{type == "vertical" && (
+				<div className="flex flex-col">
+					{userNavigationWidget.modelView.userDetails && (
+						<UserNavigationWidget
+							model={{
+								modelView: {
+									...userNavigationWidget.modelView,
+									type: "sidebar",
+								},
+								interact: userNavigationWidget.interact,
+							}}
+						/>
+					)}
+					{navlinks.map((navlink, index) => (
 						<Link
 							key={index}
+							className="block navlink uppercase no-underline px-6 py-4 md:px-8 active:bg-gray-950 active:text-[#DCB042] hover:text-[#DCB042]"
 							href={navlink.link}
-							className="navlink text-base uppercase no-underline hover:text-[#DCB042]"
 							replace={navlink.isReplaceable}
 						>
 							{navlink.text}
 						</Link>
-					)),
-				]}
-			</div>
+					))}
+					{userNavigationWidget.modelView.userDetails && (
+						<UserNavigationWidget
+							model={{
+								modelView: {
+									...userNavigationWidget.modelView,
+									type: "navbar",
+								},
+								interact: userNavigationWidget.interact,
+							}}
+						/>
+					)}
+				</div>
+			)}
 		</nav>
 	);
-} satisfies ModeledVoidComponent<ReadonlyModel<{ menuItems: MenuItems }>>;
+} satisfies ModeledVoidComponent<
+	ReadonlyModel<{
+		type: "horizontal" | "vertical";
+		menuItems: {
+			navlinks: Navlink[];
+			userNavigationWidget: InitializedModel<UserNavigationWidgetModel>;
+		};
+	}>
+>;
 
 const Header = function ({ model }) {
 	const { navlinks, userDetails } = model.modelView;
@@ -55,6 +110,13 @@ const Header = function ({ model }) {
 		navigationDrawerType,
 	);
 	const router = usePageLoadingBarRouter(useRouter);
+	const userNavigationWidget = useInitializedStatefulInteractiveModel(
+		userNavigationWidgetVIInterface(router),
+		{
+			type: isLargeScreen ? ("navbar" as const) : ("sidebar" as const),
+			userDetails,
+		},
+	);
 	const t = useTranslations("header");
 	const tNonDescriptive = useTranslations("nonDescriptive");
 	const locale = useLocale();
@@ -97,7 +159,8 @@ const Header = function ({ model }) {
 					{isLargeScreen ? (
 						<NavMenu
 							model={newReadonlyModel({
-								menuItems: { navlinks, userDetails: null },
+								type: "horizontal",
+								menuItems: { navlinks, userNavigationWidget },
 							})}
 						/>
 					) : (
@@ -113,7 +176,16 @@ const Header = function ({ model }) {
 					)}
 				</div>
 			</div>
-			{!isLargeScreen && <NavigationDrawer model={navigationDrawer} />}
+			{!isLargeScreen && (
+				<NavigationDrawer model={navigationDrawer}>
+					<NavMenu
+						model={newReadonlyModel({
+							type: "vertical",
+							menuItems: { navlinks, userNavigationWidget },
+						})}
+					/>
+				</NavigationDrawer>
+			)}
 			<hr className="header-border self-center text-gray-500" />
 		</header>
 	);
