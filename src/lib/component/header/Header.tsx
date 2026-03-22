@@ -45,6 +45,17 @@ const NavMenu = function ({ model }) {
 							</Link>
 						)),
 					]}
+					{userNavigationWidget.modelView.userDetails && (
+						<UserNavigationWidget
+							model={{
+								modelView: {
+									...userNavigationWidget.modelView,
+									type: "navbar",
+								},
+								interact: userNavigationWidget.interact,
+							}}
+						/>
+					)}
 				</div>
 			)}
 			{type == "vertical" && (
@@ -70,17 +81,6 @@ const NavMenu = function ({ model }) {
 							{navlink.text}
 						</Link>
 					))}
-					{userNavigationWidget.modelView.userDetails && (
-						<UserNavigationWidget
-							model={{
-								modelView: {
-									...userNavigationWidget.modelView,
-									type: "navbar",
-								},
-								interact: userNavigationWidget.interact,
-							}}
-						/>
-					)}
 				</div>
 			)}
 		</nav>
