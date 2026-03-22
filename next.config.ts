@@ -22,6 +22,16 @@ const nextConfig: NextConfig = {
 				hostname: "www.holytrinityorthodox.com",
 				pathname: "/**",
 			},
+			{
+				protocol: "https",
+				hostname: "lh3.googleusercontent.com",
+				pathname: "/a/**",
+			},
+			{
+				protocol: "https",
+				hostname: "avatars.yandex.net",
+				pathname: "/get-yapic/**",
+			},
 		],
 	},
 	turbopack: {

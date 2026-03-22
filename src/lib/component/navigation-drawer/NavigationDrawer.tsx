@@ -1,3 +1,4 @@
+import SidebarDecoration from "@/public/assets/ornament_33.svg";
 import {
 	Dialog,
 	DialogBackdrop,
@@ -10,12 +11,12 @@ import {
 	InteractiveModel,
 	ModelInteraction,
 } from "@mvc-react/mvc";
-import { X } from "lucide-react";
 import {
 	NavigationDrawerModel,
 	NavigationDrawerModelView,
 } from "../../model/navigation-drawer";
 import { Link } from "../page-loading-bar/navigation";
+import UserNavigation from "../user-navigation/UserNavigation";
 
 type MenuModelView = Pick<
 	NavigationDrawerModelView,
@@ -61,39 +62,41 @@ const SidebarMenu = function ({ model }) {
 		modelView: { navMenuItems, isDrawn },
 		interact,
 	} = model;
-	const { navlinks } = navMenuItems;
+	const { navlinks, userDetails } = navMenuItems;
 
 	return (
 		<Dialog
 			open={isDrawn}
-			onClose={async () => await interact({ type: "CLOSE_MENU" })}
+			onClose={() => interact({ type: "CLOSE_MENU" })}
 			className="relative z-20"
 			as="div"
 		>
-			<div className={`fixed inset-0 z-21 flex w-screen justify-end`}>
+			<div className={`fixed inset-0 z-12 flex w-screen justify-end`}>
 				<DialogBackdrop
 					transition
 					className="fixed inset-0 bg-black/50 duration-400 ease-out data-closed:opacity-0"
 				/>
 				<DialogPanel
-					className={`flex flex-col overflow-clip gap-0 duration-300 ease-out origin-top-right data-closed:translate-x-1/4 data-closed:opacity-0 z-22`}
+					className={`flex flex-col h-dvh gap-4 w-60 max-w-[80vw] pb-3 overflow-y-auto origin-right bg-gray-900/99 border-l border-white/12 text-white focus:outline-none duration-300 ease-out data-closed:translate-x-1/4 data-closed:opacity-0 z-13`}
 					transition
 				>
+					<SidebarDecoration className="fill-white/60 mt-2 px-3 h-20 max-w-full" />
+					<hr className="w-3/4 opacity-50 mx-auto mt-3" />
 					<nav
-						className="navigation-menu min-w-fit w-50 h-fit min-h-screen flex flex-col origin-right bg-gray-900/99 border-l border-white/10 text-white focus:outline-none"
+						className="navigation-menu flex flex-col"
 						onBlur={() => {
 							interact({ type: "CLOSE_MENU" });
 						}}
 					>
-						<button
-							title="Close"
-							className="flex items-center justify-start w-fit p-4 px-6 text-[28px] bg-transparent hover:text-[#DCB042] data-open:text-[#DCB042] data-open:bg-black/45 rounded-lg"
-							onClick={() => {
-								interact({ type: "CLOSE_MENU" });
-							}}
-						>
-							<X className="size-6" strokeWidth={1.75} />
-						</button>
+						{/* TODO: To be revised */}
+						{userDetails && (
+							<UserNavigation
+								model={{
+									modelView: { type: "sidebar", userDetails },
+									interact() {},
+								}}
+							/>
+						)}
 						{navlinks.map((navlink, index) => (
 							<Link
 								key={index}

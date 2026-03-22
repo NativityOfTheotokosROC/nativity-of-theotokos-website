@@ -41,23 +41,27 @@ const NavMenu = function ({ model }) {
 } satisfies ModeledVoidComponent<ReadonlyModel<{ menuItems: MenuItems }>>;
 
 const Header = function ({ model }) {
-	const { navlinks } = model.modelView;
+	const { navlinks, userDetails } = model.modelView;
 	const isLargeScreen = useMediaQuery({ minWidth: 1024 });
 	const isPortrait = useMediaQuery({ orientation: "portrait" });
 	const navigationDrawerType = (
 		isPortrait ? "sidebar" : "accordion"
 	) satisfies NavigationDrawerType;
 	const navigationDrawer = useNavigationDrawer(
-		{ navlinks, userDetails: null },
+		{
+			navlinks,
+			userDetails,
+		},
 		navigationDrawerType,
 	);
 	const router = usePageLoadingBarRouter(useRouter);
 	const t = useTranslations("header");
+	const tNonDescriptive = useTranslations("nonDescriptive");
 	const locale = useLocale();
 
 	return (
 		<header
-			className={`header flex flex-col w-full max-w-full top-0 sticky z-10 bg-gray-900/99 h-fit`}
+			className={`header flex flex-col w-full max-w-full top-0 sticky z-11 bg-gray-900/99 h-fit`}
 		>
 			<div className="header-content flex flex-nowrap gap-9 justify-between p-4 lg:p-6 lg:px-7 items-center text-white">
 				<Link href="/">
@@ -98,7 +102,7 @@ const Header = function ({ model }) {
 						/>
 					) : (
 						<button
-							title="Menu"
+							title={tNonDescriptive("menu")}
 							className="flex items-center justify-center p-1 text-[28px] bg-transparent hover:text-[#DCB042] data-open:text-[#DCB042] data-open:bg-black/45 rounded-lg"
 							onClick={() => {
 								navigationDrawer.interact({ type: "TOGGLE" });

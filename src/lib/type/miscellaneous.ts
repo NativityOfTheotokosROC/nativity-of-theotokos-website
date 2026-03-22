@@ -1,5 +1,6 @@
 import { routing } from "@/src/i18n/routing";
 import { ImagePlaceholder } from "@grod56/placeholder";
+import { NavigationUserDetails } from "../model/user-navigation";
 
 export type Navlink = {
 	text: string;
@@ -84,7 +85,7 @@ export type User = {
 };
 
 export type MenuItems = {
-	userDetails: User | null;
+	userDetails: NavigationUserDetails | null;
 	navlinks: Navlink[];
 };
 

@@ -42,6 +42,9 @@
 		"contact": "Contact",
 		"parishBulletin": "News"
 	},
+	"userNavigation": {
+		"greeting": "Hello"
+	},
 	"footer": {
 		"heading": "Nativity of the Theotokos Church",
 		"email": "Email",
@@ -140,6 +143,11 @@
 		"mailingListButton": "Subscribe",
 		"mailingListSuccessMessage": "Thank you for subscribing to our mailing list! We will be keeping you up to date with the latest news, updates, announcements and more.",
 		"errorMessage": "There was a problem subscribing you to our mailing list. Please try again, cross-check your email, or check your internet connection."
+	},
+	"nonDescriptive": {
+		"menu": "Menu",
+		"close": "Close",
+		"share": "Share"
 	},
 	"links": {
 		"liturgicalResources": "https://eadiocese.org/litresource",

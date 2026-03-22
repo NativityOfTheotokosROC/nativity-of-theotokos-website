@@ -18,6 +18,7 @@ const NewsArticle = function ({ model }) {
 	const shortDateStyle = "ru-RU";
 	const t = useTranslations("news");
 	const tCaptions = useTranslations("imageCaptions");
+	const tNonDescriptive = useTranslations("nonDescriptive");
 	const shareData = {
 		title,
 		url: permalink,
@@ -88,6 +89,7 @@ const NewsArticle = function ({ model }) {
 				<div className="flex gap-5 self-end text-sm items-end text-gray-900 **:hover:text-[#dcb042] md:mt-4">
 					{navigator.share && navigator.canShare(shareData) && (
 						<button
+							title={tNonDescriptive("share")}
 							className="flex gap-3 items-end"
 							onClick={() => {
 								navigator.share(shareData);
