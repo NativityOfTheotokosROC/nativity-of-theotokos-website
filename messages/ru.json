@@ -45,6 +45,10 @@
 	"userNavigation": {
 		"greeting": "Привет"
 	},
+	"userAction": {
+		"newQuote": "Новая цитата",
+		"signOut": "Выйти"
+	},
 	"footer": {
 		"heading": "Храм Рождества Пресвятой Богородицы",
 		"email": "Электронная почта",

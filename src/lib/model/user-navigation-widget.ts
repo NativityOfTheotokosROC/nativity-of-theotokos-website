@@ -1,4 +1,4 @@
-import { ModelInteraction, InteractiveModel } from "@mvc-react/mvc";
+import { ReadonlyModel } from "@mvc-react/mvc";
 import { Image, Role, User } from "../type/miscellaneous";
 
 export type NavigationUserDetails = Pick<User, "name"> & {
@@ -6,16 +6,14 @@ export type NavigationUserDetails = Pick<User, "name"> & {
 	roles: Role[];
 };
 
-export type UserNavigationWidgetType = "sidebar" | "navbar";
+export type UserNavigationWidgetVariant = "full" | "no_avatar" | "abbreviated";
+export type UserNavigationWidgetStyle = "dropdown" | "accordion";
 
 export interface UserNavigationWidgetModelView {
 	userDetails: NavigationUserDetails | null;
-	type: UserNavigationWidgetType;
+	variant: UserNavigationWidgetVariant;
+	style: UserNavigationWidgetStyle;
 }
 
-export type UserNavigationWidgetModelInteraction = ModelInteraction<"SIGN_OUT">;
-
-export type UserNavigationWidgetModel = InteractiveModel<
-	UserNavigationWidgetModelView,
-	UserNavigationWidgetModelInteraction
->;
+export type UserNavigationWidgetModel =
+	ReadonlyModel<UserNavigationWidgetModelView>;

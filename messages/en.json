@@ -45,6 +45,10 @@
 	"userNavigation": {
 		"greeting": "Hello"
 	},
+	"userAction": {
+		"newQuote": "New Quote",
+		"signOut": "Sign Out"
+	},
 	"footer": {
 		"heading": "Nativity of the Theotokos Church",
 		"email": "Email",

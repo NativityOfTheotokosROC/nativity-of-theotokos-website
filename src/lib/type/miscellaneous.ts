@@ -89,4 +89,4 @@ export type MenuItems = {
 	navlinks: Navlink[];
 };
 
-export type Role = "admin" | "staff" | "user" | "quotes";
+export type Role = "admin" | "staff" | "user" | "quotes" | "writer";

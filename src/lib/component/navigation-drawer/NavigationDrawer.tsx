@@ -10,23 +10,17 @@ import {
 	NavigationDrawerModel,
 	NavigationDrawerModelView,
 } from "../../model/navigation-drawer";
-import { Link } from "../page-loading-bar/navigation";
-import UserNavigationWidget from "../user-navigation-widget/UserNavigationWidget";
 import "./navigation-drawer.css";
 
-type MenuModelView = Pick<
-	NavigationDrawerModelView,
-	"navMenuItems" | "isDrawn"
->;
+type MenuModelView = Pick<NavigationDrawerModelView, "isDrawn">;
 type MenuModelInteraction = ModelInteraction<"CLOSE_MENU">;
 type MenuModel = InteractiveModel<MenuModelView, MenuModelInteraction>;
 
-const SidebarDrawer = function ({ model }) {
+const SidebarDrawer = function ({ model, children }) {
 	const {
-		modelView: { navMenuItems, isDrawn },
+		modelView: { isDrawn },
 		interact,
 	} = model;
-	const { navlinks, userDetails } = navMenuItems;
 
 	return (
 		<Dialog
@@ -46,35 +40,8 @@ const SidebarDrawer = function ({ model }) {
 				>
 					<SidebarDecoration className="fill-white/60 mt-2 px-3 min-h-20 h-20 max-w-full" />
 					<hr className="w-3/4 opacity-50 mx-auto mt-3" />
-					<nav
-						className="navigation-menu flex flex-col"
-						onBlur={() => {
-							interact({ type: "CLOSE_MENU" });
-						}}
-					>
-						{/* TODO: To be revised */}
-						{userDetails && (
-							<UserNavigationWidget
-								model={{
-									modelView: { type: "sidebar", userDetails },
-									interact() {},
-								}}
-							/>
-						)}
-						{navlinks.map((navlink, index) => (
-							<Link
-								key={index}
-								className="block navlink uppercase no-underline px-6 py-4 md:px-8 active:bg-gray-950 active:text-[#DCB042] hover:text-[#DCB042]"
-								href={navlink.link}
-								replace={navlink.isReplaceable}
-								onClick={() => {
-									interact({ type: "CLOSE_MENU" });
-								}}
-							>
-								{navlink.text}
-							</Link>
-						))}
-					</nav>
+					{/* TODO: To be revised */}
+					{children}
 				</DialogPanel>
 			</div>
 		</Dialog>
@@ -83,13 +50,12 @@ const SidebarDrawer = function ({ model }) {
 
 const NavigationDrawer = function ({ model, children }) {
 	const { modelView, interact } = model;
-	const { isDrawn, navMenuItems } = modelView;
+	const { isDrawn } = modelView;
 
 	return (
 		<SidebarDrawer
 			model={{
 				modelView: {
-					navMenuItems,
 					isDrawn,
 				},
 				async interact(interaction) {
