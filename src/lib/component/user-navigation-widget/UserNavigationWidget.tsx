@@ -144,7 +144,7 @@ const UserNavigationWidget = function ({ model }) {
 									</DisclosureButton>
 									<DisclosurePanel
 										transition
-										className="flex flex-col py-2 *:w-full *:px-6 *:py-4 *:text-left *:uppercase origin-top duration-300 ease-out data-closed:opacity-0 data-closed:-translate-y-4 data-closed:h-1/2 border-t border-white/12 bg-gray-800"
+										className="flex flex-col py-2 *:w-full *:px-6 md:*:px-8 *:py-4 *:text-left *:uppercase *:hover:text-[#dcb042] *:active:bg-gray-950 *:active:text-[#dcb042] origin-top duration-300 ease-out data-closed:opacity-0 data-closed:-translate-y-4 data-closed:h-1/2 border-t border-white/12 bg-gray-800"
 									>
 										{[
 											...userDetails.userActions.map(
@@ -169,7 +169,7 @@ const UserNavigationWidget = function ({ model }) {
 							{({ open, close }) => (
 								<>
 									<MenuButton
-										className={`dropdown-button w-full flex justify-between items-center text-left gap-3`}
+										className={`dropdown-button w-full flex justify-between items-center text-left gap-3 outline-none`}
 									>
 										<DropdownButtonContent
 											model={newReadonlyModel({
@@ -188,7 +188,7 @@ const UserNavigationWidget = function ({ model }) {
 									<MenuItems
 										anchor="bottom end"
 										transition
-										className="flex flex-col w-40 *:w-full *:px-6 *:py-4 *:uppercase *:text-left origin-top-right rounded-lg border bg-gray-800 border-white/15 z-21 transition duration-200 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-92 data-closed:opacity-0"
+										className="flex flex-col w-40 rounded-lg border bg-gray-800 border-white/15 focus:outline-none z-21 transition origin-top-right duration-200 ease-out [--anchor-gap:--spacing(1)] data-closed:scale-92 data-closed:opacity-0 *:w-full *:px-6 *:py-4 *:uppercase *:text-left *:hover:bg-gray-900/50 *:hover:text-[#dcb042] *:active:bg-gray-950 *:active:text-[#dcb042]"
 									>
 										{[
 											...userDetails.userActions.map(

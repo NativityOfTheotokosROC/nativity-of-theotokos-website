@@ -24,7 +24,7 @@ const HeroSection = function ({ model }) {
 				}
 				viewport={{ once: true }}
 				transition={{ duration: 0.4, ease: "easeOut" }}
-				className="hero-content flex flex-col justify-center items-center md:flex-row min-h-[76lvh] h-fit md:min-h-80 p-8 lg:p-20 md:items-center"
+				className="hero-content flex flex-col justify-center items-center md:flex-row min-h-[76lvh] h-fit p-8 lg:p-20 md:items-center"
 			>
 				<motion.div
 					initial={{ opacity: 0, y: 10 }}

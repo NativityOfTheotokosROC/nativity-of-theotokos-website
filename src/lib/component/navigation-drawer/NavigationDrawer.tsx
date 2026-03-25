@@ -47,7 +47,7 @@ const NavigationDrawer = function ({ model }) {
 		>
 			<div className="flex flex-col">
 				{userDetails && (
-					<div className="[&_.dropdown-button]:px-6 *:[&_.dropdown-button]:py-4 *:[&_.dropdown-button]:w-full *:[&_.dropdown-button]:bg-gray-800">
+					<div className="[&_.dropdown-button]:px-6 md:[&_.dropdown-button]:px-8 *:[&_.dropdown-button]:py-4 *:[&_.dropdown-button]:w-full *:[&_.dropdown-button]:bg-gray-800">
 						<UserNavigationWidget
 							model={newReadonlyModel({
 								userDetails: {
