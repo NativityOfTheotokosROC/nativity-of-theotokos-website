@@ -37,7 +37,7 @@ const Header = function ({ model }) {
 						name: userDetails.name,
 						avatar: userDetails.avatar,
 					},
-					userActions,
+					userActions: userActions!,
 				}
 			: null,
 	});
