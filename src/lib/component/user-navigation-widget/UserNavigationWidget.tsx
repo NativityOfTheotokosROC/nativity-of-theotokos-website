@@ -59,7 +59,7 @@ const UserDisplay = function ({ model }) {
 			return (
 				<div className="user-pane w-full flex gap-3 items-center">
 					<span
-						className={`greeting max-w-30 wrap-break-word hyphens-auto`}
+						className={`greeting max-w-40 wrap-break-word hyphens-auto`}
 					>
 						{greeting}
 					</span>
@@ -69,7 +69,7 @@ const UserDisplay = function ({ model }) {
 		case "full": {
 			return (
 				<div className="user-pane w-full flex gap-3 items-center">
-					<div className="avatar-frame flex items-stretch justify-stretch size-10 min-w-10 rounded-lg overflow-clip">
+					<div className="avatar-frame flex items-stretch justify-stretch size-10 min-w-10 rounded-lg overflow-clip border border-white/15">
 						<Image
 							className="grow object-center object-cover"
 							alt={user.avatar.about ?? user.name}

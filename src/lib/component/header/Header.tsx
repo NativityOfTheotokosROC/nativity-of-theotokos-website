@@ -21,14 +21,18 @@ import NavigationDrawer from "../navigation-drawer/NavigationDrawer";
 import { Link, usePageLoadingBarRouter } from "../page-loading-bar/navigation";
 import UserNavigationWidget from "../user-navigation-widget/UserNavigationWidget";
 import "./header.css";
+import { useContext } from "react";
+import { PageLoadingBarContext } from "../page-loading-bar/PageLoadingBar";
 
 const Header = function ({ model }) {
 	const router = usePageLoadingBarRouter(useRouter);
+	const pageLoadingBar = useContext(PageLoadingBarContext);
 	const { navlinks, userDetails } = model.modelView;
 	const isLargeScreen = useMediaQuery({ minWidth: 1024 });
 	const isPortrait = useMediaQuery({ orientation: "portrait" });
 	const userActions =
-		userDetails && getUserActions(userDetails.roles, router);
+		userDetails &&
+		getUserActions(userDetails.roles, router, pageLoadingBar);
 	const navigationDrawer = useNavigationDrawer({
 		navlinks,
 		userDetails: userDetails

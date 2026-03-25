@@ -4,10 +4,12 @@ import { UserActionModel } from "../model/user-action";
 import { signOut } from "../third-party/better-auth";
 import { Role } from "../type/miscellaneous";
 import { getUserActionNames } from "../utility/user-actions";
+import { PageLoadingBarModel } from "../model/page-loading-bar";
 
 export function getUserActions(
 	roles: Role[],
 	router: ReturnType<typeof useRouter>,
+	pageLoadingBar: PageLoadingBarModel,
 ) {
 	const actionNames = getUserActionNames(roles);
 	return [...actionNames].map(actionName => {
@@ -30,8 +32,18 @@ export function getUserActions(
 				return newReadonlyModel({
 					name: "SIGN_OUT",
 					action: async () => {
-						await signOut();
-						location.reload(); // TODO
+						await pageLoadingBar.interact({
+							type: "SET_LOADING",
+							input: { value: true },
+						});
+						await signOut().then(response => {
+							if (response.data?.success) location.reload(); // TODO
+							if (response.error)
+								return pageLoadingBar.interact({
+									type: "SET_LOADING",
+									input: { value: false },
+								});
+						});
 					},
 				});
 			}
