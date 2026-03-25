@@ -2,7 +2,6 @@
 
 import LogoIcon from "@/public/assets/logo-icon.svg";
 import { useRouter } from "@/src/i18n/navigation";
-import { navigationUser } from "@/src/playground/mockdata";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import {
 	InitializedModel,
@@ -25,8 +24,7 @@ import "./header.css";
 
 const Header = function ({ model }) {
 	const router = usePageLoadingBarRouter(useRouter);
-	const { navlinks } = model.modelView;
-	const userDetails = navigationUser;
+	const { navlinks, userDetails } = model.modelView;
 	const isLargeScreen = useMediaQuery({ minWidth: 1024 });
 	const isPortrait = useMediaQuery({ orientation: "portrait" });
 	const userActions =
