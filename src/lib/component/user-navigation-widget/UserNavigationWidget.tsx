@@ -4,6 +4,7 @@ import {
 	DisclosurePanel,
 	Menu,
 	MenuButton,
+	MenuItem,
 	MenuItems,
 } from "@headlessui/react";
 import {
@@ -18,23 +19,23 @@ import {
 import { ChevronDown as DropdownIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { Fragment } from "react/jsx-runtime";
 import {
-	NavigationUserDetails,
+	NavigationUser,
 	UserNavigationWidgetModel,
 	UserNavigationWidgetVariant,
 } from "../../model/user-navigation-widget";
-import { getUserActions } from "../../utility/user-actions";
 import UserAction from "../user-action/UserAction";
 
 type WidgetVariantModel = ReadonlyModel<{
-	userDetails: NavigationUserDetails;
+	user: NavigationUser;
 	variant: UserNavigationWidgetVariant;
 	greeting: string;
 }>;
 type DropdownButtonModel = ReadonlyModel<{ isDrawn: boolean }>;
 
 const UserDisplay = function ({ model }) {
-	const { variant, greeting, userDetails } = model.modelView;
+	const { variant, greeting, user } = model.modelView;
 	switch (variant) {
 		case "abbreviated": {
 			return (
@@ -45,10 +46,10 @@ const UserDisplay = function ({ model }) {
 					<div className="avatar-frame flex items-stretch justify-stretch size-10 min-w-10 rounded-lg overflow-clip border border-white/15">
 						<Image
 							className="grow object-center object-cover"
-							alt={userDetails.avatar.about ?? userDetails.name}
+							alt={user.avatar.about ?? user.name}
 							width={40}
 							height={40}
-							src={userDetails.avatar.source}
+							src={user.avatar.source}
 						/>
 					</div>
 				</div>
@@ -71,10 +72,10 @@ const UserDisplay = function ({ model }) {
 					<div className="avatar-frame flex items-stretch justify-stretch size-10 min-w-10 rounded-lg overflow-clip">
 						<Image
 							className="grow object-center object-cover"
-							alt={userDetails.avatar.about ?? userDetails.name}
+							alt={user.avatar.about ?? user.name}
 							width={40}
 							height={40}
-							src={userDetails.avatar.source}
+							src={user.avatar.source}
 						/>
 					</div>
 
@@ -99,7 +100,7 @@ const DropdownButtonContent = function ({ model, children }) {
 		<>
 			{children}
 			<DropdownIcon
-				className={`min-w-fit ${isDrawn && "-rotate-180"}`}
+				className={`min-w-fit transition ease-out duration-200 ${isDrawn && "-rotate-180"}`}
 				strokeWidth={1.75}
 			/>
 		</>
@@ -113,7 +114,8 @@ const UserNavigationWidget = function ({ model }) {
 
 	const t = useTranslations("userNavigation");
 	const greeting =
-		userDetails && `${t("greeting")}, ${userDetails.name.split(" ")[0]}`;
+		userDetails &&
+		`${t("greeting")}, ${userDetails.user.name.split(" ")[0]}`;
 
 	return userDetails ? (
 		<div className="user-navigation">
@@ -133,26 +135,30 @@ const UserNavigationWidget = function ({ model }) {
 										>
 											<UserDisplay
 												model={newReadonlyModel({
-													userDetails,
+													user: userDetails.user,
 													variant,
 													greeting: greeting!,
 												})}
 											/>
 										</DropdownButtonContent>
 									</DisclosureButton>
-									<DisclosurePanel className="flex flex-col py-2 *:w-full *:px-6 *:py-4 *:text-left *:uppercase origin-top duration-300 ease-out data-closed:opacity-0 data-closed:-translate-y-1/2 data-closed:h-1/2 border-t border-white/12">
+									<DisclosurePanel
+										transition
+										className="flex flex-col py-2 *:w-full *:px-6 *:py-4 *:text-left *:uppercase origin-top duration-300 ease-out data-closed:opacity-0 data-closed:-translate-y-4 data-closed:h-1/2 border-t border-white/12 bg-gray-800"
+									>
 										{[
-											...getUserActions(
-												userDetails.roles,
+											...userDetails.userActions.map(
+												userAction => (
+													<UserAction
+														key={
+															userAction.modelView
+																.name
+														}
+														model={userAction}
+													/>
+												),
 											),
-										].map(action => (
-											<UserAction
-												key={action}
-												model={newReadonlyModel({
-													name: action,
-												})}
-											/>
-										))}
+										]}
 									</DisclosurePanel>
 								</>
 							)}
@@ -160,7 +166,7 @@ const UserNavigationWidget = function ({ model }) {
 					)}
 					{style == "dropdown" && (
 						<Menu>
-							{({ open }) => (
+							{({ open, close }) => (
 								<>
 									<MenuButton
 										className={`dropdown-button w-full flex justify-between items-center text-left gap-3`}
@@ -172,26 +178,45 @@ const UserNavigationWidget = function ({ model }) {
 										>
 											<UserDisplay
 												model={newReadonlyModel({
-													userDetails,
+													user: userDetails.user,
 													variant,
 													greeting: greeting!,
 												})}
 											/>
 										</DropdownButtonContent>
 									</MenuButton>
-									<MenuItems className="flex flex-col w-40 *:w-full *:px-6 *:py-4 rounded-lg border border-white/15">
+									<MenuItems
+										anchor="bottom end"
+										transition
+										className="flex flex-col w-40 *:w-full *:px-6 *:py-4 *:uppercase *:text-left origin-top-right rounded-lg border bg-gray-800 border-white/15 z-21 transition duration-200 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-92 data-closed:opacity-0"
+									>
 										{[
-											...getUserActions(
-												userDetails.roles,
+											...userDetails.userActions.map(
+												userAction => (
+													<MenuItem
+														key={
+															userAction.modelView
+																.name
+														}
+														as={Fragment}
+													>
+														<UserAction
+															model={{
+																modelView: {
+																	name: userAction
+																		.modelView
+																		.name,
+																	action: async () => {
+																		close();
+																		userAction.modelView.action();
+																	},
+																},
+															}}
+														/>
+													</MenuItem>
+												),
 											),
-										].map(action => (
-											<UserAction
-												key={action}
-												model={newReadonlyModel({
-													name: action,
-												})}
-											/>
-										))}
+										]}
 									</MenuItems>
 								</>
 							)}

@@ -1,18 +1,12 @@
 import { InitializedModel } from "@mvc-react/mvc";
 import { useState } from "react";
-import {
-	NavigationDrawerModel,
-	NavigationDrawerType,
-} from "../model/navigation-drawer";
+import { NavigationDrawerModel } from "../model/navigation-drawer";
 import { MenuItems } from "../type/miscellaneous";
 
-export function useNavigationDrawer(
-	menuItems: MenuItems,
-	type: NavigationDrawerType,
-) {
+export function useNavigationDrawer(menuItems: MenuItems) {
 	const [isDrawn, setIsDrawn] = useState(false);
 	return {
-		modelView: { navMenuItems: menuItems, isDrawn, type },
+		modelView: { isDrawn, navMenuItems: menuItems },
 		interact(interaction) {
 			switch (interaction.type) {
 				case "OPEN": {

@@ -5,7 +5,6 @@ export type NavigationDrawerType = "sidebar" | "accordion";
 
 export interface NavigationDrawerModelView {
 	isDrawn: boolean;
-	type: NavigationDrawerType;
 	navMenuItems: MenuItems;
 }
 

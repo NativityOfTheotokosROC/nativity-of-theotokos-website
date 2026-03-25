@@ -14,7 +14,7 @@ function getAllActionNames() {
 	return new Set(actionNames satisfies UniversalActionNames);
 }
 
-export function getUserActions(roles: Role[]) {
+export function getUserActionNames(roles: Role[]) {
 	const allUserActions = getAllActionNames();
 	let specificActions = new Set<ActionName>();
 	for (const role of roles) {

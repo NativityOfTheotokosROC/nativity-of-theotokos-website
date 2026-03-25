@@ -1,6 +1,7 @@
 import { routing } from "@/src/i18n/routing";
 import { ImagePlaceholder } from "@grod56/placeholder";
-import { NavigationUserDetails } from "../model/user-navigation-widget";
+import { UserActionModel } from "../model/user-action";
+import { NavigationUser } from "../model/user-navigation-widget";
 
 export type Navlink = {
 	text: string;
@@ -85,7 +86,10 @@ export type User = {
 };
 
 export type MenuItems = {
-	userDetails: NavigationUserDetails | null;
+	userDetails: {
+		user: NavigationUser;
+		userActions: UserActionModel[];
+	} | null;
 	navlinks: Navlink[];
 };
 
