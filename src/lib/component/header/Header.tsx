@@ -87,10 +87,12 @@ const Header = function ({ model }) {
 								menuItems: {
 									navlinks,
 									userNavigationWidget: newReadonlyModel({
-										userDetails: {
-											user: userDetails,
-											userActions: userActions!,
-										},
+										userDetails: userDetails
+											? {
+													user: userDetails,
+													userActions: userActions!,
+												}
+											: null,
 										style: "dropdown",
 										variant: "abbreviated",
 									}),
