@@ -66,7 +66,7 @@ const NewsArticle = function ({ model }) {
 					</div>
 					<div className="flex flex-col gap-3 w-full md:w-1/2 md:grow md:self-stretch">
 						<div className="flex justify-stretch items-stretch w-full h-[15em] rounded-lg overflow-clip md:h-fit md:max-h-[25em]">
-							<Link href={source} target="_blank">
+							<Link className="contents" href={source} target="_blank">
 								<Image
 									className="grow object-cover object-center cursor-pointer"
 									height={600}
