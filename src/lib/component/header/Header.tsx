@@ -54,9 +54,9 @@ const Header = function ({ model }) {
 			className={`header flex flex-col w-full max-w-full top-0 sticky z-11 bg-gray-900/99 h-fit`}
 		>
 			<div className="header-content flex flex-nowrap gap-9 justify-between p-4 lg:p-6 lg:px-7 items-center text-white">
-				<Link href="/">
+				<Link className="contents" href="/">
 					<div
-						className="logo flex gap-3 items-center justify-center w-fit min-w-fit hover:cursor-pointer select-none"
+						className="logo flex gap-3 items-center justify-center w-fit hover:cursor-pointer select-none"
 						onClick={() => {
 							router.push("/");
 						}}

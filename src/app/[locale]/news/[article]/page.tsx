@@ -6,11 +6,16 @@ import {
 	getArticleMetadata,
 } from "@/src/lib/server-action/news-article";
 import { newReadonlyModel } from "@mvc-react/mvc";
-import { NewsArticle as NewsArticleType } from "@/src/lib/type/miscellaneous";
+import {
+	Language,
+	NewsArticle as NewsArticleType,
+} from "@/src/lib/type/miscellaneous";
 import { getBaseURL } from "@/src/lib/server-action/miscellaneous";
 import { DynamicMarker } from "@/src/lib/component/miscellaneous/utility";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
+import { hasLocale } from "next-intl";
+import { routing } from "@/src/i18n/routing";
 
 function articleJsonLd(article: NewsArticleType) {
 	const { title, author, articleImage, dateCreated, snippet } = article;
@@ -36,10 +41,15 @@ export async function generateStaticParams() {
 export async function generateMetadata({
 	params,
 }: PageProps<"/[locale]/news/[article]">): Promise<Metadata> {
-	const { article } = await params;
+	const { article, locale } = await params;
+	const computedLocale = hasLocale(routing.locales, locale)
+		? locale
+		: ("en" satisfies Language);
 	if (article == "__placeholder__") notFound();
-	const { title, snippet, uri, articleImage } =
-		await getArticleMetadata(article);
+	const { title, snippet, uri, articleImage } = await getArticleMetadata(
+		article,
+		computedLocale,
+	);
 
 	return {
 		title,
@@ -70,8 +80,13 @@ export default async function Page({
 	params,
 }: PageProps<"/[locale]/news/[article]">) {
 	await connection();
-	const { article: articleId } = await params;
-	const article = await getArticle(articleId);
+
+	const { article: articleId, locale } = await params;
+	const computedLocale = hasLocale(routing.locales, locale)
+		? locale
+		: ("en" satisfies Language);
+	//TODO: Investigate why locale is not updating server-side
+	const article = await getArticle(articleId, computedLocale);
 	const baseUrl = await getBaseURL();
 	const permalink = `${baseUrl}/news/${article.uri.toString()}`;
 	const jsonLd = articleJsonLd(article);

@@ -39,7 +39,7 @@ const NewsArticle = function ({ model }) {
 							{title}
 						</span>
 						<div className="byline flex flex-col gap-1">
-							<div className="flex items-center gap-2 -ml-8 pl-8 md:-ml-12 md:pl-12 pr-3 text-white bg-gray-900/80 w-3/4 p-2">
+							<div className="flex items-center gap-2 -ml-8 pl-8 md:-ml-12 md:pl-12 pr-4 text-white bg-gray-900/80 min-w-3/4 w-fit max-w-[80vw] md:max-[50vw] p-2">
 								<span className="author text-base md:text-xl">{`${t("author")} ${author}`}</span>
 							</div>
 							<span className="date text-lg">
@@ -66,7 +66,11 @@ const NewsArticle = function ({ model }) {
 					</div>
 					<div className="flex flex-col gap-3 w-full md:w-1/2 md:grow md:self-stretch">
 						<div className="flex justify-stretch items-stretch w-full h-[15em] rounded-lg overflow-clip md:h-fit md:max-h-[25em]">
-							<Link className="contents" href={source} target="_blank">
+							<Link
+								className="contents"
+								href={source}
+								target="_blank"
+							>
 								<Image
 									className="grow object-cover object-center cursor-pointer"
 									height={600}

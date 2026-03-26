@@ -11,7 +11,7 @@ import { Link } from "../page-loading-bar/navigation";
 const NewsArticlePreview = function ({ model }) {
 	const { articlePreview: article, isFeatured } = model.modelView;
 	const { title, author, dateCreated, snippet, articleImage, uri } = article;
-	const { placeholder, source, about } = articleImage;
+	const { placeholder, source } = articleImage;
 	const articleLink = `/news/${uri}`;
 	const dateString = toZonedTime(
 		dateCreated,
@@ -22,14 +22,14 @@ const NewsArticlePreview = function ({ model }) {
 	const tCaptions = useTranslations("imageCaptions");
 
 	return isFeatured ? (
-		<Link href={articleLink}>
-			<div className="featured-card flex flex-col select-none hover:cursor-pointer bg-[#FEF8F3] border border-gray-900/20 rounded-lg overflow-clip hover:border-[#dcb042] hover:[&_.title]:underline hover:scale-[1.03] active:border-[#dcb042] active:[&_.title]:underline active:scale-[1.03] transition ease-out duration-150">
+		<Link className="featured-card contents" href={articleLink}>
+			<div className="flex flex-col select-none hover:cursor-pointer bg-[#FEF8F3] border border-gray-900/20 rounded-lg overflow-clip hover:border-[#dcb042] hover:[&_.title]:underline hover:scale-[1.03] active:border-[#dcb042] active:[&_.title]:underline active:scale-[1.03] transition ease-out duration-150">
 				<div className="flex justify-stretch items-stretch w-full h-[16em] lg:h-[18em]">
 					<Image
 						className="grow object-cover object-top max-w-full"
 						height={538}
 						width={538}
-						alt={about ?? tCaptions("featuredArticleImage")}
+						alt={tCaptions("featuredArticleImage")}
 						src={source}
 						placeholder="blur"
 						blurDataURL={placeholder}
@@ -51,14 +51,14 @@ const NewsArticlePreview = function ({ model }) {
 			</div>
 		</Link>
 	) : (
-		<Link href={articleLink}>
-			<div className="normal-card flex flex-row items-center max-w-[27em] gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer hover:[&_.title]:underline active:[&_.title]:underline select-none">
+		<Link className="normal-card contents" href={articleLink}>
+			<div className="flex flex-row items-center max-w-[27em] gap-4 md:gap-0 lg:bg-transparent lg:text-black hover:cursor-pointer hover:[&_.title]:underline active:[&_.title]:underline select-none">
 				<div className="flex justify-stretch items-stretch w-[7em] min-w-[7em] h-[6em] max-h-[6em] md:w-[8em] md:min-w-[8em] md:h-[6.4em] md:max-h-[6.4em] rounded-lg overflow-clip">
 					<Image
 						className="grow object-cover object-center h-full w-full"
 						height={128}
 						width={128}
-						alt={about ?? tCaptions("newsArticleImage")}
+						alt={tCaptions("newsArticleImage")}
 						src={source}
 						placeholder="blur"
 						blurDataURL={placeholder}

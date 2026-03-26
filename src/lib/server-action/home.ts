@@ -79,7 +79,7 @@ export async function getHomeSnapshot(
 }
 
 export async function subscribeToMailingList(email: string) {
-	mailerLite.subscribers.createOrUpdate({ email });
+	await mailerLite.subscribers.createOrUpdate({ email });
 }
 
 export async function getDailyReadings(currentDate: Date = new Date()) {
@@ -128,6 +128,7 @@ export async function getScheduleItems(
 		formatInTimeZone(currentDate, "CAT", "yyyy-MM-dd"),
 	);
 	const locale = await getLocale();
+	console.log(locale);
 	const data = await prisma.scheduleItem.findMany({
 		where: {
 			date: { gte: localDate },
@@ -214,6 +215,7 @@ export async function getScheduleItems(
 export async function getLatestNews(
 	otherArticlesCount: number,
 ): Promise<LatestNews> {
+	const locale = await getLocale();
 	const baseURL = await getBaseURL();
 	const otherArticles = await prisma.newsArticle.findMany({
 		// TODO: Reinstate when we have enough articles
@@ -290,9 +292,23 @@ export async function getLatestNews(
 			})
 		).map(placeholder => [placeholder.imageLink, placeholder.placeholder]),
 	);
+	const article = featuredArticle.newsArticle;
+	const title =
+		locale == "ru" && article.titleRu ? article.titleRu : article.title;
+	const author =
+		locale == "ru" && article.authorRu != null
+			? article.authorRu
+			: article.author;
+	const snippet =
+		locale == "ru" && article.snippetRu
+			? article.snippetRu
+			: article.snippet;
 	return {
 		featuredArticle: {
 			...featuredArticle.newsArticle,
+			title,
+			author,
+			snippet,
 			uri: featuredArticle.newsArticle.link, // TODO: Alter schema
 			articleImage: {
 				source: featuredArticle.newsArticle.imageLink,
@@ -302,17 +318,39 @@ export async function getLatestNews(
 				) as ImagePlaceholder,
 			},
 		},
-		otherNewsArticles: otherArticles.map(article => ({
-			...article,
-			uri: article.link,
-			articleImage: {
-				source: article.imageLink,
-				about: article.imageCaption,
-				placeholder: articlePlaceholders.get(
-					article.imageLink,
-				) as ImagePlaceholder,
-			},
-		})),
+		otherNewsArticles: otherArticles.map(article => {
+			const title =
+				locale == "ru" && article.titleRu
+					? article.titleRu
+					: article.title;
+			const author =
+				locale == "ru" && article.authorRu != null
+					? article.authorRu
+					: article.author;
+			const body =
+				locale == "ru" && article.bodyRu
+					? article.bodyRu
+					: article.body;
+			const snippet =
+				locale == "ru" && article.snippetRu
+					? article.snippetRu
+					: article.snippet;
+			return {
+				...article,
+				title,
+				author,
+				body,
+				snippet,
+				uri: article.link,
+				articleImage: {
+					source: article.imageLink,
+					about: article.imageCaption,
+					placeholder: articlePlaceholders.get(
+						article.imageLink,
+					) as ImagePlaceholder,
+				},
+			};
+		}),
 	};
 }
 

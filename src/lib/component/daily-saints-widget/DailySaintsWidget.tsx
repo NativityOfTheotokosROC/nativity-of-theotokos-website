@@ -27,7 +27,11 @@ const DailySaintsWidget = function ({ model }) {
 			className="daily-saints flex md:flex-row md:h-fit md:max-h-[26em] items-stretch bg-[#FEF8F3] border text-black border-gray-900/20 rounded-lg overflow-clip"
 		>
 			<div className="hidden md:flex min-w-60 w-60 lg:min-w-60 lg:w-60 items-stretch justify-stretch p-2 bg-gray-800">
-				<Link href={iconOfTheDay.source} target="_blank">
+				<Link
+					className="contents"
+					href={iconOfTheDay.source}
+					target="_blank"
+				>
 					<Image
 						className="grow h-full max-h-full min-w-full object-cover object-top hover:cursor-pointer hover:scale-[1.02] active:scale-[1.02] transition ease-out duration-200"
 						height={364}

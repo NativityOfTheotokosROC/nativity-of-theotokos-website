@@ -1,6 +1,6 @@
 "use server";
 
-import { NewsArticle } from "../type/miscellaneous";
+import { Language, NewsArticle } from "../type/miscellaneous";
 import { notFound } from "next/navigation";
 import {
 	getPrismaPlaceholderRepository,
@@ -9,6 +9,7 @@ import {
 import { getBaseURL } from "./miscellaneous";
 import { getPlaceholder } from "@grod56/placeholder";
 import prisma from "../third-party/prisma";
+import { getLocale } from "next-intl/server";
 
 export async function getAllArticles(): Promise<NewsArticle[]> {
 	const articles: NewsArticle[] = await prisma.newsArticle
@@ -29,19 +30,33 @@ export async function getAllArticles(): Promise<NewsArticle[]> {
 
 export async function getArticleMetadata(
 	articleId: string,
+	language?: Language,
 ): Promise<Omit<NewsArticle, "url" | "dateCreated" | "dateUpdated">> {
 	"use cache";
+	const locale = language ?? (await getLocale());
 	try {
 		const article = await prisma.newsArticle.findUniqueOrThrow({
 			where: { link: articleId },
 			omit: { dateCreated: true, dateUpdated: true },
 		});
+		const title =
+			locale == "ru" && article.titleRu ? article.titleRu : article.title;
+		const author =
+			locale == "ru" && article.authorRu != null
+				? article.authorRu
+				: article.author;
+		const body =
+			locale == "ru" && article.bodyRu ? article.bodyRu : article.body;
+		const snippet =
+			locale == "ru" && article.snippetRu
+				? article.snippetRu
+				: article.snippet;
 		return {
 			uri: article.link.toString(),
-			title: article.title,
-			author: article.author,
-			body: article.body,
-			snippet: article.snippet,
+			title,
+			author,
+			body,
+			snippet,
 			articleImage: {
 				source: article.imageLink,
 				about: article.imageCaption ?? undefined,
@@ -56,12 +71,13 @@ export async function getArticleMetadata(
 			notFound();
 		throw error;
 	}
-};
+}
 
 export async function getArticle(
 	articleId: string,
+	language?: Language,
 ): Promise<Omit<NewsArticle, "url">> {
-	"use server";
+	const locale = language ?? (await getLocale());
 	try {
 		const article = await prisma.newsArticle.findUniqueOrThrow({
 			where: { link: articleId },
@@ -77,14 +93,28 @@ export async function getArticle(
 				: `${baseUrl}${article.imageLink}`,
 			placeholderRepository,
 		);
+		const title =
+			locale == "ru" && article.titleRu ? article.titleRu : article.title;
+		const author =
+			locale == "ru" && article.authorRu != null
+				? article.authorRu
+				: article.author;
+		const body =
+			locale == "ru" && article.bodyRu ? article.bodyRu : article.body;
+		const snippet =
+			locale == "ru" && article.snippetRu
+				? article.snippetRu
+				: article.snippet;
+		//TODO: Add imageCaptionRu
+
 		return {
 			uri: article.link.toString(),
-			title: article.title,
-			author: article.author,
+			title,
+			author,
 			dateCreated: article.dateCreated,
 			dateUpdated: article.dateUpdated ?? undefined,
-			body: article.body,
-			snippet: article.snippet,
+			body,
+			snippet,
 			articleImage: {
 				source: article.imageLink,
 				about: article.imageCaption ?? undefined,

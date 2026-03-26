@@ -7,12 +7,12 @@ const ResourceWidget = function ({ model }) {
 	const { label, link, graphic } = model.modelView.resource;
 
 	return (
-		<div className="resource-widget flex items-stretch justify-stretch md:size-[22em] w-full max-w-full h-[22em]">
-			<Link
-				href={link}
-				target={isRemotePath(link) ? "_blank" : undefined}
-				className="w-full h-full"
-			>
+		<Link
+			href={link}
+			target={isRemotePath(link) ? "_blank" : undefined}
+			className="resource-widget contents"
+		>
+			<div className="flex items-stretch justify-stretch md:size-[22em] w-full max-w-full h-[22em]">
 				<div
 					style={{
 						backgroundImage: `linear-gradient(to bottom, transparent, black), url(${graphic})`,
@@ -23,8 +23,8 @@ const ResourceWidget = function ({ model }) {
 						<span className={`text-3xl mb-3`}>{label}</span>
 					</div>
 				</div>
-			</Link>
-		</div>
+			</div>
+		</Link>
 	);
 } satisfies ModeledVoidComponent<ResourceWidgetModel>;
 
