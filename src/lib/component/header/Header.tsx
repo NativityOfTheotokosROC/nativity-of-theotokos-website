@@ -51,7 +51,7 @@ const Header = function ({ model }) {
 
 	return (
 		<header
-			className={`header flex flex-col w-full max-w-full top-0 sticky z-11 bg-gray-900/99 h-fit`}
+			className={`header flex flex-col w-full max-w-full top-px sticky z-11 bg-gray-900/99 h-fit`}
 		>
 			<div className="header-content flex flex-nowrap gap-9 justify-between p-4 lg:p-6 lg:px-7 items-center text-white">
 				<Link className="contents" href="/">

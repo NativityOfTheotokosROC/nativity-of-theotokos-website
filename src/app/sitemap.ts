@@ -6,6 +6,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const baseUrl = await getBaseURL();
 	const newsArticles = await getAllArticles();
 
+	console.log(newsArticles);
+
 	return [
 		{
 			url: "https://nativityoftheotokos.com",
