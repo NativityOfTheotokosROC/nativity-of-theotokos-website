@@ -32,6 +32,7 @@ export async function getArticleMetadata(
 	articleId: string,
 	language?: Language,
 ): Promise<Omit<NewsArticle, "url" | "dateCreated" | "dateUpdated">> {
+	"use cache";
 	const locale = language ?? (await getLocale());
 	try {
 		const article = await prisma.newsArticle.findUniqueOrThrow({
