@@ -178,16 +178,13 @@ export async function getScheduleItems(
 				),
 			})),
 		}));
-		// TODO: Revisit
-		const isPresent = await prisma.scheduleItem.findUnique({
+		const isPresent = await prisma.scheduleItem.count({
 			where: {
-				date_location: {
-					date: nextScheduleItem.date,
-					location: nextScheduleItem.location,
-				},
+				date: { equals: nextScheduleItem.date },
+				location: { equals: nextScheduleItem.location },
+				AND: { removedScheduleItem: { isNot: null } },
 			},
 		});
-		console.log(isPresent);
 		if (!isPresent) {
 			const { date, location, title, times, titleRu } = nextScheduleItem;
 
