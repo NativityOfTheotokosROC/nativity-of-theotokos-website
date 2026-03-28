@@ -128,7 +128,6 @@ export async function getScheduleItems(
 		formatInTimeZone(currentDate, "CAT", "yyyy-MM-dd"),
 	);
 	const locale = await getLocale();
-	console.log(locale);
 	const data = await prisma.scheduleItem.findMany({
 		where: {
 			date: { gte: localDate },
@@ -182,7 +181,7 @@ export async function getScheduleItems(
 		const isPresent = await prisma.scheduleItem.count({
 			where: {
 				date: { equals: nextScheduleItem.date },
-				AND: { removedScheduleItem: { is: null } },
+				AND: { removedScheduleItem: { isNot: null } },
 			},
 		});
 		if (!isPresent) {
