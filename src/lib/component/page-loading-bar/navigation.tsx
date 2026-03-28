@@ -41,12 +41,13 @@ export function usePageLoadingBarRouter<T extends typeof useRouter>(
 					currentLocale: locale,
 					targetLocale: options?.locale,
 				})
-			)
+			) {
 				await interact({
 					type: "SET_LOADING",
 					input: { value: false },
 				});
-			await interact({ type: "SET_LOADING", input: { value: true } });
+				await interact({ type: "SET_LOADING", input: { value: true } });
+			}
 		},
 		async forward() {
 			router.forward();
@@ -65,12 +66,13 @@ export function usePageLoadingBarRouter<T extends typeof useRouter>(
 					currentLocale: locale,
 					targetLocale: options?.locale,
 				})
-			)
+			) {
 				await interact({
 					type: "SET_LOADING",
 					input: { value: false },
 				});
-			await interact({ type: "SET_LOADING", input: { value: true } });
+				await interact({ type: "SET_LOADING", input: { value: true } });
+			}
 		},
 	} satisfies typeof router;
 }

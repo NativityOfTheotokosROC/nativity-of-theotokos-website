@@ -6,16 +6,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const baseUrl = await getBaseURL();
 	const newsArticles = await getAllArticles();
 
-	console.log(newsArticles);
-
 	return [
 		{
-			url: "https://nativityoftheotokos.com",
+			url: "https://www.nativityoftheotokos.com",
 			changeFrequency: "daily",
 			priority: 1,
 			alternates: {
 				languages: {
-					ru: "https://nativityoftheotokos.com/ru",
+					ru: "https://www.nativityoftheotokos.com/ru",
 				},
 			},
 		},

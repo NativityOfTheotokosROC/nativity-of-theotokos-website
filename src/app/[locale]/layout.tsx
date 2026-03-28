@@ -63,6 +63,7 @@ export async function generateMetadata(
 			description,
 			locale: localeMetaData,
 			type: "website",
+			images: ["/opengraph-image.jpg"],
 		},
 		twitter: {
 			card: "summary",

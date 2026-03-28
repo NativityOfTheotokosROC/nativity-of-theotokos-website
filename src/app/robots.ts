@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
 			userAgent: "*",
 			allow: "/",
 		},
-		sitemap: "https://nativityoftheotokos.com/sitemap.xml",
+		sitemap: "https://www.nativityoftheotokos.com/sitemap.xml",
 	};
 }
