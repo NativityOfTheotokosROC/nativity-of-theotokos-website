@@ -181,6 +181,7 @@ export async function getScheduleItems(
 		const isPresent = await prisma.scheduleItem.count({
 			where: {
 				date: { equals: nextScheduleItem.date },
+				location: { equals: nextScheduleItem.location },
 				AND: { removedScheduleItem: { isNot: null } },
 			},
 		});
