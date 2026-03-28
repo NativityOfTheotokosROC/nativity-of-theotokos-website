@@ -72,7 +72,7 @@ const nextConfig: NextConfig = {
 
 		return config;
 	},
-	cacheComponents: true,
+	cacheComponents: false,
 	experimental: {
 		authInterrupts: true,
 		viewTransition: true,
