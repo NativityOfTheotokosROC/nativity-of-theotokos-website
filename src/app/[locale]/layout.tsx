@@ -42,7 +42,7 @@ export async function generateMetadata(
 		metadataBase:
 			process.env.NODE_ENV == "development"
 				? "http:localhost:3000"
-				: `https://nativityoftheotokos.com`,
+				: process.env.BASE_URL,
 		// alternates: { //TODO
 		// 	canonical: "/",
 		// 	languages: {
