@@ -1,11 +1,10 @@
 import type { MetadataRoute } from "next";
 import { getAllArticles } from "../lib/server-action/news-article";
 import { getBaseURL } from "../lib/server-action/miscellaneous";
-
-export const dynamic = "auto";
-export const revalidate = 3600;
+import { headers } from "next/headers";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+	await headers(); //HACK
 	const baseUrl = await getBaseURL();
 	const newsArticles = await getAllArticles();
 
