@@ -5,6 +5,8 @@ import { getAllArticles } from "../lib/server-action/news-article";
 export const dynamic = "force-static";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+	"use cache";
+
 	const baseUrl = await getBaseURL();
 	const newsArticles = await getAllArticles();
 
