@@ -4,8 +4,7 @@ import { getAllArticles } from "../lib/server-action/news-article";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	"use cache";
 
-	const baseUrl = process.env.BASE_URL;
-	if (!baseUrl) throw new Error("Undefined BASE_URL");
+	const baseUrl = "https://www.nativityoftheotokos.com";
 	const newsArticles = await getAllArticles();
 
 	return [
