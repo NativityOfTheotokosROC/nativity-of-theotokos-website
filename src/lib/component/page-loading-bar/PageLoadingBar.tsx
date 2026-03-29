@@ -11,7 +11,7 @@ import {
 import { PageLoadingBarModel } from "../../model/page-loading-bar";
 import LoadingBar from "../loading-bar/LoadingBar";
 import { Link as LocalizedLink, usePathname } from "@/src/i18n/navigation";
-import { default as useLocale } from "next-intl";
+import { useLocale } from "next-intl";
 import { triggerLoading } from "../../utility/page-loading-bar";
 
 export const PageLoadingBarContext = createContext<PageLoadingBarModel>({
