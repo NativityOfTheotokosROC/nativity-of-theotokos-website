@@ -7,7 +7,7 @@ const nextIntlMiddleware = createMiddleware(routing);
 export default function middleware(req: NextRequest) {
 	const { pathname } = req.nextUrl;
 
-	if (pathname.startsWith("/sitemap") || pathname.startsWith("/robots")) {
+	if (pathname === "/sitemap.xml" || pathname === "/robots.txt") {
 		return NextResponse.next();
 	}
 
