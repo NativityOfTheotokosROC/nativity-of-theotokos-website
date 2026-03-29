@@ -48,7 +48,6 @@ const PageLoadingBar = function () {
 	);
 };
 
-export default PageLoadingBar;
 export function Link(props: ComponentProps<typeof LocalizedLink>) {
 	const { href, locale } = props;
 	const pathName = usePathname();
@@ -74,3 +73,5 @@ export function Link(props: ComponentProps<typeof LocalizedLink>) {
 		</LocalizedLink>
 	);
 }
+
+export default PageLoadingBar;
