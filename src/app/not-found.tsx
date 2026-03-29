@@ -20,7 +20,7 @@ export default function NotFound() {
 	setRequestLocale("en");
 
 	return (
-		<html data-scroll-behavior="smooth">
+		<html lang="en" data-scroll-behavior="smooth">
 			<body className={`antialiased ${googleSansFlex.className}`}>
 				<Suspense fallback={null}>
 					<NextIntlClientProvider>

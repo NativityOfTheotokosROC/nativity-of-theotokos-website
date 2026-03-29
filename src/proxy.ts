@@ -7,7 +7,7 @@ const nextIntlMiddleware = createMiddleware(routing);
 export default function middleware(req: NextRequest) {
 	const { pathname } = req.nextUrl;
 
-	if (pathname === "/sitemap.xml" || pathname === "/robots.txt") {
+	if (pathname == "/sitemap.xml" || pathname == "/robots.txt") {
 		return NextResponse.next();
 	}
 
@@ -18,5 +18,5 @@ export const config = {
 	// Match all pathnames except for
 	// - … if they start with `/api`, `/trpc`, `/_next` or `/_vercel`
 	// - … the ones containing a dot (e.g. `favicon.ico`)
-	matcher: "/((?!api|trpc|_next|_vercel|sitemap.xml|.*\\..*).*)",
+	matcher: ["/((?!api|trpc|_next|_vercel|sitemap.xml|.*\\..*).*)"],
 };
