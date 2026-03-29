@@ -13,7 +13,7 @@ export default async function middleware(req: NextRequest) {
 	for (const route of getProtectedRoutes()) {
 		if (nextUrl.pathname.endsWith(route) && !user) {
 			nextUrl.pathname = `/sign-in?endpoint=${nextUrl.pathname}`;
-			return NextResponse.redirect(nextUrl);
+			NextResponse.redirect(nextUrl);
 		}
 	}
 
