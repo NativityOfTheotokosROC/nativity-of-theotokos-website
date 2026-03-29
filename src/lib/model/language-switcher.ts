@@ -1,5 +1,5 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { Language } from "../type/miscellaneous";
+import { Language } from "../type/general";
 
 export interface LanguageSwitcherModelView {
 	locale: Language;

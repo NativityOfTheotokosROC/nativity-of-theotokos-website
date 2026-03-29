@@ -1,7 +1,7 @@
 import { load } from "cheerio";
 import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
-import { DailyReadings, Hymn, Image, Language } from "../type/miscellaneous";
+import { DailyReadings, Hymn, Image, Language } from "../type/general";
 import { removeMarkup } from "../utility/miscellaneous";
 
 interface HolyTrinityOrthodox {

@@ -4,7 +4,7 @@ import LanguageSwitcher from "@/src/lib/component/language-switcher/LanguageSwit
 import PageLoadingBar from "@/src/lib/component/page-loading-bar/PageLoadingBar";
 import { FooterModel } from "@/src/lib/model/footer";
 import { getNavigationUserDetails } from "@/src/lib/server-action/user";
-import { Language, Navlink } from "@/src/lib/type/miscellaneous";
+import { Language, Navlink } from "@/src/lib/type/general";
 import { ModeledContainerComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations, setRequestLocale } from "next-intl/server";

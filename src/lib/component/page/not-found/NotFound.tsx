@@ -2,7 +2,7 @@
 
 import { useRouter } from "@/src/i18n/navigation";
 import NotFoundGraphic from "@/public/assets/ornament_35.svg";
-import { usePageLoadingBarRouter } from "@/src/lib/component/page-loading-bar/navigation";
+import { usePageLoadingBarRouter } from "@/src/lib/utility/page-loading-bar";
 import { PageLoadingBarContext } from "@/src/lib/component/page-loading-bar/PageLoadingBar";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { useTranslations } from "next-intl";

@@ -1,5 +1,5 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
-import { Notification } from "../type/miscellaneous";
+import { Notification } from "../type/general";
 
 export interface NotifierModelView<N extends Notification<T>, T = unknown> {
 	notification: N;

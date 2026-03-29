@@ -8,7 +8,7 @@ import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { useContext, useEffect } from "react";
-import Error from "@/src/lib/component/pages/error/Error";
+import Error from "@/src/lib/component/page/error/Error";
 
 export async function generateMetadata({
 	params,

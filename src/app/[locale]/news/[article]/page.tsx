@@ -9,7 +9,7 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import {
 	Language,
 	NewsArticle as NewsArticleType,
-} from "@/src/lib/type/miscellaneous";
+} from "@/src/lib/type/general";
 import { getBaseURL } from "@/src/lib/server-action/miscellaneous";
 import { DynamicMarker } from "@/src/lib/component/miscellaneous/utility";
 import { notFound } from "next/navigation";

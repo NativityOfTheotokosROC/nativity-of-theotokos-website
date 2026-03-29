@@ -1,29 +1,8 @@
-import {
-	Link as LocalizedLink,
-	usePathname,
-	useRouter,
-} from "@/src/i18n/navigation";
+import { useRouter, usePathname } from "@/src/i18n/navigation";
 import { useLocale } from "next-intl";
+import { useContext } from "react";
+import { PageLoadingBarContext } from "../component/page-loading-bar/PageLoadingBar";
 import { QueryParams } from "next-intl/navigation";
-import { ComponentProps, useContext } from "react";
-import { PageLoadingBarContext } from "./PageLoadingBar";
-
-function triggerLoading(
-	pathName: string,
-	href: string | { pathname: string; query?: QueryParams | undefined },
-	localeInfo?: { currentLocale: string; targetLocale: string | undefined },
-) {
-	if (
-		localeInfo?.targetLocale &&
-		localeInfo.currentLocale != localeInfo.targetLocale
-	)
-		return true;
-	const destinationPathname =
-		typeof href == "string"
-			? new URL(href, window.location.origin).pathname
-			: href.pathname;
-	return destinationPathname != pathName;
-}
 
 export function usePageLoadingBarRouter<T extends typeof useRouter>(
 	useRouterHook: T,
@@ -77,28 +56,19 @@ export function usePageLoadingBarRouter<T extends typeof useRouter>(
 	} satisfies typeof router;
 }
 
-export function Link(props: ComponentProps<typeof LocalizedLink>) {
-	const { href, locale } = props;
-	const pathName = usePathname();
-	const currentLocale = useLocale();
-	const { interact } = useContext(PageLoadingBarContext);
-
-	return (
-		<LocalizedLink
-			{...props}
-			onClick={e => {
-				if (
-					props.target !== "_blank" &&
-					triggerLoading(pathName, href.toString(), {
-						currentLocale,
-						targetLocale: locale,
-					})
-				)
-					interact({ type: "SET_LOADING", input: { value: true } });
-				props.onClick?.(e);
-			}}
-		>
-			{props.children}
-		</LocalizedLink>
-	);
+export function triggerLoading(
+	pathName: string,
+	href: string | { pathname: string; query?: QueryParams | undefined },
+	localeInfo?: { currentLocale: string; targetLocale: string | undefined },
+) {
+	if (
+		localeInfo?.targetLocale &&
+		localeInfo.currentLocale != localeInfo.targetLocale
+	)
+		return true;
+	const destinationPathname =
+		typeof href == "string"
+			? new URL(href, window.location.origin).pathname
+			: href.pathname;
+	return destinationPathname != pathName;
 }

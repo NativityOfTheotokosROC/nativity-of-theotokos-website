@@ -6,7 +6,7 @@ import Image from "next/image";
 import { georgia } from "../../third-party/fonts";
 import { toZonedTime } from "date-fns-tz";
 import { useTranslations } from "next-intl";
-import { Link } from "../page-loading-bar/navigation";
+import { Link } from "../page-loading-bar/PageLoadingBar";
 
 const NewsArticlePreview = function ({ model }) {
 	const { articlePreview: article, isFeatured } = model.modelView;

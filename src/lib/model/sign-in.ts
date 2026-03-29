@@ -1,5 +1,5 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
-import { Notification } from "../type/miscellaneous";
+import { Notification } from "../type/general";
 
 export type SignInService = "google" | "yandex";
 export type SignInStatus =

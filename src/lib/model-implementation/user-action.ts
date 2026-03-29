@@ -2,8 +2,8 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { useRouter } from "next/navigation";
 import { UserActionModel } from "../model/user-action";
 import { signOut } from "../third-party/better-auth";
-import { Role } from "../type/miscellaneous";
-import { getUserActionNames } from "../utility/user-actions";
+import { Role } from "../type/general";
+import { getUserActionNames } from "../utility/user-action";
 import { PageLoadingBarModel } from "../model/page-loading-bar";
 
 export function getUserActions(

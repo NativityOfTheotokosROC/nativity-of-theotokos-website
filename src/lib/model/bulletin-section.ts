@@ -1,6 +1,6 @@
 import { Model } from "@mvc-react/mvc";
 import { LatestNews } from "../server-action/home";
-import { ScheduleItem } from "../type/miscellaneous";
+import { ScheduleItem } from "../type/general";
 
 export interface BulletinSectionModelView {
 	newsArticles: LatestNews;

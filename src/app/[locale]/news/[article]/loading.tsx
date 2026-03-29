@@ -1,5 +1,5 @@
-import PageLoading from "@/src/lib/component/page-loading/PageLoading";
+import ViewLoadingSkeleton from "@/src/lib/component/view-loading-skeleton/ViewLoadingSkeleton";
 
 export default function Loading() {
-	return <PageLoading />;
+	return <ViewLoadingSkeleton />;
 }

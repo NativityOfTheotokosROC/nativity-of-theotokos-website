@@ -1,6 +1,6 @@
 "use server";
 
-import { Language, NewsArticle } from "../type/miscellaneous";
+import { Language, NewsArticle } from "../type/general";
 import { notFound } from "next/navigation";
 import {
 	getPrismaPlaceholderRepository,

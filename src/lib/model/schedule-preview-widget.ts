@@ -1,5 +1,5 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { ScheduleItem } from "../type/miscellaneous";
+import { ScheduleItem } from "../type/general";
 
 export interface SchedulePreviewWidgetModelView {
 	scheduleItems: ScheduleItem[];

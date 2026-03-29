@@ -1,6 +1,6 @@
 import { ViewInteractionInterface } from "@mvc-react/stateful";
 import { NotifierModelInteraction, NotifierModelView } from "../model/notifier";
-import { Notification } from "../type/miscellaneous";
+import { Notification } from "../type/general";
 
 export function notifierVIInterface<
 	N extends Notification<T>,

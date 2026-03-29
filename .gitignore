@@ -39,6 +39,7 @@ next-env.d.ts
 .fttemplates
 /public/assets/favicon.svg
 /better-auth_migrations
+*.dump
 
 /src/generated/prisma
 /src/playground/

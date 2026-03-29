@@ -1,5 +1,5 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { Navlink } from "../type/miscellaneous";
+import { Navlink } from "../type/general";
 import { NavigationUserDetails } from "./user-navigation-widget";
 
 export interface HeaderModelView {

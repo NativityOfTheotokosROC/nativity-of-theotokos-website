@@ -1,5 +1,5 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { NewsArticle } from "../type/miscellaneous";
+import { NewsArticle } from "../type/general";
 
 export type NewsArticlePreview = Omit<
 	NewsArticle,

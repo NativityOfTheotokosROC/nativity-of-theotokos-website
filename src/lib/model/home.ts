@@ -4,7 +4,7 @@ import {
 	DailyReadings,
 	GalleryImage,
 	ScheduleItem,
-} from "../type/miscellaneous";
+} from "../type/general";
 import { LatestNews } from "../server-action/home";
 
 export interface HomeModelView {

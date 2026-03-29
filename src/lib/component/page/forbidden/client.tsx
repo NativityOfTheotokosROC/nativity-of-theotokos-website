@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "@/src/i18n/navigation";
-import { usePageLoadingBarRouter } from "@/src/lib/component/page-loading-bar/navigation";
+import { usePageLoadingBarRouter } from "@/src/lib/utility/page-loading-bar";
 import { useForbidden } from "@/src/lib/model-implementation/forbidden";
 import Forbidden from "./Forbidden";
 import { ModeledVoidComponent } from "@mvc-react/components";

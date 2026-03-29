@@ -1,5 +1,5 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { Image, Role, User } from "../type/miscellaneous";
+import { Image, Role, User } from "../type/general";
 import { UserActionModel } from "./user-action";
 
 export type NavigationUserDetails = Pick<User, "name"> & {

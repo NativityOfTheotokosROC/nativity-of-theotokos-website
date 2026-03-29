@@ -1,5 +1,5 @@
 import { Model } from "@mvc-react/mvc";
-import { GalleryImage } from "../type/miscellaneous";
+import { GalleryImage } from "../type/general";
 
 export interface GallerySectionModelView {
 	galleryImages: GalleryImage[];

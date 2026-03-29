@@ -1,5 +1,5 @@
 import { InteractiveModel, ModelInteraction } from "@mvc-react/mvc";
-import { Notification } from "../type/miscellaneous";
+import { Notification } from "../type/general";
 
 export type SignOutStatus =
 	| Notification<"success" | "pending">

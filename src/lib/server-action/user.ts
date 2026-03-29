@@ -2,7 +2,7 @@
 
 import { NavigationUserDetails } from "../model/user-navigation-widget";
 import prisma from "../third-party/prisma";
-import { Role } from "../type/miscellaneous";
+import { Role } from "../type/general";
 import { getUser } from "./auth";
 
 export async function getNavigationUserDetails() {

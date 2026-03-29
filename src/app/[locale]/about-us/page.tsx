@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import Maintenance from "@/src/lib/component/pages/maintenance/Maintenance";
+import Maintenance from "@/src/lib/component/page/maintenance/Maintenance";
 import { routing } from "@/src/i18n/routing";
 import { hasLocale } from "next-intl";
 

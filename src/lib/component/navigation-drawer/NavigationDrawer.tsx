@@ -14,7 +14,7 @@ import {
 	NavigationDrawerModel,
 	NavigationDrawerModelView,
 } from "../../model/navigation-drawer";
-import { Link } from "../page-loading-bar/navigation";
+import { Link } from "../page-loading-bar/PageLoadingBar";
 import UserNavigationWidget from "../user-navigation-widget/UserNavigationWidget";
 import "./navigation-drawer.css";
 

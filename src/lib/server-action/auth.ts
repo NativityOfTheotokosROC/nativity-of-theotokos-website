@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { forbidden, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import prisma from "@/src/lib/third-party/prisma";
-import { Role, User } from "../type/miscellaneous";
+import { Role, User } from "../type/general";
 
 export async function protect(protectParams?: {
 	roles?: Role[];

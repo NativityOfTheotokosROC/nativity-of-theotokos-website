@@ -4,7 +4,7 @@ import { useRouter } from "@/src/i18n/navigation";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { useLanguageToggle } from "../../model-implementation/language-toggle";
 import { LanguageSwitcherModel } from "../../model/language-switcher";
-import { usePageLoadingBarRouter } from "../page-loading-bar/navigation";
+import { usePageLoadingBarRouter } from "../../utility/page-loading-bar";
 import LanguageToggleButton from "./LanguageToggle";
 
 const LanguageSwitcher = function ({ model }) {

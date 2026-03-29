@@ -1,5 +1,5 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { DailyReadings } from "../type/miscellaneous";
+import { DailyReadings } from "../type/general";
 import { HymnsModalModel } from "./hymns-modal";
 
 export interface DailySaintsWidgetModelView {

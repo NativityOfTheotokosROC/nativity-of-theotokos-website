@@ -1,5 +1,5 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { Resource } from "../type/miscellaneous";
+import { Resource } from "../type/general";
 
 export interface ResourceWidgetModelView {
 	resource: Resource;

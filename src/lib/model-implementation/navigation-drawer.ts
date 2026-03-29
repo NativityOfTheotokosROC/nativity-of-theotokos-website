@@ -1,7 +1,7 @@
 import { InitializedModel } from "@mvc-react/mvc";
 import { useState } from "react";
 import { NavigationDrawerModel } from "../model/navigation-drawer";
-import { MenuItems } from "../type/miscellaneous";
+import { MenuItems } from "../type/general";
 
 export function useNavigationDrawer(menuItems: MenuItems) {
 	const [isDrawn, setIsDrawn] = useState(false);

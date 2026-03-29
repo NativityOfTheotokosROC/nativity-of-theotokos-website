@@ -8,7 +8,7 @@ import { FooterModel } from "../../model/footer";
 import { georgia } from "../../third-party/fonts";
 import { formatPhoneNumber, isRemotePath } from "../../utility/miscellaneous";
 import LogoIcon from "@/public/assets/logo-icon.svg";
-import { Link } from "../page-loading-bar/navigation";
+import { Link } from "../page-loading-bar/PageLoadingBar";
 import SocialLink from "../social-link/SocialLink";
 import FooterSection from "./FooterSection";
 

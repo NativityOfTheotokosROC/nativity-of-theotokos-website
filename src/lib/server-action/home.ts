@@ -16,7 +16,7 @@ import {
 	DailyReadings,
 	GalleryImage,
 	ScheduleItem,
-} from "../type/miscellaneous";
+} from "../type/general";
 import {
 	getPrismaPlaceholderRepository,
 	isRemotePath,

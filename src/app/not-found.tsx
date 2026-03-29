@@ -1,7 +1,7 @@
 import "./globals.css";
 
 import { NextIntlClientProvider } from "next-intl";
-import NotFoundPage from "../lib/component/pages/not-found/NotFound";
+import NotFoundPage from "../lib/component/page/not-found/NotFound";
 import { Metadata } from "next";
 import { Suspense } from "react";
 import { googleSansFlex } from "../lib/third-party/fonts";

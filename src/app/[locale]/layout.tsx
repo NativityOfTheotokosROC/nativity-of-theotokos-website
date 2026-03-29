@@ -1,12 +1,13 @@
 import "@/src/app/globals.css";
 import { routing } from "@/src/i18n/routing";
+import ViewLoadingSkeleton from "@/src/lib/component/view-loading-skeleton/ViewLoadingSkeleton";
 import ClientProviders from "@/src/lib/provider/client-providers";
 import {
 	georgia,
 	googleSans,
 	googleSansFlex,
 } from "@/src/lib/third-party/fonts";
-import { Language } from "@/src/lib/type/miscellaneous";
+import { Language } from "@/src/lib/type/general";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -15,10 +16,8 @@ import {
 	getTranslations,
 	setRequestLocale,
 } from "next-intl/server";
-import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import LocaleLayout from "./LocaleLayout";
-import PageLoading from "@/src/lib/component/page-loading/PageLoading";
 
 export function generateStaticParams() {
 	return [{ locale: "en" }, { locale: "ru" }];
@@ -79,21 +78,27 @@ export default async function RootLayout({
 	params,
 }: LayoutProps<"/[locale]">) {
 	const { locale } = await params;
-	if (!hasLocale(routing.locales, locale)) {
-		notFound();
-	}
-	setRequestLocale(locale);
-	const messages = await getMessages({ locale }); //TODO: Fixes useTranslations for now
+
+	const computedLocale = hasLocale(routing.locales, locale) ? locale : "en";
+	setRequestLocale(computedLocale);
+	const messages = await getMessages({ locale: computedLocale }); //TODO: Fixes useTranslations for now
 
 	return (
 		<html lang={locale} data-scroll-behavior="smooth">
 			<body
 				className={`antialiased ${googleSansFlex.variable} ${googleSans.variable} ${georgia.variable}`}
 			>
-				<Suspense fallback={<PageLoading />}>
-					<NextIntlClientProvider locale={locale} messages={messages}>
+				<Suspense fallback={<ViewLoadingSkeleton />}>
+					<NextIntlClientProvider
+						locale={computedLocale}
+						messages={messages}
+					>
 						<ClientProviders>
-							<LocaleLayout model={newReadonlyModel({ locale })}>
+							<LocaleLayout
+								model={newReadonlyModel({
+									locale: computedLocale,
+								})}
+							>
 								{children}
 							</LocaleLayout>
 						</ClientProviders>

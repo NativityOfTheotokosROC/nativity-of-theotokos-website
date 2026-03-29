@@ -1,4 +1,4 @@
-import { Link } from "@/src/lib/component/page-loading-bar/navigation";
+import { Link } from "../page-loading-bar/PageLoadingBar";
 import { ResourceWidgetModel } from "@/src/lib/model/resource-widget";
 import { isRemotePath } from "@/src/lib/utility/miscellaneous";
 import { ModeledVoidComponent } from "@mvc-react/components";

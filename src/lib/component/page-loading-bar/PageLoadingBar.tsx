@@ -1,6 +1,7 @@
 "use client";
 
 import {
+	ComponentProps,
 	createContext,
 	useCallback,
 	useContext,
@@ -9,7 +10,9 @@ import {
 } from "react";
 import { PageLoadingBarModel } from "../../model/page-loading-bar";
 import LoadingBar from "../loading-bar/LoadingBar";
-import { usePathname } from "@/src/i18n/navigation";
+import { Link as LocalizedLink, usePathname } from "@/src/i18n/navigation";
+import { default as useLocale } from "next-intl";
+import { triggerLoading } from "../../utility/page-loading-bar";
 
 export const PageLoadingBarContext = createContext<PageLoadingBarModel>({
 	interact: async function () {
@@ -46,3 +49,28 @@ const PageLoadingBar = function () {
 };
 
 export default PageLoadingBar;
+export function Link(props: ComponentProps<typeof LocalizedLink>) {
+	const { href, locale } = props;
+	const pathName = usePathname();
+	const currentLocale = useLocale();
+	const { interact } = useContext(PageLoadingBarContext);
+
+	return (
+		<LocalizedLink
+			{...props}
+			onClick={e => {
+				if (
+					props.target !== "_blank" &&
+					triggerLoading(pathName, href.toString(), {
+						currentLocale,
+						targetLocale: locale,
+					})
+				)
+					interact({ type: "SET_LOADING", input: { value: true } });
+				props.onClick?.(e);
+			}}
+		>
+			{props.children}
+		</LocalizedLink>
+	);
+}

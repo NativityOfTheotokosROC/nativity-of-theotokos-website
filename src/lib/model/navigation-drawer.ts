@@ -1,5 +1,5 @@
 import { InteractiveModel, ModelInteraction } from "@mvc-react/mvc";
-import { MenuItems } from "../type/miscellaneous";
+import { MenuItems } from "../type/general";
 
 export type NavigationDrawerType = "sidebar" | "accordion";
 
