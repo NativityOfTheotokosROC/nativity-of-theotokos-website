@@ -1,10 +1,11 @@
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { NextRequest, NextResponse } from "next/server";
+import { getProtectedRoutes } from "./lib/utility/auth";
+import { getUser } from "./lib/server-action/auth";
 
 const nextIntlMiddleware = createMiddleware(routing);
 
-<<<<<<< HEAD
 export default async function middleware(req: NextRequest) {
 	const { pathname } = req.nextUrl;
 	const user = await getUser();
@@ -16,13 +17,6 @@ export default async function middleware(req: NextRequest) {
 			);
 			return NextResponse.redirect(newUrl);
 		}
-=======
-export default function middleware(req: NextRequest) {
-	const { pathname } = req.nextUrl;
-
-	if (pathname == "/sitemap.xml" || pathname == "/robots.txt") {
-		return NextResponse.next();
->>>>>>> 5c9aec14670165be3403774640efb1ce033dc4c3
 	}
 
 	return nextIntlMiddleware(req);
