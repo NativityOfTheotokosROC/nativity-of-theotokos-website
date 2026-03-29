@@ -7,12 +7,13 @@ import { getUser } from "./lib/server-action/auth";
 const nextIntlMiddleware = createMiddleware(routing);
 
 export default async function middleware(req: NextRequest) {
-	const { pathname } = req.nextUrl;
+	const nextUrl = req.nextUrl;
 	const user = await getUser();
 
 	for (const route of getProtectedRoutes()) {
-		if (pathname.endsWith(route) && !user) {
-			NextResponse.redirect(`/sign-in?endpoint=${pathname}`);
+		if (nextUrl.pathname.endsWith(route) && !user) {
+			nextUrl.pathname = `/sign-in?endpoint=${nextUrl.pathname}`;
+			NextResponse.redirect(nextUrl);
 		}
 	}
 
