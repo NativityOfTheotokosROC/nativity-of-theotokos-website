@@ -15,5 +15,5 @@ export default function middleware(req: NextRequest) {
 
 export const config = {
 	// idk
-	matcher: ["/", `(${routing.locales.join("|")}):path*`],
+	matcher: ["/", `/(en|ru)/:path*`],
 };
