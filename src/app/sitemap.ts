@@ -1,21 +1,20 @@
 import type { MetadataRoute } from "next";
 import { getAllArticles } from "../lib/server-action/news-article";
-import { getBaseURL } from "../lib/server-action/miscellaneous";
-import { headers } from "next/headers";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-	await headers(); //HACK
-	const baseUrl = await getBaseURL();
+	"use cache";
+
+	const baseUrl = "https://www.nativityoftheotokos.com";
 	const newsArticles = await getAllArticles();
 
 	return [
 		{
-			url: "https://www.nativityoftheotokos.com",
+			url: baseUrl,
 			changeFrequency: "daily",
 			priority: 1,
 			alternates: {
 				languages: {
-					ru: "https://www.nativityoftheotokos.com/ru",
+					ru: `${baseUrl}/ru`,
 				},
 			},
 		},
