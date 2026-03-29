@@ -26,7 +26,7 @@ const NewsArticlePreview = function ({ model }) {
 			<div className="flex flex-col select-none hover:cursor-pointer bg-[#FEF8F3] border border-gray-900/20 rounded-lg overflow-clip hover:border-[#dcb042] hover:[&_.title]:underline hover:scale-[1.03] active:border-[#dcb042] active:[&_.title]:underline active:scale-[1.03] transition ease-out duration-150">
 				<div className="flex justify-stretch items-stretch w-full h-[16em] lg:h-[18em]">
 					<Image
-						className="grow object-cover object-top max-w-full"
+						className="grow object-cover object-top h-full w-full max-w-full"
 						height={538}
 						width={538}
 						alt={tCaptions("featuredArticleImage")}
