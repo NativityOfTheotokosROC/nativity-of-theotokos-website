@@ -27,6 +27,7 @@ export function generateStaticParams() {
 export async function generateMetadata(
 	props: Omit<LayoutProps<"/[locale]">, "children">,
 ): Promise<Metadata> {
+	"use cache";
 	const { locale } = await props.params;
 
 	const t = await getTranslations({
@@ -42,13 +43,14 @@ export async function generateMetadata(
 		metadataBase:
 			process.env.NODE_ENV == "development"
 				? "http:localhost:3000"
-				: `https://nativityoftheotokos.com`,
-		// alternates: { //TODO
-		// 	canonical: "/",
-		// 	languages: {
-		// 		ru: "/ru",
-		// 	},
-		// },
+				: process.env.BASE_URL,
+		alternates: {
+			//TODO
+			canonical: "/",
+			languages: {
+				ru: "/ru",
+			},
+		},
 		title: {
 			template: titleTemplate,
 			default: titleDefault,
@@ -59,7 +61,7 @@ export async function generateMetadata(
 				template: titleTemplate,
 				default: titleDefault,
 			},
-			// 	url: "/",
+			url: "/",
 			description,
 			locale: localeMetaData,
 			type: "website",
