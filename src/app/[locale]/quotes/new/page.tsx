@@ -24,7 +24,6 @@ export default function Page() {
 		<ProtectedComponent
 			model={newReadonlyModel({
 				roles: ["quotes"],
-				// signInEndpoint: "/quotes/new",
 			})}
 		>
 			<NewQuoteClient />

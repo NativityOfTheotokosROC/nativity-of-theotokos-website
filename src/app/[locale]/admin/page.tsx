@@ -7,7 +7,6 @@ export default async function Page() {
 		<ProtectedComponent
 			model={newReadonlyModel({
 				roles: ["staff"],
-				// signInEndpoint: "/admin",
 			})}
 		>
 			<Admin />
