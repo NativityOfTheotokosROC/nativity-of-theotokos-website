@@ -2,9 +2,9 @@
 import SocialLink from "@/src/lib/component/social-link/SocialLink";
 import { NewsArticleModel } from "@/src/lib/model/news-article";
 import { georgia } from "@/src/lib/third-party/fonts";
+import { getNewsArticleFormattedDate } from "@/src/lib/utility/date-time";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
-import { toZonedTime } from "date-fns-tz";
 import { Share } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -15,7 +15,6 @@ const NewsArticle = function ({ model }) {
 	const { title, author, articleImage, dateCreated, dateUpdated, body } =
 		article;
 	const { source, about, placeholder } = articleImage;
-	const shortDateStyle = "ru-RU";
 	const t = useTranslations("news");
 	const tCaptions = useTranslations("imageCaptions");
 	const tNonDescriptive = useTranslations("nonDescriptive");
@@ -43,22 +42,9 @@ const NewsArticle = function ({ model }) {
 								<span className="author text-base md:text-xl">{`${t("author")} ${author}`}</span>
 							</div>
 							<span className="date text-lg">
-								{`${toZonedTime(
-									dateCreated,
-									"Africa/Harare",
-								).toLocaleDateString(shortDateStyle, {
-									dateStyle: "short",
-								})}${
+								{`${getNewsArticleFormattedDate(dateCreated)}${
 									dateUpdated
-										? ` (${t("articleUpdated")}: ${toZonedTime(
-												dateUpdated,
-												"Africa/Harare",
-											).toLocaleDateString(
-												shortDateStyle,
-												{
-													dateStyle: "short",
-												},
-											)})`
+										? ` (${t("articleUpdated")}: ${getNewsArticleFormattedDate(dateUpdated)})`
 										: ""
 								}`}
 							</span>

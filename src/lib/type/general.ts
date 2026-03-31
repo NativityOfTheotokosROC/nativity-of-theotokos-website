@@ -2,6 +2,7 @@ import { routing } from "@/src/i18n/routing";
 import { ImagePlaceholder } from "@grod56/placeholder";
 import { UserActionModel } from "../model/user-action";
 import { NavigationUser } from "../model/user-navigation-widget";
+import { useTranslations } from "next-intl";
 
 export type Navlink = {
 	text: string;
@@ -92,5 +93,7 @@ export type MenuItems = {
 	} | null;
 	navlinks: Navlink[];
 };
+
+export type Translator = ReturnType<typeof useTranslations<never>>;
 
 export type Role = "admin" | "staff" | "user" | "quotes" | "writer";

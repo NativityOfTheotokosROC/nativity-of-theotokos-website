@@ -2,6 +2,8 @@ import { createToast } from "@/src/lib/component/miscellaneous/utility";
 import Spinner from "@/src/lib/component/spinner/Spinner";
 import { NewQuoteModel } from "@/src/lib/model/new-quote";
 import { georgia } from "@/src/lib/third-party/fonts";
+import { getDatePickerDate } from "@/src/lib/utility/date-time";
+import { useQuoteFormSchema } from "@/src/lib/validation/quote-form";
 import {
 	Checkbox,
 	Field,
@@ -12,62 +14,39 @@ import {
 	TabPanel,
 	TabPanels,
 } from "@headlessui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import { formatInTimeZone, toZonedTime } from "date-fns-tz";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
-
-type NewQuoteFields = {
-	authorField: string;
-	sourceField: string;
-	quoteField: string;
-	authorRuField: string;
-	sourceRuField: string;
-	quoteRuField: string;
-	isQuoteScheduledField: boolean;
-	scheduledDateField: string;
-};
-
-function getCurrentDate() {
-	return formatInTimeZone(new Date(), "Africa/Harare", "yyyy-MM-dd");
-}
-
-function getDefaultFields() {
-	const currentDate = getCurrentDate();
-	return {
-		authorField: "",
-		authorRuField: "",
-		quoteField: "",
-		quoteRuField: "",
-		sourceField: "",
-		sourceRuField: "",
-		isQuoteScheduledField: false,
-		scheduledDateField: currentDate,
-	} satisfies NewQuoteFields;
-}
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 const NewQuote = function ({ model }) {
-	const currentDate = getCurrentDate();
+	const quoteFormSchema = useQuoteFormSchema();
+	const currentDate = getDatePickerDate(new Date(), true);
 	const t = useTranslations("newQuote");
 	const { modelView, interact } = model;
 	const { newQuoteNotification } = modelView;
-	const [fields, setFields] = useState<NewQuoteFields>(getDefaultFields());
-	const {
-		authorField,
-		authorRuField,
-		quoteField,
-		quoteRuField,
-		sourceField,
-		sourceRuField,
-		isQuoteScheduledField,
-		scheduledDateField,
-	} = fields;
 
+	const {
+		register,
+		handleSubmit,
+		formState: { isSubmitting, errors },
+		setValue,
+		watch,
+	} = useForm({
+		mode: "onBlur",
+		resolver: zodResolver(quoteFormSchema),
+		shouldUnregister: true,
+		defaultValues: {
+			scheduledDate: currentDate,
+		},
+	});
+
+	const isQuoteScheduled = watch("isQuoteScheduled");
 	useEffect(() => {
 		if (newQuoteNotification?.type == "success") {
-			setFields(getDefaultFields());
 			createToast({
 				type: "success",
 				message: newQuoteNotification.text,
@@ -90,42 +69,34 @@ const NewQuote = function ({ model }) {
 					<hr className="mt-4 mb-0 md:w-full" />
 				</span>
 				<form
-					action={() => {
-						const author = authorField.trim();
-						const source = sourceField.trim()
-							? sourceField
-							: undefined;
-						const quote = quoteField.trim();
-						const authorRu = authorRuField.trim()
-							? authorRuField
-							: undefined;
-						const sourceRu = sourceRuField.trim()
-							? sourceRuField
-							: undefined;
-						const quoteRu = quoteRuField.trim()
-							? quoteRuField
-							: undefined;
-						const scheduledDate = isQuoteScheduledField
-							? toZonedTime(scheduledDateField, "Africa/Harare")
-							: undefined;
-
-						interact({
-							type: "ADD_QUOTE",
-							input: {
-								englishQuote: {
-									author,
-									quote,
-									source,
+					onSubmit={handleSubmit(
+						({
+							authorEn,
+							quoteEn,
+							sourceEn,
+							authorRu,
+							quoteRu,
+							sourceRu,
+							scheduledDate,
+						}) => {
+							return interact({
+								type: "ADD_QUOTE",
+								input: {
+									englishQuote: {
+										author: authorEn,
+										quote: quoteEn,
+										source: sourceEn,
+									},
+									russianQuote: {
+										author: authorRu,
+										quote: quoteRu,
+										source: sourceRu,
+									},
+									scheduledDate,
 								},
-								russianQuote: {
-									author: authorRu,
-									quote: quoteRu,
-									source: sourceRu,
-								},
-								scheduledDate,
-							},
-						});
-					}}
+							});
+						},
+					)}
 				>
 					<div className="flex flex-col md:w-3/4 lg:w-6/10 gap-6">
 						<TabGroup className="flex flex-col gap-6">
@@ -149,113 +120,96 @@ const NewQuote = function ({ model }) {
 									unmount={false}
 								>
 									<input
-										className="p-4 bg-white w-full rounded-lg overflow-clip border border-gray-400"
+										className={`p-4 bg-white w-full rounded-lg overflow-clip border ${errors.authorEn ? "border-red-700" : "border-gray-400"}`}
 										placeholder={t("author")}
-										name="author"
 										id="quote-author"
 										required
 										autoCapitalize="words"
 										autoComplete="on"
-										value={authorField}
-										onChange={e =>
-											setFields({
-												...fields,
-												authorField: e.target.value,
-											})
-										}
+										{...register("authorEn")}
 									/>
+									{errors.authorEn && (
+										<span className="text-red-700 text-sm">
+											{errors.authorEn.message}
+										</span>
+									)}
 									<input
-										className="p-4 bg-white w-full rounded-lg overflow-clip border border-gray-400"
+										className={`p-4 bg-white w-full rounded-lg overflow-clip border ${errors.sourceEn ? "border-red-700" : "border-gray-400"}`}
 										placeholder={`${t("source")} (${t("optional")})`}
-										name="source"
 										id="quote-source"
 										autoComplete="on"
-										value={sourceField}
-										onChange={e =>
-											setFields({
-												...fields,
-												sourceField: e.target.value,
-											})
-										}
+										{...register("sourceEn")}
 									/>
+									{errors.sourceEn && (
+										<span className="text-red-700 text-sm">
+											{errors.sourceEn.message}
+										</span>
+									)}
 									<textarea
-										className="p-4 bg-white w-full rounded-lg border border-gray-400"
+										className={`p-4 bg-white w-full rounded-lg border ${errors.quoteEn ? "border-red-700" : "border-gray-400"}`}
 										placeholder={t("quote")}
-										name="quote"
 										rows={5}
-										id="quote"
 										autoComplete="off"
 										required
-										value={quoteField}
-										onChange={e =>
-											setFields({
-												...fields,
-												quoteField: e.target.value,
-											})
-										}
+										{...register("quoteEn")}
 									/>
+									{errors.quoteEn && (
+										<span className="text-red-700 text-sm">
+											{errors.quoteEn.message}
+										</span>
+									)}
 								</TabPanel>
 								<TabPanel
 									className="flex flex-col gap-3"
 									unmount={false}
 								>
 									<input
-										className="p-4 bg-white w-full rounded-lg overflow-clip border border-gray-400"
+										className={`p-4 bg-white w-full rounded-lg overflow-clip border ${errors.authorRu ? "border-red-700" : "border-gray-400"}`}
 										placeholder={`${t("author")} (${t("optional")})`}
-										name="authorRu"
 										id="quote-author-ru"
 										autoCapitalize="words"
 										autoComplete="on"
-										value={authorRuField}
-										onChange={e =>
-											setFields({
-												...fields,
-												authorRuField: e.target.value,
-											})
-										}
+										{...register("authorRu")}
 									/>
+									{errors.authorRu && (
+										<span className="text-red-700 text-sm">
+											{errors.authorRu.message}
+										</span>
+									)}
 									<input
-										className="p-4 bg-white w-full rounded-lg overflow-clip border border-gray-400"
+										className={`p-4 bg-white w-full rounded-lg overflow-clip border ${errors.sourceRu ? "border-red-700" : "border-gray-400"}`}
 										placeholder={`${t("source")} (${t("optional")})`}
-										name="sourceRu"
 										id="quote-source-ru"
 										autoComplete="on"
-										value={sourceRuField}
-										onChange={e =>
-											setFields({
-												...fields,
-												sourceRuField: e.target.value,
-											})
-										}
+										{...register("sourceRu")}
 									/>
+									{errors.sourceRu && (
+										<span className="text-red-700 text-sm">
+											{errors.sourceRu.message}
+										</span>
+									)}
 									<textarea
-										className="p-4 bg-white w-full rounded-lg border border-gray-400"
+										className={`p-4 bg-white w-full rounded-lg border ${errors.quoteRu ? "border-red-700" : "border-gray-400"}`}
 										placeholder={`${t("quote")} (${t("optional")})`}
-										name="quoteRu"
 										rows={5}
 										id="quote-ru"
 										autoComplete="off"
-										value={quoteRuField}
-										onChange={e =>
-											setFields({
-												...fields,
-												quoteRuField: e.target.value,
-											})
-										}
+										{...register("quoteRu")}
 									/>
+									{errors.quoteRu && (
+										<span className="text-red-700 text-sm">
+											{errors.quoteRu.message}
+										</span>
+									)}
 								</TabPanel>
 							</TabPanels>
 						</TabGroup>
 						<div className="flex flex-col gap-3">
 							<Field className="flex items-center gap-3">
 								<Checkbox
-									checked={isQuoteScheduledField}
-									onChange={value =>
-										setFields({
-											...fields,
-											isQuoteScheduledField: value,
-										})
-									}
+									onChange={value => {
+										setValue("isQuoteScheduled", value);
+									}}
 									className={`group flex justify-center items-center size-6 rounded bg-white data-checked:bg-gray-900 border border-gray-400`}
 								>
 									<Check
@@ -266,24 +220,22 @@ const NewQuote = function ({ model }) {
 								</Checkbox>
 								<Label>{t("schedulerCheckLabel")}</Label>
 							</Field>
-							{isQuoteScheduledField && (
+							{isQuoteScheduled && (
 								<input
 									className="p-4 bg-white w-full rounded-lg overflow-clip border border-gray-400"
 									type="date"
-									value={scheduledDateField}
-									min={currentDate}
-									onChange={e =>
-										setFields({
-											...fields,
-											scheduledDateField: e.target.value,
-										})
-									}
-									name="scheduledDate"
 									id="scheduled-date"
 									required
+									min={currentDate}
+									{...register("scheduledDate")}
 								/>
 							)}
 						</div>
+						{errors.form && (
+							<span className="text-red-700 text-sm">
+								{errors.form.message}
+							</span>
+						)}
 						<hr className="w-full mt-1" />
 						<div className="flex mt-1 gap-3 justify-start w-full">
 							<button
@@ -298,6 +250,7 @@ const NewQuote = function ({ model }) {
 								type="submit"
 								className="flex justify-center items-center bg-[#513433] text-white p-4 min-w-[8em] w-fit max-w-1/2 rounded-lg hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
 								disabled={
+									isSubmitting ||
 									newQuoteNotification?.type == "pending"
 								}
 							>

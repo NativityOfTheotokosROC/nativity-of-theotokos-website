@@ -171,5 +171,9 @@
 	},
 	"miscellaneous": {
 		"futureContent": "Content to be added soon!"
+	},
+	"validation": {
+		"nonEmpty": "{field} cannot be empty",
+		"maxCharacters": "{field} is too long (maximum of {max} characters)"
 	}
 }

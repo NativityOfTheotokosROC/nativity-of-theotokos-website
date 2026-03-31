@@ -171,5 +171,9 @@
 	},
 	"miscellaneous": {
 		"futureContent": "Контент будет добавлен в ближайшее время!"
+	},
+	"validation": {
+		"nonEmpty": "Поле {field} не может быть пустым",
+		"maxCharacters": "Поле {field} слишком длинное ({max} максимум символов)"
 	}
 }

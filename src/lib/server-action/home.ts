@@ -24,6 +24,7 @@ import {
 import { getGalleryImages } from "./gallery";
 import { getBaseURL } from "./miscellaneous";
 import prisma from "../third-party/prisma";
+import z from "zod";
 
 export type LatestNews = {
 	featuredArticle: NewsArticlePreview;
@@ -78,7 +79,8 @@ export async function getHomeSnapshot(
 	};
 }
 
-export async function subscribeToMailingList(email: string) {
+export async function subscribeToMailingList(payload: string) {
+	const email = z.email().trim().parse(payload);
 	await mailerLite.subscribers.createOrUpdate({ email });
 }
 
