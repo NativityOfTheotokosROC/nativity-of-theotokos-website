@@ -1,11 +1,11 @@
 "use client";
 
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { NewsArticlePreviewModel } from "../../model/news-article-preview";
-import Image from "next/image";
-import { georgia } from "../../third-party/fonts";
-import { toZonedTime } from "date-fns-tz";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { NewsArticlePreviewModel } from "../../model/news-article-preview";
+import { georgia } from "../../third-party/fonts";
+import { getNewsArticleFormattedDate } from "../../utility/date-time";
 import { Link } from "../page-loading-bar/PageLoadingBar";
 
 const NewsArticlePreview = function ({ model }) {
@@ -13,12 +13,7 @@ const NewsArticlePreview = function ({ model }) {
 	const { title, author, dateCreated, snippet, articleImage, uri } = article;
 	const { placeholder, source } = articleImage;
 	const articleLink = `/news/${uri}`;
-	const dateString = toZonedTime(
-		dateCreated,
-		"Africa/Harare",
-	).toLocaleDateString("ru-RU", {
-		dateStyle: "short",
-	});
+	const dateString = getNewsArticleFormattedDate(dateCreated);
 	const tCaptions = useTranslations("imageCaptions");
 
 	return isFeatured ? (

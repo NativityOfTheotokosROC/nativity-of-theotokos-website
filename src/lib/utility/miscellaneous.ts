@@ -72,3 +72,6 @@ export const getPrismaPlaceholderRepository = (
 		},
 	};
 };
+export const emptyStringAsUndefined = (value: string) => {
+	return value === "" ? undefined : value;
+};

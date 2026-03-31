@@ -6,15 +6,21 @@ import { motion } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import HymnsOrnament from "@/public/assets/ornament_9.svg";
 import Link from "next/link";
+import { getLocalTimeZone } from "../../utility/date-time";
 
 const DailySaintsWidget = function ({ model }) {
 	const { details, hymnsModal } = model.modelView;
 	const { currentDate, iconOfTheDay, liturgicalWeek, saints, hymns } =
 		details;
 	const locale = useLocale();
-	const dateLocale = locale == "en" ? "en-uk" : "ru-RU";
 	const t = useTranslations("home");
 	const tCaptions = useTranslations("imageCaptions");
+	const dateString = toZonedTime(
+		currentDate,
+		getLocalTimeZone(),
+	).toLocaleDateString(locale == "en" ? "en-uk" : "ru-RU", {
+		dateStyle: "full",
+	});
 
 	return (
 		<motion.div
@@ -45,14 +51,7 @@ const DailySaintsWidget = function ({ model }) {
 				</Link>
 			</div>
 			<div className="texts flex flex-col md:justify-center grow gap-4 py-6 [&_a]:underline [&_a]:hover:text-[#DCB042]">
-				<span className={`text-2xl px-5 md:px-7`}>
-					{toZonedTime(
-						currentDate,
-						"Africa/Harare",
-					).toLocaleDateString(dateLocale, {
-						dateStyle: "full",
-					})}
-				</span>
+				<span className={`text-2xl px-5 md:px-7`}>{dateString}</span>
 				<div className="flex flex-col gap-2 grow">
 					<span className="text-xl px-5 md:px-7">
 						{liturgicalWeek}
