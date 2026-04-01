@@ -1,3 +1,5 @@
+"use cache";
+
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Maintenance from "@/src/lib/component/page/maintenance/Maintenance";
