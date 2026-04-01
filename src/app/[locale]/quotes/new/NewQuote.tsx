@@ -78,8 +78,8 @@ const NewQuote = function ({ model }) {
 							quoteRu,
 							sourceRu,
 							scheduledDate,
-						}) => {
-							return interact({
+						}) =>
+							interact({
 								type: "ADD_QUOTE",
 								input: {
 									englishQuote: {
@@ -94,8 +94,7 @@ const NewQuote = function ({ model }) {
 									},
 									scheduledDate,
 								},
-							});
-						},
+							}),
 					)}
 				>
 					<div className="flex flex-col md:w-3/4 lg:w-6/10 gap-6">
@@ -221,14 +220,21 @@ const NewQuote = function ({ model }) {
 								<Label>{t("schedulerCheckLabel")}</Label>
 							</Field>
 							{isQuoteScheduled && (
-								<input
-									className="p-4 bg-white w-full rounded-lg overflow-clip border border-gray-400"
-									type="date"
-									id="scheduled-date"
-									required
-									min={currentDate}
-									{...register("scheduledDate")}
-								/>
+								<>
+									<input
+										className={`p-4 bg-white w-full rounded-lg overflow-clip border ${errors.scheduledDate ? "border-red-700" : "border-gray-400"}`}
+										type="date"
+										id="scheduled-date"
+										required
+										min={currentDate}
+										{...register("scheduledDate")}
+									/>
+									{errors.scheduledDate && (
+										<span className="text-red-700 text-sm">
+											{errors.scheduledDate.message}
+										</span>
+									)}
+								</>
 							)}
 						</div>
 						{errors.form && (
