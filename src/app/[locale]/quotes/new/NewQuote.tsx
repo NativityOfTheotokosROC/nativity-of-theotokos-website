@@ -43,8 +43,9 @@ const NewQuote = function ({ model }) {
 			scheduledDate: currentDate,
 		},
 	});
-
+	console.log(errors);
 	const isQuoteScheduled = watch("isQuoteScheduled");
+
 	useEffect(() => {
 		if (newQuoteNotification?.type == "success") {
 			createToast({
