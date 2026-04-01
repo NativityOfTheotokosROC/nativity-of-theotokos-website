@@ -69,8 +69,8 @@ const NewQuote = function ({ model }) {
 					<hr className="mt-4 mb-0 md:w-full" />
 				</span>
 				<form
-					onSubmit={handleSubmit(
-						({
+					onSubmit={handleSubmit(form => {
+						const {
 							authorEn,
 							quoteEn,
 							sourceEn,
@@ -78,25 +78,25 @@ const NewQuote = function ({ model }) {
 							quoteRu,
 							sourceRu,
 							scheduledDate,
-						}) => {
-							return interact({
-								type: "ADD_QUOTE",
-								input: {
-									englishQuote: {
-										author: authorEn,
-										quote: quoteEn,
-										source: sourceEn,
-									},
-									russianQuote: {
-										author: authorRu,
-										quote: quoteRu,
-										source: sourceRu,
-									},
-									scheduledDate,
+						} = form;
+						console.log(form);
+						return interact({
+							type: "ADD_QUOTE",
+							input: {
+								englishQuote: {
+									author: authorEn,
+									quote: quoteEn,
+									source: sourceEn,
 								},
-							});
-						},
-					)}
+								russianQuote: {
+									author: authorRu,
+									quote: quoteRu,
+									source: sourceRu,
+								},
+								scheduledDate,
+							},
+						});
+					})}
 				>
 					<div className="flex flex-col md:w-3/4 lg:w-6/10 gap-6">
 						<TabGroup className="flex flex-col gap-6">
