@@ -22,7 +22,7 @@ export async function addNewQuote(payload: NewQuote) {
 			authorRu: russianQuote?.author,
 			quoteRu: russianQuote?.quote,
 			sourceRu: russianQuote?.source,
-			scheduledDate,
+			scheduledDate: scheduledDate?.toDateString(),
 		});
 	const scheduledLocalDate =
 		scheduledDate && toZonedTime(scheduledDate, getLocalTimeZone());
