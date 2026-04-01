@@ -1,21 +1,21 @@
-import { Metadata } from "next";
-import NewsArticle from "./NewsArticle";
+"use cache";
+
+import { routing } from "@/src/i18n/routing";
+import { getBaseURL } from "@/src/lib/server-action/miscellaneous";
 import {
 	getAllArticles,
 	getArticle,
 	getArticleMetadata,
 } from "@/src/lib/server-action/news-article";
-import { newReadonlyModel } from "@mvc-react/mvc";
 import {
 	Language,
 	NewsArticle as NewsArticleType,
 } from "@/src/lib/type/general";
-import { getBaseURL } from "@/src/lib/server-action/miscellaneous";
-import { DynamicMarker } from "@/src/lib/component/miscellaneous/utility";
-import { notFound } from "next/navigation";
-import { connection } from "next/server";
+import { newReadonlyModel } from "@mvc-react/mvc";
+import { Metadata } from "next";
 import { hasLocale } from "next-intl";
-import { routing } from "@/src/i18n/routing";
+import { notFound } from "next/navigation";
+import NewsArticle from "./NewsArticle";
 
 function articleJsonLd(article: NewsArticleType) {
 	const { title, author, articleImage, dateCreated, snippet } = article;
@@ -79,8 +79,6 @@ export async function generateMetadata({
 export default async function Page({
 	params,
 }: PageProps<"/[locale]/news/[article]">) {
-	await connection();
-
 	const { article: articleId, locale } = await params;
 	const computedLocale = hasLocale(routing.locales, locale)
 		? locale
@@ -93,7 +91,6 @@ export default async function Page({
 
 	return (
 		<>
-			<DynamicMarker />
 			<script
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

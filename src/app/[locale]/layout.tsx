@@ -27,6 +27,8 @@ export function generateStaticParams() {
 export async function generateMetadata(
 	props: Omit<LayoutProps<"/[locale]">, "children">,
 ): Promise<Metadata> {
+	"use cache";
+
 	const { locale } = await props.params;
 
 	const t = await getTranslations({
@@ -39,10 +41,7 @@ export async function generateMetadata(
 	const localeMetaData = locale == "en" ? "en-US" : "ru-RU";
 
 	return {
-		metadataBase:
-			process.env.NODE_ENV == "development"
-				? "http:localhost:3000"
-				: process.env.BASE_URL,
+		metadataBase: process.env.BASE_URL,
 		// alternates: { //TODO
 		// 	canonical: "/",
 		// 	languages: {

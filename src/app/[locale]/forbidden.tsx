@@ -8,6 +8,8 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 export async function generateMetadata({
 	params,
 }: LayoutProps<"/[locale]">): Promise<Metadata> {
+	"use cache";
+
 	const { locale } = await params;
 	const t = await getTranslations({
 		locale: hasLocale(routing.locales, locale) ? locale : "en",

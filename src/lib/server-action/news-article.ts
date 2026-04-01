@@ -77,6 +77,7 @@ export async function getArticle(
 	articleId: string,
 	language?: Language,
 ): Promise<Omit<NewsArticle, "url">> {
+	"use cache";
 	const locale = language ?? (await getLocale());
 	try {
 		const article = await prisma.newsArticle.findUniqueOrThrow({
