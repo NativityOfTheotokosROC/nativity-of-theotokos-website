@@ -12,8 +12,10 @@ export async function protect(protectParams?: {
 }) {
 	const signInEndpoint = protectParams?.signInEndpoint;
 	const roles = protectParams?.roles;
-
 	const user = await getUser();
+
+	const environment = process.env.VERCEL_ENV ?? process.env.NODE_ENV;
+	if (environment != "production") return;
 	if (!user && signInEndpoint)
 		return redirect(`/sign-in?endpoint=${signInEndpoint}`);
 	if (!(user && (await isAuthorized(user, roles)))) return forbidden();

@@ -4,7 +4,7 @@ import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
 import { NewQuote } from "../model/new-quote";
 import prisma from "../third-party/prisma";
-import { getLocalTimeZone } from "../utility/date-time";
+import { getDatePickerDate, getLocalTimeZone } from "../utility/date-time";
 import { getQuoteSchema } from "../validation/quote";
 import { protect } from "./auth";
 
@@ -22,7 +22,7 @@ export async function addNewQuote(payload: NewQuote) {
 			authorRu: russianQuote?.author,
 			quoteRu: russianQuote?.quote,
 			sourceRu: russianQuote?.source,
-			scheduledDate,
+			scheduledDate: scheduledDate && getDatePickerDate(scheduledDate), //TODO
 		});
 	const scheduledLocalDate =
 		scheduledDate && toZonedTime(scheduledDate, getLocalTimeZone());
