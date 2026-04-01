@@ -7,7 +7,6 @@ export function getQuoteFormSchema(t?: Translator) {
 	const quoteSchema = getQuoteSchema(t);
 	return quoteSchema.extend({
 		isQuoteScheduled: z.boolean(),
-		scheduledDateString: z.iso.date(),
 	});
 }
 
