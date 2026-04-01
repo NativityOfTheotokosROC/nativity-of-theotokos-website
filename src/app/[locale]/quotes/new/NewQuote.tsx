@@ -43,7 +43,6 @@ const NewQuote = function ({ model }) {
 			scheduledDate: currentDate,
 		},
 	});
-	console.log(errors);
 	const isQuoteScheduled = watch("isQuoteScheduled");
 
 	useEffect(() => {
@@ -80,7 +79,6 @@ const NewQuote = function ({ model }) {
 							sourceRu,
 							scheduledDate,
 						} = form;
-						console.log(form);
 						return interact({
 							type: "ADD_QUOTE",
 							input: {
