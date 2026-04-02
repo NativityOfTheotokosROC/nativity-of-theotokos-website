@@ -8,8 +8,6 @@ import { unstable_cache } from "next/cache";
 
 export const dailyReadings = unstable_cache(
 	async (date: Date, language: Language) => {
-		console.log("Holy trinity orthodox missed");
-
 		const localDate = toZonedTime(date, getLocalTimeZone());
 		const [
 			liturgicalWeek,
@@ -37,11 +35,8 @@ export const dailyReadings = unstable_cache(
 		} satisfies DailyReadings;
 	},
 	["holytrinity-readings"],
-	{ revalidate: 3600 },
 );
 export async function getLiturgicalWeek(date: Date, language: Language) {
-	"use cache";
-
 	const requestURL = _getDatedBaseURL(date, _getBaseURL(language));
 	requestURL.searchParams.set("header", "1");
 
@@ -55,8 +50,6 @@ export async function getLiturgicalWeek(date: Date, language: Language) {
 		.then(markedUpText => removeMarkup(markedUpText));
 }
 export async function getSaints(date: Date, language: Language) {
-	"use cache";
-
 	const requestURL = _getDatedBaseURL(date, _getBaseURL(language));
 	requestURL.searchParams.set("lives", "2");
 
@@ -77,8 +70,6 @@ export async function getSaints(date: Date, language: Language) {
 	});
 }
 export async function getScriptures(date: Date, language: Language) {
-	"use cache";
-
 	const requestURL = _getDatedBaseURL(date, _getBaseURL(language));
 	requestURL.searchParams.set("scripture", "2");
 
@@ -135,8 +126,6 @@ export async function getScriptures(date: Date, language: Language) {
 	});
 }
 export async function getFastingInfo(date: Date, language: Language) {
-	"use cache";
-
 	const requestURL = _getDatedBaseURL(date, _getBaseURL(language));
 	const t = await getTranslations({
 		locale: language,
@@ -155,8 +144,6 @@ export async function getFastingInfo(date: Date, language: Language) {
 }
 
 export async function getIconOfTheDay(date: Date, language: Language) {
-	"use cache";
-
 	const requestURL = _getDatedBaseURL(date, _getIconOfTheDayURL(language));
 	requestURL.searchParams.set("img", "1");
 	const encoding = requestURL.href.includes("/ru/") ? "UTF-8" : undefined;
@@ -173,8 +160,6 @@ export async function getIconOfTheDay(date: Date, language: Language) {
 }
 
 export async function getHymns(date: Date, language: Language) {
-	"use cache";
-
 	const requestURL = _getDatedBaseURL(date, _getBaseURL(language));
 	requestURL.searchParams.set("trp", "2");
 

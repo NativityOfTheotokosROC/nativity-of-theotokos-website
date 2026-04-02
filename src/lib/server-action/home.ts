@@ -20,6 +20,7 @@ import { isRemotePath } from "../utility/miscellaneous";
 import { getGalleryImages } from "./gallery";
 import { getBaseURL } from "./miscellaneous";
 import { getPlaceholder } from "./placeholder";
+import { unstable_cache } from "next/cache";
 
 export type LatestNews = {
 	featuredArticle: NewsArticlePreview;
@@ -80,14 +81,13 @@ export async function subscribeToMailingList(payload: string) {
 	await mailerLite.subscribers.createOrUpdate({ email });
 }
 
-export async function getDailyReadings(currentDate: Date, language: Language) {
-	"use cache";
-
-	console.log("Daily Readings missed");
-
-	const locale = language;
-	return await dailyReadings(currentDate, locale);
-}
+export const getDailyReadings = unstable_cache(
+	async (currentDate: Date, language: Language) => {
+		const locale = language;
+		return await dailyReadings(currentDate, locale);
+	},
+	["daily-readings"],
+);
 
 export async function getDailyQuote(currentDate: Date = new Date()) {
 	const locale = await getLocale();
@@ -328,80 +328,85 @@ export async function getLatestNews(
 	};
 }
 
-export async function getDailyGalleryImages(
-	count: number,
-	currentDate = new Date(),
-): Promise<GalleryImage[]> {
-	"use cache";
+export const getDailyGalleryImages = unstable_cache(
+	async (
+		count: number,
+		currentDate = new Date(),
+	): Promise<GalleryImage[]> => {
+		const baseUrl = await getBaseURL();
+		const localDate = new Date(getDateString(currentDate, true));
+		const fulfilled = await Promise.all([
+			getGalleryImages(),
+			prisma.dailyGalleryImage.findMany({
+				where: {
+					date: localDate,
+				},
+			}),
+		]);
+		const allGalleryImages = fulfilled[0];
+		let dailyGalleryImages = fulfilled[1];
 
-	console.log("gallery images missed");
+		const dailyGalleryImageLinks = dailyGalleryImages.map(
+			dailyGalleryImage => dailyGalleryImage.imageLink,
+		);
+		const otherGalleryImages = allGalleryImages.filter(
+			galleryImage => !(galleryImage.imageLink in dailyGalleryImageLinks),
+		);
 
-	const baseUrl = await getBaseURL();
-	const localDate = new Date(getDateString(currentDate, true));
-	const fulfilled = await Promise.all([
-		getGalleryImages(),
-		prisma.dailyGalleryImage.findMany({
-			where: {
-				date: localDate,
-			},
-		}),
-	]);
-	const allGalleryImages = fulfilled[0];
-	let dailyGalleryImages = fulfilled[1];
-
-	const dailyGalleryImageLinks = dailyGalleryImages.map(
-		dailyGalleryImage => dailyGalleryImage.imageLink,
-	);
-	const otherGalleryImages = allGalleryImages.filter(
-		galleryImage => !(galleryImage.imageLink in dailyGalleryImageLinks),
-	);
-
-	if (dailyGalleryImages.length < count && otherGalleryImages.length > 0) {
-		const shuffledGalleryImages = arrayToShuffled(otherGalleryImages);
-		if (otherGalleryImages.length + dailyGalleryImages.length <= count) {
-			const newDailyGalleryImages =
-				await prisma.dailyGalleryImage.createManyAndReturn({
-					data: shuffledGalleryImages.map(galleryImage => ({
-						date: localDate,
-						imageLink: galleryImage.imageLink,
-					})),
-				});
-			dailyGalleryImages = [
-				...dailyGalleryImages,
-				...newDailyGalleryImages,
-			];
-		} else {
-			const newDailyGalleryImages =
-				await prisma.dailyGalleryImage.createManyAndReturn({
-					data: shuffledGalleryImages
-						.slice(0, count - dailyGalleryImages.length)
-						.map(galleryImage => ({
+		if (
+			dailyGalleryImages.length < count &&
+			otherGalleryImages.length > 0
+		) {
+			const shuffledGalleryImages = arrayToShuffled(otherGalleryImages);
+			if (
+				otherGalleryImages.length + dailyGalleryImages.length <=
+				count
+			) {
+				const newDailyGalleryImages =
+					await prisma.dailyGalleryImage.createManyAndReturn({
+						data: shuffledGalleryImages.map(galleryImage => ({
 							date: localDate,
 							imageLink: galleryImage.imageLink,
 						})),
-				});
-			dailyGalleryImages = [
-				...dailyGalleryImages,
-				...newDailyGalleryImages,
-			];
+					});
+				dailyGalleryImages = [
+					...dailyGalleryImages,
+					...newDailyGalleryImages,
+				];
+			} else {
+				const newDailyGalleryImages =
+					await prisma.dailyGalleryImage.createManyAndReturn({
+						data: shuffledGalleryImages
+							.slice(0, count - dailyGalleryImages.length)
+							.map(galleryImage => ({
+								date: localDate,
+								imageLink: galleryImage.imageLink,
+							})),
+					});
+				dailyGalleryImages = [
+					...dailyGalleryImages,
+					...newDailyGalleryImages,
+				];
+			}
 		}
-	}
-	const placeholderedGalleryImages: GalleryImage[] = [];
-	// TODO: Optimize
-	for (let i = 0; i < dailyGalleryImages.length; i++) {
-		const imageLink = dailyGalleryImages[i].imageLink;
-		const imageURL = isRemotePath(imageLink)
-			? imageLink
-			: `${baseUrl}${imageLink}`;
-		placeholderedGalleryImages.push({
-			image: {
-				source: imageLink,
-				placeholder: await getPlaceholder(imageURL),
-			},
-		});
-	}
-	return placeholderedGalleryImages;
-}
+		const placeholderedGalleryImages: GalleryImage[] = [];
+		// TODO: Optimize
+		for (let i = 0; i < dailyGalleryImages.length; i++) {
+			const imageLink = dailyGalleryImages[i].imageLink;
+			const imageURL = isRemotePath(imageLink)
+				? imageLink
+				: `${baseUrl}${imageLink}`;
+			placeholderedGalleryImages.push({
+				image: {
+					source: imageLink,
+					placeholder: await getPlaceholder(imageURL),
+				},
+			});
+		}
+		return placeholderedGalleryImages;
+	},
+	["daily-gallery-images"],
+);
 
 // TODO: To be refactored to something less ... static
 async function _getNextDefaultScheduleItem(date: Date): Promise<
