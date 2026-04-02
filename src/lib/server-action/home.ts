@@ -1,8 +1,7 @@
 "use server";
 
-import { getPlaceholder } from "./placeholder";
+import { ImagePlaceholder } from "@grod56/placeholder";
 import { arrayToShuffled } from "array-shuffle";
-import { formatInTimeZone } from "date-fns-tz";
 import { getLocale, getTranslations } from "next-intl/server";
 import z from "zod";
 import { NewsArticlePreview } from "../model/news-article-preview";
@@ -20,7 +19,7 @@ import { getDatePickerDate } from "../utility/date-time";
 import { isRemotePath } from "../utility/miscellaneous";
 import { getGalleryImages } from "./gallery";
 import { getBaseURL } from "./miscellaneous";
-import { ImagePlaceholder } from "@grod56/placeholder";
+import { getPlaceholder } from "./placeholder";
 
 export type LatestNews = {
 	featuredArticle: NewsArticlePreview;
@@ -93,9 +92,7 @@ export async function getDailyReadings(
 
 export async function getDailyQuote(currentDate: Date = new Date()) {
 	const locale = await getLocale();
-	const localDate = new Date(
-		formatInTimeZone(currentDate, "CAT", "yyyy-MM-dd"),
-	);
+	const localDate = new Date(getDatePickerDate(currentDate, true));
 
 	let dailyQuote = await prisma.dailyQuote
 		.findFirst({
@@ -128,9 +125,7 @@ export async function getScheduleItems(
 	count: number,
 	currentDate = new Date(),
 ) {
-	const localDate = new Date(
-		formatInTimeZone(currentDate, "CAT", "yyyy-MM-dd"),
-	);
+	const localDate = new Date(getDatePickerDate(currentDate, true));
 	const locale = await getLocale();
 	const data = await prisma.scheduleItem.findMany({
 		where: {
@@ -339,9 +334,7 @@ export async function getDailyGalleryImages(
 	currentDate = new Date(),
 ): Promise<GalleryImage[]> {
 	const baseUrl = await getBaseURL();
-	const localDate = new Date(
-		formatInTimeZone(currentDate, "CAT", "yyyy-MM-dd"),
-	);
+	const localDate = new Date(getDatePickerDate(currentDate, true));
 	const allGalleryImages = await getGalleryImages();
 	let dailyGalleryImages = await prisma.dailyGalleryImage.findMany({
 		where: {

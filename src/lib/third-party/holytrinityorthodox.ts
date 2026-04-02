@@ -3,10 +3,11 @@ import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
 import { DailyReadings, Hymn, Image, Language } from "../type/general";
 import { removeMarkup } from "../utility/miscellaneous";
+import { getLocalTimeZone } from "../utility/date-time";
 
 export async function dailyReadings(date: Date, locale: Language) {
 	"use cache";
-	const localDate = toZonedTime(date, "CAT");
+	const localDate = toZonedTime(date, getLocalTimeZone());
 	const [
 		liturgicalWeek,
 		saints,
