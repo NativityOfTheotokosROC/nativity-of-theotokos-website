@@ -14,6 +14,7 @@ import {
 	DailyQuote,
 	DailyReadings,
 	GalleryImage,
+	Language,
 	ScheduleItem,
 } from "../type/general";
 import {
@@ -44,7 +45,9 @@ export async function getHomeSnapshot(
 	scheduleItemCount: number = 4,
 	otherArticleCount: number = 4,
 	dailyGalleryImagesCount: number = 5,
+	language?: Language,
 ): Promise<HomeSnapshot> {
+	const locale = language ?? (await getLocale());
 	const currentDate = new Date(getDatePickerDate(new Date()));
 	const baseUrl = await getBaseURL();
 	const placeholderRepository = getPrismaPlaceholderRepository(
@@ -52,15 +55,14 @@ export async function getHomeSnapshot(
 		prisma,
 	);
 	const [
+		dailyReadings,
 		scheduleItems,
 		newsArticles,
-		dailyReadings,
 		dailyQuote,
 		dailyGalleryImages,
 	] = await Promise.all([
-		getScheduleItems(scheduleItemCount, currentDate),
-		getLatestNews(otherArticleCount),
-		getDailyReadings(currentDate).then(readings => {
+		getDailyReadings(currentDate, locale).then(readings => {
+			"use cache";
 			return getPlaceholder(
 				readings.iconOfTheDay.source,
 				placeholderRepository,
@@ -72,6 +74,8 @@ export async function getHomeSnapshot(
 				},
 			}));
 		}),
+		getScheduleItems(scheduleItemCount, currentDate),
+		getLatestNews(otherArticleCount),
 		getDailyQuote(currentDate),
 		getDailyGalleryImages(dailyGalleryImagesCount, currentDate),
 	]);
@@ -89,8 +93,13 @@ export async function subscribeToMailingList(payload: string) {
 	await mailerLite.subscribers.createOrUpdate({ email });
 }
 
-export async function getDailyReadings(currentDate: Date = new Date()) {
-	const locale = await getLocale();
+export async function getDailyReadings(
+	currentDate: Date = new Date(),
+	language: Language,
+) {
+	"use cache";
+
+	const locale = language;
 	return await dailyReadings(currentDate, locale);
 }
 
