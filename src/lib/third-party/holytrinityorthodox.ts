@@ -4,18 +4,6 @@ import { getTranslations } from "next-intl/server";
 import { DailyReadings, Hymn, Image, Language } from "../type/general";
 import { removeMarkup } from "../utility/miscellaneous";
 
-function _getBaseURL(locale: Language) {
-	if (locale == "ru")
-		return "https://www.holytrinityorthodox.com/htc/ocalendar/ru/v2calendar.php";
-	return "https://www.holytrinityorthodox.com/htc/ocalendar/v2calendar.php";
-}
-
-function _getIconOfTheDayURL(locale: Language) {
-	if (locale == "ru")
-		return "https://www.holytrinityorthodox.com/htc/iconoftheday/ru/v6TitleIconTroparion.php";
-	return "https://www.holytrinityorthodox.com/htc/iconoftheday/v6TitleIconTroparion.php";
-}
-
 export async function dailyReadings(date: Date, locale: Language) {
 	"use cache";
 	const localDate = toZonedTime(date, "CAT");
@@ -45,6 +33,8 @@ export async function dailyReadings(date: Date, locale: Language) {
 	} satisfies DailyReadings;
 }
 export async function getLiturgicalWeek(date: Date, locale: Language) {
+	"use cache";
+
 	const requestURL = _getDatedBaseURL(date, _getBaseURL(locale));
 	requestURL.searchParams.set("header", "1");
 
@@ -58,6 +48,8 @@ export async function getLiturgicalWeek(date: Date, locale: Language) {
 		.then(markedUpText => removeMarkup(markedUpText));
 }
 export async function getSaints(date: Date, locale: Language) {
+	"use cache";
+
 	const requestURL = _getDatedBaseURL(date, _getBaseURL(locale));
 	requestURL.searchParams.set("lives", "2");
 
@@ -78,6 +70,8 @@ export async function getSaints(date: Date, locale: Language) {
 	});
 }
 export async function getScriptures(date: Date, locale: Language) {
+	"use cache";
+
 	const requestURL = _getDatedBaseURL(date, _getBaseURL(locale));
 	requestURL.searchParams.set("scripture", "2");
 
@@ -134,6 +128,8 @@ export async function getScriptures(date: Date, locale: Language) {
 	});
 }
 export async function getFastingInfo(date: Date, locale: Language) {
+	"use cache";
+
 	const requestURL = _getDatedBaseURL(date, _getBaseURL(locale));
 	const t = await getTranslations({
 		locale,
@@ -152,6 +148,8 @@ export async function getFastingInfo(date: Date, locale: Language) {
 }
 
 export async function getIconOfTheDay(date: Date, locale: Language) {
+	"use cache";
+
 	const requestURL = _getDatedBaseURL(date, _getIconOfTheDayURL(locale));
 	requestURL.searchParams.set("img", "1");
 	const encoding = requestURL.href.includes("/ru/") ? "UTF-8" : undefined;
@@ -168,6 +166,8 @@ export async function getIconOfTheDay(date: Date, locale: Language) {
 }
 
 export async function getHymns(date: Date, locale: Language) {
+	"use cache";
+
 	const requestURL = _getDatedBaseURL(date, _getBaseURL(locale));
 	requestURL.searchParams.set("trp", "2");
 
@@ -185,6 +185,18 @@ export async function getHymns(date: Date, locale: Language) {
 		});
 		return hymns;
 	});
+}
+
+function _getBaseURL(locale: Language) {
+	if (locale == "ru")
+		return "https://www.holytrinityorthodox.com/htc/ocalendar/ru/v2calendar.php";
+	return "https://www.holytrinityorthodox.com/htc/ocalendar/v2calendar.php";
+}
+
+function _getIconOfTheDayURL(locale: Language) {
+	if (locale == "ru")
+		return "https://www.holytrinityorthodox.com/htc/iconoftheday/ru/v6TitleIconTroparion.php";
+	return "https://www.holytrinityorthodox.com/htc/iconoftheday/v6TitleIconTroparion.php";
 }
 
 function _getMarkedUpText(
