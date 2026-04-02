@@ -80,10 +80,7 @@ export async function subscribeToMailingList(payload: string) {
 	await mailerLite.subscribers.createOrUpdate({ email });
 }
 
-export async function getDailyReadings(
-	currentDate: Date = new Date(),
-	language: Language,
-) {
+export async function getDailyReadings(currentDate: Date, language: Language) {
 	"use cache";
 
 	const locale = language;
@@ -333,14 +330,21 @@ export async function getDailyGalleryImages(
 	count: number,
 	currentDate = new Date(),
 ): Promise<GalleryImage[]> {
+	"use cache";
+
 	const baseUrl = await getBaseURL();
 	const localDate = new Date(getDateString(currentDate, true));
-	const allGalleryImages = await getGalleryImages();
-	let dailyGalleryImages = await prisma.dailyGalleryImage.findMany({
-		where: {
-			date: localDate,
-		},
-	});
+	const fulfilled = await Promise.all([
+		getGalleryImages(),
+		prisma.dailyGalleryImage.findMany({
+			where: {
+				date: localDate,
+			},
+		}),
+	]);
+	const allGalleryImages = fulfilled[0];
+	let dailyGalleryImages = fulfilled[1];
+
 	const dailyGalleryImageLinks = dailyGalleryImages.map(
 		dailyGalleryImage => dailyGalleryImage.imageLink,
 	);
