@@ -1,30 +1,26 @@
 "use server";
 
-import {
-	getPlaceholder,
-	ImagePlaceholder,
-	PlaceholderRepository,
-} from "@grod56/placeholder";
+import { getPlaceholder } from "./placeholder";
 import { arrayToShuffled } from "array-shuffle";
 import { formatInTimeZone } from "date-fns-tz";
 import { getLocale, getTranslations } from "next-intl/server";
+import z from "zod";
 import { NewsArticlePreview } from "../model/news-article-preview";
-import holytrinityorthodox from "../third-party/holytrinityorthodox";
+import { dailyReadings } from "../third-party/holytrinityorthodox";
 import mailerLite from "../third-party/mailer-lite";
+import prisma from "../third-party/prisma";
 import {
 	DailyQuote,
 	DailyReadings,
 	GalleryImage,
+	Language,
 	ScheduleItem,
 } from "../type/general";
-import {
-	getPrismaPlaceholderRepository,
-	isRemotePath,
-} from "../utility/miscellaneous";
+import { getDatePickerDate } from "../utility/date-time";
+import { isRemotePath } from "../utility/miscellaneous";
 import { getGalleryImages } from "./gallery";
 import { getBaseURL } from "./miscellaneous";
-import prisma from "../third-party/prisma";
-import z from "zod";
+import { ImagePlaceholder } from "@grod56/placeholder";
 
 export type LatestNews = {
 	featuredArticle: NewsArticlePreview;
@@ -43,39 +39,40 @@ export async function getHomeSnapshot(
 	scheduleItemCount: number = 4,
 	otherArticleCount: number = 4,
 	dailyGalleryImagesCount: number = 5,
+	language?: Language,
 ): Promise<HomeSnapshot> {
-	const currentDate = new Date();
-	const baseUrl = await getBaseURL();
-	const placeholderRepository = getPrismaPlaceholderRepository(
-		baseUrl,
-		prisma,
-	);
-	const scheduleItems = getScheduleItems(scheduleItemCount, currentDate);
-	const newsArticles = getLatestNews(otherArticleCount);
-	const dailyReadings = getDailyReadings(currentDate).then(readings => {
-		return getPlaceholder(
-			readings.iconOfTheDay.source,
-			placeholderRepository,
-		).then(placeholder => ({
-			...readings,
-			iconOfTheDay: {
-				...readings.iconOfTheDay,
-				placeholder,
-			},
-		}));
-	});
-	const dailyQuote = getDailyQuote(currentDate);
-	const dailyGalleryImages = getDailyGalleryImages(
-		dailyGalleryImagesCount,
-		currentDate,
-	);
-
+	const locale = language ?? (await getLocale());
+	const currentDate = new Date(getDatePickerDate(new Date()));
+	const [
+		dailyReadings,
+		scheduleItems,
+		newsArticles,
+		dailyQuote,
+		dailyGalleryImages,
+	] = await Promise.all([
+		getDailyReadings(currentDate, locale).then(async readings => {
+			const placeholder = await getPlaceholder(
+				readings.iconOfTheDay.source,
+			);
+			return {
+				...readings,
+				iconOfTheDay: {
+					...readings.iconOfTheDay,
+					placeholder,
+				},
+			};
+		}),
+		getScheduleItems(scheduleItemCount, currentDate),
+		getLatestNews(otherArticleCount),
+		getDailyQuote(currentDate),
+		getDailyGalleryImages(dailyGalleryImagesCount, currentDate),
+	]);
 	return {
-		dailyReadings: await dailyReadings,
-		dailyQuote: await dailyQuote,
-		scheduleItems: await scheduleItems,
-		newsArticles: await newsArticles,
-		dailyGalleryImages: await dailyGalleryImages,
+		dailyReadings,
+		dailyQuote,
+		scheduleItems,
+		newsArticles,
+		dailyGalleryImages,
 	};
 }
 
@@ -84,9 +81,14 @@ export async function subscribeToMailingList(payload: string) {
 	await mailerLite.subscribers.createOrUpdate({ email });
 }
 
-export async function getDailyReadings(currentDate: Date = new Date()) {
-	const locale = await getLocale();
-	return holytrinityorthodox(locale).getDailyReadings(currentDate);
+export async function getDailyReadings(
+	currentDate: Date = new Date(),
+	language: Language,
+) {
+	"use cache";
+
+	const locale = language;
+	return await dailyReadings(currentDate, locale);
 }
 
 export async function getDailyQuote(currentDate: Date = new Date()) {
@@ -251,39 +253,12 @@ export async function getLatestNews(
 		if (!item) unplaceholderedArticles.push(allArticles[i]);
 	}
 	if (unplaceholderedArticles.length) {
-		const repository: PlaceholderRepository = {
-			findPlaceholder:
-				async function (): Promise<ImagePlaceholder | null> {
-					return null;
-				},
-			setPlaceholder: async function (
-				src: string,
-				placeholder: ImagePlaceholder,
-			): Promise<void> {
-				let processedSrc;
-				try {
-					const url = new URL(src);
-					if (baseURL.includes(url.hostname))
-						processedSrc = url.pathname;
-					else processedSrc = url.href;
-				} catch (error) {
-					if (!(error instanceof TypeError)) throw error;
-					processedSrc = src;
-				}
-				await prisma.imagePlaceholder.create({
-					data: {
-						imageLink: processedSrc,
-						placeholder,
-					},
-				});
-			},
-		};
 		for (let i = 0; i < unplaceholderedArticles.length; i++) {
 			const imageLink = unplaceholderedArticles[i].imageLink;
 			const imageURL = isRemotePath(imageLink)
 				? imageLink
 				: `${baseURL}${imageLink}`;
-			await getPlaceholder(imageURL, repository);
+			await getPlaceholder(imageURL);
 		}
 	}
 	const articlePlaceholders = new Map(
@@ -411,7 +386,6 @@ export async function getDailyGalleryImages(
 		}
 	}
 	const placeholderedGalleryImages: GalleryImage[] = [];
-	const repository = getPrismaPlaceholderRepository(baseUrl, prisma);
 	// TODO: Optimize
 	for (let i = 0; i < dailyGalleryImages.length; i++) {
 		const imageLink = dailyGalleryImages[i].imageLink;
@@ -421,7 +395,7 @@ export async function getDailyGalleryImages(
 		placeholderedGalleryImages.push({
 			image: {
 				source: imageLink,
-				placeholder: await getPlaceholder(imageURL, repository),
+				placeholder: await getPlaceholder(imageURL),
 			},
 		});
 	}
