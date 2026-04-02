@@ -9,7 +9,6 @@ import { arrayToShuffled } from "array-shuffle";
 import { formatInTimeZone } from "date-fns-tz";
 import { getLocale, getTranslations } from "next-intl/server";
 import { NewsArticlePreview } from "../model/news-article-preview";
-import holytrinityorthodox from "../third-party/holytrinityorthodox";
 import mailerLite from "../third-party/mailer-lite";
 import {
 	DailyQuote,
@@ -25,6 +24,8 @@ import { getGalleryImages } from "./gallery";
 import { getBaseURL } from "./miscellaneous";
 import prisma from "../third-party/prisma";
 import z from "zod";
+import { getDatePickerDate } from "../utility/date-time";
+import { dailyReadings } from "../third-party/holytrinityorthodox";
 
 export type LatestNews = {
 	featuredArticle: NewsArticlePreview;
@@ -44,38 +45,42 @@ export async function getHomeSnapshot(
 	otherArticleCount: number = 4,
 	dailyGalleryImagesCount: number = 5,
 ): Promise<HomeSnapshot> {
-	const currentDate = new Date();
+	const currentDate = new Date(getDatePickerDate(new Date()));
 	const baseUrl = await getBaseURL();
 	const placeholderRepository = getPrismaPlaceholderRepository(
 		baseUrl,
 		prisma,
 	);
-	const scheduleItems = getScheduleItems(scheduleItemCount, currentDate);
-	const newsArticles = getLatestNews(otherArticleCount);
-	const dailyReadings = getDailyReadings(currentDate).then(readings => {
-		return getPlaceholder(
-			readings.iconOfTheDay.source,
-			placeholderRepository,
-		).then(placeholder => ({
-			...readings,
-			iconOfTheDay: {
-				...readings.iconOfTheDay,
-				placeholder,
-			},
-		}));
-	});
-	const dailyQuote = getDailyQuote(currentDate);
-	const dailyGalleryImages = getDailyGalleryImages(
-		dailyGalleryImagesCount,
-		currentDate,
-	);
-
+	const [
+		scheduleItems,
+		newsArticles,
+		dailyReadings,
+		dailyQuote,
+		dailyGalleryImages,
+	] = await Promise.all([
+		getScheduleItems(scheduleItemCount, currentDate),
+		getLatestNews(otherArticleCount),
+		getDailyReadings(currentDate).then(readings => {
+			return getPlaceholder(
+				readings.iconOfTheDay.source,
+				placeholderRepository,
+			).then(placeholder => ({
+				...readings,
+				iconOfTheDay: {
+					...readings.iconOfTheDay,
+					placeholder,
+				},
+			}));
+		}),
+		getDailyQuote(currentDate),
+		getDailyGalleryImages(dailyGalleryImagesCount, currentDate),
+	]);
 	return {
-		dailyReadings: await dailyReadings,
-		dailyQuote: await dailyQuote,
-		scheduleItems: await scheduleItems,
-		newsArticles: await newsArticles,
-		dailyGalleryImages: await dailyGalleryImages,
+		dailyReadings,
+		dailyQuote,
+		scheduleItems,
+		newsArticles,
+		dailyGalleryImages,
 	};
 }
 
@@ -86,7 +91,7 @@ export async function subscribeToMailingList(payload: string) {
 
 export async function getDailyReadings(currentDate: Date = new Date()) {
 	const locale = await getLocale();
-	return holytrinityorthodox(locale).getDailyReadings(currentDate);
+	return await dailyReadings(currentDate, locale);
 }
 
 export async function getDailyQuote(currentDate: Date = new Date()) {

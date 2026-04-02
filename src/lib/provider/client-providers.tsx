@@ -1,7 +1,7 @@
 "use client";
 import { PageLoadingBarContext } from "@/src/lib/component/page-loading-bar/PageLoadingBar";
 import { pageLoadingBarVIInterface } from "@/src/lib/model-implementation/page-loading-bar";
-import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
+import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
 import dynamic from "next/dynamic";
 
 const Polyfills = dynamic(
@@ -14,8 +14,9 @@ export const ClientProviders = function ({
 }: {
 	children: React.ReactNode;
 }) {
-	const pageLoadingBar = useNewStatefulInteractiveModel(
+	const pageLoadingBar = useInitializedStatefulInteractiveModel(
 		pageLoadingBarVIInterface(),
+		{ isLoading: false },
 	);
 
 	return (
