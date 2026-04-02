@@ -6,7 +6,7 @@ export function getLocalTimeZone() {
 	return "Africa/Harare" as const;
 }
 
-export function getDatePickerDate(date: Date, localTimezone?: boolean) {
+export function getDateString(date: Date, localTimezone?: boolean) {
 	if (localTimezone)
 		return formatInTimeZone(
 			date,
@@ -16,7 +16,7 @@ export function getDatePickerDate(date: Date, localTimezone?: boolean) {
 	return format(date, DATEPICKER_DATE_FORMAT);
 }
 
-export function getNewsArticleFormattedDate(date: Date) {
+export function getNewsArticleDateString(date: Date) {
 	return toZonedTime(date, getLocalTimeZone()).toLocaleDateString("ru-RU", {
 		dateStyle: "short",
 	});

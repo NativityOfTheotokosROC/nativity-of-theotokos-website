@@ -2,7 +2,7 @@ import { createToast } from "@/src/lib/component/miscellaneous/utility";
 import Spinner from "@/src/lib/component/spinner/Spinner";
 import { NewQuoteModel } from "@/src/lib/model/new-quote";
 import { georgia } from "@/src/lib/third-party/fonts";
-import { getDatePickerDate } from "@/src/lib/utility/date-time";
+import { getDateString } from "@/src/lib/utility/date-time";
 import { useQuoteFormSchema } from "@/src/lib/validation/quote-form";
 import {
 	Checkbox,
@@ -24,7 +24,7 @@ import { useForm } from "react-hook-form";
 
 const NewQuote = function ({ model }) {
 	const quoteFormSchema = useQuoteFormSchema();
-	const currentDate = getDatePickerDate(new Date(), true);
+	const currentDate = getDateString(new Date(), true);
 	const t = useTranslations("newQuote");
 	const { modelView, interact } = model;
 	const { newQuoteNotification } = modelView;

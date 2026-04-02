@@ -1,6 +1,6 @@
 import z from "zod";
 import { Translator } from "../type/general";
-import { getDatePickerDate } from "../utility/date-time";
+import { getDateString } from "../utility/date-time";
 import { emptyStringAsUndefined } from "../utility/miscellaneous";
 import { useLocalizedSchema } from "./general";
 
@@ -62,9 +62,7 @@ export function getQuoteSchema(t?: Translator) {
 		scheduledDate: z.iso
 			.date()
 			.pipe(z.coerce.date())
-			.refine(
-				date => date >= new Date(getDatePickerDate(new Date(), true)),
-			)
+			.refine(date => date >= new Date(getDateString(new Date(), true)))
 			.optional(),
 	});
 	return quoteSchema;

@@ -15,7 +15,7 @@ import {
 	Language,
 	ScheduleItem,
 } from "../type/general";
-import { getDatePickerDate } from "../utility/date-time";
+import { getDateString } from "../utility/date-time";
 import { isRemotePath } from "../utility/miscellaneous";
 import { getGalleryImages } from "./gallery";
 import { getBaseURL } from "./miscellaneous";
@@ -41,7 +41,7 @@ export async function getHomeSnapshot(
 	language?: Language,
 ): Promise<HomeSnapshot> {
 	const locale = language ?? (await getLocale());
-	const currentDate = new Date(getDatePickerDate(new Date()));
+	const currentDate = new Date(getDateString(new Date()));
 	const [
 		dailyReadings,
 		scheduleItems,
@@ -92,7 +92,7 @@ export async function getDailyReadings(
 
 export async function getDailyQuote(currentDate: Date = new Date()) {
 	const locale = await getLocale();
-	const localDate = new Date(getDatePickerDate(currentDate, true));
+	const localDate = new Date(getDateString(currentDate, true));
 
 	let dailyQuote = await prisma.dailyQuote
 		.findFirst({
@@ -125,7 +125,7 @@ export async function getScheduleItems(
 	count: number,
 	currentDate = new Date(),
 ) {
-	const localDate = new Date(getDatePickerDate(currentDate, true));
+	const localDate = new Date(getDateString(currentDate, true));
 	const locale = await getLocale();
 	const data = await prisma.scheduleItem.findMany({
 		where: {
@@ -334,7 +334,7 @@ export async function getDailyGalleryImages(
 	currentDate = new Date(),
 ): Promise<GalleryImage[]> {
 	const baseUrl = await getBaseURL();
-	const localDate = new Date(getDatePickerDate(currentDate, true));
+	const localDate = new Date(getDateString(currentDate, true));
 	const allGalleryImages = await getGalleryImages();
 	let dailyGalleryImages = await prisma.dailyGalleryImage.findMany({
 		where: {

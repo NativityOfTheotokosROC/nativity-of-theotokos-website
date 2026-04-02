@@ -2,7 +2,7 @@
 import SocialLink from "@/src/lib/component/social-link/SocialLink";
 import { NewsArticleModel } from "@/src/lib/model/news-article";
 import { georgia } from "@/src/lib/third-party/fonts";
-import { getNewsArticleFormattedDate } from "@/src/lib/utility/date-time";
+import { getNewsArticleDateString } from "@/src/lib/utility/date-time";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Share } from "lucide-react";
@@ -42,9 +42,9 @@ const NewsArticle = function ({ model }) {
 								<span className="author text-base md:text-xl">{`${t("author")} ${author}`}</span>
 							</div>
 							<span className="date text-lg">
-								{`${getNewsArticleFormattedDate(dateCreated)}${
+								{`${getNewsArticleDateString(dateCreated)}${
 									dateUpdated
-										? ` (${t("articleUpdated")}: ${getNewsArticleFormattedDate(dateUpdated)})`
+										? ` (${t("articleUpdated")}: ${getNewsArticleDateString(dateUpdated)})`
 										: ""
 								}`}
 							</span>
