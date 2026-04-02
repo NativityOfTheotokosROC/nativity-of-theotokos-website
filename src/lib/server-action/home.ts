@@ -61,18 +61,19 @@ export async function getHomeSnapshot(
 		dailyQuote,
 		dailyGalleryImages,
 	] = await Promise.all([
-		getDailyReadings(currentDate, locale).then(readings => {
+		getDailyReadings(currentDate, locale).then(async readings => {
 			"use cache";
-			return getPlaceholder(
+			const placeholder = await getPlaceholder(
 				readings.iconOfTheDay.source,
 				placeholderRepository,
-			).then(placeholder => ({
+			);
+			return {
 				...readings,
 				iconOfTheDay: {
 					...readings.iconOfTheDay,
 					placeholder,
 				},
-			}));
+			};
 		}),
 		getScheduleItems(scheduleItemCount, currentDate),
 		getLatestNews(otherArticleCount),
