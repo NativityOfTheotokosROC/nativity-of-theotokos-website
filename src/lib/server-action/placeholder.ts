@@ -6,17 +6,20 @@ import {
 } from "@grod56/placeholder";
 import { getBaseURL } from "../server-action/miscellaneous";
 import prisma from "../third-party/prisma";
+import { unstable_cache } from "next/cache";
 
 const baseUrl = await getBaseURL();
 
-export async function getPlaceholder(imageSource: string) {
-	"use cache";
-	const result = await findPlaceholder(imageSource);
-	if (result) return result;
-	const placeholder = await generatePlaceholder(imageSource);
-	await setPlaceholder(imageSource, placeholder);
-	return placeholder;
-}
+export const getPlaceholder = unstable_cache(
+	async (imageSource: string) => {
+		const result = await findPlaceholder(imageSource);
+		if (result) return result;
+		const placeholder = await generatePlaceholder(imageSource);
+		await setPlaceholder(imageSource, placeholder);
+		return placeholder;
+	},
+	["image_placeholder"],
+);
 
 async function findPlaceholder(src: string) {
 	let processedSrc;

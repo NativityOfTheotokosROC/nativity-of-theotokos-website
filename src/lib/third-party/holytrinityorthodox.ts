@@ -4,39 +4,40 @@ import { getTranslations } from "next-intl/server";
 import { DailyReadings, Hymn, Image, Language } from "../type/general";
 import { removeMarkup } from "../utility/miscellaneous";
 import { getLocalTimeZone } from "../utility/date-time";
+import { unstable_cache } from "next/cache";
 
-export async function dailyReadings(date: Date, locale: Language) {
-	"use cache";
-	const localDate = toZonedTime(date, getLocalTimeZone());
-	const [
-		liturgicalWeek,
-		saints,
-		scriptures,
-		fastingInfo,
-		iconOfTheDay,
-		hymns,
-	] = await Promise.all([
-		getLiturgicalWeek(localDate, locale),
-		getSaints(localDate, locale),
-		getScriptures(localDate, locale),
-		getFastingInfo(localDate, locale),
-		getIconOfTheDay(localDate, locale),
-		getHymns(localDate, locale),
-	]);
-	return {
-		currentDate: date,
-		liturgicalWeek,
-		saints,
-		scriptures,
-		fastingInfo,
-		iconOfTheDay,
-		hymns,
-	} satisfies DailyReadings;
-}
-export async function getLiturgicalWeek(date: Date, locale: Language) {
-	"use cache";
-
-	const requestURL = _getDatedBaseURL(date, _getBaseURL(locale));
+export const dailyReadings = unstable_cache(
+	async (date: Date, language: Language) => {
+		const localDate = toZonedTime(date, getLocalTimeZone());
+		const [
+			liturgicalWeek,
+			saints,
+			scriptures,
+			fastingInfo,
+			iconOfTheDay,
+			hymns,
+		] = await Promise.all([
+			getLiturgicalWeek(localDate, language),
+			getSaints(localDate, language),
+			getScriptures(localDate, language),
+			getFastingInfo(localDate, language),
+			getIconOfTheDay(localDate, language),
+			getHymns(localDate, language),
+		]);
+		return {
+			currentDate: date,
+			liturgicalWeek,
+			saints,
+			scriptures,
+			fastingInfo,
+			iconOfTheDay,
+			hymns,
+		} satisfies DailyReadings;
+	},
+	["holytrinity-readings"],
+);
+export async function getLiturgicalWeek(date: Date, language: Language) {
+	const requestURL = _getDatedBaseURL(date, _getBaseURL(language));
 	requestURL.searchParams.set("header", "1");
 
 	return _getMarkedUpText(requestURL)
@@ -48,10 +49,8 @@ export async function getLiturgicalWeek(date: Date, locale: Language) {
 		})
 		.then(markedUpText => removeMarkup(markedUpText));
 }
-export async function getSaints(date: Date, locale: Language) {
-	"use cache";
-
-	const requestURL = _getDatedBaseURL(date, _getBaseURL(locale));
+export async function getSaints(date: Date, language: Language) {
+	const requestURL = _getDatedBaseURL(date, _getBaseURL(language));
 	requestURL.searchParams.set("lives", "2");
 
 	return _getMarkedUpText(requestURL).then(html => {
@@ -70,10 +69,8 @@ export async function getSaints(date: Date, locale: Language) {
 		return $(".normaltext").html()!;
 	});
 }
-export async function getScriptures(date: Date, locale: Language) {
-	"use cache";
-
-	const requestURL = _getDatedBaseURL(date, _getBaseURL(locale));
+export async function getScriptures(date: Date, language: Language) {
+	const requestURL = _getDatedBaseURL(date, _getBaseURL(language));
 	requestURL.searchParams.set("scripture", "2");
 
 	return _getMarkedUpText(requestURL).then(html => {
@@ -128,12 +125,10 @@ export async function getScriptures(date: Date, locale: Language) {
 		return scriptures;
 	});
 }
-export async function getFastingInfo(date: Date, locale: Language) {
-	"use cache";
-
-	const requestURL = _getDatedBaseURL(date, _getBaseURL(locale));
+export async function getFastingInfo(date: Date, language: Language) {
+	const requestURL = _getDatedBaseURL(date, _getBaseURL(language));
 	const t = await getTranslations({
-		locale,
+		locale: language,
 		namespace: "dailyReadings",
 	});
 	requestURL.searchParams.set("header", "1");
@@ -148,10 +143,8 @@ export async function getFastingInfo(date: Date, locale: Language) {
 		.then(info => (info.length == 0 ? t("noFast") : info));
 }
 
-export async function getIconOfTheDay(date: Date, locale: Language) {
-	"use cache";
-
-	const requestURL = _getDatedBaseURL(date, _getIconOfTheDayURL(locale));
+export async function getIconOfTheDay(date: Date, language: Language) {
+	const requestURL = _getDatedBaseURL(date, _getIconOfTheDayURL(language));
 	requestURL.searchParams.set("img", "1");
 	const encoding = requestURL.href.includes("/ru/") ? "UTF-8" : undefined;
 
@@ -166,10 +159,8 @@ export async function getIconOfTheDay(date: Date, locale: Language) {
 	})) satisfies Pick<Image, "source" | "about"> & Partial<Image>;
 }
 
-export async function getHymns(date: Date, locale: Language) {
-	"use cache";
-
-	const requestURL = _getDatedBaseURL(date, _getBaseURL(locale));
+export async function getHymns(date: Date, language: Language) {
+	const requestURL = _getDatedBaseURL(date, _getBaseURL(language));
 	requestURL.searchParams.set("trp", "2");
 
 	return await _getMarkedUpText(requestURL).then(html => {
@@ -188,14 +179,14 @@ export async function getHymns(date: Date, locale: Language) {
 	});
 }
 
-function _getBaseURL(locale: Language) {
-	if (locale == "ru")
+function _getBaseURL(language: Language) {
+	if (language == "ru")
 		return "https://www.holytrinityorthodox.com/htc/ocalendar/ru/v2calendar.php";
 	return "https://www.holytrinityorthodox.com/htc/ocalendar/v2calendar.php";
 }
 
-function _getIconOfTheDayURL(locale: Language) {
-	if (locale == "ru")
+function _getIconOfTheDayURL(language: Language) {
+	if (language == "ru")
 		return "https://www.holytrinityorthodox.com/htc/iconoftheday/ru/v6TitleIconTroparion.php";
 	return "https://www.holytrinityorthodox.com/htc/iconoftheday/v6TitleIconTroparion.php";
 }
