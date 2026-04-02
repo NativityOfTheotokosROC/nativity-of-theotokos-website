@@ -83,6 +83,8 @@ export async function subscribeToMailingList(payload: string) {
 export async function getDailyReadings(currentDate: Date, language: Language) {
 	"use cache";
 
+	console.log("Daily Readings missed");
+
 	const locale = language;
 	return await dailyReadings(currentDate, locale);
 }
@@ -331,6 +333,8 @@ export async function getDailyGalleryImages(
 	currentDate = new Date(),
 ): Promise<GalleryImage[]> {
 	"use cache";
+
+	console.log("gallery images missed");
 
 	const baseUrl = await getBaseURL();
 	const localDate = new Date(getDateString(currentDate, true));

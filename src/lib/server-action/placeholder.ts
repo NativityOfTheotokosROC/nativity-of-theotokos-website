@@ -11,6 +11,9 @@ const baseUrl = await getBaseURL();
 
 export async function getPlaceholder(imageSource: string) {
 	"use cache";
+
+	console.log("Placeholder missed");
+
 	const result = await findPlaceholder(imageSource);
 	if (result) return result;
 	const placeholder = await generatePlaceholder(imageSource);

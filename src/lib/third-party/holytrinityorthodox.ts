@@ -7,6 +7,9 @@ import { getLocalTimeZone } from "../utility/date-time";
 
 export async function dailyReadings(date: Date, locale: Language) {
 	"use cache";
+
+	console.log("Holy trinity orthodox missed");
+
 	const localDate = toZonedTime(date, getLocalTimeZone());
 	const [
 		liturgicalWeek,
