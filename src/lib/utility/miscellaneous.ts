@@ -1,6 +1,3 @@
-import { PrismaClient } from "@/src/generated/prisma/client";
-import { ImagePlaceholder, PlaceholderRepository } from "@grod56/placeholder";
-
 export function julianDate(date: Date) {
 	return new Date(new Date().setDate(date.getDate() - 13));
 }
@@ -28,51 +25,6 @@ export function isRemotePath(src: string) {
 	}
 }
 
-export const getPrismaPlaceholderRepository = (
-	baseUrl: string,
-	prismaClient: PrismaClient,
-): PlaceholderRepository => {
-	return {
-		async findPlaceholder(src: string) {
-			"use server";
-			let processedSrc;
-			try {
-				const url = new URL(src);
-				if (baseUrl.includes(url.hostname)) processedSrc = url.pathname;
-				else processedSrc = url.href;
-			} catch (error) {
-				if (!(error instanceof TypeError)) throw error;
-				processedSrc = src;
-			}
-			const result = await prismaClient.imagePlaceholder.findFirst({
-				where: {
-					imageLink: processedSrc,
-				},
-			});
-			return result?.placeholder as ImagePlaceholder;
-		},
-		async setPlaceholder(
-			src: string,
-			placeholder: ImagePlaceholder,
-		): Promise<void> {
-			let processedSrc;
-			try {
-				const url = new URL(src);
-				if (baseUrl.includes(url.hostname)) processedSrc = url.pathname;
-				else processedSrc = url.href;
-			} catch (error) {
-				if (!(error instanceof TypeError)) throw error;
-				processedSrc = src;
-			}
-			await prismaClient.imagePlaceholder.create({
-				data: {
-					imageLink: processedSrc,
-					placeholder,
-				},
-			});
-		},
-	};
-};
 export const emptyStringAsUndefined = (value: string) => {
 	return value === "" ? undefined : value;
 };

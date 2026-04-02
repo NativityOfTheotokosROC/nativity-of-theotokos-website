@@ -2,14 +2,12 @@
 
 import { Language, NewsArticle } from "../type/general";
 import { notFound } from "next/navigation";
-import {
-	getPrismaPlaceholderRepository,
-	isRemotePath,
-} from "../utility/miscellaneous";
+import { isRemotePath } from "../utility/miscellaneous";
 import { getBaseURL } from "./miscellaneous";
 import { getPlaceholder } from "@grod56/placeholder";
 import prisma from "../third-party/prisma";
 import { getLocale } from "next-intl/server";
+import { getPrismaPlaceholderRepository } from "../utility/placeholder-repository";
 
 export async function getAllArticles(): Promise<NewsArticle[]> {
 	const articles: NewsArticle[] = await prisma.newsArticle

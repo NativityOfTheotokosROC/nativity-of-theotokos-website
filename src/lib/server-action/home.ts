@@ -8,8 +8,11 @@ import {
 import { arrayToShuffled } from "array-shuffle";
 import { formatInTimeZone } from "date-fns-tz";
 import { getLocale, getTranslations } from "next-intl/server";
+import z from "zod";
 import { NewsArticlePreview } from "../model/news-article-preview";
+import { dailyReadings } from "../third-party/holytrinityorthodox";
 import mailerLite from "../third-party/mailer-lite";
+import prisma from "../third-party/prisma";
 import {
 	DailyQuote,
 	DailyReadings,
@@ -17,16 +20,11 @@ import {
 	Language,
 	ScheduleItem,
 } from "../type/general";
-import {
-	getPrismaPlaceholderRepository,
-	isRemotePath,
-} from "../utility/miscellaneous";
+import { getDatePickerDate } from "../utility/date-time";
+import { isRemotePath } from "../utility/miscellaneous";
 import { getGalleryImages } from "./gallery";
 import { getBaseURL } from "./miscellaneous";
-import prisma from "../third-party/prisma";
-import z from "zod";
-import { getDatePickerDate } from "../utility/date-time";
-import { dailyReadings } from "../third-party/holytrinityorthodox";
+import { getPrismaPlaceholderRepository } from "../utility/placeholder-repository";
 
 export type LatestNews = {
 	featuredArticle: NewsArticlePreview;
