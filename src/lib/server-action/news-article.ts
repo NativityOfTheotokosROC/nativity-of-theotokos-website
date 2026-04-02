@@ -4,10 +4,9 @@ import { Language, NewsArticle } from "../type/general";
 import { notFound } from "next/navigation";
 import { isRemotePath } from "../utility/miscellaneous";
 import { getBaseURL } from "./miscellaneous";
-import { getPlaceholder } from "@grod56/placeholder";
 import prisma from "../third-party/prisma";
 import { getLocale } from "next-intl/server";
-import { getPrismaPlaceholderRepository } from "../utility/placeholder-repository";
+import { getPlaceholder } from "../utility/placeholder";
 
 export async function getAllArticles(): Promise<NewsArticle[]> {
 	const articles: NewsArticle[] = await prisma.newsArticle
@@ -82,15 +81,11 @@ export async function getArticle(
 			where: { link: articleId },
 		});
 		const baseUrl = await getBaseURL();
-		const placeholderRepository = getPrismaPlaceholderRepository(
-			baseUrl,
-			prisma,
-		);
+
 		const placeholder = await getPlaceholder(
 			isRemotePath(article.imageLink)
 				? article.imageLink
 				: `${baseUrl}${article.imageLink}`,
-			placeholderRepository,
 		);
 		const title =
 			locale == "ru" && article.titleRu ? article.titleRu : article.title;

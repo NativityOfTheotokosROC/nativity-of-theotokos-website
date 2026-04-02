@@ -1,10 +1,6 @@
 "use server";
 
-import {
-	getPlaceholder,
-	ImagePlaceholder,
-	PlaceholderRepository,
-} from "@grod56/placeholder";
+import { ImagePlaceholder } from "@grod56/placeholder";
 import { arrayToShuffled } from "array-shuffle";
 import { formatInTimeZone } from "date-fns-tz";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -22,9 +18,9 @@ import {
 } from "../type/general";
 import { getDatePickerDate } from "../utility/date-time";
 import { isRemotePath } from "../utility/miscellaneous";
+import { getPlaceholder } from "../utility/placeholder";
 import { getGalleryImages } from "./gallery";
 import { getBaseURL } from "./miscellaneous";
-import { getPrismaPlaceholderRepository } from "../utility/placeholder-repository";
 
 export type LatestNews = {
 	featuredArticle: NewsArticlePreview;
@@ -47,11 +43,6 @@ export async function getHomeSnapshot(
 ): Promise<HomeSnapshot> {
 	const locale = language ?? (await getLocale());
 	const currentDate = new Date(getDatePickerDate(new Date()));
-	const baseUrl = await getBaseURL();
-	const placeholderRepository = getPrismaPlaceholderRepository(
-		baseUrl,
-		prisma,
-	);
 	const [
 		dailyReadings,
 		scheduleItems,
@@ -60,10 +51,8 @@ export async function getHomeSnapshot(
 		dailyGalleryImages,
 	] = await Promise.all([
 		getDailyReadings(currentDate, locale).then(async readings => {
-			"use cache";
 			const placeholder = await getPlaceholder(
 				readings.iconOfTheDay.source,
-				placeholderRepository,
 			);
 			return {
 				...readings,
@@ -264,39 +253,12 @@ export async function getLatestNews(
 		if (!item) unplaceholderedArticles.push(allArticles[i]);
 	}
 	if (unplaceholderedArticles.length) {
-		const repository: PlaceholderRepository = {
-			findPlaceholder:
-				async function (): Promise<ImagePlaceholder | null> {
-					return null;
-				},
-			setPlaceholder: async function (
-				src: string,
-				placeholder: ImagePlaceholder,
-			): Promise<void> {
-				let processedSrc;
-				try {
-					const url = new URL(src);
-					if (baseURL.includes(url.hostname))
-						processedSrc = url.pathname;
-					else processedSrc = url.href;
-				} catch (error) {
-					if (!(error instanceof TypeError)) throw error;
-					processedSrc = src;
-				}
-				await prisma.imagePlaceholder.create({
-					data: {
-						imageLink: processedSrc,
-						placeholder,
-					},
-				});
-			},
-		};
 		for (let i = 0; i < unplaceholderedArticles.length; i++) {
 			const imageLink = unplaceholderedArticles[i].imageLink;
 			const imageURL = isRemotePath(imageLink)
 				? imageLink
 				: `${baseURL}${imageLink}`;
-			await getPlaceholder(imageURL, repository);
+			await getPlaceholder(imageURL);
 		}
 	}
 	const articlePlaceholders = new Map(
@@ -424,7 +386,6 @@ export async function getDailyGalleryImages(
 		}
 	}
 	const placeholderedGalleryImages: GalleryImage[] = [];
-	const repository = getPrismaPlaceholderRepository(baseUrl, prisma);
 	// TODO: Optimize
 	for (let i = 0; i < dailyGalleryImages.length; i++) {
 		const imageLink = dailyGalleryImages[i].imageLink;
@@ -434,7 +395,7 @@ export async function getDailyGalleryImages(
 		placeholderedGalleryImages.push({
 			image: {
 				source: imageLink,
-				placeholder: await getPlaceholder(imageURL, repository),
+				placeholder: await getPlaceholder(imageURL),
 			},
 		});
 	}
