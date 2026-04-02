@@ -7,6 +7,7 @@ import { getBaseURL } from "./miscellaneous";
 import prisma from "../third-party/prisma";
 import { getLocale } from "next-intl/server";
 import { getPlaceholder } from "./placeholder";
+import { unstable_cache } from "next/cache";
 
 export async function getAllArticles(): Promise<NewsArticle[]> {
 	const articles: NewsArticle[] = await prisma.newsArticle
@@ -70,58 +71,65 @@ export async function getArticleMetadata(
 	}
 }
 
-export async function getArticle(
-	articleId: string,
-	language?: Language,
-): Promise<Omit<NewsArticle, "url">> {
-	"use cache";
-	const locale = language ?? (await getLocale());
-	try {
-		const article = await prisma.newsArticle.findUniqueOrThrow({
-			where: { link: articleId },
-		});
-		const baseUrl = await getBaseURL();
+export const getArticle = unstable_cache(
+	async (
+		articleId: string,
+		language?: Language,
+	): Promise<Omit<NewsArticle, "url">> => {
+		const locale = language ?? (await getLocale());
+		try {
+			const article = await prisma.newsArticle.findUniqueOrThrow({
+				where: { link: articleId },
+			});
+			const baseUrl = await getBaseURL();
 
-		const placeholder = await getPlaceholder(
-			isRemotePath(article.imageLink)
-				? article.imageLink
-				: `${baseUrl}${article.imageLink}`,
-		);
-		const title =
-			locale == "ru" && article.titleRu ? article.titleRu : article.title;
-		const author =
-			locale == "ru" && article.authorRu != null
-				? article.authorRu
-				: article.author;
-		const body =
-			locale == "ru" && article.bodyRu ? article.bodyRu : article.body;
-		const snippet =
-			locale == "ru" && article.snippetRu
-				? article.snippetRu
-				: article.snippet;
-		//TODO: Add imageCaptionRu
+			const placeholder = await getPlaceholder(
+				isRemotePath(article.imageLink)
+					? article.imageLink
+					: `${baseUrl}${article.imageLink}`,
+			);
+			const title =
+				locale == "ru" && article.titleRu
+					? article.titleRu
+					: article.title;
+			const author =
+				locale == "ru" && article.authorRu != null
+					? article.authorRu
+					: article.author;
+			const body =
+				locale == "ru" && article.bodyRu
+					? article.bodyRu
+					: article.body;
+			const snippet =
+				locale == "ru" && article.snippetRu
+					? article.snippetRu
+					: article.snippet;
+			//TODO: Add imageCaptionRu
 
-		return {
-			uri: article.link.toString(),
-			title,
-			author,
-			dateCreated: article.dateCreated,
-			dateUpdated: article.dateUpdated ?? undefined,
-			body,
-			snippet,
-			articleImage: {
-				source: article.imageLink,
-				about: article.imageCaption ?? undefined,
-				placeholder,
-			},
-		};
-	} catch (error) {
-		if (
-			error instanceof Object &&
-			"code" in error &&
-			error["code"] == "P2025"
-		)
-			notFound();
-		throw error;
-	}
-}
+			return {
+				uri: article.link.toString(),
+				title,
+				author,
+				dateCreated: article.dateCreated,
+				dateUpdated: article.dateUpdated ?? undefined,
+				body,
+				snippet,
+				articleImage: {
+					source: article.imageLink,
+					about: article.imageCaption ?? undefined,
+					placeholder,
+				},
+			};
+		} catch (error) {
+			if (
+				error instanceof Object &&
+				"code" in error &&
+				error["code"] == "P2025"
+			)
+				notFound();
+			throw error;
+		}
+	},
+	["bulletin-article"],
+	{ revalidate: 3600 },
+);
