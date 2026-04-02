@@ -4,9 +4,11 @@ import { getTranslations } from "next-intl/server";
 import { DailyReadings, Hymn, Image, Language } from "../type/general";
 import { removeMarkup } from "../utility/miscellaneous";
 import { getLocalTimeZone } from "../utility/date-time";
+import { cacheLife } from "next/cache";
 
 export async function dailyReadings(date: Date, locale: Language) {
 	"use cache";
+	cacheLife("days");
 
 	console.log("Holy trinity orthodox missed");
 
