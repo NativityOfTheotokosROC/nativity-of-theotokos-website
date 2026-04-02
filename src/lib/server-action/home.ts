@@ -185,7 +185,6 @@ export async function getScheduleItems(
 				},
 			},
 		});
-		console.log(isPresent);
 		if (!isPresent) {
 			const { date, location, title, times, titleRu } = nextScheduleItem;
 
