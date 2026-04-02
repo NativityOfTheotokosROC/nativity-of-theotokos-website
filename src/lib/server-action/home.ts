@@ -62,6 +62,7 @@ export async function getHomeSnapshot(
 		dailyGalleryImages,
 	] = await Promise.all([
 		getDailyReadings(currentDate, locale).then(async readings => {
+			"use server";
 			"use cache";
 			const placeholder = await getPlaceholder(
 				readings.iconOfTheDay.source,

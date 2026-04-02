@@ -34,6 +34,7 @@ export const getPrismaPlaceholderRepository = (
 ): PlaceholderRepository => {
 	return {
 		async findPlaceholder(src: string) {
+			"use server";
 			let processedSrc;
 			try {
 				const url = new URL(src);
