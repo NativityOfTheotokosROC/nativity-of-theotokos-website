@@ -42,7 +42,7 @@ export async function getHomeSnapshot(
 	language?: Language,
 ): Promise<HomeSnapshot> {
 	const locale = language ?? (await getLocale());
-	const currentDate = new Date(getDateString(new Date()));
+	const currentDate = new Date(getDateString(new Date(), true));
 	const [
 		dailyReadings,
 		scheduleItems,
