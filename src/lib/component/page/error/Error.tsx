@@ -29,7 +29,7 @@ const Error = function ({ model }) {
 					</span>
 					<span className="text-lg [&_a]:underline [&_a:hover]:text-[#dcb042]">
 						{`${t("description")}, `}
-						<Link href="mailto:nativityoftheotokos@gmail.com">{`${t("contactUs")}.`}</Link>
+						<Link href="mailto:info@nativityoftheotokos.com">{`${t("contactUs")}.`}</Link>
 					</span>
 					<span className="text-xs">{message}</span>
 					<button

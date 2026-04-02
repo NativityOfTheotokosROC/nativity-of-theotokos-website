@@ -1,28 +1,25 @@
 "use client";
 
-import { routing } from "@/src/i18n/routing";
 import { PageLoadingBarContext } from "@/src/lib/component/page-loading-bar/PageLoadingBar";
+import Error from "@/src/lib/component/page/error/Error";
 import { errorPageVIInterface } from "@/src/lib/model-implementation/error-page";
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
-import { Metadata } from "next";
-import { hasLocale } from "next-intl";
-import { getTranslations } from "next-intl/server";
 import { useContext, useEffect } from "react";
-import Error from "@/src/lib/component/page/error/Error";
 
-export async function generateMetadata({
-	params,
-}: LayoutProps<"/[locale]">): Promise<Metadata> {
-	const { locale } = await params;
-	const t = await getTranslations({
-		locale: hasLocale(routing.locales, locale) ? locale : "en",
-		namespace: "error",
-	});
+// export async function generateMetadata({
+// 	params,
+// }: LayoutProps<"/[locale]">): Promise<Metadata> {
+// 	"use cache";
+// 	const { locale } = await params;
+// 	const t = await getTranslations({
+// 		locale: hasLocale(routing.locales, locale) ? locale : "en",
+// 		namespace: "error",
+// 	});
 
-	return {
-		title: t("metaTitle"),
-	};
-}
+// 	return {
+// 		title: t("metaTitle"),
+// 	};
+// }
 
 export default function Page({
 	error,

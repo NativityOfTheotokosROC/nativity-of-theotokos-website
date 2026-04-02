@@ -7,6 +7,8 @@ import { hasLocale } from "next-intl";
 export async function generateMetadata({
 	params,
 }: PageProps<"/[locale]/about-us">): Promise<Metadata> {
+	"use cache";
+
 	const { locale } = await params;
 	const t = await getTranslations({
 		locale: hasLocale(routing.locales, locale) ? locale : "en",
