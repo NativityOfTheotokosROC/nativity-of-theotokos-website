@@ -59,11 +59,16 @@ export function getQuoteSchema(t?: Translator) {
 			emptyStringAsUndefined,
 			z.string().trim().optional(),
 		),
-		scheduledDate: z.iso
-			.date()
-			.pipe(z.coerce.date())
-			.refine(date => date >= new Date(getDateString(new Date(), true)))
-			.optional(),
+		scheduledDate: z.preprocess(
+			emptyStringAsUndefined,
+			z.iso
+				.date()
+				.pipe(z.coerce.date())
+				.refine(
+					date => date >= new Date(getDateString(new Date(), true)),
+				)
+				.optional(),
+		),
 	});
 	return quoteSchema;
 }
