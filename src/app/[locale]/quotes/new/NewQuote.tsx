@@ -40,6 +40,7 @@ const NewQuote = function ({ model }) {
 		resolver: zodResolver(quoteFormSchema),
 		shouldUnregister: true,
 		defaultValues: {
+			isQuoteScheduled: false,
 			scheduledDate: currentDate,
 		},
 	});
