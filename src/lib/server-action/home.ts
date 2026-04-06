@@ -20,7 +20,7 @@ import { isRemotePath } from "../utility/miscellaneous";
 import { getGalleryImages } from "./gallery";
 import { getBaseURL } from "./miscellaneous";
 import { getPlaceholder } from "./placeholder";
-import { unstable_cache } from "next/cache";
+import { cacheLife, cacheTag, unstable_cache } from "next/cache";
 
 export type LatestNews = {
 	featuredArticle: NewsArticlePreview;
@@ -81,13 +81,16 @@ export async function subscribeToMailingList(payload: string) {
 	await mailerLite.subscribers.createOrUpdate({ email });
 }
 
-export const getDailyReadings = unstable_cache(
-	async (currentDate: Date, language: Language) => {
-		const locale = language;
-		return await dailyReadings(currentDate, locale);
-	},
-	["daily-readings"],
-);
+export const getDailyReadings = async (
+	currentDate: Date,
+	language: Language,
+) => {
+	"use cache: remote";
+	cacheLife("max");
+	cacheTag("daily-readings");
+	const locale = language;
+	return await dailyReadings(currentDate, locale);
+};
 
 export async function getDailyQuote(currentDate: Date = new Date()) {
 	const locale = await getLocale();
