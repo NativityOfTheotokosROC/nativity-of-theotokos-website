@@ -26,5 +26,5 @@ export function isRemotePath(src: string) {
 }
 
 export const emptyStringAsUndefined = (value: string) => {
-	return value === "" ? undefined : value;
+	return value == "" ? undefined : value;
 };
