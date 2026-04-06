@@ -1,41 +1,41 @@
 import { load } from "cheerio";
 import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
+import { cacheLife, cacheTag } from "next/cache";
 import { DailyReadings, Hymn, Image, Language } from "../type/general";
-import { removeMarkup } from "../utility/miscellaneous";
 import { getLocalTimeZone } from "../utility/date-time";
-import { unstable_cache } from "next/cache";
+import { removeMarkup } from "../utility/miscellaneous";
 
-export const dailyReadings = unstable_cache(
-	async (date: Date, language: Language) => {
-		const localDate = toZonedTime(date, getLocalTimeZone());
-		const [
-			liturgicalWeek,
-			saints,
-			scriptures,
-			fastingInfo,
-			iconOfTheDay,
-			hymns,
-		] = await Promise.all([
-			getLiturgicalWeek(localDate, language),
-			getSaints(localDate, language),
-			getScriptures(localDate, language),
-			getFastingInfo(localDate, language),
-			getIconOfTheDay(localDate, language),
-			getHymns(localDate, language),
-		]);
-		return {
-			currentDate: date,
-			liturgicalWeek,
-			saints,
-			scriptures,
-			fastingInfo,
-			iconOfTheDay,
-			hymns,
-		} satisfies DailyReadings;
-	},
-	["holytrinity-readings"],
-);
+export const dailyReadings = async (date: Date, language: Language) => {
+	"use cache: remote";
+	cacheLife("max");
+	cacheTag("holytrinity-readings");
+	const localDate = toZonedTime(date, getLocalTimeZone());
+	const [
+		liturgicalWeek,
+		saints,
+		scriptures,
+		fastingInfo,
+		iconOfTheDay,
+		hymns,
+	] = await Promise.all([
+		getLiturgicalWeek(localDate, language),
+		getSaints(localDate, language),
+		getScriptures(localDate, language),
+		getFastingInfo(localDate, language),
+		getIconOfTheDay(localDate, language),
+		getHymns(localDate, language),
+	]);
+	return {
+		currentDate: date,
+		liturgicalWeek,
+		saints,
+		scriptures,
+		fastingInfo,
+		iconOfTheDay,
+		hymns,
+	} satisfies DailyReadings;
+};
 export async function getLiturgicalWeek(date: Date, language: Language) {
 	const requestURL = _getDatedBaseURL(date, _getBaseURL(language));
 	requestURL.searchParams.set("header", "1");
