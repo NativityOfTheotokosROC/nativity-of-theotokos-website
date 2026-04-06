@@ -40,6 +40,7 @@ const NewQuote = function ({ model }) {
 		resolver: zodResolver(quoteFormSchema),
 		shouldUnregister: true,
 		defaultValues: {
+			isQuoteScheduled: false,
 			scheduledDate: currentDate,
 		},
 	});
@@ -206,6 +207,7 @@ const NewQuote = function ({ model }) {
 						<div className="flex flex-col gap-3">
 							<Field className="flex items-center gap-3">
 								<Checkbox
+									{...register("isQuoteScheduled")}
 									onChange={value => {
 										setValue("isQuoteScheduled", value);
 									}}
