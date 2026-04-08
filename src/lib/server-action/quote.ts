@@ -7,6 +7,7 @@ import prisma from "../third-party/prisma";
 import { getDateString, getLocalTimeZone } from "../utility/date-time";
 import { getQuoteSchema } from "../validation/quote";
 import { protect } from "./auth";
+import { getEnglishTranslationHash } from "../utility/miscellaneous";
 
 export async function addNewQuote(payload: NewQuote) {
 	await protect({ roles: ["quotes"] });
@@ -26,24 +27,72 @@ export async function addNewQuote(payload: NewQuote) {
 		});
 	const scheduledLocalDate =
 		scheduledDate && toZonedTime(scheduledDate, getLocalTimeZone());
-	await prisma.quote.create({
-		data: {
-			author: authorEn,
-			quote: quoteEn,
-			source: sourceEn ?? null,
-			authorRu: authorRu ?? null,
-			quoteRu: quoteRu ?? null,
-			sourceRu: sourceRu ?? null,
-			dailyQuotes: scheduledLocalDate && {
-				connectOrCreate: {
-					where: {
-						date: scheduledLocalDate,
-					},
+
+	await prisma.$transaction(async transaction => {
+		const [authorTranslation, sourceTranslation, quoteTranslation] =
+			await Promise.all([
+				transaction.translation.upsert({
+					select: { id: true },
 					create: {
-						date: scheduledLocalDate,
+						english: authorEn,
+						russian: authorRu,
+						englishHash: getEnglishTranslationHash(authorEn),
+					},
+					update: {},
+					where: {
+						englishHash: getEnglishTranslationHash(authorEn),
+					},
+				}),
+				sourceEn &&
+					transaction.translation.upsert({
+						select: { id: true },
+						create: {
+							english: sourceEn,
+							russian: sourceRu,
+							englishHash: getEnglishTranslationHash(sourceEn),
+						},
+						update: {},
+						where: {
+							englishHash: getEnglishTranslationHash(sourceEn),
+						},
+					}),
+				transaction.translation.create({
+					select: { id: true },
+					data: {
+						english: quoteEn,
+						russian: quoteRu,
+						englishHash: getEnglishTranslationHash(quoteEn),
+					},
+				}),
+			]);
+		const quoteAuthor = await transaction.quoteAuthor.upsert({
+			select: { id: true },
+			create: {
+				nameTranslationId: authorTranslation.id,
+			},
+			update: {},
+			where: {
+				nameTranslationId: authorTranslation.id,
+			},
+		});
+		return await transaction.quote.create({
+			data: {
+				quoteTranslationId: quoteTranslation.id,
+				sourceTranslationId: sourceTranslation
+					? sourceTranslation.id
+					: null,
+				authorId: quoteAuthor.id,
+				dailyQuotes: scheduledLocalDate && {
+					connectOrCreate: {
+						where: {
+							date: scheduledLocalDate,
+						},
+						create: {
+							date: scheduledLocalDate,
+						},
 					},
 				},
 			},
-		},
+		});
 	});
 }

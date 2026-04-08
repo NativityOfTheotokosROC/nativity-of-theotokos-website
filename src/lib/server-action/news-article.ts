@@ -1,27 +1,69 @@
 "use server";
 
-import { Language, NewsArticle } from "../type/general";
+import { getLocale } from "next-intl/server";
+import { cacheLife, cacheTag } from "next/cache";
 import { notFound } from "next/navigation";
+import prisma from "../third-party/prisma";
+import { Language, NewsArticle } from "../type/general";
 import { isRemotePath } from "../utility/miscellaneous";
 import { getBaseURL } from "./miscellaneous";
-import prisma from "../third-party/prisma";
-import { getLocale } from "next-intl/server";
 import { getPlaceholder } from "./placeholder";
-import { unstable_cache } from "next/cache";
+import { ImagePlaceholder } from "@grod56/placeholder";
 
-export async function getAllArticles(): Promise<NewsArticle[]> {
-	const articles: NewsArticle[] = await prisma.newsArticle
-		.findMany()
+export async function getAllArticles(
+	language: Language,
+): Promise<NewsArticle[]> {
+	const articles: NewsArticle[] = await prisma.article
+		.findMany({
+			include: {
+				title: true,
+				author: { include: { name: true } },
+				body: true,
+				snippet: true,
+				image: { include: { caption: true } },
+			},
+		})
 		.then(records =>
-			records.map(record => ({
-				...record,
-				uri: record.link,
-				dateUpdated: record.dateUpdated ?? undefined,
-				articleImage: {
-					source: record.imageLink,
-					about: record.imageCaption,
-				},
-			})),
+			records.map(record => {
+				const {
+					title,
+					author,
+					body,
+					snippet,
+					link,
+					image,
+					dateCreated,
+					dateUpdated,
+				} = record;
+				if (language == "ru")
+					return {
+						uri: link,
+						title: title.russian ?? title.english,
+						author: author.name.russian ?? author.name.english,
+						body: body.russian ?? body.english,
+						dateCreated,
+						dateUpdated: dateUpdated ?? undefined,
+						snippet: snippet.russian ?? snippet.english,
+						articleImage: {
+							source: image.link,
+							about:
+								image.caption.russian ?? image.caption.english,
+						},
+					} satisfies NewsArticle;
+				return {
+					uri: link,
+					title: title.english,
+					author: author.name.english,
+					body: body.english,
+					dateCreated,
+					dateUpdated: dateUpdated ?? undefined,
+					snippet: snippet.english,
+					articleImage: {
+						source: image.link,
+						about: image.caption.russian ?? image.caption.english,
+					},
+				} satisfies NewsArticle;
+			}),
 		);
 	return articles;
 }
@@ -29,35 +71,38 @@ export async function getAllArticles(): Promise<NewsArticle[]> {
 export async function getArticleMetadata(
 	articleId: string,
 	language?: Language,
-): Promise<Omit<NewsArticle, "url" | "dateCreated" | "dateUpdated">> {
+): Promise<Pick<NewsArticle, "uri" | "title" | "snippet" | "articleImage">> {
 	"use cache";
 	const locale = language ?? (await getLocale());
 	try {
-		const article = await prisma.newsArticle.findUniqueOrThrow({
+		const article = await prisma.article.findUniqueOrThrow({
+			include: {
+				title: true,
+				snippet: true,
+				image: { include: { caption: true } },
+			},
 			where: { link: articleId },
 			omit: { dateCreated: true, dateUpdated: true },
 		});
 		const title =
-			locale == "ru" && article.titleRu ? article.titleRu : article.title;
-		const author =
-			locale == "ru" && article.authorRu != null
-				? article.authorRu
-				: article.author;
-		const body =
-			locale == "ru" && article.bodyRu ? article.bodyRu : article.body;
+			locale == "ru" && article.title.russian
+				? article.title.russian
+				: article.title.english;
 		const snippet =
-			locale == "ru" && article.snippetRu
-				? article.snippetRu
-				: article.snippet;
+			locale == "ru" && article.snippet.russian
+				? article.snippet.russian
+				: article.snippet.english;
+		const caption =
+			locale == "ru" && article.image.caption.russian
+				? article.image.caption.russian
+				: article.image.caption.english;
 		return {
 			uri: article.link.toString(),
 			title,
-			author,
-			body,
 			snippet,
 			articleImage: {
-				source: article.imageLink,
-				about: article.imageCaption ?? undefined,
+				source: article.image.link,
+				about: caption,
 			},
 		};
 	} catch (error) {
@@ -71,65 +116,77 @@ export async function getArticleMetadata(
 	}
 }
 
-export const getArticle = unstable_cache(
-	async (
-		articleId: string,
-		language?: Language,
-	): Promise<Omit<NewsArticle, "url">> => {
-		const locale = language ?? (await getLocale());
-		try {
-			const article = await prisma.newsArticle.findUniqueOrThrow({
-				where: { link: articleId },
-			});
-			const baseUrl = await getBaseURL();
+export async function getArticle(
+	articleId: string,
+	language?: Language,
+): Promise<Omit<NewsArticle, "url">> {
+	"use cache: remote";
 
-			const placeholder = await getPlaceholder(
-				isRemotePath(article.imageLink)
-					? article.imageLink
-					: `${baseUrl}${article.imageLink}`,
-			);
-			const title =
-				locale == "ru" && article.titleRu
-					? article.titleRu
-					: article.title;
-			const author =
-				locale == "ru" && article.authorRu != null
-					? article.authorRu
-					: article.author;
-			const body =
-				locale == "ru" && article.bodyRu
-					? article.bodyRu
-					: article.body;
-			const snippet =
-				locale == "ru" && article.snippetRu
-					? article.snippetRu
-					: article.snippet;
-			//TODO: Add imageCaptionRu
+	cacheLife("days");
+	cacheTag("bulletin_article");
+	const locale = language ?? (await getLocale());
+	try {
+		const article = await prisma.article.findUniqueOrThrow({
+			where: { link: articleId },
+			include: {
+				author: { include: { name: true } },
+				title: true,
+				body: true,
+				snippet: true,
+				image: { include: { caption: true, placeholder: true } },
+			},
+		});
+		const baseUrl = await getBaseURL();
 
-			return {
-				uri: article.link.toString(),
-				title,
-				author,
-				dateCreated: article.dateCreated,
-				dateUpdated: article.dateUpdated ?? undefined,
-				body,
-				snippet,
-				articleImage: {
-					source: article.imageLink,
-					about: article.imageCaption ?? undefined,
-					placeholder,
-				},
-			};
-		} catch (error) {
-			if (
-				error instanceof Object &&
-				"code" in error &&
-				error["code"] == "P2025"
-			)
-				notFound();
-			throw error;
-		}
-	},
-	["bulletin-article"],
-	{ revalidate: 3600 },
-);
+		const placeholder =
+			(article.image.placeholder?.placeholder as ImagePlaceholder) ??
+			(await getPlaceholder(
+				isRemotePath(article.image.link)
+					? article.image.link
+					: `${baseUrl}${article.image.link}`,
+			));
+		const title =
+			locale == "ru" && article.title.russian
+				? article.title.russian
+				: article.title.english;
+		const author =
+			locale == "ru" && article.author.name.russian != null
+				? article.author.name.russian
+				: article.author.name.english;
+		const body =
+			locale == "ru" && article.body.russian
+				? article.body.russian
+				: article.body.english;
+		const snippet =
+			locale == "ru" && article.snippet.russian
+				? article.snippet.russian
+				: article.snippet.english;
+		const imageCaption =
+			locale == "ru" && article.image.caption.russian
+				? article.image.caption.russian
+				: article.image.caption.english;
+
+		return {
+			uri: article.link.toString(),
+			title,
+			author,
+			dateCreated: article.dateCreated,
+			dateUpdated: article.dateUpdated ?? undefined,
+			body,
+			snippet,
+			articleImage: {
+				source: article.image.link,
+				about: imageCaption ?? undefined,
+				placeholder,
+			},
+		};
+	} catch (error) {
+		if (
+			error instanceof Object &&
+			"code" in error &&
+			error["code"] == "P2025"
+		)
+			notFound();
+		throw error;
+	}
+}

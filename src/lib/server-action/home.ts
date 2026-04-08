@@ -16,11 +16,14 @@ import {
 	ScheduleItem,
 } from "../type/general";
 import { getDateString } from "../utility/date-time";
-import { isRemotePath } from "../utility/miscellaneous";
+import {
+	getEnglishTranslationHash,
+	isRemotePath,
+} from "../utility/miscellaneous";
 import { getGalleryImages } from "./gallery";
 import { getBaseURL } from "./miscellaneous";
 import { getPlaceholder } from "./placeholder";
-import { unstable_cache } from "next/cache";
+import { cacheLife, cacheTag, unstable_cache } from "next/cache";
 
 export type LatestNews = {
 	featuredArticle: NewsArticlePreview;
@@ -81,13 +84,16 @@ export async function subscribeToMailingList(payload: string) {
 	await mailerLite.subscribers.createOrUpdate({ email });
 }
 
-export const getDailyReadings = unstable_cache(
-	async (currentDate: Date, language: Language) => {
-		const locale = language;
-		return await dailyReadings(currentDate, locale);
-	},
-	["daily-readings"],
-);
+export const getDailyReadings = async (
+	currentDate: Date,
+	language: Language,
+) => {
+	"use cache: remote";
+	cacheLife("max");
+	cacheTag("daily-readings");
+	const locale = language;
+	return await dailyReadings(currentDate, locale);
+};
 
 export async function getDailyQuote(currentDate: Date = new Date()) {
 	const locale = await getLocale();
@@ -99,9 +105,25 @@ export async function getDailyQuote(currentDate: Date = new Date()) {
 				date: localDate,
 			},
 		})
-		.quote();
+		.quote({
+			include: {
+				author: {
+					include: { name: true },
+				},
+				quote: true,
+				source: true,
+			},
+		});
 	if (!dailyQuote) {
-		const quotes = await prisma.quote.findMany()!;
+		const quotes = await prisma.quote.findMany({
+			include: {
+				author: {
+					include: { name: true },
+				},
+				quote: true,
+				source: true,
+			},
+		});
 		dailyQuote = quotes[Math.round(Math.random() * (quotes.length - 1))];
 		await prisma.dailyQuote.create({
 			data: {
@@ -110,14 +132,24 @@ export async function getDailyQuote(currentDate: Date = new Date()) {
 			},
 		});
 	}
-	return locale == "ru"
-		? {
-				...dailyQuote,
-				quote: dailyQuote.quoteRu ?? dailyQuote.quote,
-				author: dailyQuote.authorRu ?? dailyQuote.author,
-				source: dailyQuote.sourceRu ?? dailyQuote.source,
-			}
-		: dailyQuote;
+	return (
+		locale == "ru"
+			? {
+					quote: dailyQuote.quote.russian ?? dailyQuote.quote.english,
+					author:
+						dailyQuote.author.name.russian ??
+						dailyQuote.author.name.english,
+					source:
+						dailyQuote.source?.russian ??
+						dailyQuote.source?.english ??
+						null,
+				}
+			: {
+					quote: dailyQuote.quote.english,
+					author: dailyQuote.author.name.english,
+					source: dailyQuote.source?.english ?? null,
+				}
+	) satisfies DailyQuote;
 }
 
 export async function getScheduleItems(
@@ -135,25 +167,32 @@ export async function getScheduleItems(
 			date: "asc",
 		},
 		take: count,
-		include: { scheduleItemTimes: { orderBy: { time: "asc" } } },
+		include: {
+			title: true,
+			venue: true,
+			scheduleItemTimes: {
+				include: { designation: true },
+				orderBy: { time: "asc" },
+			},
+		},
 	});
 	const scheduleItems = data.map(
 		(record): ScheduleItem => ({
 			date: record.date,
 			title:
 				locale == "ru"
-					? (record.titleRu ?? record.title)
-					: record.title,
+					? (record.title.russian ?? record.title.english)
+					: record.title.english,
 			location:
 				locale == "ru"
-					? (record.locationRu ?? record.location)
-					: record.location,
+					? (record.venue.russian ?? record.venue.english)
+					: record.venue.english,
 			times: record.scheduleItemTimes.map(time => ({
 				time: time.time,
 				designation:
 					locale == "ru"
-						? (time.designationRu ?? time.designation)
-						: time.designation,
+						? (time.designation.russian ?? time.designation.english)
+						: time.designation.english,
 			})),
 		}),
 	);
@@ -177,11 +216,13 @@ export async function getScheduleItems(
 			})),
 		}));
 		// TODO: Revisit
-		const isPresent = await prisma.scheduleItem.findUnique({
+		const isPresent = await prisma.scheduleItem.findFirst({
 			where: {
-				date_location: {
-					date: nextScheduleItem.date,
-					location: nextScheduleItem.location,
+				date: nextScheduleItem.date,
+				venue: {
+					englishHash: getEnglishTranslationHash(
+						nextScheduleItem.location,
+					),
 				},
 			},
 		});
@@ -191,13 +232,51 @@ export async function getScheduleItems(
 			await prisma.scheduleItem.create({
 				data: {
 					date,
-					location,
-					title,
-					titleRu,
-					scheduleItemTimes: {
-						createMany: {
-							data: times,
+					title: {
+						connectOrCreate: {
+							create: {
+								english: title,
+								englishHash: getEnglishTranslationHash(title),
+								russian: titleRu,
+							},
+							where: {
+								englishHash: getEnglishTranslationHash(title),
+							},
 						},
+					},
+					venue: {
+						connectOrCreate: {
+							create: {
+								english: location,
+								englishHash:
+									getEnglishTranslationHash(location),
+							},
+							where: {
+								englishHash:
+									getEnglishTranslationHash(location),
+							},
+						},
+					},
+					scheduleItemTimes: {
+						create: times.map(time => ({
+							time: time.time,
+							designation: {
+								connectOrCreate: {
+									create: {
+										english: time.designation,
+										russian: time.designationRu,
+										englishHash: getEnglishTranslationHash(
+											time.designation,
+										),
+									},
+									where: {
+										englishHash: getEnglishTranslationHash(
+											time.designation,
+										),
+									},
+								},
+							},
+						})),
 					},
 				},
 			});
@@ -217,116 +296,118 @@ export async function getLatestNews(
 ): Promise<LatestNews> {
 	const locale = await getLocale();
 	const baseURL = await getBaseURL();
-	const otherArticles = await prisma.newsArticle.findMany({
+	const articleIncludes = {
+		title: true,
+		body: true,
+		snippet: true,
+		author: { include: { name: true } },
+		image: { include: { placeholder: true, caption: true } },
+	};
+	const featuredArticle = await prisma.featuredArticle.findFirstOrThrow({
+		include: { article: { include: articleIncludes } },
+	});
+	const otherArticles = await prisma.article.findMany({
 		// TODO: Reinstate when we have enough articles
 		// where: {
 		// 	featuredArticle: {
 		// 		is: null,
 		// 	},
 		// },
+		include: articleIncludes,
 		orderBy: {
 			dateCreated: "desc",
 		},
 		take: otherArticlesCount,
 	});
-	const featuredArticle = await prisma.featuredArticle.findFirstOrThrow({
-		include: { newsArticle: true },
-	});
-	const allArticles = [featuredArticle.newsArticle, ...otherArticles];
-	const unplaceholderedArticles: typeof allArticles = [];
+	const allArticles = [featuredArticle.article, ...otherArticles];
+	const unplaceholderedArticles = allArticles.filter(
+		article => article.image.placeholder == null,
+	);
+	const newPlaceholders = new Map<number, ImagePlaceholder>();
 
-	for (let i = 0; i < allArticles.length; i++) {
-		const item = await prisma.imagePlaceholder.findFirst({
-			where: {
-				imageLink: {
-					equals: allArticles[i].imageLink,
-				},
-			},
-		});
-		if (!item) unplaceholderedArticles.push(allArticles[i]);
-	}
 	if (unplaceholderedArticles.length) {
 		for (let i = 0; i < unplaceholderedArticles.length; i++) {
-			const imageLink = unplaceholderedArticles[i].imageLink;
+			const imageLink = unplaceholderedArticles[i].image.link;
 			const imageURL = isRemotePath(imageLink)
 				? imageLink
 				: `${baseURL}${imageLink}`;
-			await getPlaceholder(imageURL);
+			newPlaceholders.set(
+				unplaceholderedArticles[i].id,
+				await getPlaceholder(imageURL),
+			);
 		}
 	}
-	const articlePlaceholders = new Map(
-		(
-			await prisma.imagePlaceholder.findMany({
-				where: {
-					imageLink: {
-						in: allArticles.map(article => article.imageLink),
-					},
-				},
-			})
-		).map(placeholder => [placeholder.imageLink, placeholder.placeholder]),
-	);
-	const article = featuredArticle.newsArticle;
+
+	const article = featuredArticle.article;
 	const title =
-		locale == "ru" && article.titleRu ? article.titleRu : article.title;
+		locale == "ru" && article.title.russian
+			? article.title.russian
+			: article.title.english;
 	const author =
-		locale == "ru" && article.authorRu != null
-			? article.authorRu
-			: article.author;
+		locale == "ru" && article.author.name.russian != null
+			? article.author.name.russian
+			: article.author.name.english;
 	const snippet =
-		locale == "ru" && article.snippetRu
-			? article.snippetRu
-			: article.snippet;
+		locale == "ru" && article.snippet.russian
+			? article.snippet.russian
+			: article.snippet.english;
 	return {
 		featuredArticle: {
-			...featuredArticle.newsArticle,
+			...featuredArticle.article,
 			title,
 			author,
 			snippet,
-			uri: featuredArticle.newsArticle.link, // TODO: Alter schema
+			uri: featuredArticle.article.link,
 			articleImage: {
-				source: featuredArticle.newsArticle.imageLink,
-				about: featuredArticle.newsArticle.imageCaption,
-				placeholder: articlePlaceholders.get(
-					featuredArticle.newsArticle.imageLink,
-				) as ImagePlaceholder,
+				source: featuredArticle.article.image.link,
+				about:
+					locale == "ru"
+						? (featuredArticle.article.image.caption.russian ??
+							featuredArticle.article.image.caption.english)
+						: featuredArticle.article.image.caption.english,
+				placeholder:
+					(featuredArticle.article.image.placeholder
+						?.placeholder as ImagePlaceholder) ??
+					newPlaceholders.get(featuredArticle.article.id),
 			},
 		},
 		otherNewsArticles: otherArticles.map(article => {
 			const title =
-				locale == "ru" && article.titleRu
-					? article.titleRu
-					: article.title;
+				locale == "ru" && article.title.russian
+					? article.title.russian
+					: article.title.english;
 			const author =
-				locale == "ru" && article.authorRu != null
-					? article.authorRu
-					: article.author;
-			const body =
-				locale == "ru" && article.bodyRu
-					? article.bodyRu
-					: article.body;
+				locale == "ru" && article.author.name.russian != null
+					? article.author.name.russian
+					: article.author.name.english;
 			const snippet =
-				locale == "ru" && article.snippetRu
-					? article.snippetRu
-					: article.snippet;
+				locale == "ru" && article.snippet.russian
+					? article.snippet.russian
+					: article.snippet.english;
 			return {
 				...article,
 				title,
 				author,
-				body,
 				snippet,
 				uri: article.link,
 				articleImage: {
-					source: article.imageLink,
-					about: article.imageCaption,
-					placeholder: articlePlaceholders.get(
-						article.imageLink,
-					) as ImagePlaceholder,
+					source: article.image.link,
+					about:
+						locale == "ru"
+							? (article.image.caption.russian ??
+								article.image.caption.english)
+							: article.image.caption.english,
+					placeholder:
+						(article.image.placeholder
+							?.placeholder as ImagePlaceholder) ??
+						newPlaceholders.get(article.id),
 				},
 			};
 		}),
 	};
 }
 
+// TODO: Optimize asap
 export const getDailyGalleryImages = unstable_cache(
 	async (
 		count: number,
@@ -346,7 +427,7 @@ export const getDailyGalleryImages = unstable_cache(
 		let dailyGalleryImages = fulfilled[1];
 
 		const dailyGalleryImageLinks = dailyGalleryImages.map(
-			dailyGalleryImage => dailyGalleryImage.imageLink,
+			dailyGalleryImage => dailyGalleryImage.link,
 		);
 		const otherGalleryImages = allGalleryImages.filter(
 			galleryImage => !(galleryImage.imageLink in dailyGalleryImageLinks),
@@ -365,7 +446,7 @@ export const getDailyGalleryImages = unstable_cache(
 					await prisma.dailyGalleryImage.createManyAndReturn({
 						data: shuffledGalleryImages.map(galleryImage => ({
 							date: localDate,
-							imageLink: galleryImage.imageLink,
+							link: galleryImage.imageLink,
 						})),
 					});
 				dailyGalleryImages = [
@@ -379,7 +460,7 @@ export const getDailyGalleryImages = unstable_cache(
 							.slice(0, count - dailyGalleryImages.length)
 							.map(galleryImage => ({
 								date: localDate,
-								imageLink: galleryImage.imageLink,
+								link: galleryImage.imageLink,
 							})),
 					});
 				dailyGalleryImages = [
@@ -391,7 +472,7 @@ export const getDailyGalleryImages = unstable_cache(
 		const placeholderedGalleryImages: GalleryImage[] = [];
 		// TODO: Optimize
 		for (let i = 0; i < dailyGalleryImages.length; i++) {
-			const imageLink = dailyGalleryImages[i].imageLink;
+			const imageLink = dailyGalleryImages[i].link;
 			const imageURL = isRemotePath(imageLink)
 				? imageLink
 				: `${baseUrl}${imageLink}`;

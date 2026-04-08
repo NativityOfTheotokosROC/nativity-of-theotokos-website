@@ -1,3 +1,5 @@
+import { createHash } from "crypto";
+
 export function julianDate(date: Date) {
 	return new Date(new Date().setDate(date.getDate() - 13));
 }
@@ -28,3 +30,7 @@ export function isRemotePath(src: string) {
 export const emptyStringAsUndefined = (value: string) => {
 	return value == "" ? undefined : value;
 };
+
+export function getEnglishTranslationHash(text: string) {
+	return createHash("md5").update(text).digest("hex");
+}
