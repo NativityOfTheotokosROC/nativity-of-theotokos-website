@@ -1,14 +1,19 @@
-"use client";
-
-import { useRouter } from "@/src/i18n/navigation";
 import MaintenanceGraphic from "@/public/assets/ornament_36.svg";
-import { usePageLoadingBarRouter } from "@/src/lib/utility/page-loading-bar";
 import { georgia } from "@/src/lib/third-party/fonts";
-import { useTranslations } from "next-intl";
+import { Language } from "@/src/lib/type/general";
+import { ModeledVoidComponent } from "@mvc-react/components";
+import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
+import { getTranslations } from "next-intl/server";
+import PageNavigationButton from "../../page-navigation-button/PageNavigationButton";
 
-export default function Maintenance() {
-	const router = usePageLoadingBarRouter(useRouter);
-	const t = useTranslations("maintenance");
+const Maintenance = async function ({ model }) {
+	"use cache";
+
+	const { language } = model.modelView;
+	const t = await getTranslations({
+		locale: language,
+		namespace: "maintenance",
+	});
 
 	return (
 		<main className={`maintenance bg-[#FEF8F3] text-black`}>
@@ -25,16 +30,16 @@ export default function Maintenance() {
 						{t("title")}
 					</span>
 					<span className="text-lg">{t("description")}</span>
-					<button
-						className="text-white rounded-lg bg-[#250203]/82 p-4 w-30 hover:bg-[#250203]/92 active:bg-[#250203]"
-						onClick={() => {
-							router.push("/");
-						}}
-					>
-						{t("goHome")}
-					</button>
+					<PageNavigationButton
+						model={newReadonlyModel({
+							buttonContent: t("goHome"),
+							endpoint: "/",
+						})}
+					/>
 				</div>
 			</div>
 		</main>
 	);
-}
+} satisfies ModeledVoidComponent<ReadonlyModel<{ language: Language }>>;
+
+export default Maintenance;
