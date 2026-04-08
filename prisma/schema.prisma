@@ -15,16 +15,21 @@ datasource db {
 
 model Quote {
   id          Int          @id @default(autoincrement())
-  quote       String
-  author      String
-  source      String?
-  quoteRu     String?
-  authorRu    String?
-  sourceRu    String?
+  quote       Translation  @relation("QuoteTranslation", fields: [quoteTranslationId], references: [id])
+  author      QuoteAuthor  @relation(fields: [authorId], references: [id])
+  source      Translation? @relation("QuoteSourceTranslation", fields: [sourceTranslationId], references: [id])
   dailyQuotes DailyQuote[]
 
-  @@unique([author, quote])
-  @@unique([authorRu, quoteRu])
+  quoteTranslationId  Int  @unique
+  sourceTranslationId Int?
+  authorId            Int
+}
+
+model QuoteAuthor {
+  id                Int         @id @default(autoincrement())
+  name              Translation @relation(fields: [nameTranslationId], references: [id])
+  nameTranslationId Int         @unique
+  quotes            Quote[]
 }
 
 model DailyQuote {
@@ -34,26 +39,28 @@ model DailyQuote {
 }
 
 model ScheduleItem {
-  id                  Int                  @id @default(autoincrement())
-  date                DateTime             @db.Date
-  location            String
-  title               String
-  locationRu          String?
-  titleRu             String?
+  id    Int         @id @default(autoincrement())
+  date  DateTime    @db.Date
+  title Translation @relation("ScheduleItemTitleTranslation", fields: [titleTranslationId], references: [id])
+  venue Translation @relation("ScheduleItemVenueTranslation", fields: [venueTranslationId], references: [id])
+
   scheduleItemTimes   ScheduleItemTime[]
   removedScheduleItem RemovedScheduleItem?
 
-  @@unique([date, location])
-  @@unique([date, locationRu])
+  titleTranslationId Int
+  venueTranslationId Int
+
+  @@unique([date, venueTranslationId])
 }
 
 model ScheduleItemTime {
   id             Int          @id @default(autoincrement())
   time           DateTime     @db.Timestamptz
-  designation    String
-  designationRu  String?
+  designation    Translation  @relation(fields: [designationTranslationId], references: [id])
   scheduleItem   ScheduleItem @relation(fields: [scheduleItemId], references: [id], onDelete: Cascade)
   scheduleItemId Int
+
+  designationTranslationId Int
 
   @@unique([time, scheduleItemId])
 }
@@ -63,40 +70,55 @@ model RemovedScheduleItem {
   scheduleItem   ScheduleItem @relation(fields: [scheduleItemId], references: [id], onDelete: Cascade)
 }
 
-model NewsArticle {
+model Article {
   id              Int              @id @default(autoincrement())
   link            String           @unique
-  title           String
-  author          String
+  title           Translation      @relation("ArticleTitleTranslation", fields: [titleTranslationId], references: [id])
+  body            Translation      @relation("ArticleBodyTranslation", fields: [bodyTranslationId], references: [id])
+  snippet         Translation      @relation("ArticleSnippetTranslation", fields: [snippetTranslationId], references: [id])
+  author          ArticleAuthor    @relation(fields: [authorId], references: [id])
+  image           ArticleImage     @relation(fields: [imageId], references: [id])
   dateCreated     DateTime
   dateUpdated     DateTime?
-  body            String
-  snippet         String
-  imageLink       String
-  imageCaption    String
-  titleRu         String?
-  authorRu        String?
-  bodyRu          String?
-  snippetRu       String?
   featuredArticle FeaturedArticle?
+
+  titleTranslationId   Int
+  bodyTranslationId    Int
+  snippetTranslationId Int
+  authorId             Int
+  imageId              Int
+}
+
+model ArticleAuthor {
+  id                Int         @id @default(autoincrement())
+  name              Translation @relation(fields: [nameTranslationId], references: [id])
+  nameTranslationId Int         @unique
+  articles          Article[]
+}
+
+model ArticleImage {
+  id                   Int               @id @default(autoincrement())
+  link                 String            @unique
+  caption              Translation       @relation(fields: [captionTranslationId], references: [id])
+  placeholder          ImagePlaceholder? @relation(fields: [placeholderId], references: [id])
+  captionTranslationId Int
+  placeholderId        Int?
+  articles             Article[]
 }
 
 model FeaturedArticle {
-  newsArticle   NewsArticle @relation(fields: [newsArticleId], references: [id], onDelete: Cascade)
-  newsArticleId Int         @id
-}
-
-model GalleryImage {
-  id        Int    @id @default(autoincrement())
-  imageLink String
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId Int     @id
 }
 
 model DailyGalleryImage {
-  id        Int      @id @default(autoincrement())
-  date      DateTime @db.Date
-  imageLink String
+  id            Int               @id @default(autoincrement())
+  date          DateTime          @db.Date
+  link          String
+  placeholder   ImagePlaceholder? @relation(fields: [placeholderId], references: [id])
+  placeholderId Int?
 
-  @@unique([date, imageLink])
+  @@unique([date, link])
 }
 
 model Admin {
@@ -108,9 +130,33 @@ model Admin {
 }
 
 model ImagePlaceholder {
-  imageLink   String @id
-  placeholder String
+  id                 Int                 @id @default(autoincrement())
+  imageLink          String              @unique
+  placeholder        String
+  articleImages      ArticleImage[]
+  dailyGalleryImages DailyGalleryImage[]
 }
+
+model Translation {
+  id          Int     @id @default(autoincrement())
+  english     String
+  russian     String?
+  englishHash String  @unique
+
+  articleImageCaptions         ArticleImage[]
+  articleAuthors               ArticleAuthor[]
+  quoteAuthors                 QuoteAuthor[]
+  quoteTranslations            Quote[]            @relation("QuoteTranslation")
+  quoteSourceTranslations      Quote[]            @relation("QuoteSourceTranslation")
+  scheduleItemTitles           ScheduleItem[]     @relation("ScheduleItemTitleTranslation")
+  scheduleItemVenues           ScheduleItem[]     @relation("ScheduleItemVenueTranslation")
+  scheduleItemTimeDesignations ScheduleItemTime[]
+  articleTitleTranslations     Article[]          @relation("ArticleTitleTranslation")
+  articleBodyTranslations      Article[]          @relation("ArticleBodyTranslation")
+  articleSnippetTranslations   Article[]          @relation("ArticleSnippetTranslation")
+}
+
+// BetterAuth  ----------------------------------------------------------------------
 
 model User {
   id            String    @id
