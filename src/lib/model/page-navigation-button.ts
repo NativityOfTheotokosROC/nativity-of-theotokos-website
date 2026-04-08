@@ -1,9 +1,8 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { ReactNode } from "react";
 
 export interface PageNavigationButtonModelView {
 	endpoint: `/${string}`;
-	buttonContent: ReactNode;
+	browserNavigation?: boolean;
 }
 
 export type PageNavigationButtonModel =

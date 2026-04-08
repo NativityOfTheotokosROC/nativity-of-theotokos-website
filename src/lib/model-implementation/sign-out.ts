@@ -1,13 +1,14 @@
 import { InitializedModel } from "@mvc-react/mvc";
+import { SignOutModel, SignOutStatus } from "../model/sign-out";
 import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
-import { useRouter } from "next/navigation";
-import { ForbiddenModel, SignOutStatus } from "../model/forbidden";
-import { signOut } from "../third-party/better-auth";
 import { notifierVIInterface } from "./notifier";
+import { useRouter } from "next/navigation";
+import { signOut } from "../third-party/better-auth";
+import { createToast } from "../component/miscellaneous/utility";
 
-export function useForbidden(
+export function useSignOut(
+	signOutEndpoint: `/${string}`,
 	router: ReturnType<typeof useRouter>,
-	signOutPath?: `/${string}`,
 ) {
 	const notifier = useNewStatefulInteractiveModel(
 		notifierVIInterface<SignOutStatus>(),
@@ -17,10 +18,6 @@ export function useForbidden(
 		modelView: { signOutStatus: notifier.modelView?.notification ?? null },
 		async interact(interaction) {
 			switch (interaction.type) {
-				case "GO_HOME": {
-					router.push("/");
-					break;
-				}
 				case "SIGN_OUT": {
 					await notifier
 						.interact({
@@ -29,30 +26,33 @@ export function useForbidden(
 						})
 						.then(() => signOut())
 						.then(async response => {
-							if (response.error)
+							if (response.error) {
+								const message =
+									response.error.message ??
+									response.error.statusText;
+								createToast({ type: "failure", message }); // TODO: Move this out in the future
 								return notifier.interact({
 									type: "NOTIFY",
 									input: {
 										notification: {
 											type: "failed",
-											message:
-												response.error.message ??
-												response.error.statusText,
+											message,
 										},
 									},
 								});
+							}
 							await notifier.interact({
 								type: "NOTIFY",
 								input: {
 									notification: { type: "success" },
 								},
 							});
-							router.push(signOutPath ?? "/");
+							router.push(signOutEndpoint);
 							router.refresh();
 						});
 					break;
 				}
 			}
 		},
-	} satisfies InitializedModel<ForbiddenModel>;
+	} satisfies InitializedModel<SignOutModel>;
 }

@@ -1,11 +1,12 @@
 import { InteractiveModel, ModelInteraction } from "@mvc-react/mvc";
-import { MenuItems } from "../type/general";
+import { Navlink } from "../type/general";
 
 export type NavigationDrawerType = "sidebar" | "accordion";
 
 export interface NavigationDrawerModelView {
 	isDrawn: boolean;
-	navMenuItems: MenuItems;
+	hasUserNavigationWidget: boolean;
+	navlinks: Navlink[];
 }
 
 export type NavigationDrawerModelInteraction = ModelInteraction<

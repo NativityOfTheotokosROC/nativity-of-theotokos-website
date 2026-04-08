@@ -1,29 +1,26 @@
-import { getTranslations } from "next-intl/server";
-import { Metadata } from "next";
 import { routing } from "@/src/i18n/routing";
-import { hasLocale } from "next-intl";
-import ForbiddenClient from "../../lib/component/page/forbidden/client";
+import Forbidden from "@/src/lib/component/page/forbidden/Forbidden";
 import { newReadonlyModel } from "@mvc-react/mvc";
+import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import { locale as rootLocale } from "next/root-params";
 
-export async function generateMetadata({
-	params,
-}: LayoutProps<"/[locale]">): Promise<Metadata> {
-	"use cache";
+export function generateStaticParams() {
+	return [...routing.locales.map(locale => ({ locale }))];
+}
 
-	const { locale } = await params;
-	const t = await getTranslations({
-		locale: hasLocale(routing.locales, locale) ? locale : "en",
-		namespace: "unauthorized",
-	});
+export async function generateMetadata(): Promise<Metadata> {
+	const locale = await rootLocale();
+	const t = await getTranslations({ locale, namespace: "unauthorized" });
 
 	return {
 		title: t("metaTitle"),
 	};
 }
 
-export default function Page() {
+export default async function Page() {
 	return (
-		<ForbiddenClient
+		<Forbidden
 			model={newReadonlyModel({
 				signOutEndpoint: "/",
 			})}
