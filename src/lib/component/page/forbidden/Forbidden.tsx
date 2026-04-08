@@ -1,27 +1,26 @@
-"use client";
-
 import ForbiddenGraphic from "@/public/assets/icon-3.svg";
 import { ForbiddenModel } from "@/src/lib/model/forbidden";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import { useTranslations } from "next-intl";
-import Spinner from "../../spinner/Spinner";
+import { getTranslations } from "next-intl/server";
+import PageNavigationButton from "../../page-navigation-button/PageNavigationButton";
+import SignOutButton from "./SignOutButton";
 
-const Forbidden = function ({ model }) {
-	const { modelView, interact } = model;
-	const { signOutStatus } = modelView;
-	const t = useTranslations("unauthorized");
+const Forbidden = async function ({ model }) {
+	"use cache";
+
+	const { language, signOutEndpoint } = model.modelView;
+	const t = await getTranslations({
+		locale: language,
+		namespace: "unauthorized",
+	});
 
 	return (
 		<main className={`forbidden bg-[#FEF8F3] text-black`}>
-			<div className="forbidden-content flex justify-center text-center p-8 py-15 pb-20 grow min-h-[94svh] h-full border-t-15 border-[#832C0B]/90">
-				<div className="flex flex-col min-h-fit h-[70svh] items-center justify-center gap-6 w-md">
-					<ForbiddenGraphic
-						className="h-72 md:h-60 w-80"
-						opacity={0.9}
-						fill="#000"
-					/>
+			<div className="forbidden-content flex h-full min-h-[94svh] grow justify-center border-t-15 border-[#832C0B]/90 p-8 py-15 pb-20 text-center">
+				<div className="flex h-[70svh] min-h-fit w-md flex-col items-center justify-center gap-6">
+					<ForbiddenGraphic className="h-72 w-80 fill-black opacity-90 md:h-60" />
 					<span
 						className={`text-4xl font-semibold ${georgia.className}`}
 					>
@@ -29,41 +28,19 @@ const Forbidden = function ({ model }) {
 					</span>
 					<span className="text-lg">{t("description")}</span>
 					<div className="flex gap-4">
-						<button
-							className="text-white rounded-lg bg-[#250203]/82 p-4 w-30 hover:bg-[#250203]/92 active:bg-[#250203] disabled:opacity-72"
-							onClick={() => {
-								interact({ type: "GO_HOME" });
-							}}
-						>
-							{t("goHome")}
-						</button>
-						<button
-							className="flex justify-center items-center text-white rounded-lg bg-[#250203]/82 p-4 w-30 hover:bg-[#250203]/92 active:bg-[#250203] disabled:opacity-72"
-							onClick={() => {
-								interact({ type: "SIGN_OUT" });
-							}}
-							disabled={
-								signOutStatus?.type == "pending" ||
-								signOutStatus?.type == "success"
-							}
-						>
-							{signOutStatus?.type == "pending" ? (
-								<Spinner
-									model={newReadonlyModel({
-										color: "white",
-										size: 20,
-									})}
-								/>
-							) : (
-								t("signOut")
-							)}
-						</button>
+						<PageNavigationButton
+							model={newReadonlyModel({
+								endpoint: "/",
+								buttonContent: t("goHome"),
+							})}
+						/>
+						<SignOutButton
+							model={newReadonlyModel({
+								signOutEndpoint,
+								buttonContent: t("signOut"),
+							})}
+						/>
 					</div>
-					{signOutStatus?.type == "failed" && (
-						<span className="text-sm line-clamp-3 text-red-900">
-							{signOutStatus.message}
-						</span>
-					)}
 				</div>
 			</div>
 		</main>

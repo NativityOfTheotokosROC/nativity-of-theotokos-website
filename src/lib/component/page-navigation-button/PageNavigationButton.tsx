@@ -11,7 +11,7 @@ const PageNavigationButton = function ({ model }) {
 
 	return (
 		<button
-			className="text-white rounded-lg bg-[#250203]/82 p-4 w-30 hover:bg-[#250203]/92 active:bg-[#250203]"
+			className="w-30 rounded-lg bg-[#250203]/82 p-4 text-white hover:bg-[#250203]/92 active:bg-[#250203]"
 			onClick={() => {
 				router.push(endpoint);
 			}}

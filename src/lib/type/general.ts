@@ -97,3 +97,5 @@ export type MenuItems = {
 export type Translator = ReturnType<typeof useTranslations<never>>;
 
 export type Role = "admin" | "staff" | "user" | "quotes" | "writer";
+
+export type Path = `/${string}`;

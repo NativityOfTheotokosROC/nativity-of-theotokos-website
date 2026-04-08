@@ -25,6 +25,8 @@ export async function generateMetadata({
 	};
 }
 
+export const dynamic = "force-static";
+
 export default async function Page({
 	params,
 }: PageProps<"/[locale]/about-us">) {
