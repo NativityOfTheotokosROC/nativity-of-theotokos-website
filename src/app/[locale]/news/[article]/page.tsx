@@ -32,6 +32,10 @@ function articleJsonLd(article: NewsArticleType) {
 	};
 }
 
+export async function generateStaticParams() {
+	return [{ article: "__placeholder__" }];
+}
+
 export async function generateMetadata({
 	params,
 }: PageProps<"/[locale]/news/[article]">): Promise<Metadata> {
