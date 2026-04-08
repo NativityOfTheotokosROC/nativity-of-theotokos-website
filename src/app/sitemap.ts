@@ -6,7 +6,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 	const baseUrl = process.env.BASE_URL;
 	if (!baseUrl) throw new Error("Undefined BASE_URL");
-	const newsArticles = await getAllArticles();
+	const newsArticles = await getAllArticles("en");
 
 	return [
 		{

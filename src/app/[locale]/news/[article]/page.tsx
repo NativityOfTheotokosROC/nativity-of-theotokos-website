@@ -3,7 +3,6 @@
 import { routing } from "@/src/i18n/routing";
 import { getBaseURL } from "@/src/lib/server-action/miscellaneous";
 import {
-	getAllArticles,
 	getArticle,
 	getArticleMetadata,
 } from "@/src/lib/server-action/news-article";
@@ -34,8 +33,7 @@ function articleJsonLd(article: NewsArticleType) {
 }
 
 export async function generateStaticParams() {
-	const articles = await getAllArticles();
-	return [{ article: "__placeholder__" }, ...articles];
+	return [{ article: "__placeholder__" }];
 }
 
 export async function generateMetadata({
