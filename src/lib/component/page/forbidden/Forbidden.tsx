@@ -4,8 +4,8 @@ import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
-import PageNavigationButton from "../../page-navigation-button/PageNavigationButton";
-import SignOutButton from "./SignOutButton";
+import PageNavigationButton from "../../button/PageNavigationButton";
+import SignOutButton from "../../button/SignOutButton";
 
 const Forbidden = async function ({ model }) {
 	"use cache";
@@ -31,15 +31,17 @@ const Forbidden = async function ({ model }) {
 						<PageNavigationButton
 							model={newReadonlyModel({
 								endpoint: "/",
-								buttonContent: t("goHome"),
 							})}
-						/>
+						>
+							{t("goHome")}
+						</PageNavigationButton>
 						<SignOutButton
 							model={newReadonlyModel({
 								signOutEndpoint,
-								buttonContent: t("signOut"),
 							})}
-						/>
+						>
+							{t("signOut")}
+						</SignOutButton>
 					</div>
 				</div>
 			</div>
