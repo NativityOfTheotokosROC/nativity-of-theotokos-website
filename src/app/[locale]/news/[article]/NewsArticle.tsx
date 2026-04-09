@@ -8,7 +8,7 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
-import { rootLocale } from "next/root-params";
+import { locale as rootLocale } from "next/root-params";
 
 const NewsArticle = async function ({ model }) {
 	"use cache";

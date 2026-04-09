@@ -6,7 +6,7 @@ import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
 import PageNavigationButton from "../../button/PageNavigationButton";
 import SignOutButton from "../../button/SignOutButton";
-import { rootLocale } from "next/root-params";
+import { locale as rootLocale } from "next/root-params";
 
 const Forbidden = async function ({ model }) {
 	"use cache";

@@ -3,7 +3,7 @@ import Forbidden from "@/src/lib/component/page/forbidden/Forbidden";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { rootLocale } from "next/root-params";
+import { locale as rootLocale } from "next/root-params";
 
 export async function generateStaticParams() {
 	return [...routing.locales.map(locale => ({ locale }))];
