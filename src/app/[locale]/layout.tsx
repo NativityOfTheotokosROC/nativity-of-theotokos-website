@@ -78,12 +78,11 @@ export default async function RootLayout({
 	params,
 }: LayoutProps<"/[locale]">) {
 	const { locale } = await params;
-
 	if (!hasLocale(routing.locales, locale)) {
 		notFound();
 	}
 	setRequestLocale(locale);
-	const messages = await getMessages({ locale }); //TODO: Fixes useTranslations for now
+	const messages = await getMessages({ locale });
 
 	return (
 		<html lang={locale} data-scroll-behavior="smooth">

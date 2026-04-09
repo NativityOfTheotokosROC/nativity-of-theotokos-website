@@ -6,12 +6,14 @@ import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
 import PageNavigationButton from "../../button/PageNavigationButton";
 import SignOutButton from "../../button/SignOutButton";
+import { rootLocale } from "next/root-params";
 
 const Forbidden = async function ({ model }) {
 	"use cache";
 
+	const locale = await rootLocale();
 	const { signOutEndpoint } = model.modelView;
-	const t = await getTranslations("unauthorized");
+	const t = await getTranslations({ locale, namespace: "unauthorized" });
 
 	return (
 		<main className={`forbidden bg-[#FEF8F3] text-black`}>

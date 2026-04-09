@@ -1,5 +1,3 @@
-"use cache";
-
 import { routing } from "@/src/i18n/routing";
 import { getBaseURL } from "@/src/lib/server-action/miscellaneous";
 import {

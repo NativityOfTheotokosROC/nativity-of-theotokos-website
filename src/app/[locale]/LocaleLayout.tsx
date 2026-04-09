@@ -7,7 +7,7 @@ import { getNavigationUserDetails } from "@/src/lib/server-action/user";
 import { Language, Navlink } from "@/src/lib/type/general";
 import { ModeledContainerComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { Toaster } from "react-hot-toast";
 
 export interface LocaleLayoutModelView {
@@ -18,7 +18,6 @@ export type LocaleLayoutModel = ReadonlyModel<LocaleLayoutModelView>;
 
 const LocaleLayout = async function ({ model, children }) {
 	const { locale } = model.modelView;
-	setRequestLocale(locale);
 
 	const tNavMenu = await getTranslations({ locale, namespace: "navMenu" });
 	const tFooterVariable = await getTranslations({

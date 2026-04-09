@@ -3,6 +3,7 @@ import Forbidden from "@/src/lib/component/page/forbidden/Forbidden";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { rootLocale } from "next/root-params";
 
 export async function generateStaticParams() {
 	return [...routing.locales.map(locale => ({ locale }))];
@@ -10,7 +11,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(): Promise<Metadata> {
 	"use cache";
-	const t = await getTranslations("unauthorized");
+	const locale = await rootLocale();
+	const t = await getTranslations({ locale, namespace: "unauthorized" });
 
 	return {
 		title: t("metaTitle"),
