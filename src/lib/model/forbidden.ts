@@ -1,8 +1,7 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { Language, Path } from "../type/general";
+import { Path } from "../type/general";
 
 export interface ForbiddenModelView {
-	language: Language;
 	signOutEndpoint: Path;
 }
 

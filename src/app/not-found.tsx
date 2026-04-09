@@ -1,13 +1,12 @@
 import "./globals.css";
 
-import { NextIntlClientProvider } from "next-intl";
-import NotFoundPage from "../lib/component/page/not-found/NotFound";
 import { Metadata } from "next";
-import { Suspense } from "react";
-import { googleSansFlex } from "../lib/third-party/fonts";
+import { NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
+import { Suspense } from "react";
 import { routing } from "../i18n/routing";
-import { newReadonlyModel } from "@mvc-react/mvc";
+import NotFoundPage from "../lib/component/page/not-found/NotFound";
+import { googleSansFlex } from "../lib/third-party/fonts";
 
 export function generateStaticParams() {
 	return routing.locales.map(locale => ({ locale }));
@@ -25,9 +24,7 @@ export default function NotFound() {
 			<body className={`antialiased ${googleSansFlex.className}`}>
 				<Suspense fallback={null}>
 					<NextIntlClientProvider>
-						<NotFoundPage
-							model={newReadonlyModel({ language: "en" })}
-						/>
+						<NotFoundPage />
 					</NextIntlClientProvider>
 				</Suspense>
 			</body>

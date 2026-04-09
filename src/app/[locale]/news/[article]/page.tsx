@@ -6,10 +6,7 @@ import {
 	getArticle,
 	getArticleMetadata,
 } from "@/src/lib/server-action/news-article";
-import {
-	Language,
-	NewsArticle as NewsArticleType,
-} from "@/src/lib/type/general";
+import { NewsArticle as NewsArticleType } from "@/src/lib/type/general";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
@@ -39,10 +36,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
 	params,
 }: PageProps<"/[locale]/news/[article]">): Promise<Metadata> {
+	"use cache";
+
 	const { article, locale } = await params;
-	const computedLocale = hasLocale(routing.locales, locale)
-		? locale
-		: ("en" satisfies Language);
+	const computedLocale = hasLocale(routing.locales, locale) ? locale : "en";
 	if (article == "__placeholder__") notFound();
 	const { title, snippet, uri, articleImage } = await getArticleMetadata(
 		article,
@@ -77,10 +74,11 @@ export async function generateMetadata({
 export default async function Page({
 	params,
 }: PageProps<"/[locale]/news/[article]">) {
+	"use cache";
+
 	const { article: articleId, locale } = await params;
-	const computedLocale = hasLocale(routing.locales, locale)
-		? locale
-		: ("en" satisfies Language);
+	const computedLocale = hasLocale(routing.locales, locale) ? locale : "en";
+
 	//TODO: Investigate why locale is not updating server-side
 	const article = await getArticle(articleId, computedLocale);
 	const baseUrl = await getBaseURL();

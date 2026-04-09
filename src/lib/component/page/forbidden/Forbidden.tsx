@@ -10,11 +10,8 @@ import SignOutButton from "../../button/SignOutButton";
 const Forbidden = async function ({ model }) {
 	"use cache";
 
-	const { language, signOutEndpoint } = model.modelView;
-	const t = await getTranslations({
-		locale: language,
-		namespace: "unauthorized",
-	});
+	const { signOutEndpoint } = model.modelView;
+	const t = await getTranslations("unauthorized");
 
 	return (
 		<main className={`forbidden bg-[#FEF8F3] text-black`}>
