@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { googleSansFlex } from "../lib/third-party/fonts";
 import { setRequestLocale } from "next-intl/server";
 import { routing } from "../i18n/routing";
+import { newReadonlyModel } from "@mvc-react/mvc";
 
 export function generateStaticParams() {
 	return routing.locales.map(locale => ({ locale }));
@@ -24,7 +25,9 @@ export default function NotFound() {
 			<body className={`antialiased ${googleSansFlex.className}`}>
 				<Suspense fallback={null}>
 					<NextIntlClientProvider>
-						<NotFoundPage />
+						<NotFoundPage
+							model={newReadonlyModel({ language: "en" })}
+						/>
 					</NextIntlClientProvider>
 				</Suspense>
 			</body>
