@@ -24,12 +24,13 @@ import UserNavigationWidget from "../user-navigation-widget/UserNavigationWidget
 import "./header.css";
 import { use, useContext } from "react";
 import { PageLoadingBarContext } from "../page-loading-bar/PageLoadingBar";
+import { getNavigationUserDetails } from "../../server-action/user";
 
 const Header = function ({ model }) {
 	const router = usePageLoadingBarRouter(useRouter);
 	const pageLoadingBar = useContext(PageLoadingBarContext);
 	const { navlinks } = model.modelView;
-	const userDetails = use(model.modelView.userDetails);
+	const userDetails = use(getNavigationUserDetails());
 	const isLargeScreen = useMediaQuery({ minWidth: 1024 });
 	const isPortrait = useMediaQuery({ orientation: "portrait" });
 	const userActions =

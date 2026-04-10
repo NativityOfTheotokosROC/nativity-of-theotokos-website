@@ -4,7 +4,6 @@ import LanguageSwitcher from "@/src/lib/component/language-switcher/LanguageSwit
 import PageLoadingBar from "@/src/lib/component/page-loading-bar/PageLoadingBar";
 import ViewLoadingSkeleton from "@/src/lib/component/view-loading-skeleton/ViewLoadingSkeleton";
 import { FooterModel } from "@/src/lib/model/footer";
-import { getNavigationUserDetails } from "@/src/lib/server-action/user";
 import { Language, Navlink } from "@/src/lib/type/general";
 import { ModeledContainerComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
@@ -27,7 +26,6 @@ const LocaleLayout = async function ({ model, children }) {
 		namespace: "footer_variable",
 	});
 	const tLinks = await getTranslations({ locale, namespace: "links" });
-	const navigationUserDetails = getNavigationUserDetails();
 	const navlinks = [
 		{ link: "/", text: tNavMenu("home") },
 		{
@@ -126,7 +124,6 @@ const LocaleLayout = async function ({ model, children }) {
 			<Header
 				model={newReadonlyModel({
 					navlinks,
-					userDetails: navigationUserDetails,
 				})}
 			/>
 			{children}
