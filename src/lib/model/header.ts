@@ -3,7 +3,7 @@ import { Navlink } from "../type/general";
 import { NavigationUserDetails } from "./user-navigation-widget";
 
 export interface HeaderModelView {
-	userDetails: NavigationUserDetails | null;
+	userDetails: Promise<NavigationUserDetails | null>;
 	navlinks: Navlink[];
 }
 

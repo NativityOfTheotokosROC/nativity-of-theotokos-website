@@ -22,13 +22,14 @@ import { Link } from "../page-loading-bar/PageLoadingBar";
 import { usePageLoadingBarRouter } from "../../utility/page-loading-bar";
 import UserNavigationWidget from "../user-navigation-widget/UserNavigationWidget";
 import "./header.css";
-import { useContext } from "react";
+import { use, useContext } from "react";
 import { PageLoadingBarContext } from "../page-loading-bar/PageLoadingBar";
 
 const Header = function ({ model }) {
 	const router = usePageLoadingBarRouter(useRouter);
 	const pageLoadingBar = useContext(PageLoadingBarContext);
-	const { navlinks, userDetails } = model.modelView;
+	const { navlinks } = model.modelView;
+	const userDetails = use(model.modelView.userDetails);
 	const isLargeScreen = useMediaQuery({ minWidth: 1024 });
 	const isPortrait = useMediaQuery({ orientation: "portrait" });
 	const userActions =
@@ -52,19 +53,19 @@ const Header = function ({ model }) {
 
 	return (
 		<header
-			className={`header flex flex-col w-full max-w-full top-px sticky z-11 bg-gray-900/99 h-fit`}
+			className={`header sticky top-px z-11 flex h-fit w-full max-w-full flex-col bg-gray-900/99`}
 		>
-			<div className="header-content flex flex-nowrap gap-9 justify-between p-4 lg:p-6 lg:px-7 items-center text-white">
+			<div className="header-content flex flex-nowrap items-center justify-between gap-9 p-4 text-white lg:p-6 lg:px-7">
 				<Link className="contents" href="/">
 					<div
-						className="logo flex gap-3 items-center justify-center w-fit hover:cursor-pointer select-none"
+						className="logo flex w-fit items-center justify-center gap-3 select-none hover:cursor-pointer"
 						onClick={() => {
 							router.push("/");
 						}}
 					>
 						<div className="size-12">
 							<LogoIcon
-								className="object-center object-contain"
+								className="object-contain object-center"
 								width={48}
 								height={48}
 								strokeWidth={9}
@@ -107,7 +108,7 @@ const Header = function ({ model }) {
 					) : (
 						<button
 							title={tNonDescriptive("menu")}
-							className="flex items-center justify-center p-1 text-[28px] bg-transparent hover:text-[#DCB042] data-open:text-[#DCB042] data-open:bg-black/45 rounded-lg"
+							className="flex items-center justify-center rounded-lg bg-transparent p-1 text-[28px] hover:text-[#DCB042] data-open:bg-black/45 data-open:text-[#DCB042]"
 							onClick={() => {
 								navigationDrawer.interact({ type: "TOGGLE" });
 							}}
@@ -132,7 +133,7 @@ const NavMenu = function ({ model }) {
 	return (
 		<nav className="nav-menu">
 			{type == "horizontal" && (
-				<div className="flex gap-6 lg:gap-8 items-center justify-center flex-wrap px-4">
+				<div className="flex flex-wrap items-center justify-center gap-6 px-4 lg:gap-8">
 					{[
 						...navlinks.map((navlink, index) => (
 							<Link
@@ -153,7 +154,7 @@ const NavMenu = function ({ model }) {
 			{type == "vertical" && (
 				<div className="flex flex-col">
 					{userNavigationWidget.modelView.userDetails && (
-						<div className="[&_.dropdown-button]:px-6 *:[&_.dropdown-button]:py-4 *:[&_.dropdown-button]:w-full bg-gray-800">
+						<div className="bg-gray-800 [&_.dropdown-button]:px-6 *:[&_.dropdown-button]:w-full *:[&_.dropdown-button]:py-4">
 							<UserNavigationWidget
 								model={userNavigationWidget}
 							/>
@@ -162,7 +163,7 @@ const NavMenu = function ({ model }) {
 					{navlinks.map((navlink, index) => (
 						<Link
 							key={index}
-							className="block navlink uppercase no-underline px-6 py-4 md:px-8 active:bg-gray-950 active:text-[#DCB042] hover:text-[#DCB042]"
+							className="navlink block px-6 py-4 uppercase no-underline hover:text-[#DCB042] active:bg-gray-950 active:text-[#DCB042] md:px-8"
 							href={navlink.link}
 							replace={navlink.isReplaceable}
 						>
