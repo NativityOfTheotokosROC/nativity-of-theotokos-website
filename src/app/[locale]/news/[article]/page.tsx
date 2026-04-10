@@ -1,5 +1,3 @@
-"use cache";
-
 import { routing } from "@/src/i18n/routing";
 import { getBaseURL } from "@/src/lib/server-action/miscellaneous";
 import {
@@ -36,6 +34,8 @@ export function generateStaticParams() {
 export async function generateMetadata({
 	params,
 }: PageProps<"/[locale]/news/[article]">): Promise<Metadata> {
+	"use cache";
+
 	const { article, locale } = await params;
 	const computedLocale = hasLocale(routing.locales, locale) ? locale : "en";
 	if (article == "__placeholder__") notFound();
@@ -72,6 +72,8 @@ export async function generateMetadata({
 export default async function Page({
 	params,
 }: PageProps<"/[locale]/news/[article]">) {
+	"use cache";
+
 	const { article: articleId, locale } = await params;
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 

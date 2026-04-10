@@ -1,5 +1,3 @@
-"use cache";
-
 import { ViewTransition } from "react";
 import LogoIcon from "@/public/assets/logo-icon.svg";
 

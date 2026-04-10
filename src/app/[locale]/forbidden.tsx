@@ -1,5 +1,3 @@
-"use cache";
-
 import { routing } from "@/src/i18n/routing";
 import Forbidden from "@/src/lib/component/page/forbidden/Forbidden";
 import { newReadonlyModel } from "@mvc-react/mvc";
