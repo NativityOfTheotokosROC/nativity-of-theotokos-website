@@ -1,3 +1,5 @@
+"use cache";
+
 import { routing } from "@/src/i18n/routing";
 import { getBaseURL } from "@/src/lib/server-action/miscellaneous";
 import {
@@ -27,15 +29,13 @@ function articleJsonLd(article: NewsArticleType) {
 	};
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
 	return [{ article: "__placeholder__" }];
 }
 
 export async function generateMetadata({
 	params,
 }: PageProps<"/[locale]/news/[article]">): Promise<Metadata> {
-	"use cache";
-
 	const { article, locale } = await params;
 	const computedLocale = hasLocale(routing.locales, locale) ? locale : "en";
 	if (article == "__placeholder__") notFound();
@@ -72,13 +72,11 @@ export async function generateMetadata({
 export default async function Page({
 	params,
 }: PageProps<"/[locale]/news/[article]">) {
-	"use cache";
-
 	const { article: articleId, locale } = await params;
-	const computedLocale = hasLocale(routing.locales, locale) ? locale : "en";
+	const language = hasLocale(routing.locales, locale) ? locale : "en";
 
 	//TODO: Investigate why locale is not updating server-side
-	const article = await getArticle(articleId, computedLocale);
+	const article = await getArticle(articleId, language);
 	const baseUrl = await getBaseURL();
 	const permalink = `${baseUrl}/news/${article.uri.toString()}`;
 	const jsonLd = articleJsonLd(article);

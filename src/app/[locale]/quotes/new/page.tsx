@@ -9,6 +9,8 @@ import NewQuoteClient from "./client";
 export async function generateMetadata({
 	params,
 }: PageProps<"/[locale]/quotes/new">): Promise<Metadata> {
+	"use cache";
+
 	const { locale } = await params;
 	const t = await getTranslations({
 		locale: hasLocale(routing.locales, locale) ? locale : "en",

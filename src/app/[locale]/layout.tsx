@@ -1,3 +1,5 @@
+"use cache";
+
 import "@/src/app/globals.css";
 import { routing } from "@/src/i18n/routing";
 import ClientProviders from "@/src/lib/provider/client-providers";
@@ -27,8 +29,6 @@ export function generateStaticParams() {
 export async function generateMetadata(
 	props: Omit<LayoutProps<"/[locale]">, "children">,
 ): Promise<Metadata> {
-	"use cache";
-
 	const { locale } = await props.params;
 
 	const t = await getTranslations({

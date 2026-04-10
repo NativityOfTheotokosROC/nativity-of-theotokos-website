@@ -6,21 +6,6 @@ import { errorPageVIInterface } from "@/src/lib/model-implementation/error-page"
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
 import { useContext, useEffect } from "react";
 
-// export async function generateMetadata({
-// 	params,
-// }: LayoutProps<"/[locale]">): Promise<Metadata> {
-// 	"use cache";
-// 	const { locale } = await params;
-// 	const t = await getTranslations({
-// 		locale: hasLocale(routing.locales, locale) ? locale : "en",
-// 		namespace: "error",
-// 	});
-
-// 	return {
-// 		title: t("metaTitle"),
-// 	};
-// }
-
 export default function Page({
 	error,
 }: {

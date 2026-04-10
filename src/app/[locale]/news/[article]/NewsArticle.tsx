@@ -1,3 +1,5 @@
+"use cache";
+
 import ShareButton from "@/src/lib/component/share-button/ShareButton";
 import SocialLink from "@/src/lib/component/social-link/SocialLink";
 import { NewsArticleModel } from "@/src/lib/model/news-article";
@@ -11,8 +13,6 @@ import Link from "next/link";
 import { locale as rootLocale } from "next/root-params";
 
 const NewsArticle = async function ({ model }) {
-	"use cache";
-
 	const { article, permalink } = model.modelView;
 	const { title, author, articleImage, dateCreated, dateUpdated, body } =
 		article;

@@ -1,3 +1,5 @@
+"use cache";
+
 import NotFoundPage from "@/src/lib/component/page/not-found/NotFound";
 import ViewLoadingSkeleton from "@/src/lib/component/view-loading-skeleton/ViewLoadingSkeleton";
 import { newReadonlyModel } from "@mvc-react/mvc";
@@ -7,8 +9,6 @@ import { routing } from "@/src/i18n/routing";
 import { hasLocale } from "next-intl";
 
 export default async function NotFound() {
-	"use cache";
-
 	const locale = await rootLocale();
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 

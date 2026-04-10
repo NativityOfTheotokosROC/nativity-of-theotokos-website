@@ -13,6 +13,11 @@ import { ImagePlaceholder } from "@grod56/placeholder";
 export async function getAllArticles(
 	language: Language,
 ): Promise<NewsArticle[]> {
+	"use cache";
+
+	cacheLife("hours");
+	cacheTag("bulletin_articles");
+
 	const articles: NewsArticle[] = await prisma.article
 		.findMany({
 			include: {
