@@ -29,11 +29,9 @@ export default async function NotFound() {
 						locale={language}
 						messages={messages}
 					>
-						<ClientProviders>
-							<NotFoundPage
-								model={newReadonlyModel({ language })}
-							/>
-						</ClientProviders>
+						<NotFoundPage
+							model={newReadonlyModel({ language })}
+						/>
 					</NextIntlClientProvider>
 				</Suspense>
 			</body>
