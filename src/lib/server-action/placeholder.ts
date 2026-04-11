@@ -4,22 +4,23 @@ import {
 	ImagePlaceholder,
 	getPlaceholder as generatePlaceholder,
 } from "@grod56/placeholder";
+import { cacheLife, cacheTag } from "next/cache";
 import { getBaseURL } from "../server-action/miscellaneous";
 import prisma from "../third-party/prisma";
-import { unstable_cache } from "next/cache";
 
 const baseUrl = await getBaseURL();
 
-export const getPlaceholder = unstable_cache(
-	async (imageSource: string) => {
-		const result = await findPlaceholder(imageSource);
-		if (result) return result;
-		const placeholder = await generatePlaceholder(imageSource);
-		await setPlaceholder(imageSource, placeholder);
-		return placeholder;
-	},
-	["image_placeholder"],
-);
+export async function getPlaceholder(imageSource: string) {
+	"use cache:remote";
+	cacheTag("image_placeholder");
+	cacheLife("weeks");
+
+	const result = await findPlaceholder(imageSource);
+	if (result) return result;
+	const placeholder = await generatePlaceholder(imageSource);
+	await setPlaceholder(imageSource, placeholder);
+	return placeholder;
+}
 
 async function findPlaceholder(src: string) {
 	let processedSrc;

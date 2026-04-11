@@ -1,11 +1,11 @@
 "use server";
 
-import { NavigationUserDetails } from "../model/user-navigation-widget";
 import prisma from "../third-party/prisma";
 import { Role } from "../type/general";
+import { NavigationUserInformation } from "../utility/user";
 import { getUser } from "./auth";
 
-export async function getNavigationUserDetails() {
+export async function getNavigationUserInformation(): Promise<NavigationUserInformation> {
 	const user = await getUser();
 	if (!user) return null;
 	const roleRecords = await prisma.admin.findMany({
@@ -25,5 +25,5 @@ export async function getNavigationUserDetails() {
 		name: user.name,
 		avatar: { source: user.image! },
 		roles,
-	} satisfies NavigationUserDetails;
+	};
 }
