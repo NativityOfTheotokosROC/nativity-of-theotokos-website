@@ -13,7 +13,7 @@ export type NavigationUserInformation = {
 export function useNavigationUserInformation(
 	queryClient?: QueryClient,
 ): NavigationUserInformation | "pending" {
-	const query = useQuery(
+	const { data } = useQuery(
 		{
 			queryKey: ["navigation-user-information"],
 			queryFn: getNavigationUserDetails,
@@ -22,5 +22,5 @@ export function useNavigationUserInformation(
 		},
 		queryClient,
 	);
-	return query.data == undefined ? "pending" : query.data;
+	return data == undefined ? "pending" : data;
 }
