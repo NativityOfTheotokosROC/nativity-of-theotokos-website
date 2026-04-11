@@ -3,51 +3,29 @@
 import LogoIcon from "@/public/assets/logo-icon.svg";
 import { useRouter } from "@/src/i18n/navigation";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import {
-	InitializedModel,
-	newReadonlyModel,
-	ReadonlyModel,
-} from "@mvc-react/mvc";
+import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { TextAlignJustifyIcon as MenuIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useMediaQuery } from "react-responsive";
 import { useNavigationDrawer } from "../../model-implementation/navigation-drawer";
-import { getUserActions } from "../../model-implementation/user-action";
 import { HeaderModel } from "../../model/header";
-import { UserNavigationWidgetModel } from "../../model/user-navigation-widget";
 import { georgia } from "../../third-party/fonts";
 import { Navlink } from "../../type/general";
+import { usePageLoadingBarRouter } from "../../utility/page-loading-bar";
 import NavigationDrawer from "../navigation-drawer/NavigationDrawer";
 import { Link } from "../page-loading-bar/PageLoadingBar";
-import { usePageLoadingBarRouter } from "../../utility/page-loading-bar";
 import UserNavigationWidget from "../user-navigation-widget/UserNavigationWidget";
 import "./header.css";
-import { use, useContext } from "react";
-import { PageLoadingBarContext } from "../page-loading-bar/PageLoadingBar";
-import { getNavigationUserDetails } from "../../server-action/user";
 
 const Header = function ({ model }) {
+	const { navlinks, hasUserNavigationWidget } = model.modelView;
 	const router = usePageLoadingBarRouter(useRouter);
-	const pageLoadingBar = useContext(PageLoadingBarContext);
-	const { navlinks } = model.modelView;
-	const userDetails = use(getNavigationUserDetails());
 	const isLargeScreen = useMediaQuery({ minWidth: 1024 });
 	const isPortrait = useMediaQuery({ orientation: "portrait" });
-	const userActions =
-		userDetails &&
-		getUserActions(userDetails.roles, router, pageLoadingBar);
-	const navigationDrawer = useNavigationDrawer({
+	const navigationDrawer = useNavigationDrawer(
 		navlinks,
-		userDetails: userDetails
-			? {
-					user: {
-						name: userDetails.name,
-						avatar: userDetails.avatar,
-					},
-					userActions: userActions!,
-				}
-			: null,
-	});
+		hasUserNavigationWidget,
+	);
 	const t = useTranslations("header");
 	const tNonDescriptive = useTranslations("nonDescriptive");
 	const locale = useLocale();
@@ -93,16 +71,7 @@ const Header = function ({ model }) {
 								type: "horizontal",
 								menuItems: {
 									navlinks,
-									userNavigationWidget: newReadonlyModel({
-										userDetails: userDetails
-											? {
-													user: userDetails,
-													userActions: userActions!,
-												}
-											: null,
-										style: "dropdown",
-										variant: "abbreviated",
-									}),
+									hasUserNavigationWidget,
 								},
 							})}
 						/>
@@ -128,7 +97,7 @@ const Header = function ({ model }) {
 const NavMenu = function ({ model }) {
 	const {
 		type,
-		menuItems: { navlinks, userNavigationWidget },
+		menuItems: { navlinks, hasUserNavigationWidget },
 	} = model.modelView;
 
 	return (
@@ -147,20 +116,28 @@ const NavMenu = function ({ model }) {
 							</Link>
 						)),
 					]}
-					{userNavigationWidget.modelView.userDetails && (
-						<UserNavigationWidget model={userNavigationWidget} />
+					{hasUserNavigationWidget && (
+						<UserNavigationWidget
+							model={newReadonlyModel({
+								style: "dropdown",
+								variant: "abbreviated",
+							})}
+						/>
 					)}
 				</div>
 			)}
 			{type == "vertical" && (
 				<div className="flex flex-col">
-					{userNavigationWidget.modelView.userDetails && (
-						<div className="bg-gray-800 [&_.dropdown-button]:px-6 *:[&_.dropdown-button]:w-full *:[&_.dropdown-button]:py-4">
+					<div className="bg-gray-800 [&_.dropdown-button]:px-6 *:[&_.dropdown-button]:w-full *:[&_.dropdown-button]:py-4">
+						{hasUserNavigationWidget && (
 							<UserNavigationWidget
-								model={userNavigationWidget}
+								model={newReadonlyModel({
+									style: "accordion",
+									variant: "full",
+								})}
 							/>
-						</div>
-					)}
+						)}
+					</div>
 					{navlinks.map((navlink, index) => (
 						<Link
 							key={index}
@@ -180,7 +157,7 @@ const NavMenu = function ({ model }) {
 		type: "horizontal" | "vertical";
 		menuItems: {
 			navlinks: Navlink[];
-			userNavigationWidget: InitializedModel<UserNavigationWidgetModel>;
+			hasUserNavigationWidget: boolean;
 		};
 	}>
 >;

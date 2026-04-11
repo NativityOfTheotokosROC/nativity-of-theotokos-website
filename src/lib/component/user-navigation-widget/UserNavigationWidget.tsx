@@ -26,6 +26,12 @@ import {
 	UserNavigationWidgetVariant,
 } from "../../model/user-navigation-widget";
 import UserAction from "../user-action/UserAction";
+import { useNavigationUserDetails } from "../../utility/user-navigation-widget";
+import { Suspense, useContext } from "react";
+import { PageLoadingBarContext } from "../page-loading-bar/PageLoadingBar";
+import { usePageLoadingBarRouter } from "../../utility/page-loading-bar";
+import { useRouter } from "@/src/i18n/navigation";
+import { getUserActions } from "../../model-implementation/user-action";
 
 type WidgetVariantModel = ReadonlyModel<{
 	user: NavigationUser;
@@ -40,12 +46,12 @@ const UserDisplay = function ({ model }) {
 		case "abbreviated": {
 			return (
 				<div
-					className="user-pane w-full flex gap-3 items-center"
+					className="user-pane flex w-full items-center gap-3"
 					title={greeting}
 				>
-					<div className="avatar-frame flex items-stretch justify-stretch size-10 min-w-10 rounded-lg overflow-clip border border-white/15">
+					<div className="avatar-frame flex size-10 min-w-10 items-stretch justify-stretch overflow-clip rounded-lg border border-white/15">
 						<Image
-							className="grow object-center object-cover"
+							className="grow object-cover object-center"
 							alt={user.avatar.about ?? user.name}
 							width={40}
 							height={40}
@@ -57,7 +63,7 @@ const UserDisplay = function ({ model }) {
 		}
 		case "no_avatar": {
 			return (
-				<div className="user-pane w-full flex gap-3 items-center">
+				<div className="user-pane flex w-full items-center gap-3">
 					<span
 						className={`greeting max-w-40 wrap-break-word hyphens-auto`}
 					>
@@ -68,17 +74,16 @@ const UserDisplay = function ({ model }) {
 		}
 		case "full": {
 			return (
-				<div className="user-pane w-full flex gap-3 items-center">
-					<div className="avatar-frame flex items-stretch justify-stretch size-10 min-w-10 rounded-lg overflow-clip border border-white/15">
+				<div className="user-pane flex w-full items-center gap-3">
+					<div className="avatar-frame flex size-10 min-w-10 items-stretch justify-stretch overflow-clip rounded-lg border border-white/15">
 						<Image
-							className="grow object-center object-cover"
+							className="grow object-cover object-center"
 							alt={user.avatar.about ?? user.name}
 							width={40}
 							height={40}
 							src={user.avatar.source}
 						/>
 					</div>
-
 					<span
 						className={`greeting max-w-30 wrap-break-word hyphens-auto`}
 					>
@@ -100,7 +105,7 @@ const DropdownButtonContent = function ({ model, children }) {
 		<>
 			{children}
 			<DropdownIcon
-				className={`min-w-fit transition ease-out duration-200 ${isDrawn && "-rotate-180"}`}
+				className={`min-w-fit transition duration-200 ease-out ${isDrawn && "-rotate-180"}`}
 				strokeWidth={1.75}
 			/>
 		</>
@@ -108,11 +113,66 @@ const DropdownButtonContent = function ({ model, children }) {
 } satisfies ModeledContainerComponent<DropdownButtonModel>;
 
 const UserNavigationWidget = function ({ model }) {
+	const { variant } = model.modelView;
+	return (
+		<Suspense
+			fallback={
+				<UserNavigationWidgetSkeleton
+					model={newReadonlyModel({ variant })}
+				/>
+			}
+		>
+			<UserNavigationWidgetCore model={model} />
+		</Suspense>
+	);
+} satisfies ModeledVoidComponent<InitializedModel<UserNavigationWidgetModel>>;
+
+const UserNavigationWidgetSkeleton = function ({ model }) {
+	const { variant } = model.modelView;
+
+	switch (variant) {
+		case "no_avatar":
+			return <div className={`w-30`} />;
+		case "abbreviated":
+			return (
+				<div className="flex w-full animate-pulse items-center gap-3 *:bg-white/20">
+					<div className="size-10 min-w-10 overflow-clip rounded-lg" />
+				</div>
+			);
+		case "full":
+			return (
+				<div className="flex w-full animate-pulse items-center gap-3 *:bg-white/20">
+					<div className="size-10 min-w-10 overflow-clip rounded-lg" />
+					<div className={`w-30`} />
+				</div>
+			);
+	}
+} satisfies ModeledVoidComponent<
+	ReadonlyModel<{ variant: UserNavigationWidgetVariant }>
+>;
+
+const UserNavigationWidgetCore = function ({ model }) {
 	const {
-		modelView: { userDetails, variant, style },
+		modelView: { variant, style },
 	} = model;
 
 	const t = useTranslations("userNavigation");
+	const pageLoadingBar = useContext(PageLoadingBarContext);
+	const router = usePageLoadingBarRouter(useRouter);
+	const navigationUserInformation = useNavigationUserDetails();
+	const userActions =
+		navigationUserInformation &&
+		getUserActions(navigationUserInformation.roles, router, pageLoadingBar);
+	const userDetails = navigationUserInformation
+		? {
+				user: {
+					name: navigationUserInformation.name,
+					avatar: navigationUserInformation.avatar,
+				},
+				userActions: userActions!,
+			}
+		: null;
+
 	const greeting =
 		userDetails &&
 		`${t("greeting")}, ${userDetails.user.name.split(" ")[0]}`;
@@ -126,7 +186,7 @@ const UserNavigationWidget = function ({ model }) {
 							{({ open }) => (
 								<>
 									<DisclosureButton
-										className={`dropdown-button w-full flex justify-between items-center text-left gap-3`}
+										className={`dropdown-button flex w-full items-center justify-between gap-3 text-left`}
 									>
 										<DropdownButtonContent
 											model={newReadonlyModel({
@@ -144,7 +204,7 @@ const UserNavigationWidget = function ({ model }) {
 									</DisclosureButton>
 									<DisclosurePanel
 										transition
-										className="flex flex-col py-2 *:w-full *:px-6 md:*:px-8 *:py-4 *:text-left *:uppercase *:hover:text-[#dcb042] *:active:bg-gray-950 *:active:text-[#dcb042] origin-top duration-300 ease-out data-closed:opacity-0 data-closed:-translate-y-4 data-closed:h-1/2 border-t border-white/12 bg-gray-800"
+										className="flex origin-top flex-col border-t border-white/12 bg-gray-800 py-2 duration-300 ease-out *:w-full *:px-6 *:py-4 *:text-left *:uppercase *:hover:text-[#dcb042] *:active:bg-gray-950 *:active:text-[#dcb042] data-closed:h-1/2 data-closed:-translate-y-4 data-closed:opacity-0 md:*:px-8"
 									>
 										{[
 											...userDetails.userActions.map(
@@ -169,7 +229,7 @@ const UserNavigationWidget = function ({ model }) {
 							{({ open, close }) => (
 								<>
 									<MenuButton
-										className={`dropdown-button w-full flex justify-between items-center text-left gap-3 outline-none`}
+										className={`dropdown-button flex w-full items-center justify-between gap-3 text-left outline-none`}
 									>
 										<DropdownButtonContent
 											model={newReadonlyModel({
@@ -188,7 +248,7 @@ const UserNavigationWidget = function ({ model }) {
 									<MenuItems
 										anchor="bottom end"
 										transition
-										className="flex flex-col w-40 rounded-lg border bg-gray-800 border-white/15 focus:outline-none z-21 transition origin-top-right duration-200 ease-out [--anchor-gap:--spacing(1)] data-closed:scale-92 data-closed:opacity-0 *:w-full *:px-6 *:py-4 *:uppercase *:text-left *:hover:bg-gray-900/50 *:hover:text-[#dcb042] *:active:bg-gray-950 *:active:text-[#dcb042]"
+										className="z-21 flex w-40 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-800 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:px-6 *:py-4 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#dcb042] focus:outline-none *:active:bg-gray-950 *:active:text-[#dcb042] data-closed:scale-92 data-closed:opacity-0"
 									>
 										{[
 											...userDetails.userActions.map(

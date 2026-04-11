@@ -24,10 +24,7 @@ type MenuModel = InteractiveModel<MenuModelView, MenuModelInteraction>;
 
 const NavigationDrawer = function ({ model }) {
 	const { modelView, interact } = model;
-	const {
-		isDrawn,
-		navMenuItems: { navlinks, userDetails },
-	} = modelView;
+	const { isDrawn, navlinks, hasUserNavigationWidget } = modelView;
 
 	return (
 		<SidebarDrawer
@@ -46,26 +43,10 @@ const NavigationDrawer = function ({ model }) {
 			}}
 		>
 			<div className="flex flex-col">
-				{userDetails && (
-					<div className="[&_.dropdown-button]:px-6 md:[&_.dropdown-button]:px-8 *:[&_.dropdown-button]:py-4 *:[&_.dropdown-button]:w-full *:[&_.dropdown-button]:bg-gray-800">
+				{hasUserNavigationWidget && (
+					<div className="[&_.dropdown-button]:px-6 *:[&_.dropdown-button]:w-full *:[&_.dropdown-button]:bg-gray-800 *:[&_.dropdown-button]:py-4 md:[&_.dropdown-button]:px-8">
 						<UserNavigationWidget
 							model={newReadonlyModel({
-								userDetails: {
-									...userDetails,
-									userActions: userDetails.userActions.map(
-										userAction => ({
-											modelView: {
-												...userAction.modelView,
-												action: async () => {
-													await interact({
-														type: "CLOSE",
-													});
-													userAction.modelView.action();
-												},
-											},
-										}),
-									),
-								},
 								style: "accordion",
 								variant: "full",
 							})}
@@ -75,7 +56,7 @@ const NavigationDrawer = function ({ model }) {
 				{navlinks.map((navlink, index) => (
 					<Link
 						key={index}
-						className="block navlink uppercase no-underline px-6 py-4 md:px-8 active:bg-gray-950 active:text-[#DCB042] hover:text-[#DCB042] transition ease-out duration-200"
+						className="navlink block px-6 py-4 uppercase no-underline transition duration-200 ease-out hover:text-[#DCB042] active:bg-gray-950 active:text-[#DCB042] md:px-8"
 						href={navlink.link}
 						replace={navlink.isReplaceable}
 						onClick={async () => await interact({ type: "CLOSE" })}
@@ -107,11 +88,11 @@ const SidebarDrawer = function ({ model, children }) {
 					className="fixed inset-0 bg-black/50 duration-400 ease-out data-closed:opacity-0"
 				/>
 				<DialogPanel
-					className={`sidebar-drawer flex flex-col h-dvh gap-4 w-60 max-w-[80vw] md:w-80 pb-3 overflow-y-auto origin-right bg-gray-900/99 border-l border-white/12 text-white focus:outline-none duration-300 ease-out data-closed:translate-x-1/4 data-closed:opacity-0 z-13`}
+					className={`sidebar-drawer z-13 flex h-dvh w-60 max-w-[80vw] origin-right flex-col gap-4 overflow-y-auto border-l border-white/12 bg-gray-900/99 pb-3 text-white duration-300 ease-out focus:outline-none data-closed:translate-x-1/4 data-closed:opacity-0 md:w-80`}
 					transition
 				>
-					<SidebarDecoration className="fill-white/60 mt-2 px-3 min-h-20 h-20 max-w-full" />
-					<hr className="w-3/4 opacity-50 mx-auto mt-3" />
+					<SidebarDecoration className="mt-2 h-20 min-h-20 max-w-full fill-white/60 px-3" />
+					<hr className="mx-auto mt-3 w-3/4 opacity-50" />
 					{/* TODO: To be revised */}
 					{children}
 				</DialogPanel>

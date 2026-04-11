@@ -124,6 +124,7 @@ const LocaleLayout = async function ({ model, children }) {
 			<Header
 				model={newReadonlyModel({
 					navlinks,
+					hasUserNavigationWidget: true,
 				})}
 			/>
 			{children}
