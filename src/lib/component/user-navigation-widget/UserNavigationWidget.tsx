@@ -1,3 +1,4 @@
+import { useRouter } from "@/src/i18n/navigation";
 import {
 	Disclosure,
 	DisclosureButton,
@@ -19,19 +20,18 @@ import {
 import { ChevronDown as DropdownIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { Suspense, useContext } from "react";
 import { Fragment } from "react/jsx-runtime";
+import { getUserActions } from "../../model-implementation/user-action";
 import {
 	NavigationUser,
 	UserNavigationWidgetModel,
 	UserNavigationWidgetVariant,
 } from "../../model/user-navigation-widget";
-import UserAction from "../user-action/UserAction";
-import { useNavigationUserDetails } from "../../utility/user-navigation-widget";
-import { Suspense, useContext } from "react";
-import { PageLoadingBarContext } from "../page-loading-bar/PageLoadingBar";
 import { usePageLoadingBarRouter } from "../../utility/page-loading-bar";
-import { useRouter } from "@/src/i18n/navigation";
-import { getUserActions } from "../../model-implementation/user-action";
+import { NavigationUserInformationContext } from "../../utility/user";
+import { PageLoadingBarContext } from "../page-loading-bar/PageLoadingBar";
+import UserAction from "../user-action/UserAction";
 
 type WidgetVariantModel = ReadonlyModel<{
 	user: NavigationUser;
@@ -160,19 +160,28 @@ export const UserNavigationWidgetCore = function ({ model }) {
 	const t = useTranslations("userNavigation");
 	const pageLoadingBar = useContext(PageLoadingBarContext);
 	const router = usePageLoadingBarRouter(useRouter);
-	const navigationUserInformation = useNavigationUserDetails();
+	const navigationUserInformation = useContext(
+		NavigationUserInformationContext,
+	);
 	const userActions =
-		navigationUserInformation &&
-		getUserActions(navigationUserInformation.roles, router, pageLoadingBar);
-	const userDetails = navigationUserInformation
-		? {
-				user: {
-					name: navigationUserInformation.name,
-					avatar: navigationUserInformation.avatar,
-				},
-				userActions: userActions!,
-			}
-		: null;
+		navigationUserInformation != null &&
+		navigationUserInformation != "pending"
+			? getUserActions(
+					navigationUserInformation.roles,
+					router,
+					pageLoadingBar,
+				)
+			: null;
+	const userDetails =
+		navigationUserInformation && navigationUserInformation != "pending"
+			? {
+					user: {
+						name: navigationUserInformation.name,
+						avatar: navigationUserInformation.avatar,
+					},
+					userActions: userActions!,
+				}
+			: null;
 
 	const greeting =
 		userDetails &&
@@ -180,112 +189,112 @@ export const UserNavigationWidgetCore = function ({ model }) {
 
 	return userDetails ? (
 		<div className="user-navigation">
-			{userDetails && (
-				<>
-					{style == "accordion" && (
-						<Disclosure>
-							{({ open }) => (
-								<>
-									<DisclosureButton
-										className={`dropdown-button flex w-full items-center justify-between gap-3 text-left`}
+			<>
+				{style == "accordion" && (
+					<Disclosure>
+						{({ open }) => (
+							<>
+								<DisclosureButton
+									className={`dropdown-button flex w-full items-center justify-between gap-3 text-left`}
+								>
+									<DropdownButtonContent
+										model={newReadonlyModel({
+											isDrawn: open,
+										})}
 									>
-										<DropdownButtonContent
+										<UserDisplay
 											model={newReadonlyModel({
-												isDrawn: open,
+												user: userDetails.user,
+												variant,
+												greeting: greeting!,
 											})}
-										>
-											<UserDisplay
-												model={newReadonlyModel({
-													user: userDetails.user,
-													variant,
-													greeting: greeting!,
-												})}
-											/>
-										</DropdownButtonContent>
-									</DisclosureButton>
-									<DisclosurePanel
-										transition
-										className="flex origin-top flex-col border-t border-white/12 bg-gray-800 py-2 duration-300 ease-out *:w-full *:px-6 *:py-4 *:text-left *:uppercase *:hover:text-[#dcb042] *:active:bg-gray-950 *:active:text-[#dcb042] data-closed:h-1/2 data-closed:-translate-y-4 data-closed:opacity-0 md:*:px-8"
+										/>
+									</DropdownButtonContent>
+								</DisclosureButton>
+								<DisclosurePanel
+									transition
+									className="flex origin-top flex-col border-t border-white/12 bg-gray-800 py-2 duration-300 ease-out *:w-full *:px-6 *:py-4 *:text-left *:uppercase *:hover:text-[#dcb042] *:active:bg-gray-950 *:active:text-[#dcb042] data-closed:h-1/2 data-closed:-translate-y-4 data-closed:opacity-0 md:*:px-8"
+								>
+									{[
+										...userDetails.userActions.map(
+											userAction => (
+												<UserAction
+													key={
+														userAction.modelView
+															.name
+													}
+													model={userAction}
+												/>
+											),
+										),
+									]}
+								</DisclosurePanel>
+							</>
+						)}
+					</Disclosure>
+				)}
+				{style == "dropdown" && (
+					<Menu>
+						{({ open, close }) => (
+							<>
+								<MenuButton
+									className={`dropdown-button flex w-full items-center justify-between gap-3 text-left outline-none`}
+								>
+									<DropdownButtonContent
+										model={newReadonlyModel({
+											isDrawn: open,
+										})}
 									>
-										{[
-											...userDetails.userActions.map(
-												userAction => (
+										<UserDisplay
+											model={newReadonlyModel({
+												user: userDetails.user,
+												variant,
+												greeting: greeting!,
+											})}
+										/>
+									</DropdownButtonContent>
+								</MenuButton>
+								<MenuItems
+									anchor="bottom end"
+									transition
+									className="z-21 flex w-40 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-800 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:px-6 *:py-4 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#dcb042] focus:outline-none *:active:bg-gray-950 *:active:text-[#dcb042] data-closed:scale-92 data-closed:opacity-0"
+								>
+									{[
+										...userDetails.userActions.map(
+											userAction => (
+												<MenuItem
+													key={
+														userAction.modelView
+															.name
+													}
+													as={Fragment}
+												>
 													<UserAction
-														key={
-															userAction.modelView
-																.name
-														}
-														model={userAction}
-													/>
-												),
-											),
-										]}
-									</DisclosurePanel>
-								</>
-							)}
-						</Disclosure>
-					)}
-					{style == "dropdown" && (
-						<Menu>
-							{({ open, close }) => (
-								<>
-									<MenuButton
-										className={`dropdown-button flex w-full items-center justify-between gap-3 text-left outline-none`}
-									>
-										<DropdownButtonContent
-											model={newReadonlyModel({
-												isDrawn: open,
-											})}
-										>
-											<UserDisplay
-												model={newReadonlyModel({
-													user: userDetails.user,
-													variant,
-													greeting: greeting!,
-												})}
-											/>
-										</DropdownButtonContent>
-									</MenuButton>
-									<MenuItems
-										anchor="bottom end"
-										transition
-										className="z-21 flex w-40 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-800 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:px-6 *:py-4 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#dcb042] focus:outline-none *:active:bg-gray-950 *:active:text-[#dcb042] data-closed:scale-92 data-closed:opacity-0"
-									>
-										{[
-											...userDetails.userActions.map(
-												userAction => (
-													<MenuItem
-														key={
-															userAction.modelView
-																.name
-														}
-														as={Fragment}
-													>
-														<UserAction
-															model={{
-																modelView: {
-																	name: userAction
-																		.modelView
-																		.name,
-																	action: async () => {
-																		close();
-																		userAction.modelView.action();
-																	},
+														model={{
+															modelView: {
+																name: userAction
+																	.modelView
+																	.name,
+																action: async () => {
+																	close();
+																	userAction.modelView.action();
 																},
-															}}
-														/>
-													</MenuItem>
-												),
+															},
+														}}
+													/>
+												</MenuItem>
 											),
-										]}
-									</MenuItems>
-								</>
-							)}
-						</Menu>
-					)}
-				</>
-			)}
+										),
+									]}
+								</MenuItems>
+							</>
+						)}
+					</Menu>
+				)}
+			</>
 		</div>
+	) : navigationUserInformation == "pending" ? (
+		<UserNavigationWidgetSkeleton model={newReadonlyModel({ variant })} />
 	) : (
 		<></>
 	);

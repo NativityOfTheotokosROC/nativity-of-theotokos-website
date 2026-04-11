@@ -2,7 +2,6 @@ import Footer from "@/src/lib/component/footer/Footer";
 import Header from "@/src/lib/component/header/Header";
 import LanguageSwitcher from "@/src/lib/component/language-switcher/LanguageSwitcher";
 import PageLoadingBar from "@/src/lib/component/page-loading-bar/PageLoadingBar";
-import ViewLoadingSkeleton from "@/src/lib/component/view-loading-skeleton/ViewLoadingSkeleton";
 import { FooterModel } from "@/src/lib/model/footer";
 import { Language, Navlink } from "@/src/lib/type/general";
 import { ModeledContainerComponent } from "@mvc-react/components";
@@ -10,22 +9,31 @@ import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
+import LayoutLoadingSkeleton from "@/src/lib/component/layout-loading-skeleton/LayoutLoadingSkeleton";
 
-export interface LocaleLayoutModelView {
-	locale: Language;
+export interface AppLayoutModelView {
+	language: Language;
 }
 
-export type LocaleLayoutModel = ReadonlyModel<LocaleLayoutModelView>;
+export type AppLayoutModel = ReadonlyModel<AppLayoutModelView>;
 
-const LocaleLayout = async function ({ model, children }) {
-	const { locale } = model.modelView;
+const AppLayout = async function ({ model, children }) {
+	"use cache";
 
-	const tNavMenu = await getTranslations({ locale, namespace: "navMenu" });
+	const { language } = model.modelView;
+
+	const tNavMenu = await getTranslations({
+		locale: language,
+		namespace: "navMenu",
+	});
 	const tFooterVariable = await getTranslations({
-		locale,
+		locale: language,
 		namespace: "footer_variable",
 	});
-	const tLinks = await getTranslations({ locale, namespace: "links" });
+	const tLinks = await getTranslations({
+		locale: language,
+		namespace: "links",
+	});
 	const navlinks = [
 		{ link: "/", text: tNavMenu("home") },
 		{
@@ -119,7 +127,7 @@ const LocaleLayout = async function ({ model, children }) {
 	}) satisfies FooterModel;
 
 	return (
-		<Suspense fallback={<ViewLoadingSkeleton />}>
+		<Suspense fallback={<LayoutLoadingSkeleton />}>
 			<PageLoadingBar />
 			<Header
 				model={newReadonlyModel({
@@ -129,10 +137,10 @@ const LocaleLayout = async function ({ model, children }) {
 			/>
 			{children}
 			<Footer model={footer} />
-			<LanguageSwitcher model={newReadonlyModel({ locale })} />
+			<LanguageSwitcher model={newReadonlyModel({ locale: language })} />
 			<Toaster position="bottom-center" containerStyle={{ bottom: 25 }} />
 		</Suspense>
 	);
-} satisfies ModeledContainerComponent<LocaleLayoutModel>;
+} satisfies ModeledContainerComponent<AppLayoutModel>;
 
-export default LocaleLayout;
+export default AppLayout;
