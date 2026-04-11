@@ -115,6 +115,7 @@ const DropdownButtonContent = function ({ model, children }) {
 const UserNavigationWidget = function ({ model }) {
 	const { variant } = model.modelView;
 	return (
+		// HACK: Hacky
 		<Suspense
 			fallback={
 				<UserNavigationWidgetSkeleton
@@ -127,7 +128,7 @@ const UserNavigationWidget = function ({ model }) {
 	);
 } satisfies ModeledVoidComponent<InitializedModel<UserNavigationWidgetModel>>;
 
-const UserNavigationWidgetSkeleton = function ({ model }) {
+export const UserNavigationWidgetSkeleton = function ({ model }) {
 	const { variant } = model.modelView;
 
 	switch (variant) {
@@ -151,7 +152,7 @@ const UserNavigationWidgetSkeleton = function ({ model }) {
 	ReadonlyModel<{ variant: UserNavigationWidgetVariant }>
 >;
 
-const UserNavigationWidgetCore = function ({ model }) {
+export const UserNavigationWidgetCore = function ({ model }) {
 	const {
 		modelView: { variant, style },
 	} = model;

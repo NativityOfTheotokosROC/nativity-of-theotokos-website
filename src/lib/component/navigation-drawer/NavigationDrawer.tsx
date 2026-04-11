@@ -15,8 +15,11 @@ import {
 	NavigationDrawerModelView,
 } from "../../model/navigation-drawer";
 import { Link } from "../page-loading-bar/PageLoadingBar";
-import UserNavigationWidget from "../user-navigation-widget/UserNavigationWidget";
+import UserNavigationWidget, {
+	UserNavigationWidgetSkeleton,
+} from "../user-navigation-widget/UserNavigationWidget";
 import "./navigation-drawer.css";
+import { Suspense } from "react";
 
 type MenuModelView = Pick<NavigationDrawerModelView, "isDrawn">;
 type MenuModelInteraction = ModelInteraction<"CLOSE_MENU">;
@@ -45,12 +48,22 @@ const NavigationDrawer = function ({ model }) {
 			<div className="flex flex-col">
 				{hasUserNavigationWidget && (
 					<div className="[&_.dropdown-button]:px-6 *:[&_.dropdown-button]:w-full *:[&_.dropdown-button]:bg-gray-800 *:[&_.dropdown-button]:py-4 md:[&_.dropdown-button]:px-8">
-						<UserNavigationWidget
-							model={newReadonlyModel({
-								style: "accordion",
-								variant: "full",
-							})}
-						/>
+						<Suspense
+							fallback={
+								<UserNavigationWidgetSkeleton
+									model={newReadonlyModel({
+										variant: "full",
+									})}
+								/>
+							}
+						>
+							<UserNavigationWidget
+								model={newReadonlyModel({
+									style: "accordion",
+									variant: "full",
+								})}
+							/>
+						</Suspense>
 					</div>
 				)}
 				{navlinks.map((navlink, index) => (

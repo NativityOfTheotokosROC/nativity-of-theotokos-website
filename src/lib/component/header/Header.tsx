@@ -14,8 +14,11 @@ import { Navlink } from "../../type/general";
 import { usePageLoadingBarRouter } from "../../utility/page-loading-bar";
 import NavigationDrawer from "../navigation-drawer/NavigationDrawer";
 import { Link } from "../page-loading-bar/PageLoadingBar";
-import UserNavigationWidget from "../user-navigation-widget/UserNavigationWidget";
+import UserNavigationWidget, {
+	UserNavigationWidgetSkeleton,
+} from "../user-navigation-widget/UserNavigationWidget";
 import "./header.css";
+import { Suspense } from "react";
 
 const Header = function ({ model }) {
 	const { navlinks, hasUserNavigationWidget } = model.modelView;
@@ -117,12 +120,22 @@ const NavMenu = function ({ model }) {
 						)),
 					]}
 					{hasUserNavigationWidget && (
-						<UserNavigationWidget
-							model={newReadonlyModel({
-								style: "dropdown",
-								variant: "abbreviated",
-							})}
-						/>
+						<Suspense
+							fallback={
+								<UserNavigationWidgetSkeleton
+									model={newReadonlyModel({
+										variant: "abbreviated",
+									})}
+								/>
+							}
+						>
+							<UserNavigationWidget
+								model={newReadonlyModel({
+									style: "dropdown",
+									variant: "abbreviated",
+								})}
+							/>
+						</Suspense>
 					)}
 				</div>
 			)}
