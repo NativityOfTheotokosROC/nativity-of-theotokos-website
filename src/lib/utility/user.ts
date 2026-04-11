@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { QueryClient, useQuery } from "@tanstack/react-query";
 import { createContext } from "react";
 import { getNavigationUserDetails } from "../server-action/user";
 import { Role } from "../type/general";
@@ -11,15 +11,18 @@ export type NavigationUserInformation = {
 	roles: Role[];
 } | null;
 
-export function useNavigationUserInformation():
-	| NavigationUserInformation
-	| "pending" {
-	const query = useQuery({
-		queryKey: ["navigation-user-information"],
-		queryFn: getNavigationUserDetails,
-		staleTime: Infinity,
-		gcTime: Infinity,
-	});
+export function useNavigationUserInformation(
+	queryClient?: QueryClient,
+): NavigationUserInformation | "pending" {
+	const query = useQuery(
+		{
+			queryKey: ["navigation-user-information"],
+			queryFn: getNavigationUserDetails,
+			staleTime: Infinity,
+			gcTime: Infinity,
+		},
+		queryClient,
+	);
 
 	return query.data == undefined ? "pending" : query.data;
 }
