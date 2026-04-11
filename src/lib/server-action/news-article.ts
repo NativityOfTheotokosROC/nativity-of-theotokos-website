@@ -126,8 +126,8 @@ export async function getArticle(
 ): Promise<Omit<NewsArticle, "url">> {
 	"use cache: remote";
 
+	cacheTag("bulletin_article", articleId);
 	cacheLife("days");
-	cacheTag("bulletin_article");
 	const locale = language;
 	try {
 		const article = await prisma.article.findUniqueOrThrow({
