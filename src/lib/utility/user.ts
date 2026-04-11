@@ -17,8 +17,6 @@ export function useNavigationUserInformation(
 		{
 			queryKey: ["navigation-user-information"],
 			queryFn: getNavigationUserDetails,
-			staleTime: Infinity,
-			gcTime: Infinity,
 		},
 		queryClient,
 	);
