@@ -10,15 +10,14 @@ export type NavigationUserInformation = {
 	roles: Role[];
 } | null;
 
-export function useNavigationUserInformation(
-	queryClient?: QueryClient,
-): NavigationUserInformation | "pending" {
-	const { data } = useQuery(
+export function useNavigationUserInformation(queryClient?: QueryClient) {
+	const { data, isPending, isSuccess } = useQuery(
 		{
 			queryKey: ["navigation-user-information"],
 			queryFn: getNavigationUserDetails,
 		},
 		queryClient,
 	);
-	return data == undefined ? "pending" : data;
+	if (isPending) return "pending";
+	if (isSuccess) return data satisfies NavigationUserInformation;
 }
