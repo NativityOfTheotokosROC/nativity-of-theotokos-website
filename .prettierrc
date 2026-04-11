@@ -1,5 +1,6 @@
 {
 	"useTabs": true,
 	"tabWidth": 4,
-	"arrowParens": "avoid"
+	"arrowParens": "avoid",
+	"plugins": ["prettier-plugin-tailwindcss"]
 }

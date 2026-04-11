@@ -10,6 +10,8 @@ import { redirect } from "next/navigation";
 export async function generateMetadata({
 	params,
 }: PageProps<"/[locale]/sign-in">): Promise<Metadata> {
+	"use cache";
+
 	const { locale } = await params;
 	const t = await getTranslations({
 		locale: hasLocale(routing.locales, locale) ? locale : "en",

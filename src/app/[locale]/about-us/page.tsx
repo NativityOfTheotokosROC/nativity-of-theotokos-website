@@ -3,6 +3,11 @@ import { getTranslations } from "next-intl/server";
 import Maintenance from "@/src/lib/component/page/maintenance/Maintenance";
 import { routing } from "@/src/i18n/routing";
 import { hasLocale } from "next-intl";
+import { newReadonlyModel } from "@mvc-react/mvc";
+
+export async function generateStaticParams() {
+	return [...routing.locales.map(locale => ({ locale }))];
+}
 
 export async function generateMetadata({
 	params,
@@ -20,6 +25,12 @@ export async function generateMetadata({
 	};
 }
 
-export default function Page() {
-	return <Maintenance />;
+export default async function Page({
+	params,
+}: PageProps<"/[locale]/about-us">) {
+	"use cache";
+
+	const { locale } = await params;
+	const language = hasLocale(routing.locales, locale) ? locale : "en";
+	return <Maintenance model={newReadonlyModel({ language })} />;
 }

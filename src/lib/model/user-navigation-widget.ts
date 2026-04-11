@@ -1,6 +1,5 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
 import { Image, Role, User } from "../type/general";
-import { UserActionModel } from "./user-action";
 
 export type NavigationUserDetails = Pick<User, "name"> & {
 	avatar: Pick<Image, "source" | "about">;
@@ -13,10 +12,6 @@ export type UserNavigationWidgetVariant = "full" | "no_avatar" | "abbreviated";
 export type UserNavigationWidgetStyle = "dropdown" | "accordion";
 
 export interface UserNavigationWidgetModelView {
-	userDetails: {
-		user: NavigationUser;
-		userActions: UserActionModel[];
-	} | null;
 	variant: UserNavigationWidgetVariant;
 	style: UserNavigationWidgetStyle;
 }

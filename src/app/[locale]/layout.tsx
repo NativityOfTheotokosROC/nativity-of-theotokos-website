@@ -1,5 +1,6 @@
 import "@/src/app/globals.css";
 import { routing } from "@/src/i18n/routing";
+import LayoutLoadingSkeleton from "@/src/lib/component/layout-loading-skeleton/LayoutLoadingSkeleton";
 import ClientProviders from "@/src/lib/provider/client-providers";
 import {
 	georgia,
@@ -17,8 +18,7 @@ import {
 } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import LocaleLayout from "./LocaleLayout";
-import ViewLoadingSkeleton from "@/src/lib/component/view-loading-skeleton/ViewLoadingSkeleton";
+import AppLayout from "./AppLayout";
 
 export function generateStaticParams() {
 	return [{ locale: "en" }, { locale: "ru" }];
@@ -77,25 +77,28 @@ export default async function RootLayout({
 	children,
 	params,
 }: LayoutProps<"/[locale]">) {
-	const { locale } = await params;
+	"use cache";
 
+	const { locale } = await params;
 	if (!hasLocale(routing.locales, locale)) {
 		notFound();
 	}
 	setRequestLocale(locale);
-	const messages = await getMessages({ locale }); //TODO: Fixes useTranslations for now
+	const messages = await getMessages({ locale });
 
 	return (
 		<html lang={locale} data-scroll-behavior="smooth">
 			<body
 				className={`antialiased ${googleSansFlex.variable} ${googleSans.variable} ${georgia.variable}`}
 			>
-				<Suspense fallback={<ViewLoadingSkeleton />}>
+				<Suspense fallback={<LayoutLoadingSkeleton />}>
 					<NextIntlClientProvider locale={locale} messages={messages}>
 						<ClientProviders>
-							<LocaleLayout model={newReadonlyModel({ locale })}>
+							<AppLayout
+								model={newReadonlyModel({ language: locale })}
+							>
 								{children}
-							</LocaleLayout>
+							</AppLayout>
 						</ClientProviders>
 					</NextIntlClientProvider>
 				</Suspense>

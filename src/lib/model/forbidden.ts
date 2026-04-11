@@ -1,19 +1,8 @@
-import { InteractiveModel, ModelInteraction } from "@mvc-react/mvc";
-import { Notification } from "../type/general";
-
-export type SignOutStatus =
-	| Notification<"success" | "pending">
-	| (Notification<"failed"> & { message: string });
+import { ReadonlyModel } from "@mvc-react/mvc";
+import { Path } from "../type/general";
 
 export interface ForbiddenModelView {
-	signOutStatus: SignOutStatus | null;
+	signOutEndpoint: Path;
 }
 
-export type ForbiddenModelInteraction = ModelInteraction<
-	"SIGN_OUT" | "GO_HOME"
->;
-
-export type ForbiddenModel = InteractiveModel<
-	ForbiddenModelView,
-	ForbiddenModelInteraction
->;
+export type ForbiddenModel = ReadonlyModel<ForbiddenModelView>;
