@@ -8,6 +8,7 @@ import { getDateString, getLocalTimeZone } from "../utility/date-time";
 import { getQuoteSchema } from "../validation/quote";
 import { protect } from "./auth";
 import { getEnglishTranslationHash } from "../utility/miscellaneous";
+import { revalidateTag } from "next/cache";
 
 export async function addNewQuote(payload: NewQuote) {
 	await protect({ roles: ["quotes"] });
@@ -75,24 +76,26 @@ export async function addNewQuote(payload: NewQuote) {
 				nameTranslationId: authorTranslation.id,
 			},
 		});
-		return await transaction.quote.create({
-			data: {
-				quoteTranslationId: quoteTranslation.id,
-				sourceTranslationId: sourceTranslation
-					? sourceTranslation.id
-					: null,
-				authorId: quoteAuthor.id,
-				dailyQuotes: scheduledLocalDate && {
-					connectOrCreate: {
-						where: {
-							date: scheduledLocalDate,
-						},
-						create: {
-							date: scheduledLocalDate,
+		return await transaction.quote
+			.create({
+				data: {
+					quoteTranslationId: quoteTranslation.id,
+					sourceTranslationId: sourceTranslation
+						? sourceTranslation.id
+						: null,
+					authorId: quoteAuthor.id,
+					dailyQuotes: scheduledLocalDate && {
+						connectOrCreate: {
+							where: {
+								date: scheduledLocalDate,
+							},
+							create: {
+								date: scheduledLocalDate,
+							},
 						},
 					},
 				},
-			},
-		});
+			})
+			.then(() => revalidateTag("daily-quote", "max"));
 	});
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import { createToast } from "@/src/lib/component/miscellaneous/utility";
 import Spinner from "@/src/lib/component/spinner/Spinner";
 import { NewQuoteModel } from "@/src/lib/model/new-quote";
@@ -61,10 +63,10 @@ const NewQuote = function ({ model }) {
 	}, [newQuoteNotification]);
 
 	return (
-		<main className="new-quote bg-[#FEF8F3] text-black border-t-15 border-t-[#976029]">
-			<div className="new-quote-content flex flex-col gap-6 p-8 py-9 lg:px-20 md:py-10">
+		<main className="new-quote border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black">
+			<div className="new-quote-content flex flex-col gap-6 p-8 py-9 md:py-10 lg:px-20">
 				<span
-					className={`text-[2.75rem]/tight mb-2 font-semibold md:text-black ${georgia.className}`}
+					className={`mb-2 text-[2.75rem]/tight font-semibold md:text-black ${georgia.className}`}
 				>
 					{t("title")}
 					<hr className="mt-4 mb-0 md:w-full" />
@@ -98,17 +100,17 @@ const NewQuote = function ({ model }) {
 						});
 					})}
 				>
-					<div className="flex flex-col md:w-3/4 lg:w-6/10 gap-6">
+					<div className="flex flex-col gap-6 md:w-3/4 lg:w-6/10">
 						<TabGroup className="flex flex-col gap-6">
-							<TabList className="flex gap-1 items-center">
+							<TabList className="flex items-center gap-1">
 								<Tab
-									className="flex items-center p-4 py-2 text-sm uppercase border-b-5 border-gray-300 data-selected:border-gray-900 data-hover:border-gray-600 focus:outline-none"
+									className="flex items-center border-b-5 border-gray-300 p-4 py-2 text-sm uppercase focus:outline-none data-hover:border-gray-600 data-selected:border-gray-900"
 									as={"button"}
 								>
 									{t("english")}
 								</Tab>
 								<Tab
-									className="flex items-center p-4 py-2 text-sm uppercase border-b-5 border-gray-300 data-selected:border-gray-900 data-hover:border-gray-600 focus:outline-none"
+									className="flex items-center border-b-5 border-gray-300 p-4 py-2 text-sm uppercase focus:outline-none data-hover:border-gray-600 data-selected:border-gray-900"
 									as={"button"}
 								>
 									{t("russian")}
@@ -120,7 +122,7 @@ const NewQuote = function ({ model }) {
 									unmount={false}
 								>
 									<input
-										className={`p-4 bg-white w-full rounded-lg overflow-clip border ${errors.authorEn ? "border-red-700" : "border-gray-400"}`}
+										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorEn ? "border-red-700" : "border-gray-400"}`}
 										placeholder={t("author")}
 										id="quote-author"
 										required
@@ -129,24 +131,24 @@ const NewQuote = function ({ model }) {
 										{...register("authorEn")}
 									/>
 									{errors.authorEn && (
-										<span className="text-red-700 text-sm">
+										<span className="text-sm text-red-700">
 											{errors.authorEn.message}
 										</span>
 									)}
 									<input
-										className={`p-4 bg-white w-full rounded-lg overflow-clip border ${errors.sourceEn ? "border-red-700" : "border-gray-400"}`}
+										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceEn ? "border-red-700" : "border-gray-400"}`}
 										placeholder={`${t("source")} (${t("optional")})`}
 										id="quote-source"
 										autoComplete="on"
 										{...register("sourceEn")}
 									/>
 									{errors.sourceEn && (
-										<span className="text-red-700 text-sm">
+										<span className="text-sm text-red-700">
 											{errors.sourceEn.message}
 										</span>
 									)}
 									<textarea
-										className={`p-4 bg-white w-full rounded-lg border ${errors.quoteEn ? "border-red-700" : "border-gray-400"}`}
+										className={`w-full rounded-lg border bg-white p-4 ${errors.quoteEn ? "border-red-700" : "border-gray-400"}`}
 										placeholder={t("quote")}
 										rows={5}
 										autoComplete="off"
@@ -154,7 +156,7 @@ const NewQuote = function ({ model }) {
 										{...register("quoteEn")}
 									/>
 									{errors.quoteEn && (
-										<span className="text-red-700 text-sm">
+										<span className="text-sm text-red-700">
 											{errors.quoteEn.message}
 										</span>
 									)}
@@ -164,7 +166,7 @@ const NewQuote = function ({ model }) {
 									unmount={false}
 								>
 									<input
-										className={`p-4 bg-white w-full rounded-lg overflow-clip border ${errors.authorRu ? "border-red-700" : "border-gray-400"}`}
+										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorRu ? "border-red-700" : "border-gray-400"}`}
 										placeholder={`${t("author")} (${t("optional")})`}
 										id="quote-author-ru"
 										autoCapitalize="words"
@@ -172,24 +174,24 @@ const NewQuote = function ({ model }) {
 										{...register("authorRu")}
 									/>
 									{errors.authorRu && (
-										<span className="text-red-700 text-sm">
+										<span className="text-sm text-red-700">
 											{errors.authorRu.message}
 										</span>
 									)}
 									<input
-										className={`p-4 bg-white w-full rounded-lg overflow-clip border ${errors.sourceRu ? "border-red-700" : "border-gray-400"}`}
+										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceRu ? "border-red-700" : "border-gray-400"}`}
 										placeholder={`${t("source")} (${t("optional")})`}
 										id="quote-source-ru"
 										autoComplete="on"
 										{...register("sourceRu")}
 									/>
 									{errors.sourceRu && (
-										<span className="text-red-700 text-sm">
+										<span className="text-sm text-red-700">
 											{errors.sourceRu.message}
 										</span>
 									)}
 									<textarea
-										className={`p-4 bg-white w-full rounded-lg border ${errors.quoteRu ? "border-red-700" : "border-gray-400"}`}
+										className={`w-full rounded-lg border bg-white p-4 ${errors.quoteRu ? "border-red-700" : "border-gray-400"}`}
 										placeholder={`${t("quote")} (${t("optional")})`}
 										rows={5}
 										id="quote-ru"
@@ -197,7 +199,7 @@ const NewQuote = function ({ model }) {
 										{...register("quoteRu")}
 									/>
 									{errors.quoteRu && (
-										<span className="text-red-700 text-sm">
+										<span className="text-sm text-red-700">
 											{errors.quoteRu.message}
 										</span>
 									)}
@@ -211,11 +213,11 @@ const NewQuote = function ({ model }) {
 									onChange={value => {
 										setValue("isQuoteScheduled", value);
 									}}
-									className={`group flex justify-center items-center size-6 rounded bg-white data-checked:bg-gray-900 border border-gray-400`}
+									className={`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white data-checked:bg-gray-900`}
 								>
 									<Check
 										className={
-											"size-4 hidden stroke-white group-data-checked:block"
+											"hidden size-4 stroke-white group-data-checked:block"
 										}
 									/>
 								</Checkbox>
@@ -224,7 +226,7 @@ const NewQuote = function ({ model }) {
 							{isQuoteScheduled && (
 								<>
 									<input
-										className={`p-4 bg-white w-full rounded-lg overflow-clip border ${errors.scheduledDate ? "border-red-700" : "border-gray-400"}`}
+										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.scheduledDate ? "border-red-700" : "border-gray-400"}`}
 										type="date"
 										id="scheduled-date"
 										required
@@ -232,7 +234,7 @@ const NewQuote = function ({ model }) {
 										{...register("scheduledDate")}
 									/>
 									{errors.scheduledDate && (
-										<span className="text-red-700 text-sm">
+										<span className="text-sm text-red-700">
 											{errors.scheduledDate.message}
 										</span>
 									)}
@@ -240,15 +242,15 @@ const NewQuote = function ({ model }) {
 							)}
 						</div>
 						{errors.form && (
-							<span className="text-red-700 text-sm">
+							<span className="text-sm text-red-700">
 								{errors.form.message}
 							</span>
 						)}
-						<hr className="w-full mt-1" />
-						<div className="flex mt-1 gap-3 justify-start w-full">
+						<hr className="mt-1 w-full" />
+						<div className="mt-1 flex w-full justify-start gap-3">
 							<button
 								type="button"
-								className="bg-[#513433] text-white p-4 min-w-[8em] w-fit max-w-1/2 rounded-lg hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
+								className="w-fit max-w-1/2 min-w-[8em] rounded-lg bg-[#513433] p-4 text-white hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
 								onClick={() => {}}
 								disabled
 							>
@@ -256,7 +258,7 @@ const NewQuote = function ({ model }) {
 							</button>
 							<button
 								type="submit"
-								className="flex justify-center items-center bg-[#513433] text-white p-4 min-w-[8em] w-fit max-w-1/2 rounded-lg hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
+								className="flex w-fit max-w-1/2 min-w-[8em] items-center justify-center rounded-lg bg-[#513433] p-4 text-white hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
 								disabled={
 									isSubmitting ||
 									newQuoteNotification?.type == "pending"

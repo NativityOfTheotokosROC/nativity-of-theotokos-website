@@ -1,23 +1,28 @@
-"use client";
+"use cache";
+
+import ShareButton from "@/src/lib/component/share-button/ShareButton";
 import SocialLink from "@/src/lib/component/social-link/SocialLink";
 import { NewsArticleModel } from "@/src/lib/model/news-article";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { getNewsArticleDateString } from "@/src/lib/utility/date-time";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
-import { Share } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
+import { locale as rootLocale } from "next/root-params";
 
-const NewsArticle = function ({ model }) {
+const NewsArticle = async function ({ model }) {
 	const { article, permalink } = model.modelView;
 	const { title, author, articleImage, dateCreated, dateUpdated, body } =
 		article;
 	const { source, about, placeholder } = articleImage;
-	const t = useTranslations("news");
-	const tCaptions = useTranslations("imageCaptions");
-	const tNonDescriptive = useTranslations("nonDescriptive");
+	const locale = await rootLocale();
+	const t = await getTranslations({ locale, namespace: "news" });
+	const tCaptions = await getTranslations({
+		locale,
+		namespace: "imageCaptions",
+	});
 	const shareData = {
 		title,
 		url: permalink,
@@ -29,7 +34,7 @@ const NewsArticle = function ({ model }) {
 
 	return (
 		<main className="newsarticle bg-[#FEF8F3] text-black">
-			<div className="newsarticle-content flex flex-col p-8 md:p-12 gap-6 border-t-15 border-[#250203]/80">
+			<div className="newsarticle-content flex flex-col gap-6 border-t-15 border-[#250203]/80 p-8 md:p-12">
 				<div className="metadata flex flex-col gap-6 md:flex-row md:gap-x-8 lg:max-w-full">
 					<div className="headline flex flex-col gap-6 md:w-1/2">
 						<span
@@ -38,7 +43,7 @@ const NewsArticle = function ({ model }) {
 							{title}
 						</span>
 						<div className="byline flex flex-col gap-1">
-							<div className="flex items-center gap-2 -ml-8 pl-8 md:-ml-12 md:pl-12 pr-4 text-white bg-gray-900/80 min-w-3/4 w-fit max-w-[80vw] md:max-[50vw] p-2">
+							<div className="md:max-[50vw] -ml-8 flex w-fit max-w-[80vw] min-w-3/4 items-center gap-2 bg-gray-900/80 p-2 pr-4 pl-8 text-white md:-ml-12 md:pl-12">
 								<span className="author text-base md:text-xl">{`${t("author")} ${author}`}</span>
 							</div>
 							<span className="date text-lg">
@@ -50,15 +55,15 @@ const NewsArticle = function ({ model }) {
 							</span>
 						</div>
 					</div>
-					<div className="flex flex-col gap-3 w-full md:w-1/2 md:grow md:self-stretch">
-						<div className="flex justify-stretch items-stretch w-full h-[15em] rounded-lg overflow-clip md:h-fit md:max-h-[25em]">
+					<div className="flex w-full flex-col gap-3 md:w-1/2 md:grow md:self-stretch">
+						<div className="flex h-[15em] w-full items-stretch justify-stretch overflow-clip rounded-lg md:h-fit md:max-h-[25em]">
 							<Link
 								className="contents"
 								href={source}
 								target="_blank"
 							>
 								<Image
-									className="grow object-cover object-center cursor-pointer"
+									className="grow cursor-pointer object-cover object-center"
 									height={600}
 									width={600}
 									alt={about ?? tCaptions("newsArticleImage")}
@@ -76,18 +81,13 @@ const NewsArticle = function ({ model }) {
 						)}
 					</div>
 				</div>
-				<div className="flex gap-5 self-end text-sm items-end text-gray-900 **:hover:text-[#dcb042] md:mt-4">
-					{navigator.share && navigator.canShare(shareData) && (
-						<button
-							title={tNonDescriptive("share")}
-							className="flex gap-3 items-end"
-							onClick={() => {
-								navigator.share(shareData);
-							}}
-						>
-							<Share strokeWidth={1.5} />
-						</button>
-					)}
+				<div className="flex items-end gap-5 self-end text-sm text-gray-900 **:hover:text-[#dcb042] md:mt-4">
+					<ShareButton
+						model={newReadonlyModel({
+							title: shareData.title,
+							url: shareData.url,
+						})}
+					/>
 					<SocialLink
 						model={newReadonlyModel({
 							details: {
@@ -113,9 +113,9 @@ const NewsArticle = function ({ model }) {
 						})}
 					/>
 				</div>
-				<hr className="text-black/50 w-full self-center md:w-3/4" />
+				<hr className="w-full self-center text-black/50 md:w-3/4" />
 				<p
-					className={`body text-lg/relaxed md:w-55/100 md:min-w-lg self-center md:text-xl/relaxed`}
+					className={`body self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed`}
 					dangerouslySetInnerHTML={{ __html: body }}
 				/>
 			</div>

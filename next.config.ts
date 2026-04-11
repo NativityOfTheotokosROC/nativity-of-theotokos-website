@@ -76,6 +76,7 @@ const nextConfig: NextConfig = {
 	experimental: {
 		authInterrupts: true,
 		viewTransition: true,
+		rootParams: true,
 	},
 	allowedDevOrigins: ["192.168.100.7"],
 };

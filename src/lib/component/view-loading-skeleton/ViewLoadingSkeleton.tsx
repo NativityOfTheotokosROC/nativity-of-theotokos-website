@@ -1,17 +1,15 @@
-"use client";
-
 import { ViewTransition } from "react";
 import LogoIcon from "@/public/assets/logo-icon.svg";
 
 export default function ViewLoadingSkeleton() {
 	return (
-		<ViewTransition name="page-loading">
-			<div className="page-loading relative flex flex-col items-center h-fit min-h-screen w-full bg-[#fef8f3] z-12">
-				<div className="min-h-fit h-full max-h-[85vh] absolute items-center justify-center w-full">
+		<ViewTransition name="view-loading">
+			<div className="view-loading relative z-12 flex h-fit min-h-screen w-full flex-col items-center bg-[#fef8f3]">
+				<div className="absolute h-full max-h-[85vh] min-h-fit w-full items-center justify-center">
 					<div
-						className={`flex gap-3 h-full my-auto mx-auto items-center justify-center max-w-[25em] animate-pulse`}
+						className={`mx-auto my-auto flex h-full max-w-[25em] animate-pulse items-center justify-center gap-3`}
 					>
-						<LogoIcon className="size-20 object-center object-contain stroke-gray-800" />
+						<LogoIcon className="size-20 stroke-gray-800 object-contain object-center" />
 					</div>
 				</div>
 			</div>

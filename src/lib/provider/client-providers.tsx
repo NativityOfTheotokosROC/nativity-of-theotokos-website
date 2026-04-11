@@ -2,12 +2,15 @@
 import { PageLoadingBarContext } from "@/src/lib/component/page-loading-bar/PageLoadingBar";
 import { pageLoadingBarVIInterface } from "@/src/lib/model-implementation/page-loading-bar";
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 
 const Polyfills = dynamic(
 	() => import("@/src/lib/component/miscellaneous/polyfills"),
 	{ ssr: false },
 );
+
+const queryClient = new QueryClient();
 
 export const ClientProviders = function ({
 	children,
@@ -20,9 +23,11 @@ export const ClientProviders = function ({
 	);
 
 	return (
-		<PageLoadingBarContext.Provider value={pageLoadingBar}>
-			<Polyfills>{children}</Polyfills>
-		</PageLoadingBarContext.Provider>
+		<QueryClientProvider client={queryClient}>
+			<PageLoadingBarContext.Provider value={pageLoadingBar}>
+				<Polyfills>{children}</Polyfills>
+			</PageLoadingBarContext.Provider>
+		</QueryClientProvider>
 	);
 };
 
