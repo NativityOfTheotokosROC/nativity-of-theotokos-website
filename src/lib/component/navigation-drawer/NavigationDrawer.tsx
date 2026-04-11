@@ -47,7 +47,7 @@ const NavigationDrawer = function ({ model }) {
 		>
 			<div className="flex flex-col">
 				{hasUserNavigationWidget && (
-					<div className="[&_.dropdown-button]:px-6 *:[&_.dropdown-button]:w-full *:[&_.dropdown-button]:bg-gray-800 *:[&_.dropdown-button]:py-4 md:[&_.dropdown-button]:px-8">
+					<div className="[&_.dropdown-button]:px-6 [&_.dropdown-button]:py-4 *:[&_.dropdown-button]:w-full *:[&_.dropdown-button]:bg-gray-800 md:[&_.dropdown-button]:px-8">
 						<Suspense
 							fallback={
 								<UserNavigationWidgetSkeleton

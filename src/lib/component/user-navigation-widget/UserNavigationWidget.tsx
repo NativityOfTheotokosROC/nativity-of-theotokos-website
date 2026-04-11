@@ -29,7 +29,7 @@ import {
 	UserNavigationWidgetVariant,
 } from "../../model/user-navigation-widget";
 import { usePageLoadingBarRouter } from "../../utility/page-loading-bar";
-import { NavigationUserInformationContext } from "../../utility/user";
+import { useNavigationUserInformation } from "../../utility/user";
 import { PageLoadingBarContext } from "../page-loading-bar/PageLoadingBar";
 import UserAction from "../user-action/UserAction";
 
@@ -133,18 +133,18 @@ export const UserNavigationWidgetSkeleton = function ({ model }) {
 
 	switch (variant) {
 		case "no_avatar":
-			return <div className={`w-30`} />;
+			return <div className={`h-10 w-full max-w-40`} />;
 		case "abbreviated":
 			return (
-				<div className="flex w-full animate-pulse items-center gap-3 *:bg-white/20">
-					<div className="size-10 min-w-10 overflow-clip rounded-lg" />
+				<div className="flex w-fit animate-pulse items-center gap-3 *:bg-white/20">
+					<div className="size-10 overflow-clip rounded-lg" />
 				</div>
 			);
 		case "full":
 			return (
-				<div className="flex w-full animate-pulse items-center gap-3 *:bg-white/20">
+				<div className="dropdown-button flex w-full animate-pulse items-center gap-3 overflow-clip rounded-lg *:h-10 *:bg-white/20">
 					<div className="size-10 min-w-10 overflow-clip rounded-lg" />
-					<div className={`w-30`} />
+					<div className={`h-full w-full max-w-40`} />
 				</div>
 			);
 	}
@@ -160,9 +160,7 @@ export const UserNavigationWidgetCore = function ({ model }) {
 	const t = useTranslations("userNavigation");
 	const pageLoadingBar = useContext(PageLoadingBarContext);
 	const router = usePageLoadingBarRouter(useRouter);
-	const navigationUserInformation = useContext(
-		NavigationUserInformationContext,
-	);
+	const navigationUserInformation = useNavigationUserInformation();
 	const userActions =
 		navigationUserInformation != null &&
 		navigationUserInformation != "pending"

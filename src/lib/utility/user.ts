@@ -1,5 +1,4 @@
 import { QueryClient, useQuery } from "@tanstack/react-query";
-import { createContext } from "react";
 import { getNavigationUserDetails } from "../server-action/user";
 import { Role } from "../type/general";
 
@@ -23,10 +22,5 @@ export function useNavigationUserInformation(
 		},
 		queryClient,
 	);
-
 	return query.data == undefined ? "pending" : query.data;
 }
-
-export const NavigationUserInformationContext = createContext<
-	NavigationUserInformation | "pending"
->("pending");
