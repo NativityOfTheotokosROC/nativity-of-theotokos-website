@@ -1,6 +1,6 @@
 "use server";
 
-import { getLocale } from "next-intl/server";
+import { ImagePlaceholder } from "@grod56/placeholder";
 import { cacheLife, cacheTag } from "next/cache";
 import { notFound } from "next/navigation";
 import prisma from "../third-party/prisma";
@@ -8,15 +8,13 @@ import { Language, NewsArticle } from "../type/general";
 import { isRemotePath } from "../utility/miscellaneous";
 import { getBaseURL } from "./miscellaneous";
 import { getPlaceholder } from "./placeholder";
-import { ImagePlaceholder } from "@grod56/placeholder";
 
 export async function getAllArticles(
 	language: Language,
 ): Promise<NewsArticle[]> {
-	"use cache";
-
-	cacheLife("hours");
+	"use cache: remote";
 	cacheTag("bulletin_articles");
+	cacheLife("hours");
 
 	const articles: NewsArticle[] = await prisma.article
 		.findMany({
@@ -75,10 +73,11 @@ export async function getAllArticles(
 
 export async function getArticleMetadata(
 	articleId: string,
-	language?: Language,
+	language: Language,
 ): Promise<Pick<NewsArticle, "uri" | "title" | "snippet" | "articleImage">> {
-	"use cache";
-	const locale = language ?? (await getLocale());
+	"use cache: remote";
+
+	const locale = language;
 	try {
 		const article = await prisma.article.findUniqueOrThrow({
 			include: {
@@ -123,13 +122,13 @@ export async function getArticleMetadata(
 
 export async function getArticle(
 	articleId: string,
-	language?: Language,
+	language: Language,
 ): Promise<Omit<NewsArticle, "url">> {
 	"use cache: remote";
 
 	cacheLife("days");
 	cacheTag("bulletin_article");
-	const locale = language ?? (await getLocale());
+	const locale = language;
 	try {
 		const article = await prisma.article.findUniqueOrThrow({
 			where: { link: articleId },
