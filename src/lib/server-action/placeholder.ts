@@ -11,7 +11,7 @@ import prisma from "../third-party/prisma";
 const baseUrl = await getBaseURL();
 
 export async function getPlaceholder(imageSource: string) {
-	"use cache:remote";
+	"use cache: remote";
 	cacheTag("image_placeholder");
 	cacheLife("weeks");
 
