@@ -42,12 +42,13 @@ export async function generateMetadata(
 
 	return {
 		metadataBase: process.env.BASE_URL,
-		// alternates: { //TODO
-		// 	canonical: "/",
-		// 	languages: {
-		// 		ru: "/ru",
-		// 	},
-		// },
+		alternates: {
+			//TODO
+			canonical: "/",
+			languages: {
+				ru: "/ru",
+			},
+		},
 		title: {
 			template: titleTemplate,
 			default: titleDefault,
@@ -58,7 +59,7 @@ export async function generateMetadata(
 				template: titleTemplate,
 				default: titleDefault,
 			},
-			// 	url: "/",
+			url: "/",
 			description,
 			locale: localeMetaData,
 			type: "website",

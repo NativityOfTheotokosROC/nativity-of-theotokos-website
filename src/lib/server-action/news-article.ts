@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import prisma from "../third-party/prisma";
 import { Language, NewsArticle } from "../type/general";
 import { isRemotePath } from "../utility/miscellaneous";
-import { getBaseURL } from "./miscellaneous";
+import { BASE_URL } from "../utility/server-constant";
 import { getPlaceholder } from "./placeholder";
 
 export async function getAllArticles(
@@ -75,7 +75,7 @@ export async function getArticleMetadata(
 	articleId: string,
 	language: Language,
 ): Promise<Pick<NewsArticle, "uri" | "title" | "snippet" | "articleImage">> {
-	"use cache: remote";
+	"use cache";
 
 	const locale = language;
 	try {
@@ -125,9 +125,8 @@ export async function getArticle(
 	language: Language,
 ): Promise<Omit<NewsArticle, "url">> {
 	"use cache: remote";
+	cacheTag("bulletin_article", articleId); // TODO: Explicitly setting articleId because of the placeholder notFound call (I think)
 
-	cacheLife("days");
-	cacheTag("bulletin_article");
 	const locale = language;
 	try {
 		const article = await prisma.article.findUniqueOrThrow({
@@ -140,7 +139,7 @@ export async function getArticle(
 				image: { include: { caption: true, placeholder: true } },
 			},
 		});
-		const baseUrl = await getBaseURL();
+		const baseUrl = BASE_URL;
 
 		const placeholder =
 			(article.image.placeholder?.placeholder as ImagePlaceholder) ??

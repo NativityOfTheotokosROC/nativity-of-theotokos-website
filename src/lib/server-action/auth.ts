@@ -1,23 +1,17 @@
 "use server";
 
-import { headers } from "next/headers";
-import { forbidden, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import prisma from "@/src/lib/third-party/prisma";
+import { headers } from "next/headers";
+import { forbidden } from "next/navigation";
 import { Role, User } from "../type/general";
+import { ENVIRONMENT } from "../utility/server-constant";
 
-export async function protect(protectParams?: {
-	roles?: Role[];
-	signInEndpoint?: string;
-}) {
-	const signInEndpoint = protectParams?.signInEndpoint;
+export async function protect(protectParams?: { roles?: Role[] }) {
 	const roles = protectParams?.roles;
 	const user = await getUser();
 
-	const environment = process.env.VERCEL_ENV ?? process.env.NODE_ENV;
-	if (environment != "production") return;
-	if (!user && signInEndpoint)
-		return redirect(`/sign-in?endpoint=${signInEndpoint}`);
+	if (ENVIRONMENT != "production") return;
 	if (!(user && (await isAuthorized(user, roles)))) return forbidden();
 }
 

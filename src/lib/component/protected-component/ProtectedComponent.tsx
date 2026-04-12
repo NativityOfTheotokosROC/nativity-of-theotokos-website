@@ -10,8 +10,8 @@ const ProtectedComponent = async function ({
 	model: ProtectedComponentModel;
 	children: React.ReactNode;
 }) {
-	const { signInEndpoint, roles } = model.modelView;
-	await protect({ roles, signInEndpoint });
+	const { roles } = model.modelView;
+	await protect({ roles });
 
 	return children;
 } satisfies ModeledContainerComponent<ProtectedComponentModel>;
