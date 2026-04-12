@@ -50,13 +50,13 @@ export async function generateMetadata({
 			description: snippet,
 			// url: `/news/${uri}`,
 			type: "article",
-			images: [{ url: articleImage.source }],
+			images: [articleImage.source],
 		},
 		twitter: {
 			card: "summary_large_image",
 			title,
 			description: snippet,
-			images: [{ url: articleImage.source }],
+			images: [articleImage.source],
 		},
 	};
 }
