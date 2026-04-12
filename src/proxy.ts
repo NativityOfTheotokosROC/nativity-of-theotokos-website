@@ -12,11 +12,12 @@ export default async function middleware(req: NextRequest) {
 	const user = await getUser();
 
 	if (pathname.endsWith("/sign-in") && user) {
-		return NextResponse.redirect(
-			searchParams.get("endpoint")?.trim()
-				? searchParams.get("endpoint")!.trim()
-				: "/",
-		);
+		return NextResponse.redirect(`${req.nextUrl.origin}
+			${
+				searchParams.get("endpoint")?.startsWith("/")
+					? searchParams.get("endpoint")
+					: "/"
+			}`);
 	}
 
 	for (const route of getProtectedRoutes()) {

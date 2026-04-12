@@ -318,12 +318,11 @@ export async function getLatestNews(
 		include: { article: { include: articleIncludes } },
 	});
 	const otherArticles = await prisma.article.findMany({
-		// TODO: Reinstate when we have enough articles
-		// where: {
-		// 	featuredArticle: {
-		// 		is: null,
-		// 	},
-		// },
+		where: {
+			featuredArticle: {
+				is: null,
+			},
+		},
 		include: articleIncludes,
 		orderBy: {
 			dateCreated: "desc",
