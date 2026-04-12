@@ -125,9 +125,8 @@ export async function getArticle(
 	language: Language,
 ): Promise<Omit<NewsArticle, "url">> {
 	"use cache: remote";
-
 	cacheTag("bulletin_article", articleId); // TODO: Explicitly setting articleId because of the placeholder notFound call (I think)
-	cacheLife("days");
+
 	const locale = language;
 	try {
 		const article = await prisma.article.findUniqueOrThrow({

@@ -1,5 +1,6 @@
 import { routing } from "@/src/i18n/routing";
 import {
+	getAllArticles,
 	getArticle,
 	getArticleMetadata,
 } from "@/src/lib/server-action/news-article";
@@ -9,6 +10,17 @@ import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import NewsArticle from "./NewsArticle";
 import { BASE_URL } from "@/src/lib/utility/server-constant";
+
+export async function generateStaticParams() {
+	const [articlesEn, articlesRu] = await Promise.all([
+		getAllArticles("en"),
+		getAllArticles("ru"),
+	]);
+	return [
+		...articlesEn.map(article => ({ locale: "en", article: article.uri })),
+		...articlesRu.map(article => ({ locale: "ru", article: article.uri })),
+	];
+}
 
 function articleJsonLd(article: NewsArticleType) {
 	const { title, author, articleImage, dateCreated, snippet } = article;
