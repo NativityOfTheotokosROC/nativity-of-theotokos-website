@@ -19,6 +19,7 @@ import {
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import AppLayout from "./AppLayout";
+import { BASE_URL } from "@/src/lib/utility/server-constant";
 
 export function generateStaticParams() {
 	return [{ locale: "en" }, { locale: "ru" }];
@@ -41,14 +42,14 @@ export async function generateMetadata(
 	const localeMetaData = locale == "en" ? "en-US" : "ru-RU";
 
 	return {
-		metadataBase: process.env.BASE_URL,
-		alternates: {
-			//TODO
-			canonical: "/",
-			languages: {
-				ru: "/ru",
-			},
-		},
+		metadataBase: BASE_URL,
+		// alternates: {
+		// 	canonical: BASE_URL,
+		// 	languages: {
+		// 		en: BASE_URL,
+		// 		ru: BASE_URL + "/ru",
+		// 	},
+		// },
 		title: {
 			template: titleTemplate,
 			default: titleDefault,
@@ -59,7 +60,7 @@ export async function generateMetadata(
 				template: titleTemplate,
 				default: titleDefault,
 			},
-			url: "/",
+			// url: BASE_URL,
 			description,
 			locale: localeMetaData,
 			type: "website",

@@ -304,7 +304,7 @@ export async function getLatestNews(
 ): Promise<LatestNews> {
 	"use cache: remote";
 	cacheTag("latest-articles");
-	cacheLife("hours");
+	cacheLife("minutes");
 
 	const baseURL = BASE_URL;
 	const articleIncludes = {
