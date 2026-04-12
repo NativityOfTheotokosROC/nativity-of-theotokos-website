@@ -11,6 +11,7 @@ import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 import { locale as rootLocale } from "next/root-params";
+import { ViewTransition } from "react";
 
 const NewsArticle = async function ({ model }) {
 	const { article, permalink } = model.modelView;
@@ -62,16 +63,24 @@ const NewsArticle = async function ({ model }) {
 								href={source}
 								target="_blank"
 							>
-								<Image
-									className="grow cursor-pointer object-cover object-center"
-									height={600}
-									width={600}
-									alt={about ?? tCaptions("newsArticleImage")}
-									title={about}
-									src={source}
-									placeholder="blur"
-									blurDataURL={placeholder}
-								/>
+								<ViewTransition
+									name={`article-image-${article.uri}`}
+									share="auto"
+								>
+									<Image
+										className="grow cursor-pointer object-cover object-center"
+										height={600}
+										width={600}
+										alt={
+											about ??
+											tCaptions("newsArticleImage")
+										}
+										title={about}
+										src={source}
+										placeholder="blur"
+										blurDataURL={placeholder}
+									/>
+								</ViewTransition>
 							</Link>
 						</div>
 						{about && (
