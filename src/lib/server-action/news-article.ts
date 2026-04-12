@@ -75,7 +75,7 @@ export async function getArticleMetadata(
 	articleId: string,
 	language: Language,
 ): Promise<Pick<NewsArticle, "uri" | "title" | "snippet" | "articleImage">> {
-	"use cache: remote";
+	"use cache";
 
 	const locale = language;
 	try {

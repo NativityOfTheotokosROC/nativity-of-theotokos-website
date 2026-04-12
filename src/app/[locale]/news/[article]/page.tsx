@@ -33,7 +33,7 @@ export async function generateMetadata({
 
 	const { article, locale } = await params;
 	const computedLocale = hasLocale(routing.locales, locale) ? locale : "en";
-	const { title, snippet, uri, articleImage } = await getArticleMetadata(
+	const { title, snippet, articleImage } = await getArticleMetadata(
 		article,
 		computedLocale,
 	);
@@ -41,16 +41,16 @@ export async function generateMetadata({
 	return {
 		title,
 		description: snippet,
-		alternates: {
-			canonical: `/news/${uri}`,
-			languages: {
-				ru: `/ru/news/${uri}`,
-			},
-		},
+		// alternates: {
+		// 	canonical: `/news/${uri}`,
+		// 	languages: {
+		// 		ru: `/ru/news/${uri}`,
+		// 	},
+		// },
 		openGraph: {
 			title,
 			description: snippet,
-			url: `/news/${uri}`,
+			// url: `/news/${uri}`,
 			type: "article",
 			images: [{ url: articleImage.source }],
 		},
