@@ -29,7 +29,8 @@ export default async function middleware(req: NextRequest) {
 		}
 	}
 	const redirectPath = redirects.get(pathname as Path);
-	if (redirectPath) return NextResponse.redirect(redirectPath);
+	if (redirectPath)
+		return NextResponse.redirect(req.nextUrl.origin + redirectPath);
 
 	return nextIntlMiddleware(req);
 }
