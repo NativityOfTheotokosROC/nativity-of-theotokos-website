@@ -19,7 +19,6 @@ import {
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import AppLayout from "./AppLayout";
-import { BASE_URL } from "@/src/lib/utility/server-constant";
 
 export function generateStaticParams() {
 	return [{ locale: "en" }, { locale: "ru" }];
