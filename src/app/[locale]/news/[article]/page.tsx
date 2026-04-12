@@ -7,7 +7,6 @@ import { NewsArticle as NewsArticleType } from "@/src/lib/type/general";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
-import { notFound } from "next/navigation";
 import NewsArticle from "./NewsArticle";
 import { BASE_URL } from "@/src/lib/utility/server-constant";
 
@@ -27,10 +26,6 @@ function articleJsonLd(article: NewsArticleType) {
 	};
 }
 
-export function generateStaticParams() {
-	return [{ article: "__placeholder__" }];
-}
-
 export async function generateMetadata({
 	params,
 }: PageProps<"/[locale]/news/[article]">): Promise<Metadata> {
@@ -38,7 +33,6 @@ export async function generateMetadata({
 
 	const { article, locale } = await params;
 	const computedLocale = hasLocale(routing.locales, locale) ? locale : "en";
-	if (article == "__placeholder__") notFound();
 	const { title, snippet, uri, articleImage } = await getArticleMetadata(
 		article,
 		computedLocale,
