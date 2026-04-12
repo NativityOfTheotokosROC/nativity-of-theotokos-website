@@ -16,4 +16,4 @@ export function getProtectedRoutes() {
 	return new Set(protectedRoutes satisfies TypeVerify);
 }
 
-export const redirects = new Map<Path, Path>([["/admin", "/admin"]]); // TODO
+export const redirects = new Map<Path, Path>(); // TODO
