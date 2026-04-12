@@ -41,9 +41,11 @@ function articleJsonLd(article: NewsArticleType) {
 export async function generateMetadata({
 	params,
 }: PageProps<"/[locale]/news/[article]">): Promise<Metadata> {
+	"use cache";
+
 	const { article, locale } = await params;
 	const computedLocale = hasLocale(routing.locales, locale) ? locale : "en";
-	const { title, snippet, articleImage } = await getArticleMetadata(
+	const { title, snippet, uri, articleImage } = await getArticleMetadata(
 		article,
 		computedLocale,
 	);
@@ -51,16 +53,16 @@ export async function generateMetadata({
 	return {
 		title,
 		description: snippet,
-		// alternates: {
-		// 	canonical: `/news/${uri}`,
-		// 	languages: {
-		// 		ru: `/ru/news/${uri}`,
-		// 	},
-		// },
+		alternates: {
+			canonical: `/news/${uri}`,
+			languages: {
+				ru: `/ru/news/${uri}`,
+			},
+		},
 		openGraph: {
 			title,
 			description: snippet,
-			// url: `/news/${uri}`,
+			url: `/news/${uri}`,
 			type: "article",
 			images: [articleImage.source],
 		},
@@ -76,6 +78,8 @@ export async function generateMetadata({
 export default async function Page({
 	params,
 }: PageProps<"/[locale]/news/[article]">) {
+	"use cache";
+
 	const { article: articleId, locale } = await params;
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 
