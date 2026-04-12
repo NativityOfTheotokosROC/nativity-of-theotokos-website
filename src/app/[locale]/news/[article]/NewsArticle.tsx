@@ -65,6 +65,7 @@ const NewsArticle = async function ({ model }) {
 							>
 								<ViewTransition
 									name={`article-image-${article.uri}`}
+									share="auto"
 								>
 									<Image
 										className="grow cursor-pointer object-cover object-center"
