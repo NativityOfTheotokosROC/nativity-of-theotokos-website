@@ -1,6 +1,6 @@
 import { routing } from "@/src/i18n/routing";
-import { getBaseURL } from "@/src/lib/server-action/miscellaneous";
 import {
+	getAllArticles,
 	getArticle,
 	getArticleMetadata,
 } from "@/src/lib/server-action/news-article";
@@ -8,8 +8,19 @@ import { NewsArticle as NewsArticleType } from "@/src/lib/type/general";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
-import { notFound } from "next/navigation";
 import NewsArticle from "./NewsArticle";
+import { BASE_URL } from "@/src/lib/utility/server-constant";
+
+export async function generateStaticParams() {
+	const [articlesEn, articlesRu] = await Promise.all([
+		getAllArticles("en"),
+		getAllArticles("ru"),
+	]);
+	return [
+		...articlesEn.map(article => ({ locale: "en", article: article.uri })),
+		...articlesRu.map(article => ({ locale: "ru", article: article.uri })),
+	];
+}
 
 function articleJsonLd(article: NewsArticleType) {
 	const { title, author, articleImage, dateCreated, snippet } = article;
@@ -27,10 +38,6 @@ function articleJsonLd(article: NewsArticleType) {
 	};
 }
 
-export function generateStaticParams() {
-	return [{ article: "__placeholder__" }];
-}
-
 export async function generateMetadata({
 	params,
 }: PageProps<"/[locale]/news/[article]">): Promise<Metadata> {
@@ -38,7 +45,6 @@ export async function generateMetadata({
 
 	const { article, locale } = await params;
 	const computedLocale = hasLocale(routing.locales, locale) ? locale : "en";
-	if (article == "__placeholder__") notFound();
 	const { title, snippet, uri, articleImage } = await getArticleMetadata(
 		article,
 		computedLocale,
@@ -58,13 +64,13 @@ export async function generateMetadata({
 			description: snippet,
 			url: `/news/${uri}`,
 			type: "article",
-			images: [{ url: articleImage.source }],
+			images: [articleImage.source],
 		},
 		twitter: {
 			card: "summary_large_image",
 			title,
 			description: snippet,
-			images: [{ url: articleImage.source }],
+			images: [articleImage.source],
 		},
 	};
 }
@@ -79,7 +85,7 @@ export default async function Page({
 
 	//TODO: Investigate why locale is not updating server-side
 	const article = await getArticle(articleId, language);
-	const baseUrl = await getBaseURL();
+	const baseUrl = BASE_URL;
 	const permalink = `${baseUrl}/news/${article.uri.toString()}`;
 	const jsonLd = articleJsonLd(article);
 

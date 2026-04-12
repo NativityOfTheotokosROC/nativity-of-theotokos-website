@@ -1,5 +1,11 @@
-import { redirect } from "next/navigation";
+"use client";
+
+import ViewLoadingSkeleton from "@/src/lib/component/view-loading-skeleton/ViewLoadingSkeleton";
+import { useLayoutEffect } from "react";
 
 export default function Admin() {
-	return redirect("/");
+	useLayoutEffect(() => {
+		window.location.replace("/");
+	}, []);
+	return <ViewLoadingSkeleton />;
 }

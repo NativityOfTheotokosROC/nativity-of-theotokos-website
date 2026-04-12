@@ -1,7 +1,11 @@
+import "server-only";
+
+import { ENVIRONMENT } from "./server-constant";
+import { Path } from "../type/general";
+
 export function getProtectedRoutes() {
-	const environment = process.env.VERCEL_ENV ?? process.env.NODE_ENV;
 	const protectedRoutes =
-		environment == "production"
+		ENVIRONMENT == "production"
 			? (["/quotes/new", "/admin"] as const)
 			: ([] as const);
 	// This should do for now lol
@@ -9,5 +13,7 @@ export function getProtectedRoutes() {
 		PageProps<`/[locale]${(typeof protectedRoutes)[number]}`> extends never
 			? never
 			: typeof protectedRoutes;
-	return protectedRoutes satisfies TypeVerify;
+	return new Set(protectedRoutes satisfies TypeVerify);
 }
+
+export const redirects = new Map<Path, Path>([["/admin", "/"]]);

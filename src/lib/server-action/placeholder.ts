@@ -4,15 +4,14 @@ import {
 	ImagePlaceholder,
 	getPlaceholder as generatePlaceholder,
 } from "@grod56/placeholder";
-import { cacheLife, cacheTag } from "next/cache";
-import { getBaseURL } from "../server-action/miscellaneous";
+import { cacheLife } from "next/cache";
 import prisma from "../third-party/prisma";
+import { BASE_URL } from "../utility/server-constant";
 
-const baseUrl = await getBaseURL();
+const baseUrl = BASE_URL;
 
 export async function getPlaceholder(imageSource: string) {
 	"use cache: remote";
-	cacheTag("image_placeholder");
 	cacheLife("weeks");
 
 	const result = await findPlaceholder(imageSource);

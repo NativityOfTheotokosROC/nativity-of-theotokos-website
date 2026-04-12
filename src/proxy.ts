@@ -1,14 +1,24 @@
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { NextRequest, NextResponse } from "next/server";
-import { getProtectedRoutes } from "./lib/utility/auth";
+import { getProtectedRoutes, redirects } from "./lib/utility/routing";
 import { getUser } from "./lib/server-action/auth";
+import { Path } from "./lib/type/general";
 
 const nextIntlMiddleware = createMiddleware(routing);
 
 export default async function middleware(req: NextRequest) {
-	const { pathname } = req.nextUrl;
+	const { pathname, searchParams } = req.nextUrl;
 	const user = await getUser();
+
+	if (pathname.endsWith("/sign-in") && user) {
+		return NextResponse.redirect(`${req.nextUrl.origin}
+			${
+				searchParams.get("endpoint")?.startsWith("/")
+					? searchParams.get("endpoint")
+					: "/"
+			}`);
+	}
 
 	for (const route of getProtectedRoutes()) {
 		if (pathname.endsWith(route) && !user) {
@@ -18,6 +28,9 @@ export default async function middleware(req: NextRequest) {
 			return NextResponse.redirect(newUrl);
 		}
 	}
+	const redirectPath = redirects.get(pathname as Path);
+	if (redirectPath)
+		return NextResponse.redirect(req.nextUrl.origin + redirectPath);
 
 	return nextIntlMiddleware(req);
 }
