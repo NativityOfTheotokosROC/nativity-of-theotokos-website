@@ -21,8 +21,8 @@ import {
 	getEnglishTranslationHash,
 	isRemotePath,
 } from "../utility/miscellaneous";
+import { BASE_URL } from "../utility/server-constant";
 import { getGalleryImages } from "./gallery";
-import { getBaseURL } from "./miscellaneous";
 import { getPlaceholder } from "./placeholder";
 
 export type LatestNews = {
@@ -306,7 +306,7 @@ export async function getLatestNews(
 	cacheTag("latest-articles");
 	cacheLife("hours");
 
-	const baseURL = await getBaseURL();
+	const baseURL = BASE_URL;
 	const articleIncludes = {
 		title: true,
 		body: true,
@@ -426,7 +426,7 @@ export async function getDailyGalleryImages(
 	"use cache: remote";
 	cacheTag("daily-gallery-images");
 
-	const baseUrl = await getBaseURL();
+	const baseUrl = BASE_URL;
 	const localDate = new Date(getDateString(currentDate, true));
 	const fulfilled = await Promise.all([
 		getGalleryImages(),

@@ -1,5 +1,4 @@
 import { routing } from "@/src/i18n/routing";
-import { getBaseURL } from "@/src/lib/server-action/miscellaneous";
 import {
 	getArticle,
 	getArticleMetadata,
@@ -10,6 +9,7 @@ import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import NewsArticle from "./NewsArticle";
+import { BASE_URL } from "@/src/lib/utility/server-constant";
 
 function articleJsonLd(article: NewsArticleType) {
 	const { title, author, articleImage, dateCreated, snippet } = article;
@@ -79,7 +79,7 @@ export default async function Page({
 
 	//TODO: Investigate why locale is not updating server-side
 	const article = await getArticle(articleId, language);
-	const baseUrl = await getBaseURL();
+	const baseUrl = BASE_URL;
 	const permalink = `${baseUrl}/news/${article.uri.toString()}`;
 	const jsonLd = articleJsonLd(article);
 

@@ -1,11 +1,11 @@
 import type { MetadataRoute } from "next";
 import { getAllArticles } from "../lib/server-action/news-article";
-import { getBaseURL } from "../lib/server-action/miscellaneous";
+import { BASE_URL } from "../lib/utility/server-constant";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	"use cache";
 
-	const baseUrl = await getBaseURL();
+	const baseUrl = BASE_URL;
 	const newsArticles = await getAllArticles("en");
 
 	return [
