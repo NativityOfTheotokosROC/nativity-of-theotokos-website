@@ -2,10 +2,10 @@
 
 import prisma from "../third-party/prisma";
 import { Role } from "../type/general";
-import { NavigationUserInformation } from "../utility/user";
+import { UserInformation } from "../utility/user";
 import { getUser } from "./auth";
 
-export async function getNavigationUserInformation(): Promise<NavigationUserInformation> {
+export async function getUserInformation(): Promise<UserInformation> {
 	const user = await getUser();
 	if (!user) return null;
 	const roleRecords = await prisma.admin.findMany({

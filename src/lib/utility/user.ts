@@ -1,9 +1,9 @@
 import { QueryClient, useQuery } from "@tanstack/react-query";
-import { getNavigationUserInformation } from "../server-action/user";
+import { getUserInformation } from "../server-action/user";
 import { Role } from "../type/general";
 import { createContext } from "react";
 
-export type NavigationUserInformation = {
+export type UserInformation = {
 	name: string;
 	avatar: {
 		source: string;
@@ -11,11 +11,11 @@ export type NavigationUserInformation = {
 	roles: Role[];
 } | null;
 
-export function useNavigationUserInformation(queryClient?: QueryClient) {
+export function useUserInformation(queryClient?: QueryClient) {
 	const { data, isSuccess } = useQuery(
 		{
-			queryKey: ["navigation-user-information"],
-			queryFn: getNavigationUserInformation,
+			queryKey: ["user-information"],
+			queryFn: getUserInformation,
 			staleTime: Infinity,
 			gcTime: Infinity,
 			refetchOnMount: false,
@@ -24,9 +24,9 @@ export function useNavigationUserInformation(queryClient?: QueryClient) {
 		},
 		queryClient,
 	);
-	if (isSuccess) return data satisfies NavigationUserInformation;
+	if (isSuccess) return data satisfies UserInformation;
 	return "pending";
 }
 
-export const NavigationUserInformationContext =
-	createContext<ReturnType<typeof useNavigationUserInformation>>("pending");
+export const UserInformationContext =
+	createContext<ReturnType<typeof useUserInformation>>("pending");
