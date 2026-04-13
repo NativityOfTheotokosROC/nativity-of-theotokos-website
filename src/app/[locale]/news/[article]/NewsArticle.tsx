@@ -38,11 +38,16 @@ const NewsArticle = async function ({ model }) {
 			<div className="newsarticle-content flex flex-col gap-6 border-t-15 border-[#250203]/80 p-8 md:p-12">
 				<div className="metadata flex flex-col gap-6 md:flex-row md:gap-x-8 lg:max-w-full">
 					<div className="headline flex flex-col gap-6 md:w-1/2">
-						<span
-							className={`title text-4xl/tight md:text-5xl/tight lg:text-6xl/tight ${georgia.className} font-semibold`}
+						<ViewTransition
+							name={`article-title-${article.uri}`}
+							share="auto"
 						>
-							{title}
-						</span>
+							<span
+								className={`title text-4xl/tight md:text-5xl/tight lg:text-6xl/tight ${georgia.className} font-semibold`}
+							>
+								{title}
+							</span>
+						</ViewTransition>
 						<div className="byline flex flex-col gap-1">
 							<div className="md:max-[50vw] -ml-8 flex w-fit max-w-[80vw] min-w-3/4 items-center gap-2 bg-gray-900/80 p-2 pr-4 pl-8 text-white md:-ml-12 md:pl-12">
 								<span className="author text-base md:text-xl">{`${t("author")} ${author}`}</span>

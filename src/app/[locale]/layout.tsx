@@ -28,7 +28,7 @@ export function generateStaticParams() {
 export async function generateMetadata(
 	props: Omit<LayoutProps<"/[locale]">, "children">,
 ): Promise<Metadata> {
-	"use cache";
+	// "use cache";
 
 	const { locale } = await props.params;
 
@@ -79,7 +79,7 @@ export default async function RootLayout({
 	children,
 	params,
 }: LayoutProps<"/[locale]">) {
-	"use cache";
+	// "use cache";
 
 	const { locale } = await params;
 	if (!hasLocale(routing.locales, locale)) {

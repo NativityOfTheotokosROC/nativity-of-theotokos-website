@@ -1,5 +1,3 @@
-"use cache";
-
 import "./globals.css";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";

@@ -1,4 +1,5 @@
-import SidebarDecoration from "@/public/assets/ornament_33.svg";
+import SidebarDecoration from "@/public/assets/ornament_38.svg";
+import { useRouter } from "@/src/i18n/navigation";
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import {
 	ModeledContainerComponent,
@@ -10,16 +11,22 @@ import {
 	ModelInteraction,
 	newReadonlyModel,
 } from "@mvc-react/mvc";
+import { Suspense, useContext } from "react";
+import { getUserActions as originalGetUserActions } from "../../model-implementation/user-action";
 import {
 	NavigationDrawerModel,
 	NavigationDrawerModelView,
 } from "../../model/navigation-drawer";
-import { Link } from "../page-loading-bar/PageLoadingBar";
+import { Role } from "../../type/general";
+import { usePageLoadingBarRouter } from "../../utility/page-loading-bar";
+import {
+	Link,
+	PageLoadingBarContext,
+} from "../page-loading-bar/PageLoadingBar";
 import UserNavigationWidget, {
 	UserNavigationWidgetSkeleton,
 } from "../user-navigation-widget/UserNavigationWidget";
 import "./navigation-drawer.css";
-import { Suspense } from "react";
 
 type MenuModelView = Pick<NavigationDrawerModelView, "isDrawn">;
 type MenuModelInteraction = ModelInteraction<"CLOSE_MENU">;
@@ -28,6 +35,8 @@ type MenuModel = InteractiveModel<MenuModelView, MenuModelInteraction>;
 const NavigationDrawer = function ({ model }) {
 	const { modelView, interact } = model;
 	const { isDrawn, navlinks, hasUserNavigationWidget } = modelView;
+	const pageLoadingBar = useContext(PageLoadingBarContext);
+	const router = usePageLoadingBarRouter(useRouter);
 
 	return (
 		<SidebarDrawer
@@ -61,6 +70,25 @@ const NavigationDrawer = function ({ model }) {
 								model={newReadonlyModel({
 									style: "accordion",
 									variant: "full",
+									getUserActions: (roles: Role[]) => {
+										const userActions =
+											originalGetUserActions(
+												roles,
+												router,
+												pageLoadingBar,
+											);
+										return userActions.map(userAction => ({
+											modelView: {
+												...userAction.modelView,
+												async action() {
+													await interact({
+														type: "CLOSE",
+													});
+													return userAction.modelView.action();
+												},
+											},
+										}));
+									},
 								})}
 							/>
 						</Suspense>

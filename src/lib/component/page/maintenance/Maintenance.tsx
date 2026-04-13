@@ -1,19 +1,18 @@
+"use client";
+
 import MaintenanceGraphic from "@/public/assets/ornament_36.svg";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { Language } from "@/src/lib/type/general";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 import PageNavigationButton from "../../button/PageNavigationButton";
 
-const Maintenance = async function ({ model }) {
-	"use cache";
+const Maintenance = function ({}) {
+	// "use cache";
 
-	const { language } = model.modelView;
-	const t = await getTranslations({
-		locale: language,
-		namespace: "maintenance",
-	});
+	// const { language } = model.modelView;
+	const t = useTranslations("maintenance");
 
 	return (
 		<main className={`maintenance bg-[#FEF8F3] text-black`}>

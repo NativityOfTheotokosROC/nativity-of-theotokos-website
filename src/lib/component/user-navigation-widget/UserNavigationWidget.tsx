@@ -1,4 +1,3 @@
-import { useRouter } from "@/src/i18n/navigation";
 import {
 	Disclosure,
 	DisclosureButton,
@@ -20,17 +19,14 @@ import {
 import { ChevronDown as DropdownIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { Suspense, useContext } from "react";
+import { Suspense } from "react";
 import { Fragment } from "react/jsx-runtime";
-import { getUserActions } from "../../model-implementation/user-action";
 import {
 	NavigationUser,
 	UserNavigationWidgetModel,
 	UserNavigationWidgetVariant,
 } from "../../model/user-navigation-widget";
-import { usePageLoadingBarRouter } from "../../utility/page-loading-bar";
-import { useNavigationUserInformation } from "../../utility/user";
-import { PageLoadingBarContext } from "../page-loading-bar/PageLoadingBar";
+import { useUserInformation } from "../../utility/user";
 import UserAction from "../user-action/UserAction";
 
 type WidgetVariantModel = ReadonlyModel<{
@@ -154,28 +150,21 @@ export const UserNavigationWidgetSkeleton = function ({ model }) {
 
 export const UserNavigationWidgetCore = function ({ model }) {
 	const {
-		modelView: { variant, style },
+		modelView: { variant, style, getUserActions },
 	} = model;
 
 	const t = useTranslations("userNavigation");
-	const pageLoadingBar = useContext(PageLoadingBarContext);
-	const router = usePageLoadingBarRouter(useRouter);
-	const navigationUserInformation = useNavigationUserInformation();
+	const userInformation = useUserInformation();
 	const userActions =
-		navigationUserInformation != null &&
-		navigationUserInformation != "pending"
-			? getUserActions(
-					navigationUserInformation.roles,
-					router,
-					pageLoadingBar,
-				)
+		userInformation != null && userInformation != "pending"
+			? getUserActions(userInformation.roles)
 			: null;
 	const userDetails =
-		navigationUserInformation && navigationUserInformation != "pending"
+		userInformation && userInformation != "pending"
 			? {
 					user: {
-						name: navigationUserInformation.name,
-						avatar: navigationUserInformation.avatar,
+						name: userInformation.name,
+						avatar: userInformation.avatar,
 					},
 					userActions: userActions!,
 				}
@@ -291,7 +280,7 @@ export const UserNavigationWidgetCore = function ({ model }) {
 				)}
 			</>
 		</div>
-	) : navigationUserInformation == "pending" ? (
+	) : userInformation == "pending" ? (
 		<UserNavigationWidgetSkeleton model={newReadonlyModel({ variant })} />
 	) : (
 		<></>

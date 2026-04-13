@@ -18,8 +18,6 @@ export interface AppLayoutModelView {
 export type AppLayoutModel = ReadonlyModel<AppLayoutModelView>;
 
 const AppLayout = async function ({ model, children }) {
-	"use cache";
-
 	const { language } = model.modelView;
 
 	const tNavMenu = await getTranslations({

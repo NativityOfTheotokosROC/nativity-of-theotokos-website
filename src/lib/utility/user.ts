@@ -1,8 +1,9 @@
-import { QueryClient, useQuery } from "@tanstack/react-query";
-import { getNavigationUserInformation } from "../server-action/user";
+import { QueryClient } from "@tanstack/react-query";
+import { createContext, useEffect, useState } from "react";
+import { getUserInformation } from "../server-action/user";
 import { Role } from "../type/general";
 
-export type NavigationUserInformation = {
+export type UserInformation = {
 	name: string;
 	avatar: {
 		source: string;
@@ -10,14 +11,34 @@ export type NavigationUserInformation = {
 	roles: Role[];
 } | null;
 
-export function useNavigationUserInformation(queryClient?: QueryClient) {
-	const { data, isSuccess } = useQuery(
-		{
-			queryKey: ["navigation-user-information"],
-			queryFn: getNavigationUserInformation,
-		},
-		queryClient,
-	);
-	if (isSuccess) return data satisfies NavigationUserInformation;
-	return "pending";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function useUserInformation(queryClient?: QueryClient) {
+	const [userInformation, setUserInformation] = useState<
+		UserInformation | undefined
+	>(undefined);
+	useEffect(() => {
+		if (userInformation === undefined)
+			getUserInformation().then(userInformation =>
+				setUserInformation(userInformation),
+			);
+	}, [userInformation]);
+
+	return userInformation === undefined ? "pending" : userInformation;
+	// const { data, isSuccess } = useQuery(
+	// 	{
+	// 		queryKey: ["user-information"],
+	// 		queryFn: getUserInformation,
+	// 		staleTime: Infinity,
+	// 		gcTime: Infinity,
+	// 		refetchOnMount: false,
+	// 		refetchOnReconnect: false,
+	// 		refetchOnWindowFocus: false,
+	// 	},
+	// 	queryClient,
+	// );
+	// if (isSuccess) return data satisfies UserInformation;
+	// return "pending";
 }
+
+export const UserInformationContext =
+	createContext<ReturnType<typeof useUserInformation>>("pending");

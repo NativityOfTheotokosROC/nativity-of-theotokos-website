@@ -21,7 +21,10 @@ const NewsArticlePreview = function ({ model }) {
 		<Link className="featured-card contents" href={articleLink}>
 			<div className="flex flex-col overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3] transition duration-150 ease-out select-none hover:scale-[1.03] hover:cursor-pointer hover:border-[#dcb042] active:scale-[1.03] active:border-[#dcb042] hover:[&_.title]:underline active:[&_.title]:underline">
 				<div className="flex h-[16em] w-full items-stretch justify-stretch lg:h-[18em]">
-					<ViewTransition name={`article-image-${article.uri}`}>
+					<ViewTransition
+						name={`article-image-${article.uri}`}
+						share={"auto"}
+					>
 						<Image
 							className="h-full w-full max-w-full grow object-cover object-top"
 							height={538}
@@ -54,7 +57,7 @@ const NewsArticlePreview = function ({ model }) {
 				<div className="flex h-[6em] max-h-[6em] w-[7em] min-w-[7em] items-stretch justify-stretch overflow-clip rounded-lg md:h-[6.4em] md:max-h-[6.4em] md:w-[8em] md:min-w-[8em]">
 					<ViewTransition
 						name={`article-image-${article.uri}`}
-						share="auto"
+						share={"auto"}
 					>
 						<Image
 							className="h-full w-full grow object-cover object-center"

@@ -2,10 +2,10 @@
 
 import prisma from "../third-party/prisma";
 import { Role } from "../type/general";
-import { NavigationUserInformation } from "../utility/user";
+import { UserInformation } from "../utility/user";
 import { getUser } from "./auth";
 
-export async function getNavigationUserInformation(): Promise<NavigationUserInformation> {
+export async function getUserInformation(): Promise<UserInformation> {
 	const user = await getUser();
 	if (!user) return null;
 	const roleRecords = await prisma.admin.findMany({
@@ -19,11 +19,13 @@ export async function getNavigationUserInformation(): Promise<NavigationUserInfo
 	const roles = roleRecords
 		.map(record => record.role)
 		.filter(role =>
-			["admin", "quotes", "staff", "user"].includes(role),
-		) as Role[]; // HACK: Dirty
+			(["admin", "quotes", "staff", "user", "writer"] as const).includes(
+				role as Role,
+			),
+		); // HACK: Dirty
 	return {
 		name: user.name,
 		avatar: { source: user.image! },
-		roles,
+		roles: roles as Role[],
 	};
 }

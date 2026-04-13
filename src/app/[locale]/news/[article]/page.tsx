@@ -1,15 +1,15 @@
 import { routing } from "@/src/i18n/routing";
-import {
-	getAllArticles,
-	getArticle,
-	getArticleMetadata,
-} from "@/src/lib/server-action/news-article";
+import { getArticle } from "@/src/lib/server-action/article";
 import { NewsArticle as NewsArticleType } from "@/src/lib/type/general";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import NewsArticle from "./NewsArticle";
 import { BASE_URL } from "@/src/lib/utility/server-constant";
+import {
+	getAllArticles,
+	getArticleMetadata,
+} from "@/src/lib/server-only/article";
 
 export async function generateStaticParams() {
 	const [articlesEn, articlesRu] = await Promise.all([
@@ -78,7 +78,7 @@ export async function generateMetadata({
 export default async function Page({
 	params,
 }: PageProps<"/[locale]/news/[article]">) {
-	"use cache";
+	// "use cache";
 
 	const { article: articleId, locale } = await params;
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
