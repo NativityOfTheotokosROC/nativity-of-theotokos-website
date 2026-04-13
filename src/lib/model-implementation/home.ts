@@ -36,6 +36,9 @@ export function useHome(): HomeModel {
 		queryFn: () => interact({ type: "REFRESH" }),
 		staleTime: Infinity,
 		gcTime: Infinity,
+		refetchOnMount: false,
+		refetchOnReconnect: false,
+		refetchOnWindowFocus: false,
 	});
 	return { modelView, interact };
 }
