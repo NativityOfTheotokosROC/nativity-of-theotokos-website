@@ -1,4 +1,4 @@
-import SidebarDecoration from "@/public/assets/ornament_33.svg";
+import SidebarDecoration from "@/public/assets/ornament_38.svg";
 import { useRouter } from "@/src/i18n/navigation";
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import {

@@ -55,15 +55,20 @@ const NewsArticlePreview = function ({ model }) {
 		<Link className="normal-card contents" href={articleLink}>
 			<div className="flex max-w-[27em] flex-row items-center gap-4 select-none hover:cursor-pointer md:gap-0 lg:bg-transparent lg:text-black hover:[&_.title]:underline active:[&_.title]:underline">
 				<div className="flex h-[6em] max-h-[6em] w-[7em] min-w-[7em] items-stretch justify-stretch overflow-clip rounded-lg md:h-[6.4em] md:max-h-[6.4em] md:w-[8em] md:min-w-[8em]">
-					<Image
-						className="h-full w-full grow object-cover object-center"
-						height={128}
-						width={128}
-						alt={tCaptions("newsArticleImage")}
-						src={source}
-						placeholder="blur"
-						blurDataURL={placeholder}
-					/>
+					<ViewTransition
+						name={`article-image-${article.uri}`}
+						share={"auto"}
+					>
+						<Image
+							className="h-full w-full grow object-cover object-center"
+							height={128}
+							width={128}
+							alt={tCaptions("newsArticleImage")}
+							src={source}
+							placeholder="blur"
+							blurDataURL={placeholder}
+						/>
+					</ViewTransition>
 				</div>
 				<div className="card-details flex flex-col gap-1.5 py-4 md:px-6">
 					<span className="title text-sm lg:text-base">{title}</span>
