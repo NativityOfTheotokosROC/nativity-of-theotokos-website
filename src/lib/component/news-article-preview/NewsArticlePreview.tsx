@@ -38,7 +38,7 @@ const NewsArticlePreview = function ({ model }) {
 				</div>
 				<div className="card-details flex flex-col gap-2.5 p-4">
 					<span
-						className={`title mb-1 text-2xl font-semibold ${georgia.className}`}
+						className={`title mb-1 text-2xl md:font-semibold ${georgia.className}`}
 					>
 						{title}
 					</span>
