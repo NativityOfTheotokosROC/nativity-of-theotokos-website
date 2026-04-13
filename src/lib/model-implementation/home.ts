@@ -1,8 +1,8 @@
-import { HomeModel, HomeModelInteraction, HomeModelView } from "../model/home";
 import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
-import { getHomeSnapshot } from "../server-action/home";
-import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
+import { HomeModel, HomeModelInteraction, HomeModelView } from "../model/home";
+import { getHomeSnapshot } from "../server-action/home";
 
 export function useHome(): HomeModel {
 	const language = useLocale();
@@ -31,11 +31,11 @@ export function useHome(): HomeModel {
 			}
 		},
 	});
-
-	useEffect(() => {
-		if (!modelView) {
-			interact({ type: "REFRESH" });
-		}
-	}, [modelView, interact]);
+	useQuery({
+		queryKey: ["home"],
+		queryFn: () => interact({ type: "REFRESH" }),
+		staleTime: Infinity,
+		gcTime: Infinity,
+	});
 	return { modelView, interact };
 }

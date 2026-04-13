@@ -37,16 +37,16 @@ const NewsArticlePreview = function ({ model }) {
 					</ViewTransition>
 				</div>
 				<div className="card-details flex flex-col gap-2.5 p-4">
-					<span
-						className={`title mb-1 text-2xl md:font-semibold ${georgia.className}`}
+					<ViewTransition
+						name={`article-title-${article.uri}`}
+						share="auto"
 					>
-						<ViewTransition
-							name={`article-title-${article.uri}`}
-							share="auto"
+						<span
+							className={`title mb-1 text-2xl md:font-semibold ${georgia.className}`}
 						>
 							{title}
-						</ViewTransition>
-					</span>
+						</span>
+					</ViewTransition>
 					<span className="timestamp text-base text-gray-600">
 						{author} — {dateString}
 					</span>
@@ -76,14 +76,14 @@ const NewsArticlePreview = function ({ model }) {
 					</ViewTransition>
 				</div>
 				<div className="card-details flex flex-col gap-1.5 py-4 md:px-6">
-					<span className="title text-sm lg:text-base">
-						<ViewTransition
-							name={`article-title-${article.uri}`}
-							share="auto"
-						>
+					<ViewTransition
+						name={`article-title-${article.uri}`}
+						share="auto"
+					>
+						<span className="title text-sm lg:text-base">
 							{title}
-						</ViewTransition>
-					</span>
+						</span>
+					</ViewTransition>
 					<span className="byline text-xs text-gray-600 lg:text-sm">
 						{author} — {dateString}
 					</span>
