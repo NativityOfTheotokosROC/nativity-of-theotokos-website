@@ -41,7 +41,12 @@ const NewsArticle = async function ({ model }) {
 						<span
 							className={`title text-4xl/tight md:text-5xl/tight lg:text-6xl/tight ${georgia.className} font-semibold`}
 						>
-							{title}
+							<ViewTransition
+								name={`article-title-${article.uri}`}
+								share="auto"
+							>
+								{title}
+							</ViewTransition>
 						</span>
 						<div className="byline flex flex-col gap-1">
 							<div className="md:max-[50vw] -ml-8 flex w-fit max-w-[80vw] min-w-3/4 items-center gap-2 bg-gray-900/80 p-2 pr-4 pl-8 text-white md:-ml-12 md:pl-12">
