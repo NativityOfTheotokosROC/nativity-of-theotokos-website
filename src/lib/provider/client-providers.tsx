@@ -25,7 +25,7 @@ export const ClientProviders = function ({
 		pageLoadingBarVIInterface(),
 		{ isLoading: false },
 	);
-	const navigationUserInformation = useNavigationUserInformation();
+	const navigationUserInformation = useNavigationUserInformation(queryClient);
 
 	return (
 		<QueryClientProvider client={queryClient}>
