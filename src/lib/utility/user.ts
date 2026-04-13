@@ -16,6 +16,11 @@ export function useNavigationUserInformation(queryClient?: QueryClient) {
 		{
 			queryKey: ["navigation-user-information"],
 			queryFn: getNavigationUserInformation,
+			staleTime: Infinity,
+			gcTime: Infinity,
+			refetchOnMount: false,
+			refetchOnReconnect: false,
+			refetchOnWindowFocus: false,
 		},
 		queryClient,
 	);
@@ -23,6 +28,5 @@ export function useNavigationUserInformation(queryClient?: QueryClient) {
 	return "pending";
 }
 
-export const NavigationUserInformationContext = createContext<
-	NavigationUserInformation | "pending"
->("pending");
+export const NavigationUserInformationContext =
+	createContext<ReturnType<typeof useNavigationUserInformation>>("pending");
