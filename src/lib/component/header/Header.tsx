@@ -13,12 +13,16 @@ import { georgia } from "../../third-party/fonts";
 import { Navlink } from "../../type/general";
 import { usePageLoadingBarRouter } from "../../utility/page-loading-bar";
 import NavigationDrawer from "../navigation-drawer/NavigationDrawer";
-import { Link } from "../page-loading-bar/PageLoadingBar";
+import {
+	Link,
+	PageLoadingBarContext,
+} from "../page-loading-bar/PageLoadingBar";
 import UserNavigationWidget, {
 	UserNavigationWidgetSkeleton,
 } from "../user-navigation-widget/UserNavigationWidget";
 import "./header.css";
-import { Suspense } from "react";
+import { Suspense, useContext } from "react";
+import { getUserActions } from "../../model-implementation/user-action";
 
 const Header = function ({ model }) {
 	const { navlinks, hasUserNavigationWidget } = model.modelView;
@@ -102,6 +106,8 @@ const NavMenu = function ({ model }) {
 		type,
 		menuItems: { navlinks, hasUserNavigationWidget },
 	} = model.modelView;
+	const pageLoadingBar = useContext(PageLoadingBarContext);
+	const router = usePageLoadingBarRouter(useRouter);
 
 	return (
 		<nav className="nav-menu">
@@ -133,6 +139,13 @@ const NavMenu = function ({ model }) {
 								model={newReadonlyModel({
 									style: "dropdown",
 									variant: "abbreviated",
+									getUserActions(roles) {
+										return getUserActions(
+											roles,
+											router,
+											pageLoadingBar,
+										);
+									},
 								})}
 							/>
 						</Suspense>
@@ -147,6 +160,13 @@ const NavMenu = function ({ model }) {
 								model={newReadonlyModel({
 									style: "accordion",
 									variant: "full",
+									getUserActions(roles) {
+										return getUserActions(
+											roles,
+											router,
+											pageLoadingBar,
+										);
+									},
 								})}
 							/>
 						)}
