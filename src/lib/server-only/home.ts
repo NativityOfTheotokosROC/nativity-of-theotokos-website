@@ -354,12 +354,10 @@ export async function getLatestNews(
 }
 
 // TODO: Optimize asap
-export async function getDailyGalleryImages(
-	count: number,
-	currentDate = new Date(),
-) {
+export async function getDailyGalleryImages(count: number, currentDate: Date) {
 	"use cache: remote";
 	cacheTag("daily-gallery-images");
+	cacheLife("hours");
 
 	const baseUrl = BASE_URL;
 	const localDate = new Date(getDateString(currentDate, true));
