@@ -16,7 +16,7 @@ export function useUserInformation(queryClient?: QueryClient) {
 		UserInformation | undefined
 	>();
 	useEffect(() => {
-		if (!userInformation)
+		if (userInformation == undefined)
 			getUserInformation().then(userInformation =>
 				setUserInformation(userInformation),
 			);
