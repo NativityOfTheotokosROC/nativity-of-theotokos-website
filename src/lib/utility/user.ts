@@ -12,8 +12,9 @@ export type UserInformation = {
 } | null;
 
 export function useUserInformation(queryClient?: QueryClient) {
-	const [userInformation, setUserInformation] =
-		useState<UserInformation | null>(null);
+	const [userInformation, setUserInformation] = useState<
+		UserInformation | undefined
+	>();
 	useEffect(() => {
 		if (!userInformation)
 			getUserInformation().then(userInformation =>
@@ -21,7 +22,7 @@ export function useUserInformation(queryClient?: QueryClient) {
 			);
 	}, [userInformation]);
 
-	return userInformation ?? "pending";
+	return userInformation == undefined ? "pending" : userInformation;
 	// const { data, isSuccess } = useQuery(
 	// 	{
 	// 		queryKey: ["user-information"],
