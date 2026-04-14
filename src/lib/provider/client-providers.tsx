@@ -4,7 +4,6 @@ import { pageLoadingBarVIInterface } from "@/src/lib/model-implementation/page-l
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
-import { UserInformationContext, useUserInformation } from "../utility/user";
 
 const Polyfills = dynamic(
 	() => import("@/src/lib/component/miscellaneous/polyfills"),
@@ -22,14 +21,14 @@ export const ClientProviders = function ({
 		pageLoadingBarVIInterface(),
 		{ isLoading: false },
 	);
-	const userInformation = useUserInformation(queryClient);
+	// const userInformation = useUserInformation(queryClient);
 
 	return (
 		<QueryClientProvider client={queryClient}>
 			<PageLoadingBarContext.Provider value={pageLoadingBar}>
-				<UserInformationContext.Provider value={userInformation}>
-					<Polyfills>{children}</Polyfills>
-				</UserInformationContext.Provider>
+				{/* <UserInformationContext.Provider value={userInformation}> */}
+				<Polyfills>{children}</Polyfills>
+				{/* </UserInformationContext.Provider> */}
 			</PageLoadingBarContext.Provider>
 		</QueryClientProvider>
 	);
