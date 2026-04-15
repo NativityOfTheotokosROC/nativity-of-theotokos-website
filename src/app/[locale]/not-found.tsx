@@ -9,6 +9,8 @@ import { routing } from "@/src/i18n/routing";
 import { hasLocale } from "next-intl";
 
 export default async function NotFound() {
+	console.log("Locale not-found run");
+
 	const locale = await rootLocale();
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 

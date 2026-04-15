@@ -15,6 +15,8 @@ export const metadata: Metadata = {
 };
 
 export default async function NotFound() {
+	console.log("Root not-found run");
+
 	const language = "en";
 	setRequestLocale(language);
 	const messages = await getMessages({ locale: language });

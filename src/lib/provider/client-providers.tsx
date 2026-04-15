@@ -18,6 +18,8 @@ export const ClientProviders = function ({
 }: {
 	children: React.ReactNode;
 }) {
+	console.log("Client providers run");
+
 	const pageLoadingBar = useInitializedStatefulInteractiveModel(
 		pageLoadingBarVIInterface(),
 		{ isLoading: false },

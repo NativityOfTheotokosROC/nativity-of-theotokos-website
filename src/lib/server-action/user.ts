@@ -19,11 +19,13 @@ export async function getUserInformation(): Promise<UserInformation> {
 	const roles = roleRecords
 		.map(record => record.role)
 		.filter(role =>
-			["admin", "quotes", "staff", "user"].includes(role),
-		) as Role[]; // HACK: Dirty
+			(["admin", "quotes", "staff", "user", "writer"] as const).includes(
+				role as Role,
+			),
+		); // HACK: Dirty
 	return {
 		name: user.name,
 		avatar: { source: user.image! },
-		roles,
+		roles: roles as Role[],
 	};
 }
