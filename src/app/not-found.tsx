@@ -1,5 +1,3 @@
-"use cache";
-
 import "./globals.css";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
@@ -15,8 +13,6 @@ export const metadata: Metadata = {
 };
 
 export default async function NotFound() {
-	console.log("Root not-found run");
-
 	const language = "en";
 	setRequestLocale(language);
 	const messages = await getMessages({ locale: language });

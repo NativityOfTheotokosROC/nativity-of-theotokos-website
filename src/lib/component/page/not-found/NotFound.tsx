@@ -1,5 +1,3 @@
-"use cache";
-
 import NotFoundGraphic from "@/public/assets/ornament_35.svg";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { Language } from "@/src/lib/type/general";
@@ -9,6 +7,8 @@ import { getTranslations } from "next-intl/server";
 import GoHomeButton from "./GoHomeButton";
 
 export const NotFound = async function ({ model }) {
+	"use cache";
+
 	const { language } = model.modelView;
 	const t = await getTranslations({
 		locale: language,
