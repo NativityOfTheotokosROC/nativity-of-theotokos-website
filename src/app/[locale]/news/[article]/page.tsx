@@ -78,7 +78,7 @@ export async function generateMetadata({
 export default async function Page({
 	params,
 }: PageProps<"/[locale]/news/[article]">) {
-	"use cache";
+	// "use cache";
 
 	const { article: articleId, locale } = await params;
 	const language = hasLocale(routing.locales, locale) ? locale : "en";

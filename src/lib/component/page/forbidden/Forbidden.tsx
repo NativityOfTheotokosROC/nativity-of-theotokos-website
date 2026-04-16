@@ -1,19 +1,20 @@
+"use client";
+
 import ForbiddenGraphic from "@/public/assets/icon-3.svg";
 import { ForbiddenModel } from "@/src/lib/model/forbidden";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 import PageNavigationButton from "../../button/PageNavigationButton";
 import SignOutButton from "../../button/SignOutButton";
-import { locale as rootLocale } from "next/root-params";
 
-const Forbidden = async function ({ model }) {
-	"use cache";
+const Forbidden = function ({ model }) {
+	// "use cache";
 
-	const locale = await rootLocale();
+	// const locale = await rootLocale();
 	const { signOutEndpoint } = model.modelView;
-	const t = await getTranslations({ locale, namespace: "unauthorized" });
+	const t = useTranslations("unauthorized");
 
 	return (
 		<main className={`forbidden bg-[#FEF8F3] text-black`}>

@@ -11,11 +11,11 @@ export type UserInformation = {
 	roles: Role[];
 } | null;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function useUserInformation(queryClient?: QueryClient) {
 	const [userInformation, setUserInformation] = useState<
 		UserInformation | undefined
 	>(undefined);
-	//nvf20.75-ts4
 	useEffect(() => {
 		if (userInformation === undefined)
 			getUserInformation().then(userInformation =>
