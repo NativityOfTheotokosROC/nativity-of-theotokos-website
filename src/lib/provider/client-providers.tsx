@@ -22,15 +22,17 @@ export const ClientProviders = function ({
 		pageLoadingBarVIInterface(),
 		{ isLoading: false },
 	);
-	const userInformation = useUserInformation(queryClient);
+	// const userInformation = useUserInformation(queryClient);
 
 	return (
 		<QueryClientProvider client={queryClient}>
+			{/* <UserInformationContext.Provider value={userInformation}> */}
 			<PageLoadingBarContext.Provider value={pageLoadingBar}>
 				<UserInformationContext.Provider value={userInformation}>
 					<Polyfills>{children}</Polyfills>
 				</UserInformationContext.Provider>
 			</PageLoadingBarContext.Provider>
+			{/* </UserInformationContext.Provider> */}
 		</QueryClientProvider>
 	);
 };

@@ -19,14 +19,14 @@ import {
 import { ChevronDown as DropdownIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { Suspense, useContext } from "react";
+import { Suspense } from "react";
 import { Fragment } from "react/jsx-runtime";
 import {
 	NavigationUser,
 	UserNavigationWidgetModel,
 	UserNavigationWidgetVariant,
 } from "../../model/user-navigation-widget";
-import { UserInformationContext } from "../../utility/user";
+import { useUserInformation } from "../../utility/user";
 import UserAction from "../user-action/UserAction";
 
 type WidgetVariantModel = ReadonlyModel<{
@@ -154,7 +154,7 @@ export const UserNavigationWidgetCore = function ({ model }) {
 	} = model;
 
 	const t = useTranslations("userNavigation");
-	const userInformation = useContext(UserInformationContext);
+	const userInformation = useUserInformation();
 	const userActions =
 		userInformation != null && userInformation != "pending"
 			? getUserActions(userInformation.roles)

@@ -1,19 +1,18 @@
-"use cache";
+"use client";
 
 import NotFoundGraphic from "@/public/assets/ornament_35.svg";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { Language } from "@/src/lib/type/general";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 import GoHomeButton from "./GoHomeButton";
 
-export const NotFound = async function ({ model }) {
-	const { language } = model.modelView;
-	const t = await getTranslations({
-		locale: language,
-		namespace: "notFound",
-	});
+export const NotFound = function ({}) {
+	// "use cache";
+
+	// const { language } = model.modelView;
+	const t = useTranslations("notFound");
 
 	return (
 		<main className={`not-found flex flex-col bg-[#FEF8F3] text-black`}>
