@@ -6,31 +6,18 @@ import { getHomeSnapshot } from "../server-action/home";
 
 export function useHome(): HomeModel {
 	const language = useLocale();
-	const { modelView, interact } = useNewStatefulInteractiveModel<
-		HomeModelView,
-		HomeModelInteraction
-	>({
-		async produceModelView(interaction) {
-			switch (interaction.type) {
-				case "REFRESH": {
-					const {
-						dailyReadings,
-						dailyQuote,
-						scheduleItems,
-						newsArticles,
-						dailyGalleryImages,
-					} = await getHomeSnapshot(4, 4, 7, language);
-					return {
-						dailyReadings,
-						dailyQuote,
-						scheduleItems,
-						newsArticles,
-						dailyGalleryImages,
-					};
-				}
-			}
-		},
+	const { data, isSuccess, refetch } = useQuery({
+		queryKey: ["home"],
+		queryFn: () => getHomeSnapshot(4, 4, 7, language),
+		staleTime: Infinity,
+		gcTime: Infinity,
+		refetchOnMount: false,
+		refetchOnReconnect: false,
+		refetchOnWindowFocus: false,
 	});
+	const interact = async (interaction: HomeModelInteraction) => {
+		if (interaction.type == "REFRESH") refetch();
+	};
 
 	useEffect(() => {
 		if (!modelView) {
