@@ -1,15 +1,15 @@
-import Footer from "@/src/lib/component/footer/Footer";
-import Header from "@/src/lib/component/header/Header";
-import LanguageSwitcher from "@/src/lib/component/language-switcher/LanguageSwitcher";
-import PageLoadingBar from "@/src/lib/component/page-loading-bar/PageLoadingBar";
-import { FooterModel } from "@/src/lib/model/footer";
-import { Language, Navlink } from "@/src/lib/type/general";
+import Footer from "@/src/lib/components/footer/Footer";
+import Header from "@/src/lib/components/header/Header";
+import LanguageSwitcher from "@/src/lib/components/language-switcher/LanguageSwitcher";
+import PageLoadingBar from "@/src/lib/components/page-loading-bar/PageLoadingBar";
+import { FooterModel } from "@/src/lib/models/footer";
+import { Language, Navlink } from "@/src/lib/types/general";
 import { ModeledContainerComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
-import LayoutLoadingSkeleton from "@/src/lib/component/layout-loading-skeleton/LayoutLoadingSkeleton";
+import LayoutLoadingSkeleton from "@/src/lib/components/layout-loading-skeleton/LayoutLoadingSkeleton";
 
 export interface AppLayoutModelView {
 	language: Language;

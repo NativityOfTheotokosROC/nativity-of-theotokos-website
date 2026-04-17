@@ -2,9 +2,9 @@ import { load } from "cheerio";
 import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
 import { cacheLife, cacheTag } from "next/cache";
-import { DailyReadings, Hymn, Image, Language } from "../type/general";
-import { getLocalTimeZone } from "../utility/date-time";
-import { removeMarkup } from "../utility/miscellaneous";
+import { DailyReadings, Hymn, Image, Language } from "../types/general";
+import { getLocalTimeZone } from "../utilities/date-time";
+import { removeMarkup } from "../utilities/miscellaneous";
 
 export const dailyReadings = async (date: Date, language: Language) => {
 	"use cache: remote";

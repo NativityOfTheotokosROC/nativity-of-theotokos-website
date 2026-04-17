@@ -1,9 +1,9 @@
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { NextRequest, NextResponse } from "next/server";
-import { getProtectedRoutes, redirects } from "./lib/utility/routing";
-import { getUser } from "./lib/server-action/auth";
-import { Path } from "./lib/type/general";
+import { getProtectedRoutes, redirects } from "./lib/utilities/routing";
+import { getUser } from "./lib/server-actions/auth";
+import { Path } from "./lib/types/general";
 
 const nextIntlMiddleware = createMiddleware(routing);
 

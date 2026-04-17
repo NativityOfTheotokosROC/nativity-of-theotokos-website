@@ -1,5 +1,5 @@
 import MailerLite from "@mailerlite/mailerlite-nodejs";
-import { MAILERLITE_API_KEY } from "../utility/server-constant";
+import { MAILERLITE_API_KEY } from "../utilities/server-constants";
 
 const mailerLite = new MailerLite({ api_key: MAILERLITE_API_KEY });
 

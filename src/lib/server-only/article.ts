@@ -1,6 +1,6 @@
 import { cacheTag, cacheLife } from "next/cache";
 import prisma from "../third-party/prisma";
-import { Language, NewsArticle } from "../type/general";
+import { Language, NewsArticle } from "../types/general";
 import { notFound } from "next/navigation";
 
 export async function getAllArticles(

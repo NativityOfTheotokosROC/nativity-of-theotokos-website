@@ -6,7 +6,7 @@ import {
 } from "@grod56/placeholder";
 import { cacheLife } from "next/cache";
 import prisma from "../third-party/prisma";
-import { BASE_URL } from "../utility/server-constant";
+import { BASE_URL } from "../utilities/server-constants";
 
 const baseUrl = BASE_URL;
 

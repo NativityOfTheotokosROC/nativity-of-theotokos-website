@@ -1,7 +1,7 @@
 import z from "zod";
-import { Translator } from "../type/general";
-import { getDateString } from "../utility/date-time";
-import { emptyStringAsUndefined } from "../utility/miscellaneous";
+import { Translator } from "../types/general";
+import { getDateString } from "../utilities/date-time";
+import { emptyStringAsUndefined } from "../utilities/miscellaneous";
 import { useLocalizedSchema } from "./general";
 
 export function getQuoteSchema(t?: Translator) {

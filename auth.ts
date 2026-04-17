@@ -9,7 +9,7 @@ import {
 	GOOGLE_CLIENT_SECRET,
 	YANDEX_CLIENT_ID,
 	YANDEX_CLIENT_SECRET,
-} from "./src/lib/utility/server-constant";
+} from "./src/lib/utilities/server-constants";
 
 export const auth = betterAuth({
 	database: prismaAdapter(prisma, { provider: "postgresql" }),

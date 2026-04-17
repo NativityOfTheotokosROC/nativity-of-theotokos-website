@@ -1,13 +1,13 @@
 import "@/src/app/globals.css";
 import { routing } from "@/src/i18n/routing";
-import LayoutLoadingSkeleton from "@/src/lib/component/layout-loading-skeleton/LayoutLoadingSkeleton";
-import ClientProviders from "@/src/lib/provider/client-providers";
+import LayoutLoadingSkeleton from "@/src/lib/components/layout-loading-skeleton/LayoutLoadingSkeleton";
+import ClientProviders from "@/src/lib/providers/client-providers";
 import {
 	georgia,
 	googleSans,
 	googleSansFlex,
 } from "@/src/lib/third-party/fonts";
-import { Language } from "@/src/lib/type/general";
+import { Language } from "@/src/lib/types/general";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -19,7 +19,7 @@ import {
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import AppLayout from "./AppLayout";
-import { BASE_URL } from "@/src/lib/utility/server-constant";
+import { BASE_URL } from "@/src/lib/utilities/server-constants";
 
 export function generateStaticParams() {
 	return [{ locale: "en" }, { locale: "ru" }];

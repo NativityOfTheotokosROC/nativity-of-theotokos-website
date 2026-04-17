@@ -1,10 +1,10 @@
 "use cache";
 
-import ShareButton from "@/src/lib/component/share-button/ShareButton";
-import SocialLink from "@/src/lib/component/social-link/SocialLink";
-import { NewsArticleModel } from "@/src/lib/model/news-article";
+import ShareButton from "@/src/lib/components/share-button/ShareButton";
+import SocialLink from "@/src/lib/components/social-link/SocialLink";
+import { NewsArticleModel } from "@/src/lib/models/news-article";
 import { georgia } from "@/src/lib/third-party/fonts";
-import { getNewsArticleDateString } from "@/src/lib/utility/date-time";
+import { getNewsArticleDateString } from "@/src/lib/utilities/date-time";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";

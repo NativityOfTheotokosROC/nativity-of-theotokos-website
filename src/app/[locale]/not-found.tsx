@@ -1,5 +1,5 @@
-import NotFoundView from "@/src/lib/component/page/not-found/NotFound";
-import ViewLoadingSkeleton from "@/src/lib/component/view-loading-skeleton/ViewLoadingSkeleton";
+import NotFoundView from "@/src/lib/components/views/not-found/NotFound";
+import ViewLoadingSkeleton from "@/src/lib/components/view-loading-skeleton/ViewLoadingSkeleton";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Suspense } from "react";
 import { locale as rootLocale } from "next/root-params";

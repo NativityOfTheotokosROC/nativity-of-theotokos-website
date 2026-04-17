@@ -1,10 +1,10 @@
 "use client";
 
-import { createToast } from "@/src/lib/component/miscellaneous/utility";
-import Spinner from "@/src/lib/component/spinner/Spinner";
-import { NewQuoteModel } from "@/src/lib/model/new-quote";
+import { createToast } from "@/src/lib/components/miscellaneous/utility";
+import Spinner from "@/src/lib/components/spinner/Spinner";
+import { NewQuoteModel } from "@/src/lib/models/new-quote";
 import { georgia } from "@/src/lib/third-party/fonts";
-import { getDateString } from "@/src/lib/utility/date-time";
+import { getDateString } from "@/src/lib/utilities/date-time";
 import { useQuoteFormSchema } from "@/src/lib/validation/quote-form";
 import {
 	Checkbox,

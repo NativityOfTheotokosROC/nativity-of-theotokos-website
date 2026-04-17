@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { cacheLife, cacheTag } from "next/cache";
 import "server-only";
 import { getGalleryImages } from "./gallery";
-import { LatestNews } from "../server-action/home";
+import { LatestNews } from "../server-actions/home";
 import { dailyReadings } from "../third-party/holytrinityorthodox";
 import prisma from "../third-party/prisma";
 import {
@@ -12,13 +12,13 @@ import {
 	GalleryImage,
 	Language,
 	ScheduleItem,
-} from "../type/general";
-import { getDateString } from "../utility/date-time";
+} from "../types/general";
+import { getDateString } from "../utilities/date-time";
 import {
 	getEnglishTranslationHash,
 	isRemotePath,
-} from "../utility/miscellaneous";
-import { BASE_URL } from "../utility/server-constant";
+} from "../utilities/miscellaneous";
+import { BASE_URL } from "../utilities/server-constants";
 
 export const getDailyReadings = async (
 	currentDate: Date,

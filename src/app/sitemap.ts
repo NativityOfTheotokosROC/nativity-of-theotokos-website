@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { BASE_URL } from "../lib/utility/server-constant";
+import { BASE_URL } from "../lib/utilities/server-constants";
 import { getAllArticles } from "../lib/server-only/article";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

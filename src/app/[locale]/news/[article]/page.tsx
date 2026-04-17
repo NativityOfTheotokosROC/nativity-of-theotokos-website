@@ -1,11 +1,11 @@
 import { routing } from "@/src/i18n/routing";
-import { getArticle } from "@/src/lib/server-action/article";
-import { NewsArticle as NewsArticleType } from "@/src/lib/type/general";
+import { getArticle } from "@/src/lib/server-actions/article";
+import { NewsArticle as NewsArticleType } from "@/src/lib/types/general";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import NewsArticle from "./NewsArticle";
-import { BASE_URL } from "@/src/lib/utility/server-constant";
+import { BASE_URL } from "@/src/lib/utilities/server-constants";
 import {
 	getAllArticles,
 	getArticleMetadata,

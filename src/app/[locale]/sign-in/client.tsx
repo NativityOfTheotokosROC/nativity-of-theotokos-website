@@ -1,7 +1,7 @@
 "use client";
 
-import { useSignIn } from "@/src/lib/model-implementation/sign-in";
-import { SignInClientModel } from "@/src/lib/model/sign-in-client";
+import { useSignIn } from "@/src/lib/model-implementations/sign-in";
+import { SignInClientModel } from "@/src/lib/models/sign-in-client";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import SignIn from "./SignIn";
 
