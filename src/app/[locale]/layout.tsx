@@ -20,12 +20,6 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import AppLayout from "./AppLayout";
 import { BASE_URL } from "@/src/lib/utilities/server-constants";
-import dynamic from "next/dynamic";
-
-const Polyfills = dynamic(
-	() => import("@/src/lib/components/miscellaneous/polyfills"),
-	{ ssr: false },
-);
 
 export function generateStaticParams() {
 	return [{ locale: "en" }, { locale: "ru" }];
@@ -102,15 +96,11 @@ export default async function RootLayout({
 				<Suspense fallback={<LayoutLoadingSkeleton />}>
 					<NextIntlClientProvider locale={locale} messages={messages}>
 						<ClientProviders>
-							<Polyfills>
-								<AppLayout
-									model={newReadonlyModel({
-										language: locale,
-									})}
-								>
-									{children}
-								</AppLayout>
-							</Polyfills>
+							<AppLayout
+								model={newReadonlyModel({ language: locale })}
+							>
+								{children}
+							</AppLayout>
 						</ClientProviders>
 					</NextIntlClientProvider>
 				</Suspense>
