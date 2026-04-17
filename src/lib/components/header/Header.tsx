@@ -23,6 +23,7 @@ import UserNavigationWidget, {
 import "./header.css";
 import { Suspense, useContext } from "react";
 import { getUserActions } from "../../model-implementations/user-action";
+import { useUserInformation } from "../../utilities/user";
 
 const Header = function ({ model }) {
 	const { navlinks, hasUserNavigationWidget } = model.modelView;
@@ -36,6 +37,7 @@ const Header = function ({ model }) {
 	const t = useTranslations("header");
 	const tNonDescriptive = useTranslations("nonDescriptive");
 	const locale = useLocale();
+	useUserInformation(); // Prefetch
 
 	return (
 		<header
