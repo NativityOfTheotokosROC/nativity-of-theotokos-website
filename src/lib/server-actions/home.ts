@@ -75,7 +75,7 @@ export async function getHomeSnapshot(
 	};
 }
 
-export async function subscribeToMailingList(payload: string) {
-	const email = z.email().trim().parse(payload);
-	await mailerLite.subscribers.createOrUpdate({ email });
+export async function subscribeToMailingList(email: string) {
+	const validatedEmail = z.email().trim().parse(email);
+	await mailerLite.subscribers.createOrUpdate({ email: validatedEmail });
 }

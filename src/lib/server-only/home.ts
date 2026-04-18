@@ -1,7 +1,7 @@
 import { ImagePlaceholder, getPlaceholder } from "@grod56/placeholder";
 import arrayToShuffled from "array-shuffle";
 import { getTranslations } from "next-intl/server";
-import { cacheLife, cacheTag } from "next/cache";
+import { cacheLife, cacheTag, unstable_cache } from "next/cache";
 import "server-only";
 import { getGalleryImages } from "./gallery";
 import { LatestNews } from "../server-actions/home";
@@ -354,14 +354,17 @@ export async function getLatestNews(
 }
 
 // TODO: Optimize asap
-export async function getDailyGalleryImages(count: number, currentDate: Date) {
-	"use cache: remote";
-	cacheTag(
-		"daily-gallery-images",
-		count.toString(),
-		currentDate.toDateString(),
-	);
-	cacheLife("hours");
+export const getDailyGalleryImages = unstable_cache(async function (
+	count: number,
+	currentDate: Date,
+) {
+	// "use cache: remote";
+	// cacheTag(
+	// 	"daily-gallery-images",
+	// 	count.toString(),
+	// 	currentDate.toDateString(),
+	// );
+	// cacheLife("hours");
 
 	const baseUrl = BASE_URL;
 	const localDate = new Date(getDateString(currentDate, true));
@@ -428,7 +431,7 @@ export async function getDailyGalleryImages(count: number, currentDate: Date) {
 		});
 	}
 	return placeholderedGalleryImages;
-}
+});
 
 // TODO: To be refactored to something less ... static
 async function _getNextDefaultScheduleItem(date: Date): Promise<
