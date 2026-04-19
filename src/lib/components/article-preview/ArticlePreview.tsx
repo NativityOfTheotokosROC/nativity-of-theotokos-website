@@ -63,6 +63,7 @@ const ArticlePreview = function ({ model }) {
 							className="h-full w-full grow object-cover object-center"
 							height={128}
 							width={128}
+							quality={1}
 							alt={tCaptions("newsArticleImage")}
 							src={source}
 							placeholder="blur"

@@ -26,7 +26,7 @@ export async function generateMetadata({
 export default async function Page(props: PageProps<"/[locale]/sign-in">) {
 	const searchParams = await props.searchParams;
 	const signInEndpoint =
-		typeof searchParams.endpoint ==== "string" ? searchParams.endpoint : "/";
+		typeof searchParams.endpoint === "string" ? searchParams.endpoint : "/";
 	const user = await getUser();
 
 	if (user) redirect(signInEndpoint);
