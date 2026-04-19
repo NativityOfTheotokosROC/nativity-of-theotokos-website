@@ -4,7 +4,7 @@ import { ImagePlaceholder } from "@grod56/placeholder";
 import { cacheTag } from "next/cache";
 import { notFound } from "next/navigation";
 import prisma from "../third-party/prisma";
-import { Language, NewsArticle } from "../types/general";
+import { Language, Article } from "../types/general";
 import { isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
 import { getPlaceholder } from "../server-only/placeholder";
@@ -12,9 +12,9 @@ import { getPlaceholder } from "../server-only/placeholder";
 export async function getArticle(
 	articleId: string,
 	language: Language,
-): Promise<Omit<NewsArticle, "url">> {
+): Promise<Omit<Article, "url">> {
 	"use cache: remote";
-	cacheTag("bulletin_article", articleId); // TODO: Explicitly setting articleId because of the placeholder notFound call (I think)
+	cacheTag("bulletin_article");
 
 	const locale = language;
 	try {
@@ -38,23 +38,23 @@ export async function getArticle(
 					: `${baseUrl}${article.image.link}`,
 			));
 		const title =
-			locale == "ru" && article.title.russian
+			locale === "ru" && article.title.russian
 				? article.title.russian
 				: article.title.english;
 		const author =
-			locale == "ru" && article.author.name.russian != null
+			locale === "ru" && article.author.name.russian != null
 				? article.author.name.russian
 				: article.author.name.english;
 		const body =
-			locale == "ru" && article.body.russian
+			locale === "ru" && article.body.russian
 				? article.body.russian
 				: article.body.english;
 		const snippet =
-			locale == "ru" && article.snippet.russian
+			locale === "ru" && article.snippet.russian
 				? article.snippet.russian
 				: article.snippet.english;
 		const imageCaption =
-			locale == "ru" && article.image.caption.russian
+			locale === "ru" && article.image.caption.russian
 				? article.image.caption.russian
 				: article.image.caption.english;
 
@@ -76,7 +76,7 @@ export async function getArticle(
 		if (
 			error instanceof Object &&
 			"code" in error &&
-			error["code"] == "P2025"
+			error["code"] === "P2025"
 		)
 			notFound();
 		throw error;

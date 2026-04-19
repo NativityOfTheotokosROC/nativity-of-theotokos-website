@@ -21,11 +21,11 @@ const SignOutButton = function ({ model, children }) {
 				variant: "standard",
 				action: () => signOutModel.interact({ type: "SIGN_OUT" }),
 				disabled:
-					signOutStatus?.type == "pending" ||
-					signOutStatus?.type == "success",
+					signOutStatus?.type === "pending" ||
+					signOutStatus?.type === "success",
 			})}
 		>
-			{signOutStatus?.type == "pending" ? (
+			{signOutStatus?.type === "pending" ? (
 				<Spinner
 					model={newReadonlyModel({
 						color: "white",

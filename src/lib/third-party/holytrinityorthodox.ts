@@ -140,7 +140,7 @@ export async function getFastingInfo(date: Date, language: Language) {
 			return (fastText ? fastText : $(".headernofast").text()).trim();
 		})
 		.then(markedUpText => removeMarkup(markedUpText))
-		.then(info => (info.length == 0 ? t("noFast") : info));
+		.then(info => (info.length === 0 ? t("noFast") : info));
 }
 
 export async function getIconOfTheDay(date: Date, language: Language) {
@@ -180,13 +180,13 @@ export async function getHymns(date: Date, language: Language) {
 }
 
 function _getBaseURL(language: Language) {
-	if (language == "ru")
+	if (language === "ru")
 		return "https://www.holytrinityorthodox.com/htc/ocalendar/ru/v2calendar.php";
 	return "https://www.holytrinityorthodox.com/htc/ocalendar/v2calendar.php";
 }
 
 function _getIconOfTheDayURL(language: Language) {
-	if (language == "ru")
+	if (language === "ru")
 		return "https://www.holytrinityorthodox.com/htc/iconoftheday/ru/v6TitleIconTroparion.php";
 	return "https://www.holytrinityorthodox.com/htc/iconoftheday/v6TitleIconTroparion.php";
 }

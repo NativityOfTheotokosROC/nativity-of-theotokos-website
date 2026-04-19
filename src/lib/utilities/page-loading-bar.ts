@@ -67,7 +67,7 @@ export function triggerLoading(
 	)
 		return true;
 	const destinationPathname =
-		typeof href == "string"
+		typeof href === "string"
 			? new URL(href, window.location.origin).pathname
 			: href.pathname;
 	return destinationPathname != pathName;

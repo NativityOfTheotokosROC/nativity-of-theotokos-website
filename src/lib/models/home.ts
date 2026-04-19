@@ -5,13 +5,13 @@ import {
 	GalleryImage,
 	ScheduleItem,
 } from "../types/general";
-import { LatestNews } from "../server-actions/home";
+import { LatestArticles } from "../server-actions/home";
 
 export interface HomeModelView {
 	dailyReadings: DailyReadings;
 	dailyQuote: DailyQuote;
 	scheduleItems: ScheduleItem[];
-	newsArticles: LatestNews;
+	newsArticles: LatestArticles;
 	dailyGalleryImages: GalleryImage[];
 }
 

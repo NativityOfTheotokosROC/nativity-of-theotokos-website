@@ -56,10 +56,10 @@ const MailingListSection = function ({ model }) {
 									className={`flex h-full w-[9em] min-w-fit items-center justify-center bg-gray-600 p-4 text-center text-white hover:bg-gray-700 active:bg-gray-950 disabled:bg-gray-400 md:w-[8em]`}
 									type="submit"
 									disabled={
-										mailingListStatus?.type == "pending"
+										mailingListStatus?.type === "pending"
 									}
 								>
-									{mailingListStatus?.type == "pending" ? (
+									{mailingListStatus?.type === "pending" ? (
 										<Spinner
 											model={newReadonlyModel({
 												color: "white",
@@ -72,7 +72,7 @@ const MailingListSection = function ({ model }) {
 								</button>
 							</div>
 						</form>
-						{mailingListStatus?.type == "failed" && (
+						{mailingListStatus?.type === "failed" && (
 							<span className="text-xs text-red-400">
 								{mailingListStatus.message}
 							</span>

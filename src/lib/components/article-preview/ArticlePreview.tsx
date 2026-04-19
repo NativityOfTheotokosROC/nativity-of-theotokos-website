@@ -3,21 +3,21 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { NewsArticlePreviewModel } from "../../models/news-article-preview";
+import { ArticlePreviewModel } from "../../models/article-preview";
 import { georgia } from "../../third-party/fonts";
 import { getNewsArticleDateString } from "../../utilities/date-time";
 import { Link } from "../page-loading-bar/PageLoadingBar";
 import { ViewTransition } from "react";
 
-const NewsArticlePreview = function ({ model }) {
-	const { articlePreview: article, isFeatured } = model.modelView;
+const ArticlePreview = function ({ model }) {
+	const { articlePreview: article, isDetailed } = model.modelView;
 	const { title, author, dateCreated, snippet, articleImage, uri } = article;
 	const { placeholder, source } = articleImage;
 	const articleLink = `/news/${uri}`;
 	const dateString = getNewsArticleDateString(dateCreated);
 	const tCaptions = useTranslations("imageCaptions");
 
-	return isFeatured ? (
+	return isDetailed ? (
 		<Link className="featured-card contents" href={articleLink}>
 			<div className="flex flex-col overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3] transition duration-150 ease-out select-none hover:scale-[1.03] hover:cursor-pointer hover:border-[#dcb042] active:scale-[1.03] active:border-[#dcb042] hover:[&_.title]:underline active:[&_.title]:underline">
 				<div className="flex h-[16em] w-full items-stretch justify-stretch lg:h-[18em]">
@@ -79,6 +79,6 @@ const NewsArticlePreview = function ({ model }) {
 			</div>
 		</Link>
 	);
-} as ModeledVoidComponent<NewsArticlePreviewModel>;
+} as ModeledVoidComponent<ArticlePreviewModel>;
 
-export default NewsArticlePreview;
+export default ArticlePreview;

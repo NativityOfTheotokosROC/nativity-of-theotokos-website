@@ -17,7 +17,7 @@ export function useHome(): HomeModel {
 						dailyReadings,
 						dailyQuote,
 						scheduleItems,
-						newsArticles,
+						articles: newsArticles,
 						dailyGalleryImages,
 					} = await getHomeSnapshot(4, 4, 7, language);
 					return {
@@ -50,7 +50,7 @@ export function useHome(): HomeModel {
 	// 	refetchOnWindowFocus: false,
 	// });
 	// const interact = async (interaction: HomeModelInteraction) => {
-	// 	if (interaction.type == "REFRESH") refetch();
+	// 	if (interaction.type === "REFRESH") refetch();
 	// };
 
 	// if (isSuccess) {

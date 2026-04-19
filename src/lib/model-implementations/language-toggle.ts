@@ -30,7 +30,7 @@ export function languageToggleVIInterface(
 			switch (interaction.type) {
 				case "TOGGLE_LANGUAGE": {
 					const currentLanguage =
-						alternateLanguage == "en" ? "ru" : "en";
+						alternateLanguage === "en" ? "ru" : "en";
 
 					const { promise, resolve } =
 						Promise.withResolvers<LanguageToggleModelView>();
@@ -83,7 +83,7 @@ const useLanguageToggle = (
 	locale: Language,
 	router: ReturnType<typeof useRouter>,
 ) => {
-	const alternateLanguage: Language = locale == "en" ? "ru" : "en";
+	const alternateLanguage: Language = locale === "en" ? "ru" : "en";
 	const currentPathName = usePathname();
 	const [localeChangeEmitter] = useState(new EventEmitter());
 	const languageToggle = useInitializedStatefulInteractiveModel(

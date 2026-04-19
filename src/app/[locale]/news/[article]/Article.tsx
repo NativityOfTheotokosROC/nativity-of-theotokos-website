@@ -2,7 +2,7 @@
 
 import ShareButton from "@/src/lib/components/share-button/ShareButton";
 import SocialLink from "@/src/lib/components/social-link/SocialLink";
-import { NewsArticleModel } from "@/src/lib/models/news-article";
+import { ArticleModel } from "@/src/lib/models/article";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { getNewsArticleDateString } from "@/src/lib/utilities/date-time";
 import { ModeledVoidComponent } from "@mvc-react/components";
@@ -13,7 +13,7 @@ import Link from "next/link";
 import { locale as rootLocale } from "next/root-params";
 import { ViewTransition } from "react";
 
-const NewsArticle = async function ({ model }) {
+const Article = async function ({ model }) {
 	const { article, permalink } = model.modelView;
 	const { title, author, articleImage, dateCreated, dateUpdated, body } =
 		article;
@@ -135,6 +135,6 @@ const NewsArticle = async function ({ model }) {
 			</div>
 		</main>
 	);
-} satisfies ModeledVoidComponent<NewsArticleModel>;
+} satisfies ModeledVoidComponent<ArticleModel>;
 
-export default NewsArticle;
+export default Article;

@@ -5,7 +5,7 @@ import { Path } from "../types/general";
 
 export function getProtectedRoutes() {
 	const protectedRoutes =
-		ENVIRONMENT == "production"
+		ENVIRONMENT === "production"
 			? (["/quotes/new", "/admin"] as const)
 			: ([] as const);
 	// This should do for now lol

@@ -65,7 +65,7 @@ const Header = function ({ model }) {
 							<span className={`text-lg/snug`}>
 								{t("logoTop")}
 							</span>
-							{!(isPortrait && locale == "ru") && ( // Too much real estate
+							{!(isPortrait && locale === "ru") && ( // Too much real estate
 								<span className={`text-sm`}>
 									{t("logoBottom")}
 								</span>
@@ -113,7 +113,7 @@ const NavMenu = function ({ model }) {
 
 	return (
 		<nav className="nav-menu">
-			{type == "horizontal" && (
+			{type === "horizontal" && (
 				<div className="flex flex-wrap items-center justify-center gap-6 px-4 lg:gap-8">
 					{[
 						...navlinks.map((navlink, index) => (
@@ -154,7 +154,7 @@ const NavMenu = function ({ model }) {
 					)}
 				</div>
 			)}
-			{type == "vertical" && (
+			{type === "vertical" && (
 				<div className="flex flex-col">
 					<div className="bg-gray-800 [&_.dropdown-button]:px-6 *:[&_.dropdown-button]:w-full *:[&_.dropdown-button]:py-4">
 						{hasUserNavigationWidget && (

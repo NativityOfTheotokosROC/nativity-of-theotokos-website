@@ -1,10 +1,10 @@
 import { routing } from "@/src/i18n/routing";
 import { getArticle } from "@/src/lib/server-actions/article";
-import { NewsArticle as NewsArticleType } from "@/src/lib/types/general";
+import { Article as ArticleType } from "@/src/lib/types/general";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
-import NewsArticle from "./NewsArticle";
+import Article from "./Article";
 import { BASE_URL } from "@/src/lib/utilities/server-constants";
 import {
 	getAllArticles,
@@ -22,7 +22,7 @@ export async function generateStaticParams() {
 	];
 }
 
-function articleJsonLd(article: NewsArticleType) {
+function articleJsonLd(article: ArticleType) {
 	const { title, author, articleImage, dateCreated, snippet } = article;
 	return {
 		"@context": "https://schema.org",
@@ -83,7 +83,6 @@ export default async function Page({
 	const { article: articleId, locale } = await params;
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 
-	//TODO: Investigate why locale is not updating server-side
 	const article = await getArticle(articleId, language);
 	const baseUrl = BASE_URL;
 	const permalink = `${baseUrl}/news/${article.uri.toString()}`;
@@ -95,7 +94,7 @@ export default async function Page({
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 			/>
-			<NewsArticle model={newReadonlyModel({ article, permalink })} />
+			<Article model={newReadonlyModel({ article, permalink })} />
 		</>
 	);
 }

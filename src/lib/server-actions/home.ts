@@ -2,12 +2,12 @@
 
 import { getLocale } from "next-intl/server";
 import z from "zod";
-import { NewsArticlePreview } from "../models/news-article-preview";
+import { ArticlePreview } from "../models/article-preview";
 import {
 	getDailyGalleryImages,
 	getDailyQuote,
 	getDailyReadings,
-	getLatestNews,
+	getLatestArticles,
 	getScheduleItems,
 } from "../server-only/home";
 import mailerLite from "../third-party/mailer-lite";
@@ -19,18 +19,17 @@ import {
 	ScheduleItem,
 } from "../types/general";
 import { getDateString } from "../utilities/date-time";
-import { getPlaceholder } from "../server-only/placeholder";
 
-export type LatestNews = {
-	featuredArticle: NewsArticlePreview;
-	otherNewsArticles: NewsArticlePreview[];
+export type LatestArticles = {
+	featuredArticle: ArticlePreview;
+	otherNewsArticles: ArticlePreview[];
 };
 
 export type HomeSnapshot = {
 	dailyReadings: DailyReadings;
 	dailyQuote: DailyQuote;
 	scheduleItems: ScheduleItem[];
-	newsArticles: LatestNews;
+	articles: LatestArticles;
 	dailyGalleryImages: GalleryImage[];
 };
 
@@ -45,24 +44,13 @@ export async function getHomeSnapshot(
 	const [
 		dailyReadings,
 		scheduleItems,
-		newsArticles,
+		articles,
 		dailyQuote,
 		dailyGalleryImages,
 	] = await Promise.all([
-		getDailyReadings(currentDate, locale).then(async readings => {
-			const placeholder = await getPlaceholder(
-				readings.iconOfTheDay.source,
-			);
-			return {
-				...readings,
-				iconOfTheDay: {
-					...readings.iconOfTheDay,
-					placeholder,
-				},
-			};
-		}),
+		getDailyReadings(currentDate, locale),
 		getScheduleItems(scheduleItemCount, currentDate, locale),
-		getLatestNews(otherArticleCount, locale),
+		getLatestArticles(otherArticleCount, locale),
 		getDailyQuote(currentDate, locale),
 		getDailyGalleryImages(dailyGalleryImagesCount, currentDate),
 	]);
@@ -70,7 +58,7 @@ export async function getHomeSnapshot(
 		dailyReadings,
 		dailyQuote,
 		scheduleItems,
-		newsArticles,
+		articles,
 		dailyGalleryImages,
 	};
 }

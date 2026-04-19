@@ -49,12 +49,12 @@ const NewQuote = function ({ model }) {
 	const isQuoteScheduled = watch("isQuoteScheduled");
 
 	useEffect(() => {
-		if (newQuoteNotification?.type == "success") {
+		if (newQuoteNotification?.type === "success") {
 			createToast({
 				type: "success",
 				message: newQuoteNotification.text,
 			});
-		} else if (newQuoteNotification?.type == "failure") {
+		} else if (newQuoteNotification?.type === "failure") {
 			createToast({
 				type: "failure",
 				message: newQuoteNotification.message,
@@ -261,10 +261,10 @@ const NewQuote = function ({ model }) {
 								className="flex w-fit max-w-1/2 min-w-[8em] items-center justify-center rounded-lg bg-[#513433] p-4 text-white hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
 								disabled={
 									isSubmitting ||
-									newQuoteNotification?.type == "pending"
+									newQuoteNotification?.type === "pending"
 								}
 							>
-								{newQuoteNotification?.type == "pending" ? (
+								{newQuoteNotification?.type === "pending" ? (
 									<Spinner
 										model={newReadonlyModel({
 											color: "white",

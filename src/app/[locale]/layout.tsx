@@ -39,7 +39,7 @@ export async function generateMetadata(
 	const titleTemplate = `%s | ${t("templateTitle")}`;
 	const titleDefault = t("templateDefault");
 	const description = t("description");
-	const localeMetaData = locale == "en" ? "en-US" : "ru-RU";
+	const localeMetaData = locale === "en" ? "en-US" : "ru-RU";
 
 	return {
 		metadataBase: BASE_URL,

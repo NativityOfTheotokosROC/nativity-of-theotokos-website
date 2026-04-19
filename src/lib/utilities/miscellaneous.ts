@@ -28,9 +28,9 @@ export function isRemotePath(src: string) {
 }
 
 export const emptyStringAsUndefined = (value: string) => {
-	return value == "" ? undefined : value;
+	return value === "" ? undefined : value;
 };
 
-export function getEnglishTranslationHash(text: string) {
+export function getMd5Hash(text: string) {
 	return createHash("md5").update(text).digest("hex");
 }

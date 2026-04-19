@@ -18,7 +18,7 @@ const DailySaintsWidget = function ({ model }) {
 	const dateString = toZonedTime(
 		currentDate,
 		getLocalTimeZone(),
-	).toLocaleDateString(locale == "en" ? "en-uk" : "ru-RU", {
+	).toLocaleDateString(locale === "en" ? "en-uk" : "ru-RU", {
 		dateStyle: "full",
 	});
 

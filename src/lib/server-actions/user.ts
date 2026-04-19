@@ -17,15 +17,15 @@ export async function getUserInformation(): Promise<UserInformation> {
 		},
 	});
 	const roles = roleRecords
-		.map(record => record.role)
+		.map(record => record.role as Role)
 		.filter(role =>
 			(["admin", "quotes", "staff", "user", "writer"] as const).includes(
-				role as Role,
+				role,
 			),
-		); // HACK: Dirty
+		);
 	return {
 		name: user.name,
 		avatar: { source: user.image! },
-		roles: roles as Role[],
+		roles,
 	};
 }

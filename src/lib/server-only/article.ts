@@ -1,16 +1,14 @@
 import { cacheTag, cacheLife } from "next/cache";
 import prisma from "../third-party/prisma";
-import { Language, NewsArticle } from "../types/general";
+import { Language, Article } from "../types/general";
 import { notFound } from "next/navigation";
 
-export async function getAllArticles(
-	language: Language,
-): Promise<NewsArticle[]> {
+export async function getAllArticles(language: Language): Promise<Article[]> {
 	"use cache: remote";
 	cacheTag("bulletin_articles");
 	cacheLife("hours");
 
-	const articles: NewsArticle[] = await prisma.article
+	const articles: Article[] = await prisma.article
 		.findMany({
 			include: {
 				title: true,
@@ -32,7 +30,7 @@ export async function getAllArticles(
 					dateCreated,
 					dateUpdated,
 				} = record;
-				if (language == "ru")
+				if (language === "ru")
 					return {
 						uri: link,
 						title: title.russian ?? title.english,
@@ -46,7 +44,7 @@ export async function getAllArticles(
 							about:
 								image.caption.russian ?? image.caption.english,
 						},
-					} satisfies NewsArticle;
+					} satisfies Article;
 				return {
 					uri: link,
 					title: title.english,
@@ -59,7 +57,7 @@ export async function getAllArticles(
 						source: image.link,
 						about: image.caption.russian ?? image.caption.english,
 					},
-				} satisfies NewsArticle;
+				} satisfies Article;
 			}),
 		);
 	return articles;
@@ -68,7 +66,7 @@ export async function getAllArticles(
 export async function getArticleMetadata(
 	articleId: string,
 	language: Language,
-): Promise<Pick<NewsArticle, "uri" | "title" | "snippet" | "articleImage">> {
+): Promise<Pick<Article, "uri" | "title" | "snippet" | "articleImage">> {
 	"use cache";
 
 	const locale = language;
@@ -83,15 +81,15 @@ export async function getArticleMetadata(
 			omit: { dateCreated: true, dateUpdated: true },
 		});
 		const title =
-			locale == "ru" && article.title.russian
+			locale === "ru" && article.title.russian
 				? article.title.russian
 				: article.title.english;
 		const snippet =
-			locale == "ru" && article.snippet.russian
+			locale === "ru" && article.snippet.russian
 				? article.snippet.russian
 				: article.snippet.english;
 		const caption =
-			locale == "ru" && article.image.caption.russian
+			locale === "ru" && article.image.caption.russian
 				? article.image.caption.russian
 				: article.image.caption.english;
 		return {
@@ -107,7 +105,7 @@ export async function getArticleMetadata(
 		if (
 			error instanceof Object &&
 			"code" in error &&
-			error["code"] == "P2025"
+			error["code"] === "P2025"
 		)
 			notFound();
 		throw error;

@@ -177,7 +177,7 @@ export const UserNavigationWidgetCore = function ({ model }) {
 	return userDetails ? (
 		<div className="user-navigation">
 			<>
-				{style == "accordion" && (
+				{style === "accordion" && (
 					<Disclosure>
 						{({ open }) => (
 							<>
@@ -220,7 +220,7 @@ export const UserNavigationWidgetCore = function ({ model }) {
 						)}
 					</Disclosure>
 				)}
-				{style == "dropdown" && (
+				{style === "dropdown" && (
 					<Menu>
 						{({ open, close }) => (
 							<>
@@ -280,7 +280,7 @@ export const UserNavigationWidgetCore = function ({ model }) {
 				)}
 			</>
 		</div>
-	) : userInformation == "pending" ? (
+	) : userInformation === "pending" ? (
 		<UserNavigationWidgetSkeleton model={newReadonlyModel({ variant })} />
 	) : (
 		<></>

@@ -12,7 +12,7 @@ const ScheduleItem = function ({ model }) {
 	const { scheduleItem, isFeatured } = model.modelView;
 	const { date: rawDate, location, times: rawTimes, title } = scheduleItem;
 	const locale = useLocale();
-	const dateLocale = locale == "en" ? "en-uk" : "ru-RU";
+	const dateLocale = locale === "en" ? "en-uk" : "ru-RU";
 	const date = toZonedTime(rawDate, getLocalTimeZone());
 	const times = rawTimes.map(time => ({
 		...time,

@@ -51,7 +51,7 @@ export type Image = {
 	about?: string;
 };
 
-export type NewsArticle = {
+export type Article = {
 	uri: string;
 	title: string;
 	author: string;

@@ -44,10 +44,10 @@ const SignIn = function ({ model }) {
 									modelView: {
 										signInService: service,
 										isEnabled: !(
-											signInStatus?.type == "pending" ||
-											signInStatus?.type == "success"
+											signInStatus?.type === "pending" ||
+											signInStatus?.type === "success"
 										),
-										isSelected: service == selectedService,
+										isSelected: service === selectedService,
 									},
 									interact: interaction => {
 										switch (interaction.type) {
@@ -66,10 +66,10 @@ const SignIn = function ({ model }) {
 						)),
 					]}
 				</div>
-				{(signInStatus?.type == "success" ||
-					signInStatus?.type == "failed") && (
+				{(signInStatus?.type === "success" ||
+					signInStatus?.type === "failed") && (
 					<span
-						className={`mt-3 line-clamp-3 text-sm/tight ${signInStatus.type == "failed" && "text-red-900"}`}
+						className={`mt-3 line-clamp-3 text-sm/tight ${signInStatus.type === "failed" && "text-red-900"}`}
 					>
 						{signInStatus.message}
 					</span>

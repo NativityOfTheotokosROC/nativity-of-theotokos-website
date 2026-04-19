@@ -13,7 +13,8 @@ import {
 
 export const auth = betterAuth({
 	database: prismaAdapter(prisma, { provider: "postgresql" }),
-	baseUrl: ENVIRONMENT == "development" ? "http://localhost:3000" : undefined,
+	baseUrl:
+		ENVIRONMENT === "development" ? "http://localhost:3000" : undefined,
 	trustedOrigins: ["http://localhost:3000", BETTER_AUTH_URL],
 	socialProviders: {
 		google: {

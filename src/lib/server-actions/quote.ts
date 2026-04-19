@@ -7,7 +7,7 @@ import prisma from "../third-party/prisma";
 import { getDateString, getLocalTimeZone } from "../utilities/date-time";
 import { getQuoteSchema } from "../validation/quote";
 import { protect } from "./auth";
-import { getEnglishTranslationHash } from "../utilities/miscellaneous";
+import { getMd5Hash } from "../utilities/miscellaneous";
 import { revalidateTag } from "next/cache";
 
 export async function addNewQuote(payload: NewQuote) {
@@ -37,11 +37,11 @@ export async function addNewQuote(payload: NewQuote) {
 					create: {
 						english: authorEn,
 						russian: authorRu,
-						englishHash: getEnglishTranslationHash(authorEn),
+						englishHash: getMd5Hash(authorEn),
 					},
 					update: {},
 					where: {
-						englishHash: getEnglishTranslationHash(authorEn),
+						englishHash: getMd5Hash(authorEn),
 					},
 				}),
 				sourceEn &&
@@ -50,11 +50,11 @@ export async function addNewQuote(payload: NewQuote) {
 						create: {
 							english: sourceEn,
 							russian: sourceRu,
-							englishHash: getEnglishTranslationHash(sourceEn),
+							englishHash: getMd5Hash(sourceEn),
 						},
 						update: {},
 						where: {
-							englishHash: getEnglishTranslationHash(sourceEn),
+							englishHash: getMd5Hash(sourceEn),
 						},
 					}),
 				transaction.translation.create({
@@ -62,7 +62,7 @@ export async function addNewQuote(payload: NewQuote) {
 					data: {
 						english: quoteEn,
 						russian: quoteRu,
-						englishHash: getEnglishTranslationHash(quoteEn),
+						englishHash: getMd5Hash(quoteEn),
 					},
 				}),
 			]);

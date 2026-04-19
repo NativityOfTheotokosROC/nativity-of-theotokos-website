@@ -1,10 +1,9 @@
 import { ImagePlaceholder, getPlaceholder } from "@grod56/placeholder";
-import arrayToShuffled from "array-shuffle";
+import { arrayToShuffled } from "array-shuffle";
 import { getTranslations } from "next-intl/server";
-import { cacheLife, cacheTag, unstable_cache } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import "server-only";
-import { getGalleryImages } from "./gallery";
-import { LatestNews } from "../server-actions/home";
+import { LatestArticles } from "../server-actions/home";
 import { dailyReadings } from "../third-party/holytrinityorthodox";
 import prisma from "../third-party/prisma";
 import {
@@ -14,11 +13,9 @@ import {
 	ScheduleItem,
 } from "../types/general";
 import { getDateString } from "../utilities/date-time";
-import {
-	getEnglishTranslationHash,
-	isRemotePath,
-} from "../utilities/miscellaneous";
+import { getMd5Hash, isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
+import { getGalleryImages } from "./gallery";
 
 export const getDailyReadings = async (
 	currentDate: Date,
@@ -29,7 +26,16 @@ export const getDailyReadings = async (
 	cacheLife("max");
 
 	const locale = language;
-	return await dailyReadings(currentDate, locale);
+	return await dailyReadings(currentDate, locale).then(async readings => {
+		const placeholder = await getPlaceholder(readings.iconOfTheDay.source);
+		return {
+			...readings,
+			iconOfTheDay: {
+				...readings.iconOfTheDay,
+				placeholder,
+			},
+		};
+	});
 };
 
 export async function getDailyQuote(currentDate: Date, language: Language) {
@@ -73,7 +79,7 @@ export async function getDailyQuote(currentDate: Date, language: Language) {
 		});
 	}
 	return (
-		locale == "ru"
+		locale === "ru"
 			? {
 					quote: dailyQuote.quote.russian ?? dailyQuote.quote.english,
 					author:
@@ -123,17 +129,17 @@ export async function getScheduleItems(
 		(record): ScheduleItem => ({
 			date: record.date,
 			title:
-				language == "ru"
+				language === "ru"
 					? (record.title.russian ?? record.title.english)
 					: record.title.english,
 			location:
-				language == "ru"
+				language === "ru"
 					? (record.venue.russian ?? record.venue.english)
 					: record.venue.english,
 			times: record.scheduleItemTimes.map(time => ({
 				time: time.time,
 				designation:
-					language == "ru"
+					language === "ru"
 						? (time.designation.russian ?? time.designation.english)
 						: time.designation.english,
 			})),
@@ -163,9 +169,7 @@ export async function getScheduleItems(
 			where: {
 				date: nextScheduleItem.date,
 				venue: {
-					englishHash: getEnglishTranslationHash(
-						nextScheduleItem.location,
-					),
+					englishHash: getMd5Hash(nextScheduleItem.location),
 				},
 			},
 		});
@@ -179,11 +183,11 @@ export async function getScheduleItems(
 						connectOrCreate: {
 							create: {
 								english: title,
-								englishHash: getEnglishTranslationHash(title),
+								englishHash: getMd5Hash(title),
 								russian: titleRu,
 							},
 							where: {
-								englishHash: getEnglishTranslationHash(title),
+								englishHash: getMd5Hash(title),
 							},
 						},
 					},
@@ -191,12 +195,10 @@ export async function getScheduleItems(
 						connectOrCreate: {
 							create: {
 								english: location,
-								englishHash:
-									getEnglishTranslationHash(location),
+								englishHash: getMd5Hash(location),
 							},
 							where: {
-								englishHash:
-									getEnglishTranslationHash(location),
+								englishHash: getMd5Hash(location),
 							},
 						},
 					},
@@ -208,12 +210,12 @@ export async function getScheduleItems(
 									create: {
 										english: time.designation,
 										russian: time.designationRu,
-										englishHash: getEnglishTranslationHash(
+										englishHash: getMd5Hash(
 											time.designation,
 										),
 									},
 									where: {
-										englishHash: getEnglishTranslationHash(
+										englishHash: getMd5Hash(
 											time.designation,
 										),
 									},
@@ -234,15 +236,13 @@ export async function getScheduleItems(
 	return scheduleItems;
 }
 
-export async function getLatestNews(
+export async function getLatestArticles(
 	otherArticlesCount: number,
 	language: Language,
-): Promise<LatestNews> {
+): Promise<LatestArticles> {
 	"use cache: remote";
 	cacheTag("latest-articles");
-	cacheLife("minutes");
 
-	const baseURL = BASE_URL;
 	const articleIncludes = {
 		title: true,
 		body: true,
@@ -267,7 +267,7 @@ export async function getLatestNews(
 	});
 	const allArticles = [featuredArticle.article, ...otherArticles];
 	const unplaceholderedArticles = allArticles.filter(
-		article => article.image.placeholder == null,
+		article => article.image.placeholder === null,
 	);
 	const newPlaceholders = new Map<number, ImagePlaceholder>();
 
@@ -276,7 +276,7 @@ export async function getLatestNews(
 			const imageLink = unplaceholderedArticles[i].image.link;
 			const imageURL = isRemotePath(imageLink)
 				? imageLink
-				: `${baseURL}${imageLink}`;
+				: `${BASE_URL}${imageLink}`;
 			newPlaceholders.set(
 				unplaceholderedArticles[i].id,
 				await getPlaceholder(imageURL),
@@ -286,15 +286,15 @@ export async function getLatestNews(
 
 	const article = featuredArticle.article;
 	const title =
-		language == "ru" && article.title.russian
+		language === "ru" && article.title.russian
 			? article.title.russian
 			: article.title.english;
 	const author =
-		language == "ru" && article.author.name.russian != null
+		language === "ru" && article.author.name.russian != null
 			? article.author.name.russian
 			: article.author.name.english;
 	const snippet =
-		language == "ru" && article.snippet.russian
+		language === "ru" && article.snippet.russian
 			? article.snippet.russian
 			: article.snippet.english;
 	return {
@@ -307,7 +307,7 @@ export async function getLatestNews(
 			articleImage: {
 				source: featuredArticle.article.image.link,
 				about:
-					language == "ru"
+					language === "ru"
 						? (featuredArticle.article.image.caption.russian ??
 							featuredArticle.article.image.caption.english)
 						: featuredArticle.article.image.caption.english,
@@ -319,15 +319,15 @@ export async function getLatestNews(
 		},
 		otherNewsArticles: otherArticles.map(article => {
 			const title =
-				language == "ru" && article.title.russian
+				language === "ru" && article.title.russian
 					? article.title.russian
 					: article.title.english;
 			const author =
-				language == "ru" && article.author.name.russian != null
+				language === "ru" && article.author.name.russian != null
 					? article.author.name.russian
 					: article.author.name.english;
 			const snippet =
-				language == "ru" && article.snippet.russian
+				language === "ru" && article.snippet.russian
 					? article.snippet.russian
 					: article.snippet.english;
 			return {
@@ -339,7 +339,7 @@ export async function getLatestNews(
 				articleImage: {
 					source: article.image.link,
 					about:
-						language == "ru"
+						language === "ru"
 							? (article.image.caption.russian ??
 								article.image.caption.english)
 							: article.image.caption.english,
@@ -354,30 +354,26 @@ export async function getLatestNews(
 }
 
 // TODO: Optimize asap
-export const getDailyGalleryImages = unstable_cache(async function (
-	count: number,
-	currentDate: Date,
-) {
-	// "use cache: remote";
-	// cacheTag(
-	// 	"daily-gallery-images",
-	// 	count.toString(),
-	// 	currentDate.toDateString(),
-	// );
-	// cacheLife("hours");
+export async function getDailyGalleryImages(count: number, currentDate: Date) {
+	"use cache: remote";
+	cacheTag("daily-gallery-images");
+	cacheLife("hours");
 
 	const baseUrl = BASE_URL;
 	const localDate = new Date(getDateString(currentDate, true));
-	const fulfilled = await Promise.all([
+	const promises = await Promise.all([
 		getGalleryImages(),
 		prisma.dailyGalleryImage.findMany({
+			include: {
+				placeholder: true,
+			},
 			where: {
 				date: localDate,
 			},
 		}),
 	]);
-	const allGalleryImages = fulfilled[0];
-	let dailyGalleryImages = fulfilled[1];
+	const allGalleryImages = promises[0];
+	let dailyGalleryImages = promises[1];
 
 	const dailyGalleryImageLinks = dailyGalleryImages.map(
 		dailyGalleryImage => dailyGalleryImage.link,
@@ -391,6 +387,7 @@ export const getDailyGalleryImages = unstable_cache(async function (
 		if (otherGalleryImages.length + dailyGalleryImages.length <= count) {
 			const newDailyGalleryImages =
 				await prisma.dailyGalleryImage.createManyAndReturn({
+					include: { placeholder: true },
 					data: shuffledGalleryImages.map(galleryImage => ({
 						date: localDate,
 						link: galleryImage.imageLink,
@@ -403,6 +400,7 @@ export const getDailyGalleryImages = unstable_cache(async function (
 		} else {
 			const newDailyGalleryImages =
 				await prisma.dailyGalleryImage.createManyAndReturn({
+					include: { placeholder: true },
 					data: shuffledGalleryImages
 						.slice(0, count - dailyGalleryImages.length)
 						.map(galleryImage => ({
@@ -417,9 +415,18 @@ export const getDailyGalleryImages = unstable_cache(async function (
 		}
 	}
 	const placeholderedGalleryImages: GalleryImage[] = [];
-	// TODO: Optimize
 	for (let i = 0; i < dailyGalleryImages.length; i++) {
 		const imageLink = dailyGalleryImages[i].link;
+		const placeholder = dailyGalleryImages[i].placeholder;
+		if (placeholder) {
+			placeholderedGalleryImages.push({
+				image: {
+					source: imageLink,
+					placeholder: placeholder.placeholder as ImagePlaceholder,
+				},
+			});
+			continue;
+		}
 		const imageURL = isRemotePath(imageLink)
 			? imageLink
 			: `${baseUrl}${imageLink}`;
@@ -431,7 +438,7 @@ export const getDailyGalleryImages = unstable_cache(async function (
 		});
 	}
 	return placeholderedGalleryImages;
-});
+}
 
 // TODO: To be refactored to something less ... static
 async function _getNextDefaultScheduleItem(date: Date): Promise<
@@ -452,7 +459,7 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 	while (scheduleItemDate.getDay() > 0 && scheduleItemDate.getDay() < 6) {
 		scheduleItemDate.setDate(scheduleItemDate.getDate() + 1);
 	}
-	if (scheduleItemDate.getDay() == 6) {
+	if (scheduleItemDate.getDay() === 6) {
 		const nextSundayDate = new Date(
 			new Date(scheduleItemDate).setDate(scheduleItemDate.getDate() + 1),
 		);
