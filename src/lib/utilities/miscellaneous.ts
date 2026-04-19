@@ -1,4 +1,5 @@
 import { createHash } from "crypto";
+import { ShareData } from "../types/general";
 
 export function julianDate(date: Date) {
 	return new Date(new Date().setDate(date.getDate() - 13));
@@ -33,4 +34,12 @@ export const emptyStringAsUndefined = (value: string) => {
 
 export function getMd5Hash(text: string) {
 	return createHash("md5").update(text).digest("hex");
+}
+
+export function getEncodedShareData(shareData: ShareData) {
+	return {
+		title: encodeURI(shareData.title),
+		url: encodeURI(shareData.url),
+		text: shareData.text ? encodeURI(shareData.text) : undefined,
+	} satisfies ShareData;
 }

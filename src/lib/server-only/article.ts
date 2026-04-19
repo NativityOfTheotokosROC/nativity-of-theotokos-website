@@ -66,7 +66,9 @@ export async function getAllArticles(language: Language): Promise<Article[]> {
 export async function getArticleMetadata(
 	articleId: string,
 	language: Language,
-): Promise<Pick<Article, "uri" | "title" | "snippet" | "articleImage">> {
+): Promise<
+	Pick<Article, "uri" | "title" | "author" | "snippet" | "articleImage">
+> {
 	"use cache";
 
 	const locale = language;
@@ -74,6 +76,7 @@ export async function getArticleMetadata(
 		const article = await prisma.article.findUniqueOrThrow({
 			include: {
 				title: true,
+				author: { include: { name: true } },
 				snippet: true,
 				image: { include: { caption: true } },
 			},
@@ -84,6 +87,10 @@ export async function getArticleMetadata(
 			locale === "ru" && article.title.russian
 				? article.title.russian
 				: article.title.english;
+		const author =
+			locale === "ru" && article.author.name.russian
+				? article.author.name.russian
+				: article.author.name.english;
 		const snippet =
 			locale === "ru" && article.snippet.russian
 				? article.snippet.russian
@@ -95,6 +102,7 @@ export async function getArticleMetadata(
 		return {
 			uri: article.link.toString(),
 			title,
+			author,
 			snippet,
 			articleImage: {
 				source: article.image.link,

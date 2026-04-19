@@ -5,8 +5,9 @@ import { cacheLife, cacheTag } from "next/cache";
 import { DailyReadings, Hymn, Image, Language } from "../types/general";
 import { getLocalTimeZone } from "../utilities/date-time";
 import { removeMarkup } from "../utilities/miscellaneous";
+import { Commemoration } from "../models/commemoration";
 
-export const dailyReadings = async (date: Date, language: Language) => {
+export async function dailyReadings(date: Date, language: Language) {
 	"use cache: remote";
 	cacheLife("max");
 	cacheTag("holytrinity-readings");
@@ -35,7 +36,7 @@ export const dailyReadings = async (date: Date, language: Language) => {
 		iconOfTheDay,
 		hymns,
 	} satisfies DailyReadings;
-};
+}
 export async function getLiturgicalWeek(date: Date, language: Language) {
 	const requestURL = _getDatedBaseURL(date, _getBaseURL(language));
 	requestURL.searchParams.set("header", "1");
@@ -62,13 +63,82 @@ export async function getSaints(date: Date, language: Language) {
 		$(".emphasized").unwrap();
 		$(".cal-main").removeAttr("onclick");
 		$(".cal-main").each(function () {
-			$(this).attr("target", "_blank");
+			const urlParts = $(this).attr("href")!.split("/");
+			const id = [
+				urlParts[urlParts.length - 2],
+				urlParts[urlParts.length - 1],
+			]
+				.join("_")
+				.replace(/\.html?/, "");
+			$(this).attr("href", `/commemorations/${id}`);
 			$(this).removeClass();
 			$(this).addClass("commemoration");
 		});
 		return $(".normaltext").html()!;
 	});
 }
+
+export async function getCommemoration(
+	id: string,
+	language: Language,
+): Promise<Commemoration | null> {
+	"use cache";
+
+	const requestURL = new URL(
+		_getCommemorationURL(language) + `/${id.replace("_", "/")}.htm`,
+	);
+	const t = await getTranslations({
+		locale: language,
+		namespace: "commemoration",
+	});
+	try {
+		const html = await _getMarkedUpText(requestURL, "UTF-8");
+		const $ = load(html);
+		const titleElement = $(".ofd_los_header");
+		const iconElement = $("img").first();
+		const feastDaysElement = $(".ofd_los_body").first();
+
+		const title = titleElement.text().trim();
+		titleElement.remove();
+		const iconSource = iconElement.attr("src");
+		const iconAbout = iconElement.attr("alt");
+		const prefix = id.split("_")[0];
+		const icon = iconSource
+			? ({
+					source: _getCommemorationImageURL(
+						`/${prefix}/${iconSource}`,
+						language,
+					),
+					about: iconAbout,
+				} satisfies Pick<Image, "source" | "about">)
+			: undefined;
+		iconElement.unwrap();
+		iconElement.remove();
+		const feastDays = `${feastDaysElement.text()} (${t("oldCalendar")})`;
+		feastDaysElement.remove();
+		$("img").each(function () {
+			const iconSource = $(this).attr("src")!;
+			const prefix = id.split("_")[0];
+			$(this).attr(
+				"src",
+				_getCommemorationImageURL(`/${prefix}/${iconSource}`, language),
+			);
+		});
+		const rawBody = $(".ofd_los_body:contains('\u00a0')").first().text();
+		const body = rawBody
+			.replaceAll("\n", " ")
+			.replaceAll(/(\&nbsp;)+/gm, "\n")
+			.replaceAll(/\u00a0+/gm, "\n")
+			.trim()
+			.replaceAll("\n", "<br><br>")
+			.replace(/<br>\w*<br>\w*<br>/gm, "<br><br>"); // Tee-hee
+		return { title, feastDays, icon, body, id } satisfies Commemoration;
+	} catch (error) {
+		if (error instanceof Response && error.status == 404) return null;
+		throw error;
+	}
+}
+
 export async function getScriptures(date: Date, language: Language) {
 	const requestURL = _getDatedBaseURL(date, _getBaseURL(language));
 	requestURL.searchParams.set("scripture", "2");
@@ -180,15 +250,23 @@ export async function getHymns(date: Date, language: Language) {
 }
 
 function _getBaseURL(language: Language) {
-	if (language === "ru")
-		return "https://www.holytrinityorthodox.com/htc/ocalendar/ru/v2calendar.php";
-	return "https://www.holytrinityorthodox.com/htc/ocalendar/v2calendar.php";
+	const interpolation = language === "ru" ? "/ru/" : "/";
+	return `https://www.holytrinityorthodox.com/htc/ocalendar${interpolation}v2calendar.php`;
 }
 
 function _getIconOfTheDayURL(language: Language) {
-	if (language === "ru")
-		return "https://www.holytrinityorthodox.com/htc/iconoftheday/ru/v6TitleIconTroparion.php";
-	return "https://www.holytrinityorthodox.com/htc/iconoftheday/v6TitleIconTroparion.php";
+	const interpolation = language === "ru" ? "/ru/" : "/";
+	return `https://www.holytrinityorthodox.com/htc/iconoftheday${interpolation}v6TitleIconTroparion.php`;
+}
+
+function _getCommemorationURL(language: Language) {
+	const interpolation = language === "ru" ? "/ru/" : "/";
+	return `https://www.holytrinityorthodox.com/htc/ocalendar${interpolation}los`;
+}
+
+function _getCommemorationImageURL(path: string, language: Language) {
+	const interpolation = language === "ru" ? "/ru/" : "/";
+	return `https://www.holytrinityorthodox.com/htc/ocalendar${interpolation}los${path}`;
 }
 
 function _getMarkedUpText(
@@ -198,7 +276,7 @@ function _getMarkedUpText(
 	return fetch(url)
 		.then(response => {
 			if (response.ok) return response.arrayBuffer();
-			return Promise.reject(`${response.status}: ${response.statusText}`);
+			return Promise.reject(response);
 		})
 		.then(encodedResponse =>
 			new TextDecoder(encoding).decode(encodedResponse),

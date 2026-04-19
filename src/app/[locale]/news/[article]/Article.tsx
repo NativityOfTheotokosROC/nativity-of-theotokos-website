@@ -5,6 +5,7 @@ import SocialLink from "@/src/lib/components/social-link/SocialLink";
 import { ArticleModel } from "@/src/lib/models/article";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { getNewsArticleDateString } from "@/src/lib/utilities/date-time";
+import { getEncodedShareData } from "@/src/lib/utilities/miscellaneous";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
@@ -15,7 +16,7 @@ import { ViewTransition } from "react";
 
 const Article = async function ({ model }) {
 	const { article, permalink } = model.modelView;
-	const { title, author, articleImage, dateCreated, dateUpdated, body } =
+	const { title, author, articleImage, dateCreated, dateUpdated, body, uri } =
 		article;
 	const { source, about, placeholder } = articleImage;
 	const locale = await rootLocale();
@@ -28,18 +29,15 @@ const Article = async function ({ model }) {
 		title,
 		url: permalink,
 	};
-	const encodedShareData: typeof shareData = {
-		title: encodeURI(shareData.title),
-		url: encodeURI(shareData.url),
-	};
+	const encodedShareData = getEncodedShareData(shareData);
 
 	return (
-		<main className="newsarticle bg-[#FEF8F3] text-black">
-			<div className="newsarticle-content flex flex-col gap-6 border-t-15 border-[#250203]/80 p-8 md:p-12">
+		<main className="article bg-[#FEF8F3] text-black">
+			<div className="article-content flex flex-col gap-6 border-t-15 border-[#250203]/80 p-8 md:p-12">
 				<div className="metadata flex flex-col gap-6 md:flex-row md:gap-x-8 lg:max-w-full">
 					<div className="headline flex flex-col gap-6 md:w-1/2">
 						<ViewTransition
-							name={`article-title-${article.uri}`}
+							name={`article-title-${uri}`}
 							share="auto"
 						>
 							<span
@@ -98,8 +96,7 @@ const Article = async function ({ model }) {
 				<div className="flex items-end gap-5 self-end text-sm text-gray-900 **:hover:text-[#dcb042] md:mt-4">
 					<ShareButton
 						model={newReadonlyModel({
-							title: shareData.title,
-							url: shareData.url,
+							shareData: encodedShareData,
 						})}
 					/>
 					<SocialLink

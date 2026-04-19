@@ -73,7 +73,7 @@ const Home = function ({ model }) {
 					model={
 						modelView
 							? newReadonlyModel({
-									newsArticles: modelView.newsArticles,
+									newsArticles: modelView.articles,
 									schedulePreview: modelView.scheduleItems,
 								})
 							: { modelView: null }

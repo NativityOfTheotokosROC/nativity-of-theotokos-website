@@ -89,3 +89,9 @@ export type Translator = ReturnType<typeof useTranslations<never>>;
 export type Role = "admin" | "staff" | "user" | "quotes" | "writer";
 
 export type Path = `/${string}`;
+
+export type ShareData = {
+	title: string;
+	url: string;
+	text?: string;
+};
