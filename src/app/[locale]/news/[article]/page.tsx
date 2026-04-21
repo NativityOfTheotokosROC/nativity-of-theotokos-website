@@ -45,10 +45,8 @@ export async function generateMetadata({
 
 	const { article, locale } = await params;
 	const computedLocale = hasLocale(routing.locales, locale) ? locale : "en";
-	const { title, snippet, uri, articleImage } = await getArticleMetadata(
-		article,
-		computedLocale,
-	);
+	const { title, author, snippet, uri, articleImage } =
+		await getArticleMetadata(article, computedLocale);
 
 	return {
 		title,
@@ -63,6 +61,7 @@ export async function generateMetadata({
 			title,
 			description: snippet,
 			url: `/news/${uri}`,
+			authors: author,
 			type: "article",
 			images: [articleImage.source],
 		},

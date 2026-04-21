@@ -17,6 +17,7 @@ export async function getPlaceholder(imageSource: string) {
 	const result = await findPlaceholder(imageSource);
 	if (result) return result;
 	const placeholder = await generatePlaceholder(imageSource);
+	console.log("Placeholder generated for " + imageSource);
 	await setPlaceholder(imageSource, placeholder);
 	return placeholder;
 }

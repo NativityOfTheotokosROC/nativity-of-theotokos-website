@@ -11,7 +11,7 @@ export interface HomeModelView {
 	dailyReadings: DailyReadings;
 	dailyQuote: DailyQuote;
 	scheduleItems: ScheduleItem[];
-	newsArticles: LatestArticles;
+	articles: LatestArticles;
 	dailyGalleryImages: GalleryImage[];
 }
 

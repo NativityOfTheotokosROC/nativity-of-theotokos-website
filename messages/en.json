@@ -86,6 +86,9 @@
 		"whatIsOrthodoxy": "What is Orthodoxy?",
 		"aboutOurParish": "About our Parish"
 	},
+	"commemoration": {
+		"oldCalendar": "Julian Calendar"
+	},
 	"aboutUs": {
 		"metaTitle": "About Us"
 	},
