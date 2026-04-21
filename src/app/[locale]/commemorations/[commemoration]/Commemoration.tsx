@@ -69,7 +69,7 @@ const Commemoration = function ({ model }) {
 							</div>
 							{icon.about && (
 								<span
-									className={`text-center text-xs/relaxed uppercase`}
+									className={`text-center text-xs/relaxed uppercase md:max-w-63`}
 								>
 									{icon.about}
 								</span>
@@ -111,7 +111,7 @@ const Commemoration = function ({ model }) {
 				</div>
 				<hr className="w-full self-center text-black/50 md:w-3/4" />
 				<p
-					className={`body self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed [&_.caption]:justify-self-center [&_img]:justify-self-center`}
+					className={`body self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed [&_.caption]:justify-self-center [&_.caption]:text-xs/relaxed [&_.caption]:uppercase md:[&_.caption]:max-w-63 [&_img]:justify-self-center`}
 					dangerouslySetInnerHTML={{ __html: body }}
 				/>
 			</div>
