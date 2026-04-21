@@ -82,7 +82,7 @@ export async function getCommemoration(
 	id: string,
 	language: Language,
 ): Promise<Commemoration | null> {
-	"use cache";
+	"use cache: remote";
 
 	const requestURL = new URL(
 		_getCommemorationURL(language) + `/${id.replace("_", "/")}.htm`,
@@ -124,14 +124,20 @@ export async function getCommemoration(
 				_getCommemorationImageURL(`/${prefix}/${iconSource}`, language),
 			);
 		});
-		const rawBody = $(".ofd_los_body:contains('\u00a0')").first().text();
-		const body = rawBody
-			.replaceAll("\n", " ")
-			.replaceAll(/(\&nbsp;)+/gm, "\n")
-			.replaceAll(/\u00a0+/gm, "\n")
-			.trim()
-			.replaceAll("\n", "<br><br>")
-			.replace(/<br>\w*<br>\w*<br>/gm, "<br><br>"); // Tee-hee
+		const paragraphs: string[] = [];
+		$(".ofd_los_body").each(function () {
+			const text = $(this)
+				.text()
+				.replaceAll(/\n+/gm, " ")
+				.replaceAll(/(\&nbsp;)+/gm, "\n")
+				.replaceAll(/\u00a0+/gm, "\n")
+				.trim()
+				.replaceAll(/\n+/gm, "<br><br>");
+			paragraphs.push(text);
+		});
+		const body = paragraphs
+			.join("<br>")
+			.replaceAll(/<br>\w*<br>\w*<br>/gm, "<br><br>"); // Tee-hee
 		return { title, feastDays, icon, body, id } satisfies Commemoration;
 	} catch (error) {
 		if (error instanceof Response && error.status == 404) return null;
