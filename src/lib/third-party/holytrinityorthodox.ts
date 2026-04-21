@@ -124,7 +124,7 @@ export async function getCommemoration(
 				_getCommemorationImageURL(`/${prefix}/${iconSource}`, language),
 			);
 		});
-		$("font").each(function () {
+		$("font>strong").each(function () {
 			const text = $(this).text();
 			const replacement = $(`<span class="caption">${text}<span>`);
 			$(this).replaceWith(replacement);
