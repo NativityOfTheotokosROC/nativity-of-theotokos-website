@@ -117,7 +117,6 @@ export async function getCommemoration(
 		const feastDays = `${feastDaysElement.text()} (${t("oldCalendar")})`;
 		feastDaysElement.remove();
 		$("img").each(function () {
-			$(this).unwrap();
 			const iconSource = $(this).attr("src")!;
 			const prefix = id.split("_")[0];
 			$(this).attr(
@@ -139,7 +138,7 @@ export async function getCommemoration(
 		});
 		const body = paragraphs
 			.join("<br><br>")
-			.replaceAll(/<br>\s*<br>\s*<br>/gm, "<br><br>"); // Tee-hee
+			.replaceAll(/(<br>\s*<br>\s*<br>)+/gm, "<br><br>"); // Tee-hee
 		return { title, feastDays, icon, body, id } satisfies Commemoration;
 	} catch (error) {
 		if (error instanceof Response && error.status == 404) return null;
