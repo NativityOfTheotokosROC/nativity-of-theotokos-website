@@ -117,6 +117,7 @@ export async function getCommemoration(
 		const feastDays = `${feastDaysElement.text()} (${t("oldCalendar")})`;
 		feastDaysElement.remove();
 		$("img").each(function () {
+			$(this).unwrap();
 			const iconSource = $(this).attr("src")!;
 			const prefix = id.split("_")[0];
 			$(this).attr(
@@ -127,7 +128,8 @@ export async function getCommemoration(
 		const paragraphs: string[] = [];
 		$(".ofd_los_body").each(function () {
 			const text = $(this)
-				.text()
+				.unwrap()
+				.html()!
 				.replaceAll(/\n+/gm, " ")
 				.replaceAll(/(\&nbsp;){2,}|\u00a0{2,}/gm, "\n")
 				.replaceAll(/(\&nbsp;)+|\u00a0+/gm, " ")
