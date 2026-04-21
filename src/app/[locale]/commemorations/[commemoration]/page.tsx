@@ -77,7 +77,7 @@ export default async function Page({
 						id,
 						icon: newIcon,
 					},
-					permalink: `${BASE_URL}/commemorations/${id}`,
+					permalink: `${BASE_URL}${language == "ru" ? "/ru/" : "/"}commemorations/${id}`,
 				})}
 			/>
 		</>
