@@ -83,6 +83,7 @@ const Commemoration = function ({ model }) {
 					<ShareButton
 						model={newReadonlyModel({
 							shareData,
+							alternateVariant: true,
 						})}
 					/>
 					<SocialLink

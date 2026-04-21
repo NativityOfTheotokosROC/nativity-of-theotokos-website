@@ -97,6 +97,7 @@ const Article = async function ({ model }) {
 					<ShareButton
 						model={newReadonlyModel({
 							shareData: encodedShareData,
+							alternateVariant: true,
 						})}
 					/>
 					<SocialLink

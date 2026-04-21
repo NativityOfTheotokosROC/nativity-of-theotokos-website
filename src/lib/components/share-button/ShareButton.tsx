@@ -3,10 +3,10 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ShareButtonModel } from "../../models/share-button";
 import { useTranslations } from "next-intl";
-import { Share } from "lucide-react";
+import { Share, Share2 } from "lucide-react";
 
 const ShareButton = function ({ model }) {
-	const { shareData } = model.modelView;
+	const { shareData, alternateVariant } = model.modelView;
 	const { title, url, text } = shareData;
 	const tNonDescriptive = useTranslations("nonDescriptive");
 
@@ -20,7 +20,11 @@ const ShareButton = function ({ model }) {
 						navigator.share({ title, url, text });
 					}}
 				>
-					<Share strokeWidth={1.5} />
+					{alternateVariant ? (
+						<Share2 strokeWidth={1.5} />
+					) : (
+						<Share strokeWidth={1.5} />
+					)}
 				</button>
 			)}
 		</>
