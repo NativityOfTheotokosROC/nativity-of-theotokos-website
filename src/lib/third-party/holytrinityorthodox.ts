@@ -129,14 +129,15 @@ export async function getCommemoration(
 			const text = $(this)
 				.text()
 				.replaceAll(/\n+/gm, " ")
-				.replaceAll(/(\&nbsp;)+/gm, "\n")
+				.replaceAll(/(\&nbsp;){2,}/gm, "\n")
 				.replaceAll(/\u00a0+/gm, "\n")
+				.replaceAll(/(\&nbsp;)+/gm, " ")
 				.trim()
 				.replaceAll(/\n+/gm, "<br><br>");
 			paragraphs.push(text);
 		});
 		const body = paragraphs
-			.join("<br>")
+			.join("<br><br>")
 			.replaceAll(/<br>\w*<br>\w*<br>/gm, "<br><br>"); // Tee-hee
 		return { title, feastDays, icon, body, id } satisfies Commemoration;
 	} catch (error) {
