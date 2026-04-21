@@ -24,7 +24,7 @@ const Commemoration = function ({ model }) {
 		<main className="commemoration bg-[#FEF8F3] text-black">
 			<div
 				style={{ backgroundImage: `url(${CommemorationBorder.src})` }}
-				className="h-5 w-full bg-[#250203] bg-size-[25%] bg-position-[50%_50%] bg-repeat-x md:bg-size-[15%] lg:bg-size-[15%]"
+				className="h-3.75 w-full bg-[#250203] bg-size-[25%] bg-position-[50%_50%] bg-repeat-x md:bg-size-[15%] lg:bg-size-[15%]"
 			/>
 			<div className="commemoration-content flex min-h-[94svh] flex-col gap-6 p-8 md:p-12">
 				<div className="metadata flex flex-col gap-6 md:flex-row md:gap-x-8 lg:max-w-full">

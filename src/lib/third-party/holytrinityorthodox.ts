@@ -139,7 +139,7 @@ export async function getCommemoration(
 		});
 		const body = paragraphs
 			.join("<br><br>")
-			.replaceAll(/<br>\w*<br>\w*<br>/gm, "<br><br>"); // Tee-hee
+			.replaceAll(/<br>\s*<br>\s*<br>/gm, "<br><br>"); // Tee-hee
 		return { title, feastDays, icon, body, id } satisfies Commemoration;
 	} catch (error) {
 		if (error instanceof Response && error.status == 404) return null;
