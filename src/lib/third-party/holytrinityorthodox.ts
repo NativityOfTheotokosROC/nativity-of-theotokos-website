@@ -127,7 +127,7 @@ export async function getCommemoration(
 		$("font>strong").each(function () {
 			$(this).unwrap();
 			const text = $(this).text();
-			const replacement = $(`<span class="caption">${text}<span>`);
+			const replacement = $(`<h5 class="caption">${text}<h5>`);
 			$(this).replaceWith(replacement);
 		});
 		const paragraphs: string[] = [];

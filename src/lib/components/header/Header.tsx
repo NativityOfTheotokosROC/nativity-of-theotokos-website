@@ -53,7 +53,7 @@ const Header = function ({ model }) {
 					>
 						<div className="size-12">
 							<LogoIcon
-								className="object-contain object-center"
+								className="logo-icon object-contain object-center"
 								width={48}
 								height={48}
 								strokeWidth={9}
