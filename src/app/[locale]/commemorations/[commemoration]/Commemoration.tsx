@@ -10,6 +10,7 @@ import SocialLink from "@/src/lib/components/social-link/SocialLink";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import Image from "next/image";
 import Link from "next/link";
+import PrintButton from "@/src/lib/components/print-button/PrintButton";
 
 const Commemoration = function ({ model }) {
 	const { commemoration, permalink } = model.modelView;
@@ -108,10 +109,11 @@ const Commemoration = function ({ model }) {
 							},
 						})}
 					/>
+					<PrintButton />
 				</div>
 				<hr className="w-full self-center text-black/50 md:w-3/4" />
 				<p
-					className={`body self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed [&_.caption]:justify-self-center [&_.caption]:text-xs/relaxed [&_.caption]:uppercase md:[&_.caption]:max-w-63 [&_img]:justify-self-center`}
+					className={`body self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed [&_.caption]:text-center [&_.caption]:text-xs/relaxed [&_.caption]:uppercase md:[&_.caption]:max-w-63 [&_img]:text-center`}
 					dangerouslySetInnerHTML={{ __html: body }}
 				/>
 			</div>

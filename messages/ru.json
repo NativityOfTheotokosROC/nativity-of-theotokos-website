@@ -154,7 +154,10 @@
 	"nonDescriptive": {
 		"menu": "Меню",
 		"close": "Закрыть",
-		"share": "Поделиться"
+		"share": "Поделиться",
+		"download": "Скачать",
+		"print": "Печать",
+		"saveAsPDF": "Сохранить как PDF"
 	},
 	"links": {
 		"liturgicalResources": "https://ru.eadiocese.org/litresource",

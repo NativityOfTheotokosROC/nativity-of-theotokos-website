@@ -154,7 +154,10 @@
 	"nonDescriptive": {
 		"menu": "Menu",
 		"close": "Close",
-		"share": "Share"
+		"share": "Share",
+		"download": "Download",
+		"print": "Print",
+		"saveAsPDF": "Save as PDF"
 	},
 	"links": {
 		"liturgicalResources": "https://eadiocese.org/litresource",
