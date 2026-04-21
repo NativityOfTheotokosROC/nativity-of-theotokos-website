@@ -124,6 +124,9 @@ export async function getCommemoration(
 				_getCommemorationImageURL(`/${prefix}/${iconSource}`, language),
 			);
 		});
+		$("font").each(function () {
+			$(this).addClass("caption");
+		});
 		const paragraphs: string[] = [];
 		$(".ofd_los_body").each(function () {
 			const text = $(this)

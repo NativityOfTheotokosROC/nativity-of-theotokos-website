@@ -111,7 +111,7 @@ const Commemoration = function ({ model }) {
 				</div>
 				<hr className="w-full self-center text-black/50 md:w-3/4" />
 				<p
-					className={`body self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed`}
+					className={`body self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed **:[.caption]:self-center **:[img]:self-center`}
 					dangerouslySetInnerHTML={{ __html: body }}
 				/>
 			</div>
