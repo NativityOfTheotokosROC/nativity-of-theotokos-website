@@ -125,7 +125,9 @@ export async function getCommemoration(
 			);
 		});
 		$("font").each(function () {
-			$(this).addClass("caption");
+			const text = $(this).text();
+			const replacement = $(`<span class="caption">${text}<span>`);
+			$(this).replaceWith(replacement);
 		});
 		const paragraphs: string[] = [];
 		$(".ofd_los_body").each(function () {
