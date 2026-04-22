@@ -68,6 +68,7 @@
 		"larisa": "Larisa",
 		"vasily": "Vasily",
 		"admin": "Admin",
+		"privacy": "Privacy Policy",
 		"dailyReadingsLicense": "Daily Readings sourced from",
 		"logoIconLicense": "Logo icon by",
 		"copyright": "2026 Nativity of the Theotokos Parish. All Rights Reserved."
@@ -91,6 +92,10 @@
 	},
 	"aboutUs": {
 		"metaTitle": "About Us"
+	},
+	"privacyPolicy": {
+		"title": "Privacy Policy",
+		"lastModified": "Last Updated"
 	},
 	"news": {
 		"metaTitle": "News",

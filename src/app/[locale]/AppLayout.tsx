@@ -121,6 +121,10 @@ const AppLayout = async function ({ model, children }) {
 				linkLabel: tFooterVariable("admin"),
 				link: "/admin",
 			},
+			{
+				linkLabel: tFooterVariable("privacy"),
+				link: "/privacy-policy",
+			},
 		],
 	}) satisfies FooterModel;
 

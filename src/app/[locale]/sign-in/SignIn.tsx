@@ -1,20 +1,15 @@
+import SignInButton from "@/src/lib/components/sign-in-button/SignInButton";
 import { SignInModel } from "@/src/lib/models/sign-in";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
-import SignInButton from "@/src/lib/components/sign-in-button/SignInButton";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
-import { useEffect } from "react";
 
 const SignIn = function ({ model }) {
 	const { modelView, interact } = model;
 	const { signInStatus, signInServices, selectedService } = modelView;
 	const t = useTranslations("signIn");
-
-	useEffect(() => {
-		window.scrollTo(0, 0);
-	}, []);
 
 	return (
 		<main className="sign-in border-t-15 border-t-red-900 bg-[#FEF8F3] text-black">
