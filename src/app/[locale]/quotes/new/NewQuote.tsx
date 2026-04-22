@@ -120,6 +120,9 @@ const NewQuote = function ({ model }) {
 								{selectedIndex => (
 									<ViewTransition
 										key={`tab-${selectedIndex}`}
+										name="tab-panels"
+										share="auto"
+										enter="auto"
 									>
 										<ViewTransition key={`tab-${0}`}>
 											<TabPanel
