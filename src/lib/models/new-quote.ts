@@ -20,7 +20,6 @@ export type NewQuoteNotification =
 
 export interface NewQuoteModelView {
 	newQuoteNotification: NewQuoteNotification | null;
-	quoteCharacterLimit: number;
 }
 
 export type NewQuoteModelInteraction = InputModelInteraction<

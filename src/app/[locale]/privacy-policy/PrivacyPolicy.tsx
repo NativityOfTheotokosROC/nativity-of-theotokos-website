@@ -23,7 +23,7 @@ const PrivacyPolicy = async function ({ model }) {
 				</span>
 				<span className="text-sm">{`${t("lastModified")}: ${new Date("2026-04-22").toLocaleDateString(dateLocale, { dateStyle: "medium" })}`}</span>
 				<div className="flex flex-col gap-6 [&_a]:underline [&_a]:hover:text-[#dcb042] [&_a]:active:text-[#dcb042]">
-					<section className="intro gap-3">
+					<section className="flex flex-col gap-3">
 						<p>
 							Protecting your private information is our priority.
 							This Privacy Policy applies to the Nativity of the
@@ -36,7 +36,7 @@ const PrivacyPolicy = async function ({ model }) {
 							Orthodox Church, include the above said website.
 						</p>
 					</section>
-					<section className="collection flex flex-col gap-3">
+					<section className="flex flex-col gap-3">
 						<span className="text-xl font-semibold">
 							Collection of your Personal Information
 						</span>
@@ -60,7 +60,7 @@ const PrivacyPolicy = async function ({ model }) {
 							Russian Orthodox Church website.
 						</p>
 					</section>
-					<section className="usage flex flex-col gap-3">
+					<section className="flex flex-col gap-3">
 						<span className="text-xl font-semibold">
 							Use of your Personal Information
 						</span>
@@ -114,7 +114,7 @@ const PrivacyPolicy = async function ({ model }) {
 							Orthodox Church website or the public.
 						</p>
 					</section>
-					<section className="security flex flex-col gap-3">
+					<section className="flex flex-col gap-3">
 						<span className="text-xl font-semibold">Cookies</span>
 						<p>
 							Cookies are small pieces of data stored on your
@@ -156,7 +156,7 @@ const PrivacyPolicy = async function ({ model }) {
 							cookie preferences through your browser settings.
 						</p>
 					</section>
-					<section className="security flex flex-col gap-3">
+					<section className="flex flex-col gap-3">
 						<span className="text-xl font-semibold">
 							Security of your Personal Information
 						</span>
@@ -170,7 +170,7 @@ const PrivacyPolicy = async function ({ model }) {
 							and we cannot guarantee its absolute security.
 						</p>
 					</section>
-					<section className="under-13 flex flex-col gap-3">
+					<section className="flex flex-col gap-3">
 						<span className="text-xl font-semibold">
 							Children Under Thirteen
 						</span>
@@ -183,7 +183,7 @@ const PrivacyPolicy = async function ({ model }) {
 							website.
 						</p>
 					</section>
-					<section className="under-13 flex flex-col gap-3">
+					<section className="flex flex-col gap-3">
 						<span className="text-xl font-semibold">
 							Opt-out, Unsubscribe and Delete your Data
 						</span>
@@ -201,7 +201,7 @@ const PrivacyPolicy = async function ({ model }) {
 							.
 						</p>
 					</section>
-					<section className="under-13 flex flex-col gap-3">
+					<section className="flex flex-col gap-3">
 						<span className="text-xl font-semibold">
 							Changes to this Policy
 						</span>
@@ -216,7 +216,7 @@ const PrivacyPolicy = async function ({ model }) {
 							information.
 						</p>
 					</section>
-					<section className="under-13 flex flex-col gap-3">
+					<section className="flex flex-col gap-3">
 						<span className="text-xl font-semibold">
 							Contact Information
 						</span>

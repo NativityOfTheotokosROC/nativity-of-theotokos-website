@@ -9,7 +9,7 @@ import { notifierVIInterface } from "./notifier";
 import { InitializedModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 
-export function useNewQuote(quoteCharacterLimit: number) {
+export function useNewQuote() {
 	const notifier = useNewStatefulInteractiveModel(
 		notifierVIInterface<NewQuoteNotification>(),
 	);
@@ -18,7 +18,6 @@ export function useNewQuote(quoteCharacterLimit: number) {
 	return {
 		modelView: {
 			newQuoteNotification: notifier.modelView?.notification ?? null,
-			quoteCharacterLimit,
 		},
 		interact: async function (interaction: NewQuoteModelInteraction) {
 			switch (interaction.type) {
