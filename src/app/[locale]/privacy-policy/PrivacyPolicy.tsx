@@ -16,14 +16,14 @@ const PrivacyPolicy = async function ({ model }) {
 		<main className="privacy-policy border-t-15 border-t-orange-800 bg-[#FEF8F3] text-black">
 			<div className="privacy-policy-content flex flex-col gap-6 p-8 py-9 md:px-20 md:py-10">
 				<span
-					className={`mb-2 text-[2.75rem]/tight font-semibold wrap-break-word hyphens-auto md:w-1/2 ${georgia.className}`}
+					className={`mb-2 text-[2.75rem]/tight font-semibold wrap-break-word hyphens-auto md:w-3/4 ${georgia.className}`}
 				>
 					{t("title")}
 					<hr className="mt-4 mb-0 md:w-full" />
 				</span>
 				<span className="text-sm">{`${t("lastModified")}: ${new Date("2026-04-22").toLocaleDateString(dateLocale, { dateStyle: "medium" })}`}</span>
-				<div className="flex flex-col gap-4 p-4 lg:p-8">
-					<section className="intro gap-5">
+				<div className="flex flex-col gap-6">
+					<section className="intro gap-3">
 						<p>
 							Protecting your private information is our priority.
 							This Privacy Policy applies to the Nativity of the
