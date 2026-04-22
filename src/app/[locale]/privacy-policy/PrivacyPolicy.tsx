@@ -14,7 +14,7 @@ const PrivacyPolicy = async function ({ model }) {
 
 	return (
 		<main className="privacy-policy border-t-15 border-t-orange-800 bg-[#FEF8F3] text-black">
-			<div className="privacy-policy-content flex flex-col gap-6 p-8 py-9 md:px-20 md:py-10">
+			<div className="privacy-policy-content flex flex-col gap-6 p-8 py-9 md:px-20 md:py-10 lg:w-3/4">
 				<span
 					className={`mb-2 text-[2.75rem]/tight font-semibold wrap-break-word hyphens-auto md:w-3/4 ${georgia.className}`}
 				>
@@ -22,7 +22,7 @@ const PrivacyPolicy = async function ({ model }) {
 					<hr className="mt-4 mb-0 md:w-full" />
 				</span>
 				<span className="text-sm">{`${t("lastModified")}: ${new Date("2026-04-22").toLocaleDateString(dateLocale, { dateStyle: "medium" })}`}</span>
-				<div className="flex flex-col gap-6">
+				<div className="flex flex-col gap-6 [&_a]:underline [&_a]:hover:text-[#dcb042] [&_a]:active:text-[#dcb042]">
 					<section className="intro gap-3">
 						<p>
 							Protecting your private information is our priority.
@@ -223,9 +223,9 @@ const PrivacyPolicy = async function ({ model }) {
 						<p>
 							For more information about our privacy practices, if
 							you have questions, or if you would like to make a
-							complaint, please contact us by{" "}
+							complaint, please{" "}
 							<a href="mailto:info@nativityoftheotokos.com">
-								email
+								reach out to us
 							</a>
 							.
 						</p>
