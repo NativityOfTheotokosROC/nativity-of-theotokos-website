@@ -1,3 +1,5 @@
+"use cache";
+
 import { routing } from "@/src/i18n/routing";
 import { getDailySaint } from "@/src/lib/third-party/holytrinityorthodox";
 import { getDateString } from "@/src/lib/utilities/date-time";
@@ -27,7 +29,6 @@ export async function generateMetadata(
 export default async function Page(
 	props: PageProps<"/[locale]/commemorations/[commemoration]">,
 ) {
-	"use cache";
 	const locale = await rootLocale();
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 	const date = getDateString(new Date());
