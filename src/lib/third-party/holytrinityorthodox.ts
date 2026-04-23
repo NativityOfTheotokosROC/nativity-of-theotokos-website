@@ -78,6 +78,21 @@ export async function getSaints(date: Date, language: Language) {
 	});
 }
 
+// TODO: Refactor
+export async function getDailySaint(date: Date, language: Language) {
+	"use cache: remote";
+	cacheLife("days");
+
+	const localDate = toZonedTime(date, getLocalTimeZone());
+	const saints = await getSaints(localDate, language);
+	const $ = load(saints);
+	const commemorationPathParts = $("a").attr("href")!.split("/");
+	return (await getCommemoration(
+		commemorationPathParts[commemorationPathParts.length - 1],
+		language,
+	))!;
+}
+
 export async function getCommemoration(
 	id: string,
 	language: Language,
