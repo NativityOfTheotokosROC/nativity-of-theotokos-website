@@ -79,10 +79,8 @@ export async function getSaints(date: Date, language: Language) {
 }
 
 // TODO: Refactor
-export async function getDailySaint(date: Date, language: Language) {
-	"use cache: remote";
-	cacheLife("days");
-
+export async function getDailySaint(language: Language) {
+	const date = new Date();
 	const localDate = toZonedTime(date, getLocalTimeZone());
 	const saints = await getSaints(localDate, language);
 	const $ = load(saints);
