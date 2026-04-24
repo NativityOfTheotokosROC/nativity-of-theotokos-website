@@ -1,15 +1,15 @@
 import { routing } from "@/src/i18n/routing";
-import {
-	getAllArticles,
-	getArticle,
-	getArticleMetadata,
-} from "@/src/lib/server-action/news-article";
-import { NewsArticle as NewsArticleType } from "@/src/lib/type/general";
+import { getArticle } from "@/src/lib/server-actions/article";
+import { Article as ArticleType } from "@/src/lib/types/general";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
-import NewsArticle from "./NewsArticle";
-import { BASE_URL } from "@/src/lib/utility/server-constant";
+import Article from "./Article";
+import { BASE_URL } from "@/src/lib/utilities/server-constants";
+import {
+	getAllArticles,
+	getArticleMetadata,
+} from "@/src/lib/server-only/article";
 
 export async function generateStaticParams() {
 	const [articlesEn, articlesRu] = await Promise.all([
@@ -22,7 +22,7 @@ export async function generateStaticParams() {
 	];
 }
 
-function articleJsonLd(article: NewsArticleType) {
+function articleJsonLd(article: ArticleType) {
 	const { title, author, articleImage, dateCreated, snippet } = article;
 	return {
 		"@context": "https://schema.org",
@@ -45,10 +45,8 @@ export async function generateMetadata({
 
 	const { article, locale } = await params;
 	const computedLocale = hasLocale(routing.locales, locale) ? locale : "en";
-	const { title, snippet, uri, articleImage } = await getArticleMetadata(
-		article,
-		computedLocale,
-	);
+	const { title, author, snippet, uri, articleImage } =
+		await getArticleMetadata(article, computedLocale);
 
 	return {
 		title,
@@ -63,6 +61,7 @@ export async function generateMetadata({
 			title,
 			description: snippet,
 			url: `/news/${uri}`,
+			authors: author,
 			type: "article",
 			images: [articleImage.source],
 		},
@@ -78,14 +77,13 @@ export async function generateMetadata({
 export default async function Page({
 	params,
 }: PageProps<"/[locale]/news/[article]">) {
-	"use cache";
+	// "use cache";
 
 	const { article: articleId, locale } = await params;
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 
-	//TODO: Investigate why locale is not updating server-side
 	const article = await getArticle(articleId, language);
-	const baseUrl = BASE_URL;
+	const baseUrl = `${BASE_URL}${language == "ru" ? "/ru" : ""}`;
 	const permalink = `${baseUrl}/news/${article.uri.toString()}`;
 	const jsonLd = articleJsonLd(article);
 
@@ -95,7 +93,7 @@ export default async function Page({
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 			/>
-			<NewsArticle model={newReadonlyModel({ article, permalink })} />
+			<Article model={newReadonlyModel({ article, permalink })} />
 		</>
 	);
 }

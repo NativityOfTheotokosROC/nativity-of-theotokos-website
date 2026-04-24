@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import SignInClient from "./client";
-import { getUser } from "@/src/lib/server-action/auth";
+import { getUser } from "@/src/lib/server-actions/auth";
 import { redirect } from "next/navigation";
 
 export async function generateMetadata({
@@ -26,7 +26,7 @@ export async function generateMetadata({
 export default async function Page(props: PageProps<"/[locale]/sign-in">) {
 	const searchParams = await props.searchParams;
 	const signInEndpoint =
-		typeof searchParams.endpoint == "string" ? searchParams.endpoint : "/";
+		typeof searchParams.endpoint === "string" ? searchParams.endpoint : "/";
 	const user = await getUser();
 
 	if (user) redirect(signInEndpoint);

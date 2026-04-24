@@ -2,21 +2,24 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { genericOAuth } from "better-auth/plugins";
 import prisma from "./src/lib/third-party/prisma";
+import {
+	BETTER_AUTH_URL,
+	ENVIRONMENT,
+	GOOGLE_CLIENT_ID,
+	GOOGLE_CLIENT_SECRET,
+	YANDEX_CLIENT_ID,
+	YANDEX_CLIENT_SECRET,
+} from "./src/lib/utilities/server-constants";
 
 export const auth = betterAuth({
 	database: prismaAdapter(prisma, { provider: "postgresql" }),
 	baseUrl:
-		process.env.NODE_ENV == "development"
-			? "http://localhost:3000"
-			: undefined,
-	trustedOrigins: [
-		"http://localhost:3000",
-		...(process.env.BETTER_AUTH_URL ? [process.env.BETTER_AUTH_URL] : []),
-	],
+		ENVIRONMENT === "development" ? "http://localhost:3000" : undefined,
+	trustedOrigins: ["http://localhost:3000", BETTER_AUTH_URL],
 	socialProviders: {
 		google: {
-			clientId: process.env.GOOGLE_CLIENT_ID!,
-			clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+			clientId: GOOGLE_CLIENT_ID,
+			clientSecret: GOOGLE_CLIENT_SECRET,
 		},
 	},
 	plugins: [
@@ -24,8 +27,8 @@ export const auth = betterAuth({
 			config: [
 				{
 					providerId: "yandex",
-					clientId: process.env.YANDEX_CLIENT_ID!,
-					clientSecret: process.env.YANDEX_CLIENT_SECRET!,
+					clientId: YANDEX_CLIENT_ID,
+					clientSecret: YANDEX_CLIENT_SECRET,
 					authorizationUrl: "https://oauth.yandex.com/authorize",
 					authorizationUrlParams: {
 						scope: "login:email login:info login:avatar",

@@ -1,5 +1,5 @@
 import { routing } from "@/src/i18n/routing";
-import ProtectedComponent from "@/src/lib/component/protected-component/ProtectedComponent";
+import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";

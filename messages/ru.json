@@ -68,6 +68,7 @@
 		"larisa": "Лариса",
 		"vasily": "Василий",
 		"admin": "Админ",
+		"privacy": "Политика конфиденциальности",
 		"dailyReadingsLicense": "Ежедневные чтения предоставлены",
 		"logoIconLicense": "Иконка логотипа:",
 		"copyright": "2026 Приход Рождества Пресвятой Богородицы. Все права защищены."
@@ -78,16 +79,23 @@
 		"dailyReadingsHeader": "Ежедневные Чтения",
 		"dailyHymns": "Тропари и кондаки дня",
 		"readings": "Чтения",
-		"latestNewsHeader": "Последние Новости",
-		"featured": "Главная новость",
+		"latestNewsHeader": "Приходской бюллетень",
+		"featured": "Главная",
 		"schedule": "Расписание",
-		"moreNews": "Другие новости",
+		"moreNews": "Другие статьи",
 		"liturgicalResources": "Богослужебные материалы",
 		"whatIsOrthodoxy": "Что такое Православие?",
 		"aboutOurParish": "О нашем приходе"
 	},
+	"commemoration": {
+		"oldCalendar": "Юлианский календарь"
+	},
 	"aboutUs": {
 		"metaTitle": "О приходе"
+	},
+	"privacyPolicy": {
+		"title": "Политика конфиденциальности",
+		"lastModified": "Последнее обновление"
 	},
 	"news": {
 		"metaTitle": "Новости",
@@ -151,7 +159,10 @@
 	"nonDescriptive": {
 		"menu": "Меню",
 		"close": "Закрыть",
-		"share": "Поделиться"
+		"share": "Поделиться",
+		"download": "Скачать",
+		"print": "Печать",
+		"saveAsPDF": "Сохранить как PDF"
 	},
 	"links": {
 		"liturgicalResources": "https://ru.eadiocese.org/litresource",

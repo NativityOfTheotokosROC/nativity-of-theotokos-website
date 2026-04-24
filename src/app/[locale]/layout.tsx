@@ -1,13 +1,13 @@
 import "@/src/app/globals.css";
 import { routing } from "@/src/i18n/routing";
-import LayoutLoadingSkeleton from "@/src/lib/component/layout-loading-skeleton/LayoutLoadingSkeleton";
-import ClientProviders from "@/src/lib/provider/client-providers";
+import LayoutLoadingSkeleton from "@/src/lib/components/layout-loading-skeleton/LayoutLoadingSkeleton";
+import ClientProviders from "@/src/lib/providers/client-providers";
 import {
 	georgia,
 	googleSans,
 	googleSansFlex,
 } from "@/src/lib/third-party/fonts";
-import { Language } from "@/src/lib/type/general";
+import { Language } from "@/src/lib/types/general";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -19,7 +19,7 @@ import {
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import AppLayout from "./AppLayout";
-import { BASE_URL } from "@/src/lib/utility/server-constant";
+import { BASE_URL } from "@/src/lib/utilities/server-constants";
 
 export function generateStaticParams() {
 	return [{ locale: "en" }, { locale: "ru" }];
@@ -28,7 +28,7 @@ export function generateStaticParams() {
 export async function generateMetadata(
 	props: Omit<LayoutProps<"/[locale]">, "children">,
 ): Promise<Metadata> {
-	"use cache";
+	// "use cache";
 
 	const { locale } = await props.params;
 
@@ -39,7 +39,7 @@ export async function generateMetadata(
 	const titleTemplate = `%s | ${t("templateTitle")}`;
 	const titleDefault = t("templateDefault");
 	const description = t("description");
-	const localeMetaData = locale == "en" ? "en-US" : "ru-RU";
+	const localeMetaData = locale === "en" ? "en-US" : "ru-RU";
 
 	return {
 		metadataBase: BASE_URL,
@@ -79,7 +79,7 @@ export default async function RootLayout({
 	children,
 	params,
 }: LayoutProps<"/[locale]">) {
-	"use cache";
+	// "use cache";
 
 	const { locale } = await params;
 	if (!hasLocale(routing.locales, locale)) {

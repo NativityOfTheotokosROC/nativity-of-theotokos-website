@@ -1,8 +1,8 @@
 "use client";
 
-import { PageLoadingBarContext } from "@/src/lib/component/page-loading-bar/PageLoadingBar";
-import Error from "@/src/lib/component/page/error/Error";
-import { errorPageVIInterface } from "@/src/lib/model-implementation/error-page";
+import { PageLoadingBarContext } from "@/src/lib/components/page-loading-bar/PageLoadingBar";
+import Error from "@/src/lib/components/views/error/Error";
+import { errorPageVIInterface } from "@/src/lib/model-implementations/error-page";
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
 import { useContext, useEffect } from "react";
 

@@ -68,6 +68,7 @@
 		"larisa": "Larisa",
 		"vasily": "Vasily",
 		"admin": "Admin",
+		"privacy": "Privacy Policy",
 		"dailyReadingsLicense": "Daily Readings sourced from",
 		"logoIconLicense": "Logo icon by",
 		"copyright": "2026 Nativity of the Theotokos Parish. All Rights Reserved."
@@ -78,16 +79,23 @@
 		"dailyReadingsHeader": "Daily Readings",
 		"dailyHymns": "Hymns for the Day",
 		"readings": "Readings",
-		"latestNewsHeader": "Latest News",
+		"latestNewsHeader": "Latest Updates",
 		"featured": "Featured",
 		"schedule": "Schedule",
-		"moreNews": "More News",
+		"moreNews": "More Articles",
 		"liturgicalResources": "Liturgical Resources",
 		"whatIsOrthodoxy": "What is Orthodoxy?",
 		"aboutOurParish": "About our Parish"
 	},
+	"commemoration": {
+		"oldCalendar": "Julian Calendar"
+	},
 	"aboutUs": {
 		"metaTitle": "About Us"
+	},
+	"privacyPolicy": {
+		"title": "Privacy Policy",
+		"lastModified": "Last Updated"
 	},
 	"news": {
 		"metaTitle": "News",
@@ -151,7 +159,10 @@
 	"nonDescriptive": {
 		"menu": "Menu",
 		"close": "Close",
-		"share": "Share"
+		"share": "Share",
+		"download": "Download",
+		"print": "Print",
+		"saveAsPDF": "Save as PDF"
 	},
 	"links": {
 		"liturgicalResources": "https://eadiocese.org/litresource",

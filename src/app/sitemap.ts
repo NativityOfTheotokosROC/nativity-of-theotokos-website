@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
-import { getAllArticles } from "../lib/server-action/news-article";
-import { BASE_URL } from "../lib/utility/server-constant";
+import { BASE_URL } from "../lib/utilities/server-constants";
+import { getAllArticles } from "../lib/server-only/article";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	"use cache";
@@ -16,6 +16,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			alternates: {
 				languages: {
 					ru: `${baseUrl}/ru`,
+				},
+			},
+		},
+		{
+			url: `${baseUrl}/daily-saint`,
+			changeFrequency: "daily",
+			priority: 1,
+			alternates: {
+				languages: {
+					ru: `${baseUrl}/ru/daily-saint`,
+				},
+			},
+		},
+		{
+			url: `${baseUrl}/privacy-policy`,
+			alternates: {
+				languages: {
+					ru: `${baseUrl}/ru/privacy-policy`,
 				},
 			},
 		},

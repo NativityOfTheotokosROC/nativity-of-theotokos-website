@@ -1,4 +1,4 @@
-import ViewLoadingSkeleton from "@/src/lib/component/view-loading-skeleton/ViewLoadingSkeleton";
+import ViewLoadingSkeleton from "@/src/lib/components/view-loading-skeleton/ViewLoadingSkeleton";
 
 export default function Loading() {
 	return <ViewLoadingSkeleton />;

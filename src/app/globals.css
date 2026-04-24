@@ -61,6 +61,16 @@ button {
 	}
 }
 
+@media print {
+	* {
+		position: static !important;
+		color: black !important;
+	}
+	.logo-icon {
+		stroke: black;
+	}
+}
+
 @theme inline {
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
