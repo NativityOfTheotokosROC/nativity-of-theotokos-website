@@ -123,7 +123,7 @@ const AppLayout = async function ({ model, children }) {
 			},
 			{
 				linkLabel: tFooterVariable("privacy"),
-				link: "https://www.nativityoftheotokos.com/privacy-policy",
+				link: "/privacy-policy",
 			},
 		],
 	}) satisfies FooterModel;

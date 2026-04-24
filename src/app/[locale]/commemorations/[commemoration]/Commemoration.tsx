@@ -27,15 +27,15 @@ const Commemoration = function ({ model }) {
 				style={{ backgroundImage: `url(${CommemorationBorder.src})` }}
 				className="h-3.75 w-full bg-[#250203] bg-size-[25%] bg-position-[50%_50%] bg-repeat-x md:bg-size-[15%] lg:bg-size-[15%]"
 			/>
-			<div className="commemoration-content flex min-h-[94svh] flex-col gap-6 p-8 md:p-12">
-				<div className="metadata flex flex-col gap-6 md:flex-row md:gap-x-8 lg:max-w-full">
-					<div className="headline flex flex-col gap-6 md:w-1/2">
+			<div className="commemoration-content flex min-h-[94svh] flex-col gap-6 p-8 md:items-center md:p-12">
+				<div className="metadata flex flex-col gap-6 md:justify-center md:gap-x-8 lg:max-w-full">
+					<div className="headline flex flex-col gap-6 md:w-3/4 md:justify-center md:text-center">
 						<ViewTransition
 							name={`commemoration-title-${id}`}
 							share="auto"
 						>
 							<span
-								className={`title text-4xl/tight md:text-5xl/tight lg:text-6xl/tight ${georgia.className} font-semibold wrap-break-word hyphens-auto`}
+								className={`title text-4xl/tight md:text-5xl/tight lg:text-6xl/tight ${georgia.className} font-semibold wrap-break-word hyphens-auto md:wrap-normal`}
 							>
 								{title}
 							</span>
@@ -78,7 +78,6 @@ const Commemoration = function ({ model }) {
 						</div>
 					)}
 				</div>
-
 				<div className="flex items-end gap-5 self-center text-sm text-gray-900 **:hover:text-[#dcb042] md:mt-4 md:self-start">
 					<ShareButton
 						model={newReadonlyModel({
@@ -114,7 +113,7 @@ const Commemoration = function ({ model }) {
 				</div>
 				<hr className="w-full self-center text-black/50 md:w-3/4" />
 				<p
-					className={`body self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed [&_.caption]:mx-auto [&_.caption]:text-center [&_.caption]:text-xs/relaxed [&_.caption]:uppercase md:[&_.caption]:max-w-63 [&_img]:mx-auto`}
+					className={`body self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-justify md:text-xl/relaxed [&_.caption]:mx-auto [&_.caption]:text-center [&_.caption]:text-xs/relaxed [&_.caption]:uppercase md:[&_.caption]:max-w-63 [&_img]:mx-auto`}
 					dangerouslySetInnerHTML={{ __html: body }}
 				/>
 			</div>

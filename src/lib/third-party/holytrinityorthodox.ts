@@ -66,16 +66,18 @@ export async function getSaints(date: Date, language: Language) {
 		$(".emphasized").unwrap();
 		$(".cal-main").removeAttr("onclick");
 		$(".cal-main").each(function () {
-			const urlParts = $(this).attr("href")!.split("/");
-			const id = [
-				urlParts[urlParts.length - 2],
-				urlParts[urlParts.length - 1],
-			]
-				.join("_")
-				.replace(/\.html?/, "");
-			$(this).attr("href", `/commemorations/${id}`);
-			$(this).removeClass();
-			$(this).addClass("commemoration");
+			const urlParts = $(this).attr("href")?.split("/");
+			if (urlParts) {
+				const id = [
+					urlParts[urlParts.length - 2],
+					urlParts[urlParts.length - 1],
+				]
+					.join("_")
+					.replace(/\.html?/, "");
+				$(this).attr("href", `/commemorations/${id}`);
+				$(this).removeClass();
+				$(this).addClass("commemoration");
+			}
 		});
 		return $(".normaltext").html()!;
 	});
