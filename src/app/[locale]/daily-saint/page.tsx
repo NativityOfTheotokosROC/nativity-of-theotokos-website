@@ -4,17 +4,17 @@ import { routing } from "@/src/i18n/routing";
 import { getDailySaint } from "@/src/lib/third-party/holytrinityorthodox";
 import { getDateString } from "@/src/lib/utilities/date-time";
 import { hasLocale } from "next-intl";
-import { cacheLife } from "next/cache";
 import { locale as rootLocale } from "next/root-params";
 import CommemorationPage, {
 	generateMetadata as commemorationMetadata,
 } from "../commemorations/[commemoration]/page";
-
-cacheLife("minutes");
+import { cacheLife, cacheTag } from "next/cache";
 
 export async function generateMetadata(
 	props: PageProps<"/[locale]/commemorations/[commemoration]">,
 ) {
+	cacheTag("daily-saint");
+	cacheLife("minutes");
 	const locale = await rootLocale();
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 	const date = getDateString(new Date());
@@ -32,6 +32,8 @@ export async function generateMetadata(
 export default async function Page(
 	props: PageProps<"/[locale]/commemorations/[commemoration]">,
 ) {
+	cacheTag("daily-saint");
+	cacheLife("minutes");
 	const locale = await rootLocale();
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 	const date = getDateString(new Date());
