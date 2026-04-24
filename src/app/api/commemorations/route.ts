@@ -26,5 +26,5 @@ export async function GET(request: Request) {
 		data: [...ids.keys().map(id => ({ id: id }))],
 		skipDuplicates: true,
 	});
-	return new Response(`Added: ${updates}`);
+	return new Response(`Added: ${updates.count}`);
 }
