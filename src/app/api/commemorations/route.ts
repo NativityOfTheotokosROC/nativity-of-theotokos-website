@@ -8,7 +8,7 @@ import { backOff } from "exponential-backoff";
 
 export async function GET(request: Request) {
 	const startDate = toZonedTime(
-		new Date(new Date().getFullYear(), 0, 1).toDateString(),
+		new Date(new Date().getFullYear(), 0, 1),
 		getLocalTimeZone(),
 	);
 	let nextDate = startDate;
