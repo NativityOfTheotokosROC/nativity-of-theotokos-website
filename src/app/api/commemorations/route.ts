@@ -10,7 +10,6 @@ export async function GET(request: Request) {
 	const ids = new Set<string>();
 	while (nextDate.getFullYear() === startDate.getFullYear()) {
 		const saints = await backOff(() => getSaints(nextDate, "en"));
-		console.log(saints);
 		const $ = load(saints);
 		try {
 			$("a").each(function () {
@@ -19,6 +18,8 @@ export async function GET(request: Request) {
 				ids.add(pathParts[pathParts.length - 1]);
 			});
 		} catch (error) {
+			console.log(nextDate);
+			console.log(saints);
 			throw error;
 		} finally {
 			await prisma.commemoration.createMany({
