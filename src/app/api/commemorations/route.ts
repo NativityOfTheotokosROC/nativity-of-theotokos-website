@@ -13,8 +13,8 @@ export async function GET(request: Request) {
 		const $ = load(saints);
 		try {
 			$("a").each(function () {
-				const pathParts = $(this).attr("href")!.split("/");
-				ids.add(pathParts[pathParts.length - 1]);
+				const pathParts = $(this).attr("href")?.split("/");
+				if (pathParts) ids.add(pathParts[pathParts.length - 1]);
 			});
 		} catch (error) {
 			console.log(nextDate);
