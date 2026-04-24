@@ -5,8 +5,6 @@ import { addDays } from "date-fns";
 import { backOff } from "exponential-backoff";
 
 export async function GET(_: Request) {
-	"use cache: remote";
-
 	const startDate = new Date(new Date().getFullYear(), 0, 1);
 	let nextDate = startDate;
 	const ids = new Set<string>();
