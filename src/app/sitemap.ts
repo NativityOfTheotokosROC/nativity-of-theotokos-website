@@ -19,6 +19,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				},
 			},
 		},
+		{
+			url: `${baseUrl}/daily-saint`,
+			changeFrequency: "daily",
+			priority: 1,
+			alternates: {
+				languages: {
+					ru: `${baseUrl}/ru/daily-saint`,
+				},
+			},
+		},
+		{
+			url: `${baseUrl}/privacy-policy`,
+			alternates: {
+				languages: {
+					ru: `${baseUrl}/ru/privacy-policy`,
+				},
+			},
+		},
 		...newsArticles.map(article => ({
 			url: `${baseUrl}/news/${article.uri.toString()}`,
 			lastModified: article.dateUpdated ?? article.dateCreated,
