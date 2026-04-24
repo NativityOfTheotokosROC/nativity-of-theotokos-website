@@ -3,11 +3,9 @@ import prisma from "@/src/lib/third-party/prisma";
 import { load } from "cheerio";
 import { addDays } from "date-fns";
 import { backOff } from "exponential-backoff";
-import { cacheLife } from "next/cache";
 
 export async function GET(_: Request) {
 	"use cache: remote";
-	cacheLife("days");
 
 	const startDate = new Date(new Date().getFullYear(), 0, 1);
 	let nextDate = startDate;
