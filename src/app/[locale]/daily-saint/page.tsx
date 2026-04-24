@@ -8,6 +8,10 @@ import { locale as rootLocale } from "next/root-params";
 import CommemorationPage, {
 	generateMetadata as commemorationMetadata,
 } from "../commemorations/[commemoration]/page";
+import { cacheLife, cacheTag } from "next/cache";
+
+cacheTag("daily-saint");
+cacheLife("minutes");
 
 export async function generateMetadata(
 	props: PageProps<"/[locale]/commemorations/[commemoration]">,
