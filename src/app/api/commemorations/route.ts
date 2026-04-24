@@ -12,10 +12,20 @@ export async function GET(request: Request) {
 		const saints = await backOff(() => getSaints(nextDate, "en"));
 		console.log(saints);
 		const $ = load(saints);
-		$("a").each(function () {
-			const pathParts = $(this).attr("href")!.split("/");
-			ids.add(pathParts[pathParts.length - 1]);
-		});
+		try {
+			$("a").each(function () {
+				console.log($(this).html());
+				const pathParts = $(this).attr("href")!.split("/");
+				ids.add(pathParts[pathParts.length - 1]);
+			});
+		} catch (error) {
+			throw error;
+		} finally {
+			await prisma.commemoration.createMany({
+				data: [...ids.keys().map(id => ({ id: id }))],
+				skipDuplicates: true,
+			});
+		}
 		nextDate = addDays(nextDate, 1);
 	}
 	const updates = await prisma.commemoration.createMany({
