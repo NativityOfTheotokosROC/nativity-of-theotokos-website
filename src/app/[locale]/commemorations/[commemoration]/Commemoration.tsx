@@ -28,7 +28,7 @@ const Commemoration = function ({ model }) {
 				className="h-3.75 w-full bg-[#250203] bg-size-[25%] bg-position-[50%_50%] bg-repeat-x md:bg-size-[15%] lg:bg-size-[15%]"
 			/>
 			<div className="commemoration-content flex min-h-[94svh] flex-col gap-6 p-8 md:items-center md:p-12">
-				<div className="metadata flex flex-col gap-6 md:justify-center md:gap-x-8 lg:max-w-full">
+				<div className="metadata flex flex-col gap-6 md:items-center md:justify-center md:gap-x-8 lg:max-w-full">
 					<div className="headline flex flex-col gap-6 md:w-3/4 md:justify-center md:text-center">
 						<ViewTransition
 							name={`commemoration-title-${id}`}
@@ -43,7 +43,7 @@ const Commemoration = function ({ model }) {
 						<span className="text-lg">{feastDays}</span>
 					</div>
 					{icon && (
-						<div className="flex w-full flex-col items-center justify-center gap-3 md:w-1/2 md:grow md:self-stretch">
+						<div className="flex w-full flex-col items-center justify-center gap-3 md:w-1/2 md:grow">
 							<div className="flex h-91 w-60 min-w-60 items-stretch justify-stretch overflow-clip rounded-lg">
 								<Link
 									className="contents"
@@ -78,7 +78,7 @@ const Commemoration = function ({ model }) {
 						</div>
 					)}
 				</div>
-				<div className="flex items-end gap-5 self-center text-sm text-gray-900 **:hover:text-[#dcb042] md:mt-4 md:self-start">
+				<div className="flex items-end gap-5 self-center text-sm text-gray-900 **:hover:text-[#dcb042] md:mt-4">
 					<ShareButton
 						model={newReadonlyModel({
 							shareData,
