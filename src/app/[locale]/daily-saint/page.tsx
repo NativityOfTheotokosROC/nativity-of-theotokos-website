@@ -4,13 +4,12 @@ import { routing } from "@/src/i18n/routing";
 import { getDailySaint } from "@/src/lib/third-party/holytrinityorthodox";
 import { getDateString } from "@/src/lib/utilities/date-time";
 import { hasLocale } from "next-intl";
+import { cacheLife } from "next/cache";
 import { locale as rootLocale } from "next/root-params";
 import CommemorationPage, {
 	generateMetadata as commemorationMetadata,
 } from "../commemorations/[commemoration]/page";
-import { cacheLife, cacheTag } from "next/cache";
 
-cacheTag("daily-saint");
 cacheLife("minutes");
 
 export async function generateMetadata(
