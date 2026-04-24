@@ -13,7 +13,6 @@ export async function GET(request: Request) {
 		const $ = load(saints);
 		try {
 			$("a").each(function () {
-				console.log($(this).html());
 				const pathParts = $(this).attr("href")!.split("/");
 				ids.add(pathParts[pathParts.length - 1]);
 			});
