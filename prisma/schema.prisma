@@ -156,6 +156,10 @@ model Translation {
   articleSnippetTranslations   Article[]          @relation("ArticleSnippetTranslation")
 }
 
+model Commemoration {
+  id String @id
+}
+
 // BetterAuth  ----------------------------------------------------------------------
 
 model User {
