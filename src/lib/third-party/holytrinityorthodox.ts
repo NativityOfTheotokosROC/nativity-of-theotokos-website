@@ -9,7 +9,7 @@ import { Commemoration } from "../models/commemoration";
 
 export async function dailyReadings(date: Date, language: Language) {
 	"use cache: remote";
-	cacheLife("max");
+	cacheLife("weeks");
 	cacheTag("holytrinity-readings");
 	const localDate = toZonedTime(date, getLocalTimeZone());
 	const [
@@ -52,6 +52,7 @@ export async function getLiturgicalWeek(date: Date, language: Language) {
 }
 export async function getSaints(date: Date, language: Language) {
 	"use cache: remote";
+	cacheLife("weeks");
 
 	const requestURL = _getDatedBaseURL(date, _getBaseURL(language));
 	requestURL.searchParams.set("lives", "2");
@@ -83,7 +84,8 @@ export async function getSaints(date: Date, language: Language) {
 // TODO: Refactor
 export async function getDailySaint(date: Date, language: Language) {
 	"use cache: remote";
-	cacheLife("days");
+	cacheTag("daily-saint");
+	cacheLife("minutes");
 
 	const localDate = toZonedTime(date, getLocalTimeZone());
 	const saints = await getSaints(localDate, language);

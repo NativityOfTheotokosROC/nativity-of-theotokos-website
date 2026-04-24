@@ -3,8 +3,12 @@ import prisma from "@/src/lib/third-party/prisma";
 import { load } from "cheerio";
 import { addDays } from "date-fns";
 import { backOff } from "exponential-backoff";
+import { cacheLife } from "next/cache";
 
-export async function GET(request: Request) {
+export async function GET(_: Request) {
+	"use cache: remote";
+	cacheLife("days");
+
 	const startDate = new Date(new Date().getFullYear(), 0, 1);
 	let nextDate = startDate;
 	const ids = new Set<string>();
@@ -19,18 +23,17 @@ export async function GET(request: Request) {
 		} catch (error) {
 			console.log(nextDate);
 			console.log(saints);
-			throw error;
-		} finally {
 			await prisma.commemoration.createMany({
 				data: [...ids.keys().map(id => ({ id: id }))],
 				skipDuplicates: true,
 			});
+			throw error;
 		}
 		nextDate = addDays(nextDate, 1);
+		const updates = await prisma.commemoration.createMany({
+			data: [...ids.keys().map(id => ({ id: id }))],
+			skipDuplicates: true,
+		});
+		return new Response(`Added: ${updates.count}`);
 	}
-	const updates = await prisma.commemoration.createMany({
-		data: [...ids.keys().map(id => ({ id: id }))],
-		skipDuplicates: true,
-	});
-	return new Response(`Added: ${updates.count}`);
 }

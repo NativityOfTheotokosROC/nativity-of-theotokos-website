@@ -1,12 +1,14 @@
 import type { MetadataRoute } from "next";
 import { BASE_URL } from "../lib/utilities/server-constants";
 import { getAllArticles } from "../lib/server-only/article";
+import { getAllCommemorations } from "../lib/server-only/commemoration";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	"use cache";
 
 	const baseUrl = BASE_URL;
 	const newsArticles = await getAllArticles("en");
+	const commemorations = await getAllCommemorations();
 
 	return [
 		{
@@ -44,6 +46,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			alternates: {
 				languages: {
 					ru: `${baseUrl}/ru/news/${article.uri.toString()}`,
+				},
+			},
+		})),
+		...commemorations.map(commemoration => ({
+			url: `${baseUrl}/commemorations/${commemoration.id}`,
+			alternates: {
+				languages: {
+					ru: `${baseUrl}/ru/commemorations/${commemoration.id}`,
 				},
 			},
 		})),
