@@ -4,7 +4,12 @@ import { load } from "cheerio";
 import { addDays } from "date-fns";
 import { backOff } from "exponential-backoff";
 
-export async function GET(_: Request) {
+export async function GET(request: Request) {
+	const userAgent = request.headers.get("user-agent");
+	if (!userAgent?.includes("vercel-cron/1.0"))
+		return new Response("Your are not allowed to access this resource", {
+			status: 403,
+		});
 	const startDate = new Date(new Date().getFullYear(), 0, 1);
 	let nextDate = startDate;
 	const ids = new Set<string>();
