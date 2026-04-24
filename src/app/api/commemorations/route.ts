@@ -13,6 +13,8 @@ export async function GET(request: Request) {
 	);
 	let nextDate = startDate;
 	const ids = new Set<string>();
+	console.log(nextDate);
+	console.log(startDate);
 	while (nextDate.getFullYear() === startDate.getFullYear()) {
 		const saints = await backOff(() => getSaints(nextDate, "en"));
 		const $ = load(saints);
