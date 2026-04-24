@@ -51,6 +51,8 @@ export async function getLiturgicalWeek(date: Date, language: Language) {
 		.then(markedUpText => removeMarkup(markedUpText));
 }
 export async function getSaints(date: Date, language: Language) {
+	"use cache";
+
 	const requestURL = _getDatedBaseURL(date, _getBaseURL(language));
 	requestURL.searchParams.set("lives", "2");
 
