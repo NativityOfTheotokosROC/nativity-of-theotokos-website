@@ -1,7 +1,7 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 import { Notification } from "../types/general";
 
-export type SignInService = "google" | "yandex";
+export type SignInService = "google" | "microsoft" | "yandex";
 export type SignInStatus =
 	| (Notification<"success" | "failed"> & { message: string })
 	| (Notification<"pending"> & { service?: SignInService });

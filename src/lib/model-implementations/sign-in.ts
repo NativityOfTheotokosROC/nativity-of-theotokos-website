@@ -79,6 +79,15 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 							);
 							break;
 						}
+						case "microsoft": {
+							await signIn.social(
+								{
+									provider: "microsoft",
+									callbackURL: endpoint,
+								},
+								callbacks("Microsoft"),
+							);
+						}
 						case "yandex": {
 							await signIn.oauth2(
 								{
@@ -88,6 +97,9 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 								callbacks("Yandex"),
 							);
 							break;
+						}
+						default: {
+							signInService satisfies never;
 						}
 					}
 				}

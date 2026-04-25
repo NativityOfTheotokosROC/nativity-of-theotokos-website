@@ -14,6 +14,14 @@ const GOOGLE_CLIENT_SECRET = z
 	.string()
 	.nonempty()
 	.parse(process.env.GOOGLE_CLIENT_SECRET);
+const MICROSOFT_CLIENT_ID = z
+	.string()
+	.nonempty()
+	.parse(process.env.MICROSOFT_CLIENT_ID);
+const MICROSOFT_CLIENT_SECRET = z
+	.string()
+	.nonempty()
+	.parse(process.env.MICROSOFT_CLIENT_SECRET);
 const YANDEX_CLIENT_ID = z
 	.string()
 	.nonempty()
@@ -36,4 +44,6 @@ export {
 	YANDEX_CLIENT_ID,
 	YANDEX_CLIENT_SECRET,
 	MAILERLITE_API_KEY,
+	MICROSOFT_CLIENT_ID,
+	MICROSOFT_CLIENT_SECRET,
 };
