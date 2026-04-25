@@ -51,7 +51,7 @@ const Commemoration = function ({ model }) {
 									target="_blank"
 								>
 									<Image
-										className="grow cursor-pointer object-cover object-center"
+										className="grow cursor-pointer object-cover object-top"
 										height={364}
 										width={240}
 										alt={icon.about ?? "Icon of the day"}
