@@ -49,7 +49,7 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 									notification: {
 										type: "success",
 										message: t("successMessage", {
-											serviceName: serviceName,
+											serviceName,
 										}),
 									},
 								},
@@ -62,7 +62,7 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 								input: {
 									notification: {
 										type: "failed",
-										message: `${t("failureMessage", { serviceName: serviceName })} ${context.error.message}`,
+										message: `${t("failureMessage", { serviceName })} ${context.error.message}`,
 									},
 								},
 							});
