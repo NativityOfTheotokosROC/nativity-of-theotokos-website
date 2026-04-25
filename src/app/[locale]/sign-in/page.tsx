@@ -35,7 +35,7 @@ export default async function Page(props: PageProps<"/[locale]/sign-in">) {
 		<SignInClient
 			model={newReadonlyModel({
 				signInEndpoint,
-				signInServices: ["google", "yandex"],
+				signInServices: ["google", "microsoft", "yandex"],
 			})}
 		/>
 	);
