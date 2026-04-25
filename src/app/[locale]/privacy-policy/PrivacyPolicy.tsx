@@ -33,7 +33,8 @@ const PrivacyPolicy = async function ({ model }) {
 							governs data collection and usage. For the purposes
 							of this Privacy Policy, unless otherwise noted, all
 							references to Nativity of the Theotokos Russian
-							Orthodox Church, include the above said website.
+							Orthodox Church, include the above mentioned
+							website.
 						</p>
 					</section>
 					<section className="flex flex-col gap-3">
@@ -44,10 +45,11 @@ const PrivacyPolicy = async function ({ model }) {
 							Nativity of the Theotokos Russian Orthodox Church
 							collects your name, email address and profile
 							picture when you sign into our website through the
-							third-party authentication providers we
-							expose—examples including Google and Microsoft. We
-							collect your email address when you subscribe to our
-							mailing list or correspond with us.
+							third-party authentication providers we expose:
+							examples including Google OAuth 2.0 and Microsoft
+							OAuth 2.0. We collect your email address and
+							possibly your name when you subscribe to our mailing
+							list or correspond with us.
 						</p>
 						<p>
 							We encourage you to review the privacy statements of
@@ -67,23 +69,24 @@ const PrivacyPolicy = async function ({ model }) {
 						</span>
 						<p>
 							Nativity of the Theotokos Russian Orthodox Church
-							collects and uses your personal information for
-							authentication, authorization, and to deliver
-							services specifically requested by you. Nativity of
-							the Theotokos Russian Orthodox Church may also use
-							your personally identifiable information to inform
-							you of other products or services available from the
-							church. Our email marketing is permission-based and
-							we will only send you information relevant to what
-							you opted-in or signed up for. You may choose to
-							cancel your email subscription at any time. Nativity
-							of the Theotokos Russian Orthodox Church does not
-							sell, rent or lease its customer lists to third
-							parties. Nativity of the Theotokos Russian Orthodox
-							Church may share data with trusted partners to help
-							perform statistical analysis, to send you email, and
-							to provide customer support. All such third parties
-							are prohibited from using your personal information
+							collects and uses your personal information to:
+							authenticate you; authorize you to access specific
+							services; and to deliver services specifically
+							requested by you. Nativity of the Theotokos Russian
+							Orthodox Church may also use your personally
+							identifiable information to inform you of other
+							products or services available from the church. Our
+							email marketing is permission-based and we will only
+							send you information relevant to what you opted-in
+							or signed up for. You may choose to cancel your
+							email subscription at any time. Nativity of the
+							Theotokos Russian Orthodox Church does not sell,
+							rent or lease its customer lists to third parties.
+							Nativity of the Theotokos Russian Orthodox Church
+							may share data with trusted partners to help perform
+							statistical analysis, to send you email, and to
+							provide customer support. All such third parties are
+							prohibited from using your personal information
 							except to provide these services to Nativity of the
 							Theotokos Russian Orthodox Church, and they are
 							required to maintain the confidentiality of your
