@@ -5,6 +5,7 @@ import Spinner from "@/src/lib/components/spinner/Spinner";
 import { NewQuoteModel } from "@/src/lib/models/new-quote";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { getDateString } from "@/src/lib/utilities/date-time";
+import { getDefaultValues } from "@/src/lib/utilities/quote-form";
 import { useQuoteFormSchema } from "@/src/lib/validation/quote-form";
 import {
 	Checkbox,
@@ -26,6 +27,7 @@ import { useForm } from "react-hook-form";
 
 const NewQuote = function ({ model }) {
 	const quoteFormSchema = useQuoteFormSchema();
+	const defaultValues = getDefaultValues();
 	const currentDate = getDateString(new Date(), true);
 	const t = useTranslations("newQuote");
 	const { modelView, interact } = model;
@@ -37,13 +39,14 @@ const NewQuote = function ({ model }) {
 		formState: { isSubmitting, errors },
 		setValue,
 		watch,
+		reset,
 	} = useForm({
 		mode: "onBlur",
 		resolver: zodResolver(quoteFormSchema),
 		shouldUnregister: true,
 		defaultValues: {
-			isQuoteScheduled: false,
-			scheduledDate: currentDate,
+			...defaultValues,
+			scheduledDate: getDateString(defaultValues.scheduledDate, true),
 		},
 	});
 	const isQuoteScheduled = watch("isQuoteScheduled");
@@ -72,7 +75,7 @@ const NewQuote = function ({ model }) {
 					<hr className="mt-4 mb-0 md:w-full" />
 				</span>
 				<form
-					onSubmit={handleSubmit(form => {
+					onSubmit={handleSubmit(async form => {
 						const {
 							authorEn,
 							quoteEn,
@@ -82,7 +85,7 @@ const NewQuote = function ({ model }) {
 							sourceRu,
 							scheduledDate,
 						} = form;
-						return interact({
+						await interact({
 							type: "ADD_QUOTE",
 							input: {
 								englishQuote: {
@@ -98,6 +101,7 @@ const NewQuote = function ({ model }) {
 								scheduledDate,
 							},
 						});
+						reset();
 					})}
 				>
 					<div className="flex flex-col gap-6 md:w-3/4 lg:w-6/10">

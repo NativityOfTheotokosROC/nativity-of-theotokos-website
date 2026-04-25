@@ -11,10 +11,12 @@ export type UserInformation = {
 	roles: Role[];
 } | null;
 
+const queryKey = ["user-information"];
+
 export function useUserInformation(queryClient?: QueryClient) {
 	const { data, isSuccess } = useQuery(
 		{
-			queryKey: ["user-information"],
+			queryKey,
 			queryFn: getUserInformation,
 			staleTime: Infinity,
 			gcTime: Infinity,
@@ -26,6 +28,10 @@ export function useUserInformation(queryClient?: QueryClient) {
 	);
 	if (isSuccess) return data satisfies UserInformation;
 	return "pending";
+}
+
+export async function refreshUserInformation(queryClient: QueryClient) {
+	await queryClient.invalidateQueries({ queryKey });
 }
 
 export const UserInformationContext =

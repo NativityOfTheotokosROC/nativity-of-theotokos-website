@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { signOut } from "../third-party/better-auth";
 import { createToast } from "../components/miscellaneous/utility";
 import { useQueryClient } from "@tanstack/react-query";
+import { refreshUserInformation } from "../utilities/user";
 
 export function useSignOut(
 	signOutEndpoint: `/${string}`,
@@ -21,40 +22,35 @@ export function useSignOut(
 		async interact(interaction) {
 			switch (interaction.type) {
 				case "SIGN_OUT": {
-					await notifier
-						.interact({
+					await notifier.interact({
+						type: "NOTIFY",
+						input: { notification: { type: "pending" } },
+					});
+					const response = await signOut();
+					if (response.error) {
+						const message =
+							response.error.message ?? response.error.statusText;
+						createToast({ type: "failure", message }); // TODO: Move this out in the future
+						await notifier.interact({
 							type: "NOTIFY",
-							input: { notification: { type: "pending" } },
-						})
-						.then(() => signOut())
-						.then(async response => {
-							if (response.error) {
-								const message =
-									response.error.message ??
-									response.error.statusText;
-								createToast({ type: "failure", message }); // TODO: Move this out in the future
-								return notifier.interact({
-									type: "NOTIFY",
-									input: {
-										notification: {
-											type: "failed",
-											message,
-										},
-									},
-								});
-							}
-							await queryClient.invalidateQueries({
-								queryKey: ["user-information"],
-							});
-							await notifier.interact({
-								type: "NOTIFY",
-								input: {
-									notification: { type: "success" },
+							input: {
+								notification: {
+									type: "failed",
+									message,
 								},
-							});
-							router.push(signOutEndpoint);
-							router.refresh();
+							},
 						});
+						return;
+					}
+					await refreshUserInformation(queryClient);
+					await notifier.interact({
+						type: "NOTIFY",
+						input: {
+							notification: { type: "success" },
+						},
+					});
+					router.push(signOutEndpoint);
+					router.refresh();
 					break;
 				}
 			}
