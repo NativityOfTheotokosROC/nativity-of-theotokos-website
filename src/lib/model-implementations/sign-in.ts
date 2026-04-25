@@ -87,6 +87,7 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 								},
 								callbacks("Microsoft"),
 							);
+							break;
 						}
 						case "yandex": {
 							await signIn.oauth2(
