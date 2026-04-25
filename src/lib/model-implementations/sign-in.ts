@@ -49,7 +49,7 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 									notification: {
 										type: "success",
 										message: t("successMessage", {
-											serviceName: serviceName,
+											serviceName,
 										}),
 									},
 								},
@@ -62,7 +62,7 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 								input: {
 									notification: {
 										type: "failed",
-										message: `${t("failureMessage", { serviceName: serviceName })} ${context.error.message}`,
+										message: `${t("failureMessage", { serviceName })} ${context.error.message}`,
 									},
 								},
 							});
@@ -79,6 +79,16 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 							);
 							break;
 						}
+						case "microsoft": {
+							await signIn.social(
+								{
+									provider: "microsoft",
+									callbackURL: endpoint,
+								},
+								callbacks("Microsoft"),
+							);
+							break;
+						}
 						case "yandex": {
 							await signIn.oauth2(
 								{
@@ -88,6 +98,9 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 								callbacks("Yandex"),
 							);
 							break;
+						}
+						default: {
+							signInService satisfies never;
 						}
 					}
 				}

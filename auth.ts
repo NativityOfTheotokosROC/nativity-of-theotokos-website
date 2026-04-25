@@ -7,6 +7,8 @@ import {
 	ENVIRONMENT,
 	GOOGLE_CLIENT_ID,
 	GOOGLE_CLIENT_SECRET,
+	MICROSOFT_CLIENT_ID,
+	MICROSOFT_CLIENT_SECRET,
 	YANDEX_CLIENT_ID,
 	YANDEX_CLIENT_SECRET,
 } from "./src/lib/utilities/server-constants";
@@ -20,6 +22,10 @@ export const auth = betterAuth({
 		google: {
 			clientId: GOOGLE_CLIENT_ID,
 			clientSecret: GOOGLE_CLIENT_SECRET,
+		},
+		microsoft: {
+			clientId: MICROSOFT_CLIENT_ID,
+			clientSecret: MICROSOFT_CLIENT_SECRET,
 		},
 	},
 	plugins: [
