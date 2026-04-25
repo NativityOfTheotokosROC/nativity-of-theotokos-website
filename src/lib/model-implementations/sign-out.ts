@@ -43,14 +43,14 @@ export function useSignOut(
 									},
 								});
 							}
+							await queryClient.invalidateQueries({
+								queryKey: ["user-information"],
+							});
 							await notifier.interact({
 								type: "NOTIFY",
 								input: {
 									notification: { type: "success" },
 								},
-							});
-							queryClient.invalidateQueries({
-								queryKey: ["user-information"],
 							});
 							router.push(signOutEndpoint);
 							router.refresh();
