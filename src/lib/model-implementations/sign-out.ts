@@ -5,11 +5,13 @@ import { notifierVIInterface } from "./notifier";
 import { useRouter } from "next/navigation";
 import { signOut } from "../third-party/better-auth";
 import { createToast } from "../components/miscellaneous/utility";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function useSignOut(
 	signOutEndpoint: `/${string}`,
 	router: ReturnType<typeof useRouter>,
 ) {
+	const queryClient = useQueryClient();
 	const notifier = useNewStatefulInteractiveModel(
 		notifierVIInterface<SignOutStatus>(),
 	);
@@ -46,6 +48,9 @@ export function useSignOut(
 								input: {
 									notification: { type: "success" },
 								},
+							});
+							queryClient.invalidateQueries({
+								queryKey: ["user-information"],
 							});
 							router.push(signOutEndpoint);
 							router.refresh();
