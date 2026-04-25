@@ -21,7 +21,7 @@ const PrivacyPolicy = async function ({ model }) {
 					{t("title")}
 					<hr className="mt-4 mb-0 md:w-full" />
 				</span>
-				<span className="text-sm">{`${t("lastModified")}: ${new Date("2026-04-22").toLocaleDateString(dateLocale, { dateStyle: "medium" })}`}</span>
+				<span className="text-sm">{`${t("lastModified")}: ${new Date("2026-04-25").toLocaleDateString(dateLocale, { dateStyle: "medium" })}`}</span>
 				<div className="flex flex-col gap-6 [&_a]:underline [&_a]:hover:text-[#dcb042] [&_a]:active:text-[#dcb042]">
 					<section className="flex flex-col gap-3">
 						<p>
@@ -42,17 +42,18 @@ const PrivacyPolicy = async function ({ model }) {
 						</span>
 						<p>
 							Nativity of the Theotokos Russian Orthodox Church
-							may collect personally identifiable information,
-							such as your name, email address and profile picture
-							when you sign into our website through third-party
-							authentication providers such as Google, or when you
-							subscribe to our mailing list or correspond with us.
+							collects your name, email address and profile
+							picture when you sign into our website through the
+							third-party authentication providers we
+							expose—examples including Google and Microsoft. We
+							collect your email address when you subscribe to our
+							mailing list or correspond with us.
 						</p>
 						<p>
 							We encourage you to review the privacy statements of
 							websites you choose to link to from the Nativity of
 							the Theotokos Russian Orthodox Church website so
-							that you can understand how those websites collect,
+							that you may understand how those websites collect,
 							use and share your information. Nativity of the
 							Theotokos Russian Orthodox Church is not responsible
 							for the privacy statements or other content on
@@ -66,27 +67,27 @@ const PrivacyPolicy = async function ({ model }) {
 						</span>
 						<p>
 							Nativity of the Theotokos Russian Orthodox Church
-							collects and uses your personal information to
-							operate its website and deliver the services you
-							have requested. Nativity of the Theotokos Russian
-							Orthodox Church may also use your personally
-							identifiable information to inform you of other
-							products or services available from the church. Our
-							email marketing is permission-based and we will only
-							send you information relevant to what you opted-in
-							or signed up for. You may choose to cancel your
-							email subscription at any time. Nativity of the
-							Theotokos Russian Orthodox Church does not sell,
-							rent or lease its customer lists to third parties.
-							Nativity of the Theotokos Russian Orthodox Church
-							may share data with trusted partner to help perform
-							statistical analysis, send you email or postal mail,
-							provide customer support, or arrange for deliveries.
-							All such third parties are prohibited from using
-							your personal information except to provide these
-							services to Nativity of the Theotokos Russian
-							Orthodox Church, and they are required to maintain
-							the confidentiality of your information.
+							collects and uses your personal information for
+							authentication, authorization, and to deliver
+							services specifically requested by you. Nativity of
+							the Theotokos Russian Orthodox Church may also use
+							your personally identifiable information to inform
+							you of other products or services available from the
+							church. Our email marketing is permission-based and
+							we will only send you information relevant to what
+							you opted-in or signed up for. You may choose to
+							cancel your email subscription at any time. Nativity
+							of the Theotokos Russian Orthodox Church does not
+							sell, rent or lease its customer lists to third
+							parties. Nativity of the Theotokos Russian Orthodox
+							Church may share data with trusted partners to help
+							perform statistical analysis, to send you email, and
+							to provide customer support. All such third parties
+							are prohibited from using your personal information
+							except to provide these services to Nativity of the
+							Theotokos Russian Orthodox Church, and they are
+							required to maintain the confidentiality of your
+							information.
 						</p>
 						<p>
 							Nativity of the Theotokos Russian Orthodox Church
@@ -127,27 +128,27 @@ const PrivacyPolicy = async function ({ model }) {
 							first-party cookies to store your preferences, and
 							enhance your user experience. We also utilize
 							third-party authentication services, including
-							Google OAuth, to secure and streamline the login
-							process. When you log in using OAuth, a cookie is
-							generated and stored on your device. This cookie is
-							essential for the proper functioning of our
-							authentication system.
+							Google OAuth 2.0 and Microsoft OAuth 2.0, to secure
+							and streamline the login process. When you log in
+							using OAuth 2.0, a cookie is generated and stored on
+							your device. This cookie is essential for the proper
+							functioning of our authentication system.
 						</p>
 						<p>
-							The OAuth cookie contains a unique identifier that
-							helps us recognize your authenticated session. It
-							enables you to access our application seamlessly
-							without the need to re-enter your credentials
-							repeatedly during a single session.
+							The cookie contains a unique identifier that helps
+							us recognize your authenticated session. It enables
+							you to access our application seamlessly without the
+							need to re-enter your credentials repeatedly during
+							a single session.
 						</p>
 						<p>
-							It is important to note that these cookies do not
-							store personal information directly on our servers.
-							Instead, they serve as tokens that establish a
-							secure connection between your browser and the
-							authentication provider. This enhances the security
-							of the authentication process while providing a more
-							user-friendly experience.
+							It is important to note that these cookies DO NOT
+							store your actual login credentials on our servers
+							or on your browser. Instead, they serve as tokens
+							that establish a secure connection between your
+							browser and the authentication provider. This
+							enhances the security of the authentication process
+							while providing a more user-friendly experience.
 						</p>
 						<p>
 							By using our site and opting for third-party
@@ -164,7 +165,7 @@ const PrivacyPolicy = async function ({ model }) {
 							We value your trust in providing us your Personal
 							Information, and we implement industry-standard
 							security measures and best-practices to the best of
-							our abilities in order to protect it; however no
+							our abilities in order to protect it. However, no
 							method of transmission over the internet, or method
 							of electronic storage is 100% secure and reliable,
 							and we cannot guarantee its absolute security.
@@ -189,12 +190,11 @@ const PrivacyPolicy = async function ({ model }) {
 						</span>
 						<p>
 							We respect your privacy and give you an opportunity
-							to opt-out of receiving announcements of certain
-							information and deleting your data. Users may
-							opt-out of receiving any or all communications from
-							Nativity of the Theotokos Russian Orthodox Church,
-							and request personal data deletion by contacting us
-							via{" "}
+							to opt-out of receiving email updates and to delete
+							your data. Users may opt-out of receiving any or all
+							communications from Nativity of the Theotokos
+							Russian Orthodox Church, and request personal data
+							deletion by contacting us via{" "}
 							<a href="mailto:info@nativityoftheotokos.com">
 								email
 							</a>
@@ -208,9 +208,9 @@ const PrivacyPolicy = async function ({ model }) {
 						<p>
 							Nativity of the Theotokos Russian Orthodox Church
 							will occasionally update this Statement of Privacy
-							to reflect company and customer feedback. This will
-							be reflected by a{'"Last Updated"'} date at the top
-							of the page. We encourage you to periodically review
+							to reflect church and user feedback. This will be
+							reflected by a {'"Last Updated"'} date at the top of
+							the page. We encourage you to periodically review
 							this Policy to be informed of how Nativity of the
 							Theotokos Russian Orthodox Church is protecting your
 							information.

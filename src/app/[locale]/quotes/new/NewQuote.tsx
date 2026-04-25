@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "@/src/lib/components/button/Button";
 import { createToast } from "@/src/lib/components/miscellaneous/utility";
 import Spinner from "@/src/lib/components/spinner/Spinner";
 import { NewQuoteModel } from "@/src/lib/models/new-quote";
@@ -262,21 +263,28 @@ const NewQuote = function ({ model }) {
 						)}
 						<hr className="mt-1 w-full" />
 						<div className="mt-1 flex w-full justify-start gap-3">
-							<button
-								type="button"
-								className="w-fit max-w-1/2 min-w-[8em] rounded-lg bg-[#513433] p-4 text-white hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
-								onClick={() => {}}
-								disabled
+							<Button
+								model={newReadonlyModel({
+									type: "button",
+									action() {},
+									disabled: true,
+									className: "max-w-1/2 min-w-[8em]",
+								})}
 							>
 								{t("preview")}
-							</button>
-							<button
-								type="submit"
-								className="flex w-fit max-w-1/2 min-w-[8em] items-center justify-center rounded-lg bg-[#513433] p-4 text-white hover:bg-[#250203]/90 active:bg-[#250203] disabled:bg-[#250203]/50"
-								disabled={
-									isSubmitting ||
-									newQuoteNotification?.type === "pending"
-								}
+							</Button>
+							<Button
+								model={newReadonlyModel({
+									type: "button",
+									action() {},
+									variant: "standard",
+									disabled:
+										isSubmitting ||
+										newQuoteNotification?.type ===
+											"pending",
+									className:
+										"flex items-center justify-center max-w-1/2 min-w-[8em]",
+								})}
 							>
 								{newQuoteNotification?.type === "pending" ? (
 									<Spinner
@@ -288,7 +296,7 @@ const NewQuote = function ({ model }) {
 								) : (
 									t("addQuote")
 								)}
-							</button>
+							</Button>
 						</div>
 					</div>
 				</form>
