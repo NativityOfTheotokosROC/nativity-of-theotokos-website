@@ -1,15 +1,14 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import { ModeledComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
-import { TabModel } from "../../models/tab";
 import { TabsModel } from "../../models/tabs";
+import { ReactNode } from "react";
 
 const Tabs = function ({
 	model,
 	children,
 }: {
 	model: InitializedModel<TabsModel>;
-	children: Awaited<ReturnType<ModeledComponent<TabModel>>>[];
+	children: ReactNode[];
 }) {
 	const { modelView, interact } = model;
 	const { tabs, selectedTab } = modelView;
@@ -35,7 +34,11 @@ const Tabs = function ({
 			</TabList>
 			<TabPanels>
 				{children.map((child, index) => (
-					<TabPanel className="flex flex-col gap-3" key={index}>
+					<TabPanel
+						key={index}
+						className="flex flex-col gap-3"
+						unmount={false}
+					>
 						{child}
 					</TabPanel>
 				))}

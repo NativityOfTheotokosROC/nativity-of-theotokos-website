@@ -6,9 +6,9 @@ export interface TabsModelView {
 	selectedTab: number;
 }
 
-export type TabModelInteraction = InputModelInteraction<
+export type TabsModelInteraction = InputModelInteraction<
 	"SWITCH_TAB",
 	{ id: number }
 >;
 
-export type TabsModel = InteractiveModel<TabsModelView, TabModelInteraction>;
+export type TabsModel = InteractiveModel<TabsModelView, TabsModelInteraction>;

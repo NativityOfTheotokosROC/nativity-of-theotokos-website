@@ -3,37 +3,33 @@
 import Button from "@/src/lib/components/button/Button";
 import { createToast } from "@/src/lib/components/miscellaneous/utility";
 import Spinner from "@/src/lib/components/spinner/Spinner";
+import Tabs from "@/src/lib/components/tabs/Tabs";
+import { useTabs } from "@/src/lib/model-implementations/tabs";
 import { NewQuoteModel } from "@/src/lib/models/new-quote";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { getDateString } from "@/src/lib/utilities/date-time";
 import { getDefaultValues } from "@/src/lib/utilities/quote-form";
 import { useQuoteFormSchema } from "@/src/lib/validation/quote-form";
-import {
-	Checkbox,
-	Field,
-	Label,
-	Tab,
-	TabGroup,
-	TabList,
-	TabPanel,
-	TabPanels,
-} from "@headlessui/react";
+import { Checkbox, Field, Label } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect, ViewTransition } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 const NewQuote = function ({ model }) {
+	const { modelView, interact } = model;
+	const { newQuoteNotification } = modelView;
+	const t = useTranslations("newQuote");
+	const tabs = useTabs([
+		newReadonlyModel({ name: t("english") }),
+		newReadonlyModel({ name: t("russian") }),
+	]);
 	const quoteFormSchema = useQuoteFormSchema();
 	const defaultValues = getDefaultValues();
 	const currentDate = getDateString(new Date(), true);
-	const t = useTranslations("newQuote");
-	const { modelView, interact } = model;
-	const { newQuoteNotification } = modelView;
-
 	const {
 		register,
 		handleSubmit,
@@ -76,37 +72,142 @@ const NewQuote = function ({ model }) {
 					<hr className="mt-4 mb-0 md:w-full" />
 				</span>
 				<form
-					onSubmit={handleSubmit(async form => {
-						const {
-							authorEn,
-							quoteEn,
-							sourceEn,
-							authorRu,
-							quoteRu,
-							sourceRu,
-							scheduledDate,
-						} = form;
-						await interact({
-							type: "ADD_QUOTE",
-							input: {
-								englishQuote: {
-									author: authorEn,
-									quote: quoteEn,
-									source: sourceEn,
-								},
-								russianQuote: {
-									author: authorRu,
-									quote: quoteRu,
-									source: sourceRu,
-								},
+					onSubmit={handleSubmit(
+						async form => {
+							const {
+								authorEn,
+								quoteEn,
+								sourceEn,
+								authorRu,
+								quoteRu,
+								sourceRu,
 								scheduledDate,
-							},
-						});
-						reset();
-					})}
+							} = form;
+							await interact({
+								type: "ADD_QUOTE",
+								input: {
+									englishQuote: {
+										author: authorEn,
+										quote: quoteEn,
+										source: sourceEn,
+									},
+									russianQuote: {
+										author: authorRu,
+										quote: quoteRu,
+										source: sourceRu,
+									},
+									scheduledDate,
+								},
+							});
+							reset();
+						},
+						async errors => {
+							if (
+								errors.authorEn ||
+								errors.sourceEn ||
+								errors.quoteEn
+							)
+								return await tabs.interact({
+									type: "SWITCH_TAB",
+									input: { id: 0 },
+								});
+							if (
+								errors.authorRu ||
+								errors.sourceRu ||
+								errors.quoteRu
+							)
+								return await tabs.interact({
+									type: "SWITCH_TAB",
+									input: { id: 0 },
+								});
+						},
+					)}
 				>
 					<div className="flex flex-col gap-6 md:w-3/4 lg:w-6/10">
-						<TabGroup className="flex flex-col gap-6">
+						<Tabs model={tabs}>
+							<div className="flex flex-col gap-3">
+								<input
+									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorEn ? "border-red-700" : "border-gray-400"}`}
+									placeholder={t("author")}
+									id="quote-author"
+									required
+									autoCapitalize="words"
+									autoComplete="on"
+									{...register("authorEn")}
+								/>
+								{errors.authorEn && (
+									<span className="text-sm text-red-700">
+										{errors.authorEn.message}
+									</span>
+								)}
+								<input
+									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceEn ? "border-red-700" : "border-gray-400"}`}
+									placeholder={`${t("source")} (${t("optional")})`}
+									id="quote-source"
+									autoComplete="on"
+									{...register("sourceEn")}
+								/>
+								{errors.sourceEn && (
+									<span className="text-sm text-red-700">
+										{errors.sourceEn.message}
+									</span>
+								)}
+								<textarea
+									className={`w-full rounded-lg border bg-white p-4 ${errors.quoteEn ? "border-red-700" : "border-gray-400"}`}
+									placeholder={t("quote")}
+									rows={5}
+									autoComplete="off"
+									required
+									{...register("quoteEn")}
+								/>
+								{errors.quoteEn && (
+									<span className="text-sm text-red-700">
+										{errors.quoteEn.message}
+									</span>
+								)}
+							</div>
+							<div className="flex flex-col gap-3">
+								<input
+									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorRu ? "border-red-700" : "border-gray-400"}`}
+									placeholder={`${t("author")} (${t("optional")})`}
+									id="quote-author-ru"
+									autoCapitalize="words"
+									autoComplete="on"
+									{...register("authorRu")}
+								/>
+								{errors.authorRu && (
+									<span className="text-sm text-red-700">
+										{errors.authorRu.message}
+									</span>
+								)}
+								<input
+									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceRu ? "border-red-700" : "border-gray-400"}`}
+									placeholder={`${t("source")} (${t("optional")})`}
+									id="quote-source-ru"
+									autoComplete="on"
+									{...register("sourceRu")}
+								/>
+								{errors.sourceRu && (
+									<span className="text-sm text-red-700">
+										{errors.sourceRu.message}
+									</span>
+								)}
+								<textarea
+									className={`w-full rounded-lg border bg-white p-4 ${errors.quoteRu ? "border-red-700" : "border-gray-400"}`}
+									placeholder={`${t("quote")} (${t("optional")})`}
+									rows={5}
+									id="quote-ru"
+									autoComplete="off"
+									{...register("quoteRu")}
+								/>
+								{errors.quoteRu && (
+									<span className="text-sm text-red-700">
+										{errors.quoteRu.message}
+									</span>
+								)}
+							</div>
+						</Tabs>
+						{/* <TabGroup className="flex flex-col gap-6">
 							<TabList className="flex items-center gap-1">
 								<Tab
 									className="flex items-center border-b-5 border-gray-300 p-4 py-2 text-sm uppercase focus:outline-none data-hover:border-gray-600 data-selected:border-gray-900"
@@ -132,7 +233,7 @@ const NewQuote = function ({ model }) {
 									>
 										<TabPanel
 											className="flex flex-col gap-3"
-											unmount={true}
+											unmount={false}
 										>
 											<input
 												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorEn ? "border-red-700" : "border-gray-400"}`}
@@ -220,11 +321,12 @@ const NewQuote = function ({ model }) {
 									</ViewTransition>
 								)}
 							</TabPanels>
-						</TabGroup>
+						</TabGroup> */}
 						<div className="flex flex-col gap-3">
 							<Field className="flex items-center gap-3">
 								<Checkbox
 									{...register("isQuoteScheduled")}
+									value={isQuoteScheduled}
 									onChange={value => {
 										setValue("isQuoteScheduled", value);
 									}}
