@@ -1,13 +1,13 @@
 "use client";
 
+import LogoIcon from "@/public/assets/logo-icon.svg";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 import { Fragment } from "react/jsx-runtime";
 import { FooterModel } from "../../models/footer";
 import { georgia } from "../../third-party/fonts";
-import { formatPhoneNumber, isRemotePath } from "../../utilities/miscellaneous";
-import LogoIcon from "@/public/assets/logo-icon.svg";
+import { formatPhoneNumber } from "../../utilities/miscellaneous";
 import { Link } from "../page-loading-bar/PageLoadingBar";
 import SocialLink from "../social-link/SocialLink";
 import FooterSection from "./FooterSection";
@@ -167,13 +167,8 @@ const Footer = function ({ model }) {
 									{bottomLink.precedingText &&
 										`${bottomLink.precedingText} `}
 									<Link
-										className="underline hover:text-[#dcb042]"
+										className="underline hover:text-[#dcb042] active:text-[#dcb042]"
 										href={bottomLink.link}
-										target={
-											isRemotePath(bottomLink.link)
-												? "_blank"
-												: undefined
-										}
 									>
 										{bottomLink.linkLabel}
 									</Link>
@@ -183,6 +178,19 @@ const Footer = function ({ model }) {
 						)),
 					]}
 				</div>
+				<span className="w-full text-center text-sm text-gray-400 md:w-fit md:text-left">
+					{t.rich("siteAttribution", {
+						name: "Grod56",
+						link: name => (
+							<Link
+								href="https://github.com/Grod56"
+								className="underline hover:text-[#dcb042] active:text-[#dcb042]"
+							>
+								{name}
+							</Link>
+						),
+					})}
+				</span>
 			</div>
 		</footer>
 	);

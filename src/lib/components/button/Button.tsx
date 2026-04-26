@@ -11,10 +11,10 @@ const Button = function ({ model, children }) {
 		<button
 			type={type}
 			className={twMerge(
-				"w-30 rounded-lg bg-[#250203]/82 p-4 text-white hover:bg-[#250203]/92 active:bg-[#250203] disabled:bg-[#250203]/50",
+				"w-30 rounded-lg bg-[#250203]/82 p-4 text-white hover:bg-[#250203]/92 active:bg-[#250203] disabled:cursor-default disabled:bg-[#250203]/50",
 				className ?? "",
 			)}
-			onClick={action}
+			onClick={() => action?.()}
 			disabled={disabled}
 		>
 			{children}

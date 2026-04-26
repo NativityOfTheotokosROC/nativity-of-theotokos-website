@@ -54,7 +54,8 @@
 		"email": "Электронная почта",
 		"jurisdictional": "Юрисдикция",
 		"clergy": "Духовенство прихода",
-		"contact": "Контакты"
+		"contact": "Контакты",
+		"siteAttribution": "Разработка сайта — <link>{name}</link>"
 	},
 	"footer_variable": {
 		"description": "Приход Рождества Пресвятой Богородицы Русской Православной Церкви в Зимбабве. Расположен в частной часовне Kingsmead, угол Rayl Road и Kingsmead Road, Борроудейл, Хараре.",

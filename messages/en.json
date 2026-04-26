@@ -54,7 +54,8 @@
 		"email": "Email",
 		"jurisdictional": "Jurisdictional",
 		"clergy": "Clergy",
-		"contact": "Contact"
+		"contact": "Contact",
+		"siteAttribution": "Website by <link>{name}</link>"
 	},
 	"footer_variable": {
 		"description": "Nativity of the Theotokos Parish of the Russian Orthodox Church in Zimbabwe. Located at Kingsmead Private Chapel, Cnr Rayl Road and Kingsmead Road, Borrowdale, Harare.",

@@ -4,7 +4,7 @@ export type ButtonVariant = "standard" | "alternative";
 export type ButtonType = "button" | "submit" | "reset";
 
 export interface ButtonModelView {
-	action: () => void;
+	action?: () => void;
 	variant?: ButtonVariant;
 	disabled?: boolean;
 	className?: string;

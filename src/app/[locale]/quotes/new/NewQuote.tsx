@@ -266,24 +266,22 @@ const NewQuote = function ({ model }) {
 							<Button
 								model={newReadonlyModel({
 									type: "button",
-									action() {},
 									disabled: true,
-									className: "max-w-1/2 min-w-[8em]",
+									className: "w-fit max-w-1/2 min-w-[8em]",
 								})}
 							>
 								{t("preview")}
 							</Button>
 							<Button
 								model={newReadonlyModel({
-									type: "button",
-									action() {},
+									type: "submit",
 									variant: "standard",
 									disabled:
 										isSubmitting ||
 										newQuoteNotification?.type ===
 											"pending",
 									className:
-										"flex items-center justify-center max-w-1/2 min-w-[8em]",
+										"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
 								})}
 							>
 								{newQuoteNotification?.type === "pending" ? (
