@@ -102,6 +102,7 @@ const NewQuote = function ({ model }) {
 							reset();
 						},
 						async errors => {
+							console.log(errors);
 							if (
 								errors.authorEn ||
 								errors.sourceEn ||
@@ -118,7 +119,7 @@ const NewQuote = function ({ model }) {
 							)
 								return await tabs.interact({
 									type: "SWITCH_TAB",
-									input: { id: 0 },
+									input: { id: 1 },
 								});
 						},
 					)}
@@ -207,121 +208,6 @@ const NewQuote = function ({ model }) {
 								)}
 							</div>
 						</Tabs>
-						{/* <TabGroup className="flex flex-col gap-6">
-							<TabList className="flex items-center gap-1">
-								<Tab
-									className="flex items-center border-b-5 border-gray-300 p-4 py-2 text-sm uppercase focus:outline-none data-hover:border-gray-600 data-selected:border-gray-900"
-									as={"button"}
-								>
-									{t("english")}
-								</Tab>
-								<Tab
-									className="flex items-center border-b-5 border-gray-300 p-4 py-2 text-sm uppercase focus:outline-none data-hover:border-gray-600 data-selected:border-gray-900"
-									as={"button"}
-								>
-									{t("russian")}
-								</Tab>
-							</TabList>
-							<TabPanels>
-								{selectedIndex => (
-									<ViewTransition
-										key={`tab-${selectedIndex}`}
-										name="tab-panels"
-										share="auto"
-										enter="auto"
-										default="none"
-									>
-										<TabPanel
-											className="flex flex-col gap-3"
-											unmount={false}
-										>
-											<input
-												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorEn ? "border-red-700" : "border-gray-400"}`}
-												placeholder={t("author")}
-												id="quote-author"
-												required
-												autoCapitalize="words"
-												autoComplete="on"
-												{...register("authorEn")}
-											/>
-											{errors.authorEn && (
-												<span className="text-sm text-red-700">
-													{errors.authorEn.message}
-												</span>
-											)}
-											<input
-												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceEn ? "border-red-700" : "border-gray-400"}`}
-												placeholder={`${t("source")} (${t("optional")})`}
-												id="quote-source"
-												autoComplete="on"
-												{...register("sourceEn")}
-											/>
-											{errors.sourceEn && (
-												<span className="text-sm text-red-700">
-													{errors.sourceEn.message}
-												</span>
-											)}
-											<textarea
-												className={`w-full rounded-lg border bg-white p-4 ${errors.quoteEn ? "border-red-700" : "border-gray-400"}`}
-												placeholder={t("quote")}
-												rows={5}
-												autoComplete="off"
-												required
-												{...register("quoteEn")}
-											/>
-											{errors.quoteEn && (
-												<span className="text-sm text-red-700">
-													{errors.quoteEn.message}
-												</span>
-											)}
-										</TabPanel>
-										<TabPanel
-											className="flex flex-col gap-3"
-											unmount={false}
-										>
-											<input
-												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorRu ? "border-red-700" : "border-gray-400"}`}
-												placeholder={`${t("author")} (${t("optional")})`}
-												id="quote-author-ru"
-												autoCapitalize="words"
-												autoComplete="on"
-												{...register("authorRu")}
-											/>
-											{errors.authorRu && (
-												<span className="text-sm text-red-700">
-													{errors.authorRu.message}
-												</span>
-											)}
-											<input
-												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceRu ? "border-red-700" : "border-gray-400"}`}
-												placeholder={`${t("source")} (${t("optional")})`}
-												id="quote-source-ru"
-												autoComplete="on"
-												{...register("sourceRu")}
-											/>
-											{errors.sourceRu && (
-												<span className="text-sm text-red-700">
-													{errors.sourceRu.message}
-												</span>
-											)}
-											<textarea
-												className={`w-full rounded-lg border bg-white p-4 ${errors.quoteRu ? "border-red-700" : "border-gray-400"}`}
-												placeholder={`${t("quote")} (${t("optional")})`}
-												rows={5}
-												id="quote-ru"
-												autoComplete="off"
-												{...register("quoteRu")}
-											/>
-											{errors.quoteRu && (
-												<span className="text-sm text-red-700">
-													{errors.quoteRu.message}
-												</span>
-											)}
-										</TabPanel>
-									</ViewTransition>
-								)}
-							</TabPanels>
-						</TabGroup> */}
 						<div className="flex flex-col gap-3">
 							<Field className="flex items-center gap-3">
 								<Checkbox
