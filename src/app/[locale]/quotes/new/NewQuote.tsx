@@ -102,7 +102,6 @@ const NewQuote = function ({ model }) {
 							reset();
 						},
 						async errors => {
-							console.log(errors);
 							if (
 								errors.authorEn ||
 								errors.sourceEn ||
@@ -131,7 +130,7 @@ const NewQuote = function ({ model }) {
 									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorEn ? "border-red-700" : "border-gray-400"}`}
 									placeholder={t("author")}
 									id="quote-author"
-									required
+									formNoValidate
 									autoCapitalize="words"
 									autoComplete="on"
 									{...register("authorEn")}
@@ -146,6 +145,7 @@ const NewQuote = function ({ model }) {
 									placeholder={`${t("source")} (${t("optional")})`}
 									id="quote-source"
 									autoComplete="on"
+									formNoValidate
 									{...register("sourceEn")}
 								/>
 								{errors.sourceEn && (
@@ -158,7 +158,6 @@ const NewQuote = function ({ model }) {
 									placeholder={t("quote")}
 									rows={5}
 									autoComplete="off"
-									required
 									{...register("quoteEn")}
 								/>
 								{errors.quoteEn && (
@@ -232,7 +231,7 @@ const NewQuote = function ({ model }) {
 										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.scheduledDate ? "border-red-700" : "border-gray-400"}`}
 										type="date"
 										id="scheduled-date"
-										required
+										formNoValidate
 										min={currentDate}
 										{...register("scheduledDate")}
 									/>
