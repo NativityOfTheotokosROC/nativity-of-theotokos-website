@@ -54,6 +54,10 @@ button {
 	cursor: pointer;
 }
 
+button:disabled {
+	cursor: default;
+}
+
 @media (pointer: fine) {
 	body *::-webkit-scrollbar {
 		width: 8px;

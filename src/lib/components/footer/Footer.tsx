@@ -30,23 +30,37 @@ const Footer = function ({ model }) {
 			<div className="footer-content flex flex-col gap-4 bg-[#0a0a0a] p-9 text-sm text-white">
 				<div className="footer-sections flex flex-col gap-x-14 gap-y-8 md:flex-row">
 					<div className="flex flex-col gap-6 md:flex-row">
-						<LogoIcon className="logo-icon size-17.5 min-w-17.5 md:self-center" />
+						<LogoIcon className="logo-icon size-17.5 min-w-17.5" />
 						<FooterSection
 							model={newReadonlyModel({
 								title: t("heading"),
 							})}
 						>
-							<p>{description}</p>
-							<br />
-							<span>
-								{`${t("email")}: `}
-								<a
-									className="hover:underline"
-									href={`mailto:${parishEmail}`}
-								>
-									{parishEmail}
-								</a>
-							</span>
+							<div className="flex flex-col gap-5">
+								<p>{description}</p>
+								<span>
+									{`${t("email")}: `}
+									<a
+										className="hover:underline"
+										href={`mailto:${parishEmail}`}
+									>
+										{parishEmail}
+									</a>
+								</span>
+								<div className="social-links flex gap-5 text-lg **:size-4 **:hover:text-[#DCB042]">
+									{[
+										...socials.map(social => (
+											<SocialLink
+												key={
+													social.modelView.details
+														.link
+												}
+												model={social}
+											/>
+										)),
+									]}
+								</div>
+							</div>
 						</FooterSection>
 					</div>
 					<div className="flex grow flex-col gap-x-18 gap-y-8 md:flex-row md:flex-wrap">
@@ -144,47 +158,40 @@ const Footer = function ({ model }) {
 						</FooterSection>
 					</div>
 				</div>
-				<hr className="mt-4 text-gray-400 md:w-4/10" />
-				<div className="social-links flex gap-3 text-lg **:size-4 **:hover:text-[#DCB042]">
-					{[
-						...socials.map(social => (
-							<SocialLink
-								key={social.modelView.details.link}
-								model={social}
-							/>
-						)),
-					]}
+				<hr className="mt-4 text-gray-300 md:hidden" />
+				<div className="flex flex-wrap-reverse items-center justify-between gap-x-20 gap-y-5 md:mt-6">
+					<span className="copyright w-fit text-sm">
+						<span className={georgia.className}>&copy;</span>{" "}
+						{copyrightText}
+					</span>
+					<div className="bottom-links flex flex-wrap gap-2 text-xs text-gray-400">
+						{[
+							...bottomLinks.map((bottomLink, index) => (
+								<Fragment key={bottomLink.link}>
+									<span>
+										{bottomLink.precedingText &&
+											`${bottomLink.precedingText} `}
+										<Link
+											className="underline hover:text-[#dcb042] active:text-[#dcb042]"
+											href={bottomLink.link}
+										>
+											{bottomLink.linkLabel}
+										</Link>
+									</span>
+									{index != bottomLinks.length - 1 && "|"}
+								</Fragment>
+							)),
+						]}
+					</div>
 				</div>
-				<span className="copyright text-xs">
-					<span className={georgia.className}>&copy;</span>{" "}
-					{copyrightText}
-				</span>
-				<div className="bottom-links flex flex-wrap gap-2 text-xs text-gray-400">
-					{[
-						...bottomLinks.map((bottomLink, index) => (
-							<Fragment key={bottomLink.link}>
-								<span>
-									{bottomLink.precedingText &&
-										`${bottomLink.precedingText} `}
-									<Link
-										className="underline hover:text-[#dcb042] active:text-[#dcb042]"
-										href={bottomLink.link}
-									>
-										{bottomLink.linkLabel}
-									</Link>
-								</span>
-								{index != bottomLinks.length - 1 && "|"}
-							</Fragment>
-						)),
-					]}
-				</div>
-				<span className="w-full text-center text-sm text-gray-400 md:w-fit md:text-left">
+				<span className="text-sm">
 					{t.rich("siteAttribution", {
 						name: "Grod56",
 						link: name => (
 							<Link
 								href="https://github.com/Grod56"
-								className="underline hover:text-[#dcb042] active:text-[#dcb042]"
+								className="text-[#dcb042] underline"
+								target="_blank"
 							>
 								{name}
 							</Link>

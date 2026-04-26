@@ -66,9 +66,15 @@ export function triggerLoading(
 		localeInfo.currentLocale != localeInfo.targetLocale
 	)
 		return true;
+	if (typeof href === "string" || href instanceof URL)
+		try {
+			const linkURL = new URL(href);
+			if (linkURL.origin !== window.location.origin) return false;
+			return linkURL.pathname !== pathName;
+		} catch {}
 	const destinationPathname =
 		typeof href === "string"
 			? new URL(href, window.location.origin).pathname
 			: href.pathname;
-	return destinationPathname != pathName;
+	return destinationPathname !== pathName;
 }
