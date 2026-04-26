@@ -15,7 +15,7 @@ export async function generateMetadata(
 	"use cache"; //TODO: Get back to this in the future
 	const locale = await rootLocale();
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
-	const date = getDateString(new Date());
+	const date = getDateString(new Date(), true);
 	const dailySaint = await getDailySaint(new Date(date), language);
 
 	return await commemorationMetadata({
@@ -31,7 +31,7 @@ export default async function Page(props: PageProps<"/[locale]/daily-saint">) {
 	await connection();
 	const locale = await rootLocale();
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
-	const date = getDateString(new Date());
+	const date = getDateString(new Date(), true);
 	const dailySaint = await getDailySaint(new Date(date), language);
 	return (
 		<>
