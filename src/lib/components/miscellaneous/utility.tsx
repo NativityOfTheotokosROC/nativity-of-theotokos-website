@@ -8,15 +8,14 @@ import { Suspense } from "react";
 export function createToast(notification: ToastNotification) {
 	return toast.custom(<Toast model={newReadonlyModel({ notification })} />);
 }
-
 const Connection = async () => {
 	await connection();
 	return null;
 };
-export const DynamicMarker = function () {
+export async function DynamicMarker() {
 	return (
 		<Suspense>
 			<Connection />
 		</Suspense>
 	);
-};
+}
