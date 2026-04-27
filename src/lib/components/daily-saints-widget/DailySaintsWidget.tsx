@@ -7,6 +7,8 @@ import { useLocale, useTranslations } from "next-intl";
 import HymnsOrnament from "@/public/assets/ornament_9.svg";
 import Link from "next/link";
 import { getLocalTimeZone } from "../../utilities/date-time";
+import { usePageLoadingBarRouter } from "../../utilities/page-loading-bar";
+import { useRouter } from "@/src/i18n/navigation";
 
 const DailySaintsWidget = function ({ model }) {
 	const { details, hymnsModal } = model.modelView;
@@ -21,6 +23,7 @@ const DailySaintsWidget = function ({ model }) {
 	).toLocaleDateString(locale === "en" ? "en-uk" : "ru-RU", {
 		dateStyle: "full",
 	});
+	const router = usePageLoadingBarRouter(useRouter);
 
 	return (
 		<motion.div
@@ -75,6 +78,12 @@ const DailySaintsWidget = function ({ model }) {
 					<div className="h-[15em] max-h-[15em] grow px-5 md:h-[10em] md:px-7">
 						<p
 							className={`max-h-full overflow-y-auto pr-3 text-base/relaxed [&_a]:text-red-900`}
+							onClick={e => {
+								if (e.target instanceof HTMLAnchorElement) {
+									e.preventDefault();
+									router.push(e.target.href);
+								}
+							}}
 							dangerouslySetInnerHTML={{
 								__html: saints,
 							}}

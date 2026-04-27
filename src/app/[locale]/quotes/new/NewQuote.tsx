@@ -127,7 +127,7 @@ const NewQuote = function ({ model }) {
 						<Tabs model={tabs}>
 							<div className="flex flex-col gap-3">
 								<input
-									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorEn ? "border-red-700" : "border-gray-400"}`}
+									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorEn ? "border-red-800" : "border-gray-400"}`}
 									placeholder={t("author")}
 									id="quote-author"
 									formNoValidate
@@ -136,12 +136,12 @@ const NewQuote = function ({ model }) {
 									{...register("authorEn")}
 								/>
 								{errors.authorEn && (
-									<span className="text-sm text-red-700">
+									<span className="text-sm text-red-800">
 										{errors.authorEn.message}
 									</span>
 								)}
 								<input
-									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceEn ? "border-red-700" : "border-gray-400"}`}
+									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceEn ? "border-red-800" : "border-gray-400"}`}
 									placeholder={`${t("source")} (${t("optional")})`}
 									id="quote-source"
 									autoComplete="on"
@@ -149,26 +149,26 @@ const NewQuote = function ({ model }) {
 									{...register("sourceEn")}
 								/>
 								{errors.sourceEn && (
-									<span className="text-sm text-red-700">
+									<span className="text-sm text-red-800">
 										{errors.sourceEn.message}
 									</span>
 								)}
 								<textarea
-									className={`w-full rounded-lg border bg-white p-4 ${errors.quoteEn ? "border-red-700" : "border-gray-400"}`}
+									className={`w-full rounded-lg border bg-white p-4 ${errors.quoteEn ? "border-red-800" : "border-gray-400"}`}
 									placeholder={t("quote")}
 									rows={5}
 									autoComplete="off"
 									{...register("quoteEn")}
 								/>
 								{errors.quoteEn && (
-									<span className="text-sm text-red-700">
+									<span className="text-sm text-red-800">
 										{errors.quoteEn.message}
 									</span>
 								)}
 							</div>
 							<div className="flex flex-col gap-3">
 								<input
-									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorRu ? "border-red-700" : "border-gray-400"}`}
+									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorRu ? "border-red-800" : "border-gray-400"}`}
 									placeholder={`${t("author")} (${t("optional")})`}
 									id="quote-author-ru"
 									autoCapitalize="words"
@@ -176,24 +176,24 @@ const NewQuote = function ({ model }) {
 									{...register("authorRu")}
 								/>
 								{errors.authorRu && (
-									<span className="text-sm text-red-700">
+									<span className="text-sm text-red-800">
 										{errors.authorRu.message}
 									</span>
 								)}
 								<input
-									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceRu ? "border-red-700" : "border-gray-400"}`}
+									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceRu ? "border-red-800" : "border-gray-400"}`}
 									placeholder={`${t("source")} (${t("optional")})`}
 									id="quote-source-ru"
 									autoComplete="on"
 									{...register("sourceRu")}
 								/>
 								{errors.sourceRu && (
-									<span className="text-sm text-red-700">
+									<span className="text-sm text-red-800">
 										{errors.sourceRu.message}
 									</span>
 								)}
 								<textarea
-									className={`w-full rounded-lg border bg-white p-4 ${errors.quoteRu ? "border-red-700" : "border-gray-400"}`}
+									className={`w-full rounded-lg border bg-white p-4 ${errors.quoteRu ? "border-red-800" : "border-gray-400"}`}
 									placeholder={`${t("quote")} (${t("optional")})`}
 									rows={5}
 									id="quote-ru"
@@ -201,7 +201,7 @@ const NewQuote = function ({ model }) {
 									{...register("quoteRu")}
 								/>
 								{errors.quoteRu && (
-									<span className="text-sm text-red-700">
+									<span className="text-sm text-red-800">
 										{errors.quoteRu.message}
 									</span>
 								)}
@@ -228,7 +228,7 @@ const NewQuote = function ({ model }) {
 							{isQuoteScheduled && (
 								<>
 									<input
-										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.scheduledDate ? "border-red-700" : "border-gray-400"}`}
+										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.scheduledDate ? "border-red-800" : "border-gray-400"}`}
 										type="date"
 										id="scheduled-date"
 										formNoValidate
@@ -236,7 +236,7 @@ const NewQuote = function ({ model }) {
 										{...register("scheduledDate")}
 									/>
 									{errors.scheduledDate && (
-										<span className="text-sm text-red-700">
+										<span className="text-sm text-red-800">
 											{errors.scheduledDate.message}
 										</span>
 									)}
@@ -244,7 +244,7 @@ const NewQuote = function ({ model }) {
 							)}
 						</div>
 						{errors.form && (
-							<span className="text-sm text-red-700">
+							<span className="text-sm text-red-800">
 								{errors.form.message}
 							</span>
 						)}
