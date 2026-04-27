@@ -158,7 +158,7 @@ const Footer = function ({ model }) {
 						</FooterSection>
 					</div>
 				</div>
-				<hr className="mt-4 text-white/15 md:mt-[3em] md:hidden" />
+				<hr className="mt-[3em] text-white/15" />
 				<div className="flex flex-wrap-reverse items-center justify-between gap-x-20 gap-y-5 md:mt-2">
 					<span className="copyright w-fit text-sm">
 						<span className={georgia.className}>&copy;</span>{" "}
