@@ -44,7 +44,7 @@ export async function generateMetadata({
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 	const commemoration = await getCommemoration(commemorationId, language);
 	if (!commemoration) notFound();
-	const { title, icon, body, feastDays, id } = commemoration;
+	const { title, icon, body, feastDays, date, id } = commemoration;
 	const description = `${feastDays}\n\n${removeMarkup(body.substring(0, 127)).trim() + "..."}`;
 	const images = icon ? [icon.source] : undefined;
 
@@ -61,6 +61,7 @@ export async function generateMetadata({
 		openGraph: {
 			title,
 			description,
+			publishedTime: date ? date.toISOString() : undefined,
 			url: `/commemorations/${id}`,
 			images,
 			type: "article",

@@ -8,11 +8,14 @@ import { connection } from "next/server";
 import CommemorationPage, {
 	generateMetadata as commemorationMetadata,
 } from "../commemorations/[commemoration]/page";
+import { cacheLife } from "next/cache";
 
 export async function generateMetadata(
 	props: PageProps<"/[locale]/daily-saint">,
 ) {
 	"use cache"; //TODO: Get back to this in the future
+	cacheLife("seconds");
+
 	const locale = await rootLocale();
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 	const date = getDateString(new Date(), true);

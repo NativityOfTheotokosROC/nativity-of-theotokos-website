@@ -52,7 +52,7 @@ export default async function Page({ params }: PageProps<"/[locale]">) {
 		"@type": "WebSite",
 		name: tMetadata("templateTitle"),
 		alternateName: "NativityofTheotokos.com",
-		url: BASE_URL + locale == "ru" ? "/ru" : "",
+		url: `${BASE_URL}${locale == "ru" ? "/ru" : ""}`,
 	} satisfies WithContext<WebSite>;
 
 	return (

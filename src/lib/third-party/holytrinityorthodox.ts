@@ -149,8 +149,6 @@ export async function getCommemoration(
 					about: iconAbout,
 				} satisfies Pick<Image, "source" | "about">)
 			: undefined;
-		iconElement.unwrap();
-		iconElement.remove();
 		const feastDays = `${feastDaysElement.text()} (${t("oldCalendar")})`;
 		feastDaysElement.remove();
 		$("img").each(function () {
@@ -185,9 +183,9 @@ export async function getCommemoration(
 		const [firstPart, secondPart] = id.split("_");
 		let date;
 
-		if (firstPart in MONTHS)
+		if (MONTHS.includes(firstPart))
 			date = new Date(
-				new Date().getFullYear(),
+				new Date().getFullYear() - 1,
 				MONTHS.indexOf(firstPart),
 				Number(secondPart.split("-")[0]),
 			);
