@@ -62,6 +62,7 @@ export async function generateMetadata({
 			description,
 			url: `/commemorations/${id}`,
 			images,
+			type: "article",
 		},
 		twitter: {
 			card: "summary_large_image",

@@ -38,23 +38,14 @@ export async function generateMetadata(
 	});
 	const titleTemplate = `%s | ${t("templateTitle")}`;
 	const titleDefault = t("templateDefault");
-	const description = t("description");
 	const localeMetaData = locale === "en" ? "en-US" : "ru-RU";
 
 	return {
 		metadataBase: BASE_URL,
-		// alternates: {
-		// 	canonical: BASE_URL,
-		// 	languages: {
-		// 		en: BASE_URL,
-		// 		ru: BASE_URL + "/ru",
-		// 	},
-		// },
 		title: {
 			template: titleTemplate,
 			default: titleDefault,
 		},
-		description,
 		keywords: [
 			"eastern orthodox church",
 			"mother of god",
@@ -68,18 +59,11 @@ export async function generateMetadata(
 				template: titleTemplate,
 				default: titleDefault,
 			},
-			// url: BASE_URL,
 			siteName: t("templateTitle"),
-			description,
 			locale: localeMetaData,
-			type: "website",
-			images: ["/opengraph-image.jpg"],
 		},
 		twitter: {
-			card: "summary",
 			title: { template: titleTemplate, default: titleDefault },
-			description,
-			images: ["/opengraph-image.jpg"],
 		},
 	};
 }
