@@ -11,6 +11,7 @@ import { getPlaceholder } from "@/src/lib/server-only/placeholder";
 import { Commemoration as CommemorationType } from "@/src/lib/models/commemoration";
 import { Article, Organization, WithContext } from "schema-dts";
 import { getTranslations } from "next-intl/server";
+import { formatISO } from "date-fns";
 
 export function generateStaticParams() {
 	return routing.locales.map(locale => ({
@@ -28,7 +29,9 @@ export function commemorationJsonLd(
 		"@context": "https://schema.org",
 		"@type": "BlogPosting",
 		headline: title,
-		datePublished: date ? date.toISOString() : undefined,
+		datePublished: date
+			? formatISO(date, { representation: "date" })
+			: undefined,
 		author: {
 			"@type": "Organization",
 			name: author,
@@ -61,7 +64,9 @@ export async function generateMetadata({
 		openGraph: {
 			title,
 			description,
-			publishedTime: date ? date.toISOString() : undefined,
+			publishedTime: date
+				? formatISO(date, { representation: "date" })
+				: undefined,
 			url: `/commemorations/${id}`,
 			images,
 			type: "article",
