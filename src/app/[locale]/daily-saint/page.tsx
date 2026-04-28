@@ -14,7 +14,7 @@ export async function generateMetadata(
 	props: PageProps<"/[locale]/daily-saint">,
 ) {
 	"use cache"; //TODO: Get back to this in the future
-	cacheLife("seconds");
+	cacheLife("minutes");
 
 	const locale = await rootLocale();
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
