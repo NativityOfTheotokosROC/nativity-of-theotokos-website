@@ -8,6 +8,7 @@ import {
 	googleSansFlex,
 } from "@/src/lib/third-party/fonts";
 import { Language } from "@/src/lib/types/general";
+import { BASE_URL } from "@/src/lib/utilities/server-constants";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -19,7 +20,6 @@ import {
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import AppLayout from "./AppLayout";
-import { BASE_URL } from "@/src/lib/utilities/server-constants";
 
 export function generateStaticParams() {
 	return [{ locale: "en" }, { locale: "ru" }];
@@ -55,12 +55,21 @@ export async function generateMetadata(
 			default: titleDefault,
 		},
 		description,
+		keywords: [
+			"eastern orthodox church",
+			"mother of god",
+			"virgin mary",
+			"zimbabwe orthodox church",
+			"russian orthodox",
+			"nativity of the theotokos",
+		],
 		openGraph: {
 			title: {
 				template: titleTemplate,
 				default: titleDefault,
 			},
 			// url: BASE_URL,
+			siteName: t("templateTitle"),
 			description,
 			locale: localeMetaData,
 			type: "website",

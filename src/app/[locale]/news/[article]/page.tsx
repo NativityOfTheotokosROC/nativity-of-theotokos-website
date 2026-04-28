@@ -10,6 +10,7 @@ import {
 	getAllArticles,
 	getArticleMetadata,
 } from "@/src/lib/server-only/article";
+import { Article as JSONLdArticle, WithContext } from "schema-dts";
 
 export async function generateStaticParams() {
 	const [articlesEn, articlesRu] = await Promise.all([
@@ -26,16 +27,16 @@ function articleJsonLd(article: ArticleType) {
 	const { title, author, articleImage, dateCreated, snippet } = article;
 	return {
 		"@context": "https://schema.org",
-		"@type": "Article",
+		"@type": "BlogPosting",
 		headline: title,
 		description: snippet,
-		datePublished: dateCreated,
+		datePublished: dateCreated.toISOString(),
 		author: {
 			"@type": "Person",
 			name: author,
 		},
 		image: articleImage.source,
-	};
+	} satisfies WithContext<JSONLdArticle>;
 }
 
 export async function generateMetadata({

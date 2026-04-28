@@ -8,12 +8,33 @@ import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import Commemoration from "./Commemoration";
 import { getPlaceholder } from "@/src/lib/server-only/placeholder";
+import { Commemoration as CommemorationType } from "@/src/lib/models/commemoration";
+import { Article, Organization, WithContext } from "schema-dts";
+import { getTranslations } from "next-intl/server";
 
 export function generateStaticParams() {
 	return routing.locales.map(locale => ({
 		commemoration: "December_25-01",
 		locale,
 	}));
+}
+
+export function commemorationJsonLd(
+	commemoration: CommemorationType,
+	author: string,
+) {
+	const { title, icon, date } = commemoration;
+	return {
+		"@context": "https://schema.org",
+		"@type": "BlogPosting",
+		headline: title,
+		datePublished: date ? date.toISOString() : undefined,
+		author: {
+			"@type": "Organization",
+			name: author,
+		} satisfies Organization,
+		image: icon?.source ?? undefined,
+	} satisfies WithContext<Article>;
 }
 
 export async function generateMetadata({
@@ -65,9 +86,18 @@ export default async function Page({
 	const newIcon = icon
 		? ({ ...icon, placeholder: iconPlaceholder } satisfies typeof icon)
 		: undefined;
+	const t = await getTranslations({
+		locale: language,
+		namespace: "commemoration",
+	});
+	const jsonLd = commemorationJsonLd(commemoration, t("prologue"));
 
 	return (
 		<>
+			<script
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+			/>
 			<Commemoration
 				model={newReadonlyModel({
 					commemoration: {

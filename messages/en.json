@@ -89,7 +89,8 @@
 		"aboutOurParish": "About our Parish"
 	},
 	"commemoration": {
-		"oldCalendar": "Julian Calendar"
+		"oldCalendar": "Julian Calendar",
+		"prologue": "Prologue of Ochrid"
 	},
 	"aboutUs": {
 		"metaTitle": "About Us"

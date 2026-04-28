@@ -8,6 +8,7 @@ export type Commemoration = {
 		Partial<Pick<Image, "placeholder">>;
 	body: string;
 	id: string;
+	date?: Date;
 };
 
 export interface CommemorationModelView {

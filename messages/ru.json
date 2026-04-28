@@ -89,7 +89,8 @@
 		"aboutOurParish": "О нашем приходе"
 	},
 	"commemoration": {
-		"oldCalendar": "Юлианский календарь"
+		"oldCalendar": "Юлианский календарь",
+		"prologue": "Пролог Охридский"
 	},
 	"aboutUs": {
 		"metaTitle": "О приходе"

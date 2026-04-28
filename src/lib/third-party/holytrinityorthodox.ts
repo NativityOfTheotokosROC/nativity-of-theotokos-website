@@ -2,10 +2,25 @@ import { load } from "cheerio";
 import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
 import { cacheLife, cacheTag } from "next/cache";
+import { Commemoration } from "../models/commemoration";
 import { DailyReadings, Hymn, Image, Language } from "../types/general";
 import { getLocalTimeZone } from "../utilities/date-time";
 import { removeMarkup } from "../utilities/miscellaneous";
-import { Commemoration } from "../models/commemoration";
+
+const MONTHS = [
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December",
+];
 
 export async function dailyReadings(date: Date, language: Language) {
 	"use cache: remote";
@@ -87,7 +102,7 @@ export async function getSaints(date: Date, language: Language) {
 export async function getDailySaint(date: Date, language: Language) {
 	"use cache: remote";
 	cacheTag("daily-saint");
-	cacheLife("minutes");
+	cacheLife("weeks");
 
 	const localDate = toZonedTime(date, getLocalTimeZone());
 	const saints = await getSaints(localDate, language);
@@ -104,6 +119,7 @@ export async function getCommemoration(
 	language: Language,
 ): Promise<Commemoration | null> {
 	"use cache: remote";
+	cacheLife("days");
 
 	const requestURL = new URL(
 		_getCommemorationURL(language) + `/${id.replace("_", "/")}.htm`,
@@ -166,7 +182,24 @@ export async function getCommemoration(
 		const body = paragraphs
 			.join("<br><br>")
 			.replaceAll(/(<br>\s*){3,}/gm, "<br><br>"); // Tee-hee
-		return { title, feastDays, icon, body, id } satisfies Commemoration;
+		const [firstPart, secondPart] = id.split("_");
+		let date;
+
+		if (firstPart in MONTHS)
+			date = new Date(
+				new Date().getFullYear(),
+				MONTHS.indexOf(firstPart),
+				Number(secondPart.split("-")[0]),
+			);
+
+		return {
+			title,
+			feastDays,
+			icon,
+			body,
+			id,
+			date,
+		} satisfies Commemoration;
 	} catch (error) {
 		if (error instanceof Response && error.status == 404) return null;
 		throw error;
