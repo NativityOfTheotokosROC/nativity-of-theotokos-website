@@ -55,6 +55,7 @@ export async function generateMetadata({
 		alternates: {
 			canonical: `/news/${uri}`,
 			languages: {
+				en: `/news/${uri}`,
 				ru: `/ru/news/${uri}`,
 			},
 		},

@@ -54,6 +54,7 @@ export async function generateMetadata({
 		alternates: {
 			canonical: `/commemorations/${id}`,
 			languages: {
+				en: `/commemorations/${id}`,
 				ru: `/ru/commemorations/${id}`,
 			},
 		},

@@ -38,8 +38,6 @@ export async function generateMetadata(
 	});
 	const titleTemplate = `%s | ${t("templateTitle")}`;
 	const titleDefault = t("templateDefault");
-	const localeMetaData = locale === "en" ? "en-US" : "ru-RU";
-
 	return {
 		metadataBase: BASE_URL,
 		title: {
@@ -59,8 +57,9 @@ export async function generateMetadata(
 				template: titleTemplate,
 				default: titleDefault,
 			},
-			siteName: t("templateTitle"),
-			locale: localeMetaData,
+			siteName: titleDefault,
+			locale: "en-US",
+			alternateLocale: "ru-RU",
 		},
 		twitter: {
 			title: { template: titleTemplate, default: titleDefault },
