@@ -47,6 +47,9 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 									...loginTooltipModelView,
 									isOpen: false,
 								});
+								setCookie("tooltipShown", false, {
+									expires: addYears(new Date(), 1),
+								});
 								resolve(null);
 							},
 							duration == undefined ? 5000 : duration,

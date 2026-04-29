@@ -106,6 +106,7 @@ const Header = function ({ model }) {
 				id="login-tooltip"
 				isOpen={loginTooltip?.modelView.isOpen}
 				content={loginTooltip?.modelView.text}
+				place="bottom"
 			/>
 		</header>
 	);
