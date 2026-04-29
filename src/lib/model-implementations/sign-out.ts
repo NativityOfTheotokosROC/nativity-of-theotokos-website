@@ -7,6 +7,7 @@ import { signOut } from "../third-party/better-auth";
 import { createToast } from "../components/miscellaneous/utility";
 import { useQueryClient } from "@tanstack/react-query";
 import { refreshUserInformation } from "../utilities/user";
+import { useCookies } from "react-cookie";
 
 export function useSignOut(
 	signOutEndpoint: `/${string}`,
@@ -16,6 +17,9 @@ export function useSignOut(
 	const notifier = useNewStatefulInteractiveModel(
 		notifierVIInterface<SignOutStatus>(),
 	);
+	const removeCookie = useCookies<"tooltipShown", { tooltipShown: boolean }>([
+		"tooltipShown",
+	])[2];
 
 	return {
 		modelView: { signOutStatus: notifier.modelView?.notification ?? null },
@@ -42,6 +46,7 @@ export function useSignOut(
 						});
 						return;
 					}
+					removeCookie("tooltipShown");
 					await refreshUserInformation(queryClient);
 					await notifier.interact({
 						type: "NOTIFY",

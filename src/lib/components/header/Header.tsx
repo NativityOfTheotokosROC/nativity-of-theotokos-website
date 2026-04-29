@@ -6,12 +6,16 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { TextAlignJustifyIcon as MenuIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { Suspense, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
+import { Tooltip } from "react-tooltip";
 import { useNavigationDrawer } from "../../model-implementations/navigation-drawer";
+import { getUserActions } from "../../model-implementations/user-action";
 import { HeaderModel } from "../../models/header";
 import { georgia } from "../../third-party/fonts";
 import { Navlink } from "../../types/general";
 import { usePageLoadingBarRouter } from "../../utilities/page-loading-bar";
+import { useUserInformation } from "../../utilities/user";
 import NavigationDrawer from "../navigation-drawer/NavigationDrawer";
 import {
 	Link,
@@ -21,9 +25,7 @@ import UserNavigationWidget, {
 	UserNavigationWidgetSkeleton,
 } from "../user-navigation-widget/UserNavigationWidget";
 import "./header.css";
-import { Suspense, useContext } from "react";
-import { getUserActions } from "../../model-implementations/user-action";
-import { useUserInformation } from "../../utilities/user";
+import { LoginTooltipContext } from "../../utilities/contexts";
 
 const Header = function ({ model }) {
 	const { navlinks, hasUserNavigationWidget } = model.modelView;
@@ -38,6 +40,7 @@ const Header = function ({ model }) {
 	const tNonDescriptive = useTranslations("nonDescriptive");
 	const locale = useLocale();
 	useUserInformation(); // Prefetch
+	const loginTooltip = useContext(LoginTooltipContext);
 
 	return (
 		<header
@@ -75,9 +78,8 @@ const Header = function ({ model }) {
 				</Link>
 				<div className="header-interactive flex gap-4">
 					{isLargeScreen ? (
-						<NavMenu
+						<NavMenuBar
 							model={newReadonlyModel({
-								type: "horizontal",
 								menuItems: {
 									navlinks,
 									hasUserNavigationWidget,
@@ -91,6 +93,7 @@ const Header = function ({ model }) {
 							onClick={() => {
 								navigationDrawer.interact({ type: "TOGGLE" });
 							}}
+							data-tooltip-id={"login-tooltip"}
 						>
 							<MenuIcon className="size-8" strokeWidth={1.75} />
 						</button>
@@ -99,13 +102,17 @@ const Header = function ({ model }) {
 			</div>
 			{!isLargeScreen && <NavigationDrawer model={navigationDrawer} />}
 			<hr className="header-border self-center text-gray-500" />
+			<Tooltip
+				id="login-tooltip"
+				isOpen={loginTooltip?.modelView.isOpen}
+				content={loginTooltip?.modelView.text}
+			/>
 		</header>
 	);
 } satisfies ModeledVoidComponent<HeaderModel>;
 
-const NavMenu = function ({ model }) {
+const NavMenuBar = function ({ model }) {
 	const {
-		type,
 		menuItems: { navlinks, hasUserNavigationWidget },
 	} = model.modelView;
 	const pageLoadingBar = useContext(PageLoadingBarContext);
@@ -113,29 +120,32 @@ const NavMenu = function ({ model }) {
 
 	return (
 		<nav className="nav-menu">
-			{type === "horizontal" && (
-				<div className="flex flex-wrap items-center justify-center gap-6 px-4 lg:gap-8">
-					{[
-						...navlinks.map((navlink, index) => (
-							<Link
-								key={index}
-								href={navlink.link}
-								className="navlink text-base uppercase no-underline hover:text-[#DCB042]"
-								replace={navlink.isReplaceable}
-							>
-								{navlink.text}
-							</Link>
-						)),
-					]}
-					{hasUserNavigationWidget && (
-						<Suspense
-							fallback={
-								<UserNavigationWidgetSkeleton
-									model={newReadonlyModel({
-										variant: "abbreviated",
-									})}
-								/>
-							}
+			<div className="flex flex-wrap items-center justify-center gap-6 px-4 lg:gap-8">
+				{[
+					...navlinks.map((navlink, index) => (
+						<Link
+							key={index}
+							href={navlink.link}
+							className="navlink text-base uppercase no-underline hover:text-[#DCB042]"
+							replace={navlink.isReplaceable}
+						>
+							{navlink.text}
+						</Link>
+					)),
+				]}
+				{hasUserNavigationWidget && (
+					<Suspense
+						fallback={
+							<UserNavigationWidgetSkeleton
+								model={newReadonlyModel({
+									variant: "abbreviated",
+								})}
+							/>
+						}
+					>
+						<div
+							className="contents"
+							data-tooltip-id={"login-tooltip"}
 						>
 							<UserNavigationWidget
 								model={newReadonlyModel({
@@ -150,46 +160,14 @@ const NavMenu = function ({ model }) {
 									},
 								})}
 							/>
-						</Suspense>
-					)}
-				</div>
-			)}
-			{type === "vertical" && (
-				<div className="flex flex-col">
-					<div className="bg-gray-800 [&_.dropdown-button]:px-6 *:[&_.dropdown-button]:w-full *:[&_.dropdown-button]:py-4">
-						{hasUserNavigationWidget && (
-							<UserNavigationWidget
-								model={newReadonlyModel({
-									style: "accordion",
-									variant: "full",
-									getUserActions(roles) {
-										return getUserActions(
-											roles,
-											router,
-											pageLoadingBar,
-										);
-									},
-								})}
-							/>
-						)}
-					</div>
-					{navlinks.map((navlink, index) => (
-						<Link
-							key={index}
-							className="navlink block px-6 py-4 uppercase no-underline hover:text-[#DCB042] active:bg-gray-950 active:text-[#DCB042] md:px-8"
-							href={navlink.link}
-							replace={navlink.isReplaceable}
-						>
-							{navlink.text}
-						</Link>
-					))}
-				</div>
-			)}
+						</div>
+					</Suspense>
+				)}
+			</div>
 		</nav>
 	);
 } satisfies ModeledVoidComponent<
 	ReadonlyModel<{
-		type: "horizontal" | "vertical";
 		menuItems: {
 			navlinks: Navlink[];
 			hasUserNavigationWidget: boolean;

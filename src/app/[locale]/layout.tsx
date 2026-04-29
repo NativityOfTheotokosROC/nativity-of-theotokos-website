@@ -1,7 +1,7 @@
 import "@/src/app/globals.css";
 import { routing } from "@/src/i18n/routing";
 import LayoutLoadingSkeleton from "@/src/lib/components/layout-loading-skeleton/LayoutLoadingSkeleton";
-import ClientProviders from "@/src/lib/providers/client-providers";
+import AppProvider from "@/src/lib/providers/AppProvider";
 import {
 	georgia,
 	googleSans,
@@ -11,7 +11,7 @@ import { Language } from "@/src/lib/types/general";
 import { BASE_URL } from "@/src/lib/utilities/server-constants";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import type { Metadata } from "next";
-import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { hasLocale } from "next-intl";
 import {
 	getMessages,
 	getTranslations,
@@ -86,15 +86,13 @@ export default async function RootLayout({
 				className={`antialiased ${googleSansFlex.variable} ${googleSans.variable} ${georgia.variable}`}
 			>
 				<Suspense fallback={<LayoutLoadingSkeleton />}>
-					<NextIntlClientProvider locale={locale} messages={messages}>
-						<ClientProviders>
-							<AppLayout
-								model={newReadonlyModel({ language: locale })}
-							>
-								{children}
-							</AppLayout>
-						</ClientProviders>
-					</NextIntlClientProvider>
+					<AppProvider model={newReadonlyModel({ locale, messages })}>
+						<AppLayout
+							model={newReadonlyModel({ language: locale })}
+						>
+							{children}
+						</AppLayout>
+					</AppProvider>
 				</Suspense>
 			</body>
 		</html>

@@ -68,7 +68,7 @@ const NavigationDrawer = function ({ model }) {
 						>
 							<UserNavigationWidget
 								model={newReadonlyModel({
-									style: "accordion",
+									style: "dropdown",
 									variant: "full",
 									getUserActions: (roles: Role[]) => {
 										const userActions =

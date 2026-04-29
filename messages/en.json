@@ -158,6 +158,9 @@
 		"mailingListSuccessMessage": "Thank you for subscribing to our mailing list! We will be keeping you up to date with the latest news, updates, announcements and more.",
 		"errorMessage": "There was a problem subscribing you to our mailing list. Please try again, cross-check your email, or check your internet connection."
 	},
+	"loginTooltip": {
+		"text": "You are now signed in"
+	},
 	"nonDescriptive": {
 		"menu": "Menu",
 		"close": "Close",
@@ -182,11 +185,11 @@
 		"newsArticleImage": "News Article Image",
 		"galleryImage": "Gallery Image"
 	},
-	"miscellaneous": {
-		"futureContent": "Content to be added soon!"
-	},
 	"validation": {
 		"nonEmpty": "{field} cannot be empty",
 		"maxCharacters": "{field} is too long (maximum of {max} characters)"
+	},
+	"miscellaneous": {
+		"futureContent": "Content to be added soon!"
 	}
 }

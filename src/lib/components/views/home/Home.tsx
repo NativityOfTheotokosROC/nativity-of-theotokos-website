@@ -12,7 +12,7 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import BulletinSection from "./bulletin/BulletinSection";
 import DailyQuoteSection from "./daily-quote/DailyQuoteSection";
 import DailyReadingsSection from "./daily-readings/DailyReadingsSection";
@@ -20,6 +20,7 @@ import GallerySection from "./gallery/GallerySection";
 import HeroSection from "./hero/HeroSection";
 import MailingListSection from "./mailing-list/MailingListSection";
 import ResourcesSection from "./resources/ResourcesSection";
+import { LoginTooltipContext } from "@/src/lib/utilities/contexts";
 
 const Home = function ({ model }) {
 	const { modelView } = model;
@@ -31,23 +32,20 @@ const Home = function ({ model }) {
 	const [splashExited, setSplashExited] = useState(false);
 	const t = useTranslations("home");
 	const tLinks = useTranslations("links");
+	const loginTooltip = useContext(LoginTooltipContext);
 
 	return (
 		<>
 			<SplashScreen
 				model={newReadonlyModel({
 					isShown: !modelView,
-					exitedCallback: () => setSplashExited(true),
+					exitedCallback: async () => {
+						setSplashExited(true);
+						await loginTooltip?.interact({ type: "TRIGGER" });
+					},
 				})}
 			/>
-			{hymnsModal.modelView && (
-				<HymnsModal
-					model={{
-						modelView: hymnsModal.modelView,
-						interact: hymnsModal.interact,
-					}}
-				/>
-			)}
+			<HymnsModal model={hymnsModal} />
 			<main
 				className={`home bg-[linear-gradient(135deg,#F7DAC1,whitesmoke)]`}
 			>
