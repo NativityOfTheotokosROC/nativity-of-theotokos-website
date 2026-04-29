@@ -33,7 +33,7 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 		async interact(interaction) {
 			switch (interaction.type) {
 				case "TRIGGER": {
-					if (cookies.tooltipShown) return;
+					if (cookies.tooltipShown == true) return;
 					await promiseWithResolvers.promise;
 					if (userInformation && userInformation !== "pending") {
 						const { promise, resolve } = Promise.withResolvers();
@@ -47,7 +47,7 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 									...loginTooltipModelView,
 									isOpen: false,
 								});
-								setCookie("tooltipShown", false, {
+								setCookie("tooltipShown", true, {
 									expires: addYears(new Date(), 1),
 								});
 								resolve(null);
@@ -74,7 +74,7 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 		) {
 			async function _() {
 				await loginTooltip.interact({ type: "TRIGGER" });
-				setCookie("tooltipShown", false, {
+				setCookie("tooltipShown", true, {
 					expires: addYears(new Date(), 1),
 				});
 			}
