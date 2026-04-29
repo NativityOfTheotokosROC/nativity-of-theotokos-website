@@ -1,5 +1,5 @@
 import { addYears } from "date-fns";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import {
 	LoginTooltipModel,
@@ -17,7 +17,7 @@ type LoginTooltipOptions = Partial<{
 export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 	const pathname = usePathname();
 	const { autoTriggerExceptions, duration } = options;
-	const [loginTooltipModelView, setLoginTooltipModelView] =
+	const [modelView, setLoginTooltipModelView] =
 		useState<LoginTooltipModelView>({
 			isOpen: false,
 			text,
@@ -28,9 +28,8 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 		{ tooltipShown: boolean }
 	>(["tooltipShown"]);
 	const [promiseWithResolvers] = useState(Promise.withResolvers());
-	const loginTooltip = {
-		modelView: loginTooltipModelView,
-		async interact(interaction) {
+	const interact = useCallback(
+		async interaction => {
 			switch (interaction.type) {
 				case "TRIGGER": {
 					if (cookies.tooltipShown == true) return;
@@ -38,13 +37,13 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 					if (userInformation && userInformation !== "pending") {
 						const { promise, resolve } = Promise.withResolvers();
 						setLoginTooltipModelView({
-							...loginTooltipModelView,
+							...modelView,
 							isOpen: true,
 						});
 						setTimeout(
 							() => {
 								setLoginTooltipModelView({
-									...loginTooltipModelView,
+									...modelView,
 									isOpen: false,
 								});
 								setCookie("tooltipShown", true, {
@@ -59,7 +58,15 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 				}
 			}
 		},
-	} satisfies LoginTooltipModel;
+		[
+			cookies.tooltipShown,
+			duration,
+			modelView,
+			promiseWithResolvers.promise,
+			setCookie,
+			userInformation,
+		],
+	) satisfies LoginTooltipModel["interact"];
 
 	useEffect(() => {
 		if (
@@ -73,17 +80,14 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 			!cookies.tooltipShown
 		) {
 			async function _() {
-				await loginTooltip.interact({ type: "TRIGGER" });
-				setCookie("tooltipShown", true, {
-					expires: addYears(new Date(), 1),
-				});
+				await interact({ type: "TRIGGER" });
 			}
 			_();
 		}
 	}, [
 		autoTriggerExceptions,
 		cookies.tooltipShown,
-		loginTooltip,
+		interact,
 		pathname,
 		setCookie,
 		userInformation,
@@ -94,5 +98,5 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 			promiseWithResolvers.resolve(userInformation);
 	}, [promiseWithResolvers, userInformation]);
 
-	return loginTooltip;
+	return { modelView, interact } satisfies LoginTooltipModel;
 }

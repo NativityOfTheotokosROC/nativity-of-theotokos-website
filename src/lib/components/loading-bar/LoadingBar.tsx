@@ -17,7 +17,7 @@ const LoadingBar = function ({ model }) {
 						duration: 0.3,
 						ease: "easeIn",
 					}}
-					className={`loading-bar-progress h-full bg-[#dcb042]`}
+					className={`loading-bar-progress h-full animate-pulse bg-[#dcb042]`}
 				/>
 			)}
 		</div>

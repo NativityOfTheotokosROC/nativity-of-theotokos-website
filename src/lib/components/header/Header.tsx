@@ -89,7 +89,7 @@ const Header = function ({ model }) {
 					) : (
 						<button
 							title={tNonDescriptive("menu")}
-							className="flex items-center justify-center rounded-lg bg-transparent p-1 text-[28px] hover:text-[#DCB042] data-open:bg-black/45 data-open:text-[#DCB042]"
+							className={`flex items-center justify-center rounded-lg bg-transparent p-1 text-[28px] transition ease-out hover:text-[#DCB042] data-open:bg-black/45 data-open:text-[#DCB042] ${loginTooltip?.modelView.isOpen && "text-[#DCB042]"}`}
 							onClick={() => {
 								navigationDrawer.interact({ type: "TOGGLE" });
 							}}
@@ -106,6 +106,7 @@ const Header = function ({ model }) {
 				id="login-tooltip"
 				isOpen={loginTooltip?.modelView.isOpen}
 				content={loginTooltip?.modelView.text}
+				border="1px solid #dcb042"
 				place="bottom-end"
 			/>
 		</header>
