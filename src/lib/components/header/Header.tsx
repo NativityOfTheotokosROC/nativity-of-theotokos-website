@@ -8,7 +8,6 @@ import { TextAlignJustifyIcon as MenuIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Suspense, useCallback, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
-import { Tooltip } from "react-tooltip";
 import { useNavigationDrawer } from "../../model-implementations/navigation-drawer";
 import { useUserActions } from "../../model-implementations/user-action";
 import { HeaderModel } from "../../models/header";
@@ -17,6 +16,7 @@ import { Navlink } from "../../types/general";
 import { LoginTooltipContext } from "../../utilities/contexts";
 import { usePageLoadingBarRouter } from "../../utilities/page-loading-bar";
 import { useUserInformation } from "../../utilities/user";
+import LoginTooltip from "../login-tooltip/LoginTooltip";
 import NavigationDrawer from "../navigation-drawer/NavigationDrawer";
 import { Link } from "../page-loading-bar/PageLoadingBar";
 import UserNavigationWidget, {
@@ -37,7 +37,7 @@ const Header = function ({ model }) {
 	const tNonDescriptive = useTranslations("nonDescriptive");
 	const locale = useLocale();
 	useUserInformation(); // Prefetch
-	const loginTooltip = useContext(LoginTooltipContext);
+	const loginTooltip = useContext(LoginTooltipContext)!;
 
 	return (
 		<header
@@ -99,13 +99,7 @@ const Header = function ({ model }) {
 			</div>
 			{!isLargeScreen && <NavigationDrawer model={navigationDrawer} />}
 			<hr className="header-border self-center text-gray-500" />
-			<Tooltip
-				id="login-tooltip"
-				isOpen={loginTooltip?.modelView.isOpen}
-				content={loginTooltip?.modelView.text}
-				border="1px solid #dcb042"
-				place="bottom-end"
-			/>
+			<LoginTooltip model={loginTooltip} />
 		</header>
 	);
 } satisfies ModeledVoidComponent<HeaderModel>;
@@ -141,20 +135,15 @@ const NavMenuBar = function ({ model }) {
 							/>
 						}
 					>
-						<div
-							className="contents"
-							data-tooltip-id={"login-tooltip"}
-						>
-							<UserNavigationWidget
-								model={newReadonlyModel({
-									style: "dropdown",
-									variant: "abbreviated",
-									getUserActions(roles) {
-										return originalGetUserActions(roles);
-									},
-								})}
-							/>
-						</div>
+						<UserNavigationWidget
+							model={newReadonlyModel({
+								style: "dropdown",
+								variant: "abbreviated",
+								getUserActions(roles) {
+									return originalGetUserActions(roles);
+								},
+							})}
+						/>
 					</Suspense>
 				)}
 			</div>
