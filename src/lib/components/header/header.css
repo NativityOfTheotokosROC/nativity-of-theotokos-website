@@ -19,6 +19,14 @@
 	animation-range: 500px 610px;
 }
 
+.header .login-tooltip {
+	transform-origin: top right;
+	scale: 1 1;
+	animation: shrink-header-content ease-out forwards;
+	animation-timeline: scroll(root);
+	animation-range: 500px 610px;
+}
+
 .header .header-interactive {
 	transform-origin: top right;
 	scale: 1 1;
