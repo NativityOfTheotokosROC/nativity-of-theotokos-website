@@ -51,7 +51,7 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 								});
 								resolve(null);
 							},
-							duration == undefined ? 5000 : duration,
+							duration == undefined ? 4000 : duration,
 						);
 						await promise;
 					}
