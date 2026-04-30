@@ -47,7 +47,7 @@ const Footer = function ({ model }) {
 										{parishEmail}
 									</a>
 								</span>
-								<div className="social-links flex gap-5 text-lg **:size-4 **:hover:text-[#DCB042]">
+								<div className="social-links flex gap-5 text-lg **:size-4 **:hover:text-[#ffd400]">
 									{[
 										...socials.map(social => (
 											<SocialLink
@@ -172,7 +172,7 @@ const Footer = function ({ model }) {
 										{bottomLink.precedingText &&
 											`${bottomLink.precedingText} `}
 										<Link
-											className="underline hover:text-[#dcb042] active:text-[#dcb042]"
+											className="underline hover:text-[#ffd400] active:text-[#ffd400]"
 											href={bottomLink.link}
 										>
 											{bottomLink.linkLabel}
@@ -190,7 +190,7 @@ const Footer = function ({ model }) {
 						link: name => (
 							<Link
 								href="https://github.com/Grod56"
-								className="text-[#dcb042] underline"
+								className="text-[#ffd400] underline"
 								target="_blank"
 							>
 								{name}

@@ -41,7 +41,7 @@ const Header = function ({ model }) {
 
 	return (
 		<header
-			className={`header sticky top-px z-11 flex h-fit w-full max-w-full flex-col bg-gray-900/99`}
+			className={`header sticky top-px z-12 flex h-fit w-full max-w-full flex-col bg-gray-900/99`}
 		>
 			<div className="header-content flex flex-nowrap items-center justify-between gap-9 p-4 text-white lg:p-6 lg:px-7">
 				<Link className="contents" href="/">
@@ -86,7 +86,7 @@ const Header = function ({ model }) {
 					) : (
 						<button
 							title={tNonDescriptive("menu")}
-							className={`flex items-center justify-center rounded-lg bg-transparent p-1 text-[28px] transition ease-out hover:text-[#DCB042] data-open:bg-black/45 data-open:text-[#DCB042] ${loginTooltip?.modelView.isOpen && "text-[#DCB042]"}`}
+							className={`flex items-center justify-center rounded-lg bg-transparent p-1 text-[28px] transition ease-out hover:text-[#ffd400] data-open:bg-black/45 data-open:text-[#ffd400] ${loginTooltip?.modelView.isOpen && "text-[#ffd400]"}`}
 							onClick={() => {
 								navigationDrawer.interact({ type: "TOGGLE" });
 							}}
@@ -118,7 +118,7 @@ const NavMenuBar = function ({ model }) {
 						<Link
 							key={index}
 							href={navlink.link}
-							className="navlink text-base uppercase no-underline hover:text-[#DCB042]"
+							className="navlink text-base uppercase no-underline hover:text-[#ffd400]"
 							replace={navlink.isReplaceable}
 						>
 							{navlink.text}
