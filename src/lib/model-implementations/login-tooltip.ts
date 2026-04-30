@@ -62,7 +62,7 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 			cookies.tooltipShown,
 			duration,
 			modelView,
-			promiseWithResolvers.promise,
+			promiseWithResolvers,
 			setCookie,
 			userInformation,
 		],

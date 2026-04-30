@@ -1,16 +1,15 @@
+import { usePathname, useRouter } from "@/src/i18n/navigation";
 import { newReadonlyModel } from "@mvc-react/mvc";
-import { useRouter } from "next/navigation";
 import { UserActionModel } from "../models/user-action";
-import { signOut } from "../third-party/better-auth";
-import { Role } from "../types/general";
+import { Path, Role } from "../types/general";
+import { usePageLoadingBarRouter } from "../utilities/page-loading-bar";
 import { getUserActionNames } from "../utilities/user-action";
-import { PageLoadingBarModel } from "../models/page-loading-bar";
+import { useSignOut } from "./sign-out";
 
-export function getUserActions(
-	roles: Role[],
-	router: ReturnType<typeof useRouter>,
-	pageLoadingBar: PageLoadingBarModel,
-) {
+export function useUserActions(roles: Role[]) {
+	const router = usePageLoadingBarRouter(useRouter);
+	const pathname = usePathname();
+	const signOut = useSignOut(pathname as Path, router);
 	const actionNames = getUserActionNames(roles);
 	return [...actionNames].map(actionName => {
 		switch (actionName) {
@@ -32,17 +31,9 @@ export function getUserActions(
 				return newReadonlyModel({
 					name: "SIGN_OUT",
 					action: async () => {
-						await pageLoadingBar.interact({
-							type: "SET_LOADING",
-							input: { value: true },
-						});
-						await signOut().then(response => {
-							if (response.data?.success) location.reload(); // TODO
-							if (response.error)
-								return pageLoadingBar.interact({
-									type: "SET_LOADING",
-									input: { value: false },
-								});
+						await signOut.interact({
+							type: "SIGN_OUT",
+							input: { hardRefresh: true },
 						});
 					},
 				});

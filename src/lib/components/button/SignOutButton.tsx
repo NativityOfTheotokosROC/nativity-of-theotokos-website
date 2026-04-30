@@ -19,7 +19,11 @@ const SignOutButton = function ({ model, children }) {
 		<Button
 			model={newReadonlyModel({
 				variant: "standard",
-				action: () => signOutModel.interact({ type: "SIGN_OUT" }),
+				action: () =>
+					signOutModel.interact({
+						type: "SIGN_OUT",
+						input: { hardRefresh: false },
+					}),
 				disabled:
 					signOutStatus?.type === "pending" ||
 					signOutStatus?.type === "success",

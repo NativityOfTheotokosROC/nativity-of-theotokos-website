@@ -46,14 +46,18 @@ export function useSignOut(
 						});
 						return;
 					}
-					removeCookie("tooltipShown");
 					await refreshUserInformation(queryClient);
+					removeCookie("tooltipShown");
 					await notifier.interact({
 						type: "NOTIFY",
 						input: {
 							notification: { type: "success" },
 						},
 					});
+					if (interaction.input.hardRefresh) {
+						window.open(signOutEndpoint, "_self");
+						break;
+					}
 					router.push(signOutEndpoint);
 					router.refresh();
 					break;

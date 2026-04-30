@@ -1,5 +1,4 @@
 import SidebarDecoration from "@/public/assets/ornament_38.svg";
-import { useRouter } from "@/src/i18n/navigation";
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import {
 	ModeledContainerComponent,
@@ -11,18 +10,14 @@ import {
 	ModelInteraction,
 	newReadonlyModel,
 } from "@mvc-react/mvc";
-import { Suspense, useContext } from "react";
-import { getUserActions as originalGetUserActions } from "../../model-implementations/user-action";
+import { Suspense, useCallback } from "react";
+import { useUserActions } from "../../model-implementations/user-action";
 import {
 	NavigationDrawerModel,
 	NavigationDrawerModelView,
 } from "../../models/navigation-drawer";
 import { Role } from "../../types/general";
-import { usePageLoadingBarRouter } from "../../utilities/page-loading-bar";
-import {
-	Link,
-	PageLoadingBarContext,
-} from "../page-loading-bar/PageLoadingBar";
+import { Link } from "../page-loading-bar/PageLoadingBar";
 import UserNavigationWidget, {
 	UserNavigationWidgetSkeleton,
 } from "../user-navigation-widget/UserNavigationWidget";
@@ -35,8 +30,7 @@ type MenuModel = InteractiveModel<MenuModelView, MenuModelInteraction>;
 const NavigationDrawer = function ({ model }) {
 	const { modelView, interact } = model;
 	const { isDrawn, navlinks, hasUserNavigationWidget } = modelView;
-	const pageLoadingBar = useContext(PageLoadingBarContext);
-	const router = usePageLoadingBarRouter(useRouter);
+	const originalGetUserActions = useCallback(useUserActions, []);
 
 	return (
 		<SidebarDrawer
@@ -72,11 +66,7 @@ const NavigationDrawer = function ({ model }) {
 									variant: "full",
 									getUserActions: (roles: Role[]) => {
 										const userActions =
-											originalGetUserActions(
-												roles,
-												router,
-												pageLoadingBar,
-											);
+											originalGetUserActions(roles);
 										return userActions.map(userAction => ({
 											modelView: {
 												...userAction.modelView,

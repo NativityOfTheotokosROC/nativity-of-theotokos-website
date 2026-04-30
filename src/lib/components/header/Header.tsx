@@ -6,26 +6,23 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { TextAlignJustifyIcon as MenuIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { Suspense, useContext } from "react";
+import { Suspense, useCallback, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
 import { Tooltip } from "react-tooltip";
 import { useNavigationDrawer } from "../../model-implementations/navigation-drawer";
-import { getUserActions } from "../../model-implementations/user-action";
+import { useUserActions } from "../../model-implementations/user-action";
 import { HeaderModel } from "../../models/header";
 import { georgia } from "../../third-party/fonts";
 import { Navlink } from "../../types/general";
+import { LoginTooltipContext } from "../../utilities/contexts";
 import { usePageLoadingBarRouter } from "../../utilities/page-loading-bar";
 import { useUserInformation } from "../../utilities/user";
 import NavigationDrawer from "../navigation-drawer/NavigationDrawer";
-import {
-	Link,
-	PageLoadingBarContext,
-} from "../page-loading-bar/PageLoadingBar";
+import { Link } from "../page-loading-bar/PageLoadingBar";
 import UserNavigationWidget, {
 	UserNavigationWidgetSkeleton,
 } from "../user-navigation-widget/UserNavigationWidget";
 import "./header.css";
-import { LoginTooltipContext } from "../../utilities/contexts";
 
 const Header = function ({ model }) {
 	const { navlinks, hasUserNavigationWidget } = model.modelView;
@@ -117,8 +114,7 @@ const NavMenuBar = function ({ model }) {
 	const {
 		menuItems: { navlinks, hasUserNavigationWidget },
 	} = model.modelView;
-	const pageLoadingBar = useContext(PageLoadingBarContext);
-	const router = usePageLoadingBarRouter(useRouter);
+	const originalGetUserActions = useCallback(useUserActions, []);
 
 	return (
 		<nav className="nav-menu">
@@ -154,11 +150,7 @@ const NavMenuBar = function ({ model }) {
 									style: "dropdown",
 									variant: "abbreviated",
 									getUserActions(roles) {
-										return getUserActions(
-											roles,
-											router,
-											pageLoadingBar,
-										);
+										return originalGetUserActions(roles);
 									},
 								})}
 							/>

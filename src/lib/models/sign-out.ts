@@ -1,4 +1,4 @@
-import { InteractiveModel, ModelInteraction } from "@mvc-react/mvc";
+import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 import { Notification } from "../types/general";
 
 export type SignOutStatus =
@@ -9,7 +9,10 @@ export interface SignOutModelView {
 	signOutStatus: SignOutStatus | null;
 }
 
-export type SignOutModelInteraction = ModelInteraction<"SIGN_OUT">;
+export type SignOutModelInteraction = InputModelInteraction<
+	"SIGN_OUT",
+	{ hardRefresh: boolean }
+>; // TODO: Tweak mvc-react
 
 export type SignOutModel = InteractiveModel<
 	SignOutModelView,
