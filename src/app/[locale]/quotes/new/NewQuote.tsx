@@ -34,7 +34,7 @@ const NewQuote = function ({ model }) {
 		watch,
 		reset,
 	} = useForm({
-		mode: "onBlur",
+		mode: "onChange",
 		resolver: zodResolver(quoteFormSchema),
 		shouldUnregister: true,
 		defaultValues: {
@@ -252,35 +252,31 @@ const NewQuote = function ({ model }) {
 										disabled: !isValid,
 										className:
 											"w-fit max-w-1/2 min-w-[8em]",
-										action() {
-											handleSubmit(async form => {
-												const {
-													authorEn,
-													quoteEn,
-													sourceEn,
-													authorRu,
-													quoteRu,
-													sourceRu,
-												} = form;
-												await quotePreviewModal.interact(
-													{
-														type: "OPEN",
-														input: {
-															englishQuote: {
-																author: authorEn,
-																quote: quoteEn,
-																source: sourceEn,
-															},
-															russianQuote: {
-																author: authorRu,
-																quote: quoteRu,
-																source: sourceRu,
-															},
-														},
+										action: handleSubmit(async form => {
+											const {
+												authorEn,
+												quoteEn,
+												sourceEn,
+												authorRu,
+												quoteRu,
+												sourceRu,
+											} = form;
+											await quotePreviewModal.interact({
+												type: "OPEN",
+												input: {
+													englishQuote: {
+														author: authorEn,
+														quote: quoteEn,
+														source: sourceEn,
 													},
-												);
+													russianQuote: {
+														author: authorRu,
+														quote: quoteRu,
+														source: sourceRu,
+													},
+												},
 											});
-										},
+										}),
 									})}
 								>
 									{t("preview")}
