@@ -69,6 +69,7 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 	) satisfies LoginTooltipModel["interact"];
 
 	useEffect(() => {
+		console.log("autoTriggerEffect called");
 		if (
 			autoTriggerExceptions &&
 			autoTriggerExceptions.includes(pathname as Path)
@@ -94,6 +95,7 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 	]);
 
 	useEffect(() => {
+		console.log("Resolve effect called");
 		if (userInformation !== "pending")
 			promiseWithResolvers.resolve(userInformation);
 	}, [promiseWithResolvers, userInformation]);

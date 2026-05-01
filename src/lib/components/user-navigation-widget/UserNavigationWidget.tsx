@@ -196,7 +196,7 @@ export const UserNavigationWidgetCore = function ({ model }) {
 								</DisclosureButton>
 								<DisclosurePanel
 									transition
-									className="flex origin-top flex-col border-t border-white/12 bg-gray-800 py-2 duration-300 ease-out *:w-full *:px-6 *:py-4 *:text-left *:uppercase *:hover:text-[#dcb042] *:active:bg-gray-950 *:active:text-[#dcb042] data-closed:h-1/2 data-closed:-translate-y-4 data-closed:opacity-0 md:*:px-8"
+									className="flex origin-top flex-col border-t border-white/12 bg-gray-800 py-2 duration-300 ease-out *:w-full *:px-6 *:py-4 *:text-left *:uppercase *:hover:text-[#ffd400] *:active:bg-gray-950 *:active:text-[#ffd400] data-closed:h-1/2 data-closed:-translate-y-4 data-closed:opacity-0 md:*:px-8"
 								>
 									{[
 										...userDetails.userActions.map(
@@ -240,7 +240,7 @@ export const UserNavigationWidgetCore = function ({ model }) {
 								<MenuItems
 									anchor="bottom end"
 									transition
-									className="z-21 flex w-40 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-800 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:px-6 *:py-4 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#dcb042] focus:outline-none *:active:bg-gray-950 *:active:text-[#dcb042] data-closed:scale-92 data-closed:opacity-0"
+									className="z-21 mr-1 flex w-40 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-800 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:px-6 *:py-4 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#ffd400] focus:outline-none *:active:bg-gray-950 *:active:text-[#ffd400] data-closed:scale-92 data-closed:opacity-0"
 								>
 									{[
 										...userDetails.userActions.map(
