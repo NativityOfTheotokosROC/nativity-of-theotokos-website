@@ -15,19 +15,20 @@ type LoginTooltipOptions = Partial<{
 }>;
 
 export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
-	const pathname = usePathname();
-	const { autoTriggerExceptions, duration } = options;
 	const [modelView, setLoginTooltipModelView] =
 		useState<LoginTooltipModelView>({
 			isOpen: false,
 			text,
 		});
+	const pathname = usePathname();
+	const { autoTriggerExceptions, duration } = options;
 	const userInformation = useUserInformation();
 	const [cookies, setCookie] = useCookies<
 		"tooltipShown",
 		{ tooltipShown: boolean }
 	>(["tooltipShown"]);
 	const [promiseWithResolvers] = useState(Promise.withResolvers());
+
 	const interact = useCallback(
 		async interaction => {
 			switch (interaction.type) {
@@ -69,7 +70,7 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 	) satisfies LoginTooltipModel["interact"];
 
 	useEffect(() => {
-		console.log("autoTriggerEffect called");
+		// console.log("autoTriggerEffect called");
 		if (
 			autoTriggerExceptions &&
 			autoTriggerExceptions.includes(pathname as Path)
@@ -95,7 +96,7 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 	]);
 
 	useEffect(() => {
-		console.log("Resolve effect called");
+		// console.log("Resolve effect called");
 		if (userInformation !== "pending")
 			promiseWithResolvers.resolve(userInformation);
 	}, [promiseWithResolvers, userInformation]);

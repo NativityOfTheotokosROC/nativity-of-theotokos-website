@@ -117,14 +117,18 @@
 		"preview": "Предпросмотр",
 		"addQuote": "Добавить цитату",
 		"successMessage": "Цитата успешно добавлена",
-		"failureMessage": "Не удалось добавить цитату. Ошибка:"
+		"failureMessage": "Не удалось добавить цитату. Ошибка:",
+		"quotePreview": "Предпросмотр цитаты"
 	},
 	"signIn": {
 		"metaTitle": "Вход",
 		"title": "Вход",
 		"description": "Войдите на сайт, чтобы получить доступ к административным ресурсам.",
 		"successMessage": "Скоро вы будете перенаправлены на страницу входа {serviceName}. Пожалуйста, подождите...",
-		"failureMessage": "Не удалось подключиться к входу через {serviceName}:"
+		"failureMessage": "Не удалось подключиться к входу через {serviceName}:",
+		"consent": "Входя в систему, вы соглашаетесь с нашими {termsOfService} и подтверждаете, что ознакомились с нашей {privacyPolicy}",
+		"privacyPolicy": "Политика конфиденциальности",
+		"termsOfService": "Условия использования"
 	},
 	"signInButton": {
 		"buttonText": "Войти через {serviceName}"

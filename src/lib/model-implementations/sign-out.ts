@@ -54,14 +54,13 @@ export function useSignOut(
 							notification: { type: "success" },
 						},
 					});
-					// if (interaction.input.hardRefresh) {
-					// 	window.open(signOutEndpoint, "_self");
-					// 	break;
-					// }
-					// router.push(signOutEndpoint);
-					// router.refresh();
-					// break;
-					window.open(signOutEndpoint, "_self");
+					if (interaction.input.hardNavigate) {
+						window.open(signOutEndpoint, "_self");
+						break;
+					}
+					router.push(signOutEndpoint);
+					router.refresh();
+					break;
 				}
 			}
 		},

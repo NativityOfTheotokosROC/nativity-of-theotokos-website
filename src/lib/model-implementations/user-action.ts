@@ -38,7 +38,7 @@ export function useUserActions() {
 					action: async () => {
 						await signOut.interact({
 							type: "SIGN_OUT",
-							input: { hardRefresh: true },
+							input: { hardNavigate: true },
 						});
 					},
 				});

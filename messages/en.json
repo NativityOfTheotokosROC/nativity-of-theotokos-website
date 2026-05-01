@@ -117,14 +117,18 @@
 		"preview": "Preview",
 		"addQuote": "Add Quote",
 		"successMessage": "Quote successfully added",
-		"failureMessage": "Could not add the quote. Error:"
+		"failureMessage": "Could not add the quote. Error:",
+		"quotePreview": "Quote Preview"
 	},
 	"signIn": {
 		"metaTitle": "Sign In",
 		"title": "Sign In",
 		"description": "Sign in to the website to access admin resources.",
 		"successMessage": "Redirecting you to {serviceName} sign-in shortly. Please wait...",
-		"failureMessage": "Could not connect to {serviceName} sign-in:"
+		"failureMessage": "Could not connect to {serviceName} sign-in:",
+		"consent": "By signing in, you agree with our {termsOfService} and acknowledge that you have read our {privacyPolicy}.",
+		"privacyPolicy": "Privacy Policy",
+		"termsOfService": "Terms of Service"
 	},
 	"signInButton": {
 		"buttonText": "Sign in with {serviceName}"

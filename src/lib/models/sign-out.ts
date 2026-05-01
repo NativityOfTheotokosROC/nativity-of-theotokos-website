@@ -11,7 +11,7 @@ export interface SignOutModelView {
 
 export type SignOutModelInteraction = InputModelInteraction<
 	"SIGN_OUT",
-	{ hardRefresh: boolean }
+	{ hardNavigate: boolean }
 >; // TODO: Tweak mvc-react
 
 export type SignOutModel = InteractiveModel<
