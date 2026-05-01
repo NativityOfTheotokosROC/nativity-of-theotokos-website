@@ -1,14 +1,13 @@
+import HymnsOrnament from "@/public/assets/ornament_9.svg";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { DailySaintsWidgetModel } from "../../models/daily-saints-widget";
-import Image from "next/image";
 import { toZonedTime } from "date-fns-tz";
 import { motion } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
-import HymnsOrnament from "@/public/assets/ornament_9.svg";
+import Image from "next/image";
 import Link from "next/link";
+import { DailySaintsWidgetModel } from "../../models/daily-saints-widget";
 import { getLocalTimeZone } from "../../utilities/date-time";
 import { usePageLoadingBarRouter } from "../../utilities/page-loading-bar";
-import { useRouter } from "@/src/i18n/navigation";
 
 const DailySaintsWidget = function ({ model }) {
 	const { details, hymnsModal } = model.modelView;
@@ -23,7 +22,7 @@ const DailySaintsWidget = function ({ model }) {
 	).toLocaleDateString(locale === "en" ? "en-uk" : "ru-RU", {
 		dateStyle: "full",
 	});
-	const router = usePageLoadingBarRouter(useRouter);
+	const router = usePageLoadingBarRouter();
 
 	return (
 		<motion.div

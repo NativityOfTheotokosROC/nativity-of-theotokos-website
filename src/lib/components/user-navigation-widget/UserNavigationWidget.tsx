@@ -19,14 +19,15 @@ import {
 import { ChevronDown as DropdownIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { Suspense } from "react";
 import { Fragment } from "react/jsx-runtime";
+import { useUserActions } from "../../model-implementations/user-action";
 import {
 	NavigationUser,
 	UserNavigationWidgetModel,
+	UserNavigationWidgetModelView,
 	UserNavigationWidgetVariant,
 } from "../../models/user-navigation-widget";
-import { useUserInformation } from "../../utilities/user";
+import { UserInformation, useUserInformation } from "../../utilities/user";
 import UserAction from "../user-action/UserAction";
 
 type WidgetVariantModel = ReadonlyModel<{
@@ -35,6 +36,12 @@ type WidgetVariantModel = ReadonlyModel<{
 	greeting: string;
 }>;
 type DropdownButtonModel = ReadonlyModel<{ isDrawn: boolean }>;
+
+type UserNavigationWidgetCoreModel = ReadonlyModel<
+	UserNavigationWidgetModelView & {
+		userInformation: UserInformation;
+	}
+>;
 
 const UserDisplay = function ({ model }) {
 	const { variant, greeting, user } = model.modelView;
@@ -110,17 +117,13 @@ const DropdownButtonContent = function ({ model, children }) {
 
 const UserNavigationWidget = function ({ model }) {
 	const { variant } = model.modelView;
-	return (
-		// HACK: Hacky
-		<Suspense
-			fallback={
-				<UserNavigationWidgetSkeleton
-					model={newReadonlyModel({ variant })}
-				/>
-			}
-		>
-			<UserNavigationWidgetCore model={model} />
-		</Suspense>
+	const userInformation = useUserInformation();
+	return userInformation == "pending" ? (
+		<UserNavigationWidgetSkeleton model={newReadonlyModel({ variant })} />
+	) : (
+		<UserNavigationWidgetCore
+			model={newReadonlyModel({ ...model.modelView, userInformation })}
+		/>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<UserNavigationWidgetModel>>;
 
@@ -150,25 +153,20 @@ export const UserNavigationWidgetSkeleton = function ({ model }) {
 
 export const UserNavigationWidgetCore = function ({ model }) {
 	const {
-		modelView: { variant, style, getUserActions },
+		modelView: { variant, style, userInformation },
 	} = model;
 
 	const t = useTranslations("userNavigation");
-	const userInformation = useUserInformation();
-	const userActions =
-		userInformation != null && userInformation != "pending"
-			? getUserActions(userInformation.roles)
-			: null;
-	const userDetails =
-		userInformation && userInformation != "pending"
-			? {
-					user: {
-						name: userInformation.name,
-						avatar: userInformation.avatar,
-					},
-					userActions: userActions!,
-				}
-			: null;
+	const userActions = useUserActions();
+	const userDetails = userInformation
+		? {
+				user: {
+					name: userInformation.name,
+					avatar: userInformation.avatar,
+				},
+				userActions: userActions!,
+			}
+		: null;
 
 	const greeting =
 		userDetails &&
@@ -280,11 +278,9 @@ export const UserNavigationWidgetCore = function ({ model }) {
 				)}
 			</>
 		</div>
-	) : userInformation === "pending" ? (
-		<UserNavigationWidgetSkeleton model={newReadonlyModel({ variant })} />
 	) : (
 		<></>
 	);
-} satisfies ModeledVoidComponent<InitializedModel<UserNavigationWidgetModel>>;
+} satisfies ModeledVoidComponent<UserNavigationWidgetCoreModel>;
 
 export default UserNavigationWidget;

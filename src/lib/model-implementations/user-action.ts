@@ -1,16 +1,21 @@
-import { usePathname, useRouter } from "@/src/i18n/navigation";
+import { usePathname } from "@/src/i18n/navigation";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { UserActionModel } from "../models/user-action";
-import { Path, Role } from "../types/general";
+import { Path } from "../types/general";
 import { usePageLoadingBarRouter } from "../utilities/page-loading-bar";
+import { useUserInformation } from "../utilities/user";
 import { getUserActionNames } from "../utilities/user-action";
 import { useSignOut } from "./sign-out";
 
-export function useUserActions(roles: Role[]) {
-	const router = usePageLoadingBarRouter(useRouter);
+export function useUserActions() {
+	const userInformation = useUserInformation();
+	const router = usePageLoadingBarRouter();
 	const pathname = usePathname();
 	const signOut = useSignOut(pathname as Path, router);
-	const actionNames = getUserActionNames(roles);
+
+	if (!userInformation || userInformation === "pending") return [];
+	const actionNames = getUserActionNames(userInformation.roles);
+
 	return [...actionNames].map(actionName => {
 		switch (actionName) {
 			case "NEW_QUOTE": {

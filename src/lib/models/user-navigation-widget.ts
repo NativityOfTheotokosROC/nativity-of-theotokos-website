@@ -13,7 +13,7 @@ export type UserNavigationWidgetVariant = "full" | "no_avatar" | "abbreviated";
 export type UserNavigationWidgetStyle = "dropdown" | "accordion";
 
 export interface UserNavigationWidgetModelView {
-	getUserActions: (roles: Role[]) => UserActionModel[];
+	userActions: UserActionModel[];
 	variant: UserNavigationWidgetVariant;
 	style: UserNavigationWidgetStyle;
 }

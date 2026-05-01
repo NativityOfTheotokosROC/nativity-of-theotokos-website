@@ -1,15 +1,14 @@
 "use client";
 
-import { useRouter } from "@/src/i18n/navigation";
+import { ModeledContainerComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { PageNavigationButtonModel } from "../../models/page-navigation-button";
 import { usePageLoadingBarRouter } from "../../utilities/page-loading-bar";
 import Button from "./Button";
-import { ModeledContainerComponent } from "@mvc-react/components";
 
 const PageNavigationButton = function ({ model, children }) {
 	const { endpoint, browserNavigation } = model.modelView;
-	const router = usePageLoadingBarRouter(useRouter);
+	const router = usePageLoadingBarRouter();
 
 	return (
 		<Button

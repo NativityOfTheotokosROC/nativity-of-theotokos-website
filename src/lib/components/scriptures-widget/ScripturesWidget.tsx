@@ -36,7 +36,7 @@ const ScripturesWidget = function ({ model }) {
 			<div className="fasting-info bg-gray-950 p-2.5 px-4 text-center text-white md:mt-0 md:px-10 md:text-left lg:text-center">
 				<span className="text-base">{fastingInfo}</span>
 			</div>
-			<div className="flex max-h-[15em] min-h-[9em] bg-gray-700 p-6 text-white md:max-h-[11em] md:px-10 lg:px-6 [&_a]:underline [&_a]:hover:text-[#DCB042] [&_a]:hover:underline">
+			<div className="flex max-h-[15em] min-h-[9em] bg-gray-700 p-6 text-white md:max-h-[11em] md:px-10 lg:px-6 [&_a]:underline [&_a]:hover:text-[#ffd400] [&_a]:hover:underline">
 				<div className="scriptures flex grow flex-col gap-1 overflow-y-auto pr-3">
 					{[
 						...scriptures.map((scripture, index) => (

@@ -1,12 +1,11 @@
 "use client";
 
 import LogoIcon from "@/public/assets/logo-icon.svg";
-import { useRouter } from "@/src/i18n/navigation";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { TextAlignJustifyIcon as MenuIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { Suspense, useCallback, useContext } from "react";
+import { useContext } from "react";
 import { useMediaQuery } from "react-responsive";
 import { useNavigationDrawer } from "../../model-implementations/navigation-drawer";
 import { useUserActions } from "../../model-implementations/user-action";
@@ -19,14 +18,12 @@ import { useUserInformation } from "../../utilities/user";
 import LoginTooltip from "../login-tooltip/LoginTooltip";
 import NavigationDrawer from "../navigation-drawer/NavigationDrawer";
 import { Link } from "../page-loading-bar/PageLoadingBar";
-import UserNavigationWidget, {
-	UserNavigationWidgetSkeleton,
-} from "../user-navigation-widget/UserNavigationWidget";
+import UserNavigationWidget from "../user-navigation-widget/UserNavigationWidget";
 import "./header.css";
 
 const Header = function ({ model }) {
 	const { navlinks, hasUserNavigationWidget } = model.modelView;
-	const router = usePageLoadingBarRouter(useRouter);
+	const router = usePageLoadingBarRouter();
 	const isLargeScreen = useMediaQuery({ minWidth: 1024 });
 	const isPortrait = useMediaQuery({ orientation: "portrait" });
 	const navigationDrawer = useNavigationDrawer(
@@ -108,7 +105,7 @@ const NavMenuBar = function ({ model }) {
 	const {
 		menuItems: { navlinks, hasUserNavigationWidget },
 	} = model.modelView;
-	const originalGetUserActions = useCallback(useUserActions, []);
+	const userActions = useUserActions();
 
 	return (
 		<nav className="nav-menu">
@@ -126,25 +123,13 @@ const NavMenuBar = function ({ model }) {
 					)),
 				]}
 				{hasUserNavigationWidget && (
-					<Suspense
-						fallback={
-							<UserNavigationWidgetSkeleton
-								model={newReadonlyModel({
-									variant: "abbreviated",
-								})}
-							/>
-						}
-					>
-						<UserNavigationWidget
-							model={newReadonlyModel({
-								style: "dropdown",
-								variant: "abbreviated",
-								getUserActions(roles) {
-									return originalGetUserActions(roles);
-								},
-							})}
-						/>
-					</Suspense>
+					<UserNavigationWidget
+						model={newReadonlyModel({
+							style: "dropdown",
+							variant: "abbreviated",
+							userActions,
+						})}
+					/>
 				)}
 			</div>
 		</nav>

@@ -10,13 +10,12 @@ import {
 	ModelInteraction,
 	newReadonlyModel,
 } from "@mvc-react/mvc";
-import { Suspense, useCallback } from "react";
+import { Suspense } from "react";
 import { useUserActions } from "../../model-implementations/user-action";
 import {
 	NavigationDrawerModel,
 	NavigationDrawerModelView,
 } from "../../models/navigation-drawer";
-import { Role } from "../../types/general";
 import { Link } from "../page-loading-bar/PageLoadingBar";
 import UserNavigationWidget, {
 	UserNavigationWidgetSkeleton,
@@ -30,7 +29,7 @@ type MenuModel = InteractiveModel<MenuModelView, MenuModelInteraction>;
 const NavigationDrawer = function ({ model }) {
 	const { modelView, interact } = model;
 	const { isDrawn, navlinks, hasUserNavigationWidget } = modelView;
-	const originalGetUserActions = useCallback(useUserActions, []);
+	const originalUserActions = useUserActions();
 
 	return (
 		<SidebarDrawer
@@ -64,10 +63,8 @@ const NavigationDrawer = function ({ model }) {
 								model={newReadonlyModel({
 									style: "dropdown",
 									variant: "full",
-									getUserActions: (roles: Role[]) => {
-										const userActions =
-											originalGetUserActions(roles);
-										return userActions.map(userAction => ({
+									userActions: originalUserActions.map(
+										userAction => ({
 											modelView: {
 												...userAction.modelView,
 												async action() {
@@ -77,8 +74,8 @@ const NavigationDrawer = function ({ model }) {
 													return userAction.modelView.action();
 												},
 											},
-										}));
-									},
+										}),
+									),
 								})}
 							/>
 						</Suspense>

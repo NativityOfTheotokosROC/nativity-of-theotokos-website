@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "@/src/i18n/navigation";
 import { useSignOut } from "@/src/lib/model-implementations/sign-out";
 import { Path } from "@/src/lib/types/general";
 import { usePageLoadingBarRouter } from "@/src/lib/utilities/page-loading-bar";
@@ -11,7 +10,7 @@ import Button from "./Button";
 
 const SignOutButton = function ({ model, children }) {
 	const { signOutEndpoint } = model.modelView;
-	const router = usePageLoadingBarRouter(useRouter);
+	const router = usePageLoadingBarRouter();
 	const signOutModel = useSignOut(signOutEndpoint, router);
 	const { signOutStatus } = signOutModel.modelView;
 

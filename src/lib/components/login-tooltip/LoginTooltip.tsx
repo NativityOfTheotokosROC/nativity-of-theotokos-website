@@ -8,7 +8,7 @@ const LoginTooltip = function ({ model }) {
 	return (
 		<Tooltip
 			id="login-tooltip"
-			className="login-tooltip z-13"
+			className="login-tooltip"
 			isOpen={isOpen}
 			content={text}
 			border="1px solid #dcb042"

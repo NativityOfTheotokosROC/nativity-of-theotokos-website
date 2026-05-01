@@ -190,7 +190,7 @@ const Footer = function ({ model }) {
 						link: name => (
 							<Link
 								href="https://github.com/Grod56"
-								className="text-[#ffd400] underline"
+								className="text-[#dcb042] underline"
 								target="_blank"
 							>
 								{name}

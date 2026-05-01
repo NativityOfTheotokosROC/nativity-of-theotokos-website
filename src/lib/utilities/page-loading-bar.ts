@@ -4,13 +4,11 @@ import { useContext } from "react";
 import { PageLoadingBarContext } from "../components/page-loading-bar/PageLoadingBar";
 import { QueryParams } from "next-intl/navigation";
 
-export function usePageLoadingBarRouter<T extends typeof useRouter>(
-	useRouterHook: T,
-) {
-	const router = useRouterHook();
+export function usePageLoadingBarRouter() {
+	const { interact } = useContext(PageLoadingBarContext);
+	const router = useRouter();
 	const pathName = usePathname();
 	const locale = useLocale();
-	const { interact } = useContext(PageLoadingBarContext);
 	return {
 		...router,
 		async push(href, options?) {
