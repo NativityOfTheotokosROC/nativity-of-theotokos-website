@@ -190,7 +190,8 @@
 		"galleryImage": "Изображение галереи"
 	},
 	"miscellaneous": {
-		"futureContent": "Контент будет добавлен в ближайшее время!"
+		"futureContent": "Контент будет добавлен в ближайшее время!",
+		"closeButton": "Закрыть"
 	},
 	"validation": {
 		"nonEmpty": "Поле {field} не может быть пустым",

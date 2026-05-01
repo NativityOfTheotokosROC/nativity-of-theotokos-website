@@ -1,9 +1,10 @@
 "use client";
 
 import Button from "@/src/lib/components/button/Button";
-import { createToast } from "@/src/lib/components/miscellaneous/utility";
+import QuotePreviewModal from "@/src/lib/components/quote-preview-modal/QuotePreviewModal";
 import Spinner from "@/src/lib/components/spinner/Spinner";
 import Tabs from "@/src/lib/components/tabs/Tabs";
+import { useQuotePreviewModal } from "@/src/lib/model-implementations/quote-preview-model";
 import { useTabs } from "@/src/lib/model-implementations/tabs";
 import { NewQuoteModel } from "@/src/lib/models/new-quote";
 import { georgia } from "@/src/lib/third-party/fonts";
@@ -16,24 +17,19 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 const NewQuote = function ({ model }) {
 	const { modelView, interact } = model;
 	const { newQuoteNotification } = modelView;
 	const t = useTranslations("newQuote");
-	const tabs = useTabs([
-		newReadonlyModel({ name: t("english") }),
-		newReadonlyModel({ name: t("russian") }),
-	]);
 	const quoteFormSchema = useQuoteFormSchema();
 	const defaultValues = getDefaultValues();
 	const currentDate = getDateString(new Date(), true);
 	const {
 		register,
 		handleSubmit,
-		formState: { isSubmitting, errors },
+		formState: { isSubmitting, errors, isValid },
 		setValue,
 		watch,
 		reset,
@@ -47,246 +43,278 @@ const NewQuote = function ({ model }) {
 		},
 	});
 	const isQuoteScheduled = watch("isQuoteScheduled");
-
-	useEffect(() => {
-		if (newQuoteNotification?.type === "success") {
-			createToast({
-				type: "success",
-				message: newQuoteNotification.text,
-			});
-		} else if (newQuoteNotification?.type === "failure") {
-			createToast({
-				type: "failure",
-				message: newQuoteNotification.message,
-			});
-		}
-	}, [newQuoteNotification]);
+	const tabs = useTabs([
+		newReadonlyModel({ name: t("english") }),
+		newReadonlyModel({ name: t("russian") }),
+	]);
+	const quotePreviewModal = useQuotePreviewModal();
 
 	return (
-		<main className="new-quote border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black">
-			<div className="new-quote-content flex flex-col gap-6 p-8 py-9 md:py-10 lg:px-20">
-				<span
-					className={`mb-2 text-[2.75rem]/tight font-semibold md:text-black ${georgia.className}`}
-				>
-					{t("title")}
-					<hr className="mt-4 mb-0 md:w-full" />
-				</span>
-				<form
-					onSubmit={handleSubmit(
-						async form => {
-							const {
-								authorEn,
-								quoteEn,
-								sourceEn,
-								authorRu,
-								quoteRu,
-								sourceRu,
-								scheduledDate,
-							} = form;
-							await interact({
-								type: "ADD_QUOTE",
-								input: {
-									englishQuote: {
-										author: authorEn,
-										quote: quoteEn,
-										source: sourceEn,
-									},
-									russianQuote: {
-										author: authorRu,
-										quote: quoteRu,
-										source: sourceRu,
-									},
+		<>
+			{quotePreviewModal.modelView && (
+				<QuotePreviewModal
+					model={{
+						...quotePreviewModal,
+						modelView: quotePreviewModal.modelView,
+					}}
+				/>
+			)}
+			<main className="new-quote border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black">
+				<div className="new-quote-content flex flex-col gap-6 p-8 py-9 md:py-10 lg:px-20">
+					<span
+						className={`mb-2 text-[2.75rem]/tight font-semibold md:text-black ${georgia.className}`}
+					>
+						{t("title")}
+						<hr className="mt-4 mb-0 md:w-full" />
+					</span>
+					<form
+						onSubmit={handleSubmit(
+							async form => {
+								const {
+									authorEn,
+									quoteEn,
+									sourceEn,
+									authorRu,
+									quoteRu,
+									sourceRu,
 									scheduledDate,
-								},
-							});
-							reset();
-						},
-						async errors => {
-							if (
-								errors.authorEn ||
-								errors.sourceEn ||
-								errors.quoteEn
-							)
-								return await tabs.interact({
-									type: "SWITCH_TAB",
-									input: { id: 0 },
+								} = form;
+								await interact({
+									type: "ADD_QUOTE",
+									input: {
+										englishQuote: {
+											author: authorEn,
+											quote: quoteEn,
+											source: sourceEn,
+										},
+										russianQuote: {
+											author: authorRu,
+											quote: quoteRu,
+											source: sourceRu,
+										},
+										scheduledDate,
+									},
 								});
-							if (
-								errors.authorRu ||
-								errors.sourceRu ||
-								errors.quoteRu
-							)
-								return await tabs.interact({
-									type: "SWITCH_TAB",
-									input: { id: 1 },
-								});
-						},
-					)}
-				>
-					<div className="flex flex-col gap-6 md:w-3/4 lg:w-6/10">
-						<Tabs model={tabs}>
-							<div className="flex flex-col gap-3">
-								<input
-									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorEn ? "border-red-800" : "border-gray-400"}`}
-									placeholder={t("author")}
-									id="quote-author"
-									formNoValidate
-									autoCapitalize="words"
-									autoComplete="on"
-									{...register("authorEn")}
-								/>
-								{errors.authorEn && (
-									<span className="text-sm text-red-800">
-										{errors.authorEn.message}
-									</span>
-								)}
-								<input
-									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceEn ? "border-red-800" : "border-gray-400"}`}
-									placeholder={`${t("source")} (${t("optional")})`}
-									id="quote-source"
-									autoComplete="on"
-									formNoValidate
-									{...register("sourceEn")}
-								/>
-								{errors.sourceEn && (
-									<span className="text-sm text-red-800">
-										{errors.sourceEn.message}
-									</span>
-								)}
-								<textarea
-									className={`w-full rounded-lg border bg-white p-4 ${errors.quoteEn ? "border-red-800" : "border-gray-400"}`}
-									placeholder={t("quote")}
-									rows={5}
-									autoComplete="off"
-									{...register("quoteEn")}
-								/>
-								{errors.quoteEn && (
-									<span className="text-sm text-red-800">
-										{errors.quoteEn.message}
-									</span>
-								)}
-							</div>
-							<div className="flex flex-col gap-3">
-								<input
-									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorRu ? "border-red-800" : "border-gray-400"}`}
-									placeholder={`${t("author")} (${t("optional")})`}
-									id="quote-author-ru"
-									autoCapitalize="words"
-									autoComplete="on"
-									{...register("authorRu")}
-								/>
-								{errors.authorRu && (
-									<span className="text-sm text-red-800">
-										{errors.authorRu.message}
-									</span>
-								)}
-								<input
-									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceRu ? "border-red-800" : "border-gray-400"}`}
-									placeholder={`${t("source")} (${t("optional")})`}
-									id="quote-source-ru"
-									autoComplete="on"
-									{...register("sourceRu")}
-								/>
-								{errors.sourceRu && (
-									<span className="text-sm text-red-800">
-										{errors.sourceRu.message}
-									</span>
-								)}
-								<textarea
-									className={`w-full rounded-lg border bg-white p-4 ${errors.quoteRu ? "border-red-800" : "border-gray-400"}`}
-									placeholder={`${t("quote")} (${t("optional")})`}
-									rows={5}
-									id="quote-ru"
-									autoComplete="off"
-									{...register("quoteRu")}
-								/>
-								{errors.quoteRu && (
-									<span className="text-sm text-red-800">
-										{errors.quoteRu.message}
-									</span>
-								)}
-							</div>
-						</Tabs>
-						<div className="flex flex-col gap-3">
-							<Field className="flex items-center gap-3">
-								<Checkbox
-									{...register("isQuoteScheduled")}
-									value={isQuoteScheduled}
-									onChange={value => {
-										setValue("isQuoteScheduled", value);
-									}}
-									className={`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white data-checked:bg-gray-900`}
-								>
-									<Check
-										className={
-											"hidden size-4 stroke-white group-data-checked:block"
-										}
-									/>
-								</Checkbox>
-								<Label>{t("schedulerCheckLabel")}</Label>
-							</Field>
-							{isQuoteScheduled && (
-								<>
+								reset();
+							},
+							async errors => {
+								if (
+									errors.authorEn ||
+									errors.sourceEn ||
+									errors.quoteEn
+								)
+									return await tabs.interact({
+										type: "SWITCH_TAB",
+										input: { id: 0 },
+									});
+								if (
+									errors.authorRu ||
+									errors.sourceRu ||
+									errors.quoteRu
+								)
+									return await tabs.interact({
+										type: "SWITCH_TAB",
+										input: { id: 1 },
+									});
+							},
+						)}
+					>
+						<div className="flex flex-col gap-6 md:w-3/4 lg:w-6/10">
+							<Tabs model={tabs}>
+								<div className="flex flex-col gap-3">
 									<input
-										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.scheduledDate ? "border-red-800" : "border-gray-400"}`}
-										type="date"
-										id="scheduled-date"
+										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorEn ? "border-red-800" : "border-gray-400"}`}
+										placeholder={t("author")}
+										id="quote-author"
 										formNoValidate
-										min={currentDate}
-										{...register("scheduledDate")}
+										autoCapitalize="words"
+										autoComplete="on"
+										{...register("authorEn")}
 									/>
-									{errors.scheduledDate && (
+									{errors.authorEn && (
 										<span className="text-sm text-red-800">
-											{errors.scheduledDate.message}
+											{errors.authorEn.message}
 										</span>
 									)}
-								</>
-							)}
-						</div>
-						{errors.form && (
-							<span className="text-sm text-red-800">
-								{errors.form.message}
-							</span>
-						)}
-						<hr className="mt-1 w-full" />
-						<div className="mt-1 flex w-full justify-start gap-3">
-							<Button
-								model={newReadonlyModel({
-									type: "button",
-									disabled: true,
-									className: "w-fit max-w-1/2 min-w-[8em]",
-								})}
-							>
-								{t("preview")}
-							</Button>
-							<Button
-								model={newReadonlyModel({
-									type: "submit",
-									variant: "standard",
-									disabled:
-										isSubmitting ||
-										newQuoteNotification?.type ===
-											"pending",
-									className:
-										"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
-								})}
-							>
-								{newQuoteNotification?.type === "pending" ? (
-									<Spinner
-										model={newReadonlyModel({
-											color: "white",
-											size: 20,
-										})}
+									<input
+										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceEn ? "border-red-800" : "border-gray-400"}`}
+										placeholder={`${t("source")} (${t("optional")})`}
+										id="quote-source"
+										autoComplete="on"
+										formNoValidate
+										{...register("sourceEn")}
 									/>
-								) : (
-									t("addQuote")
+									{errors.sourceEn && (
+										<span className="text-sm text-red-800">
+											{errors.sourceEn.message}
+										</span>
+									)}
+									<textarea
+										className={`w-full rounded-lg border bg-white p-4 ${errors.quoteEn ? "border-red-800" : "border-gray-400"}`}
+										placeholder={t("quote")}
+										rows={5}
+										autoComplete="off"
+										{...register("quoteEn")}
+									/>
+									{errors.quoteEn && (
+										<span className="text-sm text-red-800">
+											{errors.quoteEn.message}
+										</span>
+									)}
+								</div>
+								<div className="flex flex-col gap-3">
+									<input
+										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorRu ? "border-red-800" : "border-gray-400"}`}
+										placeholder={`${t("author")} (${t("optional")})`}
+										id="quote-author-ru"
+										autoCapitalize="words"
+										autoComplete="on"
+										{...register("authorRu")}
+									/>
+									{errors.authorRu && (
+										<span className="text-sm text-red-800">
+											{errors.authorRu.message}
+										</span>
+									)}
+									<input
+										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceRu ? "border-red-800" : "border-gray-400"}`}
+										placeholder={`${t("source")} (${t("optional")})`}
+										id="quote-source-ru"
+										autoComplete="on"
+										{...register("sourceRu")}
+									/>
+									{errors.sourceRu && (
+										<span className="text-sm text-red-800">
+											{errors.sourceRu.message}
+										</span>
+									)}
+									<textarea
+										className={`w-full rounded-lg border bg-white p-4 ${errors.quoteRu ? "border-red-800" : "border-gray-400"}`}
+										placeholder={`${t("quote")} (${t("optional")})`}
+										rows={5}
+										id="quote-ru"
+										autoComplete="off"
+										{...register("quoteRu")}
+									/>
+									{errors.quoteRu && (
+										<span className="text-sm text-red-800">
+											{errors.quoteRu.message}
+										</span>
+									)}
+								</div>
+							</Tabs>
+							<div className="flex flex-col gap-3">
+								<Field className="flex items-center gap-3">
+									<Checkbox
+										{...register("isQuoteScheduled")}
+										value={isQuoteScheduled}
+										onChange={value => {
+											setValue("isQuoteScheduled", value);
+										}}
+										className={`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white data-checked:bg-gray-900`}
+									>
+										<Check
+											className={
+												"hidden size-4 stroke-white group-data-checked:block"
+											}
+										/>
+									</Checkbox>
+									<Label>{t("schedulerCheckLabel")}</Label>
+								</Field>
+								{isQuoteScheduled && (
+									<>
+										<input
+											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.scheduledDate ? "border-red-800" : "border-gray-400"}`}
+											type="date"
+											id="scheduled-date"
+											formNoValidate
+											min={currentDate}
+											{...register("scheduledDate")}
+										/>
+										{errors.scheduledDate && (
+											<span className="text-sm text-red-800">
+												{errors.scheduledDate.message}
+											</span>
+										)}
+									</>
 								)}
-							</Button>
+							</div>
+							{errors.form && (
+								<span className="text-sm text-red-800">
+									{errors.form.message}
+								</span>
+							)}
+							<hr className="mt-1 w-full" />
+							<div className="mt-1 flex w-full justify-start gap-3">
+								<Button
+									model={newReadonlyModel({
+										type: "button",
+										disabled: isValid,
+										className:
+											"w-fit max-w-1/2 min-w-[8em]",
+										action() {
+											handleSubmit(async form => {
+												const {
+													authorEn,
+													quoteEn,
+													sourceEn,
+													authorRu,
+													quoteRu,
+													sourceRu,
+												} = form;
+												await quotePreviewModal.interact(
+													{
+														type: "OPEN",
+														input: {
+															englishQuote: {
+																author: authorEn,
+																quote: quoteEn,
+																source: sourceEn,
+															},
+															russianQuote: {
+																author: authorRu,
+																quote: quoteRu,
+																source: sourceRu,
+															},
+														},
+													},
+												);
+											});
+										},
+									})}
+								>
+									{t("preview")}
+								</Button>
+								<Button
+									model={newReadonlyModel({
+										type: "submit",
+										variant: "standard",
+										disabled:
+											isSubmitting ||
+											newQuoteNotification?.type ===
+												"pending",
+										className:
+											"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
+									})}
+								>
+									{newQuoteNotification?.type ===
+									"pending" ? (
+										<Spinner
+											model={newReadonlyModel({
+												color: "white",
+												size: 20,
+											})}
+										/>
+									) : (
+										t("addQuote")
+									)}
+								</Button>
+							</div>
 						</div>
-					</div>
-				</form>
-			</div>
-		</main>
+					</form>
+				</div>
+			</main>
+		</>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<NewQuoteModel>>;
 

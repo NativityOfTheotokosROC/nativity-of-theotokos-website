@@ -1,6 +1,9 @@
-import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
+import {
+	InputModelInteraction,
+	InteractiveModel,
+	ModelInteraction,
+} from "@mvc-react/mvc";
 import { Quote } from "./new-quote";
-import { ModalToggleValue } from "./modal";
 
 export interface QuotePreviewModalModelView {
 	isOpen: boolean;
@@ -8,10 +11,12 @@ export interface QuotePreviewModalModelView {
 	russianQuote: Partial<Quote>;
 }
 
-export type QuotePreviewModalModelInteraction = InputModelInteraction<
-	"TOGGLE",
-	{ value: ModalToggleValue }
->;
+export type QuotePreviewModalModelInteraction =
+	| InputModelInteraction<
+			"OPEN",
+			Pick<QuotePreviewModalModelView, "englishQuote" | "russianQuote">
+	  >
+	| ModelInteraction<"CLOSE">;
 
 export type QuotePreviewModalModel = InteractiveModel<
 	QuotePreviewModalModelView,

@@ -1,18 +1,49 @@
-import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
+import { InitializedModel } from "@mvc-react/mvc";
+import {
+	useNewStatefulInteractiveModel,
+	ViewInteractionInterface,
+} from "@mvc-react/stateful";
+import { useTranslations } from "next-intl";
+import { createToast } from "../components/miscellaneous/utility";
 import {
 	NewQuoteModel,
 	NewQuoteModelInteraction,
 	NewQuoteNotification,
 } from "../models/new-quote";
+import {
+	NotifierModelInteraction,
+	NotifierModelView,
+} from "../models/notifier";
 import { addNewQuote } from "../server-actions/quote";
-import { notifierVIInterface } from "./notifier";
-import { InitializedModel } from "@mvc-react/mvc";
-import { useTranslations } from "next-intl";
 
 export function useNewQuote() {
-	const notifier = useNewStatefulInteractiveModel(
-		notifierVIInterface<NewQuoteNotification>(),
-	);
+	const notifier = useNewStatefulInteractiveModel({
+		produceModelView: async function (
+			interaction: NotifierModelInteraction<NewQuoteNotification>,
+		): Promise<NotifierModelView<NewQuoteNotification>> {
+			switch (interaction.type) {
+				case "NOTIFY": {
+					const notification = interaction.input.notification;
+					if (notification.type == "success") {
+						createToast({
+							type: "success",
+							message: notification.text,
+						});
+					}
+					if (notification.type == "failure") {
+						createToast({
+							type: "failure",
+							message: notification.message,
+						});
+					}
+					return { notification };
+				}
+			}
+		},
+	} satisfies ViewInteractionInterface<
+		NotifierModelView<NewQuoteNotification>,
+		NotifierModelInteraction<NewQuoteNotification>
+	>);
 	const t = useTranslations("newQuote");
 
 	return {
