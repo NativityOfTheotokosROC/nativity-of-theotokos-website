@@ -20,7 +20,6 @@ import { ChevronDown as DropdownIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Fragment } from "react/jsx-runtime";
-import { useUserActions } from "../../model-implementations/user-action";
 import {
 	NavigationUser,
 	UserNavigationWidgetModel,
@@ -153,11 +152,10 @@ export const UserNavigationWidgetSkeleton = function ({ model }) {
 
 export const UserNavigationWidgetCore = function ({ model }) {
 	const {
-		modelView: { variant, style, userInformation },
+		modelView: { variant, style, userActions, userInformation },
 	} = model;
 
 	const t = useTranslations("userNavigation");
-	const userActions = useUserActions();
 	const userDetails = userInformation
 		? {
 				user: {
