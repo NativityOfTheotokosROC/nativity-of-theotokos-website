@@ -249,7 +249,7 @@ const NewQuote = function ({ model }) {
 								<Button
 									model={newReadonlyModel({
 										type: "button",
-										disabled: isValid,
+										disabled: !isValid,
 										className:
 											"w-fit max-w-1/2 min-w-[8em]",
 										action() {
