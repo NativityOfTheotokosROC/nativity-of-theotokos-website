@@ -1,13 +1,13 @@
 import { InitializedModel } from "@mvc-react/mvc";
-import { SignOutModel, SignOutStatus } from "../models/sign-out";
 import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
-import { notifierVIInterface } from "./notifier";
-import { useRouter } from "next/navigation";
-import { signOut } from "../third-party/better-auth";
-import { createToast } from "../components/miscellaneous/utility";
 import { useQueryClient } from "@tanstack/react-query";
-import { refreshUserInformation } from "../utilities/user";
+import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
+import { createToast } from "../components/miscellaneous/utility";
+import { SignOutModel, SignOutStatus } from "../models/sign-out";
+import { signOut } from "../third-party/better-auth";
+import { refreshUserInformation } from "../utilities/user";
+import { notifierVIInterface } from "./notifier";
 
 export function useSignOut(
 	signOutEndpoint: `/${string}`,
@@ -54,13 +54,14 @@ export function useSignOut(
 							notification: { type: "success" },
 						},
 					});
-					if (interaction.input.hardRefresh) {
-						window.open(signOutEndpoint, "_self");
-						break;
-					}
-					router.push(signOutEndpoint);
-					router.refresh();
-					break;
+					// if (interaction.input.hardRefresh) {
+					// 	window.open(signOutEndpoint, "_self");
+					// 	break;
+					// }
+					// router.push(signOutEndpoint);
+					// router.refresh();
+					// break;
+					window.open(signOutEndpoint, "_self");
 				}
 			}
 		},
