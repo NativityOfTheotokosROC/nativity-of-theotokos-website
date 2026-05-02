@@ -11,7 +11,7 @@ export async function protect(protectParams?: { roles?: Role[] }) {
 	const roles = protectParams?.roles;
 	const user = await getUser();
 
-	//if (ENVIRONMENT != "production") return;
+	if (ENVIRONMENT != "production") return;
 	if (!(user && (await isAuthorized(user, roles)))) return forbidden();
 }
 

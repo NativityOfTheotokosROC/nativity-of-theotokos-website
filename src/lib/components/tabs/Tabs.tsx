@@ -11,7 +11,7 @@ const Tabs = function ({
 	children: ReactNode[];
 }) {
 	const { modelView, interact } = model;
-	const { tabs, selectedTab } = modelView;
+	const { tabs, selectedTab, tabsPosition } = modelView;
 
 	return (
 		<TabGroup
@@ -21,7 +21,9 @@ const Tabs = function ({
 				interact({ type: "SWITCH_TAB", input: { id: index } });
 			}}
 		>
-			<TabList className="flex items-center gap-1">
+			<TabList
+				className={`flex items-center ${(tabsPosition === "center" && "justify-center") || (tabsPosition === "start" && "justify-start") || (tabsPosition === "end" && "justify-end")} gap-1`}
+			>
 				{tabs.map((tab, index) => (
 					<Tab
 						key={index}

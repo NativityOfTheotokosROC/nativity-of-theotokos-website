@@ -194,6 +194,7 @@
 		"maxCharacters": "{field} is too long (maximum of {max} characters)"
 	},
 	"miscellaneous": {
-		"futureContent": "Content to be added soon!"
+		"futureContent": "Content to be added soon!",
+		"closeButton": "Close"
 	}
 }
