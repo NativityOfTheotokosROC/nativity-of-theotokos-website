@@ -8,7 +8,7 @@ import { Quote } from "./new-quote";
 export interface QuotePreviewModalModelView {
 	isOpen: boolean;
 	englishQuote: Quote;
-	russianQuote: Partial<Quote>;
+	russianQuote?: Partial<Quote>;
 }
 
 export type QuotePreviewModalModelInteraction =

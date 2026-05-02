@@ -1,9 +1,12 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 import { TabModel } from "./tab";
 
+export type TabsPosition = "start" | "center" | "end";
+
 export interface TabsModelView {
 	tabs: TabModel[];
 	selectedTab: number;
+	tabsPosition?: TabsPosition;
 }
 
 export type TabsModelInteraction = InputModelInteraction<
