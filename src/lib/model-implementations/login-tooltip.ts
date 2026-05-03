@@ -1,13 +1,12 @@
+import { usePathname } from "@/src/i18n/navigation";
 import { addYears } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
 import {
 	LoginTooltipModel,
 	LoginTooltipModelView,
 } from "../models/login-tooltip";
 import { Path } from "../types/general";
 import { useUserInformation } from "../utilities/user";
-import { usePathname } from "@/src/i18n/navigation";
 
 type LoginTooltipOptions = Partial<{
 	autoTriggerExceptions: Path[];
@@ -15,6 +14,7 @@ type LoginTooltipOptions = Partial<{
 }>;
 
 export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
+	const cookieName = "tooltipShown";
 	const [modelView, setLoginTooltipModelView] =
 		useState<LoginTooltipModelView>({
 			isOpen: false,
@@ -23,16 +23,13 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 	const pathname = usePathname();
 	const { autoTriggerExceptions, duration } = options;
 	const userInformation = useUserInformation();
-	const [cookies, setCookie] = useCookies<
-		"tooltipShown",
-		{ tooltipShown: boolean }
-	>(["tooltipShown"]);
 
 	const interact = useCallback(
 		async interaction => {
 			switch (interaction.type) {
 				case "TRIGGER": {
-					if (cookies.tooltipShown == true) return;
+					const cookie = await window.cookieStore.get(cookieName);
+					if (cookie && cookie.value == "true") return;
 					if (userInformation && userInformation !== "pending") {
 						const { promise, resolve } = Promise.withResolvers();
 						setLoginTooltipModelView({
@@ -40,13 +37,15 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 							isOpen: true,
 						});
 						setTimeout(
-							() => {
+							async () => {
 								setLoginTooltipModelView({
 									...modelView,
 									isOpen: false,
 								});
-								setCookie("tooltipShown", true, {
-									expires: addYears(new Date(), 1),
+								await window.cookieStore.set({
+									name: cookieName,
+									value: "true",
+									expires: addYears(new Date(), 1).getTime(),
 								});
 								resolve(null);
 							},
@@ -57,33 +56,29 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 				}
 			}
 		},
-		[cookies.tooltipShown, duration, modelView, setCookie, userInformation],
+		[duration, modelView, userInformation],
 	) satisfies LoginTooltipModel["interact"];
 
 	useEffect(() => {
+		console.log(pathname);
 		if (
 			autoTriggerExceptions &&
 			autoTriggerExceptions.includes(pathname as Path)
 		)
 			return;
-		if (
-			userInformation &&
-			userInformation !== "pending" &&
-			!cookies.tooltipShown
-		) {
-			async function _() {
-				await interact({ type: "TRIGGER" });
+		window.cookieStore.get(cookieName).then(cookie => {
+			if (
+				userInformation &&
+				userInformation !== "pending" &&
+				cookie?.value != "true"
+			) {
+				async function _() {
+					await interact({ type: "TRIGGER" });
+				}
+				_();
 			}
-			_();
-		}
-	}, [
-		autoTriggerExceptions,
-		cookies.tooltipShown,
-		interact,
-		pathname,
-		setCookie,
-		userInformation,
-	]);
+		});
+	}, [autoTriggerExceptions, interact, pathname, userInformation]);
 
 	return { modelView, interact } satisfies LoginTooltipModel;
 }
