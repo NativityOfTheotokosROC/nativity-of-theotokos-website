@@ -11,7 +11,7 @@ export function useUserActions() {
 	const userInformation = useUserInformation();
 	const router = usePageLoadingBarRouter();
 	const pathname = usePathname();
-	const signOut = useSignOut(pathname as Path, router);
+	const signOut = useSignOut(pathname as Path);
 
 	if (!userInformation || userInformation === "pending") return [];
 	const actionNames = getUserActionNames(userInformation.roles);

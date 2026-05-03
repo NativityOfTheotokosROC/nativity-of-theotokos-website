@@ -2,7 +2,6 @@
 
 import { useSignOut } from "@/src/lib/model-implementations/sign-out";
 import { Path } from "@/src/lib/types/general";
-import { usePageLoadingBarRouter } from "@/src/lib/utilities/page-loading-bar";
 import { ModeledContainerComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import Spinner from "../spinner/Spinner";
@@ -10,8 +9,7 @@ import Button from "./Button";
 
 const SignOutButton = function ({ model, children }) {
 	const { signOutEndpoint } = model.modelView;
-	const router = usePageLoadingBarRouter();
-	const signOutModel = useSignOut(signOutEndpoint, router);
+	const signOutModel = useSignOut(signOutEndpoint);
 	const { signOutStatus } = signOutModel.modelView;
 
 	return (
