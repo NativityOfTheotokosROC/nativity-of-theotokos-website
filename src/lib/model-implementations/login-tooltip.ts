@@ -27,14 +27,12 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 		"tooltipShown",
 		{ tooltipShown: boolean }
 	>(["tooltipShown"]);
-	const [promiseWithResolvers] = useState(Promise.withResolvers());
 
 	const interact = useCallback(
 		async interaction => {
 			switch (interaction.type) {
 				case "TRIGGER": {
 					if (cookies.tooltipShown == true) return;
-					await promiseWithResolvers.promise;
 					if (userInformation && userInformation !== "pending") {
 						const { promise, resolve } = Promise.withResolvers();
 						setLoginTooltipModelView({
@@ -59,18 +57,10 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 				}
 			}
 		},
-		[
-			cookies.tooltipShown,
-			duration,
-			modelView,
-			promiseWithResolvers,
-			setCookie,
-			userInformation,
-		],
+		[cookies.tooltipShown, duration, modelView, setCookie, userInformation],
 	) satisfies LoginTooltipModel["interact"];
 
 	useEffect(() => {
-		// console.log("autoTriggerEffect called");
 		if (
 			autoTriggerExceptions &&
 			autoTriggerExceptions.includes(pathname as Path)
@@ -94,12 +84,6 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 		setCookie,
 		userInformation,
 	]);
-
-	useEffect(() => {
-		// console.log("Resolve effect called");
-		if (userInformation !== "pending")
-			promiseWithResolvers.resolve(userInformation);
-	}, [promiseWithResolvers, userInformation]);
 
 	return { modelView, interact } satisfies LoginTooltipModel;
 }
