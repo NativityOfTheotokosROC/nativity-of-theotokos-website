@@ -2,11 +2,11 @@ import { InitializedModel } from "@mvc-react/mvc";
 import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useCookies } from "react-cookie";
 import { createToast } from "../components/miscellaneous/utility";
 import { SignOutModel, SignOutStatus } from "../models/sign-out";
 import { signOut } from "../third-party/better-auth";
 import { refreshUserInformation } from "../utilities/user";
+import { LOGIN_TOOLTIP_COOKIE_NAME } from "./login-tooltip";
 import { notifierVIInterface } from "./notifier";
 
 export function useSignOut(
@@ -17,9 +17,6 @@ export function useSignOut(
 	const notifier = useNewStatefulInteractiveModel(
 		notifierVIInterface<SignOutStatus>(),
 	);
-	const removeCookie = useCookies<"tooltipShown", { tooltipShown: boolean }>([
-		"tooltipShown",
-	])[2];
 
 	return {
 		modelView: { signOutStatus: notifier.modelView?.notification ?? null },
@@ -47,7 +44,7 @@ export function useSignOut(
 						return;
 					}
 					await refreshUserInformation(queryClient);
-					removeCookie("tooltipShown");
+					await window.cookieStore.delete(LOGIN_TOOLTIP_COOKIE_NAME);
 					await notifier.interact({
 						type: "NOTIFY",
 						input: {

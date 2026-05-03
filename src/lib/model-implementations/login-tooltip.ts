@@ -13,8 +13,9 @@ type LoginTooltipOptions = Partial<{
 	duration: number;
 }>;
 
+export const LOGIN_TOOLTIP_COOKIE_NAME = "tooltipShown";
+
 export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
-	const cookieName = "tooltipShown";
 	const [modelView, setLoginTooltipModelView] =
 		useState<LoginTooltipModelView>({
 			isOpen: false,
@@ -28,7 +29,9 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 		async interaction => {
 			switch (interaction.type) {
 				case "TRIGGER": {
-					const cookie = await window.cookieStore.get(cookieName);
+					const cookie = await window.cookieStore.get(
+						LOGIN_TOOLTIP_COOKIE_NAME,
+					);
 					if (cookie && cookie.value == "true") return;
 					if (userInformation && userInformation !== "pending") {
 						const { promise, resolve } = Promise.withResolvers();
@@ -43,7 +46,7 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 									isOpen: false,
 								});
 								await window.cookieStore.set({
-									name: cookieName,
+									name: LOGIN_TOOLTIP_COOKIE_NAME,
 									value: "true",
 									expires: addYears(new Date(), 1).getTime(),
 								});
@@ -60,13 +63,12 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 	) satisfies LoginTooltipModel["interact"];
 
 	useEffect(() => {
-		console.log(pathname);
 		if (
 			autoTriggerExceptions &&
 			autoTriggerExceptions.includes(pathname as Path)
 		)
 			return;
-		window.cookieStore.get(cookieName).then(cookie => {
+		window.cookieStore.get(LOGIN_TOOLTIP_COOKIE_NAME).then(cookie => {
 			if (
 				userInformation &&
 				userInformation !== "pending" &&
