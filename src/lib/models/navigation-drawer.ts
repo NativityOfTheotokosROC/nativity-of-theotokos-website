@@ -3,11 +3,11 @@ import { Navlink } from "../types/general";
 
 export type NavigationDrawerType = "sidebar" | "accordion";
 
-export interface NavigationDrawerModelView {
+export type NavigationDrawerModelView = {
 	isDrawn: boolean;
 	hasUserNavigationWidget: boolean;
 	navlinks: Navlink[];
-}
+};
 
 export type NavigationDrawerModelInteraction = ModelInteraction<
 	"OPEN" | "CLOSE" | "TOGGLE"

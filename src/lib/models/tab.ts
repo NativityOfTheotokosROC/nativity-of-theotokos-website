@@ -1,7 +1,7 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
 
-export interface TabModelView {
+export type TabModelView = {
 	name: string;
-}
+};
 
 export type TabModel = ReadonlyModel<TabModelView>;

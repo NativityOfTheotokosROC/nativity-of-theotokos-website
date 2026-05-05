@@ -5,9 +5,9 @@ export type SignOutStatus =
 	| Notification<"success" | "pending">
 	| (Notification<"failed"> & { message: string });
 
-export interface SignOutModelView {
+export type SignOutModelView = {
 	signOutStatus: SignOutStatus | null;
-}
+};
 
 export type SignOutModelInteraction = InputModelInteraction<
 	"SIGN_OUT",

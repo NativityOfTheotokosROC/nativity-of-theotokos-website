@@ -11,9 +11,9 @@ export type Commemoration = {
 	date?: Date;
 };
 
-export interface CommemorationModelView {
+export type CommemorationModelView = {
 	commemoration: Commemoration;
 	permalink: string;
-}
+};
 
 export type CommemorationModel = ReadonlyModel<CommemorationModelView>;

@@ -1,7 +1,7 @@
 import { Model } from "@mvc-react/mvc";
 
-export interface LoadingBarModelView {
+export type LoadingBarModelView = {
 	isLoading: boolean;
-}
+};
 
 export type LoadingBarModel = Model<LoadingBarModelView>;

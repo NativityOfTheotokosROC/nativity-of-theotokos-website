@@ -1,7 +1,7 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
 
-export interface ForbiddenClientModelView {
+export type ForbiddenClientModelView = {
 	signOutEndpoint: `/${string}`;
-}
+};
 
 export type ForbiddenClientModel = ReadonlyModel<ForbiddenClientModelView>;

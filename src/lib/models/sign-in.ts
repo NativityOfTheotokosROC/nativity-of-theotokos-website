@@ -6,11 +6,11 @@ export type SignInStatus =
 	| (Notification<"success" | "failed"> & { message: string })
 	| (Notification<"pending"> & { service?: SignInService });
 
-export interface SignInModelView {
+export type SignInModelView = {
 	signInServices: SignInService[];
 	signInStatus: SignInStatus | null;
 	selectedService: SignInService | null;
-}
+};
 
 export type SignInModelInteraction = InputModelInteraction<
 	"SIGN_IN",

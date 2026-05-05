@@ -10,9 +10,9 @@ export type MailingListStatus =
 	| (Notification<"failed"> & { message: string })
 	| Notification<"pending">;
 
-export interface MailingListRepositoryModelView {
+export type MailingListRepositoryModelView = {
 	mailingListStatus: MailingListStatus | null;
-}
+};
 
 export type MailingListRepositoryModelInteraction = InputModelInteraction<
 	"SUBSCRIBE",

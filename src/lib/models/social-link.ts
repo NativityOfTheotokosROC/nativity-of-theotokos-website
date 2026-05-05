@@ -15,8 +15,8 @@ export type Details =
 	| SocialLinkTypeObject<"Email", `mailto:${string}`>
 	| SocialLinkTypeObject<"Telegram", `https://t.me/${string}`>;
 
-export interface SocialLinkModelView {
+export type SocialLinkModelView = {
 	details: Details;
-}
+};
 
 export type SocialLinkModel = ReadonlyModel<SocialLinkModelView>;

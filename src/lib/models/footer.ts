@@ -29,7 +29,7 @@ export type JurisdictionInfo = {
 	patriarchate: Jurisdiction;
 };
 
-export interface FooterModelView {
+export type FooterModelView = {
 	copyrightText: string;
 	description: string;
 	parishEmail: string;
@@ -38,6 +38,6 @@ export interface FooterModelView {
 	contacts: Contact[];
 	socials: SocialLinkModel[];
 	bottomLinks: BottomLink[];
-}
+};
 
 export type FooterModel = ReadonlyModel<FooterModelView>;

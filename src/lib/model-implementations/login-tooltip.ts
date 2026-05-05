@@ -68,6 +68,7 @@ export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
 			autoTriggerExceptions.includes(pathname as Path)
 		)
 			return;
+
 		window.cookieStore.get(LOGIN_TOOLTIP_COOKIE_NAME).then(cookie => {
 			if (
 				userInformation &&

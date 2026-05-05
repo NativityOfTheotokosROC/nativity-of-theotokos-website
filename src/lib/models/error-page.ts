@@ -4,9 +4,9 @@ import {
 	ModelInteraction,
 } from "@mvc-react/mvc";
 
-export interface ErrorPageModelView {
+export type ErrorPageModelView = {
 	message: string;
-}
+};
 
 export type ErrorPageModelInteraction =
 	| ModelInteraction<"RETRY">

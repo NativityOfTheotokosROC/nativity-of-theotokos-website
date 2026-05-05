@@ -1,9 +1,9 @@
 import { InitializedInteractiveModel, ModelInteraction } from "@mvc-react/mvc";
 
-export interface LoginTooltipModelView {
+export type LoginTooltipModelView = {
 	isOpen: boolean;
 	text: string;
-}
+};
 
 export type LoginTooltipModelInteraction = ModelInteraction<"TRIGGER">;
 

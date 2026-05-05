@@ -1,8 +1,8 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
 
-export interface SpinnerModelView {
+export type SpinnerModelView = {
 	color: string;
 	size: number;
-}
+};
 
 export type SpinnerModel = ReadonlyModel<SpinnerModelView>;

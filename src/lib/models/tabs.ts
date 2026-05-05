@@ -3,11 +3,11 @@ import { TabModel } from "./tab";
 
 export type TabsPosition = "start" | "center" | "end";
 
-export interface TabsModelView {
+export type TabsModelView = {
 	tabs: TabModel[];
 	selectedTab: number;
 	tabsPosition?: TabsPosition;
-}
+};
 
 export type TabsModelInteraction = InputModelInteraction<
 	"SWITCH_TAB",

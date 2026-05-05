@@ -2,12 +2,12 @@ import { ReadonlyModel } from "@mvc-react/mvc";
 import { DailyReadings } from "../types/general";
 import { HymnsModalModel } from "./hymns-modal";
 
-export interface DailySaintsWidgetModelView {
+export type DailySaintsWidgetModelView = {
 	details: Pick<
 		DailyReadings,
 		"currentDate" | "liturgicalWeek" | "saints" | "iconOfTheDay" | "hymns"
 	>;
 	hymnsModal: HymnsModalModel;
-}
+};
 
 export type DailySaintsWidgetModel = ReadonlyModel<DailySaintsWidgetModelView>;

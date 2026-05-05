@@ -7,13 +7,13 @@ import {
 } from "../types/general";
 import { LatestArticles } from "../server-actions/home";
 
-export interface HomeModelView {
+export type HomeModelView = {
 	dailyReadings: DailyReadings;
 	dailyQuote: DailyQuote;
 	scheduleItems: ScheduleItem[];
 	articles: LatestArticles;
 	dailyGalleryImages: GalleryImage[];
-}
+};
 
 export type HomeModelInteraction = ModelInteraction<"REFRESH">;
 

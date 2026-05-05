@@ -16,8 +16,8 @@ const SignOutButton = function ({ model, children }) {
 		<Button
 			model={newReadonlyModel({
 				variant: "standard",
-				action: () =>
-					signOutModel.interact({
+				action: async () =>
+					await signOutModel.interact({
 						type: "SIGN_OUT",
 						input: { hardNavigate: true }, // TODO: true until 310 error is solved
 					}),

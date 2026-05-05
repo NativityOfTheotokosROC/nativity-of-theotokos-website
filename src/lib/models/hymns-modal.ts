@@ -5,10 +5,10 @@ import {
 } from "@mvc-react/mvc";
 import { Hymn } from "../types/general";
 
-export interface HymnsModalModelView {
+export type HymnsModalModelView = {
 	isOpen: boolean;
 	hymns: Hymn[];
-}
+};
 
 export type HymnsModalModelInteraction =
 	| InputModelInteraction<"OPEN", { hymns: Hymn[] }>

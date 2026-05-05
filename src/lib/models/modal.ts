@@ -1,9 +1,9 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 
-export interface ModalModelView {
+export type ModalModelView = {
 	isOpen: boolean;
 	title: string;
-}
+};
 
 export type ModalToggleValue = "open" | "close";
 

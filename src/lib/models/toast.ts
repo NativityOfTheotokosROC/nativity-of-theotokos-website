@@ -5,9 +5,9 @@ export type ToastNotification = { message: string } & Notification<
 	"info" | "success" | "failure"
 >;
 
-export interface ToastModelView {
+export type ToastModelView = {
 	notification: ToastNotification;
-}
+};
 
 // export type ToastModelInteraction = ModelInteraction<"DISMISS">;
 

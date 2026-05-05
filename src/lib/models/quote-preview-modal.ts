@@ -5,11 +5,11 @@ import {
 } from "@mvc-react/mvc";
 import { Quote } from "./new-quote";
 
-export interface QuotePreviewModalModelView {
+export type QuotePreviewModalModelView = {
 	isOpen: boolean;
 	englishQuote: Quote;
 	russianQuote?: Partial<Quote>;
-}
+};
 
 export type QuotePreviewModalModelInteraction =
 	| InputModelInteraction<

@@ -11,9 +11,9 @@ import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 import LayoutLoadingSkeleton from "@/src/lib/components/layout-loading-skeleton/LayoutLoadingSkeleton";
 
-export interface AppLayoutModelView {
+export type AppLayoutModelView = {
 	language: Language;
-}
+};
 
 export type AppLayoutModel = ReadonlyModel<AppLayoutModelView>;
 

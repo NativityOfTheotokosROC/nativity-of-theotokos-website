@@ -12,11 +12,11 @@ export type NavigationUser = Omit<NavigationUserDetails, "roles">;
 export type UserNavigationWidgetVariant = "full" | "no_avatar" | "abbreviated";
 export type UserNavigationWidgetStyle = "dropdown" | "accordion";
 
-export interface UserNavigationWidgetModelView {
+export type UserNavigationWidgetModelView = {
 	userActions: UserActionModel[];
 	variant: UserNavigationWidgetVariant;
 	style: UserNavigationWidgetStyle;
-}
+};
 
 export type UserNavigationWidgetModel =
 	ReadonlyModel<UserNavigationWidgetModelView>;

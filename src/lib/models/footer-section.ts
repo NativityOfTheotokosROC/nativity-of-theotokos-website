@@ -1,7 +1,7 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
 
-export interface FooterSectionModelView {
+export type FooterSectionModelView = {
 	title: string;
-}
+};
 
 export type FooterSectionModel = ReadonlyModel<FooterSectionModelView>;

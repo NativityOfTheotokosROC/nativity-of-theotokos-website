@@ -18,9 +18,9 @@ export type NewQuoteNotification =
 	| (Notification<"failure"> & { message: string })
 	| Notification<"pending">;
 
-export interface NewQuoteModelView {
+export type NewQuoteModelView = {
 	newQuoteNotification: NewQuoteNotification | null;
-}
+};
 
 export type NewQuoteModelInteraction = InputModelInteraction<
 	"ADD_QUOTE",
