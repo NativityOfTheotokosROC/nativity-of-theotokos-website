@@ -78,9 +78,12 @@ const DailySaintsWidget = function ({ model }) {
 						<p
 							className={`max-h-full overflow-y-auto pr-3 text-base/relaxed [&_a]:text-red-900`}
 							onClick={e => {
-								if (e.target instanceof HTMLAnchorElement) {
-									e.preventDefault();
-									router.push(e.target.href);
+								if (e.target instanceof HTMLElement) {
+									const anchorElement = e.target.closest("a");
+									if (anchorElement) {
+										e.preventDefault();
+										router.push(anchorElement.href);
+									}
 								}
 							}}
 							dangerouslySetInnerHTML={{
