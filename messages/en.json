@@ -69,7 +69,7 @@
 		"larisa": "Larisa",
 		"vasily": "Vasily",
 		"admin": "Admin",
-		"privacy": "Privacy & Cookies",
+		"privacy": "Privacy",
 		"dailyReadingsLicense": "Daily Readings sourced from",
 		"logoIconLicense": "Logo icon by",
 		"copyright": "2026 Nativity of the Theotokos Parish. All Rights Reserved."
@@ -99,6 +99,9 @@
 		"title": "Privacy Policy",
 		"lastModified": "Last Updated"
 	},
+	"termsOfService": {
+		"title": "Terms of Service"
+	},
 	"news": {
 		"metaTitle": "News",
 		"author": "By",
@@ -126,7 +129,7 @@
 		"description": "Sign in to the website to access admin resources.",
 		"successMessage": "Redirecting you to {serviceName} sign-in shortly. Please wait...",
 		"failureMessage": "Could not connect to {serviceName} sign-in:",
-		"consent": "By signing in, you agree with our {termsOfService} and acknowledge that you have read our {privacyPolicy}.",
+		"consent": "By signing in, you agree with our <tos>{termsOfService}</tos> and acknowledge that you have read our <privacy>{privacyPolicy}</privacy>.",
 		"privacyPolicy": "Privacy Policy",
 		"termsOfService": "Terms of Service"
 	},

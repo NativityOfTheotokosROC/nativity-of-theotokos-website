@@ -11,7 +11,7 @@ export default async function middleware(req: NextRequest) {
 	const { pathname, searchParams } = req.nextUrl;
 	const user = await getUser();
 
-	if (pathname.match(/(\/ru)?\/sign-in\/?/) && user) {
+	if (pathname.match(/(\/ru)?\/sign-in\/?.*/) && user) {
 		return NextResponse.redirect(`${req.nextUrl.origin}
 			${
 				searchParams.get("endpoint")?.startsWith("/")
@@ -21,7 +21,7 @@ export default async function middleware(req: NextRequest) {
 	}
 
 	for (const route of getProtectedRoutes()) {
-		const pattern = new RegExp(`(/ru)?${route}/?`);
+		const pattern = new RegExp(`(/ru)?${route}/?.*`);
 		if (pathname.match(pattern) && !user) {
 			const newUrl = new URL(
 				`${req.nextUrl.origin}/sign-in?endpoint=${pathname}`,

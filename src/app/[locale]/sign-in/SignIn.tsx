@@ -1,3 +1,4 @@
+import { Link } from "@/src/lib/components/page-loading-bar/PageLoadingBar";
 import SignInButton from "@/src/lib/components/sign-in-button/SignInButton";
 import { SignInModel } from "@/src/lib/models/sign-in";
 import { georgia } from "@/src/lib/third-party/fonts";
@@ -69,6 +70,33 @@ const SignIn = function ({ model }) {
 						{signInStatus.message}
 					</span>
 				)}
+				<div className="consent-message mt-10 flex flex-col gap-2 md:max-w-md">
+					<hr className="text-black/30" />
+					<span className="text-sm">
+						{t.rich("consent", {
+							tos: text => (
+								<Link
+									className="underline hover:text-[#dcb042]"
+									href="/terms"
+									target="_blank"
+								>
+									{text}
+								</Link>
+							),
+							privacy: text => (
+								<Link
+									className="underline hover:text-[#dcb042]"
+									href="/privacy-policy"
+									target="_blank"
+								>
+									{text}
+								</Link>
+							),
+							privacyPolicy: t("privacyPolicy"),
+							termsOfService: t("termsOfService"),
+						})}
+					</span>
+				</div>
 			</motion.div>
 		</main>
 	);
