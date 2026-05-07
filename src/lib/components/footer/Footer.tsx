@@ -164,7 +164,7 @@ const Footer = function ({ model }) {
 						<span className={georgia.className}>&copy;</span>{" "}
 						{copyrightText}
 					</span>
-					<div className="bottom-links flex flex-wrap gap-x-4 gap-y-2 text-xs text-gray-400">
+					<div className="bottom-links flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-400">
 						{[
 							...bottomLinks.map(bottomLink => (
 								<Fragment key={bottomLink.link}>
