@@ -76,7 +76,7 @@ const SignIn = function ({ model }) {
 						{t.rich("consent", {
 							tos: text => (
 								<Link
-									className="underline hover:text-[#dcb042]"
+									className="underline hover:text-[#dcb042] active:text-[#dcb042]"
 									href="/terms"
 									target="_blank"
 								>
@@ -85,7 +85,7 @@ const SignIn = function ({ model }) {
 							),
 							privacy: text => (
 								<Link
-									className="underline hover:text-[#dcb042]"
+									className="underline hover:text-[#dcb042] active:text-[#dcb042]"
 									href="/privacy-policy"
 									target="_blank"
 								>

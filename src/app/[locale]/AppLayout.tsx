@@ -107,16 +107,16 @@ const AppLayout = async function ({ model, children }) {
 		],
 		copyrightText: tFooterVariable("copyright"),
 		bottomLinks: [
-			{
-				precedingText: tFooterVariable("dailyReadingsLicense"),
-				linkLabel: "Holy Trinity Orthodox",
-				link: tLinks("holyTrinityChurch"),
-			},
-			{
-				precedingText: tFooterVariable("logoIconLicense"),
-				linkLabel: "Lordicon.com",
-				link: "https://lordicon.com",
-			},
+			// {
+			// 	precedingText: tFooterVariable("dailyReadingsLicense"),
+			// 	linkLabel: "Holy Trinity Orthodox",
+			// 	link: tLinks("holyTrinityChurch"),
+			// },
+			// {
+			// 	precedingText: tFooterVariable("logoIconLicense"),
+			// 	linkLabel: "Lordicon.com",
+			// 	link: "https://lordicon.com",
+			// },
 			{
 				linkLabel: tFooterVariable("admin"),
 				link: "/admin",
@@ -124,6 +124,14 @@ const AppLayout = async function ({ model, children }) {
 			{
 				linkLabel: tFooterVariable("privacy"),
 				link: "/privacy-policy",
+			},
+			{
+				linkLabel: tFooterVariable("terms"),
+				link: "/terms",
+			},
+			{
+				linkLabel: tFooterVariable("licenses"),
+				link: "/licenses",
 			},
 		],
 	}) satisfies FooterModel;

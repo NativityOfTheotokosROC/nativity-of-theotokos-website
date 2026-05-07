@@ -164,21 +164,20 @@ const Footer = function ({ model }) {
 						<span className={georgia.className}>&copy;</span>{" "}
 						{copyrightText}
 					</span>
-					<div className="bottom-links flex flex-wrap gap-2 text-xs text-gray-400">
+					<div className="bottom-links flex flex-wrap gap-x-4 gap-y-2 text-xs text-gray-400">
 						{[
-							...bottomLinks.map((bottomLink, index) => (
+							...bottomLinks.map(bottomLink => (
 								<Fragment key={bottomLink.link}>
 									<span>
 										{bottomLink.precedingText &&
 											`${bottomLink.precedingText} `}
 										<Link
-											className="underline hover:text-[#ffd400] active:text-[#ffd400]"
+											className="hover:underline active:underline"
 											href={bottomLink.link}
 										>
 											{bottomLink.linkLabel}
 										</Link>
 									</span>
-									{index != bottomLinks.length - 1 && "|"}
 								</Fragment>
 							)),
 						]}

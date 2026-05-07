@@ -12,7 +12,7 @@ export async function generateMetadata({
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 	const t = await getTranslations({
 		locale: language,
-		namespace: "termsOfService",
+		namespace: "licenses",
 	});
 	return { title: t("title") };
 }
