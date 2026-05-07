@@ -61,6 +61,7 @@ const AppLayout = async function ({ model, children }) {
 		clergy: [
 			{ name: tFooterVariable("frDimitri") },
 			{ name: tFooterVariable("frSavva") },
+			{ name: tFooterVariable("frEmilianos") },
 		],
 		jurisdictionInfo: {
 			diocese: {
