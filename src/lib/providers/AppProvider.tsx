@@ -23,7 +23,11 @@ export const AppProvider = function ({ model, children }) {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<CookiesProvider>
-				<NextIntlClientProvider locale={locale} messages={messages}>
+				<NextIntlClientProvider
+					locale={locale}
+					messages={messages}
+					timeZone="UTC"
+				>
 					<PageLoadingBarProvider>
 						<LoginTooltipProvider
 							model={newReadonlyModel({ autoTriggerExceptions })}
