@@ -10,6 +10,6 @@
 	}
 	to {
 		transform: translateY(0);
-		position: static;
+		position: absolute;
 	}
 }
