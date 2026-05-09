@@ -74,8 +74,6 @@
 		"terms": "Terms",
 		"licenses": "Licenses",
 		"attribution": "Attribution",
-		"dailyReadingsLicense": "Daily Readings sourced from",
-		"logoIconLicense": "Logo icon by",
 		"copyright": "2026 Nativity of the Theotokos Parish. All Rights Reserved."
 	},
 	"home": {
@@ -108,7 +106,12 @@
 		"lastModified": "Last Updated"
 	},
 	"licenses": {
-		"title": "Licenses"
+		"title": "Licenses",
+		"alternateTitle": "Attribution"
+	},
+	"licenses_variable": {
+		"dailyReadingsLicense": "Daily Readings sourced from",
+		"logoIconLicense": "Logo icon by"
 	},
 	"news": {
 		"metaTitle": "News",

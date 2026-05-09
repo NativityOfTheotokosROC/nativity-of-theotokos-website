@@ -132,7 +132,7 @@ const AppLayout = async function ({ model, children }) {
 				link: "/terms",
 			},
 			{
-				linkLabel: tFooterVariable("licenses"),
+				linkLabel: tFooterVariable("attribution"),
 				link: "/licenses",
 			},
 		],

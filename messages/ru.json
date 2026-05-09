@@ -75,7 +75,7 @@
 		"licenses": "Лицензии",
 		"attribution": "Атрибуция",
 		"dailyReadingsLicense": "Ежедневные чтения предоставлены",
-		"logoIconLicense": "Иконка логотипа:",
+		"logoIconLicense": "Иконка логотипа",
 		"copyright": "2026 Приход Рождества Пресвятой Богородицы. Все права защищены."
 	},
 	"home": {
@@ -108,7 +108,12 @@
 		"lastModified": "Последнее обновление"
 	},
 	"licenses": {
-		"title": "Лицензии"
+		"title": "Лицензии",
+		"alternateTitle": "Атрибуция"
+	},
+	"licenses_variable": {
+		"dailyReadingsLicense": "Ежедневные чтения предоставлены",
+		"logoIconLicense": "Иконка логотипа"
 	},
 	"news": {
 		"metaTitle": "Новости",
