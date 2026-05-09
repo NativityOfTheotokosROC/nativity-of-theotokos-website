@@ -13,7 +13,7 @@ const Attribution = async function ({ model }) {
 
 	return (
 		<main className="attribution border-t-15 border-t-orange-800 bg-[#FEF8F3] text-black">
-			<div className="attribution-content flex flex-col gap-6 p-8 py-9 md:px-20 md:py-10 lg:w-3/4">
+			<div className="attribution-content flex min-h-[94svh] flex-col gap-6 p-8 py-9 md:px-20 md:py-10 lg:w-3/4">
 				<span
 					className={`mb-2 text-[2.75rem]/tight font-semibold wrap-break-word hyphens-auto md:w-3/4 ${georgia.className}`}
 				>
@@ -21,7 +21,7 @@ const Attribution = async function ({ model }) {
 					<hr className="mt-4 mb-0 md:w-full" />
 				</span>
 				<div className="flex flex-col gap-6 [&_a]:underline [&_a]:hover:text-[#dcb042] [&_a]:active:text-[#dcb042]">
-					<ul className="flex list-disc flex-col gap-1">
+					<ul className="flex list-inside list-disc flex-col gap-3">
 						{licenses.map((license, index) => (
 							<li key={index}>
 								<span>

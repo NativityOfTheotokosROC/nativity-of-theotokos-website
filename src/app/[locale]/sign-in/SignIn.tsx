@@ -62,14 +62,19 @@ const SignIn = function ({ model }) {
 						)),
 					]}
 				</div>
-				{(signInStatus?.type === "success" ||
-					signInStatus?.type === "failed") && (
+				{
 					<span
-						className={`mt-3 line-clamp-3 text-sm/tight ${signInStatus.type === "failed" && "text-red-900"}`}
+						className={`invisible mt-3 line-clamp-3 text-sm/tight ${
+							signInStatus?.type === "success" ||
+							(signInStatus?.type === "failed" && "visible")
+						} ${signInStatus?.type === "failed" && "text-red-900"}`}
 					>
-						{signInStatus.message}
+						{signInStatus?.type === "success" ||
+						signInStatus?.type === "failed"
+							? signInStatus.message
+							: ""}
 					</span>
-				)}
+				}
 				<div className="consent-message mt-10 flex flex-col gap-2 md:max-w-md">
 					<hr className="text-black/30" />
 					<span className="text-sm">
