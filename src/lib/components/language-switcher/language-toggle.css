@@ -7,6 +7,5 @@
 @keyframes hide-button {
 	to {
 		transform: translateY(101%);
-		opacity: 0;
 	}
 }
