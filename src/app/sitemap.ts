@@ -39,6 +39,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				},
 			},
 		},
+		{
+			url: `${baseUrl}/terms`,
+			alternates: {
+				languages: {
+					ru: `${baseUrl}/ru/terms`,
+				},
+			},
+		},
 		...newsArticles.map(article => ({
 			url: `${baseUrl}/news/${article.uri.toString()}`,
 			lastModified: article.dateUpdated ?? article.dateCreated,

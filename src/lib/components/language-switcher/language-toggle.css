@@ -7,8 +7,6 @@
 @keyframes hide-button {
 	to {
 		transform: translateY(101%);
-		display: none;
 		opacity: 0;
-		visibility: hidden; /* This one's for you, Firefox */
 	}
 }
