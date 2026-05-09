@@ -5,7 +5,11 @@
 }
 
 @keyframes hide-button {
+	99% {
+		transform: translateY(100%);
+	}
 	to {
-		transform: translateY(101%);
+		transform: translateY(0);
+		position: static;
 	}
 }
