@@ -185,11 +185,11 @@ const Footer = function ({ model }) {
 				</div>
 				<span className="text-sm">
 					{t.rich("siteAttribution", {
-						name: "Grod56",
+						name: "garikai.org",
 						link: name => (
 							<Link
-								href="https://github.com/Grod56"
-								className="text-[#dcb042]"
+								href="https://garikai.org"
+								className="text-[#dcb042] hover:underline active:underline"
 								target="_blank"
 							>
 								{name}
