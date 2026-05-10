@@ -65,7 +65,7 @@
 		"patriarchate": "Moscow Patriarchate",
 		"frDimitri": "Archpriest Dmitry Polokhov",
 		"frSavva": "Fr Savva Kajawa",
-		"frEmilianos": "Fr Emilianos",
+		"frEmilianos": "Fr Emilianos Shumba",
 		"phone": "Phone",
 		"larisa": "Larisa",
 		"vasily": "Vasily",
@@ -110,7 +110,7 @@
 		"alternateTitle": "Attribution"
 	},
 	"licenses_variable": {
-		"dailyReadingsLicense": "Daily Readings sourced from",
+		"dailyReadingsLicense": "Daily readings, commemorations, and hymns sourced from",
 		"logoIconLicense": "Logo icon by"
 	},
 	"news": {
@@ -140,7 +140,7 @@
 		"description": "Sign in to the website to proceed.",
 		"successMessage": "Redirecting you to {serviceName} sign-in shortly. Please wait...",
 		"failureMessage": "Could not connect to {serviceName} sign-in:",
-		"consent": "By signing in, you agree with our <tos>{termsOfService}</tos> and acknowledge that you have read our <privacy>{privacyPolicy}</privacy>.",
+		"consent": "By signing in, you acknowledge that you agree with our <tos>{termsOfService}</tos> and consent to our <privacy>{privacyPolicy}</privacy>.",
 		"privacyPolicy": "Privacy Policy",
 		"termsOfService": "Terms of Service"
 	},
@@ -174,7 +174,8 @@
 		"mailingListDescription": "Stay up to date with the latest church news, announcements, and events straight from your mailbox. Enter your email below and subscribe if you haven't already.",
 		"mailingListButton": "Subscribe",
 		"mailingListSuccessMessage": "Thank you for subscribing to our mailing list! We will be keeping you up to date with the latest news, updates, announcements and more.",
-		"errorMessage": "There was a problem subscribing you to our mailing list. Please try again, cross-check your email, or check your internet connection."
+		"errorMessage": "There was a problem subscribing you to our mailing list. Please try again, cross-check your email, or check your internet connection.",
+		"consent": "By subscribing, you acknowledge that you agree with our <tos>{termsOfService}</tos> and consent to our <privacy>{privacyPolicy}</privacy>."
 	},
 	"loginTooltip": {
 		"text": "You are now signed in"
