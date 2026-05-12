@@ -92,7 +92,7 @@ const MailingListSection = function ({ model }) {
 							</span>
 						)}
 						<div
-							className={`consent-message flex flex-col gap-2 transition duration-200 md:max-w-md ${consentPanel.modelView.isShown ? "visible opacity-100" : "invisible opacity-0"}`}
+							className={`consent-message mt-8 flex flex-col gap-2 transition duration-200 md:max-w-md ${consentPanel.modelView.isShown ? "visible opacity-100" : "invisible opacity-0"}`}
 						>
 							<hr className="text-white/30" />
 							<span className="text-sm">
