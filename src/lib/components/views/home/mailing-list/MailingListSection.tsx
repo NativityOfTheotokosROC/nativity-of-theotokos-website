@@ -18,7 +18,7 @@ const MailingListSection = function ({ model }) {
 	const { modelView } = model;
 	const { mailingListRepository } = modelView;
 	const { mailingListStatus } = mailingListRepository.modelView;
-	const consentPanel = useConsentPanel();
+	const consentPanel = useConsentPanel(true);
 
 	return (
 		<section className="mailing-list bg-gray-900 text-white">
@@ -142,8 +142,8 @@ type ConsentPanelModel = InteractiveModel<
 	ConsentPanelModelInteraction
 >;
 
-function useConsentPanel() {
-	const [isShown, setShown] = useState(false);
+function useConsentPanel(defaultShown?: boolean) {
+	const [isShown, setShown] = useState(defaultShown ?? false);
 	return {
 		interact: function (
 			interaction: ConsentPanelModelInteraction,
