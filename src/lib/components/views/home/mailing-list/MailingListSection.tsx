@@ -1,15 +1,24 @@
 import { MailingListSectionModel } from "@/src/lib/models/mailing-list-section";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
+import {
+	InitializedModel,
+	InteractiveModel,
+	ModelInteraction,
+	newReadonlyModel,
+} from "@mvc-react/mvc";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { Link } from "../../../page-loading-bar/PageLoadingBar";
 import Spinner from "../../../spinner/Spinner";
-import { newReadonlyModel } from "@mvc-react/mvc";
 
 const MailingListSection = function ({ model }) {
 	const t = useTranslations("mailingList");
-	const { interact, modelView } = model.modelView.mailingListRepository;
-	const { mailingListStatus } = modelView;
+	const { modelView } = model;
+	const { mailingListRepository } = modelView;
+	const { mailingListStatus } = mailingListRepository.modelView;
+	const consentPanel = useConsentPanel();
 
 	return (
 		<section className="mailing-list bg-gray-900 text-white">
@@ -31,7 +40,7 @@ const MailingListSection = function ({ model }) {
 						<p>{t("mailingListDescription")}</p>
 						<form
 							action={formData => {
-								interact({
+								mailingListRepository.interact({
 									type: "SUBSCRIBE",
 									input: {
 										email: formData
@@ -51,6 +60,11 @@ const MailingListSection = function ({ model }) {
 									id="mailing-email"
 									required
 									autoComplete="email"
+									onChange={() =>
+										consentPanel.interact({
+											type: "SHOW",
+										})
+									}
 								/>
 								<button
 									className={`flex h-full w-[9em] min-w-fit items-center justify-center bg-gray-600 p-4 text-center text-white hover:bg-gray-700 active:bg-gray-950 disabled:bg-gray-400 md:w-[8em]`}
@@ -77,6 +91,35 @@ const MailingListSection = function ({ model }) {
 								{mailingListStatus.message}
 							</span>
 						)}
+						<div
+							className={`consent-message mt-8 flex flex-col gap-2 transition duration-200 md:max-w-md ${consentPanel.modelView.isShown ? "opacity-100" : "opacity-0"}`}
+						>
+							<hr className="text-white/30" />
+							<span className="text-sm">
+								{t.rich("consent", {
+									tos: text => (
+										<Link
+											className="underline hover:text-[#dcb042] active:text-[#dcb042]"
+											href="/terms"
+											target="_blank"
+										>
+											{text}
+										</Link>
+									),
+									privacy: text => (
+										<Link
+											className="underline hover:text-[#dcb042] active:text-[#dcb042]"
+											href="/privacy-policy"
+											target="_blank"
+										>
+											{text}
+										</Link>
+									),
+									privacyPolicy: t("privacyPolicy"),
+									termsOfService: t("termsOfService"),
+								})}
+							</span>
+						</div>
 					</div>
 				) : (
 					<div>
@@ -86,6 +129,36 @@ const MailingListSection = function ({ model }) {
 			</motion.div>
 		</section>
 	);
-} satisfies ModeledVoidComponent<MailingListSectionModel>;
+} satisfies ModeledVoidComponent<InitializedModel<MailingListSectionModel>>;
+
+type ConsentPanelModelView = {
+	isShown: boolean;
+};
+
+type ConsentPanelModelInteraction = ModelInteraction<"SHOW">;
+
+type ConsentPanelModel = InteractiveModel<
+	ConsentPanelModelView,
+	ConsentPanelModelInteraction
+>;
+
+function useConsentPanel() {
+	const [isShown, setShown] = useState(false);
+	return {
+		interact: function (
+			interaction: ConsentPanelModelInteraction,
+		): void | Promise<void> {
+			switch (interaction.type) {
+				case "SHOW": {
+					if (!isShown) setShown(true);
+					break;
+				}
+			}
+		},
+		modelView: {
+			isShown,
+		},
+	} satisfies ConsentPanelModel;
+}
 
 export default MailingListSection;

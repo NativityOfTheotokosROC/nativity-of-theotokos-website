@@ -175,7 +175,9 @@
 		"mailingListButton": "Subscribe",
 		"mailingListSuccessMessage": "Thank you for subscribing to our mailing list! We will be keeping you up to date with the latest news, updates, announcements and more.",
 		"errorMessage": "There was a problem subscribing you to our mailing list. Please try again, cross-check your email, or check your internet connection.",
-		"consent": "By subscribing, you acknowledge that you agree with our <tos>{termsOfService}</tos> and consent to our <privacy>{privacyPolicy}</privacy>."
+		"consent": "By subscribing, you acknowledge that you agree with our <tos>{termsOfService}</tos> and consent to our <privacy>{privacyPolicy}</privacy>.",
+		"privacyPolicy": "Privacy Policy",
+		"termsOfService": "Terms of Service"
 	},
 	"loginTooltip": {
 		"text": "You are now signed in"

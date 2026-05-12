@@ -63,11 +63,11 @@ const SignIn = function ({ model }) {
 					]}
 				</div>
 				<span
-					className={`mt-3 line-clamp-3 text-sm/tight ${
+					className={`mt-3 line-clamp-3 text-sm/tight transition ${
 						signInStatus?.type === "success" ||
 						signInStatus?.type === "failed"
-							? "visible"
-							: "invisible"
+							? "opacity-100"
+							: "opacity-0"
 					} ${signInStatus?.type === "failed" && "text-red-900"}`}
 				>
 					{signInStatus?.type === "success" ||
