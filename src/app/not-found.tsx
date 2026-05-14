@@ -13,6 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default async function NotFound() {
+	console.log("Not found run");
+
 	const language = "en";
 	setRequestLocale(language);
 	const messages = await getMessages({ locale: language });

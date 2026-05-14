@@ -27,7 +27,10 @@ const Footer = function ({ model }) {
 
 	return (
 		<footer id="footer" className="w-full max-w-full">
-			<div className="footer-content flex flex-col gap-4 bg-[#0a0a0a] p-9 text-sm text-white">
+			<div
+				className="footer-content flex flex-col gap-4 bg-[#0a0a0a] p-9 text-sm text-white"
+				data-nosnippet
+			>
 				<div className="footer-sections flex flex-col gap-x-14 gap-y-8 md:flex-row">
 					<div className="flex flex-col gap-6 md:flex-row">
 						<LogoIcon className="logo-icon size-17.5 min-w-17.5" />

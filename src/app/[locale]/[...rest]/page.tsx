@@ -14,5 +14,6 @@ import { notFound } from "next/navigation";
 // }
 
 export default function Page() {
+	console.log("Running not found");
 	notFound();
 }
