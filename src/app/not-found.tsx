@@ -14,8 +14,11 @@ export const metadata: Metadata = {
 
 export default async function NotFound() {
 	const language = "en";
+	console.log("before setrequestlocale");
 	setRequestLocale(language);
+	console.log("after setrequestlocale");
 	const messages = await getMessages({ locale: language });
+	console.log("after getmessages");
 
 	return (
 		<html lang={language} data-scroll-behavior="smooth">
