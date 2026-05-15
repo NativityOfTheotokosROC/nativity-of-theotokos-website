@@ -83,7 +83,7 @@ const Header = function ({ model }) {
 					) : (
 						<button
 							title={tNonDescriptive("menu")}
-							className={`flex items-center justify-center rounded-lg bg-transparent p-1 text-[28px] transition ease-out hover:text-[#ffd400] data-open:bg-black/45 data-open:text-[#ffd400] ${loginTooltip?.modelView.isOpen && "text-[#ffd400]"}`}
+							className={`flex items-center justify-center rounded-lg bg-transparent p-1 text-[28px] transition ease-out hover:text-[#ffdc4f] data-open:bg-black/45 data-open:text-[#ffdc4f] ${loginTooltip?.modelView.isOpen && "text-[#ffdc4f]"}`}
 							onClick={() => {
 								navigationDrawer.interact({ type: "TOGGLE" });
 							}}
@@ -115,7 +115,7 @@ const NavMenuBar = function ({ model }) {
 						<Link
 							key={index}
 							href={navlink.link}
-							className="navlink text-base uppercase no-underline hover:text-[#ffd400]"
+							className="navlink text-base uppercase no-underline hover:text-[#ffdc4f]"
 							replace={navlink.isReplaceable}
 						>
 							{navlink.text}

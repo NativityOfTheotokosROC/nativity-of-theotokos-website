@@ -84,7 +84,7 @@ const NavigationDrawer = function ({ model }) {
 				{navlinks.map((navlink, index) => (
 					<Link
 						key={index}
-						className="navlink block px-6 py-4 uppercase no-underline transition duration-200 ease-out hover:text-[#ffd400] active:bg-gray-950 active:text-[#ffd400] md:px-8"
+						className="navlink block px-6 py-4 uppercase no-underline transition duration-200 ease-out hover:text-[#ffdc4f] active:bg-gray-950 active:text-[#ffdc4f] md:px-8"
 						href={navlink.link}
 						replace={navlink.isReplaceable}
 						onClick={async () => await interact({ type: "CLOSE" })}
