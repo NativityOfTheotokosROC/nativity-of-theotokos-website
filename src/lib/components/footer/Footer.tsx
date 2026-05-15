@@ -50,7 +50,7 @@ const Footer = function ({ model }) {
 										{parishEmail}
 									</a>
 								</span>
-								<div className="social-links flex gap-5 text-lg **:size-4 **:hover:text-[#ffd400]">
+								<div className="social-links flex gap-5 text-lg **:size-4 **:hover:text-[#ffdc4f]">
 									{[
 										...socials.map(social => (
 											<SocialLink
