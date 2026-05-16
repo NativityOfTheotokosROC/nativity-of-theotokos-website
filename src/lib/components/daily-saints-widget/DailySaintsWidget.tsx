@@ -52,7 +52,7 @@ const DailySaintsWidget = function ({ model }) {
 					/>
 				</Link>
 			</div>
-			<div className="texts flex grow flex-col gap-4 py-6 md:justify-center [&_a]:underline [&_a]:hover:text-[#DCB042]">
+			<div className="texts flex grow flex-col gap-4 py-6 md:justify-center [&_a]:underline [&_a]:hover:text-[#ffdc4f]">
 				<span className={`px-5 text-2xl md:px-7`}>{dateString}</span>
 				<div className="flex grow flex-col gap-2">
 					<span className="px-5 text-xl md:px-7">

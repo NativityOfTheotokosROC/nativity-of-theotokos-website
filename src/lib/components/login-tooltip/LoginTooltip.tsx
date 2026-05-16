@@ -11,7 +11,7 @@ const LoginTooltip = function ({ model }) {
 			className="login-tooltip"
 			isOpen={isOpen}
 			content={text}
-			border="1px solid #dcb042"
+			border="1px solid #ffdc4f"
 			place="bottom-end"
 		/>
 	);

@@ -9,7 +9,7 @@ const LoadingBar = function ({ model }) {
 	const { modelView } = model;
 
 	return (
-		<div className={`loading-bar animate-pulse h-[1.5px]`}>
+		<div className={`loading-bar h-[1.5px] animate-pulse`}>
 			{modelView?.isLoading && (
 				<motion.div
 					exit={{ width: "100%", opacity: 0 }}
@@ -17,7 +17,7 @@ const LoadingBar = function ({ model }) {
 						duration: 0.3,
 						ease: "easeIn",
 					}}
-					className={`loading-bar-progress h-full bg-[#dcb042]`}
+					className={`loading-bar-progress h-full bg-[#ffdc4f]`}
 				/>
 			)}
 		</div>

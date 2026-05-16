@@ -17,7 +17,7 @@ const ResourceWidget = function ({ model }) {
 					style={{
 						backgroundImage: `linear-gradient(to bottom, transparent, black), url(${graphic})`,
 					}}
-					className={`h-full w-full overflow-clip rounded-lg border border-black/70 bg-cover bg-center bg-no-repeat text-white transition duration-200 ease-out select-none hover:scale-[1.03] hover:text-[#dcb042] active:scale-[1.03] active:border-[#dcb042] active:text-[#dcb042]`}
+					className={`h-full w-full overflow-clip rounded-lg border border-black/70 bg-cover bg-center bg-no-repeat text-white transition duration-200 ease-out select-none hover:scale-[1.03] hover:text-[#ffdc4f] active:scale-[1.03] active:border-[#ffdc4f] active:text-[#ffdc4f]`}
 				>
 					<div className="flex size-full items-end justify-center p-6 text-center hover:cursor-pointer">
 						<span className={`mb-3 text-3xl`}>{label}</span>

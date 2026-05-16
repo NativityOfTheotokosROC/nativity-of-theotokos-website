@@ -27,7 +27,7 @@ const Error = function ({ model }) {
 					>
 						{t("title")}
 					</span>
-					<span className="text-lg [&_a]:underline [&_a:hover]:text-[#dcb042]">
+					<span className="text-lg [&_a]:underline [&_a:hover]:text-[#ffdc4f]">
 						{`${t("description")}, `}
 						<Link href="mailto:info@nativityoftheotokos.com">{`${t("contactUs")}.`}</Link>
 					</span>

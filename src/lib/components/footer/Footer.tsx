@@ -192,7 +192,7 @@ const Footer = function ({ model }) {
 						link: name => (
 							<Link
 								href="https://garikai.org"
-								className="text-[#dcb042] hover:underline active:underline"
+								className="text-[#ffdc4f] hover:underline active:underline"
 								target="_blank"
 							>
 								{name}

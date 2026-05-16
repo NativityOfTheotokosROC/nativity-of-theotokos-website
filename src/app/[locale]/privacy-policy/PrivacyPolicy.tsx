@@ -22,7 +22,7 @@ const PrivacyPolicy = async function ({ model }) {
 					<hr className="mt-4 mb-0 md:w-full" />
 				</span>
 				<span className="text-sm">{`${t("lastModified")}: ${new Date("2026-04-25").toLocaleDateString(dateLocale, { dateStyle: "medium" })}`}</span>
-				<div className="flex flex-col gap-6 [&_a]:underline [&_a]:hover:text-[#dcb042] [&_a]:active:text-[#dcb042]">
+				<div className="flex flex-col gap-6 [&_a]:underline [&_a]:hover:text-[#ffdc4f] [&_a]:active:text-[#ffdc4f]">
 					<section className="flex flex-col gap-3">
 						<p>
 							Protecting your private information is our priority.

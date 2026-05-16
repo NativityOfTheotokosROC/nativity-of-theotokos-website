@@ -93,7 +93,7 @@ const Article = async function ({ model }) {
 						)}
 					</div>
 				</div>
-				<div className="flex items-end gap-5 self-end text-sm text-gray-900 **:hover:text-[#dcb042] md:mt-4">
+				<div className="flex items-end gap-5 self-end text-sm text-gray-900 **:hover:text-[#ffdc4f] md:mt-4">
 					<ShareButton
 						model={newReadonlyModel({
 							shareData: encodedShareData,

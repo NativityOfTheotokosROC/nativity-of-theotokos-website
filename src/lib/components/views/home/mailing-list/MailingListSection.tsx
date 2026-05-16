@@ -99,7 +99,7 @@ const MailingListSection = function ({ model }) {
 								{t.rich("consent", {
 									tos: text => (
 										<Link
-											className="underline hover:text-[#dcb042] active:text-[#dcb042]"
+											className="underline hover:text-[#ffdc4f] active:text-[#ffdc4f]"
 											href="/terms"
 											target="_blank"
 										>
@@ -108,7 +108,7 @@ const MailingListSection = function ({ model }) {
 									),
 									privacy: text => (
 										<Link
-											className="underline hover:text-[#dcb042] active:text-[#dcb042]"
+											className="underline hover:text-[#ffdc4f] active:text-[#ffdc4f]"
 											href="/privacy-policy"
 											target="_blank"
 										>
