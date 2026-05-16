@@ -12,9 +12,7 @@ export const NotFound = function ({}) {
 	// "use cache";
 
 	// const { language } = model.modelView;
-	console.log("before retrieving notfound translations");
 	const t = useTranslations("notFound");
-	console.log("after retrieving notfound translations");
 
 	return (
 		<main className={`not-found flex flex-col bg-[#FEF8F3] text-black`}>

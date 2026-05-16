@@ -6,7 +6,7 @@
 		"postinstall": "prisma generate",
 		"dev": "next dev",
 		"build": "prisma migrate deploy; next build",
-		"start": "next start",
+		"start": "NODE_OPTIONS='--inspect' next start",
 		"lint": "eslint"
 	},
 	"dependencies": {

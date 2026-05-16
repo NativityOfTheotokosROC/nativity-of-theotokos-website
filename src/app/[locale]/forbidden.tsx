@@ -3,14 +3,14 @@ import Forbidden from "@/src/lib/components/views/forbidden/Forbidden";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-// import { locale as rootLocale } from "next/root-params";
+import { locale as rootLocale } from "next/root-params";
 
 export function generateStaticParams() {
 	return [...routing.locales.map(locale => ({ locale }))];
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-	const locale = "en";
+	const locale = await rootLocale();
 	const t = await getTranslations({ locale, namespace: "unauthorized" });
 
 	return {

@@ -8,9 +8,7 @@ import { usePageLoadingBarRouter } from "@/src/lib/utilities/page-loading-bar";
 
 const PageNavigationButton = function ({ model, children }) {
 	const { endpoint, browserNavigation } = model.modelView;
-	console.log("page navigation button perhaps");
 	const router = usePageLoadingBarRouter();
-	console.log("pageloadingbar check");
 
 	return (
 		<Button
