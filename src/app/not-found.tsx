@@ -19,11 +19,11 @@ export default function NotFound() {
 	return (
 		<html lang={language} data-scroll-behavior="smooth">
 			<body className={`antialiased ${googleSansFlex.className}`}>
-				<Suspense fallback={<LayoutLoadingSkeleton />}>
-					<NextIntlClientProvider locale={language}>
-						<NotFoundPage model={newReadonlyModel({ language })} />
-					</NextIntlClientProvider>
-				</Suspense>
+				{/* <Suspense fallback={<LayoutLoadingSkeleton />}> */}
+				<NextIntlClientProvider locale={language}>
+					<NotFoundPage model={newReadonlyModel({ language })} />
+				</NextIntlClientProvider>
+				{/* </Suspense> */}
 			</body>
 		</html>
 	);
