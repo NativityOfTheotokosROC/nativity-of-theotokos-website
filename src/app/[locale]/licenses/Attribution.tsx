@@ -20,7 +20,7 @@ const Attribution = async function ({ model }) {
 					{t("alternateTitle")}
 					<hr className="mt-4 mb-0 md:w-full" />
 				</span>
-				<div className="flex flex-col gap-6 [&_a]:underline [&_a]:hover:text-[#ffdc4f] [&_a]:active:text-[#ffdc4f]">
+				<div className="flex flex-col gap-6 [&_a]:underline [&_a]:hover:text-[#dcb042] [&_a]:active:text-[#dcb042]">
 					<ul className="flex list-inside list-disc flex-col gap-3">
 						{licenses.map((license, index) => (
 							<li key={index}>

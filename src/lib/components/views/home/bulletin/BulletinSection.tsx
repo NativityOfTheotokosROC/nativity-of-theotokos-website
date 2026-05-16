@@ -64,7 +64,7 @@ const BulletinSection = function ({ model }) {
 							/>
 						</motion.div>
 					</div>
-					<div className="other-stories flex flex-col gap-4 border-t-2 border-t-[#ffdc4f] bg-white/70 px-8 pt-10 pb-15 lg:px-20">
+					<div className="other-stories flex flex-col gap-4 border-t-2 border-t-[#dcb042] bg-white/70 px-8 pt-10 pb-15 lg:px-20">
 						<span className="mb-1 text-xl">{t("moreNews")}</span>
 						<div className="grid gap-8 md:w-95/100 md:grid-cols-2 md:gap-6 lg:w-85/100">
 							{[...modelView.newsArticles.otherNewsArticles].map(
