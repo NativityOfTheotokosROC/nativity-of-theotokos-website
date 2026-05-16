@@ -7,7 +7,6 @@ import { Suspense } from "react";
 import NotFoundPage from "../lib/components/views/not-found/NotFound";
 import { googleSansFlex } from "../lib/third-party/fonts";
 import LayoutLoadingSkeleton from "../lib/components/layout-loading-skeleton/LayoutLoadingSkeleton";
-import Error from "next/error";
 
 export const metadata: Metadata = {
 	title: "404 - Resource not Found",
@@ -22,16 +21,12 @@ export default async function NotFound() {
 		<html lang={language} data-scroll-behavior="smooth">
 			<body className={`antialiased ${googleSansFlex.className}`}>
 				<Suspense fallback={<LayoutLoadingSkeleton />}>
-					<Error statusCode={404}>
-						<NextIntlClientProvider
-							locale={language}
-							messages={messages}
-						>
-							<NotFoundPage
-								model={newReadonlyModel({ language })}
-							/>
-						</NextIntlClientProvider>
-					</Error>
+					<NextIntlClientProvider
+						locale={language}
+						messages={messages}
+					>
+						<NotFoundPage model={newReadonlyModel({ language })} />
+					</NextIntlClientProvider>
 				</Suspense>
 			</body>
 		</html>
