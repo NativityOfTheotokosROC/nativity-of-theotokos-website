@@ -1,6 +1,12 @@
-import { Metadata } from "next";
-import { googleSansFlex } from "../lib/third-party/fonts";
 import "./globals.css";
+import { newReadonlyModel } from "@mvc-react/mvc";
+import { Metadata } from "next";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, setRequestLocale } from "next-intl/server";
+import { Suspense } from "react";
+import NotFoundPage from "../lib/components/views/not-found/NotFound";
+import { googleSansFlex } from "../lib/third-party/fonts";
+import LayoutLoadingSkeleton from "../lib/components/layout-loading-skeleton/LayoutLoadingSkeleton";
 
 export const metadata: Metadata = {
 	title: "404 - Resource not Found",
@@ -8,21 +14,20 @@ export const metadata: Metadata = {
 
 export default async function NotFound() {
 	const language = "en";
-	// const messages = await getMessages({ locale: language });
-	// setRequestLocale(language);
+	const messages = await getMessages({ locale: language });
+	setRequestLocale(language);
 
 	return (
 		<html lang={language} data-scroll-behavior="smooth">
 			<body className={`antialiased ${googleSansFlex.className}`}>
-				Not Found
-				{/* <Suspense fallback={<LayoutLoadingSkeleton />}>
+				<Suspense fallback={<LayoutLoadingSkeleton />}>
 					<NextIntlClientProvider
 						locale={language}
 						messages={messages}
 					>
 						<NotFoundPage model={newReadonlyModel({ language })} />
 					</NextIntlClientProvider>
-				</Suspense> */}
+				</Suspense>
 			</body>
 		</html>
 	);
