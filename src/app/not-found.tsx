@@ -1,12 +1,6 @@
-import "./globals.css";
-import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
-import { Suspense } from "react";
-import NotFoundPage from "../lib/components/views/not-found/NotFound";
 import { googleSansFlex } from "../lib/third-party/fonts";
-import LayoutLoadingSkeleton from "../lib/components/layout-loading-skeleton/LayoutLoadingSkeleton";
+import "./globals.css";
 
 export const metadata: Metadata = {
 	title: "404 - Resource not Found",
@@ -14,8 +8,8 @@ export const metadata: Metadata = {
 
 export default async function NotFound() {
 	const language = "en";
-	const messages = await getMessages({ locale: language });
-	setRequestLocale(language);
+	// const messages = await getMessages({ locale: language });
+	// setRequestLocale(language);
 
 	return (
 		<html lang={language} data-scroll-behavior="smooth">
