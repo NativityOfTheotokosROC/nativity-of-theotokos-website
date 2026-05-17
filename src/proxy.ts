@@ -8,8 +8,6 @@ import { Path } from "./lib/types/general";
 const nextIntlMiddleware = createMiddleware(routing);
 
 export default async function middleware(req: NextRequest) {
-	console.log("This should not run");
-
 	const { pathname, searchParams } = req.nextUrl;
 	const user = await getUser();
 
