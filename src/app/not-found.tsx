@@ -20,14 +20,15 @@ export default async function NotFound() {
 	return (
 		<html lang={language} data-scroll-behavior="smooth">
 			<body className={`antialiased ${googleSansFlex.className}`}>
-				<Suspense fallback={<LayoutLoadingSkeleton />}>
+				Not Found
+				{/* <Suspense fallback={<LayoutLoadingSkeleton />}>
 					<NextIntlClientProvider
 						locale={language}
 						messages={messages}
 					>
 						<NotFoundPage model={newReadonlyModel({ language })} />
 					</NextIntlClientProvider>
-				</Suspense>
+				</Suspense> */}
 			</body>
 		</html>
 	);
