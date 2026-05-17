@@ -19,7 +19,7 @@ const ArticlePreview = function ({ model }) {
 
 	return isDetailed ? (
 		<Link className="featured-card contents" href={articleLink}>
-			<div className="flex flex-col overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3] transition duration-150 ease-out select-none hover:scale-[1.03] hover:cursor-pointer hover:border-[#ffdc4f] active:scale-[1.03] active:border-[#ffdc4f] hover:[&_.title]:underline active:[&_.title]:underline">
+			<div className="flex flex-col overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3] transition duration-150 ease-out select-none hover:scale-[1.03] hover:cursor-pointer hover:border-[#dcb042] active:scale-[1.03] active:border-[#dcb042]">
 				<div className="flex h-[16em] w-full items-stretch justify-stretch lg:h-[18em]">
 					<ViewTransition
 						name={`article-image-${article.uri}`}
