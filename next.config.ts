@@ -77,6 +77,7 @@ const nextConfig: NextConfig = {
 		authInterrupts: true,
 		viewTransition: true,
 		rootParams: true,
+		globalNotFound: true,
 	},
 	allowedDevOrigins: ["192.168.100.7"],
 };

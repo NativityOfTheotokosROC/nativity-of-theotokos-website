@@ -4,12 +4,12 @@ import { ModeledContainerComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { PageNavigationButtonModel } from "../../models/page-navigation-button";
 import Button from "./Button";
-import { usePageLoadingBarRouter } from "@/src/lib/utilities/page-loading-bar"
+import { usePageLoadingBarRouter } from "@/src/lib/utilities/page-loading-bar";
 
 const PageNavigationButton = function ({ model, children }) {
 	const { endpoint, browserNavigation } = model.modelView;
-	const router = usePageLoadingBarRouter()
-	
+	const router = usePageLoadingBarRouter();
+
 	return (
 		<Button
 			model={newReadonlyModel({
