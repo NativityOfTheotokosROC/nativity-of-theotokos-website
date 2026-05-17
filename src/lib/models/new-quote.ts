@@ -10,7 +10,7 @@ export type Quote = {
 export type NewQuote = {
 	englishQuote: Quote;
 	russianQuote?: Partial<Quote>;
-	scheduledDate?: Date;
+	scheduledDate?: string;
 };
 
 export type NewQuoteNotification =

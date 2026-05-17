@@ -29,10 +29,11 @@ const NewQuote = function ({ model }) {
 	const {
 		register,
 		handleSubmit,
-		formState: { isSubmitting, errors, isValid },
+		getValues,
 		setValue,
 		watch,
 		reset,
+		formState: { isSubmitting, errors, isValid },
 	} = useForm({
 		mode: "onChange",
 		resolver: zodResolver(quoteFormSchema),
@@ -92,7 +93,12 @@ const NewQuote = function ({ model }) {
 											quote: quoteRu,
 											source: sourceRu,
 										},
-										scheduledDate,
+										scheduledDate:
+											scheduledDate === undefined
+												? undefined
+												: (getValues(
+														"scheduledDate",
+													) as string),
 									},
 								});
 								reset();
@@ -207,7 +213,6 @@ const NewQuote = function ({ model }) {
 								<Field className="flex items-center gap-3">
 									<Checkbox
 										{...register("isQuoteScheduled")}
-										value={isQuoteScheduled}
 										onChange={value => {
 											setValue("isQuoteScheduled", value);
 										}}

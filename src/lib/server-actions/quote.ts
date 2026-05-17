@@ -2,17 +2,17 @@
 
 import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
+import { revalidateTag } from "next/cache";
 import { NewQuote } from "../models/new-quote";
 import prisma from "../third-party/prisma";
-import { getDateString, getLocalTimeZone } from "../utilities/date-time";
+import { getLocalTimeZone } from "../utilities/date-time";
+import { getMd5Hash } from "../utilities/miscellaneous";
 import { getQuoteSchema } from "../validation/quote";
 import { protect } from "./auth";
-import { getMd5Hash } from "../utilities/miscellaneous";
-import { revalidateTag } from "next/cache";
 
-export async function addNewQuote(payload: NewQuote) {
+export async function addNewQuote(newQuote: NewQuote) {
 	await protect({ roles: ["quotes"] });
-	const { englishQuote, russianQuote, scheduledDate } = payload;
+	const { englishQuote, russianQuote, scheduledDate } = newQuote;
 	const { author, quote, source } = englishQuote;
 	const t = await getTranslations();
 	const quoteSchema = getQuoteSchema(t);
@@ -24,10 +24,11 @@ export async function addNewQuote(payload: NewQuote) {
 			authorRu: russianQuote?.author,
 			quoteRu: russianQuote?.quote,
 			sourceRu: russianQuote?.source,
-			scheduledDate: scheduledDate && getDateString(scheduledDate), //TODO
+			scheduledDate,
 		});
-	const scheduledLocalDate =
-		scheduledDate && toZonedTime(scheduledDate, getLocalTimeZone());
+	const scheduledLocalDate = scheduledDate
+		? toZonedTime(scheduledDate, getLocalTimeZone())
+		: undefined;
 
 	await prisma.$transaction(async transaction => {
 		const [authorTranslation, sourceTranslation, quoteTranslation] =
