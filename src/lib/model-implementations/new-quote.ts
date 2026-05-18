@@ -53,37 +53,37 @@ export function useNewQuote() {
 		interact: async function (interaction: NewQuoteModelInteraction) {
 			switch (interaction.type) {
 				case "ADD_QUOTE": {
-					await notifier
-						.interact({
-							type: "NOTIFY",
-							input: {
-								notification: { type: "pending" },
-							},
-						})
+					await notifier.interact({
+						type: "NOTIFY",
+						input: {
+							notification: { type: "pending" },
+						},
+					});
+					await addNewQuote(interaction.input.newQuote)
 						.then(() =>
-							addNewQuote(interaction.input)
-								.then(() =>
-									notifier.interact({
-										type: "NOTIFY",
-										input: {
-											notification: {
-												type: "success",
-												text: t("successMessage"),
-											},
+							Promise.all([
+								notifier.interact({
+									type: "NOTIFY",
+									input: {
+										notification: {
+											type: "success",
+											text: t("successMessage"),
 										},
-									}),
-								)
-								.catch(reason =>
-									notifier.interact({
-										type: "NOTIFY",
-										input: {
-											notification: {
-												type: "failure",
-												message: `${t("failureMessage")} ${reason} `,
-											},
-										},
-									}),
-								),
+									},
+								}),
+								interaction.input.options?.successCallback?.(),
+							]),
+						)
+						.catch(reason =>
+							notifier.interact({
+								type: "NOTIFY",
+								input: {
+									notification: {
+										type: "failure",
+										message: `${t("failureMessage")} ${reason} `,
+									},
+								},
+							}),
 						);
 				}
 			}

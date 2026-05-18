@@ -83,25 +83,27 @@ const NewQuote = function ({ model }) {
 								await interact({
 									type: "ADD_QUOTE",
 									input: {
-										englishQuote: {
-											author: authorEn,
-											quote: quoteEn,
-											source: sourceEn,
+										newQuote: {
+											englishQuote: {
+												author: authorEn,
+												quote: quoteEn,
+												source: sourceEn,
+											},
+											russianQuote: {
+												author: authorRu,
+												quote: quoteRu,
+												source: sourceRu,
+											},
+											scheduledDate:
+												scheduledDate === undefined
+													? undefined
+													: (getValues(
+															"scheduledDate",
+														) as string),
 										},
-										russianQuote: {
-											author: authorRu,
-											quote: quoteRu,
-											source: sourceRu,
-										},
-										scheduledDate:
-											scheduledDate === undefined
-												? undefined
-												: (getValues(
-														"scheduledDate",
-													) as string),
+										options: { successCallback: reset },
 									},
 								});
-								reset();
 							},
 							async errors => {
 								if (
@@ -156,7 +158,7 @@ const NewQuote = function ({ model }) {
 										</span>
 									)}
 									<textarea
-										className={`w-full rounded-lg border bg-white p-4 ${errors.quoteEn ? "border-red-800" : "border-gray-400"}`}
+										className={`w-full resize-none rounded-lg border bg-white p-4 ${errors.quoteEn ? "border-red-800" : "border-gray-400"}`}
 										placeholder={t("quote")}
 										rows={5}
 										autoComplete="off"
@@ -195,7 +197,7 @@ const NewQuote = function ({ model }) {
 										</span>
 									)}
 									<textarea
-										className={`w-full rounded-lg border bg-white p-4 ${errors.quoteRu ? "border-red-800" : "border-gray-400"}`}
+										className={`w-full resize-none rounded-lg border bg-white p-4 ${errors.quoteRu ? "border-red-800" : "border-gray-400"}`}
 										placeholder={`${t("quote")} (${t("optional")})`}
 										rows={5}
 										id="quote-ru"

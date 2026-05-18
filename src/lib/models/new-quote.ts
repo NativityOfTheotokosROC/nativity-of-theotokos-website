@@ -24,7 +24,7 @@ export type NewQuoteModelView = {
 
 export type NewQuoteModelInteraction = InputModelInteraction<
 	"ADD_QUOTE",
-	NewQuote
+	{ newQuote: NewQuote; options?: { successCallback?: () => void } }
 >;
 
 export type NewQuoteModel = InteractiveModel<

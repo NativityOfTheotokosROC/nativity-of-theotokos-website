@@ -17,7 +17,6 @@ export type Contact = {
 };
 
 export type BottomLink = {
-	precedingText?: string;
 	linkLabel: string;
 	link: string;
 };

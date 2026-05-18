@@ -109,16 +109,6 @@ const AppLayout = async function ({ model, children }) {
 		],
 		copyrightText: tFooterVariable("copyright"),
 		bottomLinks: [
-			// {
-			// 	precedingText: tFooterVariable("dailyReadingsLicense"),
-			// 	linkLabel: "Holy Trinity Orthodox",
-			// 	link: tLinks("holyTrinityChurch"),
-			// },
-			// {
-			// 	precedingText: tFooterVariable("logoIconLicense"),
-			// 	linkLabel: "Lordicon.com",
-			// 	link: "https://lordicon.com",
-			// },
 			{
 				linkLabel: tFooterVariable("admin"),
 				link: "/admin",
@@ -150,7 +140,7 @@ const AppLayout = async function ({ model, children }) {
 			{children}
 			<Footer model={footer} />
 			<LanguageSwitcher model={newReadonlyModel({ locale: language })} />
-			<Toaster position="bottom-center" containerStyle={{ bottom: 25 }} />
+			<Toaster position="bottom-center" containerStyle={{ bottom: 35 }} />
 		</Suspense>
 	);
 } satisfies ModeledContainerComponent<AppLayoutModel>;
