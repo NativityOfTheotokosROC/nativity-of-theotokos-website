@@ -36,11 +36,7 @@ const Tabs = function ({
 			</TabList>
 			<TabPanels>
 				{children.map((child, index) => (
-					<TabPanel
-						key={index}
-						className="flex flex-col gap-3"
-						unmount={false}
-					>
+					<TabPanel key={index} className="contents" unmount={false}>
 						{child}
 					</TabPanel>
 				))}

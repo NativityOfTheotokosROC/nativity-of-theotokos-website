@@ -6,6 +6,7 @@ import { ModalModel } from "../../models/modal";
 import { QuotePreviewModalModel } from "../../models/quote-preview-modal";
 import Modal from "../modal/Modal";
 import Tabs from "../tabs/Tabs";
+import HymnsOrnament from "@/public/assets/ornament_19.svg";
 
 const QuotePreviewModal = function ({ model }) {
 	const {
@@ -44,10 +45,15 @@ const QuotePreviewModal = function ({ model }) {
 
 	return (
 		<Modal model={modal}>
-			<div className="flex max-w-full min-w-full flex-col items-center justify-center pt-6 *:px-8 md:max-w-[25em]">
+			<div className="flex w-full max-w-full min-w-full flex-col items-center justify-center *:px-8 md:max-w-[25em]">
+				<div className="mb-4 w-full rounded-none border-0 bg-gray-800 p-4 text-[#FEF8F3]">
+					<div className="ornament flex h-[4em] w-full items-center justify-center">
+						<HymnsOrnament className="h-[4em] w-[8em] fill-[#FEF8F3] object-contain object-center" />
+					</div>
+				</div>
 				<Tabs model={tabs}>
 					<div
-						className={`quote-box flex h-[40dvh] max-h-[40dvh] w-full max-w-full flex-col items-center justify-center-safe gap-4 overflow-y-auto pr-4 data-closed:overflow-hidden [@media(height<=448px)]:max-h-[15dvh]`}
+						className={`quote-box flex h-[35dvh] max-h-[35dvh] max-w-full min-w-full flex-col items-center justify-center-safe gap-4 overflow-y-auto pr-4 data-closed:overflow-hidden [@media(height<=448px)]:max-h-[7dvh]`}
 					>
 						<p className="quote text-lg/relaxed font-light">
 							<span>{"“"}</span>
@@ -60,7 +66,7 @@ const QuotePreviewModal = function ({ model }) {
 						</span>
 					</div>
 					<div
-						className={`quote-box flex h-[40dvh] max-h-[40dvh] w-full max-w-full flex-col items-center justify-center-safe gap-4 overflow-y-auto pr-4 data-closed:overflow-hidden [@media(height<=448px)]:max-h-[15dvh]`}
+						className={`quote-box flex h-[35dvh] max-h-[35dvh] max-w-full min-w-full flex-col items-center justify-center-safe gap-4 overflow-y-auto pr-4 data-closed:overflow-hidden [@media(height<=448px)]:max-h-[15dvh]`}
 					>
 						<p className="quote text-lg/relaxed font-light">
 							<span>{"«"}</span>
@@ -73,7 +79,7 @@ const QuotePreviewModal = function ({ model }) {
 						</span>
 					</div>
 				</Tabs>
-				<div className="mt-3 flex w-full items-center justify-center bg-white p-5">
+				<div className="mt-3 flex w-full items-center justify-center p-5">
 					<button
 						className="w-[8em] rounded-lg bg-[#513433] p-4 text-white hover:bg-[#250203]/90 active:bg-[#250203]"
 						onClick={async () => {

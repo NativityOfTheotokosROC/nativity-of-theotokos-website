@@ -31,7 +31,7 @@ const Modal = function ({ model, children }) {
 					className="fixed inset-0 bg-black/50 duration-400 ease-out data-closed:opacity-0"
 				/>
 				<DialogPanel
-					className={`z-22 flex flex-col gap-0 overflow-clip rounded-lg border border-[#868686] bg-[#FEF8F3] text-black duration-300 ease-out data-closed:transform-[scale(92%)] data-closed:opacity-0 md:min-w-lg`}
+					className={`z-22 flex w-full max-w-lg flex-col gap-0 overflow-clip rounded-lg border border-[#868686] bg-[#FEF8F3] text-black duration-300 ease-out data-closed:transform-[scale(92%)] data-closed:opacity-0 md:min-w-lg`}
 					transition
 				>
 					<DialogTitle className="sr-only">{title}</DialogTitle>
