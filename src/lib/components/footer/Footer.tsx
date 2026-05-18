@@ -172,8 +172,6 @@ const Footer = function ({ model }) {
 							...bottomLinks.map(bottomLink => (
 								<Fragment key={bottomLink.link}>
 									<span>
-										{bottomLink.precedingText &&
-											`${bottomLink.precedingText} `}
 										<Link
 											className="hover:underline active:underline"
 											href={bottomLink.link}
