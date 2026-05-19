@@ -34,7 +34,7 @@ const MAILERLITE_API_KEY = z
 	.string()
 	.nonempty()
 	.parse(process.env.MAILERLITE_API_KEY);
-const PREPRODUCTION_PROTECTION = process.env.PREPREPRODUCTION_PROTECTION;
+const PREPRODUCTION_PROTECTION = process.env.PREPRODUCTION_PROTECTION;
 
 export {
 	BASE_URL,
