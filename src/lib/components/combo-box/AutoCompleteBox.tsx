@@ -8,6 +8,7 @@ const AutoCompleteBox = function ({ model }) {
 	const { id, items, query, isOpen } = modelView;
 	const filteredItems = items.filter(item => item.includes(query));
 	const computedOpen = filteredItems.length > 0 && isOpen;
+	console.log(filteredItems);
 
 	return (
 		<Tooltip
@@ -18,9 +19,9 @@ const AutoCompleteBox = function ({ model }) {
 			place="bottom-start"
 		>
 			<div className="auto-complete-items flex max-h-[8em] flex-col overflow-y-scroll pr-3 text-sm">
-				{filteredItems.map((item, index) => (
+				{filteredItems.map(item => (
 					<button
-						key={`${item}_${index}`}
+						key={`${item}`}
 						onClick={() =>
 							interact({ type: "SELECT", input: { value: item } })
 						}

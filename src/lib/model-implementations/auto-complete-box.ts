@@ -34,7 +34,7 @@ export function autoCompleteBoxVIInterface() {
 						currentModelView.isOpen && query.trim() === "";
 					return {
 						...currentModelView,
-						query,
+						query: query,
 						isOpen: currentModelView.items.length > 0 && !close,
 					};
 				}
