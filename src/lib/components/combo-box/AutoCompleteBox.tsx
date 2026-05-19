@@ -17,10 +17,10 @@ const AutoCompleteBox = function ({ model }) {
 			clickable
 			place="bottom-start"
 		>
-			<div className="auto-complete-items flex max-h-[10em] flex-col overflow-y-scroll pr-3 text-sm">
-				{filteredItems.map(item => (
+			<div className="auto-complete-items flex max-h-[8em] flex-col overflow-y-scroll pr-3 text-sm">
+				{filteredItems.map((item, index) => (
 					<button
-						key={item}
+						key={`${item}_${index}`}
 						onClick={() =>
 							interact({ type: "SELECT", input: { value: item } })
 						}

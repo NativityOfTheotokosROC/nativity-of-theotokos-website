@@ -25,6 +25,7 @@ export async function generateMetadata({
 export default async function Page() {
 	await protect({ roles: ["quotes"] });
 	const autoCompleteInfo = await getAutoCompleteInfo();
+	console.log(autoCompleteInfo.existingAuthors);
 
 	return <NewQuoteClient model={newReadonlyModel({ autoCompleteInfo })} />;
 }

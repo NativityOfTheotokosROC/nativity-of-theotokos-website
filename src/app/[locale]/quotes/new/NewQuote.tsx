@@ -178,6 +178,16 @@ const NewQuote = function ({ model }) {
 												},
 											);
 										}}
+										onBlur={() =>
+											englishAuthorAutoCompleteBox.interact(
+												{
+													type: "TOGGLE",
+													input: {
+														value: "close",
+													},
+												},
+											)
+										}
 									/>
 									{errors.authorEn && (
 										<span className="text-sm text-red-800">
