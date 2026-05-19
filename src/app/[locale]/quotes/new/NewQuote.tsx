@@ -151,7 +151,33 @@ const NewQuote = function ({ model }) {
 										formNoValidate
 										autoCapitalize="words"
 										autoComplete="on"
+										data-tooltip-id={
+											englishAuthorAutoCompleteBox
+												.modelView.id
+										}
 										{...register("authorEn")}
+										onChange={async e => {
+											await englishAuthorAutoCompleteBox.interact(
+												{
+													type: "FILTER",
+													input: {
+														query: e.target.value,
+													},
+												},
+											);
+											await englishAuthorAutoCompleteBox.interact(
+												{
+													type: "TOGGLE",
+													input: {
+														value:
+															e.target.value.trim() ===
+															""
+																? "close"
+																: "open",
+													},
+												},
+											);
+										}}
 									/>
 									{errors.authorEn && (
 										<span className="text-sm text-red-800">

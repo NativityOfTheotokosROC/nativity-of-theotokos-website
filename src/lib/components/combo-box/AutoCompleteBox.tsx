@@ -7,12 +7,13 @@ const AutoCompleteBox = function ({ model }) {
 	const { modelView, interact } = model;
 	const { id, items, query, isOpen } = modelView;
 	const filteredItems = items.filter(item => item.includes(query));
+	const computedOpen = filteredItems.length > 0 && isOpen;
 
 	return (
 		<Tooltip
 			id={id}
 			className="auto-complete-box"
-			isOpen={isOpen}
+			isOpen={computedOpen}
 			clickable
 			place="bottom-start"
 		>
