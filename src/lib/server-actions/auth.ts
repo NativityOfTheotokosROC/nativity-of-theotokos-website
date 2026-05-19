@@ -1,23 +1,30 @@
 "use server";
 
 import { auth } from "@/auth";
-import prisma from "@/src/lib/third-party/prisma";
+import database from "@/src/lib/third-party/prisma";
 import { headers } from "next/headers";
 import { forbidden } from "next/navigation";
 import { Role, User } from "../types/general";
-import { ENVIRONMENT } from "../utilities/server-constants";
+import {
+	ENVIRONMENT,
+	PREPRODUCTION_PROTECTION,
+} from "../utilities/server-constants";
 
 export async function protect(protectParams?: { roles?: Role[] }) {
 	const roles = protectParams?.roles;
 	const user = await getUser();
 
-	if (ENVIRONMENT != "production") return;
+	if (
+		ENVIRONMENT !== "production" &&
+		PREPRODUCTION_PROTECTION?.toLowerCase() === "disabled"
+	)
+		return;
 	if (!(user && (await isAuthorized(user, roles)))) return forbidden();
 }
 
 async function isAuthorized(user: User, roles?: Role[]) {
 	const computedRoles: Role[] = ["admin", ...(roles ? roles : [])];
-	const record = await prisma.admin.findFirst({
+	const record = await database.admin.findFirst({
 		where: {
 			email: user.email,
 			AND: { role: { in: computedRoles } },

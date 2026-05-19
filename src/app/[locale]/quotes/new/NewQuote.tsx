@@ -1,9 +1,11 @@
 "use client";
 
 import Button from "@/src/lib/components/button/Button";
+import AutoCompleteBox from "@/src/lib/components/combo-box/AutoCompleteBox";
 import QuotePreviewModal from "@/src/lib/components/quote-preview-modal/QuotePreviewModal";
 import Spinner from "@/src/lib/components/spinner/Spinner";
 import Tabs from "@/src/lib/components/tabs/Tabs";
+import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complete-box";
 import { useQuotePreviewModal } from "@/src/lib/model-implementations/quote-preview-model";
 import { useTabs } from "@/src/lib/model-implementations/tabs";
 import { NewQuoteModel } from "@/src/lib/models/new-quote";
@@ -21,7 +23,7 @@ import { useForm } from "react-hook-form";
 
 const NewQuote = function ({ model }) {
 	const { modelView, interact } = model;
-	const { newQuoteNotification } = modelView;
+	const { newQuoteNotification, autoCompleteInfo } = modelView;
 	const t = useTranslations("newQuote");
 	const quoteFormSchema = useQuoteFormSchema();
 	const defaultValues = getDefaultValues();
@@ -49,6 +51,15 @@ const NewQuote = function ({ model }) {
 		newReadonlyModel({ name: t("russian") }),
 	]);
 	const quotePreviewModal = useQuotePreviewModal();
+	const englishAuthorAutoCompleteBox = useAutoCompleteBox({
+		id: "english-author",
+		isOpen: false,
+		items:
+			autoCompleteInfo?.existingAuthors.map(author => author.english) ??
+			[],
+		query: "",
+		selectCallback: value => setValue("authorEn", value),
+	});
 
 	return (
 		<>
@@ -59,6 +70,9 @@ const NewQuote = function ({ model }) {
 						modelView: quotePreviewModal.modelView,
 					}}
 				/>
+			)}
+			{autoCompleteInfo && (
+				<AutoCompleteBox model={englishAuthorAutoCompleteBox} />
 			)}
 			<main className="new-quote border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black">
 				<div className="new-quote-content flex flex-col gap-6 p-8 py-9 md:py-10 lg:px-20">

@@ -15,8 +15,9 @@ import {
 	NotifierModelView,
 } from "../models/notifier";
 import { addNewQuote } from "../server-actions/quote";
+import { AutoCompleteInfo } from "../utilities/quote-form";
 
-export function useNewQuote() {
+export function useNewQuote(autoCompleteInfo?: AutoCompleteInfo) {
 	const notifier = useNewStatefulInteractiveModel({
 		produceModelView: async function (
 			interaction: NotifierModelInteraction<NewQuoteNotification>,
@@ -49,6 +50,7 @@ export function useNewQuote() {
 	return {
 		modelView: {
 			newQuoteNotification: notifier.modelView?.notification ?? null,
+			autoCompleteInfo,
 		},
 		interact: async function (interaction: NewQuoteModelInteraction) {
 			switch (interaction.type) {

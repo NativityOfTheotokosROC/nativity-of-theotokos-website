@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "../third-party/prisma";
+import database from "../third-party/prisma";
 import { Role } from "../types/general";
 import { UserInformation } from "../utilities/user";
 import { getUser } from "./auth";
@@ -8,7 +8,7 @@ import { getUser } from "./auth";
 export async function getUserInformation(): Promise<UserInformation> {
 	const user = await getUser();
 	if (!user) return null;
-	const roleRecords = await prisma.admin.findMany({
+	const roleRecords = await database.admin.findMany({
 		where: {
 			email: user.email,
 		},

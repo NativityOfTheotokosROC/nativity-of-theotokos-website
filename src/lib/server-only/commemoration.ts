@@ -1,6 +1,6 @@
 import "server-only";
-import prisma from "../third-party/prisma";
+import database from "../third-party/prisma";
 
 export async function getAllCommemorations() {
-	return await prisma.commemoration.findMany();
+	return await database.commemoration.findMany();
 }

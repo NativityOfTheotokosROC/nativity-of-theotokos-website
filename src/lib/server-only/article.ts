@@ -1,5 +1,5 @@
 import { cacheTag, cacheLife } from "next/cache";
-import prisma from "../third-party/prisma";
+import database from "../third-party/prisma";
 import { Language, Article } from "../types/general";
 import { notFound } from "next/navigation";
 
@@ -8,7 +8,7 @@ export async function getAllArticles(language: Language): Promise<Article[]> {
 	cacheTag("bulletin_articles");
 	cacheLife("hours");
 
-	const articles: Article[] = await prisma.article
+	const articles: Article[] = await database.article
 		.findMany({
 			include: {
 				title: true,
@@ -73,7 +73,7 @@ export async function getArticleMetadata(
 
 	const locale = language;
 	try {
-		const article = await prisma.article.findUniqueOrThrow({
+		const article = await database.article.findUniqueOrThrow({
 			include: {
 				title: true,
 				author: { include: { name: true } },

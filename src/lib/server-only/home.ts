@@ -5,7 +5,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import "server-only";
 import { LatestArticles } from "../server-actions/home";
 import { dailyReadings } from "../third-party/holytrinityorthodox";
-import prisma from "../third-party/prisma";
+import database from "../third-party/prisma";
 import {
 	DailyQuote,
 	GalleryImage,
@@ -45,7 +45,7 @@ export async function getDailyQuote(currentDate: Date, language: Language) {
 	const locale = language;
 	const localDate = new Date(getDateString(currentDate, true));
 
-	let dailyQuote = await prisma.dailyQuote
+	let dailyQuote = await database.dailyQuote
 		.findFirst({
 			where: {
 				date: localDate,
@@ -61,7 +61,7 @@ export async function getDailyQuote(currentDate: Date, language: Language) {
 			},
 		});
 	if (!dailyQuote) {
-		const quotes = await prisma.quote.findMany({
+		const quotes = await database.quote.findMany({
 			include: {
 				author: {
 					include: { name: true },
@@ -71,7 +71,7 @@ export async function getDailyQuote(currentDate: Date, language: Language) {
 			},
 		});
 		dailyQuote = quotes[Math.round(Math.random() * (quotes.length - 1))];
-		await prisma.dailyQuote.create({
+		await database.dailyQuote.create({
 			data: {
 				date: localDate,
 				quoteId: dailyQuote.id,
@@ -107,7 +107,7 @@ export async function getScheduleItems(
 	cacheTag("latest-schedule-items");
 
 	const localDate = new Date(getDateString(currentDate, true));
-	const data = await prisma.scheduleItem.findMany({
+	const data = await database.scheduleItem.findMany({
 		where: {
 			date: { gte: localDate },
 			AND: { removedScheduleItem: { is: null } },
@@ -165,7 +165,7 @@ export async function getScheduleItems(
 			})),
 		}));
 		// TODO: Revisit
-		const isPresent = await prisma.scheduleItem.findFirst({
+		const isPresent = await database.scheduleItem.findFirst({
 			where: {
 				date: nextScheduleItem.date,
 				venue: {
@@ -176,7 +176,7 @@ export async function getScheduleItems(
 		if (!isPresent) {
 			const { date, location, title, times, titleRu } = nextScheduleItem;
 
-			await prisma.scheduleItem.create({
+			await database.scheduleItem.create({
 				data: {
 					date,
 					title: {
@@ -250,10 +250,10 @@ export async function getLatestArticles(
 		author: { include: { name: true } },
 		image: { include: { placeholder: true, caption: true } },
 	};
-	const featuredArticle = await prisma.featuredArticle.findFirstOrThrow({
+	const featuredArticle = await database.featuredArticle.findFirstOrThrow({
 		include: { article: { include: articleIncludes } },
 	});
-	const otherArticles = await prisma.article.findMany({
+	const otherArticles = await database.article.findMany({
 		where: {
 			featuredArticle: {
 				is: null,
@@ -363,7 +363,7 @@ export async function getDailyGalleryImages(count: number, currentDate: Date) {
 	const localDate = new Date(getDateString(currentDate, true));
 	const promises = await Promise.all([
 		getGalleryImages(),
-		prisma.dailyGalleryImage.findMany({
+		database.dailyGalleryImage.findMany({
 			include: {
 				placeholder: true,
 			},
@@ -386,7 +386,7 @@ export async function getDailyGalleryImages(count: number, currentDate: Date) {
 		const shuffledGalleryImages = arrayToShuffled(otherGalleryImages);
 		if (otherGalleryImages.length + dailyGalleryImages.length <= count) {
 			const newDailyGalleryImages =
-				await prisma.dailyGalleryImage.createManyAndReturn({
+				await database.dailyGalleryImage.createManyAndReturn({
 					include: { placeholder: true },
 					data: shuffledGalleryImages.map(galleryImage => ({
 						date: localDate,
@@ -399,7 +399,7 @@ export async function getDailyGalleryImages(count: number, currentDate: Date) {
 			];
 		} else {
 			const newDailyGalleryImages =
-				await prisma.dailyGalleryImage.createManyAndReturn({
+				await database.dailyGalleryImage.createManyAndReturn({
 					include: { placeholder: true },
 					data: shuffledGalleryImages
 						.slice(0, count - dailyGalleryImages.length)

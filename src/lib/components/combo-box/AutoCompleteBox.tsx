@@ -1,0 +1,36 @@
+import { ModeledVoidComponent } from "@mvc-react/components";
+import { InitializedModel } from "@mvc-react/mvc";
+import { AutoCompleteBoxModel } from "../../models/auto-complete-box";
+import { Tooltip } from "react-tooltip";
+
+const AutoCompleteBox = function ({ model }) {
+	const { modelView, interact } = model;
+	const { id, items, query, isOpen } = modelView;
+	const filteredItems = items.filter(item => item.includes(query));
+
+	return (
+		<Tooltip
+			id={id}
+			className="auto-complete-box"
+			isOpen={isOpen}
+			clickable
+			place="bottom-start"
+		>
+			<div className="auto-complete-items flex max-h-[10em] flex-col overflow-y-scroll pr-3 text-sm">
+				{filteredItems.map(item => (
+					<button
+						key={item}
+						onClick={() =>
+							interact({ type: "SELECT", input: { value: item } })
+						}
+						className="bg-transparent p-3 text-left active:bg-black active:text-[#ffdc4f]"
+					>
+						{item}
+					</button>
+				))}
+			</div>
+		</Tooltip>
+	);
+} satisfies ModeledVoidComponent<InitializedModel<AutoCompleteBoxModel>>;
+
+export default AutoCompleteBox;

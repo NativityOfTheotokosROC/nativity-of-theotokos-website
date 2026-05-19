@@ -5,7 +5,7 @@ import {
 	getPlaceholder as generatePlaceholder,
 } from "@grod56/placeholder";
 import { cacheLife } from "next/cache";
-import prisma from "../third-party/prisma";
+import database from "../third-party/prisma";
 import { BASE_URL } from "../utilities/server-constants";
 
 const baseUrl = BASE_URL;
@@ -32,7 +32,7 @@ async function findPlaceholder(src: string) {
 		if (!(error instanceof TypeError)) throw error;
 		processedSrc = src;
 	}
-	const result = await prisma.imagePlaceholder.findFirst({
+	const result = await database.imagePlaceholder.findFirst({
 		where: {
 			imageLink: processedSrc,
 		},
@@ -55,7 +55,7 @@ async function setPlaceholder(
 		if (!(error instanceof TypeError)) throw error;
 		processedSrc = src;
 	}
-	await prisma.imagePlaceholder.create({
+	await database.imagePlaceholder.create({
 		data: {
 			imageLink: processedSrc,
 			placeholder,
