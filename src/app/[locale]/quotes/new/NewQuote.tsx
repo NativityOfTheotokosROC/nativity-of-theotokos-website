@@ -159,14 +159,6 @@ const NewQuote = function ({ model }) {
 										onChange={async e => {
 											await englishAuthorAutoCompleteBox.interact(
 												{
-													type: "FILTER",
-													input: {
-														query: e.target.value,
-													},
-												},
-											);
-											await englishAuthorAutoCompleteBox.interact(
-												{
 													type: "TOGGLE",
 													input: {
 														value:
@@ -174,6 +166,14 @@ const NewQuote = function ({ model }) {
 															""
 																? "close"
 																: "open",
+													},
+												},
+											);
+											await englishAuthorAutoCompleteBox.interact(
+												{
+													type: "FILTER",
+													input: {
+														query: e.target.value,
 													},
 												},
 											);

@@ -8,7 +8,6 @@ const AutoCompleteBox = function ({ model }) {
 	const { id, items, query, isOpen } = modelView;
 	const filteredItems = items.filter(item => item.includes(query));
 	const computedOpen = filteredItems.length > 0 && isOpen;
-	console.log(filteredItems);
 
 	return (
 		<Tooltip
