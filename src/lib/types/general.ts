@@ -95,3 +95,8 @@ export type ShareData = {
 	url: string;
 	text?: string;
 };
+
+export type Translation = {
+	english: string;
+	russian: string | null;
+};

@@ -1,5 +1,5 @@
 import { getSaints } from "@/src/lib/third-party/holytrinityorthodox";
-import prisma from "@/src/lib/third-party/prisma";
+import database from "@/src/lib/third-party/prisma";
 import { load } from "cheerio";
 import { addDays } from "date-fns";
 import { backOff } from "exponential-backoff";
@@ -24,14 +24,14 @@ export async function GET(request: Request) {
 		} catch (error) {
 			console.log(nextDate);
 			console.log(saints);
-			await prisma.commemoration.createMany({
+			await database.commemoration.createMany({
 				data: [...ids.keys().map(id => ({ id: id }))],
 				skipDuplicates: true,
 			});
 			throw error;
 		}
 		nextDate = addDays(nextDate, 1);
-		const updates = await prisma.commemoration.createMany({
+		const updates = await database.commemoration.createMany({
 			data: [...ids.keys().map(id => ({ id: id }))],
 			skipDuplicates: true,
 		});

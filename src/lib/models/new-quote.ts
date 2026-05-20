@@ -1,4 +1,5 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
+import { AutoCompleteInfo } from "../utilities/quote-form";
 import { Notification } from "../types/general";
 
 export type Quote = {
@@ -20,6 +21,7 @@ export type NewQuoteNotification =
 
 export type NewQuoteModelView = {
 	newQuoteNotification: NewQuoteNotification | null;
+	autoCompleteInfo?: AutoCompleteInfo;
 };
 
 export type NewQuoteModelInteraction = InputModelInteraction<

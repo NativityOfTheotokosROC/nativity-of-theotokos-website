@@ -3,7 +3,7 @@
 import { ImagePlaceholder } from "@grod56/placeholder";
 import { cacheTag } from "next/cache";
 import { notFound } from "next/navigation";
-import prisma from "../third-party/prisma";
+import database from "../third-party/prisma";
 import { Language, Article } from "../types/general";
 import { isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
@@ -18,7 +18,7 @@ export async function getArticle(
 
 	const locale = language;
 	try {
-		const article = await prisma.article.findUniqueOrThrow({
+		const article = await database.article.findUniqueOrThrow({
 			where: { link: articleId },
 			include: {
 				author: { include: { name: true } },
