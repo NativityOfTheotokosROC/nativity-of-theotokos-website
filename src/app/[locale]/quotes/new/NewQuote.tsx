@@ -58,7 +58,16 @@ const NewQuote = function ({ model }) {
 			autoCompleteInfo?.existingAuthors.map(author => author.english) ??
 			[],
 		query: "",
-		selectCallback: value => setValue("authorEn", value),
+		selectCallback: value => {
+			setValue("authorEn", value);
+			setValue(
+				// TODO: Refactor
+				"authorRu",
+				autoCompleteInfo!.existingAuthors.filter(
+					author => author.english == value,
+				)[0].russian,
+			);
+		},
 	});
 
 	return (
