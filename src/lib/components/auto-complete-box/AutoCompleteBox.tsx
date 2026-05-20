@@ -28,7 +28,6 @@ const AutoCompleteBox = function ({ model }) {
 						<button
 							key={`${item}`}
 							onClick={async () => {
-								console.log(item);
 								await interact({
 									type: "SELECT",
 									input: { value: item },
