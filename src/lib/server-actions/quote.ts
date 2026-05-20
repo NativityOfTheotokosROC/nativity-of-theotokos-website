@@ -81,7 +81,9 @@ export async function addNewQuote(newQuote: NewQuote) {
 						russian: authorRu,
 						englishHash: getMd5Hash(authorEn),
 					},
-					update: {},
+					update: {
+						russian: authorRu,
+					},
 					where: {
 						englishHash: getMd5Hash(authorEn),
 					},
@@ -94,7 +96,9 @@ export async function addNewQuote(newQuote: NewQuote) {
 							russian: sourceRu,
 							englishHash: getMd5Hash(sourceEn),
 						},
-						update: {},
+						update: {
+							russian: sourceRu,
+						},
 						where: {
 							englishHash: getMd5Hash(sourceEn),
 						},
