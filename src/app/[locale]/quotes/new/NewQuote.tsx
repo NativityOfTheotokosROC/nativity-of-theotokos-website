@@ -161,7 +161,6 @@ const NewQuote = function ({ model }) {
 									sourceRu,
 									scheduledDate,
 								} = form;
-								console.log(form);
 								await interact({
 									type: "ADD_QUOTE",
 									input: {

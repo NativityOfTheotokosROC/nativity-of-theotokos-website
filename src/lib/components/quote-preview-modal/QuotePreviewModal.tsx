@@ -55,12 +55,12 @@ const QuotePreviewModal = function ({ model }) {
 					<div
 						className={`quote-box flex h-[35dvh] max-h-[35dvh] max-w-full min-w-full flex-col items-center justify-center-safe gap-4 overflow-y-auto pr-4 data-closed:overflow-hidden [@media(height<=448px)]:max-h-[7dvh]`}
 					>
-						<p className="quote text-lg/relaxed font-light">
+						<p className="quote text-lg/relaxed">
 							<span>{"“"}</span>
 							{englishQuote.quote}
 							<span>{"”"}</span>
 						</p>
-						<span className="author w-full text-right font-light">
+						<span className="author w-full text-right">
 							— {englishQuote.author}
 							{englishQuote.source && `, ${englishQuote.source}`}
 						</span>
@@ -68,12 +68,12 @@ const QuotePreviewModal = function ({ model }) {
 					<div
 						className={`quote-box flex h-[35dvh] max-h-[35dvh] max-w-full min-w-full flex-col items-center justify-center-safe gap-4 overflow-y-auto pr-4 data-closed:overflow-hidden [@media(height<=448px)]:max-h-[15dvh]`}
 					>
-						<p className="quote text-lg/relaxed font-light">
+						<p className="quote text-lg/relaxed">
 							<span>{"«"}</span>
 							{quoteRu}
 							<span>{"»"}</span>
 						</p>
-						<span className="author w-full text-right font-light">
+						<span className="author w-full text-right">
 							— {authorRu}
 							{sourceRu && `, ${sourceRu}`}
 						</span>

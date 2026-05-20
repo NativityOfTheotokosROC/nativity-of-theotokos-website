@@ -8,14 +8,17 @@ import "./auto-complete-box.css";
 const AutoCompleteBox = function ({ model }) {
 	const { modelView, interact } = model;
 	const { id, items, query, isOpen } = modelView;
-	const queryParts = query.split(/\s+/).map(part => part.toLowerCase());
-	const filteredItems = items.filter(item =>
-		queryParts.reduce(
+	const lowercasedQueryParts = query
+		.split(/\s+/)
+		.map(part => part.toLowerCase());
+	const filteredItems = items.filter(item => {
+		const lowercasedItem = item.toLowerCase();
+		return lowercasedQueryParts.reduce(
 			(value, currentPart) =>
-				value && item.toLowerCase().includes(currentPart),
+				value && lowercasedItem.includes(currentPart),
 			true,
-		),
-	);
+		);
+	});
 	const computedOpen = filteredItems.length > 0 && isOpen;
 	const [isClickable, setClickable] = useState(computedOpen); //TODO: Not ideal
 
