@@ -7,7 +7,9 @@ import { useState } from "react";
 const AutoCompleteBox = function ({ model }) {
 	const { modelView, interact } = model;
 	const { id, items, query, isOpen } = modelView;
-	const filteredItems = items.filter(item => item.includes(query));
+	const filteredItems = items.filter(item =>
+		item.toLowerCase().includes(query.toLowerCase()),
+	);
 	const computedOpen = filteredItems.length > 0 && isOpen;
 	const [isClickable, setClickable] = useState(computedOpen); //TODO: Not ideal
 
