@@ -24,7 +24,7 @@ const AutoCompleteBox = function ({ model }) {
 						onClick={() =>
 							interact({ type: "SELECT", input: { value: item } })
 						}
-						className="bg-transparent p-3 text-left active:bg-black active:text-[#ffdc4f]"
+						className="bg-transparent p-3 text-left active:text-[#ffdc4f]"
 					>
 						{item}
 					</button>
