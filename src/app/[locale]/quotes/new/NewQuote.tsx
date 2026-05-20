@@ -225,6 +225,7 @@ const NewQuote = function ({ model }) {
 												.modelView.id
 										}
 										onChange={async e => {
+											register("authorEn").onChange(e);
 											await englishAuthorAutoCompleteBox.interact(
 												{
 													type: "TOGGLE",
@@ -274,6 +275,7 @@ const NewQuote = function ({ model }) {
 												.modelView.id
 										}
 										onChange={async e => {
+											register("sourceEn").onChange(e);
 											await englishSourceAutoCompleteBox.interact(
 												{
 													type: "TOGGLE",
@@ -337,6 +339,7 @@ const NewQuote = function ({ model }) {
 												.modelView.id
 										}
 										onChange={async e => {
+											register("authorRu").onChange(e);
 											await russianAuthorAutoCompleteBox.interact(
 												{
 													type: "TOGGLE",
@@ -385,6 +388,7 @@ const NewQuote = function ({ model }) {
 												.modelView.id
 										}
 										onChange={async e => {
+											register("sourceRu").onChange(e);
 											await russianSourceAutoCompleteBox.interact(
 												{
 													type: "TOGGLE",
