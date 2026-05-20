@@ -65,7 +65,7 @@ const NewQuote = function ({ model }) {
 				"authorRu",
 				autoCompleteInfo!.existingAuthors.filter(
 					author => author.english == value,
-				)[0].russian,
+				)[0].russian ?? "",
 			);
 		},
 	});
@@ -100,7 +100,7 @@ const NewQuote = function ({ model }) {
 				"sourceRu",
 				autoCompleteInfo!.existingSources.filter(
 					source => source.english == value,
-				)[0].russian,
+				)[0].russian ?? "",
 			);
 		},
 	});
@@ -161,6 +161,7 @@ const NewQuote = function ({ model }) {
 									sourceRu,
 									scheduledDate,
 								} = form;
+								console.log(form);
 								await interact({
 									type: "ADD_QUOTE",
 									input: {

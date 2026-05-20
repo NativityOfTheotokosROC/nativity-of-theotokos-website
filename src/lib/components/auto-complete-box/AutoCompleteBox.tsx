@@ -24,7 +24,7 @@ const AutoCompleteBox = function ({ model }) {
 			afterShow={() => setClickable(true)}
 			place="bottom-start"
 			content={
-				<div className="auto-complete-items flex max-h-[8em] w-[17em] max-w-[17em] flex-col overflow-y-auto pr-3 text-sm">
+				<div className="auto-complete-items flex max-h-[9em] w-[17em] max-w-[17em] flex-col overflow-y-auto pr-3 text-sm">
 					{filteredItems.map(item => (
 						<button
 							key={`${item}`}
