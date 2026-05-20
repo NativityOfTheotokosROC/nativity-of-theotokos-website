@@ -57,7 +57,7 @@ export function Link(props: ComponentProps<typeof LocalizedLink>) {
 	return (
 		<LocalizedLink
 			{...props}
-			onClick={e => {
+			onClick={async e => {
 				if (
 					props.target !== "_blank" &&
 					triggerLoading(pathName, href.toString(), {
@@ -65,7 +65,11 @@ export function Link(props: ComponentProps<typeof LocalizedLink>) {
 						targetLocale: locale,
 					})
 				)
-					interact({ type: "SET_LOADING", input: { value: true } });
+					await interact({
+						type: "SET_LOADING",
+						input: { value: false },
+					});
+				await interact({ type: "SET_LOADING", input: { value: true } });
 				props.onClick?.(e);
 			}}
 		>

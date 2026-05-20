@@ -75,7 +75,7 @@ const SignIn = function ({ model }) {
 						? signInStatus.message
 						: " "}
 				</span>
-				<div className="consent-message mt-8 flex flex-col gap-2 md:max-w-md">
+				<div className="consent-message mt-8 flex flex-col gap-2 md:mt-4 md:max-w-md">
 					<hr className="text-black/30" />
 					<span className="text-sm">
 						{t.rich("consent", {
