@@ -21,10 +21,14 @@ const AutoCompleteBox = function ({ model }) {
 				{filteredItems.map(item => (
 					<button
 						key={`${item}`}
-						onClick={() =>
-							interact({ type: "SELECT", input: { value: item } })
-						}
-						className="bg-transparent p-3 text-left active:text-[#ffdc4f]"
+						onClick={async () => {
+							console.log(item);
+							await interact({
+								type: "SELECT",
+								input: { value: item },
+							});
+						}}
+						className="bg-transparent p-3 text-left hover:text-[#ffdc4f] active:text-[#ffdc4f]"
 					>
 						{item}
 					</button>
