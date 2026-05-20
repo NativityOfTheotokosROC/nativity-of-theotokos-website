@@ -2,19 +2,23 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
 import { AutoCompleteBoxModel } from "../../models/auto-complete-box";
 import { Tooltip } from "react-tooltip";
+import { useState } from "react";
 
 const AutoCompleteBox = function ({ model }) {
 	const { modelView, interact } = model;
 	const { id, items, query, isOpen } = modelView;
 	const filteredItems = items.filter(item => item.includes(query));
 	const computedOpen = filteredItems.length > 0 && isOpen;
+	const [isClickable, setClickable] = useState(computedOpen); //TODO: Not ideal
 
 	return (
 		<Tooltip
 			id={id}
 			className="auto-complete-box"
 			isOpen={computedOpen}
-			clickable={computedOpen}
+			clickable={isClickable}
+			afterHide={() => setClickable(false)}
+			afterShow={() => setClickable(true)}
 			place="bottom-start"
 			content={
 				<div className="auto-complete-items flex max-h-[8em] w-[17em] max-w-[17em] flex-col overflow-y-auto pr-3 text-sm">
