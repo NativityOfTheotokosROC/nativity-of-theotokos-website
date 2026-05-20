@@ -14,7 +14,7 @@ const AutoCompleteBox = function ({ model }) {
 			id={id}
 			className="auto-complete-box"
 			isOpen={computedOpen}
-			clickable
+			clickable={computedOpen}
 			place="bottom-start"
 		>
 			<div className="auto-complete-items flex max-h-[8em] w-[17em] max-w-[17em] flex-col overflow-y-auto pr-3 text-sm">
