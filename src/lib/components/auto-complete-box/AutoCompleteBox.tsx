@@ -3,6 +3,7 @@ import { InitializedModel } from "@mvc-react/mvc";
 import { AutoCompleteBoxModel } from "../../models/auto-complete-box";
 import { Tooltip } from "react-tooltip";
 import { useState } from "react";
+import "./auto-complete-box.css";
 
 const AutoCompleteBox = function ({ model }) {
 	const { modelView, interact } = model;
