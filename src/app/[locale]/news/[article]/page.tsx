@@ -11,6 +11,7 @@ import {
 	getArticleMetadata,
 } from "@/src/lib/server-only/article";
 import { Article as JSONLdArticle, WithContext } from "schema-dts";
+import { formatISO } from "date-fns";
 
 export async function generateStaticParams() {
 	const [articlesEn, articlesRu] = await Promise.all([
@@ -25,13 +26,12 @@ export async function generateStaticParams() {
 
 function articleJsonLd(article: ArticleType) {
 	const { title, author, articleImage, dateCreated, snippet } = article;
-	console.log(`type of dateCreated: ${typeof dateCreated}`);
 	return {
 		"@context": "https://schema.org",
 		"@type": "BlogPosting",
 		headline: title,
 		description: snippet,
-		datePublished: dateCreated.toISOString(),
+		datePublished: formatISO(dateCreated),
 		author: {
 			"@type": "Person",
 			name: author,
