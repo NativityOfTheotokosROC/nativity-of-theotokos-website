@@ -41,6 +41,7 @@ export const getDailyReadings = async (
 export async function getDailyQuote(currentDate: Date, language: Language) {
 	"use cache: remote";
 	cacheTag("daily-quote");
+	cacheLife("days");
 
 	const locale = language;
 	const localDate = new Date(getDateString(currentDate, true));
@@ -105,6 +106,7 @@ export async function getScheduleItems(
 ) {
 	"use cache: remote";
 	cacheTag("latest-schedule-items");
+	cacheLife("days");
 
 	const localDate = new Date(getDateString(currentDate, true));
 	const data = await database.scheduleItem.findMany({
@@ -357,7 +359,7 @@ export async function getLatestArticles(
 export async function getDailyGalleryImages(count: number, currentDate: Date) {
 	"use cache: remote";
 	cacheTag("daily-gallery-images");
-	cacheLife("hours");
+	cacheLife("days");
 
 	const baseUrl = BASE_URL;
 	const localDate = new Date(getDateString(currentDate, true));

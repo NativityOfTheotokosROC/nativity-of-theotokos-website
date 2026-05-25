@@ -3,7 +3,7 @@
 	"crons": [
 		{
 			"path": "/api/commemorations",
-			"schedule": "0 0 1 */1 *"
+			"schedule": "0 0 1 1 *"
 		}
 	]
 }
