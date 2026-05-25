@@ -1,7 +1,7 @@
 import { load } from "cheerio";
 import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
-import { cacheLife, unstable_cache } from "next/cache";
+import { unstable_cache } from "next/cache";
 import { Commemoration } from "../models/commemoration";
 import { DailyReadings, Hymn, Image, Language } from "../types/general";
 import { getLocalTimeZone } from "../utilities/date-time";
@@ -122,9 +122,9 @@ export const getDailySaint = unstable_cache(
 );
 
 export const getCommemoration = unstable_cache(
-	async (id: string, language: Language) => {
-		"use cache: remote";
-		cacheLife("weeks");
+	async (id: string, language: Language): Promise<Commemoration | null> => {
+		// "use cache: remote";
+		// cacheLife("weeks");
 
 		const requestURL = new URL(
 			_getCommemorationURL(language) + `/${id.replace("_", "/")}.htm`,

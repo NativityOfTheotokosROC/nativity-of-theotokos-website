@@ -1,9 +1,8 @@
 import { ImagePlaceholder, getPlaceholder } from "@grod56/placeholder";
 import { arrayToShuffled } from "array-shuffle";
 import { getTranslations } from "next-intl/server";
-import { cacheLife, cacheTag, unstable_cache } from "next/cache";
+import { unstable_cache } from "next/cache";
 import "server-only";
-import { LatestArticles } from "../server-actions/home";
 import { dailyReadings } from "../third-party/holytrinityorthodox";
 import database from "../third-party/prisma";
 import {

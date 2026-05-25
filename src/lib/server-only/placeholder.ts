@@ -4,7 +4,7 @@ import {
 	ImagePlaceholder,
 	getPlaceholder as generatePlaceholder,
 } from "@grod56/placeholder";
-import { cacheLife, unstable_cache } from "next/cache";
+import { unstable_cache } from "next/cache";
 import database from "../third-party/prisma";
 import { BASE_URL } from "../utilities/server-constants";
 
