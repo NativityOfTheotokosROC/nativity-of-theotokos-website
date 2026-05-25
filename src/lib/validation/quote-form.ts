@@ -1,5 +1,5 @@
 import z from "zod";
-import { Translator } from "../type/general";
+import { Translator } from "../types/general";
 import { useLocalizedSchema } from "./general";
 import { getQuoteSchema } from "./quote";
 

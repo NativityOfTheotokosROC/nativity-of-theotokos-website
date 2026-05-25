@@ -1,0 +1,72 @@
+:root {
+	scroll-padding-top: 4em;
+}
+
+.header {
+	scale: 1 1;
+	animation: shrink-header ease-out forwards;
+	transform-origin: top;
+	animation-timeline: scroll(root);
+	animation-range: 500px 610px;
+	will-change: transform;
+}
+
+.header .logo {
+	transform-origin: top left;
+	scale: 1 1;
+	animation: shrink-header-content ease-out forwards;
+	animation-timeline: scroll(root);
+	animation-range: 500px 610px;
+}
+
+.header .login-tooltip {
+	transform-origin: top right;
+	scale: 1 1;
+	animation: shrink-header-content ease-out forwards;
+	animation-timeline: scroll(root);
+	animation-range: 500px 610px;
+}
+
+.header .header-interactive {
+	transform-origin: top right;
+	scale: 1 1;
+	animation: shrink-header-content ease-out forwards;
+	animation-timeline: scroll(root);
+	animation-range: 500px 610px;
+}
+
+.header .accordion-menu-content {
+	transform-origin: center;
+	scale: 1 1;
+	animation: shrink-header-content ease-out forwards;
+	animation-timeline: scroll(root);
+	animation-range: 500px 610px;
+}
+
+.header-border {
+	scale: 0 1;
+	opacity: 0;
+	width: 100%;
+	animation: expandout ease-out forwards;
+	animation-timeline: scroll(root);
+	animation-range: 0 500px;
+}
+
+@keyframes expandout {
+	to {
+		scale: 1 1;
+		opacity: 1;
+	}
+}
+
+@keyframes shrink-header {
+	to {
+		scale: 1 0.85;
+	}
+}
+
+@keyframes shrink-header-content {
+	to {
+		transform: scale(0.85, 1) translateZ(0);
+	}
+}

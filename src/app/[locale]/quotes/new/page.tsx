@@ -1,5 +1,6 @@
 import { routing } from "@/src/i18n/routing";
-import ProtectedComponent from "@/src/lib/component/protected-component/ProtectedComponent";
+import { protect } from "@/src/lib/server-actions/auth";
+import { getAutoCompleteInfo } from "@/src/lib/server-actions/quote";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
@@ -21,14 +22,9 @@ export async function generateMetadata({
 		title: t("metaTitle"),
 	};
 }
-export default function Page() {
-	return (
-		<ProtectedComponent
-			model={newReadonlyModel({
-				roles: ["quotes"],
-			})}
-		>
-			<NewQuoteClient />
-		</ProtectedComponent>
-	);
+export default async function Page() {
+	await protect({ roles: ["quotes"] });
+	const autoCompleteInfo = await getAutoCompleteInfo();
+
+	return <NewQuoteClient model={newReadonlyModel({ autoCompleteInfo })} />;
 }

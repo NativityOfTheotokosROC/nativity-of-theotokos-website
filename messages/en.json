@@ -54,7 +54,8 @@
 		"email": "Email",
 		"jurisdictional": "Jurisdictional",
 		"clergy": "Clergy",
-		"contact": "Contact"
+		"contact": "Contact",
+		"siteAttribution": "Website by <link>{name}</link>"
 	},
 	"footer_variable": {
 		"description": "Nativity of the Theotokos Parish of the Russian Orthodox Church in Zimbabwe. Located at Kingsmead Private Chapel, Cnr Rayl Road and Kingsmead Road, Borrowdale, Harare.",
@@ -64,12 +65,15 @@
 		"patriarchate": "Moscow Patriarchate",
 		"frDimitri": "Archpriest Dmitry Polokhov",
 		"frSavva": "Fr Savva Kajawa",
+		"frEmilianos": "Fr Emilianos Shumba",
 		"phone": "Phone",
 		"larisa": "Larisa",
 		"vasily": "Vasily",
 		"admin": "Admin",
-		"dailyReadingsLicense": "Daily Readings sourced from",
-		"logoIconLicense": "Logo icon by",
+		"privacy": "Privacy & Cookies",
+		"terms": "Terms",
+		"licenses": "Licenses",
+		"attribution": "Attribution",
 		"copyright": "2026 Nativity of the Theotokos Parish. All Rights Reserved."
 	},
 	"home": {
@@ -78,16 +82,36 @@
 		"dailyReadingsHeader": "Daily Readings",
 		"dailyHymns": "Hymns for the Day",
 		"readings": "Readings",
-		"latestNewsHeader": "Latest News",
+		"latestNewsHeader": "Latest Updates",
 		"featured": "Featured",
 		"schedule": "Schedule",
-		"moreNews": "More News",
+		"moreNews": "More Articles",
 		"liturgicalResources": "Liturgical Resources",
 		"whatIsOrthodoxy": "What is Orthodoxy?",
 		"aboutOurParish": "About our Parish"
 	},
+	"commemoration": {
+		"oldCalendar": "Julian Calendar",
+		"prologue": "Prologue of Ochrid"
+	},
 	"aboutUs": {
 		"metaTitle": "About Us"
+	},
+	"privacyPolicy": {
+		"title": "Privacy Policy",
+		"lastModified": "Last Updated"
+	},
+	"termsOfService": {
+		"title": "Terms of Service",
+		"lastModified": "Last Updated"
+	},
+	"licenses": {
+		"title": "Licenses",
+		"alternateTitle": "Attribution"
+	},
+	"licenses_variable": {
+		"dailyReadingsLicense": "Daily readings, commemorations, and hymns sourced from",
+		"logoIconLicense": "Logo icon by"
 	},
 	"news": {
 		"metaTitle": "News",
@@ -107,14 +131,18 @@
 		"preview": "Preview",
 		"addQuote": "Add Quote",
 		"successMessage": "Quote successfully added",
-		"failureMessage": "Could not add the quote. Error:"
+		"failureMessage": "Could not add the quote. Error:",
+		"quotePreview": "Quote Preview"
 	},
 	"signIn": {
 		"metaTitle": "Sign In",
 		"title": "Sign In",
-		"description": "Sign in to the website to access admin resources.",
+		"description": "Sign in to the website to proceed.",
 		"successMessage": "Redirecting you to {serviceName} sign-in shortly. Please wait...",
-		"failureMessage": "Could not connect to {serviceName} sign-in:"
+		"failureMessage": "Could not connect to {serviceName} sign-in:",
+		"consent": "By signing in, you acknowledge that you agree with our <tos>{termsOfService}</tos> and consent to our <privacy>{privacyPolicy}</privacy>.",
+		"privacyPolicy": "Privacy Policy",
+		"termsOfService": "Terms of Service"
 	},
 	"signInButton": {
 		"buttonText": "Sign in with {serviceName}"
@@ -146,12 +174,21 @@
 		"mailingListDescription": "Stay up to date with the latest church news, announcements, and events straight from your mailbox. Enter your email below and subscribe if you haven't already.",
 		"mailingListButton": "Subscribe",
 		"mailingListSuccessMessage": "Thank you for subscribing to our mailing list! We will be keeping you up to date with the latest news, updates, announcements and more.",
-		"errorMessage": "There was a problem subscribing you to our mailing list. Please try again, cross-check your email, or check your internet connection."
+		"errorMessage": "There was a problem subscribing you to our mailing list. Please try again, cross-check your email, or check your internet connection.",
+		"consent": "By subscribing, you acknowledge that you agree with our <tos>{termsOfService}</tos> and consent to our <privacy>{privacyPolicy}</privacy>.",
+		"privacyPolicy": "Privacy Policy",
+		"termsOfService": "Terms of Service"
+	},
+	"loginTooltip": {
+		"text": "You are now signed in"
 	},
 	"nonDescriptive": {
 		"menu": "Menu",
 		"close": "Close",
-		"share": "Share"
+		"share": "Share",
+		"download": "Download",
+		"print": "Print",
+		"saveAsPDF": "Save as PDF"
 	},
 	"links": {
 		"liturgicalResources": "https://eadiocese.org/litresource",
@@ -169,11 +206,12 @@
 		"newsArticleImage": "News Article Image",
 		"galleryImage": "Gallery Image"
 	},
-	"miscellaneous": {
-		"futureContent": "Content to be added soon!"
-	},
 	"validation": {
 		"nonEmpty": "{field} cannot be empty",
 		"maxCharacters": "{field} is too long (maximum of {max} characters)"
+	},
+	"miscellaneous": {
+		"futureContent": "Content to be added soon!",
+		"closeButton": "Close"
 	}
 }

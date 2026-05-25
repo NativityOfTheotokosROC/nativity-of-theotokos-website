@@ -54,7 +54,8 @@
 		"email": "Электронная почта",
 		"jurisdictional": "Юрисдикция",
 		"clergy": "Духовенство прихода",
-		"contact": "Контакты"
+		"contact": "Контакты",
+		"siteAttribution": "Разработка сайта — <link>{name}</link>"
 	},
 	"footer_variable": {
 		"description": "Приход Рождества Пресвятой Богородицы Русской Православной Церкви в Зимбабве. Расположен в частной часовне Kingsmead, угол Rayl Road и Kingsmead Road, Борроудейл, Хараре.",
@@ -63,13 +64,16 @@
 		"patriarch": "Святейший Патриарх Кирилл",
 		"patriarchate": "Московский Патриархат",
 		"frDimitri": "Протоиерей Димитрий Полохов",
-		"frSavva": "иерей Савва Каджава",
+		"frSavva": "иерей Савва Kajawa",
+		"frEmilianos": "иерей Емелиан Shumba",
 		"phone": "Телефон",
 		"larisa": "Лариса",
 		"vasily": "Василий",
 		"admin": "Админ",
-		"dailyReadingsLicense": "Ежедневные чтения предоставлены",
-		"logoIconLicense": "Иконка логотипа:",
+		"privacy": "Конфиденциальность",
+		"terms": "Условия",
+		"licenses": "Лицензии",
+		"attribution": "Атрибуция",
 		"copyright": "2026 Приход Рождества Пресвятой Богородицы. Все права защищены."
 	},
 	"home": {
@@ -78,16 +82,36 @@
 		"dailyReadingsHeader": "Ежедневные Чтения",
 		"dailyHymns": "Тропари и кондаки дня",
 		"readings": "Чтения",
-		"latestNewsHeader": "Последние Новости",
-		"featured": "Главная новость",
+		"latestNewsHeader": "Приходской бюллетень",
+		"featured": "Главная",
 		"schedule": "Расписание",
-		"moreNews": "Другие новости",
+		"moreNews": "Другие статьи",
 		"liturgicalResources": "Богослужебные материалы",
 		"whatIsOrthodoxy": "Что такое Православие?",
 		"aboutOurParish": "О нашем приходе"
 	},
+	"commemoration": {
+		"oldCalendar": "Юлианский календарь",
+		"prologue": "Пролог Охридский"
+	},
 	"aboutUs": {
 		"metaTitle": "О приходе"
+	},
+	"privacyPolicy": {
+		"title": "Политика конфиденциальности",
+		"lastModified": "Последнее обновление"
+	},
+	"termsOfService": {
+		"title": "Условия использования",
+		"lastModified": "Последнее обновление"
+	},
+	"licenses": {
+		"title": "Лицензии",
+		"alternateTitle": "Атрибуция"
+	},
+	"licenses_variable": {
+		"dailyReadingsLicense": "Ежедневные чтения, памятования и песнопения предоставлены",
+		"logoIconLicense": "Иконка логотипа"
 	},
 	"news": {
 		"metaTitle": "Новости",
@@ -107,14 +131,18 @@
 		"preview": "Предпросмотр",
 		"addQuote": "Добавить цитату",
 		"successMessage": "Цитата успешно добавлена",
-		"failureMessage": "Не удалось добавить цитату. Ошибка:"
+		"failureMessage": "Не удалось добавить цитату. Ошибка:",
+		"quotePreview": "Предпросмотр цитаты"
 	},
 	"signIn": {
 		"metaTitle": "Вход",
 		"title": "Вход",
-		"description": "Войдите на сайт, чтобы получить доступ к административным ресурсам.",
+		"description": "Войдите на сайт, чтобы продолжить.",
 		"successMessage": "Скоро вы будете перенаправлены на страницу входа {serviceName}. Пожалуйста, подождите...",
-		"failureMessage": "Не удалось подключиться к входу через {serviceName}:"
+		"failureMessage": "Не удалось подключиться к входу через {serviceName}:",
+		"consent": "Входя в систему, вы подтверждаете, что соглашаетесь с нашими <tos>{termsOfService}</tos> и принимаете нашу <privacy>{privacyPolicy}</privacy>.",
+		"privacyPolicy": "Политика конфиденциальности",
+		"termsOfService": "Условия использования"
 	},
 	"signInButton": {
 		"buttonText": "Войти через {serviceName}"
@@ -146,12 +174,21 @@
 		"mailingListDescription": "Получайте последние новости прихода, объявления и события по электронной почте. Введите ваш адрес ниже, чтобы подписаться.",
 		"mailingListButton": "Подписаться",
 		"mailingListSuccessMessage": "Спасибо за подписку! Мы будем информировать вас о последних новостях, обновлениях и объявлениях прихода.",
-		"errorMessage": "Возникла проблема при подписке на нашу рассылку. Пожалуйста, попробуйте снова, проверьте правильность указанного адреса электронной почты или проверьте подключение к интернету."
+		"errorMessage": "Возникла проблема при подписке на нашу рассылку. Пожалуйста, попробуйте снова, проверьте правильность указанного адреса электронной почты или проверьте подключение к интернету.",
+		"consent": "Подписываясь на рассылку, вы подтверждаете, что соглашаетесь с нашими <tos>{termsOfService}</tos> и принимаете нашу <privacy>{privacyPolicy}</privacy>.",
+		"privacyPolicy": "Политика конфиденциальности",
+		"termsOfService": "Условия использования"
+	},
+	"loginTooltip": {
+		"text": "Вы вошли в систему"
 	},
 	"nonDescriptive": {
 		"menu": "Меню",
 		"close": "Закрыть",
-		"share": "Поделиться"
+		"share": "Поделиться",
+		"download": "Скачать",
+		"print": "Печать",
+		"saveAsPDF": "Сохранить как PDF"
 	},
 	"links": {
 		"liturgicalResources": "https://ru.eadiocese.org/litresource",
@@ -170,7 +207,8 @@
 		"galleryImage": "Изображение галереи"
 	},
 	"miscellaneous": {
-		"futureContent": "Контент будет добавлен в ближайшее время!"
+		"futureContent": "Контент будет добавлен в ближайшее время!",
+		"closeButton": "Закрыть"
 	},
 	"validation": {
 		"nonEmpty": "Поле {field} не может быть пустым",

@@ -1,16 +1,17 @@
 import "@/src/app/globals.css";
 import { routing } from "@/src/i18n/routing";
-import LayoutLoadingSkeleton from "@/src/lib/component/layout-loading-skeleton/LayoutLoadingSkeleton";
-import ClientProviders from "@/src/lib/provider/client-providers";
+import LayoutLoadingSkeleton from "@/src/lib/components/layout-loading-skeleton/LayoutLoadingSkeleton";
+import AppProvider from "@/src/lib/providers/AppProvider";
 import {
 	georgia,
 	googleSans,
 	googleSansFlex,
 } from "@/src/lib/third-party/fonts";
-import { Language } from "@/src/lib/type/general";
+import { Language } from "@/src/lib/types/general";
+import { BASE_URL } from "@/src/lib/utilities/server-constants";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import type { Metadata } from "next";
-import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { hasLocale } from "next-intl";
 import {
 	getMessages,
 	getTranslations,
@@ -19,7 +20,6 @@ import {
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import AppLayout from "./AppLayout";
-import { BASE_URL } from "@/src/lib/utility/server-constant";
 
 export function generateStaticParams() {
 	return [{ locale: "en" }, { locale: "ru" }];
@@ -28,7 +28,7 @@ export function generateStaticParams() {
 export async function generateMetadata(
 	props: Omit<LayoutProps<"/[locale]">, "children">,
 ): Promise<Metadata> {
-	"use cache";
+	// "use cache";
 
 	const { locale } = await props.params;
 
@@ -38,39 +38,31 @@ export async function generateMetadata(
 	});
 	const titleTemplate = `%s | ${t("templateTitle")}`;
 	const titleDefault = t("templateDefault");
-	const description = t("description");
-	const localeMetaData = locale == "en" ? "en-US" : "ru-RU";
-
 	return {
 		metadataBase: BASE_URL,
-		// alternates: {
-		// 	canonical: BASE_URL,
-		// 	languages: {
-		// 		en: BASE_URL,
-		// 		ru: BASE_URL + "/ru",
-		// 	},
-		// },
 		title: {
 			template: titleTemplate,
 			default: titleDefault,
 		},
-		description,
+		keywords: [
+			"eastern orthodox church",
+			"mother of god",
+			"virgin mary",
+			"zimbabwe orthodox church",
+			"russian orthodox",
+			"nativity of the theotokos",
+		],
 		openGraph: {
 			title: {
 				template: titleTemplate,
 				default: titleDefault,
 			},
-			// url: BASE_URL,
-			description,
-			locale: localeMetaData,
-			type: "website",
-			images: ["/opengraph-image.jpg"],
+			siteName: titleDefault,
+			locale: "en-US",
+			alternateLocale: "ru-RU",
 		},
 		twitter: {
-			card: "summary",
 			title: { template: titleTemplate, default: titleDefault },
-			description,
-			images: ["/opengraph-image.jpg"],
 		},
 	};
 }
@@ -79,7 +71,7 @@ export default async function RootLayout({
 	children,
 	params,
 }: LayoutProps<"/[locale]">) {
-	"use cache";
+	// "use cache";
 
 	const { locale } = await params;
 	if (!hasLocale(routing.locales, locale)) {
@@ -94,15 +86,13 @@ export default async function RootLayout({
 				className={`antialiased ${googleSansFlex.variable} ${googleSans.variable} ${georgia.variable}`}
 			>
 				<Suspense fallback={<LayoutLoadingSkeleton />}>
-					<NextIntlClientProvider locale={locale} messages={messages}>
-						<ClientProviders>
-							<AppLayout
-								model={newReadonlyModel({ language: locale })}
-							>
-								{children}
-							</AppLayout>
-						</ClientProviders>
-					</NextIntlClientProvider>
+					<AppProvider model={newReadonlyModel({ locale, messages })}>
+						<AppLayout
+							model={newReadonlyModel({ language: locale })}
+						>
+							{children}
+						</AppLayout>
+					</AppProvider>
 				</Suspense>
 			</body>
 		</html>

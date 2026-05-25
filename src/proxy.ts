@@ -1,9 +1,9 @@
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { NextRequest, NextResponse } from "next/server";
-import { getProtectedRoutes, redirects } from "./lib/utility/routing";
-import { getUser } from "./lib/server-action/auth";
-import { Path } from "./lib/type/general";
+import { getProtectedRoutes, redirects } from "./lib/utilities/routing";
+import { getUser } from "./lib/server-actions/auth";
+import { Path } from "./lib/types/general";
 
 const nextIntlMiddleware = createMiddleware(routing);
 
@@ -11,7 +11,7 @@ export default async function middleware(req: NextRequest) {
 	const { pathname, searchParams } = req.nextUrl;
 	const user = await getUser();
 
-	if (pathname.endsWith("/sign-in") && user) {
+	if (pathname.match(/(\/ru)?\/sign-in\/?.*/) && user) {
 		return NextResponse.redirect(`${req.nextUrl.origin}
 			${
 				searchParams.get("endpoint")?.startsWith("/")
@@ -21,7 +21,8 @@ export default async function middleware(req: NextRequest) {
 	}
 
 	for (const route of getProtectedRoutes()) {
-		if (pathname.endsWith(route) && !user) {
+		const pattern = new RegExp(`(/ru)?${route}/?.*`);
+		if (pathname.match(pattern) && !user) {
 			const newUrl = new URL(
 				`${req.nextUrl.origin}/sign-in?endpoint=${pathname}`,
 			);
@@ -39,5 +40,5 @@ export const config = {
 	// Match all pathnames except for
 	// - … if they start with `/api`, `/trpc`, `/_next` or `/_vercel`
 	// - … the ones containing a dot (e.g. `favicon.ico`)
-	matcher: ["/((?!api|trpc|_next|_vercel|sitemap.xml|.*\\..*).*)"],
+	matcher: ["/((?!api|trpc|_next|_vercel|.*\\..*).*)"],
 };

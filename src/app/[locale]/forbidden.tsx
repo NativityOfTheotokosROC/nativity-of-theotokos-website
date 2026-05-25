@@ -1,5 +1,5 @@
 import { routing } from "@/src/i18n/routing";
-import Forbidden from "@/src/lib/component/page/forbidden/Forbidden";
+import Forbidden from "@/src/lib/components/views/forbidden/Forbidden";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
