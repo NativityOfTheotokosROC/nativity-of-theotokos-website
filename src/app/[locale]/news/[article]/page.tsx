@@ -85,6 +85,7 @@ export default async function Page({
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 
 	const article = await getArticle(articleId, language);
+	console.log(article);
 	const baseUrl = `${BASE_URL}${language == "ru" ? "/ru" : ""}`;
 	const permalink = `${baseUrl}/news/${article.uri.toString()}`;
 	const jsonLd = articleJsonLd(article);
