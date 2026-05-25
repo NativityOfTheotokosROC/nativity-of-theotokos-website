@@ -18,6 +18,7 @@ export async function generateMetadata({
 	const description = tMetadata("description");
 
 	return {
+		description,
 		alternates: {
 			canonical: BASE_URL,
 			languages: {
