@@ -5,9 +5,11 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 
 const SchedulePreviewWidget = function ({ model }) {
 	const { scheduleItems } = model.modelView;
-	const orderedScheduleItems = [...scheduleItems].sort(
-		(a, b) => a.date.getTime() - b.date.getTime(),
-	);
+	const orderedScheduleItems = [...scheduleItems].sort((a, b) => {
+		console.log(a instanceof Date);
+		console.log(b instanceof Date);
+		return new Date(a.date).getTime() - new Date(b.date).getTime(); // TODO: More Nextjs bullshit
+	});
 
 	return (
 		<div className="schedule-list flex h-[27em] max-h-[27em] w-full flex-col gap-4 overflow-y-auto pr-3 lg:h-[30em] lg:max-h-[30em] lg:pr-6">
