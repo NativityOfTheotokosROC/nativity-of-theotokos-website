@@ -16,30 +16,6 @@ import { getMd5Hash, isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
 import { getGalleryImages } from "./gallery";
 
-export const getDailyReadings = unstable_cache(
-	async (currentDate: Date, language: Language) => {
-		// "use cache: remote";
-		// cacheTag("daily-readings");
-		// cacheLife("max");
-
-		const locale = language;
-		return await dailyReadings(currentDate, locale).then(async readings => {
-			const placeholder = await getPlaceholder(
-				readings.iconOfTheDay.source,
-			);
-			return {
-				...readings,
-				iconOfTheDay: {
-					...readings.iconOfTheDay,
-					placeholder,
-				},
-			};
-		});
-	},
-	undefined,
-	{ tags: ["daily-readings"] },
-);
-
 export const getDailyQuote = unstable_cache(
 	async (currentDate: Date, language: Language) => {
 		// "use cache: remote";
