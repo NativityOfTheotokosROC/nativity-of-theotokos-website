@@ -64,12 +64,16 @@ export function Link(props: ComponentProps<typeof LocalizedLink>) {
 						currentLocale,
 						targetLocale: locale,
 					})
-				)
+				) {
 					await interact({
 						type: "SET_LOADING",
 						input: { value: false },
 					});
-				await interact({ type: "SET_LOADING", input: { value: true } });
+					await interact({
+						type: "SET_LOADING",
+						input: { value: true },
+					});
+				}
 				props.onClick?.(e);
 			}}
 		>
