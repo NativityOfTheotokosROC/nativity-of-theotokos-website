@@ -6,7 +6,6 @@ import { ArticlePreview } from "../models/article-preview";
 import {
 	getDailyGalleryImages,
 	getDailyQuote,
-	getDailyReadings,
 	getLatestArticles,
 	getScheduleItems,
 } from "../server-only/home";
@@ -19,6 +18,9 @@ import {
 	ScheduleItem,
 } from "../types/general";
 import { getDateString } from "../utilities/date-time";
+import { getPlaceholder } from "@grod56/placeholder";
+import { unstable_cache } from "next/cache";
+import { dailyReadings } from "../third-party/holytrinityorthodox";
 
 export type LatestArticles = {
 	featuredArticle: ArticlePreview;
@@ -62,6 +64,30 @@ export async function getHomeSnapshot(
 		dailyGalleryImages,
 	};
 }
+
+const getDailyReadings = unstable_cache(
+	async (currentDate: Date, language: Language) => {
+		// "use cache: remote";
+		// cacheTag("daily-readings");
+		// cacheLife("max");
+
+		const locale = language;
+		return await dailyReadings(currentDate, locale).then(async readings => {
+			const placeholder = await getPlaceholder(
+				readings.iconOfTheDay.source,
+			);
+			return {
+				...readings,
+				iconOfTheDay: {
+					...readings.iconOfTheDay,
+					placeholder,
+				},
+			};
+		});
+	},
+	undefined,
+	{ tags: ["daily-readings"] },
+);
 
 export async function subscribeToMailingList(email: string) {
 	const validatedEmail = z.email().trim().parse(email);
