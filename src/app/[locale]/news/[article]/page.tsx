@@ -25,6 +25,7 @@ export async function generateStaticParams() {
 
 function articleJsonLd(article: ArticleType) {
 	const { title, author, articleImage, dateCreated, snippet } = article;
+	console.log(`type of dateCreated: ${typeof dateCreated}`);
 	return {
 		"@context": "https://schema.org",
 		"@type": "BlogPosting",
@@ -85,7 +86,6 @@ export default async function Page({
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 
 	const article = await getArticle(articleId, language);
-	console.log(article);
 	const baseUrl = `${BASE_URL}${language == "ru" ? "/ru" : ""}`;
 	const permalink = `${baseUrl}/news/${article.uri.toString()}`;
 	const jsonLd = articleJsonLd(article);
