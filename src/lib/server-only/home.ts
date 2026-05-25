@@ -1,7 +1,7 @@
 import { ImagePlaceholder, getPlaceholder } from "@grod56/placeholder";
 import { arrayToShuffled } from "array-shuffle";
 import { getTranslations } from "next-intl/server";
-import { cacheLife, cacheTag } from "next/cache";
+import { cacheLife, cacheTag, unstable_cache } from "next/cache";
 import "server-only";
 import { LatestArticles } from "../server-actions/home";
 import { dailyReadings } from "../third-party/holytrinityorthodox";
@@ -17,430 +17,456 @@ import { getMd5Hash, isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
 import { getGalleryImages } from "./gallery";
 
-export const getDailyReadings = async (
-	currentDate: Date,
-	language: Language,
-) => {
-	"use cache: remote";
-	cacheTag("daily-readings");
-	cacheLife("max");
+export const getDailyReadings = unstable_cache(
+	async (currentDate: Date, language: Language) => {
+		// "use cache: remote";
+		// cacheTag("daily-readings");
+		// cacheLife("max");
 
-	const locale = language;
-	return await dailyReadings(currentDate, locale).then(async readings => {
-		const placeholder = await getPlaceholder(readings.iconOfTheDay.source);
-		return {
-			...readings,
-			iconOfTheDay: {
-				...readings.iconOfTheDay,
-				placeholder,
-			},
-		};
-	});
-};
-
-export async function getDailyQuote(currentDate: Date, language: Language) {
-	"use cache: remote";
-	cacheTag("daily-quote");
-	cacheLife("days");
-
-	const locale = language;
-	const localDate = new Date(getDateString(currentDate, true));
-
-	let dailyQuote = await database.dailyQuote
-		.findFirst({
-			where: {
-				date: localDate,
-			},
-		})
-		.quote({
-			include: {
-				author: {
-					include: { name: true },
+		const locale = language;
+		return await dailyReadings(currentDate, locale).then(async readings => {
+			const placeholder = await getPlaceholder(
+				readings.iconOfTheDay.source,
+			);
+			return {
+				...readings,
+				iconOfTheDay: {
+					...readings.iconOfTheDay,
+					placeholder,
 				},
-				quote: true,
-				source: true,
-			},
+			};
 		});
-	if (!dailyQuote) {
-		const quotes = await database.quote.findMany({
-			include: {
-				author: {
-					include: { name: true },
+	},
+	undefined,
+	{ tags: ["daily-readings"] },
+);
+
+export const getDailyQuote = unstable_cache(
+	async (currentDate: Date, language: Language) => {
+		// "use cache: remote";
+		// cacheTag("daily-quote");
+		// cacheLife("days");
+
+		const locale = language;
+		const localDate = new Date(getDateString(currentDate, true));
+
+		let dailyQuote = await database.dailyQuote
+			.findFirst({
+				where: {
+					date: localDate,
 				},
-				quote: true,
-				source: true,
-			},
-		});
-		dailyQuote = quotes[Math.round(Math.random() * (quotes.length - 1))];
-		await database.dailyQuote.create({
-			data: {
-				date: localDate,
-				quoteId: dailyQuote.id,
-			},
-		});
-	}
-	return (
-		locale === "ru"
-			? {
-					quote: dailyQuote.quote.russian ?? dailyQuote.quote.english,
-					author:
-						dailyQuote.author.name.russian ??
-						dailyQuote.author.name.english,
-					source:
-						dailyQuote.source?.russian ??
-						dailyQuote.source?.english ??
-						null,
-				}
-			: {
-					quote: dailyQuote.quote.english,
-					author: dailyQuote.author.name.english,
-					source: dailyQuote.source?.english ?? null,
-				}
-	) satisfies DailyQuote;
-}
-
-export async function getScheduleItems(
-	count: number,
-	currentDate: Date,
-	language: Language,
-) {
-	"use cache: remote";
-	cacheTag("latest-schedule-items");
-	cacheLife("days");
-
-	const localDate = new Date(getDateString(currentDate, true));
-	const data = await database.scheduleItem.findMany({
-		where: {
-			date: { gte: localDate },
-			AND: { removedScheduleItem: { is: null } },
-		},
-		orderBy: {
-			date: "asc",
-		},
-		take: count,
-		include: {
-			title: true,
-			venue: true,
-			scheduleItemTimes: {
-				include: { designation: true },
-				orderBy: { time: "asc" },
-			},
-		},
-	});
-	const scheduleItems = data.map(
-		(record): ScheduleItem => ({
-			date: record.date,
-			title:
-				language === "ru"
-					? (record.title.russian ?? record.title.english)
-					: record.title.english,
-			location:
-				language === "ru"
-					? (record.venue.russian ?? record.venue.english)
-					: record.venue.english,
-			times: record.scheduleItemTimes.map(time => ({
-				time: time.time,
-				designation:
-					language === "ru"
-						? (time.designation.russian ?? time.designation.english)
-						: time.designation.english,
-			})),
-		}),
-	);
-	let nextScheduleItemDate = new Date(localDate);
-	while (scheduleItems.length < count) {
-		const nextScheduleItem = await _getNextDefaultScheduleItem(
-			nextScheduleItemDate,
-		).then(scheduleItem => ({
-			...scheduleItem,
-			times: scheduleItem.times.map(time => ({
-				...time,
-				time: new Date(
-					Date.UTC(
-						time.time.getFullYear(),
-						time.time.getMonth() + 1,
-						time.time.getDate(),
-						time.time.getHours() - 2,
-						time.time.getMinutes(),
-					),
-				),
-			})),
-		}));
-		// TODO: Revisit
-		const isPresent = await database.scheduleItem.findFirst({
-			where: {
-				date: nextScheduleItem.date,
-				venue: {
-					englishHash: getMd5Hash(nextScheduleItem.location),
+			})
+			.quote({
+				include: {
+					author: {
+						include: { name: true },
+					},
+					quote: true,
+					source: true,
 				},
-			},
-		});
-		if (!isPresent) {
-			const { date, location, title, times, titleRu } = nextScheduleItem;
-
-			await database.scheduleItem.create({
+			});
+		if (!dailyQuote) {
+			const quotes = await database.quote.findMany({
+				include: {
+					author: {
+						include: { name: true },
+					},
+					quote: true,
+					source: true,
+				},
+			});
+			dailyQuote =
+				quotes[Math.round(Math.random() * (quotes.length - 1))];
+			await database.dailyQuote.create({
 				data: {
-					date,
-					title: {
-						connectOrCreate: {
-							create: {
-								english: title,
-								englishHash: getMd5Hash(title),
-								russian: titleRu,
-							},
-							where: {
-								englishHash: getMd5Hash(title),
-							},
-						},
-					},
+					date: localDate,
+					quoteId: dailyQuote.id,
+				},
+			});
+		}
+		return (
+			locale === "ru"
+				? {
+						quote:
+							dailyQuote.quote.russian ??
+							dailyQuote.quote.english,
+						author:
+							dailyQuote.author.name.russian ??
+							dailyQuote.author.name.english,
+						source:
+							dailyQuote.source?.russian ??
+							dailyQuote.source?.english ??
+							null,
+					}
+				: {
+						quote: dailyQuote.quote.english,
+						author: dailyQuote.author.name.english,
+						source: dailyQuote.source?.english ?? null,
+					}
+		) satisfies DailyQuote;
+	},
+	undefined,
+	{ tags: ["daily-quote"] },
+);
+
+export const getScheduleItems = unstable_cache(
+	async (count: number, currentDate: Date, language: Language) => {
+		// "use cache: remote";
+		// cacheTag("latest-schedule-items");
+		// cacheLife("days");
+
+		const localDate = new Date(getDateString(currentDate, true));
+		const data = await database.scheduleItem.findMany({
+			where: {
+				date: { gte: localDate },
+				AND: { removedScheduleItem: { is: null } },
+			},
+			orderBy: {
+				date: "asc",
+			},
+			take: count,
+			include: {
+				title: true,
+				venue: true,
+				scheduleItemTimes: {
+					include: { designation: true },
+					orderBy: { time: "asc" },
+				},
+			},
+		});
+		const scheduleItems = data.map(
+			(record): ScheduleItem => ({
+				date: record.date,
+				title:
+					language === "ru"
+						? (record.title.russian ?? record.title.english)
+						: record.title.english,
+				location:
+					language === "ru"
+						? (record.venue.russian ?? record.venue.english)
+						: record.venue.english,
+				times: record.scheduleItemTimes.map(time => ({
+					time: time.time,
+					designation:
+						language === "ru"
+							? (time.designation.russian ??
+								time.designation.english)
+							: time.designation.english,
+				})),
+			}),
+		);
+		let nextScheduleItemDate = new Date(localDate);
+		while (scheduleItems.length < count) {
+			const nextScheduleItem = await _getNextDefaultScheduleItem(
+				nextScheduleItemDate,
+			).then(scheduleItem => ({
+				...scheduleItem,
+				times: scheduleItem.times.map(time => ({
+					...time,
+					time: new Date(
+						Date.UTC(
+							time.time.getFullYear(),
+							time.time.getMonth() + 1,
+							time.time.getDate(),
+							time.time.getHours() - 2,
+							time.time.getMinutes(),
+						),
+					),
+				})),
+			}));
+			// TODO: Revisit
+			const isPresent = await database.scheduleItem.findFirst({
+				where: {
+					date: nextScheduleItem.date,
 					venue: {
-						connectOrCreate: {
-							create: {
-								english: location,
-								englishHash: getMd5Hash(location),
-							},
-							where: {
-								englishHash: getMd5Hash(location),
-							},
-						},
-					},
-					scheduleItemTimes: {
-						create: times.map(time => ({
-							time: time.time,
-							designation: {
-								connectOrCreate: {
-									create: {
-										english: time.designation,
-										russian: time.designationRu,
-										englishHash: getMd5Hash(
-											time.designation,
-										),
-									},
-									where: {
-										englishHash: getMd5Hash(
-											time.designation,
-										),
-									},
-								},
-							},
-						})),
+						englishHash: getMd5Hash(nextScheduleItem.location),
 					},
 				},
 			});
-			scheduleItems.push(nextScheduleItem);
-		}
-		nextScheduleItemDate = new Date(
-			new Date(nextScheduleItem.date).setDate(
-				nextScheduleItem.date.getDate() + 1,
-			),
-		);
-	}
-	return scheduleItems;
-}
+			if (!isPresent) {
+				const { date, location, title, times, titleRu } =
+					nextScheduleItem;
 
-export async function getLatestArticles(
-	otherArticlesCount: number,
-	language: Language,
-): Promise<LatestArticles> {
-	"use cache: remote";
-	cacheTag("latest-articles");
-
-	const articleIncludes = {
-		title: true,
-		body: true,
-		snippet: true,
-		author: { include: { name: true } },
-		image: { include: { placeholder: true, caption: true } },
-	};
-	const featuredArticle = await database.featuredArticle.findFirstOrThrow({
-		include: { article: { include: articleIncludes } },
-	});
-	const otherArticles = await database.article.findMany({
-		where: {
-			featuredArticle: {
-				is: null,
-			},
-		},
-		include: articleIncludes,
-		orderBy: {
-			dateCreated: "desc",
-		},
-		take: otherArticlesCount,
-	});
-	const allArticles = [featuredArticle.article, ...otherArticles];
-	const unplaceholderedArticles = allArticles.filter(
-		article => article.image.placeholder === null,
-	);
-	const newPlaceholders = new Map<number, ImagePlaceholder>();
-
-	if (unplaceholderedArticles.length) {
-		for (let i = 0; i < unplaceholderedArticles.length; i++) {
-			const imageLink = unplaceholderedArticles[i].image.link;
-			const imageURL = isRemotePath(imageLink)
-				? imageLink
-				: `${BASE_URL}${imageLink}`;
-			newPlaceholders.set(
-				unplaceholderedArticles[i].id,
-				await getPlaceholder(imageURL),
+				await database.scheduleItem.create({
+					data: {
+						date,
+						title: {
+							connectOrCreate: {
+								create: {
+									english: title,
+									englishHash: getMd5Hash(title),
+									russian: titleRu,
+								},
+								where: {
+									englishHash: getMd5Hash(title),
+								},
+							},
+						},
+						venue: {
+							connectOrCreate: {
+								create: {
+									english: location,
+									englishHash: getMd5Hash(location),
+								},
+								where: {
+									englishHash: getMd5Hash(location),
+								},
+							},
+						},
+						scheduleItemTimes: {
+							create: times.map(time => ({
+								time: time.time,
+								designation: {
+									connectOrCreate: {
+										create: {
+											english: time.designation,
+											russian: time.designationRu,
+											englishHash: getMd5Hash(
+												time.designation,
+											),
+										},
+										where: {
+											englishHash: getMd5Hash(
+												time.designation,
+											),
+										},
+									},
+								},
+							})),
+						},
+					},
+				});
+				scheduleItems.push(nextScheduleItem);
+			}
+			nextScheduleItemDate = new Date(
+				new Date(nextScheduleItem.date).setDate(
+					nextScheduleItem.date.getDate() + 1,
+				),
 			);
 		}
-	}
+		return scheduleItems;
+	},
+	undefined,
+	{ tags: ["latest-schedule-items"] },
+);
 
-	const article = featuredArticle.article;
-	const title =
-		language === "ru" && article.title.russian
-			? article.title.russian
-			: article.title.english;
-	const author =
-		language === "ru" && article.author.name.russian != null
-			? article.author.name.russian
-			: article.author.name.english;
-	const snippet =
-		language === "ru" && article.snippet.russian
-			? article.snippet.russian
-			: article.snippet.english;
-	return {
-		featuredArticle: {
-			...featuredArticle.article,
-			title,
-			author,
-			snippet,
-			uri: featuredArticle.article.link,
-			articleImage: {
-				source: featuredArticle.article.image.link,
-				about:
-					language === "ru"
-						? (featuredArticle.article.image.caption.russian ??
-							featuredArticle.article.image.caption.english)
-						: featuredArticle.article.image.caption.english,
-				placeholder:
-					(featuredArticle.article.image.placeholder
-						?.placeholder as ImagePlaceholder) ??
-					newPlaceholders.get(featuredArticle.article.id),
+export const getLatestArticles = unstable_cache(
+	async (otherArticlesCount: number, language: Language) => {
+		// "use cache: remote";
+		// cacheTag("latest-articles");
+
+		const articleIncludes = {
+			title: true,
+			body: true,
+			snippet: true,
+			author: { include: { name: true } },
+			image: { include: { placeholder: true, caption: true } },
+		};
+		const featuredArticle = await database.featuredArticle.findFirstOrThrow(
+			{
+				include: { article: { include: articleIncludes } },
 			},
-		},
-		otherNewsArticles: otherArticles.map(article => {
-			const title =
-				language === "ru" && article.title.russian
-					? article.title.russian
-					: article.title.english;
-			const author =
-				language === "ru" && article.author.name.russian != null
-					? article.author.name.russian
-					: article.author.name.english;
-			const snippet =
-				language === "ru" && article.snippet.russian
-					? article.snippet.russian
-					: article.snippet.english;
-			return {
-				...article,
+		);
+		const otherArticles = await database.article.findMany({
+			where: {
+				featuredArticle: {
+					is: null,
+				},
+			},
+			include: articleIncludes,
+			orderBy: {
+				dateCreated: "desc",
+			},
+			take: otherArticlesCount,
+		});
+		const allArticles = [featuredArticle.article, ...otherArticles];
+		const unplaceholderedArticles = allArticles.filter(
+			article => article.image.placeholder === null,
+		);
+		const newPlaceholders = new Map<number, ImagePlaceholder>();
+
+		if (unplaceholderedArticles.length) {
+			for (let i = 0; i < unplaceholderedArticles.length; i++) {
+				const imageLink = unplaceholderedArticles[i].image.link;
+				const imageURL = isRemotePath(imageLink)
+					? imageLink
+					: `${BASE_URL}${imageLink}`;
+				newPlaceholders.set(
+					unplaceholderedArticles[i].id,
+					await getPlaceholder(imageURL),
+				);
+			}
+		}
+
+		const article = featuredArticle.article;
+		const title =
+			language === "ru" && article.title.russian
+				? article.title.russian
+				: article.title.english;
+		const author =
+			language === "ru" && article.author.name.russian != null
+				? article.author.name.russian
+				: article.author.name.english;
+		const snippet =
+			language === "ru" && article.snippet.russian
+				? article.snippet.russian
+				: article.snippet.english;
+		return {
+			featuredArticle: {
+				...featuredArticle.article,
 				title,
 				author,
 				snippet,
-				uri: article.link,
+				uri: featuredArticle.article.link,
 				articleImage: {
-					source: article.image.link,
+					source: featuredArticle.article.image.link,
 					about:
 						language === "ru"
-							? (article.image.caption.russian ??
-								article.image.caption.english)
-							: article.image.caption.english,
+							? (featuredArticle.article.image.caption.russian ??
+								featuredArticle.article.image.caption.english)
+							: featuredArticle.article.image.caption.english,
 					placeholder:
-						(article.image.placeholder
+						(featuredArticle.article.image.placeholder
 							?.placeholder as ImagePlaceholder) ??
-						newPlaceholders.get(article.id),
+						newPlaceholders.get(featuredArticle.article.id),
 				},
-			};
-		}),
-	};
-}
+			},
+			otherNewsArticles: otherArticles.map(article => {
+				const title =
+					language === "ru" && article.title.russian
+						? article.title.russian
+						: article.title.english;
+				const author =
+					language === "ru" && article.author.name.russian != null
+						? article.author.name.russian
+						: article.author.name.english;
+				const snippet =
+					language === "ru" && article.snippet.russian
+						? article.snippet.russian
+						: article.snippet.english;
+				return {
+					...article,
+					title,
+					author,
+					snippet,
+					uri: article.link,
+					articleImage: {
+						source: article.image.link,
+						about:
+							language === "ru"
+								? (article.image.caption.russian ??
+									article.image.caption.english)
+								: article.image.caption.english,
+						placeholder:
+							(article.image.placeholder
+								?.placeholder as ImagePlaceholder) ??
+							newPlaceholders.get(article.id),
+					},
+				};
+			}),
+		};
+	},
+	undefined,
+	{ tags: ["latest-articles"] },
+);
 
 // TODO: Optimize asap
-export async function getDailyGalleryImages(count: number, currentDate: Date) {
-	"use cache: remote";
-	cacheTag("daily-gallery-images");
-	cacheLife("days");
+export const getDailyGalleryImages = unstable_cache(
+	async (count: number, currentDate: Date) => {
+		// "use cache: remote";
+		// cacheTag("daily-gallery-images");
+		// cacheLife("days");
 
-	const baseUrl = BASE_URL;
-	const localDate = new Date(getDateString(currentDate, true));
-	const promises = await Promise.all([
-		getGalleryImages(),
-		database.dailyGalleryImage.findMany({
-			include: {
-				placeholder: true,
-			},
-			where: {
-				date: localDate,
-			},
-		}),
-	]);
-	const allGalleryImages = promises[0];
-	let dailyGalleryImages = promises[1];
+		const baseUrl = BASE_URL;
+		const localDate = new Date(getDateString(currentDate, true));
+		const promises = await Promise.all([
+			getGalleryImages(),
+			database.dailyGalleryImage.findMany({
+				include: {
+					placeholder: true,
+				},
+				where: {
+					date: localDate,
+				},
+			}),
+		]);
+		const allGalleryImages = promises[0];
+		let dailyGalleryImages = promises[1];
 
-	const dailyGalleryImageLinks = dailyGalleryImages.map(
-		dailyGalleryImage => dailyGalleryImage.link,
-	);
-	const otherGalleryImages = allGalleryImages.filter(
-		galleryImage => !(galleryImage.imageLink in dailyGalleryImageLinks),
-	);
+		const dailyGalleryImageLinks = dailyGalleryImages.map(
+			dailyGalleryImage => dailyGalleryImage.link,
+		);
+		const otherGalleryImages = allGalleryImages.filter(
+			galleryImage => !(galleryImage.imageLink in dailyGalleryImageLinks),
+		);
 
-	if (dailyGalleryImages.length < count && otherGalleryImages.length > 0) {
-		const shuffledGalleryImages = arrayToShuffled(otherGalleryImages);
-		if (otherGalleryImages.length + dailyGalleryImages.length <= count) {
-			const newDailyGalleryImages =
-				await database.dailyGalleryImage.createManyAndReturn({
-					include: { placeholder: true },
-					data: shuffledGalleryImages.map(galleryImage => ({
-						date: localDate,
-						link: galleryImage.imageLink,
-					})),
-				});
-			dailyGalleryImages = [
-				...dailyGalleryImages,
-				...newDailyGalleryImages,
-			];
-		} else {
-			const newDailyGalleryImages =
-				await database.dailyGalleryImage.createManyAndReturn({
-					include: { placeholder: true },
-					data: shuffledGalleryImages
-						.slice(0, count - dailyGalleryImages.length)
-						.map(galleryImage => ({
+		if (
+			dailyGalleryImages.length < count &&
+			otherGalleryImages.length > 0
+		) {
+			const shuffledGalleryImages = arrayToShuffled(otherGalleryImages);
+			if (
+				otherGalleryImages.length + dailyGalleryImages.length <=
+				count
+			) {
+				const newDailyGalleryImages =
+					await database.dailyGalleryImage.createManyAndReturn({
+						include: { placeholder: true },
+						data: shuffledGalleryImages.map(galleryImage => ({
 							date: localDate,
 							link: galleryImage.imageLink,
 						})),
-				});
-			dailyGalleryImages = [
-				...dailyGalleryImages,
-				...newDailyGalleryImages,
-			];
+					});
+				dailyGalleryImages = [
+					...dailyGalleryImages,
+					...newDailyGalleryImages,
+				];
+			} else {
+				const newDailyGalleryImages =
+					await database.dailyGalleryImage.createManyAndReturn({
+						include: { placeholder: true },
+						data: shuffledGalleryImages
+							.slice(0, count - dailyGalleryImages.length)
+							.map(galleryImage => ({
+								date: localDate,
+								link: galleryImage.imageLink,
+							})),
+					});
+				dailyGalleryImages = [
+					...dailyGalleryImages,
+					...newDailyGalleryImages,
+				];
+			}
 		}
-	}
-	const placeholderedGalleryImages: GalleryImage[] = [];
-	for (let i = 0; i < dailyGalleryImages.length; i++) {
-		const imageLink = dailyGalleryImages[i].link;
-		const placeholder = dailyGalleryImages[i].placeholder;
-		if (placeholder) {
+		const placeholderedGalleryImages: GalleryImage[] = [];
+		for (let i = 0; i < dailyGalleryImages.length; i++) {
+			const imageLink = dailyGalleryImages[i].link;
+			const placeholder = dailyGalleryImages[i].placeholder;
+			if (placeholder) {
+				placeholderedGalleryImages.push({
+					image: {
+						source: imageLink,
+						placeholder:
+							placeholder.placeholder as ImagePlaceholder,
+					},
+				});
+				continue;
+			}
+			const imageURL = isRemotePath(imageLink)
+				? imageLink
+				: `${baseUrl}${imageLink}`;
 			placeholderedGalleryImages.push({
 				image: {
 					source: imageLink,
-					placeholder: placeholder.placeholder as ImagePlaceholder,
+					placeholder: await getPlaceholder(imageURL),
 				},
 			});
-			continue;
 		}
-		const imageURL = isRemotePath(imageLink)
-			? imageLink
-			: `${baseUrl}${imageLink}`;
-		placeholderedGalleryImages.push({
-			image: {
-				source: imageLink,
-				placeholder: await getPlaceholder(imageURL),
-			},
-		});
-	}
-	return placeholderedGalleryImages;
-}
+		return placeholderedGalleryImages;
+	},
+	undefined,
+	{ tags: ["daily-gallery-images"] },
+);
 
 // TODO: To be refactored to something less ... static
 async function _getNextDefaultScheduleItem(date: Date): Promise<

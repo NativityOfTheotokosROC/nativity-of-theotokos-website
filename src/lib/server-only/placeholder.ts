@@ -4,29 +4,31 @@ import {
 	ImagePlaceholder,
 	getPlaceholder as generatePlaceholder,
 } from "@grod56/placeholder";
-import { cacheLife } from "next/cache";
+import { cacheLife, unstable_cache } from "next/cache";
 import database from "../third-party/prisma";
 import { BASE_URL } from "../utilities/server-constants";
 
-const baseUrl = BASE_URL;
+export const getPlaceholder = unstable_cache(
+	async (imageSource: string) => {
+		// "use cache: remote";
+		// cacheLife("weeks");
 
-export async function getPlaceholder(imageSource: string) {
-	"use cache: remote";
-	cacheLife("weeks");
-
-	const result = await findPlaceholder(imageSource);
-	if (result) return result;
-	const placeholder = await generatePlaceholder(imageSource);
-	console.log("Placeholder generated for " + imageSource);
-	await setPlaceholder(imageSource, placeholder);
-	return placeholder;
-}
+		const result = await findPlaceholder(imageSource);
+		if (result) return result;
+		const placeholder = await generatePlaceholder(imageSource);
+		console.log("Placeholder generated for " + imageSource);
+		await setPlaceholder(imageSource, placeholder);
+		return placeholder;
+	},
+	undefined,
+	{ revalidate: false },
+);
 
 async function findPlaceholder(src: string) {
 	let processedSrc;
 	try {
 		const url = new URL(src);
-		if (baseUrl.includes(url.hostname)) processedSrc = url.pathname;
+		if (BASE_URL.includes(url.hostname)) processedSrc = url.pathname;
 		else processedSrc = url.href;
 	} catch (error) {
 		if (!(error instanceof TypeError)) throw error;
@@ -49,7 +51,7 @@ async function setPlaceholder(
 	let processedSrc;
 	try {
 		const url = new URL(src);
-		if (baseUrl.includes(url.hostname)) processedSrc = url.pathname;
+		if (BASE_URL.includes(url.hostname)) processedSrc = url.pathname;
 		else processedSrc = url.href;
 	} catch (error) {
 		if (!(error instanceof TypeError)) throw error;

@@ -34,6 +34,11 @@ const MAILERLITE_API_KEY = z
 	.string()
 	.nonempty()
 	.parse(process.env.MAILERLITE_API_KEY);
+const S3_BUCKET = z.string().nonempty().parse(process.env.S3_BUCKET);
+const S3_BUCKET_REGION = z
+	.string()
+	.nonempty()
+	.parse(process.env.S3_BUCKET_REGION);
 const PREPRODUCTION_PROTECTION = process.env.PREPRODUCTION_PROTECTION;
 
 export {
@@ -47,5 +52,7 @@ export {
 	MAILERLITE_API_KEY,
 	MICROSOFT_CLIENT_ID,
 	MICROSOFT_CLIENT_SECRET,
+	S3_BUCKET,
+	S3_BUCKET_REGION,
 	PREPRODUCTION_PROTECTION,
 };
