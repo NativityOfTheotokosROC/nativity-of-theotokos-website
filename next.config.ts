@@ -79,6 +79,7 @@ const nextConfig: NextConfig = {
 		rootParams: true,
 	},
 	allowedDevOrigins: ["192.168.100.7"],
+	output: "standalone",
 };
 
 const withNextIntl = createNextIntlPlugin();
