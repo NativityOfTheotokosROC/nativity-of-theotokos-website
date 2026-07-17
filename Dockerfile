@@ -15,7 +15,8 @@ ENV NODE_ENV=production
 COPY --from=dependencies /app/node_modules/ ./node_modules/
 COPY --from=dependencies /app/src/ ./src/
 COPY . .
-RUN --mount=type=secret,id=better_auth_secrets,env=BETTER_AUTH_SECRETS \
+RUN --mount=type=secret,id=base_url,env=BASE_URL \
+    --mount=type=secret,id=better_auth_secrets,env=BETTER_AUTH_SECRETS \
     --mount=type=secret,id=better_auth_url,env=BETTER_AUTH_URL \
     --mount=type=secret,id=database_url,env=DATABASE_URL \ 
     --mount=type=secret,id=google_client_id,env=GOOGLE_CLIENT_ID \
