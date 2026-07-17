@@ -1,6 +1,6 @@
 services:
     webapp:
-        image: nativityoftheotokos/website:latest
+        image: nativityoftheotokos/website:main
         ports:
             - 3000:3000
         env_file:

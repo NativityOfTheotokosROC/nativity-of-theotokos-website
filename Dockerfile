@@ -15,10 +15,18 @@ ENV NODE_ENV=production
 COPY --from=dependencies /app/node_modules/ ./node_modules/
 COPY --from=dependencies /app/src/ ./src/
 COPY . .
-RUN --mount=type=secret,id=dotenv \
-    set -a && \
-    . /run/secrets/dotenv && \
-    set +a && \
+RUN --mount=type=secret,id=better_auth_secrets,env=BETTER_AUTH_SECRETS \
+    --mount=type=secret,id=better_auth_url,env=BETTER_AUTH_URL \
+    --mount=type=secret,id=database_url,env=DATABASE_URL \ 
+    --mount=type=secret,id=google_client_id,env=GOOGLE_CLIENT_ID \
+    --mount=type=secret,id=google_client_secret,env=GOOGLE_CLIENT_SECRET \
+    --mount=type=secret,id=mailerlite_api_key,env=MAILERLITE_API_KEY \
+    --mount=type=secret,id=microsoft_client_id,env=MICROSOFT_CLIENT_ID \
+    --mount=type=secret,id=microsoft_client_secret,env=MICROSOFT_CLIENT_SECRET \
+    --mount=type=secret,id=s3_bucket,env=S3_BUCKET \
+    --mount=type=secret,id=s3_bucket_region,env=S3_BUCKET_REGION \
+    --mount=type=secret,id=yandex_client_id,env=YANDEX_CLIENT_ID \
+    --mount=type=secret,id=yandex_client_secret,env=YANDEX_CLIENT_SECRET \
     if [ -f package-lock.json ]; then \
         npm run build; \
     else \
