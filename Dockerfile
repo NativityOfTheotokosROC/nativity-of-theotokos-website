@@ -1,4 +1,4 @@
-FROM node:24-slim AS dependencies
+FROM node:lts-slim AS dependencies
 WORKDIR /app
 COPY package.json package-lock.json* ./
 COPY prisma ./prisma/
@@ -9,9 +9,9 @@ RUN --mount=type=cache,target=/root/.npm \
         echo "No lockfile found" && exit 1; \
     fi;
 
-FROM node:24-slim AS builder
-WORKDIR /app
+FROM node:lts-slim AS builder
 ENV NODE_ENV=production
+WORKDIR /app
 COPY --from=dependencies /app/node_modules/ ./node_modules/
 COPY --from=dependencies /app/src/ ./src/
 COPY . .
@@ -34,18 +34,17 @@ RUN --mount=type=secret,id=base_url,env=BASE_URL \
         echo "No lockfile found" && exit 1; \
     fi;
 
-FROM node:24-slim AS runner
-WORKDIR /app
+FROM node:lts-slim AS runner
+ARG PORT=3000
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV PORT=${PORT}
 ENV HOSTNAME=0.0.0.0
+WORKDIR /app
 COPY --from=builder --chown=node:node /app/public/ ./public/
-RUN mkdir .next
-RUN chown node:node .next
 COPY --from=builder --chown=node:node /app/.next/standalone ./
 COPY --from=builder --chown=node:node /app/.next/static ./.next/static
 COPY --from=builder --chown=node:node /app/.next/cache ./.next/cache
 USER node
-EXPOSE 3000
+EXPOSE ${PORT}
 
 CMD ["node", "server.js"]

@@ -1,7 +1,53 @@
 services:
     webapp:
-        image: nativityoftheotokos/website:main
+        image: ${DOCKER_USERNAME:-nativityoftheotokos}/website
+        build:
+            context: .
+            args:
+                - PORT=${CONTAINER_PORT:-3000}
+            secrets:
+                - base_url
+                - better_auth_secrets
+                - better_auth_url
+                - database_url
+                - google_client_id
+                - google_client_secret
+                - mailerlite_api_key
+                - microsoft_client_id
+                - microsoft_client_secret
+                - s3_bucket
+                - s3_bucket_region
+                - yandex_client_id
+                - yandex_client_secret
         ports:
-            - 3000:3000
+            - ${HOST_PORT:-3000}:${CONTAINER_PORT:-3000}
         env_file:
             - .env
+
+secrets:
+    base_url:
+        environment: BASE_URL
+    better_auth_secrets:
+        environment: BETTER_AUTH_SECRETS
+    better_auth_url:
+        environment: BETTER_AUTH_URL
+    database_url:
+        environment: DATABASE_URL
+    google_client_id:
+        environment: GOOGLE_CLIENT_ID
+    google_client_secret:
+        environment: GOOGLE_CLIENT_SECRET
+    mailerlite_api_key:
+        environment: MAILERLITE_API_KEY
+    microsoft_client_id:
+        environment: MICROSOFT_CLIENT_ID
+    microsoft_client_secret:
+        environment: MICROSOFT_CLIENT_SECRET
+    s3_bucket:
+        environment: S3_BUCKET
+    s3_bucket_region:
+        environment: S3_BUCKET_REGION
+    yandex_client_id:
+        environment: YANDEX_CLIENT_ID
+    yandex_client_secret:
+        environment: YANDEX_CLIENT_SECRET
