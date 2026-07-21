@@ -19,6 +19,9 @@ export const auth = betterAuth({
 	baseUrl:
 		ENVIRONMENT === "development" ? "http://localhost:3000" : undefined,
 	trustedOrigins: ["http://localhost:3000", BETTER_AUTH_URL],
+	session: {
+		expiresIn: 60 * 60 * 24 * 365
+	},
 	socialProviders: {
 		google: {
 			clientId: GOOGLE_CLIENT_ID,
