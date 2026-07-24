@@ -1,6 +1,6 @@
 "use client";
 
-import ArticleEditor from "@/src/lib/components/article-editor/ArticleEditor";
+import Editor from "@/src/lib/components/editor/Editor";
 import { NewArticleModel } from "@/src/lib/models/new-article";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
@@ -28,7 +28,7 @@ const NewArticle = function ({ model }) {
 							placeholder={t("title")}
 							name={"article-title"}
 						/>
-						<ArticleEditor
+						<Editor
 							model={newReadonlyModel({
 								initialContent: t("bodyPlaceholder"),
 							})}

@@ -1,5 +1,5 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { ArticleEditorModel } from "../../models/article-editor";
+import { EditorModel } from "../../models/editor";
 import { InitializedModel } from "@mvc-react/mvc";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
@@ -8,7 +8,7 @@ import EditorTools from "../editor-tools/EditorTools";
 import { useEditorTools } from "../../model-implementations/editor-tools";
 import "./article-editor.css";
 
-const ArticleEditor = function ({ model }) {
+const Editor = function ({ model }) {
 	const { initialContent } = model.modelView;
 	const editor = useEditor({
 		content: initialContent,
@@ -38,6 +38,6 @@ const ArticleEditor = function ({ model }) {
 			/>
 		</div>
 	);
-} satisfies ModeledVoidComponent<InitializedModel<ArticleEditorModel>>;
+} satisfies ModeledVoidComponent<InitializedModel<EditorModel>>;
 
-export default ArticleEditor;
+export default Editor;
