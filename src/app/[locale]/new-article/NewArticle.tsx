@@ -1,3 +1,5 @@
+"use client";
+
 import ArticleEditor from "@/src/lib/components/article-editor/ArticleEditor";
 import { NewArticleModel } from "@/src/lib/models/new-article";
 import { georgia } from "@/src/lib/third-party/fonts";

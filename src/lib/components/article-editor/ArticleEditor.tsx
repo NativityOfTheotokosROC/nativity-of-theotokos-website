@@ -17,6 +17,7 @@ const ArticleEditor = function ({ model }) {
 		immediatelyRender: false,
 	});
 	const editorTools = useEditorTools(editor);
+	console.log(editor);
 
 	return (
 		<div className="flex w-full flex-col">
