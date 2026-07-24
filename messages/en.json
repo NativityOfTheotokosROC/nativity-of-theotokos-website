@@ -134,6 +134,27 @@
 		"failureMessage": "Could not add the quote. Error:",
 		"quotePreview": "Quote Preview"
 	},
+	"newArticle": {
+		"metaTitle": "New Article",
+		"title": "Article Title",
+		"author": "Author",
+		"bodyPlaceholder": "Start writing here...",
+		"preview": "Preview",
+		"submit": "Submit",
+		"successMessage": "Article successfully submitted",
+		"failureMessage": "Could not submit the article. Error:"
+	},
+	"editorTools": {
+		"heading": "Heading",
+		"bold": "Bold",
+		"italic": "Italic",
+		"underline": "Underline",
+		"quote": "Quote",
+		"bulletList": "Bullet List",
+		"numberedList": "Numbered List",
+		"undo": "Undo",
+		"redo": "Redo"
+	},
 	"signIn": {
 		"metaTitle": "Sign In",
 		"title": "Sign In",

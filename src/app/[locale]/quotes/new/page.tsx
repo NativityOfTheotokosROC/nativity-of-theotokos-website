@@ -1,5 +1,5 @@
 import { routing } from "@/src/i18n/routing";
-import { protect } from "@/src/lib/server-actions/auth";
+import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
 import { getAutoCompleteInfo } from "@/src/lib/server-actions/quote";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
@@ -23,8 +23,15 @@ export async function generateMetadata({
 	};
 }
 export default async function Page() {
-	await protect({ roles: ["quotes"] });
-	const autoCompleteInfo = await getAutoCompleteInfo();
+	const autoCompleteInfo = getAutoCompleteInfo();
 
-	return <NewQuoteClient model={newReadonlyModel({ autoCompleteInfo })} />;
+	return (
+		<ProtectedComponent model={newReadonlyModel({ roles: ["quotes"] })}>
+			<NewQuoteClient
+				model={newReadonlyModel({
+					autoCompleteInfo: await autoCompleteInfo,
+				})}
+			/>
+		</ProtectedComponent>
+	);
 }

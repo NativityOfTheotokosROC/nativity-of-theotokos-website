@@ -134,6 +134,27 @@
 		"failureMessage": "Не удалось добавить цитату. Ошибка:",
 		"quotePreview": "Предпросмотр цитаты"
 	},
+	"newArticle": {
+		"metaTitle": "Новая статья",
+		"title": "Название статьи",
+		"author": "Автор",
+		"bodyPlaceholder": "Начните писать здесь...",
+		"preview": "Предпросмотр",
+		"submit": "Опубликовать",
+		"successMessage": "Статья успешно опубликована",
+		"failureMessage": "Не удалось опубликовать статью. Ошибка:"
+	},
+	"editorTools": {
+		"heading": "Заголовок",
+		"bold": "Полужирный",
+		"italic": "Курсив",
+		"underline": "Подчёркнутый",
+		"quote": "Цитата",
+		"bulletList": "Маркированный список",
+		"numberedList": "Нумерованный список",
+		"undo": "Отменить",
+		"redo": "Повторить"
+	},
 	"signIn": {
 		"metaTitle": "Вход",
 		"title": "Вход",
