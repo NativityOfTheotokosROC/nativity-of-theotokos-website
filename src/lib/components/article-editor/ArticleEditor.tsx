@@ -1,5 +1,3 @@
-"use client";
-
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ArticleEditorModel } from "../../models/article-editor";
 import { InitializedModel } from "@mvc-react/mvc";
@@ -17,11 +15,9 @@ const ArticleEditor = function ({ model }) {
 		immediatelyRender: false,
 	});
 	const editorTools = useEditorTools(editor);
-	console.log(editor);
-	console.log(editorTools.modelView);
 
 	return (
-		<div className="flex min-h-100 w-full flex-col">
+		<div className="flex w-full flex-col rounded-lg border-gray-900/20 bg-white p-4 md:p-6">
 			{editorTools.modelView ? (
 				<>
 					<EditorTools
@@ -34,7 +30,7 @@ const ArticleEditor = function ({ model }) {
 			) : (
 				<></>
 			)}
-			<EditorContent className="grow" editor={editor} />
+			<EditorContent className="h-100 min-h-full grow" editor={editor} />
 		</div>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ArticleEditorModel>>;
