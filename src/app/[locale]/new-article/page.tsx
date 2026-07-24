@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 	} satisfies Metadata;
 }
 
-export async function Page({ params }: LayoutProps<"/[locale]">) {
+export default async function Page({ params }: LayoutProps<"/[locale]">) {
 	const { locale } = await params;
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 
