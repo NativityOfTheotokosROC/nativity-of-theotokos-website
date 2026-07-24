@@ -6,7 +6,7 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { TextStyleKit } from "@tiptap/extension-text-style";
 import EditorTools from "../editor-tools/EditorTools";
 import { useEditorTools } from "../../model-implementations/editor-tools";
-import "./article-editor.css";
+import "./editor.css";
 
 const Editor = function ({ model }) {
 	const { initialContent } = model.modelView;
