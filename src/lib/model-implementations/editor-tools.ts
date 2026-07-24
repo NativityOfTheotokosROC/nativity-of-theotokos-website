@@ -1,43 +1,36 @@
-import { useEditorState } from "@tiptap/react";
 import type { Editor } from "@tiptap/core";
-import { editorToolsStateSelector } from "../utilities/editor-tools";
+import { useEditorState } from "@tiptap/react";
 import {
 	EditorToolsModel,
 	EditorToolsModelInteraction,
 } from "../models/editor-tools";
-import { InitializedModel } from "@mvc-react/mvc";
+import { editorToolsStateSelector } from "../utilities/editor-tools";
 
-export function useEditorTools(editor: Editor) {
+export function useEditorTools(editor: Editor | null) {
 	const editorState = useEditorState({
 		editor,
-		selector: editorToolsStateSelector,
-	});
-	const {
-		isBold,
-		isItalic,
-		isUnderlined,
-		canUndo,
-		canRedo,
-		isBlockquote,
-		isHeading1,
-		isBulletList,
-		isOrderedList,
-	} = editorState;
-	return {
-		modelView: {
-			bold: isBold,
-			italic: isItalic,
-			underline: isUnderlined,
-			canUndo,
-			canRedo,
-			quote: isBlockquote,
-			heading: isHeading1,
-			bulletList: isBulletList,
-			numberedList: isOrderedList,
+		selector: ({ editor, transactionNumber }) => {
+			if (editor)
+				return editorToolsStateSelector({ editor, transactionNumber });
+			return null;
 		},
-		interact: function (
-			interaction: EditorToolsModelInteraction,
-		): void | Promise<void> {
+	});
+	return {
+		modelView: editorState
+			? {
+					bold: editorState.isBold,
+					italic: editorState.isItalic,
+					underline: editorState.isUnderlined,
+					canUndo: editorState.canUndo,
+					canRedo: editorState.canRedo,
+					quote: editorState.isBlockquote,
+					heading: editorState.isHeading1,
+					bulletList: editorState.isBulletList,
+					numberedList: editorState.isOrderedList,
+				}
+			: null,
+		interact: async function (interaction: EditorToolsModelInteraction) {
+			if (!editor) throw new Error("Editor is uninitialized");
 			switch (interaction.type) {
 				case "TOGGLE_HEADING": {
 					editor.chain().focus().toggleHeading({ level: 1 }).run();
@@ -84,5 +77,5 @@ export function useEditorTools(editor: Editor) {
 				}
 			}
 		},
-	} satisfies InitializedModel<EditorToolsModel>;
+	} satisfies EditorToolsModel;
 }

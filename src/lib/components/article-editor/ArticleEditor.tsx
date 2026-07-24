@@ -16,15 +16,23 @@ const ArticleEditor = function ({ model }) {
 		extensions: [StarterKit, TextStyleKit],
 		immediatelyRender: false,
 	});
-
-	if (!editor) throw new Error("Editor instance is null");
-
 	const editorTools = useEditorTools(editor);
 
 	return (
 		<div className="flex w-full flex-col">
-			<EditorTools model={editorTools} />
-			<EditorContent editor={editor} />
+			{editorTools.modelView ? (
+				<>
+					<EditorTools
+						model={{
+							...editorTools,
+							modelView: editorTools.modelView,
+						}}
+					/>
+					<EditorContent editor={editor} />
+				</>
+			) : (
+				<></>
+			)}
 		</div>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ArticleEditorModel>>;
