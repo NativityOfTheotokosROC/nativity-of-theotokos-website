@@ -18,9 +18,10 @@ const ArticleEditor = function ({ model }) {
 	});
 	const editorTools = useEditorTools(editor);
 	console.log(editor);
+	console.log(editorTools);
 
 	return (
-		<div className="flex w-full flex-col">
+		<div className="flex min-h-100 w-full flex-col">
 			{editorTools.modelView ? (
 				<>
 					<EditorTools
@@ -29,7 +30,7 @@ const ArticleEditor = function ({ model }) {
 							modelView: editorTools.modelView,
 						}}
 					/>
-					<EditorContent editor={editor} />
+					<EditorContent className="grow" editor={editor} />
 				</>
 			) : (
 				<></>
