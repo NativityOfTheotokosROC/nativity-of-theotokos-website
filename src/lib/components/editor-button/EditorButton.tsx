@@ -10,7 +10,7 @@ const EditorButton = function ({ model, children }) {
 		<button
 			type="button"
 			title={title}
-			className={`editor-button p-2 text-sm text-black disabled:opacity-50 disabled:backdrop-grayscale ${isToggled ? "bg-gray-900 text-white" : ""}`}
+			className={`editor-button p-1 text-sm text-black *:size-5 ${!(isDisabled || isToggled) && "hover:bg-gray-200"} disabled:opacity-50 disabled:backdrop-grayscale ${isToggled ? "bg-gray-900 text-white" : ""}`}
 			disabled={isDisabled}
 			onClick={() => interact({ type: "ACTION", input: { isToggled } })}
 		>

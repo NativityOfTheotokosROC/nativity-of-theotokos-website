@@ -1,0 +1,27 @@
+.tiptap {
+	min-height: 100%;
+	outline-style: none;
+
+	ul,
+	ol,
+	blockquote {
+		padding-left: 1rem;
+		margin-left: 1rem;
+	}
+
+	ul {
+		list-style: disc;
+	}
+	ol {
+		list-style: decimal;
+	}
+	blockquote {
+		border-left-width: 5px;
+		border-color: color-mix(in oklab, black 40%, transparent);
+		font-style: italic;
+	}
+	h1 {
+		font-size: 1.5rem;
+		line-height: 1.1;
+	}
+}

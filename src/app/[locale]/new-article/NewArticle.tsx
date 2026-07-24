@@ -26,6 +26,7 @@ const NewArticle = function ({ model }) {
 						<input
 							className={`w-full overflow-clip rounded-lg border bg-white p-4`}
 							placeholder={t("title")}
+							name={"article-title"}
 						/>
 						<ArticleEditor
 							model={newReadonlyModel({
