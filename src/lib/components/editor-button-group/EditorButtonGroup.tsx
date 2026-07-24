@@ -5,5 +5,5 @@ export default function EditorButtonGroup({
 }: {
 	children: ReactNode;
 }) {
-	return <div className="flex">{children}</div>;
+	return <div className="flex gap-1">{children}</div>;
 }

@@ -34,7 +34,7 @@ const EditorTools = function ({ model }) {
 	const t = useTranslations("editorTools");
 
 	return (
-		<div className="flex w-full flex-wrap items-center justify-center gap-2">
+		<div className="flex w-full flex-wrap items-center justify-center gap-1">
 			<EditorButtonGroup>
 				<EditorButton
 					model={{
