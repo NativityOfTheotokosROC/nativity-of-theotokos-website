@@ -18,7 +18,7 @@ const ArticleEditor = function ({ model }) {
 	});
 	const editorTools = useEditorTools(editor);
 	console.log(editor);
-	console.log(editorTools);
+	console.log(editorTools.modelView);
 
 	return (
 		<div className="flex min-h-100 w-full flex-col">
@@ -30,11 +30,11 @@ const ArticleEditor = function ({ model }) {
 							modelView: editorTools.modelView,
 						}}
 					/>
-					<EditorContent className="grow" editor={editor} />
 				</>
 			) : (
 				<></>
 			)}
+			<EditorContent className="grow" editor={editor} />
 		</div>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ArticleEditorModel>>;
