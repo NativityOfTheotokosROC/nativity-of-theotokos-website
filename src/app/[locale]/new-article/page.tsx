@@ -1,10 +1,11 @@
 import { routing } from "@/src/i18n/routing";
+import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
+import { getUser } from "@/src/lib/server-actions/auth";
+import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import NewArticle from "./NewArticle";
-import { newReadonlyModel } from "@mvc-react/mvc";
-import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
+import NewArticleClient from "./client";
 
 export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 	const { locale } = await params;
@@ -18,13 +19,16 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 	} satisfies Metadata;
 }
 
-export default async function Page({ params }: LayoutProps<"/[locale]">) {
-	const { locale } = await params;
-	const language = hasLocale(routing.locales, locale) ? locale : "en";
+export default async function Page() {
+	const user = await getUser();
 
 	return (
 		<ProtectedComponent model={newReadonlyModel({ roles: ["writer"] })}>
-			<NewArticle model={newReadonlyModel({ language })} />
+			<NewArticleClient
+				model={newReadonlyModel({
+					author: user?.name,
+				})}
+			/>
 		</ProtectedComponent>
 	);
 }

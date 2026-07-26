@@ -8,6 +8,8 @@ import { Language, Article } from "../types/general";
 import { isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
 import { getPlaceholder } from "../server-only/placeholder";
+import { protect } from "./auth";
+import { NewArticle } from "../models/new-article";
 
 export async function getArticle(
 	articleId: string,
@@ -81,4 +83,8 @@ export async function getArticle(
 			notFound();
 		throw error;
 	}
+}
+
+export async function submitArticle(newArticle: NewArticle) {
+	await protect({ roles: ["writer"] });
 }

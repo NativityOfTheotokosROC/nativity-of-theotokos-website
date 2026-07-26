@@ -1,8 +1,34 @@
-import { Model } from "@mvc-react/mvc";
-import { Language } from "../types/general";
+import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
+import { Notification } from "../types/general";
 
-export type NewArticleModelView = {
-	language: Language;
+export type NewArticleNotification =
+	| (Notification<"success" | "failure"> & { message: string })
+	| Notification<"pending">;
+
+export type NewArticle = {
+	title: string;
+	body: string;
 };
 
-export type NewArticleModel = Model<NewArticleModelView>;
+export type NewArticleModelView = {
+	author?: string;
+	newArticleNotification: NewArticleNotification | null;
+};
+
+export type NewArticleModelInteraction =
+	| InputModelInteraction<
+			"SUBMIT",
+			{
+				newArticle: NewArticle;
+				options?: { successCallback?: () => void };
+			}
+	  >
+	| InputModelInteraction<
+			"PREVIEW",
+			{ title: string; body: string; author: string }
+	  >;
+
+export type NewArticleModel = InteractiveModel<
+	NewArticleModelView,
+	NewArticleModelInteraction
+>;

@@ -1,7 +1,15 @@
-import { Model } from "@mvc-react/mvc";
+import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 
 export type EditorModelView = {
-	initialContent: string;
+	content: string;
 };
 
-export type EditorModel = Model<EditorModelView>;
+export type EditorModelInteraction = InputModelInteraction<
+	"UPDATE_EDITOR",
+	{ content: string }
+>;
+
+export type EditorModel = InteractiveModel<
+	EditorModelView,
+	EditorModelInteraction
+>;

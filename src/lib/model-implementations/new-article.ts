@@ -1,29 +1,27 @@
-import { InitializedModel } from "@mvc-react/mvc";
 import {
 	useNewStatefulInteractiveModel,
 	ViewInteractionInterface,
 } from "@mvc-react/stateful";
-import { useTranslations } from "next-intl";
 import {
-	NewQuoteModel,
-	NewQuoteModelInteraction,
-	NewQuoteNotification,
-} from "../models/new-quote";
+	NewArticleModel,
+	NewArticleModelInteraction,
+	NewArticleNotification,
+} from "../models/new-article";
 import {
 	NotifierModelInteraction,
 	NotifierModelView,
 } from "../models/notifier";
-import { addNewQuote } from "../server-actions/quote";
-import { AutoCompleteInfo } from "../utilities/quote-form";
 import { toastNotifierVIInterface } from "./notifier";
+import { useTranslations } from "next-intl";
+import { submitArticle } from "../server-actions/article";
 
 const TOAST_NOTIFIER_VI_INTERFACE = toastNotifierVIInterface();
 
-function newQuoteNotifierVIInterface() {
+export function newArticleNotifierVIInterface() {
 	return {
 		produceModelView: async function (
-			interaction: NotifierModelInteraction<NewQuoteNotification>,
-		): Promise<NotifierModelView<NewQuoteNotification>> {
+			interaction: NotifierModelInteraction<NewArticleNotification>,
+		) {
 			switch (interaction.type) {
 				case "NOTIFY": {
 					const notification = interaction.input.notification;
@@ -41,32 +39,33 @@ function newQuoteNotifierVIInterface() {
 			}
 		},
 	} satisfies ViewInteractionInterface<
-		NotifierModelView<NewQuoteNotification>,
-		NotifierModelInteraction<NewQuoteNotification>
+		NotifierModelView<NewArticleNotification>,
+		NotifierModelInteraction<NewArticleNotification>
 	>;
 }
 
-export function useNewQuote(autoCompleteInfo?: AutoCompleteInfo) {
+export function useNewArticle(author?: string) {
 	const notifier = useNewStatefulInteractiveModel(
-		newQuoteNotifierVIInterface(),
+		newArticleNotifierVIInterface(),
 	);
-	const t = useTranslations("newQuote");
-
+	const t = useTranslations("newArticle");
 	return {
 		modelView: {
-			newQuoteNotification: notifier.modelView?.notification ?? null,
-			autoCompleteInfo,
+			newArticleNotification: notifier.modelView?.notification ?? null,
+			author,
 		},
-		interact: async function (interaction: NewQuoteModelInteraction) {
+		interact: async function (
+			interaction: NewArticleModelInteraction,
+		): Promise<void> {
 			switch (interaction.type) {
-				case "ADD_QUOTE": {
+				case "SUBMIT": {
 					await notifier.interact({
 						type: "NOTIFY",
 						input: {
 							notification: { type: "pending" },
 						},
 					});
-					await addNewQuote(interaction.input.newQuote)
+					await submitArticle(interaction.input.newArticle)
 						.then(() =>
 							Promise.all([
 								notifier.interact({
@@ -92,8 +91,13 @@ export function useNewQuote(autoCompleteInfo?: AutoCompleteInfo) {
 								},
 							}),
 						);
+					break;
+				}
+				case "PREVIEW": {
+					// TODO:
+					break;
 				}
 			}
 		},
-	} satisfies InitializedModel<NewQuoteModel>;
+	} satisfies NewArticleModel;
 }

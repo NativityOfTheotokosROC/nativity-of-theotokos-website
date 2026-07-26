@@ -142,7 +142,11 @@
 		"preview": "Preview",
 		"submit": "Submit",
 		"successMessage": "Article successfully submitted",
-		"failureMessage": "Could not submit the article. Error:"
+		"failureMessage": "Could not submit the article. Error:",
+		"unknownAuthor": "Your Name"
+	},
+	"editor": {
+		"initError": "Editor is uninitialized"
 	},
 	"editorTools": {
 		"heading": "Heading",

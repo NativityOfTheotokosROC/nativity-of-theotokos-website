@@ -9,11 +9,18 @@ import { useEditorTools } from "../../model-implementations/editor-tools";
 import "./editor.css";
 
 const Editor = function ({ model }) {
-	const { initialContent } = model.modelView;
+	const { modelView, interact } = model;
+	const { content } = modelView;
 	const editor = useEditor({
-		content: initialContent,
+		content,
 		extensions: [StarterKit, TextStyleKit],
 		immediatelyRender: false,
+		onUpdate({ editor }) {
+			return interact({
+				type: "UPDATE_EDITOR",
+				input: { content: editor.getHTML() },
+			});
+		},
 	});
 	const editorTools = useEditorTools(editor);
 

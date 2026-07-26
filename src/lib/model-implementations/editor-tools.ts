@@ -5,6 +5,7 @@ import {
 	EditorToolsModelInteraction,
 } from "../models/editor-tools";
 import { editorToolsStateSelector } from "../utilities/editor-tools";
+import { useTranslations } from "next-intl";
 
 export function useEditorTools(editor: Editor | null) {
 	const editorState = useEditorState({
@@ -15,6 +16,7 @@ export function useEditorTools(editor: Editor | null) {
 			return null;
 		},
 	});
+	const t = useTranslations("editor");
 	return {
 		modelView: editorState
 			? {
@@ -30,7 +32,7 @@ export function useEditorTools(editor: Editor | null) {
 				}
 			: null,
 		interact: async function (interaction: EditorToolsModelInteraction) {
-			if (!editor) throw new Error("Editor is uninitialized");
+			if (!editor) throw new Error(t("initError"));
 			switch (interaction.type) {
 				case "TOGGLE_HEADING": {
 					editor.chain().focus().toggleHeading({ level: 1 }).run();

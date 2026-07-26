@@ -15,7 +15,7 @@ export type NewQuote = {
 };
 
 export type NewQuoteNotification =
-	| (Notification<"success"> & { text: string })
+	| (Notification<"success"> & { message: string })
 	| (Notification<"failure"> & { message: string })
 	| Notification<"pending">;
 
