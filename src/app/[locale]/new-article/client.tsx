@@ -1,14 +1,15 @@
 "use client";
 
+import { useNewArticle } from "@/src/lib/model-implementations/new-article";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { useTranslations } from "next-intl";
+import NewArticle from "./NewArticle";
 
 const NewArticleClient = function ({ model }) {
 	const { author } = model.modelView;
-	const t = useTranslations("newArticle");
+	const newArticle = useNewArticle(author);
 
-	return <div className=""></div>;
-} satisfies ModeledVoidComponent<ReadonlyModel<{ author?: string | null }>>;
+	return <NewArticle model={newArticle} />;
+} satisfies ModeledVoidComponent<ReadonlyModel<{ author?: string }>>;
 
 export default NewArticleClient;
