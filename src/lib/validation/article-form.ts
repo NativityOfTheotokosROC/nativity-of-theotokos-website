@@ -10,7 +10,9 @@ export function getArticleFormSchema(t?: Translator) {
 			.string()
 			.trim()
 			.nonempty({
-				error: t && t("validation.nonEmpty"),
+				error:
+					t &&
+					t("validation.nonEmpty", { field: t("newArticle.title") }),
 			})
 			.max(maxTitleEn, {
 				error:

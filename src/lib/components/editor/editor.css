@@ -25,3 +25,9 @@
 		line-height: 1.1;
 	}
 }
+
+/* @media (min-width: 768px) {
+	.tiptap {
+		padding-inline: 13em;
+	}
+} */

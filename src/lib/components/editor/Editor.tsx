@@ -40,7 +40,7 @@ const Editor = function ({ model }) {
 				<></>
 			)}
 			<EditorContent
-				className="h-100 max-h-100 overflow-y-auto"
+				className="h-100 max-h-100 overflow-y-auto md:px-[13em] md:text-lg/relaxed"
 				editor={editor}
 			/>
 		</div>
