@@ -451,8 +451,8 @@ const NewQuote = function ({ model }) {
 										}) => (
 											<Checkbox
 												className={`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white data-checked:bg-gray-900`}
-												value={value}
 												onChange={onChange}
+												checked={value}
 											>
 												<Check
 													className={
