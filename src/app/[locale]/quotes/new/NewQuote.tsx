@@ -19,7 +19,7 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 const NewQuote = function ({ model }) {
 	const { modelView, interact } = model;
@@ -29,6 +29,7 @@ const NewQuote = function ({ model }) {
 	const defaultValues = getDefaultValues();
 	const currentDate = getDateString(new Date(), true);
 	const {
+		control,
 		register,
 		handleSubmit,
 		getValues,
@@ -442,19 +443,25 @@ const NewQuote = function ({ model }) {
 							</Tabs>
 							<div className="flex flex-col gap-3">
 								<Field className="flex items-center gap-3">
-									<Checkbox
-										{...register("isQuoteScheduled")}
-										onChange={value => {
-											setValue("isQuoteScheduled", value);
-										}}
-										className={`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white data-checked:bg-gray-900`}
-									>
-										<Check
-											className={
-												"hidden size-4 stroke-white group-data-checked:block"
-											}
-										/>
-									</Checkbox>
+									<Controller
+										control={control}
+										name={"isQuoteScheduled"}
+										render={({
+											field: { onChange, value },
+										}) => (
+											<Checkbox
+												className={`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white data-checked:bg-gray-900`}
+												value={value}
+												onChange={onChange}
+											>
+												<Check
+													className={
+														"hidden size-4 stroke-white group-data-checked:block"
+													}
+												/>
+											</Checkbox>
+										)}
+									/>
 									<Label>{t("schedulerCheckLabel")}</Label>
 								</Field>
 								{isQuoteScheduled && (
