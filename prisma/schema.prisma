@@ -111,6 +111,13 @@ model FeaturedArticle {
   articleId Int     @id
 }
 
+model ArticleDraft {
+  id   Int   @id @default(autoincrement())
+  user Admin @relation(fields: [adminId], references: [id])
+
+  adminId Int
+}
+
 model DailyGalleryImage {
   id            Int               @id @default(autoincrement())
   date          DateTime          @db.Date
@@ -122,9 +129,10 @@ model DailyGalleryImage {
 }
 
 model Admin {
-  id    Int    @id @default(autoincrement())
-  email String
-  role  String
+  id            Int            @id @default(autoincrement())
+  email         String
+  role          String
+  articleDrafts ArticleDraft[]
 
   @@unique([email, role])
 }

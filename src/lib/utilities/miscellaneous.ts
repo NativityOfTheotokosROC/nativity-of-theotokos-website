@@ -1,5 +1,6 @@
 import { createHash } from "crypto";
 import { ShareData } from "../types/general";
+import { useEffect } from "react";
 
 export function julianDate(date: Date) {
 	return new Date(new Date().setDate(date.getDate() - 13));
@@ -42,4 +43,23 @@ export function getEncodedShareData(shareData: ShareData) {
 		url: encodeURI(shareData.url),
 		text: shareData.text ? encodeURI(shareData.text) : undefined,
 	} satisfies ShareData;
+}
+
+export function beforeUnloadHandler(e: BeforeUnloadEvent) {
+	e.preventDefault();
+}
+
+export function useCloseWarning(valuePredicates?: [unknown, unknown][]) {
+	useEffect(() => {
+		if (!valuePredicates?.length) return;
+		if (
+			valuePredicates.every(
+				valuePredicate => valuePredicate[0] !== valuePredicate[1],
+			)
+		) {
+			window.addEventListener("beforeunload", beforeUnloadHandler);
+		} else {
+			window.removeEventListener("beforeunload", beforeUnloadHandler);
+		}
+	}, [valuePredicates]);
 }

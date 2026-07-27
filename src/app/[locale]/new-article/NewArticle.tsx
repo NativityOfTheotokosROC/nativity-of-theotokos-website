@@ -6,6 +6,7 @@ import Spinner from "@/src/lib/components/spinner/Spinner";
 import { useEditor } from "@/src/lib/model-implementations/editor";
 import { NewArticleModel } from "@/src/lib/models/new-article";
 import { georgia } from "@/src/lib/third-party/fonts";
+import { useCloseWarning } from "@/src/lib/utilities/miscellaneous";
 import { useArticleFormSchema } from "@/src/lib/validation/article-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
@@ -17,6 +18,7 @@ const NewArticle = function ({ model }) {
 	const { modelView, interact } = model;
 	const { author, newArticleNotification } = modelView;
 	const t = useTranslations("newArticle");
+	const bodyPlaceholder = t("bodyPlaceholder");
 	const editor = useEditor(t("bodyPlaceholder"));
 	const body = editor.modelView.content;
 	const definitiveAuthor = author ?? t("unknownAuthor");
@@ -32,6 +34,8 @@ const NewArticle = function ({ model }) {
 		shouldUnregister: true,
 		defaultValues: { title: "" },
 	});
+
+	useCloseWarning([[bodyPlaceholder, body]]);
 
 	return (
 		<main className="new-quote border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black">

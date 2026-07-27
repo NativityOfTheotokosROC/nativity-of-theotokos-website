@@ -20,6 +20,7 @@ import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
+import { useCloseWarning } from "@/src/lib/utilities/miscellaneous";
 
 const NewQuote = function ({ model }) {
 	const { modelView, interact } = model;
@@ -123,6 +124,15 @@ const NewQuote = function ({ model }) {
 			);
 		},
 	});
+
+	useCloseWarning([
+		[defaultValues.authorEn, getValues("authorEn")],
+		[defaultValues.authorRu, getValues("authorRu")],
+		[defaultValues.sourceEn, getValues("sourceEn")],
+		[defaultValues.sourceRu, getValues("sourceRu")],
+		[defaultValues.quoteEn, getValues("quoteEn")],
+		[defaultValues.quoteRu, getValues("quoteRu")],
+	]);
 
 	return (
 		<>
