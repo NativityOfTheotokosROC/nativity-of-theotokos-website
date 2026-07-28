@@ -6,7 +6,7 @@ import Spinner from "@/src/lib/components/spinner/Spinner";
 import { useEditor } from "@/src/lib/model-implementations/editor";
 import { NewArticleModel } from "@/src/lib/models/new-article";
 import { georgia } from "@/src/lib/third-party/fonts";
-import { useCloseWarning } from "@/src/lib/utilities/miscellaneous";
+import { useCloseWarning } from "@/src/lib/utilities/hooks";
 import { useArticleFormSchema } from "@/src/lib/validation/article-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";

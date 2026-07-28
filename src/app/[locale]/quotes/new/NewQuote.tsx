@@ -20,7 +20,7 @@ import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
-import { useCloseWarning } from "@/src/lib/utilities/miscellaneous";
+import { useCloseWarning } from "@/src/lib/utilities/hooks";
 
 const NewQuote = function ({ model }) {
 	const { modelView, interact } = model;
