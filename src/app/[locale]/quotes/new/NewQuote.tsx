@@ -48,6 +48,7 @@ const NewQuote = function ({ model }) {
 		},
 	});
 	const isQuoteScheduled = watch("isQuoteScheduled");
+
 	const tabs = useTabs([
 		newReadonlyModel({ name: t("english") }),
 		newReadonlyModel({ name: t("russian") }),
@@ -126,12 +127,12 @@ const NewQuote = function ({ model }) {
 	});
 
 	useCloseWarning([
-		[defaultValues.authorEn, getValues("authorEn")],
-		[defaultValues.authorRu, getValues("authorRu")],
-		[defaultValues.sourceEn, getValues("sourceEn")],
-		[defaultValues.sourceRu, getValues("sourceRu")],
-		[defaultValues.quoteEn, getValues("quoteEn")],
-		[defaultValues.quoteRu, getValues("quoteRu")],
+		[defaultValues.authorEn, watch("authorEn")],
+		[defaultValues.authorRu, watch("authorRu")],
+		[defaultValues.sourceEn, watch("sourceEn")],
+		[defaultValues.sourceRu, watch("sourceRu")],
+		[defaultValues.quoteEn, watch("quoteEn")],
+		[defaultValues.quoteRu, watch("quoteRu")],
 	]);
 
 	return (
