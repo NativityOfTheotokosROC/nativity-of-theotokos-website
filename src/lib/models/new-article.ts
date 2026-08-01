@@ -6,6 +6,7 @@ export type NewArticleNotification =
 	| Notification<"pending">;
 
 export type NewArticle = {
+	ticketId: string;
 	title: string;
 	body: string;
 };

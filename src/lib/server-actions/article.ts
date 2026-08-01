@@ -2,14 +2,16 @@
 
 import { ImagePlaceholder } from "@grod56/placeholder";
 import { cacheTag } from "next/cache";
-import { notFound } from "next/navigation";
+import { forbidden, notFound } from "next/navigation";
 import database from "../third-party/prisma";
 import { Language, Article } from "../types/general";
 import { isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
 import { getPlaceholder } from "../server-only/placeholder";
-import { protect } from "./auth";
+import { getUser } from "./auth";
 import { NewArticle } from "../models/new-article";
+import { getTranslations } from "next-intl/server";
+import { getArticleFormSchema } from "../validation/article-form";
 
 export async function getArticle(
 	articleId: string,
@@ -85,6 +87,58 @@ export async function getArticle(
 	}
 }
 
-export async function submitArticle(newArticle: NewArticle) {
-	await protect({ roles: ["writer"] });
+export async function saveDraft(draft: NewArticle, locale?: Language) {
+	const { ticketId } = draft;
+	const user = await getUser();
+	if (!user) forbidden();
+	if (
+		!(await database.articleTicket.findUnique({
+			where: { id: ticketId, userEmail: user.email },
+		}))
+	)
+		forbidden();
+	const isSubmitted = await database.pendingArticleSubmission.findFirst({
+		where: {
+			articleDraft: { articleTicketId: ticketId },
+		},
+	});
+	const t = await getTranslations({ locale: locale ?? "en" });
+	const articleFormSchema = getArticleFormSchema(t);
+	const { title, body } = isSubmitted
+		? articleFormSchema.parse({ title: draft.title, body: draft.body })
+		: draft;
+	const savedDraft = await database.articleDraft.upsert({
+		create: {
+			articleTicketId: ticketId,
+			title,
+			body,
+		},
+		update: {
+			title,
+			body,
+			lastSaved: new Date(),
+		},
+		where: {
+			articleTicketId: ticketId,
+		},
+	});
+	return savedDraft;
+}
+
+export async function submitArticle(article: NewArticle, locale?: Language) {
+	const { ticketId } = article;
+	const t = await getTranslations({ locale: locale ?? "en" });
+	const articleFormSchema = getArticleFormSchema(t);
+	const { title, body } = articleFormSchema.parse({
+		title: article.title,
+		body: article.body,
+	});
+	const { id } = await saveDraft({ ticketId, title, body }, locale);
+	await database.pendingArticleSubmission.upsert({
+		create: {
+			articleDraftId: id,
+		},
+		update: {},
+		where: { articleDraftId: id },
+	});
 }

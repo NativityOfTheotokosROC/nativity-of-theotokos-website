@@ -143,7 +143,10 @@
 		"submit": "Submit",
 		"successMessage": "Article successfully submitted",
 		"failureMessage": "Could not submit the article. Error:",
-		"unknownAuthor": "Your Name"
+		"unknownAuthor": "Your Name",
+		"saveDraft": "Save Draft",
+		"autoSave": "Auto Save",
+		"body": "Body"
 	},
 	"editor": {
 		"initError": "Editor is uninitialized"
@@ -233,7 +236,8 @@
 	},
 	"validation": {
 		"nonEmpty": "{field} cannot be empty",
-		"maxCharacters": "{field} is too long (maximum of {max} characters)"
+		"maxCharacters": "{field} is too long (maximum of {max} characters)",
+		"minCharacters": "{field} is too short (minimum of {min} characters)"
 	},
 	"miscellaneous": {
 		"futureContent": "Content to be added soon!",
