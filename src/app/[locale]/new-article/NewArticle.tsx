@@ -12,27 +12,22 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 
 const NewArticle = function ({ model }) {
 	const { modelView, interact } = model;
-	const {
-		ticketId,
-		newArticleNotification,
-		initialTitle,
-		initialBody,
-		author,
-		lastSavedDraft,
-	} = modelView;
+	const { ticketId, newArticleNotification, author, lastSavedDraft } =
+		modelView;
 	const t = useTranslations("newArticle");
-	const bodyPlaceholder = `<p>${t("bodyPlaceholder")}</p>`;
+	const defaultTitle = "";
+	const defaultBody = `<p>${t("bodyPlaceholder")}</p>`;
 	const articleFormSchema = useArticleFormSchema();
 	const {
 		register,
 		handleSubmit,
 		reset,
 		formState: { isSubmitting, errors, isValid },
-		getValues,
 		setValue,
 		watch,
 	} = useForm({
@@ -40,23 +35,22 @@ const NewArticle = function ({ model }) {
 		resolver: zodResolver(articleFormSchema),
 		shouldUnregister: true,
 		defaultValues: {
-			title: initialTitle ?? "",
-			body: initialBody ?? bodyPlaceholder,
+			title: lastSavedDraft?.title ?? defaultTitle,
+			body: lastSavedDraft?.body ?? defaultBody,
 		},
 	});
-	const editor = useEditor(initialBody ?? bodyPlaceholder, async content =>
-		setValue("body", content),
+	const editor = useEditor(
+		lastSavedDraft?.body ?? defaultBody,
+		async content => setValue("body", content),
 	);
-	const body = editor.modelView.content;
+	const title = watch("title");
+	const body = watch("body");
 	const definitiveAuthor = author ?? t("unknownAuthor");
 	const hasDraftChanged = lastSavedDraft
-		? !(
-				watch("title") === lastSavedDraft.title &&
-				body === lastSavedDraft.body
-			)
-		: !(watch("title") === "" && body === bodyPlaceholder);
+		? !(title === lastSavedDraft.title && body === lastSavedDraft.body)
+		: !(title === defaultTitle && body === defaultBody);
 
-	useCloseWarning([[bodyPlaceholder, body]]);
+	useCloseWarning(useCallback(() => hasDraftChanged, [hasDraftChanged]));
 
 	return (
 		<main className="new-quote border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black">
@@ -76,19 +70,19 @@ const NewArticle = function ({ model }) {
 									draft: {
 										ticketId,
 										title: form.title,
-										body,
+										body: form.body,
 									},
 									options: {
 										async successCallback() {
 											await editor.interact({
 												type: "UPDATE_EDITOR",
 												input: {
-													content: bodyPlaceholder,
+													content: defaultBody,
 												},
 											});
 											reset({
-												title: "",
-												body: bodyPlaceholder,
+												title: defaultTitle,
+												body: defaultBody,
 											});
 										},
 									},
@@ -98,11 +92,11 @@ const NewArticle = function ({ model }) {
 				>
 					<div className="flex flex-col gap-3">
 						<input
+							{...register("title")}
 							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title ? "border-red-800" : "border-gray-400"}`}
 							placeholder={t("title")}
 							autoComplete="off"
 							autoCapitalize="words"
-							{...register("title")}
 						/>
 						{errors.title && (
 							<span className="text-sm text-red-800">
@@ -123,14 +117,24 @@ const NewArticle = function ({ model }) {
 											input: {
 												draft: {
 													ticketId,
-													title: getValues("title"),
+													title,
 													body,
 												},
 											},
 										}),
 								})}
 							>
-								{t("saveDraft")}
+								{newArticleNotification?.type ===
+								"saving_draft" ? (
+									<Spinner
+										model={newReadonlyModel({
+											color: "white",
+											size: 20,
+										})}
+									/>
+								) : (
+									t("saveDraft")
+								)}
 							</Button>
 							<Button
 								model={newReadonlyModel({
@@ -142,8 +146,8 @@ const NewArticle = function ({ model }) {
 											type: "PREVIEW",
 											input: {
 												author: definitiveAuthor,
-												body,
 												title: form.title,
+												body: form.body,
 											},
 										}),
 									),

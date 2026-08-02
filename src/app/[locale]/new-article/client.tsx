@@ -5,22 +5,24 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { ReadonlyModel } from "@mvc-react/mvc";
 import NewArticle from "./NewArticle";
 import { NewArticleModelView } from "@/src/lib/models/new-article";
+import { toastNotifierVIInterface } from "@/src/lib/model-implementations/notifier";
+import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
 
 const NewArticleClient = function ({ model }) {
-	const { ticketId, initialTitle, initialBody, author } = model.modelView;
+	const { ticketId, author, lastSavedDraft } = model.modelView;
+	const toastNotifier = useNewStatefulInteractiveModel(
+		toastNotifierVIInterface(),
+	);
 	const newArticle = useNewArticle(ticketId, {
-		initialTitle,
-		initialBody,
 		author,
+		lastSavedDraft,
+		toastNotifier,
 	});
 
 	return <NewArticle model={newArticle} />;
 } satisfies ModeledVoidComponent<
 	ReadonlyModel<
-		Pick<
-			NewArticleModelView,
-			"ticketId" | "author" | "initialTitle" | "initialBody"
-		>
+		Pick<NewArticleModelView, "ticketId" | "lastSavedDraft" | "author">
 	>
 >;
 

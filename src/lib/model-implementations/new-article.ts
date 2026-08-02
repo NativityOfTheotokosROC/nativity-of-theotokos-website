@@ -7,6 +7,7 @@ import {
 	LastSavedDraft,
 	NewArticleModel,
 	NewArticleModelInteraction,
+	NewArticleModelView,
 	NewArticleNotification,
 } from "../models/new-article";
 import {
@@ -61,9 +62,8 @@ export function newArticleNotifierVIInterface(
 export function useNewArticle(
 	ticketId: string,
 	options?: Partial<{
+		lastSavedDraft: NewArticleModelView["lastSavedDraft"];
 		author: string;
-		initialTitle: string;
-		initialBody: string;
 		toastNotifier: NotifierModel<ToastNotification>;
 	}>,
 ) {
@@ -79,8 +79,6 @@ export function useNewArticle(
 		modelView: {
 			ticketId,
 			newArticleNotification: notifier.modelView?.notification ?? null,
-			initialTitle: options?.initialTitle,
-			initialBody: options?.initialBody,
 			author: options?.author,
 			lastSavedDraft,
 		},

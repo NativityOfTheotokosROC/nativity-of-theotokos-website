@@ -5,20 +5,16 @@ function beforeUnloadHandler(e: BeforeUnloadEvent) {
 	e.preventDefault();
 }
 
-export function useCloseWarning<T>(valuePredicates?: [T, T][]) {
+export function useCloseWarning(predicate?: () => boolean) {
 	useEffect(() => {
-		if (!valuePredicates?.length) {
+		if (!predicate) {
 			window.addEventListener("beforeunload", beforeUnloadHandler);
 			return;
 		}
-		if (
-			!valuePredicates.every(
-				valuePredicate => valuePredicate[0] === valuePredicate[1],
-			)
-		) {
+		if (!predicate()) {
 			window.addEventListener("beforeunload", beforeUnloadHandler);
 		} else {
 			window.removeEventListener("beforeunload", beforeUnloadHandler);
 		}
-	}, [valuePredicates]);
+	}, [predicate]);
 }
