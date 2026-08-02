@@ -44,7 +44,7 @@ const NewArticle = function ({ model }) {
 			body: initialBody ?? bodyPlaceholder,
 		},
 	});
-	const editor = useEditor(bodyPlaceholder, async content =>
+	const editor = useEditor(initialBody ?? bodyPlaceholder, async content =>
 		setValue("body", content),
 	);
 	const body = editor.modelView.content;
