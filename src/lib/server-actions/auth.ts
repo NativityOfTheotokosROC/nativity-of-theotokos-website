@@ -10,15 +10,15 @@ import {
 	PREPRODUCTION_PROTECTION,
 } from "../utilities/server-constants";
 
+export const IS_AUTH_DISABLED =
+	PREPRODUCTION_PROTECTION?.toLowerCase() === "disabled" &&
+	ENVIRONMENT !== "production";
+
 export async function protect(protectParams?: { roles?: Role[] }) {
 	const roles = protectParams?.roles;
 	const user = await getUser();
 
-	if (
-		ENVIRONMENT !== "production" &&
-		PREPRODUCTION_PROTECTION?.toLowerCase() === "disabled"
-	)
-		return;
+	if (IS_AUTH_DISABLED) return;
 	if (!(user && (await isAuthorized(user, roles)))) return forbidden();
 }
 
