@@ -3,11 +3,11 @@ import {
 	ViewInteractionInterface,
 } from "@mvc-react/stateful";
 import { useLocale, useTranslations } from "next-intl";
+import { useState } from "react";
 import {
 	LastSavedDraft,
 	NewArticleModel,
 	NewArticleModelInteraction,
-	NewArticleModelView,
 	NewArticleNotification,
 } from "../models/new-article";
 import {
@@ -17,7 +17,6 @@ import {
 } from "../models/notifier";
 import { ToastNotification } from "../models/toast";
 import { saveDraft, submitArticle } from "../server-actions/article";
-import { useState } from "react";
 
 export function newArticleNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
@@ -62,7 +61,7 @@ export function newArticleNotifierVIInterface(
 export function useNewArticle(
 	ticketId: string,
 	options?: Partial<{
-		lastSavedDraft: NewArticleModelView["lastSavedDraft"];
+		lastSavedDraft: LastSavedDraft;
 		author: string;
 		toastNotifier: NotifierModel<ToastNotification>;
 	}>,
@@ -73,7 +72,7 @@ export function useNewArticle(
 	const t = useTranslations("newArticle");
 	const [lastSavedDraft, setLastSavedDraft] = useState<
 		LastSavedDraft | undefined
-	>(undefined);
+	>(options?.lastSavedDraft);
 	const locale = useLocale();
 	return {
 		modelView: {

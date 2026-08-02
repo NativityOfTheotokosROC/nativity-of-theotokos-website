@@ -45,7 +45,7 @@ const NewArticle = function ({ model }) {
 	);
 	const title = watch("title");
 	const body = watch("body");
-	const definitiveAuthor = author ?? t("unknownAuthor");
+	const previewAuthor = author ?? t("unknownAuthor");
 	const hasDraftChanged = lastSavedDraft
 		? !(title === lastSavedDraft.title && body === lastSavedDraft.body)
 		: !(title === defaultTitle && body === defaultBody);
@@ -104,6 +104,16 @@ const NewArticle = function ({ model }) {
 							</span>
 						)}
 						<Editor model={editor} />
+						{errors.body && (
+							<span className="text-sm text-red-800">
+								{errors.body.message}
+							</span>
+						)}
+						{errors.form && (
+							<span className="text-sm text-red-800">
+								{errors.form.message}
+							</span>
+						)}
 						<hr className="mt-1 w-full" />
 						<div className="mt-1 flex w-full justify-start gap-3">
 							<Button
@@ -145,7 +155,7 @@ const NewArticle = function ({ model }) {
 										interact({
 											type: "PREVIEW",
 											input: {
-												author: definitiveAuthor,
+												author: previewAuthor,
 												title: form.title,
 												body: form.body,
 											},

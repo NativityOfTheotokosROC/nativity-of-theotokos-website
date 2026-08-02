@@ -11,7 +11,7 @@ export function useCloseWarning(predicate?: () => boolean) {
 			window.addEventListener("beforeunload", beforeUnloadHandler);
 			return;
 		}
-		if (!predicate()) {
+		if (predicate()) {
 			window.addEventListener("beforeunload", beforeUnloadHandler);
 		} else {
 			window.removeEventListener("beforeunload", beforeUnloadHandler);
