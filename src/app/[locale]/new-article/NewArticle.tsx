@@ -50,9 +50,11 @@ const NewArticle = function ({ model }) {
 	const body = editor.modelView.content;
 	const definitiveAuthor = author ?? t("unknownAuthor");
 	const hasDraftChanged = lastSavedDraft
-		? watch("title") === lastSavedDraft.title &&
-			body === lastSavedDraft.body
-		: watch("title") !== "" && body !== bodyPlaceholder;
+		? !(
+				watch("title") === lastSavedDraft.title &&
+				body === lastSavedDraft.body
+			)
+		: !(watch("title") === "" && body === bodyPlaceholder);
 
 	useCloseWarning([[bodyPlaceholder, body]]);
 
