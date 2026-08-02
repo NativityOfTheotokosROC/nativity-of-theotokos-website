@@ -11,7 +11,8 @@ import {
 	PREPRODUCTION_PROTECTION,
 } from "../utilities/server-constants";
 import { getPlaceholder } from "../server-only/placeholder";
-import { getUser, IS_AUTH_DISABLED, protect } from "./auth";
+import { getUser, protect } from "./auth";
+import { IS_AUTH_DISABLED } from "../utilities/server-constants";
 import { NewArticle } from "../models/new-article";
 import { getTranslations } from "next-intl/server";
 import { getArticleFormSchema } from "../validation/article-form";

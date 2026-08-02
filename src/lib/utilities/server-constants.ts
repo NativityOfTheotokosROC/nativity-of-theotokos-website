@@ -40,6 +40,9 @@ const S3_BUCKET_REGION = z
 	.nonempty()
 	.parse(process.env.S3_BUCKET_REGION);
 const PREPRODUCTION_PROTECTION = process.env.PREPRODUCTION_PROTECTION;
+const IS_AUTH_DISABLED =
+	PREPRODUCTION_PROTECTION?.toLowerCase() === "disabled" &&
+	ENVIRONMENT !== "production";
 
 export {
 	BASE_URL,
@@ -55,4 +58,5 @@ export {
 	S3_BUCKET,
 	S3_BUCKET_REGION,
 	PREPRODUCTION_PROTECTION,
+	IS_AUTH_DISABLED,
 };

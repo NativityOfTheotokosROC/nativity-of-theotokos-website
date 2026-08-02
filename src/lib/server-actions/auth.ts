@@ -5,14 +5,7 @@ import database from "@/src/lib/third-party/prisma";
 import { headers } from "next/headers";
 import { forbidden } from "next/navigation";
 import { Role, User } from "../types/general";
-import {
-	ENVIRONMENT,
-	PREPRODUCTION_PROTECTION,
-} from "../utilities/server-constants";
-
-export const IS_AUTH_DISABLED =
-	PREPRODUCTION_PROTECTION?.toLowerCase() === "disabled" &&
-	ENVIRONMENT !== "production";
+import { IS_AUTH_DISABLED } from "../utilities/server-constants";
 
 export async function protect(protectParams?: { roles?: Role[] }) {
 	const roles = protectParams?.roles;
