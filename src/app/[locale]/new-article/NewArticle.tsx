@@ -20,9 +20,6 @@ const NewArticle = function ({ model }) {
 		modelView;
 	const t = useTranslations("newArticle");
 	const bodyPlaceholder = `<p>${t("bodyPlaceholder")}</p>`;
-	const editor = useEditor(bodyPlaceholder);
-	const body = editor.modelView.content;
-	const definitiveAuthor = author ?? t("unknownAuthor");
 	const articleFormSchema = useArticleFormSchema();
 	const {
 		register,
@@ -30,6 +27,7 @@ const NewArticle = function ({ model }) {
 		reset,
 		formState: { isSubmitting, errors, isValid },
 		getValues,
+		setValue,
 		watch,
 	} = useForm({
 		mode: "onChange",
@@ -37,9 +35,15 @@ const NewArticle = function ({ model }) {
 		shouldUnregister: true,
 		defaultValues: { title: "" },
 	});
-	const hasDraftChanged =
-		watch("title") === lastSavedDraft?.title &&
-		body === lastSavedDraft?.body;
+	const editor = useEditor(bodyPlaceholder, content =>
+		setValue("body", content),
+	);
+	const body = editor.modelView.content;
+	const definitiveAuthor = author ?? t("unknownAuthor");
+	const hasDraftChanged = lastSavedDraft
+		? watch("title") === lastSavedDraft.title &&
+			body === lastSavedDraft.body
+		: true;
 
 	useCloseWarning([[bodyPlaceholder, body]]);
 
