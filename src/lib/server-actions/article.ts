@@ -11,7 +11,7 @@ import {
 	PREPRODUCTION_PROTECTION,
 } from "../utilities/server-constants";
 import { getPlaceholder } from "../server-only/placeholder";
-import { getUser, protect } from "./auth";
+import { getUser, IS_AUTH_DISABLED, protect } from "./auth";
 import { NewArticle } from "../models/new-article";
 import { getTranslations } from "next-intl/server";
 import { getArticleFormSchema } from "../validation/article-form";
@@ -94,13 +94,12 @@ export async function getArticle(
 export async function saveDraft(draft: NewArticle, locale?: Language) {
 	const { ticketId } = draft;
 	const user = await getUser();
-	if (!user) forbidden();
-	if (
-		!(await database.articleTicket.findUnique({
-			where: { id: ticketId, userEmail: user.email },
-		}))
-	)
-		forbidden();
+	if (!user && !IS_AUTH_DISABLED) forbidden();
+	const ticket = await database.articleTicket.findUnique({
+		where: { id: ticketId },
+	});
+	if (!ticket) forbidden(); // TODO: Throw error instead
+	if (user && ticket.userEmail !== user.email) forbidden();
 	const isSubmitted = await database.pendingArticleSubmission.findFirst({
 		where: {
 			articleDraft: { articleTicketId: ticketId },

@@ -33,9 +33,9 @@ const NewArticle = function ({ model }) {
 		mode: "onChange",
 		resolver: zodResolver(articleFormSchema),
 		shouldUnregister: true,
-		defaultValues: { title: "" },
+		defaultValues: { title: "", body: bodyPlaceholder },
 	});
-	const editor = useEditor(bodyPlaceholder, content =>
+	const editor = useEditor(bodyPlaceholder, async content =>
 		setValue("body", content),
 	);
 	const body = editor.modelView.content;
