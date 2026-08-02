@@ -9,6 +9,10 @@ import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import NewArticleClient from "./client";
+import {
+	ENVIRONMENT,
+	PREPRODUCTION_PROTECTION,
+} from "@/src/lib/utilities/server-constants";
 
 export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 	const { locale } = await params;
@@ -24,10 +28,16 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 
 export default async function Page() {
 	const user = await getUser();
-	const latestUnsubmittedDraft = await getLatestUnsubmittedDraft();
+	const authorEmail =
+		(user?.email ??
+		(PREPRODUCTION_PROTECTION === "disabled" &&
+			ENVIRONMENT !== "production"))
+			? "editorial@nativityoftheotokos.com"
+			: undefined;
+	const latestUnsubmittedDraft = await getLatestUnsubmittedDraft(authorEmail);
 	const ticketId = latestUnsubmittedDraft
 		? latestUnsubmittedDraft.ticketId
-		: (await createTicket()).ticketId;
+		: (await createTicket(authorEmail)).ticketId;
 
 	return (
 		<NewArticleClient

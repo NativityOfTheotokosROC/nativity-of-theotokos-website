@@ -6,7 +6,10 @@ import { forbidden, notFound } from "next/navigation";
 import database from "../third-party/prisma";
 import { Language, Article } from "../types/general";
 import { isRemotePath } from "../utilities/miscellaneous";
-import { BASE_URL } from "../utilities/server-constants";
+import {
+	BASE_URL,
+	PREPRODUCTION_PROTECTION,
+} from "../utilities/server-constants";
 import { getPlaceholder } from "../server-only/placeholder";
 import { getUser, protect } from "./auth";
 import { NewArticle } from "../models/new-article";
@@ -186,9 +189,22 @@ export async function createTicket(
 	return { ticketId: ticket.id };
 }
 
-export async function getLatestUnsubmittedDraft() {
+export async function getLatestUnsubmittedDraft(authorEmail?: string) {
+	const parsedEmail = authorEmail
+		? z.email().parse(authorEmail.trim())
+		: undefined;
 	const user = await getUser();
-	if (!user) forbidden();
+	if (
+		!(parsedEmail || user?.email) &&
+		PREPRODUCTION_PROTECTION === "disabled"
+	)
+		throw new Error("Not logged in and no email provided.");
+	if (!(parsedEmail || user?.email)) forbidden();
+	if (!user && !(PREPRODUCTION_PROTECTION === "disabled")) forbidden();
+	if (parsedEmail && parsedEmail !== user?.email) await protect();
+
+	const userEmail = parsedEmail ?? user!.email;
+
 	const draft = await database.articleDraft.findFirst({
 		orderBy: {
 			lastSaved: "desc",
@@ -199,7 +215,7 @@ export async function getLatestUnsubmittedDraft() {
 		},
 		where: {
 			articleTicket: {
-				userEmail: user.email,
+				userEmail,
 			},
 			pendingArticleSubmission: null,
 		},
