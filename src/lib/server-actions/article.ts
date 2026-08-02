@@ -1,22 +1,18 @@
 "use server";
 
 import { ImagePlaceholder } from "@grod56/placeholder";
+import { getTranslations } from "next-intl/server";
 import { cacheTag } from "next/cache";
 import { forbidden, notFound } from "next/navigation";
-import database from "../third-party/prisma";
-import { Language, Article } from "../types/general";
-import { isRemotePath } from "../utilities/miscellaneous";
-import {
-	BASE_URL,
-	PREPRODUCTION_PROTECTION,
-} from "../utilities/server-constants";
-import { getPlaceholder } from "../server-only/placeholder";
-import { getUser, protect } from "./auth";
-import { IS_AUTH_DISABLED } from "../utilities/server-constants";
-import { NewArticle } from "../models/new-article";
-import { getTranslations } from "next-intl/server";
-import { getArticleFormSchema } from "../validation/article-form";
 import z from "zod";
+import { NewArticle } from "../models/new-article";
+import { getPlaceholder } from "../server-only/placeholder";
+import database from "../third-party/prisma";
+import { Article, Language } from "../types/general";
+import { isRemotePath } from "../utilities/miscellaneous";
+import { BASE_URL, IS_AUTH_DISABLED } from "../utilities/server-constants";
+import { getArticleFormSchema } from "../validation/article-form";
+import { getUser, protect } from "./auth";
 
 export async function getArticle(
 	articleId: string,
@@ -148,11 +144,14 @@ export async function submitArticle(article: NewArticle, locale?: Language) {
 }
 
 export async function createTicket(
-	userEmail?: string,
-	articleId?: string,
+	options?: Partial<{
+		userEmail: string;
+		articleId: string;
+		useUnused: boolean;
+	}>,
 ): Promise<{ ticketId: string }> {
-	const parsedEmail = userEmail
-		? z.email().parse(userEmail.trim())
+	const parsedEmail = options?.userEmail
+		? z.email().parse(options.userEmail.trim())
 		: undefined;
 	const user = await getUser();
 	if (!parsedEmail) {
@@ -163,29 +162,50 @@ export async function createTicket(
 		await protect();
 	}
 	const authorEmail = parsedEmail ?? user!.email;
-	const article = articleId
+	const article = options?.articleId
 		? await database.article.findUniqueOrThrow({
 				include: { author: true },
 				where: {
-					link: articleId,
+					link: options.articleId,
 				},
 			})
 		: null;
 	if (!article) {
-		const ticket = await database.articleTicket.create({
-			data: {
-				userEmail: authorEmail,
-			},
-		});
+		const unusedTicket = options?.useUnused
+			? await database.articleTicket.findFirst({
+					where: {
+						userEmail: authorEmail,
+						articleDraft: null,
+					},
+				})
+			: null;
+		const ticket =
+			unusedTicket ??
+			(await database.articleTicket.create({
+				data: {
+					userEmail: authorEmail,
+				},
+			}));
 		return { ticketId: ticket.id };
 	}
 	if (!(article.author.email === authorEmail)) forbidden();
-	const ticket = await database.articleTicket.create({
-		data: {
-			userEmail: authorEmail,
-			articleId: article.id,
-		},
-	});
+	const unusedTicket = options?.useUnused
+		? await database.articleTicket.findFirst({
+				where: {
+					userEmail: authorEmail,
+					articleDraft: null,
+					articleId: article.id,
+				},
+			})
+		: null;
+	const ticket =
+		unusedTicket ??
+		(await database.articleTicket.create({
+			data: {
+				userEmail: authorEmail,
+				articleId: article.id,
+			},
+		}));
 	return { ticketId: ticket.id };
 }
 
@@ -194,13 +214,10 @@ export async function getLatestUnsubmittedDraft(authorEmail?: string) {
 		? z.email().parse(authorEmail.trim())
 		: undefined;
 	const user = await getUser();
-	if (
-		!(parsedEmail || user?.email) &&
-		PREPRODUCTION_PROTECTION === "disabled"
-	)
+	if (!(parsedEmail || user?.email) && IS_AUTH_DISABLED)
 		throw new Error("Not logged in and no email provided.");
 	if (!(parsedEmail || user?.email)) forbidden();
-	if (!user && !(PREPRODUCTION_PROTECTION === "disabled")) forbidden();
+	if (!user && !IS_AUTH_DISABLED) forbidden();
 	if (parsedEmail && parsedEmail !== user?.email) await protect();
 
 	const userEmail = parsedEmail ?? user!.email;
@@ -220,6 +237,7 @@ export async function getLatestUnsubmittedDraft(authorEmail?: string) {
 			pendingArticleSubmission: null,
 		},
 	});
+
 	return draft
 		? ({
 				ticketId: draft.articleTicketId,

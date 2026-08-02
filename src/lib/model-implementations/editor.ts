@@ -10,7 +10,7 @@ import {
 } from "../models/editor";
 
 function editorVIInterface(
-	updateCallback?: (content: string) => void | Promise<void>,
+	updateCallback?: (content: string) => Promise<void>,
 ) {
 	return {
 		produceModelView: async function (
@@ -31,7 +31,7 @@ function editorVIInterface(
 
 export function useEditor(
 	initialContent: string,
-	updateCallback?: (content: string) => void | Promise<void>,
+	updateCallback?: (content: string) => Promise<void>,
 ) {
 	const model = useInitializedStatefulInteractiveModel(
 		editorVIInterface(updateCallback),

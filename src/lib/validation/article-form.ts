@@ -36,7 +36,7 @@ export function getArticleFormSchema(t?: Translator) {
 					t &&
 					t("validation.minCharacters", {
 						field: t("newArticle.body"),
-						max: minBodyEn,
+						min: minBodyEn,
 					}),
 			}),
 	});

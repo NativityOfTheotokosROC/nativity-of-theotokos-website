@@ -37,7 +37,8 @@ export default async function Page() {
 	const latestUnsubmittedDraft = await getLatestUnsubmittedDraft(authorEmail);
 	const ticketId = latestUnsubmittedDraft
 		? latestUnsubmittedDraft.ticketId
-		: (await createTicket(authorEmail)).ticketId;
+		: (await createTicket({ userEmail: authorEmail, useUnused: true }))
+				.ticketId;
 
 	return (
 		<NewArticleClient
