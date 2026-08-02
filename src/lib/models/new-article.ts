@@ -2,8 +2,16 @@ import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 import { Notification } from "../types/general";
 
 export type NewArticleNotification =
-	| (Notification<"success" | "failure"> & { message: string })
-	| Notification<"pending">;
+	| (Notification<
+			| "submit_success"
+			| "submit_failure"
+			| "save_draft_success"
+			| "save_draft_failure"
+			| "saving_draft"
+	  > & {
+			message: string;
+	  })
+	| Notification<"submitting">;
 
 export type NewArticle = {
 	ticketId: string;
@@ -11,16 +19,22 @@ export type NewArticle = {
 	body: string;
 };
 
+export type LastSavedDraft = Omit<NewArticle, "ticketId"> & {};
+
 export type NewArticleModelView = {
+	ticketId: string;
 	author?: string;
+	initialTitle?: string;
+	initialBody?: string;
+	lastSavedDraft?: LastSavedDraft;
 	newArticleNotification: NewArticleNotification | null;
 };
 
 export type NewArticleModelInteraction =
 	| InputModelInteraction<
-			"SUBMIT",
+			"SUBMIT" | "SAVE_DRAFT",
 			{
-				newArticle: NewArticle;
+				draft: NewArticle;
 				options?: { successCallback?: () => void };
 			}
 	  >

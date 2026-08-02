@@ -2,22 +2,25 @@ import {
 	useNewStatefulInteractiveModel,
 	ViewInteractionInterface,
 } from "@mvc-react/stateful";
+import { useLocale, useTranslations } from "next-intl";
 import {
+	LastSavedDraft,
 	NewArticleModel,
 	NewArticleModelInteraction,
 	NewArticleNotification,
 } from "../models/new-article";
 import {
+	NotifierModel,
 	NotifierModelInteraction,
 	NotifierModelView,
 } from "../models/notifier";
-import { toastNotifierVIInterface } from "./notifier";
-import { useTranslations } from "next-intl";
-import { submitArticle } from "../server-actions/article";
+import { ToastNotification } from "../models/toast";
+import { saveDraft, submitArticle } from "../server-actions/article";
+import { useState } from "react";
 
-const TOAST_NOTIFIER_VI_INTERFACE = toastNotifierVIInterface();
-
-export function newArticleNotifierVIInterface() {
+export function newArticleNotifierVIInterface(
+	toastNotifier?: NotifierModel<ToastNotification>,
+) {
 	return {
 		produceModelView: async function (
 			interaction: NotifierModelInteraction<NewArticleNotification>,
@@ -25,16 +28,27 @@ export function newArticleNotifierVIInterface() {
 			switch (interaction.type) {
 				case "NOTIFY": {
 					const notification = interaction.input.notification;
-					switch (notification.type) {
-						case "pending": {
-							return { notification };
-						}
-						default: {
-							return TOAST_NOTIFIER_VI_INTERFACE.produceModelView(
-								{ type: "NOTIFY", input: { notification } },
-							);
-						}
-					}
+					if (
+						notification.type === "submitting" ||
+						notification.type === "saving_draft"
+					)
+						return { notification };
+					const toastNotificationType = (
+						notification.type === "submit_success" ||
+						notification.type === "save_draft_success"
+							? "success"
+							: "failure"
+					) satisfies ToastNotification["type"];
+					await toastNotifier?.interact({
+						type: "NOTIFY",
+						input: {
+							notification: {
+								type: toastNotificationType,
+								message: notification.message,
+							},
+						},
+					});
+					return { notification };
 				}
 			}
 		},
@@ -44,36 +58,57 @@ export function newArticleNotifierVIInterface() {
 	>;
 }
 
-export function useNewArticle(author?: string) {
+export function useNewArticle(
+	ticketId: string,
+	options?: Partial<{
+		author: string;
+		initialTitle: string;
+		initialBody: string;
+		toastNotifier: NotifierModel<ToastNotification>;
+	}>,
+) {
 	const notifier = useNewStatefulInteractiveModel(
-		newArticleNotifierVIInterface(),
+		newArticleNotifierVIInterface(options?.toastNotifier),
 	);
 	const t = useTranslations("newArticle");
+	const [lastSavedDraft, setLastSavedDraft] = useState<
+		LastSavedDraft | undefined
+	>(undefined);
+	const locale = useLocale();
 	return {
 		modelView: {
+			ticketId,
 			newArticleNotification: notifier.modelView?.notification ?? null,
-			author,
+			initialTitle: options?.initialTitle,
+			initialBody: options?.initialBody,
+			author: options?.author,
+			lastSavedDraft,
 		},
 		interact: async function (
 			interaction: NewArticleModelInteraction,
 		): Promise<void> {
 			switch (interaction.type) {
-				case "SUBMIT": {
+				case "SAVE_DRAFT": {
+					const draft = interaction.input.draft;
 					await notifier.interact({
 						type: "NOTIFY",
 						input: {
-							notification: { type: "pending" },
+							notification: {
+								type: "saving_draft",
+								message: t("savingDraft"),
+							},
 						},
 					});
-					await submitArticle(interaction.input.newArticle)
+					await saveDraft(draft, locale)
+						.then(() => setLastSavedDraft(draft))
 						.then(() =>
 							Promise.all([
 								notifier.interact({
 									type: "NOTIFY",
 									input: {
 										notification: {
-											type: "success",
-											message: t("successMessage"),
+											type: "save_draft_success",
+											message: t("saveDraftSuccess"),
 										},
 									},
 								}),
@@ -85,8 +120,43 @@ export function useNewArticle(author?: string) {
 								type: "NOTIFY",
 								input: {
 									notification: {
-										type: "failure",
-										message: `${t("failureMessage")} ${reason} `,
+										type: "save_draft_failure",
+										message: `${t("saveDraftFailure", { message: reason })}`,
+									},
+								},
+							}),
+						);
+					break;
+				}
+				case "SUBMIT": {
+					await notifier.interact({
+						type: "NOTIFY",
+						input: {
+							notification: { type: "submitting" },
+						},
+					});
+					await submitArticle(interaction.input.draft, locale)
+						.then(() =>
+							Promise.all([
+								notifier.interact({
+									type: "NOTIFY",
+									input: {
+										notification: {
+											type: "submit_success",
+											message: t("submitSuccess"),
+										},
+									},
+								}),
+								interaction.input.options?.successCallback?.(),
+							]),
+						)
+						.catch(reason =>
+							notifier.interact({
+								type: "NOTIFY",
+								input: {
+									notification: {
+										type: "submit_failure",
+										message: `${t("submitFailure", { message: reason })}`,
 									},
 								},
 							}),

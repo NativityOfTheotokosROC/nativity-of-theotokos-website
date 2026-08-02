@@ -141,11 +141,14 @@
 		"bodyPlaceholder": "Start writing here...",
 		"preview": "Preview",
 		"submit": "Submit",
-		"successMessage": "Article successfully submitted",
-		"failureMessage": "Could not submit the article. Error:",
+		"submitSuccess": "Article successfully submitted",
+		"submitFailure": "Could not submit the article. Error: {message}",
 		"unknownAuthor": "Your Name",
 		"saveDraft": "Save Draft",
 		"autoSave": "Auto Save",
+		"savingDraft": "Saving draft",
+		"saveDraftSuccess": "Draft saved",
+		"saveDraftFailure": "Could not save draft. Error: {message}",
 		"body": "Body"
 	},
 	"editor": {

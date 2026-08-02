@@ -122,18 +122,18 @@ model ArticleTicket {
 }
 
 model ArticleDraft {
-  id                        Int                        @id @default(autoincrement())
-  title                     String
-  body                      String
-  lastSaved                 DateTime                   @default(now())
-  articleTicket             ArticleTicket              @relation(fields: [articleTicketId], references: [id])
-  articleTicketId           String                     @unique
-  pendingArticleSubmissions PendingArticleSubmission[]
+  id                       Int                       @id @default(autoincrement())
+  title                    String
+  body                     String
+  lastSaved                DateTime                  @default(now())
+  articleTicket            ArticleTicket             @relation(fields: [articleTicketId], references: [id])
+  articleTicketId          String                    @unique
+  pendingArticleSubmission PendingArticleSubmission?
 }
 
 model PendingArticleSubmission {
   articleDraft   ArticleDraft @relation(fields: [articleDraftId], references: [id])
-  articleDraftId Int @id
+  articleDraftId Int          @id
 }
 
 model DailyGalleryImage {

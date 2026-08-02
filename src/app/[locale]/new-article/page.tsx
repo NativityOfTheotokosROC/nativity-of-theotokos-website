@@ -1,5 +1,8 @@
 import { routing } from "@/src/i18n/routing";
-import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
+import {
+	createTicket,
+	getLatestUnsubmittedDraft,
+} from "@/src/lib/server-actions/article";
 import { getUser } from "@/src/lib/server-actions/auth";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
@@ -21,14 +24,19 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 
 export default async function Page() {
 	const user = await getUser();
+	const latestUnsubmittedDraft = await getLatestUnsubmittedDraft();
+	const ticketId = latestUnsubmittedDraft
+		? latestUnsubmittedDraft.ticketId
+		: (await createTicket()).ticketId;
 
 	return (
-		<ProtectedComponent model={newReadonlyModel({ roles: ["writer"] })}>
-			<NewArticleClient
-				model={newReadonlyModel({
-					author: user?.name,
-				})}
-			/>
-		</ProtectedComponent>
+		<NewArticleClient
+			model={newReadonlyModel({
+				ticketId,
+				initialTitle: latestUnsubmittedDraft?.title,
+				initialBody: latestUnsubmittedDraft?.body,
+				author: user?.name,
+			})}
+		/>
 	);
 }

@@ -8,10 +8,11 @@ import { Language, Article } from "../types/general";
 import { isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
 import { getPlaceholder } from "../server-only/placeholder";
-import { getUser } from "./auth";
+import { getUser, protect } from "./auth";
 import { NewArticle } from "../models/new-article";
 import { getTranslations } from "next-intl/server";
 import { getArticleFormSchema } from "../validation/article-form";
+import z from "zod";
 
 export async function getArticle(
 	articleId: string,
@@ -141,4 +142,73 @@ export async function submitArticle(article: NewArticle, locale?: Language) {
 		update: {},
 		where: { articleDraftId: id },
 	});
+}
+
+export async function createTicket(
+	userEmail?: string,
+	articleId?: string,
+): Promise<{ ticketId: string }> {
+	const parsedEmail = userEmail
+		? z.email().parse(userEmail.trim())
+		: undefined;
+	const user = await getUser();
+	if (!parsedEmail) {
+		await protect({ roles: ["writer"] });
+	} else if (parsedEmail === user?.email) {
+		await protect({ roles: ["writer"] });
+	} else {
+		await protect();
+	}
+	const authorEmail = parsedEmail ?? user!.email;
+	const article = articleId
+		? await database.article.findUniqueOrThrow({
+				include: { author: true },
+				where: {
+					link: articleId,
+				},
+			})
+		: null;
+	if (!article) {
+		const ticket = await database.articleTicket.create({
+			data: {
+				userEmail: authorEmail,
+			},
+		});
+		return { ticketId: ticket.id };
+	}
+	if (!(article.author.email === authorEmail)) forbidden();
+	const ticket = await database.articleTicket.create({
+		data: {
+			userEmail: authorEmail,
+			articleId: article.id,
+		},
+	});
+	return { ticketId: ticket.id };
+}
+
+export async function getLatestUnsubmittedDraft() {
+	const user = await getUser();
+	if (!user) forbidden();
+	const draft = await database.articleDraft.findFirst({
+		orderBy: {
+			lastSaved: "desc",
+		},
+		include: {
+			articleTicket: true,
+			pendingArticleSubmission: true,
+		},
+		where: {
+			articleTicket: {
+				userEmail: user.email,
+			},
+			pendingArticleSubmission: null,
+		},
+	});
+	return draft
+		? ({
+				ticketId: draft.articleTicketId,
+				title: draft.title,
+				body: draft.body,
+			} satisfies NewArticle)
+		: null;
 }

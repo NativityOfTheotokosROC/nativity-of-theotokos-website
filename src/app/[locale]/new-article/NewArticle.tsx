@@ -16,7 +16,8 @@ import { useForm } from "react-hook-form";
 
 const NewArticle = function ({ model }) {
 	const { modelView, interact } = model;
-	const { author, newArticleNotification } = modelView;
+	const { ticketId, newArticleNotification, author, lastSavedDraft } =
+		modelView;
 	const t = useTranslations("newArticle");
 	const bodyPlaceholder = `<p>${t("bodyPlaceholder")}</p>`;
 	const editor = useEditor(bodyPlaceholder);
@@ -28,12 +29,17 @@ const NewArticle = function ({ model }) {
 		handleSubmit,
 		reset,
 		formState: { isSubmitting, errors, isValid },
+		getValues,
+		watch,
 	} = useForm({
 		mode: "onChange",
 		resolver: zodResolver(articleFormSchema),
 		shouldUnregister: true,
 		defaultValues: { title: "" },
 	});
+	const hasDraftChanged =
+		watch("title") === lastSavedDraft?.title &&
+		body === lastSavedDraft?.body;
 
 	useCloseWarning([[bodyPlaceholder, body]]);
 
@@ -52,7 +58,11 @@ const NewArticle = function ({ model }) {
 							await interact({
 								type: "SUBMIT",
 								input: {
-									newArticle: { body, title: form.title },
+									draft: {
+										ticketId,
+										title: form.title,
+										body,
+									},
 									options: {
 										async successCallback() {
 											reset();
@@ -81,6 +91,26 @@ const NewArticle = function ({ model }) {
 							<Button
 								model={newReadonlyModel({
 									type: "button",
+									disabled: !hasDraftChanged,
+									className: "w-fit max-w-1/2 min-w-[8em]",
+									action: () =>
+										interact({
+											type: "SAVE_DRAFT",
+											input: {
+												draft: {
+													ticketId,
+													title: getValues("title"),
+													body,
+												},
+											},
+										}),
+								})}
+							>
+								{t("saveDraft")}
+							</Button>
+							<Button
+								model={newReadonlyModel({
+									type: "button",
 									disabled: !isValid,
 									className: "w-fit max-w-1/2 min-w-[8em]",
 									action: handleSubmit(async form =>
@@ -104,12 +134,13 @@ const NewArticle = function ({ model }) {
 									disabled:
 										isSubmitting ||
 										newArticleNotification?.type ===
-											"pending",
+											"submitting",
 									className:
 										"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
 								})}
 							>
-								{newArticleNotification?.type === "pending" ? (
+								{newArticleNotification?.type ===
+								"submitting" ? (
 									<Spinner
 										model={newReadonlyModel({
 											color: "white",
