@@ -52,7 +52,7 @@ const NewArticle = function ({ model }) {
 	const hasDraftChanged = lastSavedDraft
 		? watch("title") === lastSavedDraft.title &&
 			body === lastSavedDraft.body
-		: true;
+		: watch("title") !== "" && body !== bodyPlaceholder;
 
 	useCloseWarning([[bodyPlaceholder, body]]);
 
@@ -115,7 +115,7 @@ const NewArticle = function ({ model }) {
 									type: "button",
 									disabled: !hasDraftChanged,
 									className: "w-fit max-w-1/2 min-w-[8em]",
-									action: () =>
+									action: async () =>
 										interact({
 											type: "SAVE_DRAFT",
 											input: {
