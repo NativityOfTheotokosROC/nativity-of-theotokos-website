@@ -16,8 +16,14 @@ import { useForm } from "react-hook-form";
 
 const NewArticle = function ({ model }) {
 	const { modelView, interact } = model;
-	const { ticketId, newArticleNotification, author, lastSavedDraft } =
-		modelView;
+	const {
+		ticketId,
+		newArticleNotification,
+		initialTitle,
+		initialBody,
+		author,
+		lastSavedDraft,
+	} = modelView;
 	const t = useTranslations("newArticle");
 	const bodyPlaceholder = `<p>${t("bodyPlaceholder")}</p>`;
 	const articleFormSchema = useArticleFormSchema();
@@ -33,7 +39,10 @@ const NewArticle = function ({ model }) {
 		mode: "onChange",
 		resolver: zodResolver(articleFormSchema),
 		shouldUnregister: true,
-		defaultValues: { title: "", body: bodyPlaceholder },
+		defaultValues: {
+			title: initialTitle ?? "",
+			body: initialBody ?? bodyPlaceholder,
+		},
 	});
 	const editor = useEditor(bodyPlaceholder, async content =>
 		setValue("body", content),
@@ -69,7 +78,16 @@ const NewArticle = function ({ model }) {
 									},
 									options: {
 										async successCallback() {
-											reset();
+											await editor.interact({
+												type: "UPDATE_EDITOR",
+												input: {
+													content: bodyPlaceholder,
+												},
+											});
+											reset({
+												title: "",
+												body: bodyPlaceholder,
+											});
 										},
 									},
 								},
