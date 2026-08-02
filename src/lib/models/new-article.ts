@@ -23,11 +23,9 @@ export type LastSavedDraft = Omit<NewArticle, "ticketId"> & {};
 
 export type NewArticleModelView = {
 	ticketId: string;
-	author?: string;
-	initialTitle?: string;
-	initialBody?: string;
-	lastSavedDraft?: LastSavedDraft;
 	newArticleNotification: NewArticleNotification | null;
+	author?: string;
+	lastSavedDraft?: LastSavedDraft;
 };
 
 export type NewArticleModelInteraction =

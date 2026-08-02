@@ -44,8 +44,7 @@ export default async function Page() {
 		<NewArticleClient
 			model={newReadonlyModel({
 				ticketId,
-				initialTitle: latestUnsubmittedDraft?.title,
-				initialBody: latestUnsubmittedDraft?.body,
+				lastSavedDraft: latestUnsubmittedDraft ?? undefined,
 				author: user?.name,
 			})}
 		/>
