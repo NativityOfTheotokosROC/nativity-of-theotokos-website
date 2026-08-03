@@ -40,7 +40,6 @@ const NewArticle = function ({ model }) {
 	});
 	const editor = useEditor(lastSavedDraft?.body ?? defaultBody, {
 		updateCallback: async content => setValue("body", content),
-		className: errors.body ? "border-red-800" : "border-gray-400",
 	});
 	const title = watch("title");
 	const body = editor.modelView.content;
@@ -102,7 +101,18 @@ const NewArticle = function ({ model }) {
 								{errors.title.message}
 							</span>
 						)}
-						<Editor model={editor} />
+						{/* TODO: Sloppy */}
+						<Editor
+							model={{
+								...editor,
+								modelView: {
+									...editor.modelView,
+									className: errors.body
+										? "border-red-800"
+										: "border-gray-400",
+								},
+							}}
+						/>
 						{errors.body && (
 							<span className="text-sm text-red-800">
 								{errors.body.message}
@@ -113,7 +123,7 @@ const NewArticle = function ({ model }) {
 								{errors.form.message}
 							</span>
 						)}
-						<hr className="mt-1 w-full" />
+						<hr className="mt-3 w-full" />
 						<div className="mt-1 flex w-full justify-start gap-3">
 							<Button
 								model={newReadonlyModel({
