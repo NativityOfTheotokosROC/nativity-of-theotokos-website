@@ -3,6 +3,7 @@
 import ShareButton from "@/src/lib/components/share-button/ShareButton";
 import SocialLink from "@/src/lib/components/social-link/SocialLink";
 import { ArticleModel } from "@/src/lib/models/article";
+import "@/src/lib/styles/document.css";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { getNewsArticleDateString } from "@/src/lib/utilities/date-time";
 import { getEncodedShareData } from "@/src/lib/utilities/miscellaneous";
@@ -126,8 +127,8 @@ const Article = async function ({ model }) {
 					/>
 				</div>
 				<hr className="w-full self-center text-black/50 md:w-3/4" />
-				<p
-					className={`body self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed`}
+				<div
+					className={`body document self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed`}
 					dangerouslySetInnerHTML={{ __html: body }}
 				/>
 			</div>

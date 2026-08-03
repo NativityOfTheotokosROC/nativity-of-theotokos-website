@@ -1,4 +1,5 @@
-.tiptap {
+.tiptap,
+.document {
 	min-height: 100%;
 	outline-style: none;
 

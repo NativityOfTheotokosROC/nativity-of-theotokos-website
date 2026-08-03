@@ -1,13 +1,13 @@
+import "@/src/lib/styles/document.css";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { EditorModel } from "../../models/editor";
 import { InitializedModel } from "@mvc-react/mvc";
-import { useEditor, EditorContent } from "@tiptap/react";
-import { StarterKit } from "@tiptap/starter-kit";
 import { TextStyleKit } from "@tiptap/extension-text-style";
-import EditorTools from "../editor-tools/EditorTools";
-import { useEditorTools } from "../../model-implementations/editor-tools";
-import "./editor.css";
+import { EditorContent, useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
 import { twMerge } from "tailwind-merge";
+import { useEditorTools } from "../../model-implementations/editor-tools";
+import { EditorModel } from "../../models/editor";
+import EditorTools from "../editor-tools/EditorTools";
 
 const Editor = function ({ model }) {
 	const { modelView, interact } = model;

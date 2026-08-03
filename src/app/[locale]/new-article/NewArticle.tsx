@@ -128,7 +128,10 @@ const NewArticle = function ({ model }) {
 							<Button
 								model={newReadonlyModel({
 									type: "button",
-									disabled: !hasDraftChanged,
+									disabled:
+										!hasDraftChanged ||
+										newArticleNotification?.type ===
+											"saving_draft",
 									className: "w-fit max-w-1/2 min-w-[8em]",
 									action: async () =>
 										interact({
