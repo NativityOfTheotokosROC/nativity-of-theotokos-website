@@ -10,7 +10,10 @@ import {
 } from "../models/editor";
 
 function editorVIInterface(
-	updateCallback?: (content: string) => Promise<void>,
+	options?: Partial<{
+		updateCallback: (content: string) => Promise<void>;
+		className: string;
+	}>,
 ) {
 	return {
 		produceModelView: async function (
@@ -18,8 +21,11 @@ function editorVIInterface(
 		): Promise<EditorModelView> {
 			switch (interaction.type) {
 				case "UPDATE_EDITOR": {
-					await updateCallback?.(interaction.input.content);
-					return { content: interaction.input.content };
+					await options?.updateCallback?.(interaction.input.content);
+					return {
+						content: interaction.input.content,
+						className: options?.className,
+					};
 				}
 			}
 		},
@@ -31,12 +37,16 @@ function editorVIInterface(
 
 export function useEditor(
 	initialContent: string,
-	updateCallback?: (content: string) => Promise<void>,
+	options?: Partial<{
+		updateCallback: (content: string) => Promise<void>;
+		className: string;
+	}>,
 ) {
 	const model = useInitializedStatefulInteractiveModel(
-		editorVIInterface(updateCallback),
+		editorVIInterface(options),
 		{
 			content: initialContent,
+			className: options?.className,
 		},
 	);
 	return model satisfies InitializedModel<EditorModel>;

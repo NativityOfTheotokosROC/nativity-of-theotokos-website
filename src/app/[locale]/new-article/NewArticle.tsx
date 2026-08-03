@@ -17,8 +17,7 @@ import { useForm } from "react-hook-form";
 
 const NewArticle = function ({ model }) {
 	const { modelView, interact } = model;
-	const { ticketId, newArticleNotification, author, lastSavedDraft } =
-		modelView;
+	const { ticketId, newArticleNotification, lastSavedDraft } = modelView;
 	const t = useTranslations("newArticle");
 	const defaultTitle = "";
 	const defaultBody = `<p>${t("bodyPlaceholder")}</p>`;
@@ -27,7 +26,7 @@ const NewArticle = function ({ model }) {
 		register,
 		handleSubmit,
 		reset,
-		formState: { isSubmitting, errors, isValid },
+		formState: { isSubmitting, errors },
 		setValue,
 		watch,
 	} = useForm({
@@ -39,13 +38,13 @@ const NewArticle = function ({ model }) {
 			body: lastSavedDraft?.body ?? defaultBody,
 		},
 	});
-	const editor = useEditor(
-		lastSavedDraft?.body ?? defaultBody,
-		async content => setValue("body", content),
-	);
+	const editor = useEditor(lastSavedDraft?.body ?? defaultBody, {
+		updateCallback: async content => setValue("body", content),
+		className: errors.body ? "border-red-800" : "border-gray-400",
+	});
 	const title = watch("title");
-	const body = watch("body");
-	const previewAuthor = author ?? t("unknownAuthor");
+	const body = editor.modelView.content;
+	// const previewAuthor = author ?? t("unknownAuthor");
 	const hasDraftChanged = lastSavedDraft
 		? !(title === lastSavedDraft.title && body === lastSavedDraft.body)
 		: !(title === defaultTitle && body === defaultBody);
@@ -146,7 +145,7 @@ const NewArticle = function ({ model }) {
 									t("saveDraft")
 								)}
 							</Button>
-							<Button
+							{/* <Button
 								model={newReadonlyModel({
 									type: "button",
 									disabled: !isValid,
@@ -164,7 +163,7 @@ const NewArticle = function ({ model }) {
 								})}
 							>
 								{t("preview")}
-							</Button>
+							</Button> */}
 							<Button
 								model={newReadonlyModel({
 									type: "submit",
