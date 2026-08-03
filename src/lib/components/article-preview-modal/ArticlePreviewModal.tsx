@@ -1,3 +1,5 @@
+"use client";
+
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ArticlePreviewModalModel } from "../../models/article-preview-modal";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
