@@ -151,6 +151,12 @@
 		"saveDraftFailure": "Could not save draft. Error: {message}",
 		"body": "Body"
 	},
+	"articlePreview": {
+		"title": "Article Preview",
+		"authorPlaceholder": "Your Name",
+		"continueEdit": "Continue Editing",
+		"submit": "Submit"
+	},
 	"editor": {
 		"initError": "Editor is uninitialized"
 	},
@@ -243,6 +249,7 @@
 		"minCharacters": "{field} is too short (minimum of {min} characters)"
 	},
 	"miscellaneous": {
+		"modelInitError": "The model is not initialized",
 		"futureContent": "Content to be added soon!",
 		"closeButton": "Close"
 	}

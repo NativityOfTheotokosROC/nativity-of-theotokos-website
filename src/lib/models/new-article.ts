@@ -28,18 +28,13 @@ export type NewArticleModelView = {
 	lastSavedDraft?: LastSavedDraft;
 };
 
-export type NewArticleModelInteraction =
-	| InputModelInteraction<
-			"SUBMIT" | "SAVE_DRAFT",
-			{
-				draft: NewArticle;
-				options?: { successCallback?: () => void };
-			}
-	  >
-	| InputModelInteraction<
-			"PREVIEW",
-			{ title: string; body: string; author: string }
-	  >;
+export type NewArticleModelInteraction = InputModelInteraction<
+	"SUBMIT" | "SAVE_DRAFT",
+	{
+		draft: NewArticle;
+		options?: { successCallback?: () => void };
+	}
+>;
 
 export type NewArticleModel = InteractiveModel<
 	NewArticleModelView,

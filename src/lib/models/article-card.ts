@@ -3,9 +3,9 @@ import { Article } from "../types/general";
 
 export type ArticlePreview = Omit<Article, "body" | "dateUpdated" | "url">;
 
-export type ArticlePreviewModelView = {
+export type ArticleCardModelView = {
 	articlePreview: ArticlePreview;
 	isDetailed?: boolean;
 };
 
-export type ArticlePreviewModel = ReadonlyModel<ArticlePreviewModelView>;
+export type ArticleCardModel = ReadonlyModel<ArticleCardModelView>;

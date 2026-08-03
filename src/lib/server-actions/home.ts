@@ -2,7 +2,7 @@
 
 import { getLocale } from "next-intl/server";
 import z from "zod";
-import { ArticlePreview } from "../models/article-preview";
+import { ArticlePreview } from "../models/article-card";
 import {
 	getDailyGalleryImages,
 	getDailyQuote,

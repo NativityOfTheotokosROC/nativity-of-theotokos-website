@@ -1,8 +1,10 @@
 "use client";
 
+import ArticlePreviewModal from "@/src/lib/components/article-preview-modal/ArticlePreviewModal";
 import Button from "@/src/lib/components/button/Button";
 import Editor from "@/src/lib/components/editor/Editor";
 import Spinner from "@/src/lib/components/spinner/Spinner";
+import { useArticlePreviewModal } from "@/src/lib/model-implementations/article-preview-modal";
 import { useEditor } from "@/src/lib/model-implementations/editor";
 import { NewArticleModel } from "@/src/lib/models/new-article";
 import { georgia } from "@/src/lib/third-party/fonts";
@@ -17,7 +19,8 @@ import { useForm } from "react-hook-form";
 
 const NewArticle = function ({ model }) {
 	const { modelView, interact } = model;
-	const { ticketId, newArticleNotification, lastSavedDraft } = modelView;
+	const { ticketId, newArticleNotification, lastSavedDraft, author } =
+		modelView;
 	const t = useTranslations("newArticle");
 	const defaultTitle = "";
 	const defaultBody = `<p>${t("bodyPlaceholder")}</p>`;
@@ -43,15 +46,52 @@ const NewArticle = function ({ model }) {
 	});
 	const title = watch("title");
 	const body = editor.modelView.content;
-	// const previewAuthor = author ?? t("unknownAuthor");
+	const previewAuthor = author ?? t("unknownAuthor");
 	const hasDraftChanged = lastSavedDraft
 		? !(title === lastSavedDraft.title && body === lastSavedDraft.body)
 		: !(title === defaultTitle && body === defaultBody);
+	const articlePreviewModal = useArticlePreviewModal(
+		handleSubmit(async form => {
+			await articlePreviewModal.interact({ type: "CLOSE" });
+			await interact({
+				type: "SUBMIT",
+				input: {
+					draft: {
+						ticketId,
+						title: form.title,
+						body: form.body,
+					},
+					options: {
+						async successCallback() {
+							await editor.interact({
+								type: "UPDATE_EDITOR",
+								input: {
+									content: defaultBody,
+								},
+							});
+							reset({
+								title: defaultTitle,
+								body: defaultBody,
+							});
+						},
+					},
+				},
+			});
+		}),
+	);
 
 	useCloseWarning(useCallback(() => hasDraftChanged, [hasDraftChanged]));
 
 	return (
 		<main className="new-quote border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black">
+			{articlePreviewModal.modelView && (
+				<ArticlePreviewModal
+					model={{
+						...articlePreviewModal,
+						modelView: { ...articlePreviewModal.modelView },
+					}}
+				/>
+			)}
 			<div className="new-quote-content flex flex-col gap-6 p-8 py-9 md:py-10 lg:px-20">
 				<span
 					className={`mb-2 text-[2.75rem]/tight font-semibold md:text-black ${georgia.className}`}
@@ -62,28 +102,15 @@ const NewArticle = function ({ model }) {
 				<form
 					onSubmit={handleSubmit(
 						async form =>
-							await interact({
-								type: "SUBMIT",
+							await articlePreviewModal.interact({
+								type: "OPEN",
 								input: {
 									draft: {
 										ticketId,
 										title: form.title,
 										body: form.body,
 									},
-									options: {
-										async successCallback() {
-											await editor.interact({
-												type: "UPDATE_EDITOR",
-												input: {
-													content: defaultBody,
-												},
-											});
-											reset({
-												title: defaultTitle,
-												body: defaultBody,
-											});
-										},
-									},
+									author: previewAuthor,
 								},
 							}),
 					)}
@@ -123,7 +150,7 @@ const NewArticle = function ({ model }) {
 								{errors.form.message}
 							</span>
 						)}
-						<hr className="mt-3 w-full" />
+						<hr className="mt-6 w-full" />
 						<div className="mt-1 flex w-full justify-start gap-3">
 							<Button
 								model={newReadonlyModel({
@@ -132,7 +159,8 @@ const NewArticle = function ({ model }) {
 										!hasDraftChanged ||
 										newArticleNotification?.type ===
 											"saving_draft",
-									className: "w-fit max-w-1/2 min-w-[8em]",
+									className:
+										"flex justify-center items-center w-fit max-w-1/2 min-w-[8em]",
 									action: async () =>
 										interact({
 											type: "SAVE_DRAFT",
@@ -158,25 +186,6 @@ const NewArticle = function ({ model }) {
 									t("saveDraft")
 								)}
 							</Button>
-							{/* <Button
-								model={newReadonlyModel({
-									type: "button",
-									disabled: !isValid,
-									className: "w-fit max-w-1/2 min-w-[8em]",
-									action: handleSubmit(async form =>
-										interact({
-											type: "PREVIEW",
-											input: {
-												author: previewAuthor,
-												title: form.title,
-												body: form.body,
-											},
-										}),
-									),
-								})}
-							>
-								{t("preview")}
-							</Button> */}
 							<Button
 								model={newReadonlyModel({
 									type: "submit",

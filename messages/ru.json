@@ -151,6 +151,12 @@
 		"saveDraftSuccess": "Черновик сохранён",
 		"saveDraftFailure": "Не удалось сохранить черновик. Ошибка: {message}"
 	},
+	"articlePreview": {
+		"title": "Предпросмотр статьи",
+		"authorPlaceholder": "Ваше имя",
+		"continueEdit": "Продолжить редактирование",
+		"submit": "Опубликовать"
+	},
 	"editor": {
 		"initError": "Редактор не инициализирован"
 	},
@@ -238,6 +244,7 @@
 		"galleryImage": "Изображение галереи"
 	},
 	"miscellaneous": {
+		"modelInitError": "Модель не инициализирована",
 		"futureContent": "Контент будет добавлен в ближайшее время!",
 		"closeButton": "Закрыть"
 	},

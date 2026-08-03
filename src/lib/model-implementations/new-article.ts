@@ -160,10 +160,6 @@ export function useNewArticle(
 						);
 					break;
 				}
-				case "PREVIEW": {
-					// TODO:
-					break;
-				}
 			}
 		},
 	} satisfies NewArticleModel;
