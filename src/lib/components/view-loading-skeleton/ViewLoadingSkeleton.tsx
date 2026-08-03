@@ -4,7 +4,7 @@ import LogoIcon from "@/public/assets/logo-icon.svg";
 export default function ViewLoadingSkeleton() {
 	return (
 		// <ViewTransition name="view-loading">
-		<div className="view-loading h-fit min-h-screen w-full bg-[#fef8f3]">
+		<div className="view-loading h-svh min-h-svh w-full bg-[#fef8f3]">
 			<div className="h-full max-h-[85vh] min-h-fit w-full items-center justify-center">
 				<div
 					className={`mx-auto my-auto flex h-full max-w-[25em] animate-pulse items-center justify-center gap-3`}
