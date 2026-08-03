@@ -5,7 +5,7 @@ import { ArticlePreviewModalModel } from "../../models/article-preview-modal";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import Modal from "../modal/Modal";
 import { useTranslations } from "next-intl";
-import Article from "@/src/app/[locale]/news/[article]/Article";
+import Article from "@/src/lib/components/views/article/Article";
 
 const ArticlePreviewModal = function ({ model }) {
 	const { modelView, interact } = model;

@@ -4,7 +4,7 @@ import { Article as ArticleType } from "@/src/lib/types/general";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
-import Article from "./Article";
+import Article from "../../../../lib/components/views/article/Article";
 import { BASE_URL } from "@/src/lib/utilities/server-constants";
 import {
 	getAllArticles,
