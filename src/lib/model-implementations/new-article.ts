@@ -118,7 +118,7 @@ export function useNewArticle(
 								input: {
 									notification: {
 										type: "save_draft_failure",
-										message: `${t("saveDraftFailure", { message: reason })}`,
+										message: `${t("saveDraftFailure", { message: JSON.stringify(reason) })}`,
 									},
 								},
 							}),

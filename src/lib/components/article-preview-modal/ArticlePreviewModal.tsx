@@ -31,30 +31,32 @@ const ArticlePreviewModal = function ({ model }) {
 				},
 			}}
 		>
-			<div className="flex w-full max-w-full min-w-full flex-col items-center justify-center *:px-8">
+			<div className="flex w-full flex-col items-center justify-center *:px-8">
 				<div className="mb-4 w-full rounded-none border-0 bg-gray-800 p-4 text-[#FEF8F3]">
-					<span className="text-lg">{t("title")}</span>
+					<span className="text-xl">{t("title")}</span>
 				</div>
-				<Article
-					model={newReadonlyModel({
-						permalink: "#",
-						article: {
-							uri: "#",
-							title,
-							body,
-							author: previewAuthor,
-							dateCreated: new Date(),
-							snippet: "",
-							articleImage: {
-								source: "/assets/article-preview-placeholder.svg",
-								about: tCaptions("newsArticleImage"),
+				<div className="article-box max-h-[65svh] w-full overflow-y-auto p-8">
+					<Article
+						model={newReadonlyModel({
+							permalink: "#",
+							article: {
+								uri: "#",
+								title,
+								body,
+								author: previewAuthor,
+								dateCreated: new Date(),
+								snippet: "",
+								articleImage: {
+									source: "/assets/article-preview-placeholder.svg",
+									about: tCaptions("newsArticleImage"),
+								},
 							},
-						},
-					})}
-				/>
-				<div className="mt-3 flex w-full items-center justify-center p-5">
+						})}
+					/>
+				</div>
+				<div className="mt-3 flex w-full items-center justify-center gap-4 p-5">
 					<button
-						className="w-[8em] rounded-lg bg-[#513433] p-4 text-white hover:bg-[#250203]/90 active:bg-[#250203]"
+						className="rounded-lg bg-[#513433] p-4 text-white hover:bg-[#250203]/90 active:bg-[#250203]"
 						onClick={async () => {
 							await interact({ type: "CLOSE" });
 						}}

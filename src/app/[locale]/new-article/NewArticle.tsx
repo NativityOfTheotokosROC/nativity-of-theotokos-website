@@ -45,7 +45,7 @@ const NewArticle = function ({ model }) {
 		updateCallback: async content => setValue("body", content),
 	});
 	const title = watch("title");
-	const body = editor.modelView.content;
+	const body = watch("body");
 	const previewAuthor = author ?? t("unknownAuthor");
 	const hasDraftChanged = lastSavedDraft
 		? !(title === lastSavedDraft.title && body === lastSavedDraft.body)
@@ -79,11 +79,11 @@ const NewArticle = function ({ model }) {
 			});
 		}),
 	);
-
+	register("body");
 	useCloseWarning(useCallback(() => hasDraftChanged, [hasDraftChanged]));
 
 	return (
-		<main className="new-quote border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black">
+		<>
 			{articlePreviewModal.modelView && (
 				<ArticlePreviewModal
 					model={{
@@ -92,129 +92,131 @@ const NewArticle = function ({ model }) {
 					}}
 				/>
 			)}
-			<div className="new-quote-content flex flex-col gap-6 p-8 py-9 md:py-10 lg:px-20">
-				<span
-					className={`mb-2 text-[2.75rem]/tight font-semibold md:text-black ${georgia.className}`}
-				>
-					{t("metaTitle")}
-					<hr className="mt-4 mb-0 md:w-full" />
-				</span>
-				<form
-					onSubmit={handleSubmit(
-						async form =>
-							await articlePreviewModal.interact({
-								type: "OPEN",
-								input: {
-									draft: {
-										ticketId,
-										title: form.title,
-										body: form.body,
+			<main className="new-quote border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black">
+				<div className="new-quote-content flex flex-col gap-6 p-8 py-9 md:py-10 lg:px-20">
+					<span
+						className={`mb-2 text-[2.75rem]/tight font-semibold md:text-black ${georgia.className}`}
+					>
+						{t("metaTitle")}
+						<hr className="mt-4 mb-0 md:w-full" />
+					</span>
+					<form
+						onSubmit={handleSubmit(
+							async form =>
+								await articlePreviewModal.interact({
+									type: "OPEN",
+									input: {
+										draft: {
+											ticketId,
+											title: form.title,
+											body: form.body,
+										},
+										author: previewAuthor,
 									},
-									author: previewAuthor,
-								},
-							}),
-					)}
-				>
-					<div className="flex flex-col gap-3">
-						<input
-							{...register("title")}
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title ? "border-red-800" : "border-gray-400"}`}
-							placeholder={t("title")}
-							autoComplete="off"
-							autoCapitalize="words"
-						/>
-						{errors.title && (
-							<span className="text-sm text-red-800">
-								{errors.title.message}
-							</span>
+								}),
 						)}
-						{/* TODO: Sloppy */}
-						<Editor
-							model={{
-								...editor,
-								modelView: {
-									...editor.modelView,
-									className: errors.body
-										? "border-red-800"
-										: "border-gray-400",
-								},
-							}}
-						/>
-						{errors.body && (
-							<span className="text-sm text-red-800">
-								{errors.body.message}
-							</span>
-						)}
-						{errors.form && (
-							<span className="text-sm text-red-800">
-								{errors.form.message}
-							</span>
-						)}
-						<hr className="mt-6 w-full" />
-						<div className="mt-1 flex w-full justify-start gap-3">
-							<Button
-								model={newReadonlyModel({
-									type: "button",
-									disabled:
-										!hasDraftChanged ||
-										newArticleNotification?.type ===
-											"saving_draft",
-									className:
-										"flex justify-center items-center w-fit max-w-1/2 min-w-[8em]",
-									action: async () =>
-										interact({
-											type: "SAVE_DRAFT",
-											input: {
-												draft: {
-													ticketId,
-													title,
-													body,
+					>
+						<div className="flex flex-col gap-3">
+							<input
+								{...register("title")}
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title ? "border-red-800" : "border-gray-400"}`}
+								placeholder={t("title")}
+								autoComplete="off"
+								autoCapitalize="words"
+							/>
+							{errors.title && (
+								<span className="text-sm text-red-800">
+									{errors.title.message}
+								</span>
+							)}
+							{/* TODO: Sloppy */}
+							<Editor
+								model={{
+									...editor,
+									modelView: {
+										...editor.modelView,
+										className: errors.body
+											? "border-red-800"
+											: "border-gray-400",
+									},
+								}}
+							/>
+							{errors.body && (
+								<span className="text-sm text-red-800">
+									{errors.body.message}
+								</span>
+							)}
+							{errors.form && (
+								<span className="text-sm text-red-800">
+									{errors.form.message}
+								</span>
+							)}
+							<hr className="mt-6 w-full" />
+							<div className="mt-1 flex w-full justify-start gap-3">
+								<Button
+									model={newReadonlyModel({
+										type: "button",
+										disabled:
+											!hasDraftChanged ||
+											newArticleNotification?.type ===
+												"saving_draft",
+										className:
+											"flex justify-center items-center w-fit max-w-1/2 min-w-[8em]",
+										action: async () =>
+											interact({
+												type: "SAVE_DRAFT",
+												input: {
+													draft: {
+														ticketId,
+														title,
+														body,
+													},
 												},
-											},
-										}),
-								})}
-							>
-								{newArticleNotification?.type ===
-								"saving_draft" ? (
-									<Spinner
-										model={newReadonlyModel({
-											color: "white",
-											size: 20,
-										})}
-									/>
-								) : (
-									t("saveDraft")
-								)}
-							</Button>
-							<Button
-								model={newReadonlyModel({
-									type: "submit",
-									variant: "standard",
-									disabled:
-										isSubmitting ||
-										newArticleNotification?.type ===
-											"submitting",
-									className:
-										"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
-								})}
-							>
-								{newArticleNotification?.type ===
-								"submitting" ? (
-									<Spinner
-										model={newReadonlyModel({
-											color: "white",
-											size: 20,
-										})}
-									/>
-								) : (
-									t("submit")
-								)}
-							</Button>
+											}),
+									})}
+								>
+									{newArticleNotification?.type ===
+									"saving_draft" ? (
+										<Spinner
+											model={newReadonlyModel({
+												color: "white",
+												size: 20,
+											})}
+										/>
+									) : (
+										t("saveDraft")
+									)}
+								</Button>
+								<Button
+									model={newReadonlyModel({
+										type: "submit",
+										variant: "standard",
+										disabled:
+											isSubmitting ||
+											newArticleNotification?.type ===
+												"submitting",
+										className:
+											"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
+									})}
+								>
+									{newArticleNotification?.type ===
+									"submitting" ? (
+										<Spinner
+											model={newReadonlyModel({
+												color: "white",
+												size: 20,
+											})}
+										/>
+									) : (
+										t("submit")
+									)}
+								</Button>
+							</div>
 						</div>
-					</div>
-				</form>
-			</div>
-		</main>
+					</form>
+				</div>
+			</main>
+		</>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<NewArticleModel>>;
 

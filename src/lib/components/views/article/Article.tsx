@@ -1,4 +1,4 @@
-"use cache";
+"use client";
 
 import ShareButton from "@/src/lib/components/share-button/ShareButton";
 import SocialLink from "@/src/lib/components/social-link/SocialLink";
@@ -9,26 +9,18 @@ import { getNewsArticleDateString } from "@/src/lib/utilities/date-time";
 import { getEncodedShareData } from "@/src/lib/utilities/miscellaneous";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { ViewTransition } from "react";
-import { locale as localeParam } from "next/root-params";
-import { routing } from "@/src/i18n/routing";
-import { hasLocale } from "next-intl";
 
-const Article = async function ({ model }) {
+const Article = function ({ model }) {
 	const { article, permalink } = model.modelView;
 	const { title, author, articleImage, dateCreated, dateUpdated, body, uri } =
 		article;
 	const { source, about, placeholder } = articleImage;
-	const locale = await localeParam();
-	const language = hasLocale(routing.locales, locale) ? locale : "en";
-	const t = await getTranslations({ namespace: "news", locale: language });
-	const tCaptions = await getTranslations({
-		namespace: "imageCaptions",
-		locale: language,
-	});
+	const t = useTranslations("news");
+	const tCaptions = useTranslations("imageCaptions");
 	const shareData = {
 		title,
 		url: permalink,
@@ -84,7 +76,9 @@ const Article = async function ({ model }) {
 										}
 										title={about}
 										src={source}
-										placeholder="blur"
+										placeholder={
+											placeholder ? "blur" : undefined
+										}
 										blurDataURL={placeholder}
 									/>
 								</ViewTransition>
