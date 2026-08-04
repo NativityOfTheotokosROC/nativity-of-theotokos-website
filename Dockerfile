@@ -11,6 +11,7 @@ RUN --mount=type=cache,target=/root/.npm \
 
 FROM node:lts-slim AS builder
 ENV NODE_ENV=production
+ENV IS_DOCKER_BUILD=true
 WORKDIR /app
 COPY --from=dependencies /app/node_modules/ ./node_modules/
 COPY --from=dependencies /app/src/ ./src/

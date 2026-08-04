@@ -3,6 +3,8 @@ import type { NextConfig } from "next";
 import withPlaiceholder from "@plaiceholder/next";
 import createNextIntlPlugin from "next-intl/plugin";
 
+const IS_DOCKER_BUILD = process.env.IS_DOCKER_BUILD;
+
 const nextConfig: NextConfig = {
 	images: {
 		minimumCacheTTL: 60 * 60 * 24 * 90,
@@ -75,11 +77,9 @@ const nextConfig: NextConfig = {
 	cacheComponents: true,
 	experimental: {
 		authInterrupts: true,
-		viewTransition: true,
-		rootParams: true,
 	},
-	allowedDevOrigins: ["192.168.100.7"],
-	output: "standalone",
+	allowedDevOrigins: ["192.168.100.7", "192.168.100.15"],
+	output: IS_DOCKER_BUILD ? "standalone" : undefined,
 };
 
 const withNextIntl = createNextIntlPlugin();
