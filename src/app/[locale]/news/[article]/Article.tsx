@@ -11,7 +11,6 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
-import { locale as rootLocale } from "next/root-params";
 import { ViewTransition } from "react";
 
 const Article = async function ({ model }) {
@@ -19,12 +18,8 @@ const Article = async function ({ model }) {
 	const { title, author, articleImage, dateCreated, dateUpdated, body, uri } =
 		article;
 	const { source, about, placeholder } = articleImage;
-	const locale = await rootLocale();
-	const t = await getTranslations({ locale, namespace: "news" });
-	const tCaptions = await getTranslations({
-		locale,
-		namespace: "imageCaptions",
-	});
+	const t = await getTranslations("news");
+	const tCaptions = await getTranslations("imageCaptions");
 	const shareData = {
 		title,
 		url: permalink,
