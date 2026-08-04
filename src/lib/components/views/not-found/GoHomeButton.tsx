@@ -1,18 +1,19 @@
 "use client";
 
 import { newReadonlyModel } from "@mvc-react/mvc";
-import { ReactNode } from "react";
+import { ReactNode, useContext } from "react";
 import PageNavigationButton from "../../button/PageNavigationButton";
+import { PageLoadingBarContext } from "../../page-loading-bar/PageLoadingBar";
 
 const GoHomeButton = function ({ children }: { children: ReactNode }) {
-	// const pageLoadingBar = useContext(PageLoadingBarContext);
+	const pageLoadingBar = useContext(PageLoadingBarContext);
 
 	return (
 		<PageNavigationButton
 			model={newReadonlyModel({
 				variant: "standard",
 				endpoint: "/",
-				browserNavigation: true, // TODO: True until 310 is fixed
+				browserNavigation: pageLoadingBar.modelView === null, // TODO: True until 310 is fixed
 			})}
 		>
 			{children}
