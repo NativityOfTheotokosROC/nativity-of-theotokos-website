@@ -19,7 +19,7 @@ const SignOutButton = function ({ model, children }) {
 				action: async () =>
 					await signOutModel.interact({
 						type: "SIGN_OUT",
-						input: { hardNavigate: true }, // TODO: true until 310 error is solved
+						input: { hardNavigate: false }, // TODO: true until 310 error is solved
 					}),
 				disabled:
 					signOutStatus?.type === "pending" ||
