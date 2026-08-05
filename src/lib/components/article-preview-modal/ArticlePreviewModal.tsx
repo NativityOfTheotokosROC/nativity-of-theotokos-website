@@ -31,11 +31,11 @@ const ArticlePreviewModal = function ({ model }) {
 				},
 			}}
 		>
-			<div className="flex w-full flex-col items-center justify-center *:px-8">
-				<div className="mb-4 w-full rounded-none border-0 bg-gray-800 p-4 text-[#FEF8F3]">
+			<div className="flex w-full flex-col items-center justify-center">
+				<div className="w-full rounded-none border-0 bg-gray-800 p-6 text-[#FEF8F3]">
 					<span className="text-xl">{t("title")}</span>
 				</div>
-				<div className="article-box max-h-[65svh] w-full overflow-y-auto p-8">
+				<div className="article-box max-h-[65svh] w-full overflow-y-auto">
 					<Article
 						model={newReadonlyModel({
 							permalink: "#",

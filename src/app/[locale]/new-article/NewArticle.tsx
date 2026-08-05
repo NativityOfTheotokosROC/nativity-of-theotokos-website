@@ -151,7 +151,7 @@ const NewArticle = function ({ model }) {
 									{errors.form.message}
 								</span>
 							)}
-							<hr className="mt-6 w-full" />
+							<hr className="mt-6 w-full opacity-50" />
 							<div className="mt-1 flex w-full justify-start gap-3">
 								<Button
 									model={newReadonlyModel({
