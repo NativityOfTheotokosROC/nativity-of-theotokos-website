@@ -90,7 +90,7 @@ const NewArticle = function ({ model }) {
 					<span
 						className={`mb-2 text-[2.75rem]/tight font-semibold md:text-black ${georgia.className}`}
 					>
-						{t("metaTitle")}
+						{t("title")}
 						<hr className="mt-4 mb-0 md:w-full" />
 					</span>
 					<form
@@ -156,7 +156,7 @@ const NewArticle = function ({ model }) {
 										className:
 											"flex justify-center items-center w-fit max-w-1/2 min-w-[8em]",
 										action: async () =>
-											interact({
+											await interact({
 												type: "SAVE_DRAFT",
 												input: {
 													draft: {

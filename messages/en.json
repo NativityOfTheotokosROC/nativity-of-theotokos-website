@@ -136,7 +136,7 @@
 	},
 	"newArticle": {
 		"metaTitle": "New Article",
-		"title": "Article Title",
+		"title": "Edit Article",
 		"author": "Author",
 		"bodyPlaceholder": "Start writing here...",
 		"preview": "Preview",
@@ -153,6 +153,7 @@
 	},
 	"articlePreview": {
 		"title": "Article Preview",
+		"imagePlaceholder": "The article image will be placed here",
 		"authorPlaceholder": "Your Name",
 		"continueEdit": "Continue Editing",
 		"submit": "Submit"

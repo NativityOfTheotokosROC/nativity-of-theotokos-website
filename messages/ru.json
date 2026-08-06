@@ -136,7 +136,7 @@
 	},
 	"newArticle": {
 		"metaTitle": "Новая статья",
-		"title": "Название статьи",
+		"title": "Предпросмотр статьи",
 		"author": "Автор",
 		"bodyPlaceholder": "Начните писать здесь...",
 		"preview": "Предпросмотр",
@@ -153,6 +153,7 @@
 	},
 	"articlePreview": {
 		"title": "Предпросмотр статьи",
+		"imagePlaceholder": "Здесь будет размещено изображение статьи",
 		"authorPlaceholder": "Ваше имя",
 		"continueEdit": "Продолжить редактирование",
 		"submit": "Опубликовать"

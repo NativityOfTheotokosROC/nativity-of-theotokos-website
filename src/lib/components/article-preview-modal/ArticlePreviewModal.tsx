@@ -16,7 +16,6 @@ const ArticlePreviewModal = function ({ model }) {
 	};
 	const { title, body } = { title: draft?.title, body: draft?.body };
 	const t = useTranslations("articlePreview");
-	const tCaptions = useTranslations("imageCaptions");
 
 	return (
 		<Modal
@@ -52,7 +51,9 @@ const ArticlePreviewModal = function ({ model }) {
 								snippet: "",
 								articleImage: {
 									source: "/assets/article-preview-placeholder.svg",
-									about: tCaptions("newsArticleImage"),
+									about: t("imagePlaceholder"),
+									placeholder:
+										"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAa0lEQVR4AXyKSwoAIQxDUz8g6tKNoPe/jkdRdyLiOAVXAxOatiRPlFL2nwWOrLUwxpzvOwyMMTDn5JaI+N7FwFoLe29orZFSgvf+9mDgDXLOiDFCSokQApxzDIkjKKXQWkPvHbVW9psRER4AAAD//wDRBJ0AAAAGSURBVAMAvkw0q8hhr/QAAAAASUVORK5CYII=",
 								},
 							},
 						})}
@@ -68,7 +69,7 @@ const ArticlePreviewModal = function ({ model }) {
 						{t("continueEdit")}
 					</button>
 					<button
-						className="w-[8em] rounded-lg bg-[#513433] p-4 text-white hover:bg-[#250203]/90 active:bg-[#250203]"
+						className="break-word min-w-[8em] rounded-lg bg-[#513433] p-4 hyphens-auto text-white hover:bg-[#250203]/90 active:bg-[#250203]"
 						onClick={async () => {
 							await interact({ type: "SUBMIT" });
 						}}
