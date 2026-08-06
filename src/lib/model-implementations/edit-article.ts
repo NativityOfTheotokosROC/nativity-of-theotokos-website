@@ -6,9 +6,9 @@ import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import {
 	LastSavedDraft,
-	NewArticleModel,
-	NewArticleModelInteraction,
-	NewArticleNotification,
+	EditArticleModel,
+	EditArticleModelInteraction,
+	EditArticleNotification,
 } from "../models/new-article";
 import {
 	NotifierModel,
@@ -18,12 +18,12 @@ import {
 import { ToastNotification } from "../models/toast";
 import { saveDraft, submitArticle } from "../server-actions/article";
 
-export function newArticleNotifierVIInterface(
+export function editArticleNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
 ) {
 	return {
 		produceModelView: async function (
-			interaction: NotifierModelInteraction<NewArticleNotification>,
+			interaction: NotifierModelInteraction<EditArticleNotification>,
 		) {
 			switch (interaction.type) {
 				case "NOTIFY": {
@@ -53,12 +53,12 @@ export function newArticleNotifierVIInterface(
 			}
 		},
 	} satisfies ViewInteractionInterface<
-		NotifierModelView<NewArticleNotification>,
-		NotifierModelInteraction<NewArticleNotification>
+		NotifierModelView<EditArticleNotification>,
+		NotifierModelInteraction<EditArticleNotification>
 	>;
 }
 
-export function useNewArticle(
+export function useEditArticle(
 	ticketId: string,
 	options?: Partial<{
 		lastSavedDraft: LastSavedDraft;
@@ -67,9 +67,9 @@ export function useNewArticle(
 	}>,
 ) {
 	const notifier = useNewStatefulInteractiveModel(
-		newArticleNotifierVIInterface(options?.toastNotifier),
+		editArticleNotifierVIInterface(options?.toastNotifier),
 	);
-	const t = useTranslations("newArticle");
+	const t = useTranslations("editArticle");
 	const [lastSavedDraft, setLastSavedDraft] = useState<
 		LastSavedDraft | undefined
 	>(options?.lastSavedDraft);
@@ -77,12 +77,12 @@ export function useNewArticle(
 	return {
 		modelView: {
 			ticketId,
-			newArticleNotification: notifier.modelView?.notification ?? null,
+			notification: notifier.modelView?.notification ?? null,
 			author: options?.author,
 			lastSavedDraft,
 		},
 		interact: async function (
-			interaction: NewArticleModelInteraction,
+			interaction: EditArticleModelInteraction,
 		): Promise<void> {
 			switch (interaction.type) {
 				case "SAVE_DRAFT": {
@@ -162,5 +162,5 @@ export function useNewArticle(
 				}
 			}
 		},
-	} satisfies NewArticleModel;
+	} satisfies EditArticleModel;
 }

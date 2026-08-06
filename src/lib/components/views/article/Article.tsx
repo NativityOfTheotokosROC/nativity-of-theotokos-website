@@ -15,7 +15,7 @@ import Link from "next/link";
 import { ViewTransition } from "react";
 
 const Article = function ({ model }) {
-	const { article, permalink } = model.modelView;
+	const { article, permalink, options } = model.modelView;
 	const { title, author, articleImage, dateCreated, dateUpdated, body, uri } =
 		article;
 	const { source, about, placeholder } = articleImage;
@@ -91,38 +91,40 @@ const Article = function ({ model }) {
 						)}
 					</div>
 				</div>
-				<div className="flex items-end gap-5 self-end text-sm text-gray-900 **:hover:text-[#dcb042] md:mt-4">
-					<ShareButton
-						model={newReadonlyModel({
-							shareData: encodedShareData,
-							alternateVariant: true,
-						})}
-					/>
-					<SocialLink
-						model={newReadonlyModel({
-							details: {
-								type: "WhatsApp",
-								link: `https://wa.me/?text=${encodedShareData.title}%20${encodedShareData.url}`,
-							},
-						})}
-					/>
-					<SocialLink
-						model={newReadonlyModel({
-							details: {
-								type: "Telegram",
-								link: `https://t.me/share/url?url=${encodedShareData.url}&text=${encodedShareData.title}`,
-							},
-						})}
-					/>
-					<SocialLink
-						model={newReadonlyModel({
-							details: {
-								type: "Facebook",
-								link: `https://facebook.com/sharer/sharer.php?u=${encodedShareData.url}&text=${encodedShareData.title}`,
-							},
-						})}
-					/>
-				</div>
+				{!options?.sharingDisabled && (
+					<div className="flex items-end gap-5 self-end text-sm text-gray-900 **:hover:text-[#dcb042] md:mt-4">
+						<ShareButton
+							model={newReadonlyModel({
+								shareData: encodedShareData,
+								alternateVariant: true,
+							})}
+						/>
+						<SocialLink
+							model={newReadonlyModel({
+								details: {
+									type: "WhatsApp",
+									link: `https://wa.me/?text=${encodedShareData.title}%20${encodedShareData.url}`,
+								},
+							})}
+						/>
+						<SocialLink
+							model={newReadonlyModel({
+								details: {
+									type: "Telegram",
+									link: `https://t.me/share/url?url=${encodedShareData.url}&text=${encodedShareData.title}`,
+								},
+							})}
+						/>
+						<SocialLink
+							model={newReadonlyModel({
+								details: {
+									type: "Facebook",
+									link: `https://facebook.com/sharer/sharer.php?u=${encodedShareData.url}&text=${encodedShareData.title}`,
+								},
+							})}
+						/>
+					</div>
+				)}
 				<hr className="w-full self-center text-black/50 md:w-3/4" />
 				<div
 					className={`body document self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed`}

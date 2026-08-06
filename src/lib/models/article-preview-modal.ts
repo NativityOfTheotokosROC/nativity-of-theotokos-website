@@ -3,17 +3,17 @@ import {
 	InteractiveModel,
 	InputModelInteraction,
 } from "@mvc-react/mvc";
-import { NewArticle } from "./new-article";
+import { ArticleDraft } from "./new-article";
 
 export type ArticlePreviewModalModelView = {
 	isOpen: boolean;
-	draft: NewArticle;
+	draft: ArticleDraft;
 	previewAuthor: string;
 };
 
 export type ArticlePreviewModalModelInteraction =
 	| ModelInteraction<"SUBMIT">
-	| InputModelInteraction<"OPEN", { draft: NewArticle; author: string }>
+	| InputModelInteraction<"OPEN", { draft: ArticleDraft; author: string }>
 	| ModelInteraction<"CLOSE">;
 
 export type ArticlePreviewModalModel = InteractiveModel<

@@ -6,7 +6,7 @@ import Editor from "@/src/lib/components/editor/Editor";
 import Spinner from "@/src/lib/components/spinner/Spinner";
 import { useArticlePreviewModal } from "@/src/lib/model-implementations/article-preview-modal";
 import { useEditor } from "@/src/lib/model-implementations/editor";
-import { NewArticleModel } from "@/src/lib/models/new-article";
+import { EditArticleModel } from "@/src/lib/models/new-article";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { useCloseWarning } from "@/src/lib/utilities/hooks";
 import { useArticleFormSchema } from "@/src/lib/validation/article-form";
@@ -17,11 +17,10 @@ import { useTranslations } from "next-intl";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 
-const NewArticle = function ({ model }) {
+const EditArticle = function ({ model }) {
 	const { modelView, interact } = model;
-	const { ticketId, newArticleNotification, lastSavedDraft, author } =
-		modelView;
-	const t = useTranslations("newArticle");
+	const { ticketId, notification, lastSavedDraft, author } = modelView;
+	const t = useTranslations("editArticle");
 	const defaultTitle = "";
 	const defaultBody = `<p>${t("bodyPlaceholder")}</p>`;
 	const articleFormSchema = useArticleFormSchema();
@@ -85,8 +84,8 @@ const NewArticle = function ({ model }) {
 	return (
 		<>
 			<ArticlePreviewModal model={articlePreviewModal} />
-			<main className="new-quote border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black">
-				<div className="new-quote-content flex flex-col gap-6 p-8 py-9 md:py-10 lg:px-20">
+			<main className="edit-article border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black">
+				<div className="edit-article-content flex flex-col gap-6 p-8 py-9 md:py-10 lg:px-20">
 					<span
 						className={`mb-2 text-[2.75rem]/tight font-semibold md:text-black ${georgia.className}`}
 					>
@@ -151,7 +150,7 @@ const NewArticle = function ({ model }) {
 										type: "button",
 										disabled:
 											!hasDraftChanged ||
-											newArticleNotification?.type ===
+											notification?.type ===
 												"saving_draft",
 										className:
 											"flex justify-center items-center w-fit max-w-1/2 min-w-[8em]",
@@ -168,8 +167,7 @@ const NewArticle = function ({ model }) {
 											}),
 									})}
 								>
-									{newArticleNotification?.type ===
-									"saving_draft" ? (
+									{notification?.type === "saving_draft" ? (
 										<Spinner
 											model={newReadonlyModel({
 												color: "white",
@@ -186,14 +184,12 @@ const NewArticle = function ({ model }) {
 										variant: "standard",
 										disabled:
 											isSubmitting ||
-											newArticleNotification?.type ===
-												"submitting",
+											notification?.type === "submitting",
 										className:
 											"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
 									})}
 								>
-									{newArticleNotification?.type ===
-									"submitting" ? (
+									{notification?.type === "submitting" ? (
 										<Spinner
 											model={newReadonlyModel({
 												color: "white",
@@ -211,6 +207,6 @@ const NewArticle = function ({ model }) {
 			</main>
 		</>
 	);
-} satisfies ModeledVoidComponent<InitializedModel<NewArticleModel>>;
+} satisfies ModeledVoidComponent<InitializedModel<EditArticleModel>>;
 
-export default NewArticle;
+export default EditArticle;

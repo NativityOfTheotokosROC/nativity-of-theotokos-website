@@ -134,8 +134,8 @@
 		"failureMessage": "Could not add the quote. Error:",
 		"quotePreview": "Quote Preview"
 	},
-	"newArticle": {
-		"metaTitle": "New Article",
+	"editArticle": {
+		"metaTitle": "Edit Article",
 		"title": "Edit Article",
 		"author": "Author",
 		"bodyPlaceholder": "Start writing here...",

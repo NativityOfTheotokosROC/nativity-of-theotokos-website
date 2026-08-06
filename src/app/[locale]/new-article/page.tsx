@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 	const t = await getTranslations({
 		locale: language,
-		namespace: "newArticle",
+		namespace: "editArticle",
 	});
 	return {
 		title: t("metaTitle"),

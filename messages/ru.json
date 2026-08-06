@@ -134,9 +134,9 @@
 		"failureMessage": "Не удалось добавить цитату. Ошибка:",
 		"quotePreview": "Предпросмотр цитаты"
 	},
-	"newArticle": {
-		"metaTitle": "Новая статья",
-		"title": "Предпросмотр статьи",
+	"editArticle": {
+		"metaTitle": "Редактировать статью",
+		"title": "Редактировать статью",
 		"author": "Автор",
 		"bodyPlaceholder": "Начните писать здесь...",
 		"preview": "Предпросмотр",

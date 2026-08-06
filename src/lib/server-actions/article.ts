@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { cacheTag } from "next/cache";
 import { forbidden, notFound } from "next/navigation";
 import z from "zod";
-import { NewArticle } from "../models/new-article";
+import { ArticleDraft } from "../models/new-article";
 import { getPlaceholder } from "../server-only/placeholder";
 import database from "../third-party/prisma";
 import { Article, Language } from "../types/general";
@@ -88,7 +88,7 @@ export async function getArticle(
 	}
 }
 
-export async function saveDraft(draft: NewArticle, locale?: Language) {
+export async function saveDraft(draft: ArticleDraft, locale?: Language) {
 	const { ticketId } = draft;
 	const user = await getUser();
 	if (!user && !IS_AUTH_DISABLED) forbidden();
@@ -125,7 +125,7 @@ export async function saveDraft(draft: NewArticle, locale?: Language) {
 	return savedDraft;
 }
 
-export async function submitArticle(article: NewArticle, locale?: Language) {
+export async function submitArticle(article: ArticleDraft, locale?: Language) {
 	const { ticketId } = article;
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const articleFormSchema = getArticleFormSchema(t);
@@ -243,6 +243,6 @@ export async function getLatestUnsubmittedDraft(authorEmail?: string) {
 				ticketId: draft.articleTicketId,
 				title: draft.title,
 				body: draft.body,
-			} satisfies NewArticle)
+			} satisfies ArticleDraft)
 		: null;
 }

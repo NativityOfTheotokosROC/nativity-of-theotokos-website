@@ -1,7 +1,7 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 import { Notification } from "../types/general";
 
-export type NewArticleNotification =
+export type EditArticleNotification =
 	| (Notification<
 			| "submit_success"
 			| "submit_failure"
@@ -13,30 +13,30 @@ export type NewArticleNotification =
 	  })
 	| Notification<"submitting">;
 
-export type NewArticle = {
+export type ArticleDraft = {
 	ticketId: string;
 	title: string;
 	body: string;
 };
 
-export type LastSavedDraft = Omit<NewArticle, "ticketId"> & {};
+export type LastSavedDraft = Omit<ArticleDraft, "ticketId"> & {};
 
-export type NewArticleModelView = {
+export type EditArticleModelView = {
 	ticketId: string;
-	newArticleNotification: NewArticleNotification | null;
+	notification: EditArticleNotification | null;
 	author?: string;
 	lastSavedDraft?: LastSavedDraft;
 };
 
-export type NewArticleModelInteraction = InputModelInteraction<
+export type EditArticleModelInteraction = InputModelInteraction<
 	"SUBMIT" | "SAVE_DRAFT",
 	{
-		draft: NewArticle;
+		draft: ArticleDraft;
 		options?: { successCallback?: () => void };
 	}
 >;
 
-export type NewArticleModel = InteractiveModel<
-	NewArticleModelView,
-	NewArticleModelInteraction
+export type EditArticleModel = InteractiveModel<
+	EditArticleModelView,
+	EditArticleModelInteraction
 >;
