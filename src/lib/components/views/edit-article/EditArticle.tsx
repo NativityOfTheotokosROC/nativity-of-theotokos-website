@@ -9,7 +9,7 @@ import { useEditor } from "@/src/lib/model-implementations/editor";
 import { EditArticleModel } from "@/src/lib/models/new-article";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { useCloseWarning } from "@/src/lib/utilities/hooks";
-import { useArticleFormSchema } from "@/src/lib/validation/article-form";
+import { useEditArticleFormSchema } from "@/src/lib/validation/edit-article-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
@@ -23,7 +23,7 @@ const EditArticle = function ({ model }) {
 	const t = useTranslations("editArticle");
 	const defaultTitle = "";
 	const defaultBody = `<p>${t("bodyPlaceholder")}</p>`;
-	const articleFormSchema = useArticleFormSchema();
+	const articleFormSchema = useEditArticleFormSchema();
 	const {
 		register,
 		handleSubmit,

@@ -2,7 +2,7 @@ import z from "zod";
 import { Translator } from "../types/general";
 import { useLocalizedSchema } from "./general";
 
-export function getArticleFormSchema(t?: Translator) {
+export function getEditArticleFormSchema(t?: Translator) {
 	const maxTitleEn = 65;
 	// const maxTitleRu = maxTitleEn / 1.2
 	const minBodyEn = 100;
@@ -13,13 +13,13 @@ export function getArticleFormSchema(t?: Translator) {
 			.nonempty({
 				error:
 					t &&
-					t("validation.nonEmpty", { field: t("newArticle.title") }),
+					t("validation.nonEmpty", { field: t("editArticle.title") }),
 			})
 			.max(maxTitleEn, {
 				error:
 					t &&
 					t("validation.maxCharacters", {
-						field: t("newArticle.title"),
+						field: t("editArticle.title"),
 						max: maxTitleEn,
 					}),
 			}),
@@ -29,13 +29,13 @@ export function getArticleFormSchema(t?: Translator) {
 			.nonempty({
 				error:
 					t &&
-					t("validation.nonEmpty", { field: t("newArticle.body") }),
+					t("validation.nonEmpty", { field: t("editArticle.body") }),
 			})
 			.min(minBodyEn, {
 				error:
 					t &&
 					t("validation.minCharacters", {
-						field: t("newArticle.body"),
+						field: t("editArticle.body"),
 						min: minBodyEn,
 					}),
 			}),
@@ -43,6 +43,6 @@ export function getArticleFormSchema(t?: Translator) {
 	return articleFormSchema;
 }
 
-export function useArticleFormSchema() {
-	return useLocalizedSchema(getArticleFormSchema);
+export function useEditArticleFormSchema() {
+	return useLocalizedSchema(getEditArticleFormSchema);
 }

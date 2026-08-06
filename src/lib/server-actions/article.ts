@@ -11,7 +11,7 @@ import database from "../third-party/prisma";
 import { Article, Language } from "../types/general";
 import { isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL, IS_AUTH_DISABLED } from "../utilities/server-constants";
-import { getArticleFormSchema } from "../validation/article-form";
+import { getEditArticleFormSchema } from "../validation/edit-article-form";
 import { getUser, protect } from "./auth";
 
 export async function getArticle(
@@ -103,7 +103,7 @@ export async function saveDraft(draft: ArticleDraft, locale?: Language) {
 		},
 	});
 	const t = await getTranslations({ locale: locale ?? "en" });
-	const articleFormSchema = getArticleFormSchema(t);
+	const articleFormSchema = getEditArticleFormSchema(t);
 	const { title, body } = isSubmitted
 		? articleFormSchema.parse({ title: draft.title, body: draft.body })
 		: draft;
@@ -128,7 +128,7 @@ export async function saveDraft(draft: ArticleDraft, locale?: Language) {
 export async function submitArticle(article: ArticleDraft, locale?: Language) {
 	const { ticketId } = article;
 	const t = await getTranslations({ locale: locale ?? "en" });
-	const articleFormSchema = getArticleFormSchema(t);
+	const articleFormSchema = getEditArticleFormSchema(t);
 	const { title, body } = articleFormSchema.parse({
 		title: article.title,
 		body: article.body,
