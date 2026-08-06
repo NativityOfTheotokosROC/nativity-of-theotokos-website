@@ -1,23 +1,27 @@
 "use client";
 
-import { ModeledVoidComponent } from "@mvc-react/components";
-import { ArticlePreviewModalModel } from "../../models/article-preview-modal";
-import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import Modal from "../modal/Modal";
-import { useTranslations } from "next-intl";
 import Article from "@/src/lib/components/views/article/Article";
+import { ModeledVoidComponent } from "@mvc-react/components";
+import { newReadonlyModel } from "@mvc-react/mvc";
+import { useTranslations } from "next-intl";
+import { ArticlePreviewModalModel } from "../../models/article-preview-modal";
+import Modal from "../modal/Modal";
 
 const ArticlePreviewModal = function ({ model }) {
 	const { modelView, interact } = model;
-	const { isOpen, draft, previewAuthor } = modelView;
-	const { title, body } = draft;
+	const { isOpen, draft, previewAuthor } = {
+		isOpen: modelView?.isOpen,
+		draft: modelView?.draft,
+		previewAuthor: modelView?.previewAuthor,
+	};
+	const { title, body } = { title: draft?.title, body: draft?.body };
 	const t = useTranslations("articlePreview");
 	const tCaptions = useTranslations("imageCaptions");
 
 	return (
 		<Modal
 			model={{
-				modelView: { title: t("title"), isOpen },
+				modelView: { title: t("title"), isOpen: isOpen ?? false },
 				async interact(interaction) {
 					switch (interaction.type) {
 						case "TOGGLE": {
@@ -41,9 +45,9 @@ const ArticlePreviewModal = function ({ model }) {
 							permalink: "#",
 							article: {
 								uri: "#",
-								title,
-								body,
-								author: previewAuthor,
+								title: title ?? "",
+								body: body ?? "",
+								author: previewAuthor ?? "",
 								dateCreated: new Date(),
 								snippet: "",
 								articleImage: {
@@ -75,6 +79,6 @@ const ArticlePreviewModal = function ({ model }) {
 			</div>
 		</Modal>
 	);
-} satisfies ModeledVoidComponent<InitializedModel<ArticlePreviewModalModel>>;
+} satisfies ModeledVoidComponent<ArticlePreviewModalModel>;
 
 export default ArticlePreviewModal;

@@ -84,14 +84,7 @@ const NewArticle = function ({ model }) {
 
 	return (
 		<>
-			{articlePreviewModal.modelView && (
-				<ArticlePreviewModal
-					model={{
-						...articlePreviewModal,
-						modelView: { ...articlePreviewModal.modelView },
-					}}
-				/>
-			)}
+			<ArticlePreviewModal model={articlePreviewModal} />
 			<main className="new-quote border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black">
 				<div className="new-quote-content flex flex-col gap-6 p-8 py-9 md:py-10 lg:px-20">
 					<span
