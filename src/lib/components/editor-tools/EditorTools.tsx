@@ -42,30 +42,6 @@ const EditorTools = function ({ model }) {
 			<EditorButtonGroup>
 				<EditorButton
 					model={{
-						modelView: {
-							title: t("undo"),
-							isDisabled: !canUndo,
-						},
-						interact: () => interact({ type: "UNDO" }),
-					}}
-				>
-					<Undo2Icon />
-				</EditorButton>
-				<EditorButton
-					model={{
-						modelView: {
-							title: t("redo"),
-							isDisabled: !canRedo,
-						},
-						interact: () => interact({ type: "REDO" }),
-					}}
-				>
-					<Redo2Icon />
-				</EditorButton>
-			</EditorButtonGroup>
-			<EditorButtonGroup>
-				<EditorButton
-					model={{
 						modelView: { title: t("heading"), isToggled: heading },
 						interact: () => interact({ type: "TOGGLE_HEADING" }),
 					}}
@@ -157,6 +133,30 @@ const EditorTools = function ({ model }) {
 					}}
 				>
 					<Subscript />
+				</EditorButton>
+			</EditorButtonGroup>
+			<EditorButtonGroup>
+				<EditorButton
+					model={{
+						modelView: {
+							title: t("undo"),
+							isDisabled: !canUndo,
+						},
+						interact: () => interact({ type: "UNDO" }),
+					}}
+				>
+					<Undo2Icon />
+				</EditorButton>
+				<EditorButton
+					model={{
+						modelView: {
+							title: t("redo"),
+							isDisabled: !canRedo,
+						},
+						interact: () => interact({ type: "REDO" }),
+					}}
+				>
+					<Redo2Icon />
 				</EditorButton>
 			</EditorButtonGroup>
 		</div>

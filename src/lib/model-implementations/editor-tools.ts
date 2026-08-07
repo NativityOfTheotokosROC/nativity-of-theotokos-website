@@ -77,11 +77,11 @@ export function useEditorTools(editor: Editor | null) {
 					break;
 				}
 				case "TOGGLE_SUPERSCRIPT": {
-					editor.chain().focus().toggleSuperscript();
+					editor.chain().focus().toggleSuperscript().run();
 					break;
 				}
 				case "TOGGLE_SUBSCRIPT": {
-					editor.chain().focus().toggleSubscript();
+					editor.chain().focus().toggleSubscript().run();
 					break;
 				}
 				default: {

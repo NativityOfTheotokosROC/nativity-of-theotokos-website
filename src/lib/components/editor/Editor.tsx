@@ -9,6 +9,7 @@ import { Subscript } from "@tiptap/extension-subscript";
 import { twMerge } from "tailwind-merge";
 import { useEditorTools } from "../../model-implementations/editor-tools";
 import { EditorModel } from "../../models/editor";
+import OfficePaste from "@intevation/tiptap-extension-office-paste";
 import EditorTools from "../editor-tools/EditorTools";
 
 const Editor = function ({ model }) {
@@ -16,7 +17,13 @@ const Editor = function ({ model }) {
 	const { content, className } = modelView;
 	const editor = useEditor({
 		content,
-		extensions: [StarterKit, TextStyleKit, Superscript, Subscript],
+		extensions: [
+			StarterKit,
+			TextStyleKit,
+			Superscript,
+			Subscript,
+			OfficePaste,
+		],
 		immediatelyRender: false,
 		onUpdate({ editor }) {
 			return interact({
