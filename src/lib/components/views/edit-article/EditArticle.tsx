@@ -121,7 +121,6 @@ const EditArticle = function ({ model }) {
 									{errors.title.message}
 								</span>
 							)}
-							{/* TODO: Sloppy */}
 							<Editor
 								model={{
 									...editor,

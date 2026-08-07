@@ -4,6 +4,8 @@ import { InitializedModel } from "@mvc-react/mvc";
 import { TextStyleKit } from "@tiptap/extension-text-style";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
+import { Superscript } from "@tiptap/extension-superscript";
+import { Subscript } from "@tiptap/extension-subscript";
 import { twMerge } from "tailwind-merge";
 import { useEditorTools } from "../../model-implementations/editor-tools";
 import { EditorModel } from "../../models/editor";
@@ -14,13 +16,18 @@ const Editor = function ({ model }) {
 	const { content, className } = modelView;
 	const editor = useEditor({
 		content,
-		extensions: [StarterKit, TextStyleKit],
+		extensions: [StarterKit, TextStyleKit, Superscript, Subscript],
 		immediatelyRender: false,
 		onUpdate({ editor }) {
 			return interact({
 				type: "UPDATE_EDITOR",
 				input: { content: editor.getHTML() },
 			});
+		},
+		editorProps: {
+			transformPastedHTML(html) {
+				return html.replace(/style="[^"]*"/gi, "");
+			},
 		},
 	});
 	const editorTools = useEditorTools(editor);

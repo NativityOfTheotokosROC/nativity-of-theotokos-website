@@ -10,6 +10,8 @@ import {
 	ListOrderedIcon,
 	QuoteIcon,
 	Redo2Icon,
+	Subscript,
+	SuperscriptIcon,
 	UnderlineIcon,
 	Undo2Icon,
 } from "lucide-react";
@@ -30,11 +32,37 @@ const EditorTools = function ({ model }) {
 		numberedList,
 		canUndo,
 		canRedo,
+		superscript,
+		subscript,
 	} = modelView;
 	const t = useTranslations("editorTools");
 
 	return (
 		<div className="flex w-full flex-wrap items-center justify-center gap-1">
+			<EditorButtonGroup>
+				<EditorButton
+					model={{
+						modelView: {
+							title: t("undo"),
+							isDisabled: !canUndo,
+						},
+						interact: () => interact({ type: "UNDO" }),
+					}}
+				>
+					<Undo2Icon />
+				</EditorButton>
+				<EditorButton
+					model={{
+						modelView: {
+							title: t("redo"),
+							isDisabled: !canRedo,
+						},
+						interact: () => interact({ type: "REDO" }),
+					}}
+				>
+					<Redo2Icon />
+				</EditorButton>
+			</EditorButtonGroup>
 			<EditorButtonGroup>
 				<EditorButton
 					model={{
@@ -110,24 +138,25 @@ const EditorTools = function ({ model }) {
 				<EditorButton
 					model={{
 						modelView: {
-							title: t("undo"),
-							isDisabled: !canUndo,
+							title: t("super"),
+							isToggled: superscript,
 						},
-						interact: () => interact({ type: "UNDO" }),
+						interact: () =>
+							interact({ type: "TOGGLE_SUPERSCRIPT" }),
 					}}
 				>
-					<Undo2Icon />
+					<SuperscriptIcon />
 				</EditorButton>
 				<EditorButton
 					model={{
 						modelView: {
-							title: t("redo"),
-							isDisabled: !canRedo,
+							title: t("sub"),
+							isToggled: subscript,
 						},
-						interact: () => interact({ type: "REDO" }),
+						interact: () => interact({ type: "TOGGLE_SUBSCRIPT" }),
 					}}
 				>
-					<Redo2Icon />
+					<Subscript />
 				</EditorButton>
 			</EditorButtonGroup>
 		</div>

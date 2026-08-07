@@ -29,6 +29,8 @@ export function useEditorTools(editor: Editor | null) {
 					heading: editorState.isHeading1,
 					bulletList: editorState.isBulletList,
 					numberedList: editorState.isOrderedList,
+					superscript: editorState.isSuperscript,
+					subscript: editorState.isSubscript,
 				}
 			: null,
 		interact: async function (interaction: EditorToolsModelInteraction) {
@@ -72,6 +74,14 @@ export function useEditorTools(editor: Editor | null) {
 				}
 				case "REDO": {
 					editor.chain().focus().redo().run();
+					break;
+				}
+				case "TOGGLE_SUPERSCRIPT": {
+					editor.chain().focus().toggleSuperscript();
+					break;
+				}
+				case "TOGGLE_SUBSCRIPT": {
+					editor.chain().focus().toggleSubscript();
 					break;
 				}
 				default: {

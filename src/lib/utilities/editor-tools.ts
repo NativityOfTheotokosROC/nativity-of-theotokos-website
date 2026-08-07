@@ -12,6 +12,8 @@ export function editorToolsStateSelector(ctx: EditorStateSnapshot<Editor>) {
 		isStrike: ctx.editor.isActive("strike") ?? false,
 		canStrike: ctx.editor.can().chain().toggleStrike().run() ?? false,
 		canClearMarks: ctx.editor.can().chain().unsetAllMarks().run() ?? false,
+		isSuperscript: ctx.editor.isActive("superscript") ?? false,
+		isSubscript: ctx.editor.isActive("subscript") ?? false,
 
 		// Block types
 		isParagraph: ctx.editor.isActive("paragraph") ?? false,

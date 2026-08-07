@@ -170,7 +170,11 @@
 		"bulletList": "Bullet List",
 		"numberedList": "Numbered List",
 		"undo": "Undo",
-		"redo": "Redo"
+		"redo": "Redo",
+		"super": "Superscript",
+		"sub": "Subscript",
+		"rule": "Horizontal Rule",
+		"link": "Link"
 	},
 	"signIn": {
 		"metaTitle": "Sign In",

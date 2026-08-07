@@ -8,9 +8,10 @@
 	blockquote {
 		padding-left: 1rem;
 		margin-left: 1rem;
+		margin-block: 0.5em;
 	}
 
-	p:not(:last-of-type) {
+	p:not(:last-of-type):empty {
 		margin-bottom: 1.5em;
 	}
 	ul {
@@ -28,6 +29,10 @@
 		font-size: 1.5rem;
 		line-height: 1.1;
 		margin-bottom: 0.5em;
+	}
+	sup,
+	sub {
+		font-size: 0.25rem;
 	}
 }
 

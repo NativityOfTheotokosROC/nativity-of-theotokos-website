@@ -3,7 +3,7 @@ import { Translator } from "../types/general";
 import { useLocalizedSchema } from "./general";
 
 export function getEditArticleFormSchema(t?: Translator) {
-	const maxTitleEn = 65;
+	const maxTitleEn = 100;
 	// const maxTitleRu = maxTitleEn / 1.2
 	const minBodyEn = 100;
 	const articleFormSchema = z.object({

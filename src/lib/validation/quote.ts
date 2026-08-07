@@ -6,7 +6,7 @@ import { useLocalizedSchema } from "./general";
 
 export function getQuoteSchema(t?: Translator) {
 	const maxQuoteEn = 600;
-	const maxQuoteRu = maxQuoteEn / 1.2;
+	const maxQuoteRu = maxQuoteEn;
 	const quoteSchema = z.object({
 		authorEn: z
 			.string()
