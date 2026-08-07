@@ -149,7 +149,10 @@
 		"savingDraft": "Saving draft",
 		"saveDraftSuccess": "Draft saved",
 		"saveDraftFailure": "Could not save draft. Error: {message}",
-		"body": "Body"
+		"body": "Body",
+		"mainMessage": "Article Submitted",
+		"detailedMessage": "Your article has been submitted and will be reviewed and processed.",
+		"nextButton": "Continue"
 	},
 	"articlePreview": {
 		"title": "Article Preview",

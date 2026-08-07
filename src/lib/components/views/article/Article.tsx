@@ -70,10 +70,7 @@ const Article = function ({ model }) {
 										className="grow cursor-pointer object-cover object-center"
 										height={600}
 										width={600}
-										alt={
-											about ??
-											tCaptions("newsArticleImage")
-										}
+										alt={tCaptions("newsArticleImage")}
 										title={about}
 										src={source}
 										placeholder={

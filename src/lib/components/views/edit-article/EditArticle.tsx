@@ -16,6 +16,8 @@ import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import GoHomeButton from "../not-found/GoHomeButton";
+import SuccessGraphic from "@/public/assets/icon-2.svg";
 
 const EditArticle = function ({ model }) {
 	const { modelView, interact } = model;
@@ -85,124 +87,139 @@ const EditArticle = function ({ model }) {
 		<>
 			<ArticlePreviewModal model={articlePreviewModal} />
 			<main className="edit-article border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black">
-				<div className="edit-article-content flex flex-col gap-6 p-8 py-9 md:py-10 lg:px-20">
-					<span
-						className={`mb-2 text-[2.75rem]/tight font-semibold md:text-black ${georgia.className}`}
-					>
-						{t("title")}
-						<hr className="mt-4 mb-0 md:w-full" />
-					</span>
-					<form
-						onSubmit={handleSubmit(
-							async form =>
-								await articlePreviewModal.interact({
-									type: "OPEN",
-									input: {
-										draft: {
-											ticketId,
-											title: form.title,
-											body: form.body,
+				{notification?.type !== "submit_success" ? (
+					<div className="edit-article-content flex flex-col gap-6 p-8 py-9 md:py-10 lg:px-20">
+						<span
+							className={`mb-2 text-[2.75rem]/tight font-semibold md:text-black ${georgia.className}`}
+						>
+							{t("title")}
+							<hr className="mt-4 mb-0 md:w-full" />
+						</span>
+						<form
+							onSubmit={handleSubmit(
+								async form =>
+									await articlePreviewModal.interact({
+										type: "OPEN",
+										input: {
+											draft: {
+												ticketId,
+												title: form.title,
+												body: form.body,
+											},
+											author: previewAuthor,
 										},
-										author: previewAuthor,
-									},
-								}),
-						)}
-					>
-						<div className="flex flex-col gap-3">
-							<input
-								{...register("title")}
-								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title ? "border-red-800" : "border-gray-400"}`}
-								placeholder={t("title")}
-								autoComplete="off"
-								autoCapitalize="words"
-							/>
-							{errors.title && (
-								<span className="text-sm text-red-800">
-									{errors.title.message}
-								</span>
+									}),
 							)}
-							<Editor
-								model={{
-									...editor,
-									modelView: {
-										...editor.modelView,
-										className: errors.body
-											? "border-red-800"
-											: "border-gray-400",
-									},
-								}}
-							/>
-							{errors.body && (
-								<span className="text-sm text-red-800">
-									{errors.body.message}
-								</span>
-							)}
-							{errors.form && (
-								<span className="text-sm text-red-800">
-									{errors.form.message}
-								</span>
-							)}
-							<hr className="mt-6 w-full opacity-50" />
-							<div className="mt-1 flex w-full justify-start gap-3">
-								<Button
-									model={newReadonlyModel({
-										type: "button",
-										disabled:
-											!hasDraftChanged ||
-											notification?.type ===
-												"saving_draft",
-										className:
-											"flex justify-center items-center w-fit max-w-1/2 min-w-[8em]",
-										action: async () =>
-											await interact({
-												type: "SAVE_DRAFT",
-												input: {
-													draft: {
-														ticketId,
-														title,
-														body,
+						>
+							<div className="flex flex-col gap-3">
+								<input
+									{...register("title")}
+									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title ? "border-red-800" : "border-gray-400"}`}
+									placeholder={t("title")}
+									autoComplete="off"
+									autoCapitalize="words"
+								/>
+								{errors.title && (
+									<span className="text-sm text-red-800">
+										{errors.title.message}
+									</span>
+								)}
+								<Editor
+									model={{
+										...editor,
+										modelView: {
+											...editor.modelView,
+											className: errors.body
+												? "border-red-800"
+												: "border-gray-400",
+										},
+									}}
+								/>
+								{errors.body && (
+									<span className="text-sm text-red-800">
+										{errors.body.message}
+									</span>
+								)}
+								{errors.form && (
+									<span className="text-sm text-red-800">
+										{errors.form.message}
+									</span>
+								)}
+								<hr className="mt-6 w-full opacity-50" />
+								<div className="mt-1 flex w-full justify-start gap-3">
+									<Button
+										model={newReadonlyModel({
+											type: "button",
+											disabled:
+												!hasDraftChanged ||
+												notification?.type ===
+													"saving_draft",
+											className:
+												"flex justify-center items-center w-fit max-w-1/2 min-w-[8em]",
+											action: async () =>
+												await interact({
+													type: "SAVE_DRAFT",
+													input: {
+														draft: {
+															ticketId,
+															title,
+															body,
+														},
 													},
-												},
-											}),
-									})}
-								>
-									{notification?.type === "saving_draft" ? (
-										<Spinner
-											model={newReadonlyModel({
-												color: "white",
-												size: 20,
-											})}
-										/>
-									) : (
-										t("saveDraft")
-									)}
-								</Button>
-								<Button
-									model={newReadonlyModel({
-										type: "submit",
-										variant: "standard",
-										disabled:
-											isSubmitting ||
-											notification?.type === "submitting",
-										className:
-											"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
-									})}
-								>
-									{notification?.type === "submitting" ? (
-										<Spinner
-											model={newReadonlyModel({
-												color: "white",
-												size: 20,
-											})}
-										/>
-									) : (
-										t("submit")
-									)}
-								</Button>
+												}),
+										})}
+									>
+										{notification?.type ===
+										"saving_draft" ? (
+											<Spinner
+												model={newReadonlyModel({
+													color: "white",
+													size: 20,
+												})}
+											/>
+										) : (
+											t("saveDraft")
+										)}
+									</Button>
+									<Button
+										model={newReadonlyModel({
+											type: "submit",
+											variant: "standard",
+											disabled:
+												isSubmitting ||
+												notification?.type ===
+													"submitting",
+											className:
+												"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
+										})}
+									>
+										{notification?.type === "submitting" ? (
+											<Spinner
+												model={newReadonlyModel({
+													color: "white",
+													size: 20,
+												})}
+											/>
+										) : (
+											t("submit")
+										)}
+									</Button>
+								</div>
 							</div>
-						</div>
-					</form>
-				</div>
+						</form>
+					</div>
+				) : (
+					<div className="flex h-[70svh] min-h-fit w-md flex-col items-center justify-center gap-6">
+						<SuccessGraphic className="h-64 w-80 fill-black opacity-90 md:h-48" />
+						<span
+							className={`text-4xl font-semibold ${georgia.className}`}
+						>
+							{t("mainMessage")}
+						</span>
+						<span className="text-lg">{t("detailedMessage")}</span>
+						<GoHomeButton>{t("nextButton")}</GoHomeButton>
+					</div>
+				)}
 			</main>
 		</>
 	);

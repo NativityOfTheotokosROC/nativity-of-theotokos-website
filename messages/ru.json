@@ -149,7 +149,10 @@
 		"body": "Текст статьи",
 		"savingDraft": "Сохранение черновика",
 		"saveDraftSuccess": "Черновик сохранён",
-		"saveDraftFailure": "Не удалось сохранить черновик. Ошибка: {message}"
+		"saveDraftFailure": "Не удалось сохранить черновик. Ошибка: {message}",
+		"mainMessage": "Статья отправлена",
+		"detailedMessage": "Ваша статья отправлена и будет рассмотрена и обработана.",
+		"nextButton": "Продолжить"
 	},
 	"articlePreview": {
 		"title": "Предпросмотр статьи",
