@@ -87,11 +87,13 @@ model Article {
   snippetTranslationId Int
   authorId             Int
   imageId              Int
+  articleTickets       ArticleTicket[]
 }
 
 model ArticleAuthor {
   id                Int         @id @default(autoincrement())
   name              Translation @relation(fields: [nameTranslationId], references: [id])
+  email             String?
   nameTranslationId Int         @unique
   articles          Article[]
 }
@@ -111,11 +113,27 @@ model FeaturedArticle {
   articleId Int     @id
 }
 
-model ArticleDraft {
-  id   Int   @id @default(autoincrement())
-  user Admin @relation(fields: [adminId], references: [id])
+model ArticleTicket {
+  id           String        @id @default(uuid())
+  userEmail    String
+  articleDraft ArticleDraft?
+  article      Article?      @relation(fields: [articleId], references: [id])
+  articleId    Int?
+}
 
-  adminId Int
+model ArticleDraft {
+  id                       Int                       @id @default(autoincrement())
+  title                    String
+  body                     String
+  lastSaved                DateTime                  @default(now())
+  articleTicket            ArticleTicket             @relation(fields: [articleTicketId], references: [id])
+  articleTicketId          String                    @unique
+  pendingArticleSubmission PendingArticleSubmission?
+}
+
+model PendingArticleSubmission {
+  articleDraft   ArticleDraft @relation(fields: [articleDraftId], references: [id])
+  articleDraftId Int          @id
 }
 
 model DailyGalleryImage {
@@ -129,10 +147,9 @@ model DailyGalleryImage {
 }
 
 model Admin {
-  id            Int            @id @default(autoincrement())
-  email         String
-  role          String
-  articleDrafts ArticleDraft[]
+  id    Int    @id @default(autoincrement())
+  email String
+  role  String
 
   @@unique([email, role])
 }

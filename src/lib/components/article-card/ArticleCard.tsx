@@ -3,13 +3,13 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { ArticlePreviewModel } from "../../models/article-preview";
+import { ArticleCardModel } from "../../models/article-card";
 import { georgia } from "../../third-party/fonts";
 import { getNewsArticleDateString } from "../../utilities/date-time";
 import { Link } from "../page-loading-bar/PageLoadingBar";
 import { ViewTransition } from "react";
 
-const ArticlePreview = function ({ model }) {
+const ArticleCard = function ({ model }) {
 	const { articlePreview: article, isDetailed } = model.modelView;
 	const { title, author, dateCreated, snippet, articleImage, uri } = article;
 	const { placeholder, source } = articleImage;
@@ -79,6 +79,6 @@ const ArticlePreview = function ({ model }) {
 			</div>
 		</Link>
 	);
-} as ModeledVoidComponent<ArticlePreviewModel>;
+} as ModeledVoidComponent<ArticleCardModel>;
 
-export default ArticlePreview;
+export default ArticleCard;

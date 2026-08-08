@@ -1,33 +1,26 @@
-"use cache";
+"use client";
 
 import ShareButton from "@/src/lib/components/share-button/ShareButton";
 import SocialLink from "@/src/lib/components/social-link/SocialLink";
 import { ArticleModel } from "@/src/lib/models/article";
+import "@/src/lib/styles/document.css";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { getNewsArticleDateString } from "@/src/lib/utilities/date-time";
 import { getEncodedShareData } from "@/src/lib/utilities/miscellaneous";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { ViewTransition } from "react";
-import { locale as localeParam } from "next/root-params";
-import { routing } from "@/src/i18n/routing";
-import { hasLocale } from "next-intl";
 
-const Article = async function ({ model }) {
-	const { article, permalink } = model.modelView;
+const Article = function ({ model }) {
+	const { article, permalink, options } = model.modelView;
 	const { title, author, articleImage, dateCreated, dateUpdated, body, uri } =
 		article;
 	const { source, about, placeholder } = articleImage;
-	const locale = await localeParam();
-	const language = hasLocale(routing.locales, locale) ? locale : "en";
-	const t = await getTranslations({ namespace: "news", locale: language });
-	const tCaptions = await getTranslations({
-		namespace: "imageCaptions",
-		locale: language,
-	});
+	const t = useTranslations("news");
+	const tCaptions = useTranslations("imageCaptions");
 	const shareData = {
 		title,
 		url: permalink,
@@ -77,13 +70,12 @@ const Article = async function ({ model }) {
 										className="grow cursor-pointer object-cover object-center"
 										height={600}
 										width={600}
-										alt={
-											about ??
-											tCaptions("newsArticleImage")
-										}
+										alt={tCaptions("newsArticleImage")}
 										title={about}
 										src={source}
-										placeholder="blur"
+										placeholder={
+											placeholder ? "blur" : undefined
+										}
 										blurDataURL={placeholder}
 									/>
 								</ViewTransition>
@@ -96,41 +88,43 @@ const Article = async function ({ model }) {
 						)}
 					</div>
 				</div>
-				<div className="flex items-end gap-5 self-end text-sm text-gray-900 **:hover:text-[#dcb042] md:mt-4">
-					<ShareButton
-						model={newReadonlyModel({
-							shareData: encodedShareData,
-							alternateVariant: true,
-						})}
-					/>
-					<SocialLink
-						model={newReadonlyModel({
-							details: {
-								type: "WhatsApp",
-								link: `https://wa.me/?text=${encodedShareData.title}%20${encodedShareData.url}`,
-							},
-						})}
-					/>
-					<SocialLink
-						model={newReadonlyModel({
-							details: {
-								type: "Telegram",
-								link: `https://t.me/share/url?url=${encodedShareData.url}&text=${encodedShareData.title}`,
-							},
-						})}
-					/>
-					<SocialLink
-						model={newReadonlyModel({
-							details: {
-								type: "Facebook",
-								link: `https://facebook.com/sharer/sharer.php?u=${encodedShareData.url}&text=${encodedShareData.title}`,
-							},
-						})}
-					/>
-				</div>
+				{!options?.sharingDisabled && (
+					<div className="flex items-end gap-5 self-end text-sm text-gray-900 **:hover:text-[#dcb042] md:mt-4">
+						<ShareButton
+							model={newReadonlyModel({
+								shareData: encodedShareData,
+								alternateVariant: true,
+							})}
+						/>
+						<SocialLink
+							model={newReadonlyModel({
+								details: {
+									type: "WhatsApp",
+									link: `https://wa.me/?text=${encodedShareData.title}%20${encodedShareData.url}`,
+								},
+							})}
+						/>
+						<SocialLink
+							model={newReadonlyModel({
+								details: {
+									type: "Telegram",
+									link: `https://t.me/share/url?url=${encodedShareData.url}&text=${encodedShareData.title}`,
+								},
+							})}
+						/>
+						<SocialLink
+							model={newReadonlyModel({
+								details: {
+									type: "Facebook",
+									link: `https://facebook.com/sharer/sharer.php?u=${encodedShareData.url}&text=${encodedShareData.title}`,
+								},
+							})}
+						/>
+					</div>
+				)}
 				<hr className="w-full self-center text-black/50 md:w-3/4" />
-				<p
-					className={`body self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed`}
+				<div
+					className={`body document self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed`}
 					dangerouslySetInnerHTML={{ __html: body }}
 				/>
 			</div>

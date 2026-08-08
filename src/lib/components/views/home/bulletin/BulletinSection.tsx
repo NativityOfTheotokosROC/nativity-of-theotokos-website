@@ -1,5 +1,5 @@
 import LatestNewsOrnament from "@/public/assets/ornament_11.svg";
-import ArticlePreview from "@/src/lib/components/article-preview/ArticlePreview";
+import ArticleCard from "@/src/lib/components/article-card/ArticleCard";
 import SchedulePreviewWidget from "@/src/lib/components/schedule-preview-widget/SchedulePreviewWidget";
 import { BulletinSectionModel } from "@/src/lib/models/bulletin-section";
 import { georgia } from "@/src/lib/third-party/fonts";
@@ -39,7 +39,7 @@ const BulletinSection = function ({ model }) {
 							className="featured flex flex-col gap-4 md:max-w-1/2 lg:max-w-[45%] [&_.featured-card]:max-w-full"
 						>
 							<span className="text-xl">{t("featured")}</span>
-							<ArticlePreview
+							<ArticleCard
 								model={newReadonlyModel({
 									isDetailed: true,
 									articlePreview:
@@ -69,7 +69,7 @@ const BulletinSection = function ({ model }) {
 						<div className="grid gap-8 md:w-95/100 md:grid-cols-2 md:gap-6 lg:w-85/100">
 							{[...modelView.newsArticles.otherNewsArticles].map(
 								(articlePreview, index) => (
-									<ArticlePreview
+									<ArticleCard
 										key={index}
 										model={newReadonlyModel({
 											articlePreview,

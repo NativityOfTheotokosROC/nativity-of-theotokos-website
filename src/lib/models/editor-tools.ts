@@ -10,6 +10,8 @@ export type EditorToolsModelView = {
 	heading: boolean;
 	bulletList: boolean;
 	numberedList: boolean;
+	superscript: boolean;
+	subscript: boolean;
 };
 
 export type EditorToolsModelInteraction = ModelInteraction<
@@ -22,6 +24,8 @@ export type EditorToolsModelInteraction = ModelInteraction<
 	| "TOGGLE_HEADING"
 	| "TOGGLE_BULLET_LIST"
 	| "TOGGLE_NUMBERED_LIST"
+	| "TOGGLE_SUPERSCRIPT"
+	| "TOGGLE_SUBSCRIPT"
 >;
 
 export type EditorToolsModel = InteractiveModel<

@@ -10,6 +10,8 @@ import {
 	ListOrderedIcon,
 	QuoteIcon,
 	Redo2Icon,
+	Subscript,
+	SuperscriptIcon,
 	UnderlineIcon,
 	Undo2Icon,
 } from "lucide-react";
@@ -30,6 +32,8 @@ const EditorTools = function ({ model }) {
 		numberedList,
 		canUndo,
 		canRedo,
+		superscript,
+		subscript,
 	} = modelView;
 	const t = useTranslations("editorTools");
 
@@ -104,6 +108,31 @@ const EditorTools = function ({ model }) {
 					}}
 				>
 					<ListOrderedIcon />
+				</EditorButton>
+			</EditorButtonGroup>
+			<EditorButtonGroup>
+				<EditorButton
+					model={{
+						modelView: {
+							title: t("super"),
+							isToggled: superscript,
+						},
+						interact: () =>
+							interact({ type: "TOGGLE_SUPERSCRIPT" }),
+					}}
+				>
+					<SuperscriptIcon />
+				</EditorButton>
+				<EditorButton
+					model={{
+						modelView: {
+							title: t("sub"),
+							isToggled: subscript,
+						},
+						interact: () => interact({ type: "TOGGLE_SUBSCRIPT" }),
+					}}
+				>
+					<Subscript />
 				</EditorButton>
 			</EditorButtonGroup>
 			<EditorButtonGroup>

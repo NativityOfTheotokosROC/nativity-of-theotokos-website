@@ -2,6 +2,7 @@ import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 
 export type EditorModelView = {
 	content: string;
+	className?: string;
 };
 
 export type EditorModelInteraction = InputModelInteraction<

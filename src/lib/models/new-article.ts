@@ -1,34 +1,42 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 import { Notification } from "../types/general";
 
-export type NewArticleNotification =
-	| (Notification<"success" | "failure"> & { message: string })
-	| Notification<"pending">;
+export type EditArticleNotification =
+	| (Notification<
+			| "submit_success"
+			| "submit_failure"
+			| "save_draft_success"
+			| "save_draft_failure"
+			| "saving_draft"
+	  > & {
+			message: string;
+	  })
+	| Notification<"submitting">;
 
-export type NewArticle = {
+export type ArticleDraft = {
+	ticketId: string;
 	title: string;
 	body: string;
 };
 
-export type NewArticleModelView = {
+export type LastSavedDraft = Omit<ArticleDraft, "ticketId"> & {};
+
+export type EditArticleModelView = {
+	ticketId: string;
+	notification: EditArticleNotification | null;
 	author?: string;
-	newArticleNotification: NewArticleNotification | null;
+	lastSavedDraft?: LastSavedDraft;
 };
 
-export type NewArticleModelInteraction =
-	| InputModelInteraction<
-			"SUBMIT",
-			{
-				newArticle: NewArticle;
-				options?: { successCallback?: () => void };
-			}
-	  >
-	| InputModelInteraction<
-			"PREVIEW",
-			{ title: string; body: string; author: string }
-	  >;
+export type EditArticleModelInteraction = InputModelInteraction<
+	"SUBMIT" | "SAVE_DRAFT",
+	{
+		draft: ArticleDraft;
+		options?: { successCallback?: () => void };
+	}
+>;
 
-export type NewArticleModel = InteractiveModel<
-	NewArticleModelView,
-	NewArticleModelInteraction
+export type EditArticleModel = InteractiveModel<
+	EditArticleModelView,
+	EditArticleModelInteraction
 >;

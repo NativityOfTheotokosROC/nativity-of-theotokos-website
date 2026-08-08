@@ -21,6 +21,7 @@ import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import { useCloseWarning } from "@/src/lib/utilities/hooks";
+import { useCallback } from "react";
 
 const NewQuote = function ({ model }) {
 	const { modelView, interact } = model;
@@ -125,15 +126,28 @@ const NewQuote = function ({ model }) {
 			);
 		},
 	});
+	const hasFormChanged = useCallback(
+		() =>
+			!(
+				defaultValues.authorEn === watch("authorEn") &&
+				defaultValues.authorRu === watch("authorRu") &&
+				defaultValues.sourceEn === watch("sourceEn") &&
+				defaultValues.sourceRu === watch("sourceRu") &&
+				defaultValues.quoteEn === watch("quoteEn") &&
+				defaultValues.quoteRu === watch("quoteRu")
+			),
+		[
+			defaultValues.authorEn,
+			defaultValues.authorRu,
+			defaultValues.quoteEn,
+			defaultValues.quoteRu,
+			defaultValues.sourceEn,
+			defaultValues.sourceRu,
+			watch,
+		],
+	);
 
-	useCloseWarning([
-		[defaultValues.authorEn, watch("authorEn")],
-		[defaultValues.authorRu, watch("authorRu")],
-		[defaultValues.sourceEn, watch("sourceEn")],
-		[defaultValues.sourceRu, watch("sourceRu")],
-		[defaultValues.quoteEn, watch("quoteEn")],
-		[defaultValues.quoteRu, watch("quoteRu")],
-	]);
+	useCloseWarning(hasFormChanged);
 
 	return (
 		<>

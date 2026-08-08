@@ -5,20 +5,13 @@ import database from "@/src/lib/third-party/prisma";
 import { headers } from "next/headers";
 import { forbidden } from "next/navigation";
 import { Role, User } from "../types/general";
-import {
-	ENVIRONMENT,
-	PREPRODUCTION_PROTECTION,
-} from "../utilities/server-constants";
+import { IS_AUTH_DISABLED } from "../utilities/server-constants";
 
 export async function protect(protectParams?: { roles?: Role[] }) {
 	const roles = protectParams?.roles;
 	const user = await getUser();
 
-	if (
-		ENVIRONMENT !== "production" &&
-		PREPRODUCTION_PROTECTION?.toLowerCase() === "disabled"
-	)
-		return;
+	if (IS_AUTH_DISABLED) return;
 	if (!(user && (await isAuthorized(user, roles)))) return forbidden();
 }
 

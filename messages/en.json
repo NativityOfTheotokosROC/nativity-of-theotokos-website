@@ -134,16 +134,32 @@
 		"failureMessage": "Could not add the quote. Error:",
 		"quotePreview": "Quote Preview"
 	},
-	"newArticle": {
-		"metaTitle": "New Article",
-		"title": "Article Title",
+	"editArticle": {
+		"metaTitle": "Edit Article",
+		"title": "Edit Article",
 		"author": "Author",
 		"bodyPlaceholder": "Start writing here...",
 		"preview": "Preview",
 		"submit": "Submit",
-		"successMessage": "Article successfully submitted",
-		"failureMessage": "Could not submit the article. Error:",
-		"unknownAuthor": "Your Name"
+		"submitSuccess": "Article successfully submitted",
+		"submitFailure": "Could not submit the article. Error: {message}",
+		"unknownAuthor": "Your Name",
+		"saveDraft": "Save Draft",
+		"autoSave": "Auto Save",
+		"savingDraft": "Saving draft",
+		"saveDraftSuccess": "Draft saved",
+		"saveDraftFailure": "Could not save draft. Error: {message}",
+		"body": "Body",
+		"mainMessage": "Article Submitted",
+		"detailedMessage": "Your article has been submitted and will be reviewed and processed.",
+		"nextButton": "Continue"
+	},
+	"articlePreview": {
+		"title": "Article Preview",
+		"imagePlaceholder": "The article image will be placed here",
+		"authorPlaceholder": "Your Name",
+		"continueEdit": "Continue Editing",
+		"submit": "Submit"
 	},
 	"editor": {
 		"initError": "Editor is uninitialized"
@@ -157,7 +173,11 @@
 		"bulletList": "Bullet List",
 		"numberedList": "Numbered List",
 		"undo": "Undo",
-		"redo": "Redo"
+		"redo": "Redo",
+		"super": "Superscript",
+		"sub": "Subscript",
+		"rule": "Horizontal Rule",
+		"link": "Link"
 	},
 	"signIn": {
 		"metaTitle": "Sign In",
@@ -233,9 +253,11 @@
 	},
 	"validation": {
 		"nonEmpty": "{field} cannot be empty",
-		"maxCharacters": "{field} is too long (maximum of {max} characters)"
+		"maxCharacters": "{field} is too long (maximum of {max} characters)",
+		"minCharacters": "{field} is too short (minimum of {min} characters)"
 	},
 	"miscellaneous": {
+		"modelInitError": "The model is not initialized",
 		"futureContent": "Content to be added soon!",
 		"closeButton": "Close"
 	}

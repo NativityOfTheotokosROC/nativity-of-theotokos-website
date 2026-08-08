@@ -9,14 +9,23 @@ import {
 	EditorModelView,
 } from "../models/editor";
 
-function editorVIInterface() {
+function editorVIInterface(
+	options?: Partial<{
+		updateCallback: (content: string) => Promise<void>;
+		className: string;
+	}>,
+) {
 	return {
 		produceModelView: async function (
 			interaction: EditorModelInteraction,
 		): Promise<EditorModelView> {
 			switch (interaction.type) {
 				case "UPDATE_EDITOR": {
-					return { content: interaction.input.content };
+					await options?.updateCallback?.(interaction.input.content);
+					return {
+						content: interaction.input.content,
+						className: options?.className,
+					};
 				}
 			}
 		},
@@ -26,9 +35,19 @@ function editorVIInterface() {
 	>;
 }
 
-export function useEditor(initialContent: string) {
-	const model = useInitializedStatefulInteractiveModel(editorVIInterface(), {
-		content: initialContent,
-	});
+export function useEditor(
+	initialContent: string,
+	options?: Partial<{
+		updateCallback: (content: string) => Promise<void>;
+		className: string;
+	}>,
+) {
+	const model = useInitializedStatefulInteractiveModel(
+		editorVIInterface(options),
+		{
+			content: initialContent,
+			className: options?.className,
+		},
+	);
 	return model satisfies InitializedModel<EditorModel>;
 }

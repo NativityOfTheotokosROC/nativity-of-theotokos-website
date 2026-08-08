@@ -1,19 +1,29 @@
+import "@/src/lib/styles/document.css";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { EditorModel } from "../../models/editor";
 import { InitializedModel } from "@mvc-react/mvc";
-import { useEditor, EditorContent } from "@tiptap/react";
-import { StarterKit } from "@tiptap/starter-kit";
 import { TextStyleKit } from "@tiptap/extension-text-style";
-import EditorTools from "../editor-tools/EditorTools";
+import { EditorContent, useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+import { Superscript } from "@tiptap/extension-superscript";
+import { Subscript } from "@tiptap/extension-subscript";
+import { twMerge } from "tailwind-merge";
 import { useEditorTools } from "../../model-implementations/editor-tools";
-import "./editor.css";
+import { EditorModel } from "../../models/editor";
+import OfficePaste from "@intevation/tiptap-extension-office-paste";
+import EditorTools from "../editor-tools/EditorTools";
 
 const Editor = function ({ model }) {
 	const { modelView, interact } = model;
-	const { content } = modelView;
+	const { content, className } = modelView;
 	const editor = useEditor({
 		content,
-		extensions: [StarterKit, TextStyleKit],
+		extensions: [
+			StarterKit,
+			TextStyleKit,
+			Superscript,
+			Subscript,
+			OfficePaste,
+		],
 		immediatelyRender: false,
 		onUpdate({ editor }) {
 			return interact({
@@ -21,11 +31,21 @@ const Editor = function ({ model }) {
 				input: { content: editor.getHTML() },
 			});
 		},
+		editorProps: {
+			transformPastedHTML(html) {
+				return html.replace(/style="[^"]*"/gi, "");
+			},
+		},
 	});
 	const editorTools = useEditorTools(editor);
 
 	return (
-		<div className="flex w-full flex-col gap-4 rounded-lg border border-black/50 bg-white p-6 md:p-8 md:px-[8em] lg:px-[13em]">
+		<div
+			className={twMerge(
+				"flex w-full flex-col gap-4 rounded-lg border border-gray-400 bg-white p-6 md:p-8 md:px-[8em] lg:px-[13em]",
+				className ?? "",
+			)}
+		>
 			{editorTools.modelView ? (
 				<>
 					<EditorTools

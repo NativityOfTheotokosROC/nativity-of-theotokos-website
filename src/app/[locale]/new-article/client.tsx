@@ -1,15 +1,29 @@
 "use client";
 
-import { useNewArticle } from "@/src/lib/model-implementations/new-article";
+import { useEditArticle } from "@/src/lib/model-implementations/edit-article";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ReadonlyModel } from "@mvc-react/mvc";
-import NewArticle from "./NewArticle";
+import EditArticle from "../../../lib/components/views/edit-article/EditArticle";
+import { EditArticleModelView } from "@/src/lib/models/new-article";
+import { toastNotifierVIInterface } from "@/src/lib/model-implementations/notifier";
+import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
 
 const NewArticleClient = function ({ model }) {
-	const { author } = model.modelView;
-	const newArticle = useNewArticle(author);
+	const { ticketId, author, lastSavedDraft } = model.modelView;
+	const toastNotifier = useNewStatefulInteractiveModel(
+		toastNotifierVIInterface(),
+	);
+	const newArticle = useEditArticle(ticketId, {
+		author,
+		lastSavedDraft,
+		toastNotifier,
+	});
 
-	return <NewArticle model={newArticle} />;
-} satisfies ModeledVoidComponent<ReadonlyModel<{ author?: string }>>;
+	return <EditArticle model={newArticle} />;
+} satisfies ModeledVoidComponent<
+	ReadonlyModel<
+		Pick<EditArticleModelView, "ticketId" | "lastSavedDraft" | "author">
+	>
+>;
 
 export default NewArticleClient;

@@ -134,16 +134,32 @@
 		"failureMessage": "Не удалось добавить цитату. Ошибка:",
 		"quotePreview": "Предпросмотр цитаты"
 	},
-	"newArticle": {
-		"metaTitle": "Новая статья",
-		"title": "Название статьи",
+	"editArticle": {
+		"metaTitle": "Редактировать статью",
+		"title": "Редактировать статью",
 		"author": "Автор",
 		"bodyPlaceholder": "Начните писать здесь...",
 		"preview": "Предпросмотр",
 		"submit": "Опубликовать",
 		"successMessage": "Статья успешно опубликована",
-		"failureMessage": "Не удалось опубликовать статью. Ошибка:",
-		"unknownAuthor": "Ваше имя"
+		"failureMessage": "Не удалось опубликовать статью. Ошибка: {message}",
+		"unknownAuthor": "Ваше имя",
+		"saveDraft": "Сохранить черновик",
+		"autoSave": "Автосохранение",
+		"body": "Текст статьи",
+		"savingDraft": "Сохранение черновика",
+		"saveDraftSuccess": "Черновик сохранён",
+		"saveDraftFailure": "Не удалось сохранить черновик. Ошибка: {message}",
+		"mainMessage": "Статья отправлена",
+		"detailedMessage": "Ваша статья отправлена и будет рассмотрена и обработана.",
+		"nextButton": "Продолжить"
+	},
+	"articlePreview": {
+		"title": "Предпросмотр статьи",
+		"imagePlaceholder": "Здесь будет размещено изображение статьи",
+		"authorPlaceholder": "Ваше имя",
+		"continueEdit": "Продолжить редактирование",
+		"submit": "Опубликовать"
 	},
 	"editor": {
 		"initError": "Редактор не инициализирован"
@@ -157,7 +173,11 @@
 		"bulletList": "Маркированный список",
 		"numberedList": "Нумерованный список",
 		"undo": "Отменить",
-		"redo": "Повторить"
+		"redo": "Повторить",
+		"super": "Верхний индекс",
+		"sub": "Нижний индекс",
+		"rule": "Горизонтальная линия",
+		"link": "Ссылка"
 	},
 	"signIn": {
 		"metaTitle": "Вход",
@@ -232,11 +252,13 @@
 		"galleryImage": "Изображение галереи"
 	},
 	"miscellaneous": {
+		"modelInitError": "Модель не инициализирована",
 		"futureContent": "Контент будет добавлен в ближайшее время!",
 		"closeButton": "Закрыть"
 	},
 	"validation": {
 		"nonEmpty": "Поле {field} не может быть пустым",
-		"maxCharacters": "Поле {field} слишком длинное ({max} максимум символов)"
+		"maxCharacters": "Поле {field} слишком длинное ({max} максимум символов)",
+		"minCharacters": "Поле «{field}» слишком короткое (минимум {min} символов)"
 	}
 }
