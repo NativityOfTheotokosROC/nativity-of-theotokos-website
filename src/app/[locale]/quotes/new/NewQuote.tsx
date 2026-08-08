@@ -202,13 +202,21 @@ const NewQuote = function ({ model }) {
 												source: sourceRu,
 											},
 											scheduledDate:
-												scheduledDate === undefined
+												scheduledDate === undefined //TODO: Revisit
 													? undefined
 													: (getValues(
 															"scheduledDate",
 														) as string),
 										},
-										options: { successCallback: reset },
+										options: {
+											successCallback: async () => {
+												reset();
+												await tabs.interact({
+													type: "SWITCH_TAB",
+													input: { id: 0 },
+												});
+											},
+										},
 									},
 								});
 							},

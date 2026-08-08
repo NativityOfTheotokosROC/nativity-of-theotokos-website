@@ -158,7 +158,9 @@ const EditArticle = function ({ model }) {
 											disabled:
 												!hasDraftChanged ||
 												notification?.type ===
-													"saving_draft",
+													"saving_draft" ||
+												notification?.type ===
+													"submitting",
 											className:
 												"flex justify-center items-center w-fit max-w-1/2 min-w-[8em]",
 											action: async () =>
