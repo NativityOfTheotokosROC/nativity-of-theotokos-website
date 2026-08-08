@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import GoHomeButton from "../not-found/GoHomeButton";
 import SuccessGraphic from "@/public/assets/icon-2.svg";
@@ -82,6 +82,11 @@ const EditArticle = function ({ model }) {
 	);
 	register("body");
 	useCloseWarning(useCallback(() => hasDraftChanged, [hasDraftChanged]));
+	useEffect(() => {
+		if (notification?.type === "submit_success") {
+			window.scrollTo(0, 0);
+		}
+	}, [notification?.type]);
 
 	return (
 		<>

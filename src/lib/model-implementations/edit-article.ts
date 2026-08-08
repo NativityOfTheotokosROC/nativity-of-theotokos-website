@@ -126,13 +126,15 @@ export function useEditArticle(
 					break;
 				}
 				case "SUBMIT": {
+					const draft = interaction.input.draft;
 					await notifier.interact({
 						type: "NOTIFY",
 						input: {
 							notification: { type: "submitting" },
 						},
 					});
-					await submitArticle(interaction.input.draft, locale)
+					await submitArticle(draft, locale)
+						.then(() => setLastSavedDraft(draft))
 						.then(() =>
 							Promise.all([
 								notifier.interact({
