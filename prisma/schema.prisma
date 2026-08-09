@@ -117,8 +117,8 @@ model ArticleTicket {
   id           String        @id @default(uuid())
   userEmail    String
   articleDraft ArticleDraft?
-  article      Article?      @relation(fields: [articleId], references: [id])
-  articleId    Int?
+  article      Article?      @relation(fields: [articleId], references: [link])
+  articleId    String?       @unique
 }
 
 model ArticleDraft {

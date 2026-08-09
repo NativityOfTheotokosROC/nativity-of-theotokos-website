@@ -4,15 +4,12 @@ import {
 	getLatestUnsubmittedDraft,
 } from "@/src/lib/server-actions/article";
 import { getUser } from "@/src/lib/server-actions/auth";
+import { IS_AUTH_DISABLED } from "@/src/lib/utilities/server-constants";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import NewArticleClient from "./client";
-import {
-	ENVIRONMENT,
-	PREPRODUCTION_PROTECTION,
-} from "@/src/lib/utilities/server-constants";
+import EditArticleClient from "../../../lib/components/views/edit-article/client";
 
 export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 	const { locale } = await params;
@@ -29,11 +26,8 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 export default async function Page() {
 	const user = await getUser();
 	const authorEmail =
-		(user?.email ??
-		(PREPRODUCTION_PROTECTION === "disabled" &&
-			ENVIRONMENT !== "production"))
-			? "editorial@nativityoftheotokos.com"
-			: undefined;
+		user?.email ??
+		(IS_AUTH_DISABLED ? "editorial@nativityoftheotokos.com" : undefined);
 	const latestUnsubmittedDraft = await getLatestUnsubmittedDraft(authorEmail);
 	const ticketId = latestUnsubmittedDraft
 		? latestUnsubmittedDraft.ticketId
@@ -41,7 +35,7 @@ export default async function Page() {
 				.ticketId;
 
 	return (
-		<NewArticleClient
+		<EditArticleClient
 			model={newReadonlyModel({
 				ticketId,
 				lastSavedDraft: latestUnsubmittedDraft ?? undefined,
