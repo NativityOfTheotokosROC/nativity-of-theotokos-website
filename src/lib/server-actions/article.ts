@@ -8,7 +8,7 @@ import z from "zod";
 import { ArticleDraft } from "../models/new-article";
 import { getPlaceholder } from "../server-only/placeholder";
 import database from "../third-party/prisma";
-import { Article, Language } from "../types/general";
+import { Article, ArticleAuthor, Language } from "../types/general";
 import { isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL, IS_AUTH_DISABLED } from "../utilities/server-constants";
 import { getEditArticleFormSchema } from "../validation/edit-article-form";
@@ -46,10 +46,13 @@ export async function getArticle(
 			locale === "ru" && article.title.russian
 				? article.title.russian
 				: article.title.english;
-		const author =
-			locale === "ru" && article.author.name.russian != null
-				? article.author.name.russian
-				: article.author.name.english;
+		const author = {
+			name:
+				locale === "ru" && article.author.name.russian != null
+					? article.author.name.russian
+					: article.author.name.english,
+			email: article.author.email ?? undefined,
+		} satisfies ArticleAuthor;
 		const body =
 			locale === "ru" && article.body.russian
 				? article.body.russian

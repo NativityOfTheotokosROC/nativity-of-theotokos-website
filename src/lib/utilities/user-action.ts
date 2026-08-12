@@ -3,7 +3,7 @@ import { Role } from "../types/general";
 
 function getAllActionNames() {
 	const actionNames = [
-		"NEW_ARTICLE",
+		"WRITE_ARTICLE",
 		"NEW_QUOTE",
 		"SIGN_OUT",
 	] as const satisfies ActionName[];
@@ -26,7 +26,10 @@ export function getUserActionNames(roles: Role[]) {
 				break;
 			}
 			case "writer": {
-				specificActions = new Set([...specificActions, "NEW_ARTICLE"]);
+				specificActions = new Set([
+					...specificActions,
+					"WRITE_ARTICLE",
+				]);
 				break;
 			}
 			case "quotes": {

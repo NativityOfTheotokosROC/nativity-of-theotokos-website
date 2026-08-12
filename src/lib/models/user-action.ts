@@ -1,6 +1,6 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
 
-export type ActionName = "NEW_QUOTE" | "NEW_ARTICLE" | "SIGN_OUT";
+export type ActionName = "NEW_QUOTE" | "WRITE_ARTICLE" | "SIGN_OUT";
 
 export type UserActionModelView = {
 	name: ActionName;

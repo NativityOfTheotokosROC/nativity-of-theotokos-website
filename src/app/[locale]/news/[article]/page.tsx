@@ -33,7 +33,7 @@ function articleJsonLd(article: ArticleType) {
 		datePublished: dateCreated.toISOString(),
 		author: {
 			"@type": "Person",
-			name: author,
+			name: author.name,
 		},
 		image: articleImage.source,
 	} satisfies WithContext<JSONLdArticle>;
@@ -63,7 +63,7 @@ export async function generateMetadata({
 			title,
 			description: snippet,
 			url: `/news/${uri}`,
-			authors: author,
+			authors: author.name,
 			type: "article",
 			images: [articleImage.source],
 		},

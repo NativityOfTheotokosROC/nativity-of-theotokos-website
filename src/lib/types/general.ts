@@ -51,10 +51,15 @@ export type Image = {
 	about?: string;
 };
 
+export type ArticleAuthor = {
+	name: string;
+	email?: string;
+};
+
 export type Article = {
 	uri: string;
 	title: string;
-	author: string;
+	author: ArticleAuthor;
 	body: string;
 	dateCreated: Date;
 	dateUpdated?: Date;

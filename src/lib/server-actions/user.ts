@@ -16,16 +16,19 @@ export async function getUserInformation(): Promise<UserInformation> {
 			role: true,
 		},
 	});
+	const isWriter = await database.articleTicket.findFirst({
+		where: { userEmail: user.email },
+	});
+	type ModifiedRole = Exclude<Role, "writer">;
 	const roles = roleRecords
-		.map(record => record.role as Role)
+		.map(record => record.role as ModifiedRole)
 		.filter(role =>
-			(["admin", "quotes", "staff", "user", "writer"] as const).includes(
-				role,
-			),
+			(["admin", "quotes", "staff", "user"] as const).includes(role),
 		);
 	return {
 		name: user.name,
+		email: user.email,
 		avatar: { source: user.image! },
-		roles,
+		roles: isWriter ? [...roles, "writer"] : roles,
 	};
 }

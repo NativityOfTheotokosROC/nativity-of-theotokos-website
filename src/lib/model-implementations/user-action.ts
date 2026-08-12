@@ -26,10 +26,12 @@ export function useUserActions() {
 					},
 				});
 			}
-			case "NEW_ARTICLE": {
+			case "WRITE_ARTICLE": {
 				return newReadonlyModel({
-					name: "NEW_ARTICLE",
-					action: () => {},
+					name: "WRITE_ARTICLE",
+					action: () => {
+						router.push("/edit-article");
+					},
 				});
 			}
 			case "SIGN_OUT": {
