@@ -77,6 +77,7 @@ const nextConfig: NextConfig = {
 	cacheComponents: true,
 	experimental: {
 		authInterrupts: true,
+		useTypeScriptCli: true,
 	},
 	allowedDevOrigins: ["192.168.100.7", "192.168.100.15"],
 	output: IS_DOCKER_BUILD ? "standalone" : undefined,
