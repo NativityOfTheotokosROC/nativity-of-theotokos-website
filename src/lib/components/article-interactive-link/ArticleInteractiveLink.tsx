@@ -7,7 +7,7 @@ const ArticleInteractiveLink = function ({ model, children }) {
 	const { title, link } = model.modelView;
 
 	return (
-		<Link title={title} href={link}>
+		<Link title={title} href={link} target="_blank">
 			{children}
 		</Link>
 	);
