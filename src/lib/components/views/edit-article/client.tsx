@@ -3,12 +3,12 @@
 import { useEditArticle } from "@/src/lib/model-implementations/edit-article";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ReadonlyModel } from "@mvc-react/mvc";
-import EditArticle from "../../../lib/components/views/edit-article/EditArticle";
+import EditArticle from "./EditArticle";
 import { EditArticleModelView } from "@/src/lib/models/new-article";
 import { toastNotifierVIInterface } from "@/src/lib/model-implementations/notifier";
 import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
 
-const NewArticleClient = function ({ model }) {
+const EditArticleClient = function ({ model }) {
 	const { ticketId, author, lastSavedDraft } = model.modelView;
 	const toastNotifier = useNewStatefulInteractiveModel(
 		toastNotifierVIInterface(),
@@ -26,4 +26,4 @@ const NewArticleClient = function ({ model }) {
 	>
 >;
 
-export default NewArticleClient;
+export default EditArticleClient;

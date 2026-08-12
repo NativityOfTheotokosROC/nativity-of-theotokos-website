@@ -8,7 +8,7 @@ import z from "zod";
 import { ArticleDraft } from "../models/new-article";
 import { getPlaceholder } from "../server-only/placeholder";
 import database from "../third-party/prisma";
-import { Article, Language } from "../types/general";
+import { Article, ArticleAuthor, Language } from "../types/general";
 import { isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL, IS_AUTH_DISABLED } from "../utilities/server-constants";
 import { getEditArticleFormSchema } from "../validation/edit-article-form";
@@ -46,10 +46,13 @@ export async function getArticle(
 			locale === "ru" && article.title.russian
 				? article.title.russian
 				: article.title.english;
-		const author =
-			locale === "ru" && article.author.name.russian != null
-				? article.author.name.russian
-				: article.author.name.english;
+		const author = {
+			name:
+				locale === "ru" && article.author.name.russian != null
+					? article.author.name.russian
+					: article.author.name.english,
+			email: article.author.email ?? undefined,
+		} satisfies ArticleAuthor;
 		const body =
 			locale === "ru" && article.body.russian
 				? article.body.russian
@@ -194,7 +197,7 @@ export async function createTicket(
 				where: {
 					userEmail: authorEmail,
 					articleDraft: null,
-					articleId: article.id,
+					articleId: article.link,
 				},
 			})
 		: null;
@@ -203,10 +206,57 @@ export async function createTicket(
 		(await database.articleTicket.create({
 			data: {
 				userEmail: authorEmail,
-				articleId: article.id,
+				articleId: article.link,
 			},
 		}));
 	return { ticketId: ticket.id };
+}
+
+export async function makeArticleEdit(articleId: string) {
+	const user = await getUser();
+	if (!user && !IS_AUTH_DISABLED) forbidden();
+	const article = await database.article.findUnique({
+		include: { author: true, title: true, body: true },
+		where: { link: articleId },
+	});
+	if (!article) notFound();
+	if (!IS_AUTH_DISABLED && user?.email !== article.author.email) forbidden();
+	const ticket = await database.articleTicket.upsert({
+		include: { articleDraft: true },
+		create: {
+			userEmail: user?.email ?? "editorial@nativityoftheotokos.com",
+			articleId,
+			articleDraft: {
+				create: {
+					title: article.title.english,
+					body: article.body.english,
+				},
+			},
+		},
+		update: {},
+		where: { articleId },
+	});
+	return {
+		ticketId: ticket.id,
+		title: ticket.articleDraft?.title ?? article.title.english,
+		body: ticket.articleDraft?.body ?? article.body.english,
+	} satisfies ArticleDraft;
+}
+
+export async function getDraft(ticketId: string) {
+	const user = await getUser();
+	if (!user && !IS_AUTH_DISABLED) forbidden();
+	const ticket = await database.articleTicket.findUnique({
+		include: { articleDraft: true },
+		where: { id: ticketId },
+	});
+	if (!ticket) notFound();
+	if (!IS_AUTH_DISABLED && user?.email !== ticket.userEmail) forbidden();
+	return {
+		ticketId,
+		title: ticket.articleDraft?.title ?? "",
+		body: ticket.articleDraft?.body ?? "",
+	} satisfies ArticleDraft;
 }
 
 export async function getLatestUnsubmittedDraft(authorEmail?: string) {

@@ -7,6 +7,7 @@ import { LatestArticles } from "../server-actions/home";
 import { dailyReadings } from "../third-party/holytrinityorthodox";
 import database from "../third-party/prisma";
 import {
+	ArticleAuthor,
 	DailyQuote,
 	GalleryImage,
 	Language,
@@ -291,10 +292,13 @@ export async function getLatestArticles(
 		language === "ru" && article.title.russian
 			? article.title.russian
 			: article.title.english;
-	const author =
-		language === "ru" && article.author.name.russian != null
-			? article.author.name.russian
-			: article.author.name.english;
+	const author = {
+		name:
+			language === "ru" && article.author.name.russian != null
+				? article.author.name.russian
+				: article.author.name.english,
+		email: article.author.email ?? undefined,
+	} satisfies ArticleAuthor;
 	const snippet =
 		language === "ru" && article.snippet.russian
 			? article.snippet.russian
@@ -324,10 +328,13 @@ export async function getLatestArticles(
 				language === "ru" && article.title.russian
 					? article.title.russian
 					: article.title.english;
-			const author =
-				language === "ru" && article.author.name.russian != null
-					? article.author.name.russian
-					: article.author.name.english;
+			const author = {
+				name:
+					language === "ru" && article.author.name.russian != null
+						? article.author.name.russian
+						: article.author.name.english,
+				email: article.author.email ?? undefined,
+			} satisfies ArticleAuthor;
 			const snippet =
 				language === "ru" && article.snippet.russian
 					? article.snippet.russian

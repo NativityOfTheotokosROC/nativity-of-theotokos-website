@@ -43,7 +43,7 @@ const ArticleCard = function ({ model }) {
 						{title}
 					</span>
 					<span className="timestamp text-base text-gray-600">
-						{author} — {dateString}
+						{author.name} — {dateString}
 					</span>
 					<p className="line-clamp-4 text-base md:line-clamp-5">
 						{snippet}
@@ -73,7 +73,7 @@ const ArticleCard = function ({ model }) {
 				<div className="card-details flex flex-col gap-1.5 py-4 md:px-6">
 					<span className="title text-sm lg:text-base">{title}</span>
 					<span className="byline text-xs text-gray-600 lg:text-sm">
-						{author} — {dateString}
+						{author.name} — {dateString}
 					</span>
 				</div>
 			</div>

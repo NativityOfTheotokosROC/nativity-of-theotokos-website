@@ -46,7 +46,7 @@ const ArticlePreviewModal = function ({ model }) {
 								uri: "#",
 								title: title ?? "",
 								body: body ?? "",
-								author: previewAuthor ?? "",
+								author: { name: previewAuthor ?? "" },
 								dateCreated: new Date(),
 								snippet: "",
 								articleImage: {

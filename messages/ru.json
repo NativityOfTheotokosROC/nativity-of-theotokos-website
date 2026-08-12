@@ -47,7 +47,8 @@
 	},
 	"userAction": {
 		"newQuote": "Новая цитата",
-		"signOut": "Выйти"
+		"signOut": "Выйти",
+		"writeArticle": "Написать статью"
 	},
 	"footer": {
 		"heading": "Храм Рождества Пресвятой Богородицы",
@@ -115,8 +116,9 @@
 	},
 	"news": {
 		"metaTitle": "Новости",
-		"author": "Автор:",
-		"articleUpdated": "Обновлено"
+		"byline": "Автор:",
+		"articleUpdated": "Обновлено",
+		"editArticle": "Редактировать статью"
 	},
 	"newQuote": {
 		"metaTitle": "Новая цитата",
