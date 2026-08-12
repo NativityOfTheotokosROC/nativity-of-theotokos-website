@@ -120,7 +120,7 @@ const EditArticle = function ({ model }) {
 								<input
 									{...register("title")}
 									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title ? "border-red-800" : "border-gray-400"}`}
-									placeholder={t("title")}
+									placeholder={t("titleField")}
 									autoComplete="off"
 									autoCapitalize="words"
 								/>

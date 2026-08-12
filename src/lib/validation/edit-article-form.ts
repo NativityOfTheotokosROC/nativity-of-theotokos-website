@@ -13,13 +13,15 @@ export function getEditArticleFormSchema(t?: Translator) {
 			.nonempty({
 				error:
 					t &&
-					t("validation.nonEmpty", { field: t("editArticle.title") }),
+					t("validation.nonEmpty", {
+						field: t("editArticle.titleField"),
+					}),
 			})
 			.max(maxTitleEn, {
 				error:
 					t &&
 					t("validation.maxCharacters", {
-						field: t("editArticle.title"),
+						field: t("editArticle.titleField"),
 						max: maxTitleEn,
 					}),
 			}),
@@ -29,13 +31,15 @@ export function getEditArticleFormSchema(t?: Translator) {
 			.nonempty({
 				error:
 					t &&
-					t("validation.nonEmpty", { field: t("editArticle.body") }),
+					t("validation.nonEmpty", {
+						field: t("editArticle.bodyField"),
+					}),
 			})
 			.min(minBodyEn, {
 				error:
 					t &&
 					t("validation.minCharacters", {
-						field: t("editArticle.body"),
+						field: t("editArticle.bodyField"),
 						min: minBodyEn,
 					}),
 			}),

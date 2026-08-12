@@ -139,7 +139,8 @@
 	"editArticle": {
 		"metaTitle": "Edit Article",
 		"title": "Edit Article",
-		"titlePlaceholder": "Article Title",
+		"titleField": "Article Title",
+		"bodyField": "Body",
 		"bodyPlaceholder": "Start writing here...",
 		"preview": "Preview",
 		"submit": "Submit",
@@ -152,7 +153,6 @@
 		"savingDraft": "Saving draft",
 		"saveDraftSuccess": "Draft saved",
 		"saveDraftFailure": "Could not save draft. Error: {message}",
-		"body": "Body",
 		"mainMessage": "Article Submitted",
 		"detailedMessage": "Your article has been submitted and will be reviewed and processed.",
 		"nextButton": "Continue"

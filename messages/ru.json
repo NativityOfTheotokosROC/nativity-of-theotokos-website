@@ -139,7 +139,8 @@
 	"editArticle": {
 		"metaTitle": "Редактировать статью",
 		"title": "Редактировать статью",
-		"titlePlacholder": "Название статьи",
+		"titleField": "Название статьи",
+		"bodyField": "Текст статьи",
 		"bodyPlaceholder": "Начните писать здесь...",
 		"preview": "Предпросмотр",
 		"submit": "Опубликовать",
@@ -149,7 +150,6 @@
 		"unknownAuthor": "Ваше имя",
 		"saveDraft": "Сохранить черновик",
 		"autoSave": "Автосохранение",
-		"body": "Текст статьи",
 		"savingDraft": "Сохранение черновика",
 		"saveDraftSuccess": "Черновик сохранён",
 		"saveDraftFailure": "Не удалось сохранить черновик. Ошибка: {message}",

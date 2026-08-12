@@ -13,6 +13,7 @@ import { isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL, IS_AUTH_DISABLED } from "../utilities/server-constants";
 import { getEditArticleFormSchema } from "../validation/edit-article-form";
 import { getUser, protect } from "./auth";
+import { getUserInformation } from "./user";
 
 export async function getArticle(
 	articleId: string,
@@ -162,7 +163,7 @@ export async function createTicket(
 	} else if (parsedEmail === user?.email) {
 		await protect({ roles: ["writer"] });
 	} else {
-		await protect();
+		await protect({ roles: ["admin"] });
 	}
 	const authorEmail = parsedEmail ?? user!.email;
 	const article = options?.articleId
@@ -213,14 +214,15 @@ export async function createTicket(
 }
 
 export async function makeArticleEdit(articleId: string) {
-	const user = await getUser();
+	const user = await getUserInformation();
 	if (!user && !IS_AUTH_DISABLED) forbidden();
 	const article = await database.article.findUnique({
 		include: { author: true, title: true, body: true },
 		where: { link: articleId },
 	});
 	if (!article) notFound();
-	if (!IS_AUTH_DISABLED && user?.email !== article.author.email) forbidden();
+	if (!IS_AUTH_DISABLED && user?.email !== article.author.email)
+		await protect({ roles: ["admin"] });
 	const ticket = await database.articleTicket.upsert({
 		include: { articleDraft: true },
 		create: {
