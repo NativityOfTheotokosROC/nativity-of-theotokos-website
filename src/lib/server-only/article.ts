@@ -1,6 +1,6 @@
 import { cacheTag, cacheLife } from "next/cache";
 import database from "../third-party/prisma";
-import { Language, Article } from "../types/general";
+import { Language, Article, ArticleAuthor } from "../types/general";
 import { notFound } from "next/navigation";
 
 export async function getAllArticles(language: Language): Promise<Article[]> {
@@ -34,7 +34,10 @@ export async function getAllArticles(language: Language): Promise<Article[]> {
 					return {
 						uri: link,
 						title: title.russian ?? title.english,
-						author: author.name.russian ?? author.name.english,
+						author: {
+							name: author.name.russian ?? author.name.english,
+							email: author.email ?? undefined,
+						},
 						body: body.russian ?? body.english,
 						dateCreated,
 						dateUpdated: dateUpdated ?? undefined,
@@ -48,7 +51,10 @@ export async function getAllArticles(language: Language): Promise<Article[]> {
 				return {
 					uri: link,
 					title: title.english,
-					author: author.name.english,
+					author: {
+						name: author.name.english,
+						email: author.email ?? undefined,
+					},
 					body: body.english,
 					dateCreated,
 					dateUpdated: dateUpdated ?? undefined,
@@ -87,10 +93,13 @@ export async function getArticleMetadata(
 			locale === "ru" && article.title.russian
 				? article.title.russian
 				: article.title.english;
-		const author =
-			locale === "ru" && article.author.name.russian
-				? article.author.name.russian
-				: article.author.name.english;
+		const author = {
+			name:
+				locale === "ru" && article.author.name.russian
+					? article.author.name.russian
+					: article.author.name.english,
+			email: article.author.email ?? undefined,
+		} satisfies ArticleAuthor;
 		const snippet =
 			locale === "ru" && article.snippet.russian
 				? article.snippet.russian
