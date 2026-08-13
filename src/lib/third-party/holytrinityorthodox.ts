@@ -245,8 +245,8 @@ export async function getScriptures(date: Date, language: Language) {
 			if (!verse.trim()) return;
 
 			const _$ = load(verse, null, false);
+			if (!_$("*").is(".scripture")) return;
 			_$("*").wrapAll('<span class="reading"></span>');
-			if (!_$(".scripture").attr("href")) return;
 			markedUpScriptures.push(_$(".reading").html()!);
 		});
 		const scriptures = markedUpScriptures.map(scripture => {
