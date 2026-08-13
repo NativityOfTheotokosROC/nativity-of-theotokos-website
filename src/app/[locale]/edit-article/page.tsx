@@ -33,8 +33,8 @@ export default async function Page() {
 	const draft = latestUnsubmittedArticle?.draft ?? undefined;
 	const currentArticle =
 		latestUnsubmittedArticle?.currentArticle ?? undefined;
-	const ticketId = draft
-		? draft.ticketId
+	const ticketId = latestUnsubmittedArticle
+		? latestUnsubmittedArticle.ticketId
 		: (await createTicket({ userEmail: authorEmail, useUnused: true }))
 				.ticketId;
 

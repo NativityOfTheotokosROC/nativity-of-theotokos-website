@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { cacheTag } from "next/cache";
 import { forbidden, notFound } from "next/navigation";
 import z from "zod";
-import { ArticleDraft } from "../models/edit-article";
+import { ArticleDraft, LastSavedDraft } from "../models/edit-article";
 import { getPlaceholder } from "../server-only/placeholder";
 import database from "../third-party/prisma";
 import { Article, ArticleAuthor, Language } from "../types/general";
@@ -317,16 +317,16 @@ export async function getLatestUnsubmittedArticle(authorEmail?: string) {
 		},
 	});
 
-	const articleDraft = ticket?.articleDraft
+	if (!ticket) return null;
+
+	const articleDraft = ticket.articleDraft
 		? ({
-				ticketId: ticket.id,
 				title: ticket.articleDraft.title,
 				body: ticket.articleDraft.body,
-			} satisfies ArticleDraft)
-		: null;
-	if (!articleDraft) return null;
+			} satisfies LastSavedDraft)
+		: undefined;
 
-	const article = ticket?.article
+	const article = ticket.article
 		? ({
 				title: ticket.article.title.english,
 				author: { name: ticket.article.author.name.english },
@@ -345,7 +345,12 @@ export async function getLatestUnsubmittedArticle(authorEmail?: string) {
 		: null;
 
 	return {
+		ticketId: ticket.id,
 		draft: articleDraft,
 		currentArticle: article ?? undefined,
-	} satisfies { draft: ArticleDraft; currentArticle?: Article };
+	} satisfies {
+		ticketId: string;
+		draft?: LastSavedDraft;
+		currentArticle?: Article;
+	};
 }
