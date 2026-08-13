@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { cacheTag } from "next/cache";
 import { forbidden, notFound } from "next/navigation";
 import z from "zod";
-import { ArticleDraft } from "../models/new-article";
+import { ArticleDraft } from "../models/edit-article";
 import { getPlaceholder } from "../server-only/placeholder";
 import database from "../third-party/prisma";
 import { Article, ArticleAuthor, Language } from "../types/general";
@@ -217,7 +217,13 @@ export async function makeArticleEdit(articleId: string) {
 	const user = await getUserInformation();
 	if (!user && !IS_AUTH_DISABLED) forbidden();
 	const article = await database.article.findUnique({
-		include: { author: true, title: true, body: true },
+		include: {
+			author: { include: { name: true } },
+			title: true,
+			body: true,
+			snippet: true,
+			image: { include: { placeholder: true, caption: true } },
+		},
 		where: { link: articleId },
 	});
 	if (!article) notFound();
@@ -242,7 +248,22 @@ export async function makeArticleEdit(articleId: string) {
 		ticketId: ticket.id,
 		title: ticket.articleDraft?.title ?? article.title.english,
 		body: ticket.articleDraft?.body ?? article.body.english,
-	} satisfies ArticleDraft;
+		currentArticle: {
+			title: article.title.english,
+			author: { name: article.author.name.english },
+			body: article.body.english,
+			snippet: article.snippet.english,
+			dateCreated: article.dateCreated,
+			uri: article.link,
+			articleImage: {
+				source: article.image.link,
+				about: article.image.caption.english,
+				placeholder:
+					(article.image.placeholder
+						?.placeholder as ImagePlaceholder) ?? undefined,
+			},
+		},
+	} satisfies ArticleDraft & { currentArticle: Article };
 }
 
 export async function getDraft(ticketId: string) {

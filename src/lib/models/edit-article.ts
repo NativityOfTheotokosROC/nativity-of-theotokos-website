@@ -1,5 +1,5 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
-import { Notification } from "../types/general";
+import { Article, Notification } from "../types/general";
 
 export type EditArticleNotification =
 	| (Notification<
@@ -26,6 +26,7 @@ export type EditArticleModelView = {
 	notification: EditArticleNotification | null;
 	author?: string;
 	lastSavedDraft?: LastSavedDraft;
+	currentArticle?: Article;
 };
 
 export type EditArticleModelInteraction = InputModelInteraction<

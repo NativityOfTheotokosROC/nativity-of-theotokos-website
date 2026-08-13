@@ -9,7 +9,7 @@ import {
 	EditArticleModel,
 	EditArticleModelInteraction,
 	EditArticleNotification,
-} from "../models/new-article";
+} from "../models/edit-article";
 import {
 	NotifierModel,
 	NotifierModelInteraction,
@@ -17,6 +17,7 @@ import {
 } from "../models/notifier";
 import { ToastNotification } from "../models/toast";
 import { saveDraft, submitArticle } from "../server-actions/article";
+import { Article } from "../types/general";
 
 export function editArticleNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
@@ -62,6 +63,7 @@ export function useEditArticle(
 	ticketId: string,
 	options?: Partial<{
 		lastSavedDraft: LastSavedDraft;
+		currentArticle: Article;
 		author: string;
 		toastNotifier: NotifierModel<ToastNotification>;
 	}>,
@@ -80,6 +82,7 @@ export function useEditArticle(
 			notification: notifier.modelView?.notification ?? null,
 			author: options?.author,
 			lastSavedDraft,
+			currentArticle: options?.currentArticle,
 		},
 		interact: async function (
 			interaction: EditArticleModelInteraction,

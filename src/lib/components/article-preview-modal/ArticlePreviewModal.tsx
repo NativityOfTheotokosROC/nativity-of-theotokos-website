@@ -9,10 +9,11 @@ import Modal from "../modal/Modal";
 
 const ArticlePreviewModal = function ({ model }) {
 	const { modelView, interact } = model;
-	const { isOpen, draft, previewAuthor } = {
+	const { isOpen, draft, previewAuthor, currentArticle } = {
 		isOpen: modelView?.isOpen,
 		draft: modelView?.draft,
 		previewAuthor: modelView?.previewAuthor,
+		currentArticle: modelView?.currentArticle,
 	};
 	const { title, body } = { title: draft?.title, body: draft?.body };
 	const t = useTranslations("articlePreview");
@@ -43,20 +44,29 @@ const ArticlePreviewModal = function ({ model }) {
 						model={newReadonlyModel({
 							permalink: "#",
 							article: {
-								uri: "#",
+								uri: currentArticle?.uri ?? "#",
 								title: title ?? "",
 								body: body ?? "",
-								author: { name: previewAuthor ?? "" },
-								dateCreated: new Date(),
-								snippet: "",
-								articleImage: {
+								author: {
+									name:
+										currentArticle?.author.name ??
+										previewAuthor ??
+										"",
+								},
+								dateCreated:
+									currentArticle?.dateCreated ?? new Date(),
+								snippet: currentArticle?.snippet ?? "",
+								articleImage: currentArticle?.articleImage ?? {
 									source: "/assets/article-preview-placeholder.svg",
 									about: t("imagePlaceholder"),
 									placeholder:
 										"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAa0lEQVR4AXyKSwoAIQxDUz8g6tKNoPe/jkdRdyLiOAVXAxOatiRPlFL2nwWOrLUwxpzvOwyMMTDn5JaI+N7FwFoLe29orZFSgvf+9mDgDXLOiDFCSokQApxzDIkjKKXQWkPvHbVW9psRER4AAAD//wDRBJ0AAAAGSURBVAMAvkw0q8hhr/QAAAAASUVORK5CYII=",
 								},
 							},
-							options: { sharingDisabled: true },
+							options: {
+								sharingDisabled: true,
+								editingDisabled: true,
+							},
 						})}
 					/>
 				</div>

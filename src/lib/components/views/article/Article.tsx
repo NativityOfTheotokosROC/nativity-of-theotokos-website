@@ -32,11 +32,12 @@ const Article = function ({ model }) {
 	const encodedShareData = getEncodedShareData(shareData);
 	const userInformation = useUserInformation();
 	const canEdit =
-		author.email && userInformation !== "pending"
+		!options?.editingDisabled &&
+		(author.email && userInformation !== "pending"
 			? userInformation?.email === author.email
 			: false ||
 				(userInformation !== "pending" &&
-					userInformation?.roles.includes("admin"));
+					userInformation?.roles.includes("admin")));
 	const path = usePathname();
 
 	return (

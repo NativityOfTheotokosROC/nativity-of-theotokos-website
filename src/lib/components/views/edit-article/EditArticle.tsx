@@ -6,7 +6,7 @@ import Editor from "@/src/lib/components/editor/Editor";
 import Spinner from "@/src/lib/components/spinner/Spinner";
 import { useArticlePreviewModal } from "@/src/lib/model-implementations/article-preview-modal";
 import { useEditor } from "@/src/lib/model-implementations/editor";
-import { EditArticleModel } from "@/src/lib/models/new-article";
+import { EditArticleModel } from "@/src/lib/models/edit-article";
 import { georgia } from "@/src/lib/third-party/fonts";
 import { useCloseWarning } from "@/src/lib/utilities/hooks";
 import { useEditArticleFormSchema } from "@/src/lib/validation/edit-article-form";
@@ -21,7 +21,8 @@ import SuccessGraphic from "@/public/assets/icon-2.svg";
 
 const EditArticle = function ({ model }) {
 	const { modelView, interact } = model;
-	const { ticketId, notification, lastSavedDraft, author } = modelView;
+	const { ticketId, notification, lastSavedDraft, author, currentArticle } =
+		modelView;
 	const t = useTranslations("editArticle");
 	const defaultTitle = "";
 	const defaultBody = `<p>${t("bodyPlaceholder")}</p>`;
@@ -112,6 +113,7 @@ const EditArticle = function ({ model }) {
 												body: form.body,
 											},
 											author: previewAuthor,
+											currentArticle,
 										},
 									}),
 							)}
