@@ -14,14 +14,14 @@ const EditArticleClient = function ({ model }) {
 	const toastNotifier = useNewStatefulInteractiveModel(
 		toastNotifierVIInterface(),
 	);
-	const newArticle = useEditArticle(ticketId, {
+	const article = useEditArticle(ticketId, {
 		author,
 		lastSavedDraft,
 		toastNotifier,
 		currentArticle,
 	});
 
-	return <EditArticle model={newArticle} />;
+	return <EditArticle model={article} />;
 } satisfies ModeledVoidComponent<
 	ReadonlyModel<
 		Pick<

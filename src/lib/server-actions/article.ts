@@ -282,7 +282,7 @@ export async function getDraft(ticketId: string) {
 	} satisfies ArticleDraft;
 }
 
-export async function getLatestUnsubmittedDraft(authorEmail?: string) {
+export async function getLatestUnsubmittedArticle(authorEmail?: string) {
 	const parsedEmail = authorEmail
 		? z.email().parse(authorEmail.trim())
 		: undefined;
@@ -295,27 +295,57 @@ export async function getLatestUnsubmittedDraft(authorEmail?: string) {
 
 	const userEmail = parsedEmail ?? user!.email;
 
-	const draft = await database.articleDraft.findFirst({
+	const ticket = await database.articleTicket.findFirst({
 		orderBy: {
-			lastSaved: "desc",
+			articleDraft: { lastSaved: "desc" },
 		},
 		include: {
-			articleTicket: true,
-			pendingArticleSubmission: true,
+			article: {
+				include: {
+					author: { include: { name: true } },
+					title: true,
+					body: true,
+					snippet: true,
+					image: { include: { placeholder: true, caption: true } },
+				},
+			},
+			articleDraft: true,
 		},
 		where: {
-			articleTicket: {
-				userEmail,
-			},
+			userEmail,
 			pendingArticleSubmission: null,
 		},
 	});
 
-	return draft
+	const articleDraft = ticket?.articleDraft
 		? ({
-				ticketId: draft.articleTicketId,
-				title: draft.title,
-				body: draft.body,
+				ticketId: ticket.id,
+				title: ticket.articleDraft.title,
+				body: ticket.articleDraft.body,
 			} satisfies ArticleDraft)
 		: null;
+	if (!articleDraft) return null;
+
+	const article = ticket?.article
+		? ({
+				title: ticket.article.title.english,
+				author: { name: ticket.article.author.name.english },
+				body: ticket.article.body.english,
+				snippet: ticket.article.snippet.english,
+				dateCreated: ticket.article.dateCreated,
+				uri: ticket.article.link,
+				articleImage: {
+					source: ticket.article.image.link,
+					about: ticket.article.image.caption.english,
+					placeholder:
+						(ticket.article.image.placeholder
+							?.placeholder as ImagePlaceholder) ?? undefined,
+				},
+			} satisfies Article)
+		: null;
+
+	return {
+		draft: articleDraft,
+		currentArticle: article ?? undefined,
+	} satisfies { draft: ArticleDraft; currentArticle?: Article };
 }

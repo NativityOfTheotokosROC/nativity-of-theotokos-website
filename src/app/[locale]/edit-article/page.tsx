@@ -1,7 +1,7 @@
 import { routing } from "@/src/i18n/routing";
 import {
 	createTicket,
-	getLatestUnsubmittedDraft,
+	getLatestUnsubmittedArticle,
 } from "@/src/lib/server-actions/article";
 import { getUser } from "@/src/lib/server-actions/auth";
 import { IS_AUTH_DISABLED } from "@/src/lib/utilities/server-constants";
@@ -28,9 +28,13 @@ export default async function Page() {
 	const authorEmail =
 		user?.email ??
 		(IS_AUTH_DISABLED ? "editorial@nativityoftheotokos.com" : undefined);
-	const latestUnsubmittedDraft = await getLatestUnsubmittedDraft(authorEmail);
-	const ticketId = latestUnsubmittedDraft
-		? latestUnsubmittedDraft.ticketId
+	const latestUnsubmittedArticle =
+		await getLatestUnsubmittedArticle(authorEmail);
+	const draft = latestUnsubmittedArticle?.draft ?? undefined;
+	const currentArticle =
+		latestUnsubmittedArticle?.currentArticle ?? undefined;
+	const ticketId = draft
+		? draft.ticketId
 		: (await createTicket({ userEmail: authorEmail, useUnused: true }))
 				.ticketId;
 
@@ -38,7 +42,8 @@ export default async function Page() {
 		<EditArticleClient
 			model={newReadonlyModel({
 				ticketId,
-				lastSavedDraft: latestUnsubmittedDraft ?? undefined,
+				lastSavedDraft: draft,
+				currentArticle,
 				author: user?.name,
 			})}
 		/>
