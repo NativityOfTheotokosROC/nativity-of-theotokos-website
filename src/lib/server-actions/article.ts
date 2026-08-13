@@ -313,7 +313,7 @@ export async function getLatestUnsubmittedArticle(authorEmail?: string) {
 		},
 		where: {
 			userEmail,
-			pendingArticleSubmission: null,
+			articleDraft: { pendingArticleSubmission: null },
 		},
 	});
 
