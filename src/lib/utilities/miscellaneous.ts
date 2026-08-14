@@ -29,7 +29,7 @@ export function isRemotePath(src: string) {
 }
 
 export const emptyStringAsUndefined = (value: string) => {
-	return value === "" ? undefined : value;
+	return value && value.length > 0 ? value : undefined;
 };
 
 export function getMd5Hash(text: string) {

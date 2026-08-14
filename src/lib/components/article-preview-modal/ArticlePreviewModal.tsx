@@ -4,18 +4,23 @@ import Article from "@/src/lib/components/views/article/Article";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
-import { ArticlePreviewModalModel } from "../../models/article-preview-modal";
+import {
+	ArticlePreviewModalModel,
+	ArticlePreviewModalModelView,
+} from "../../models/article-preview-modal";
 import Modal from "../modal/Modal";
 
 const ArticlePreviewModal = function ({ model }) {
 	const { modelView, interact } = model;
-	const { isOpen, draft, previewAuthor, currentArticle } = {
+	const { isOpen, title, authorName, body, dateCreated, snippet, image } = {
 		isOpen: modelView?.isOpen,
-		draft: modelView?.draft,
-		previewAuthor: modelView?.previewAuthor,
-		currentArticle: modelView?.currentArticle,
-	};
-	const { title, body } = { title: draft?.title, body: draft?.body };
+		title: modelView?.title,
+		authorName: modelView?.authorName,
+		body: modelView?.body,
+		dateCreated: modelView?.dateCreated,
+		snippet: modelView?.snippet,
+		image: modelView?.image,
+	} satisfies Partial<ArticlePreviewModalModelView>;
 	const t = useTranslations("articlePreview");
 
 	return (
@@ -44,19 +49,15 @@ const ArticlePreviewModal = function ({ model }) {
 						model={newReadonlyModel({
 							permalink: "#",
 							article: {
-								uri: currentArticle?.uri ?? "#",
+								uri: "#",
 								title: title ?? "",
 								body: body ?? "",
 								author: {
-									name:
-										currentArticle?.author.name ??
-										previewAuthor ??
-										"",
+									name: authorName ?? "",
 								},
-								dateCreated:
-									currentArticle?.dateCreated ?? new Date(),
-								snippet: currentArticle?.snippet ?? "",
-								articleImage: currentArticle?.articleImage ?? {
+								dateCreated: dateCreated ?? new Date(),
+								snippet: snippet ?? "",
+								articleImage: image ?? {
 									source: "/assets/article-preview-placeholder.svg",
 									about: t("imagePlaceholder"),
 									placeholder:

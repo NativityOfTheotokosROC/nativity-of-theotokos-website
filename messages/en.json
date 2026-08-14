@@ -171,6 +171,7 @@
 		"bodyField": "Body",
 		"modifyDraft": "Modify Draft",
 		"snippetField": "Snippet",
+		"imageField": "Image",
 		"imageCaptionField": "Image Caption",
 		"selectImage": "Select Image",
 		"changeImage": "Change Image",

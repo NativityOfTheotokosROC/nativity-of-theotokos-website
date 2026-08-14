@@ -16,12 +16,22 @@ export function articlePreviewModalVIInterface(
 			const initErrorMessage = "The model is uninitialized";
 			switch (interaction.type) {
 				case "OPEN": {
-					const { author, draft, currentArticle } = interaction.input;
+					const {
+						title,
+						body,
+						authorName,
+						dateCreated,
+						snippet,
+						image,
+					} = interaction.input;
 					return {
 						isOpen: true,
-						draft,
-						previewAuthor: author,
-						currentArticle,
+						title,
+						body,
+						authorName,
+						dateCreated,
+						snippet,
+						image,
 					};
 				}
 				case "CLOSE": {

@@ -106,12 +106,13 @@ const EditArticle = function ({ model }) {
 									await articlePreviewModal.interact({
 										type: "OPEN",
 										input: {
-											draft: {
-												title: form.title,
-												body: form.body,
-											},
-											author: previewAuthor,
-											currentArticle,
+											title: form.title,
+											body: form.body,
+											authorName: previewAuthor,
+											dateCreated:
+												currentArticle?.dateCreated,
+											snippet: currentArticle?.snippet,
+											image: currentArticle?.articleImage,
 										},
 									}),
 							)}

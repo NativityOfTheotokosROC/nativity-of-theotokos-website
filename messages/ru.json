@@ -171,6 +171,7 @@
 		"bodyField": "Текст статьи",
 		"modifyDraft": "Изменить черновик",
 		"snippetField": "Краткое описание",
+		"imageField": "Изображение",
 		"imageCaptionField": "Подпись к изображению",
 		"selectImage": "Выбрать изображение",
 		"changeImage": "Изменить изображение",

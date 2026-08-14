@@ -2,6 +2,7 @@ import z, { string } from "zod";
 import { Translator } from "../types/general";
 import { getEditArticleFormSchema } from "./edit-article-form";
 import { emptyStringAsUndefined } from "../utilities/miscellaneous";
+import { useLocalizedSchema } from "./general";
 
 export function getPublishArticleFormSchema(t?: Translator) {
 	const minSnippet = 100;
@@ -10,6 +11,24 @@ export function getPublishArticleFormSchema(t?: Translator) {
 	const editArticleFormSchema = getEditArticleFormSchema(t);
 	return editArticleFormSchema.extend({
 		authorName: z.string().trim().nonempty(),
+		imageUrl: z.httpUrl({
+			error:
+				t &&
+				t("validation.invalidUrl", {
+					field: t("reviewArticle.imageField"),
+				}),
+		}),
+		imageCaption: z
+			.string()
+			.trim()
+			.max(maxImageCaption, {
+				error:
+					t &&
+					t("validation.maxCharacters", {
+						field: t("reviewArticle.imageCaptionField"),
+						max: maxImageCaption,
+					}),
+			}),
 		snippet: z.preprocess(
 			emptyStringAsUndefined,
 			string()
@@ -32,16 +51,9 @@ export function getPublishArticleFormSchema(t?: Translator) {
 				})
 				.optional(),
 		),
-		imageCaption: z
-			.string()
-			.trim()
-			.max(maxImageCaption, {
-				error:
-					t &&
-					t("validation.maxCharacters", {
-						field: t("reviewArticle.imageCaptionField"),
-						max: maxImageCaption,
-					}),
-			}),
 	});
+}
+
+export function usePublishArticleFormSchema() {
+	return useLocalizedSchema(getPublishArticleFormSchema);
 }
