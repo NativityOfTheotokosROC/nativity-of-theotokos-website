@@ -14,18 +14,15 @@ export type EditArticleNotification =
 	| Notification<"submitting">;
 
 export type ArticleDraft = {
-	ticketId: string;
 	title: string;
 	body: string;
 };
-
-export type LastSavedDraft = Omit<ArticleDraft, "ticketId"> & {};
 
 export type EditArticleModelView = {
 	ticketId: string;
 	notification: EditArticleNotification | null;
 	author?: string;
-	lastSavedDraft?: LastSavedDraft;
+	lastSavedDraft?: ArticleDraft;
 	currentArticle?: Article;
 };
 

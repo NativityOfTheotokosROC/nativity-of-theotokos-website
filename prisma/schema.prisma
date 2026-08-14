@@ -93,7 +93,7 @@ model Article {
 model ArticleAuthor {
   id                Int         @id @default(autoincrement())
   name              Translation @relation(fields: [nameTranslationId], references: [id])
-  email             String?
+  email             String?     @unique
   nameTranslationId Int         @unique
   articles          Article[]
 }
@@ -134,6 +134,8 @@ model ArticleDraft {
 model PendingArticleSubmission {
   articleDraft   ArticleDraft @relation(fields: [articleDraftId], references: [id])
   articleDraftId Int          @id
+  assignedEditor Editor?      @relation(fields: [editorEmail], references: [email])
+  editorEmail    String?
 }
 
 model DailyGalleryImage {
@@ -152,6 +154,12 @@ model Admin {
   role  String
 
   @@unique([email, role])
+}
+
+model Editor {
+  id                        Int                        @id @default(autoincrement())
+  email                     String                     @unique
+  pendingArticleSubmissions PendingArticleSubmission[]
 }
 
 model ImagePlaceholder {

@@ -5,7 +5,7 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import {
-	LastSavedDraft,
+	ArticleDraft,
 	EditArticleModel,
 	EditArticleModelInteraction,
 	EditArticleNotification,
@@ -62,7 +62,7 @@ export function editArticleNotifierVIInterface(
 export function useEditArticle(
 	ticketId: string,
 	options?: Partial<{
-		lastSavedDraft: LastSavedDraft;
+		lastSavedDraft: ArticleDraft;
 		currentArticle: Article;
 		author: string;
 		toastNotifier: NotifierModel<ToastNotification>;
@@ -73,7 +73,7 @@ export function useEditArticle(
 	);
 	const t = useTranslations("editArticle");
 	const [lastSavedDraft, setLastSavedDraft] = useState<
-		LastSavedDraft | undefined
+		ArticleDraft | undefined
 	>(options?.lastSavedDraft);
 	const locale = useLocale();
 	return {
@@ -99,7 +99,7 @@ export function useEditArticle(
 							},
 						},
 					});
-					await saveDraft(draft, locale)
+					await saveDraft(ticketId, draft, locale)
 						.then(() => setLastSavedDraft(draft))
 						.then(() =>
 							Promise.all([
@@ -136,7 +136,7 @@ export function useEditArticle(
 							notification: { type: "submitting" },
 						},
 					});
-					await submitArticle(draft, locale)
+					await submitArticle(ticketId, draft, locale)
 						.then(() => setLastSavedDraft(draft))
 						.then(() =>
 							Promise.all([

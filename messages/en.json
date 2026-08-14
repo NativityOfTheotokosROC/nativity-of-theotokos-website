@@ -164,6 +164,19 @@
 		"continueEdit": "Continue Editing",
 		"submit": "Submit"
 	},
+	"reviewArticle": {
+		"title": "Review Article",
+		"titleField": "Article Title",
+		"authorNameField": "Author Name",
+		"bodyField": "Body",
+		"modifyDraft": "Modify Draft",
+		"snippetField": "Snippet",
+		"imageCaptionField": "Image Caption",
+		"selectImage": "Select Image",
+		"changeImage": "Change Image",
+		"articlePreview": "Article Preview",
+		"publish": "Publish"
+	},
 	"editor": {
 		"initError": "Editor is uninitialized"
 	},
@@ -257,7 +270,9 @@
 	"validation": {
 		"nonEmpty": "{field} cannot be empty",
 		"maxCharacters": "{field} is too long (maximum of {max} characters)",
-		"minCharacters": "{field} is too short (minimum of {min} characters)"
+		"minCharacters": "{field} is too short (minimum of {min} characters)",
+		"invalidUrl": "You did not provide a valid URL for {field}",
+		"invalidEmail": "Invalid email provided for {field}"
 	},
 	"miscellaneous": {
 		"modelInitError": "The model is not initialized",

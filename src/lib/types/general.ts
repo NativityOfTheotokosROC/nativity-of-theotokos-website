@@ -51,6 +51,14 @@ export type Image = {
 	about?: string;
 };
 
+export type ArticleTicket = {
+	ticketId: string;
+	assignee: {
+		email: string;
+		name?: string;
+	};
+};
+
 export type ArticleAuthor = {
 	name: string;
 	email?: string;
@@ -66,6 +74,14 @@ export type Article = {
 	snippet: string;
 	articleImage: Required<Pick<Image, "source" | "about">> &
 		Partial<Pick<Image, "placeholder">>;
+};
+
+export type NewArticle = {
+	title: string;
+	author: ArticleAuthor;
+	body: string;
+	snippet: string;
+	articleImage: Required<Pick<Image, "source" | "about">>;
 };
 
 export type GalleryImage = {

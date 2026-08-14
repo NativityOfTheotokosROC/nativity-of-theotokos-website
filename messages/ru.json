@@ -164,6 +164,19 @@
 		"continueEdit": "Продолжить редактирование",
 		"submit": "Опубликовать"
 	},
+	"reviewArticle": {
+		"title": "Проверка статьи",
+		"titleField": "Название статьи",
+		"authorNameField": "Имя автора",
+		"bodyField": "Текст статьи",
+		"modifyDraft": "Изменить черновик",
+		"snippetField": "Краткое описание",
+		"imageCaptionField": "Подпись к изображению",
+		"selectImage": "Выбрать изображение",
+		"changeImage": "Изменить изображение",
+		"articlePreview": "Предпросмотр статьи",
+		"publish": "Опубликовать"
+	},
 	"editor": {
 		"initError": "Редактор не инициализирован"
 	},
@@ -262,6 +275,8 @@
 	"validation": {
 		"nonEmpty": "Поле {field} не может быть пустым",
 		"maxCharacters": "Поле {field} слишком длинное ({max} максимум символов)",
-		"minCharacters": "Поле «{field}» слишком короткое (минимум {min} символов)"
+		"minCharacters": "Поле «{field}» слишком короткое (минимум {min} символов)",
+		"invalidUrl": "Вы указали недействительный URL для поля «{field}»",
+		"invalidEmail": "Указан недействительный адрес электронной почты для поля «{field}»"
 	}
 }

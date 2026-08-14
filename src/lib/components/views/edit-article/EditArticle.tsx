@@ -59,7 +59,6 @@ const EditArticle = function ({ model }) {
 				type: "SUBMIT",
 				input: {
 					draft: {
-						ticketId,
 						title: form.title,
 						body: form.body,
 					},
@@ -108,7 +107,6 @@ const EditArticle = function ({ model }) {
 										type: "OPEN",
 										input: {
 											draft: {
-												ticketId,
 												title: form.title,
 												body: form.body,
 											},
@@ -170,7 +168,6 @@ const EditArticle = function ({ model }) {
 													type: "SAVE_DRAFT",
 													input: {
 														draft: {
-															ticketId,
 															title,
 															body,
 														},
