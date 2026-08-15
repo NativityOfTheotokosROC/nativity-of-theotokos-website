@@ -15,11 +15,16 @@ import {
 	Language,
 	NewArticle,
 } from "../types/general";
-import { isRemotePath } from "../utilities/miscellaneous";
+import {
+	getMd5Hash,
+	isRemotePath,
+	removeMarkup,
+} from "../utilities/miscellaneous";
 import { BASE_URL, IS_AUTH_DISABLED } from "../utilities/server-constants";
 import { getEditArticleFormSchema } from "../validation/edit-article-form";
 import { getUser, protect } from "./auth";
 import { getUserInformation } from "./user";
+import { getPublishArticleFormSchema } from "../validation/publish-article-form";
 
 const FULL_ARTICLE_INCLUDES = {
 	author: { include: { name: true } },
@@ -446,4 +451,182 @@ export async function getPendingArticleSubmission() {
 	};
 }
 
-export async function publishArticle(article: NewArticle) {}
+export async function publishArticle(
+	ticketId: string,
+	article: NewArticle,
+	locale?: Language,
+) {
+	const user = await getUser();
+	if (!IS_AUTH_DISABLED && !user) forbidden();
+	const draft = await database.articleDraft.findUnique({
+		include: {
+			pendingArticleSubmission: true,
+			articleTicket: true,
+		},
+		where: { articleTicketId: ticketId },
+	});
+	if (!draft) notFound();
+	if (!draft.pendingArticleSubmission) forbidden();
+	if (
+		!IS_AUTH_DISABLED &&
+		draft.pendingArticleSubmission.editorEmail !== user?.email
+	)
+		await protect({ roles: ["admin"] }); //TODO: Implement new roles management idea
+
+	const t = await getTranslations({ locale: locale ?? "en" });
+	const publishArticleFormSchema = getPublishArticleFormSchema(t);
+	const { title, body, authorName, imageUrl, imageCaption, snippet } =
+		publishArticleFormSchema.parse({
+			title: article.title,
+			body: article.body,
+			authorName: article.authorName,
+			snippet: article.snippet ?? "",
+			imageUrl: article.articleImage.source,
+			imageCaption: article.articleImage.about,
+		} satisfies z.infer<typeof publishArticleFormSchema>);
+	const link = z.string().slugify().parse(title);
+	const finalSnippet = snippet ?? removeMarkup(body.split("</p>")[0]);
+
+	const newArticle = await database.article.upsert({
+		create: {
+			link,
+			title: {
+				connectOrCreate: {
+					create: { english: title, englishHash: getMd5Hash(title) },
+					where: {
+						englishHash: getMd5Hash(title),
+					},
+				},
+			},
+			author: {
+				connectOrCreate: {
+					create: {
+						email: draft.articleTicket.userEmail,
+						name: {
+							connectOrCreate: {
+								create: {
+									english: authorName,
+									englishHash: getMd5Hash(authorName),
+								},
+								where: {
+									englishHash: getMd5Hash(authorName),
+								},
+							},
+						},
+					},
+					where: {
+						email: draft.articleTicket.userEmail,
+					},
+				},
+			},
+			body: {
+				connectOrCreate: {
+					create: { english: body, englishHash: getMd5Hash(body) },
+					where: {
+						englishHash: getMd5Hash(body),
+					},
+				},
+			},
+			snippet: {
+				connectOrCreate: {
+					create: {
+						english: finalSnippet,
+						englishHash: getMd5Hash(finalSnippet),
+					},
+					where: {
+						englishHash: getMd5Hash(finalSnippet),
+					},
+				},
+			},
+			image: {
+				connectOrCreate: {
+					create: {
+						link: imageUrl,
+						caption: {
+							connectOrCreate: {
+								create: {
+									english: imageCaption,
+									englishHash: getMd5Hash(imageCaption),
+								},
+								where: {
+									englishHash: getMd5Hash(imageCaption),
+								},
+							},
+						},
+					},
+					where: { link: imageUrl },
+				},
+			},
+		},
+		update: {
+			// TODO: Watch out, these could balloon in future
+			title: {
+				connectOrCreate: {
+					create: { english: title, englishHash: getMd5Hash(title) },
+					where: {
+						englishHash: getMd5Hash(title),
+					},
+				},
+			},
+			author: {
+				update: {
+					name: {
+						connectOrCreate: {
+							create: {
+								english: authorName,
+								englishHash: getMd5Hash(authorName),
+							},
+							where: {
+								englishHash: getMd5Hash(authorName),
+							},
+						},
+					},
+				},
+			},
+			body: {
+				connectOrCreate: {
+					create: { english: body, englishHash: getMd5Hash(body) },
+					where: {
+						englishHash: getMd5Hash(body),
+					},
+				},
+			},
+			snippet: {
+				connectOrCreate: {
+					create: {
+						english: finalSnippet,
+						englishHash: getMd5Hash(finalSnippet),
+					},
+					where: {
+						englishHash: getMd5Hash(finalSnippet),
+					},
+				},
+			},
+			image: {
+				connectOrCreate: {
+					create: {
+						link: imageUrl,
+						caption: {
+							connectOrCreate: {
+								create: {
+									english: imageCaption,
+									englishHash: getMd5Hash(imageCaption),
+								},
+								where: {
+									englishHash: getMd5Hash(imageCaption),
+								},
+							},
+						},
+					},
+					where: { link: imageUrl },
+				},
+			},
+		},
+		where: {
+			link: draft.articleTicket.articleId ?? undefined, // TODO: Change articleId to articleLink in future to avoid confusion
+		},
+	});
+
+	await database.articleTicket.delete({ where: { id: ticketId } });
+	return newArticle;
+}

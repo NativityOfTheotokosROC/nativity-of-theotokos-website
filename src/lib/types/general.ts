@@ -78,7 +78,7 @@ export type Article = {
 
 export type NewArticle = {
 	title: string;
-	author: ArticleAuthor;
+	authorName: string;
 	body: string;
 	snippet: string;
 	articleImage: Required<Pick<Image, "source" | "about">>;

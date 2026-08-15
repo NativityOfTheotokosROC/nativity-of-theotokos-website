@@ -78,7 +78,7 @@ model Article {
   snippet         Translation      @relation("ArticleSnippetTranslation", fields: [snippetTranslationId], references: [id])
   author          ArticleAuthor    @relation(fields: [authorId], references: [id])
   image           ArticleImage     @relation(fields: [imageId], references: [id])
-  dateCreated     DateTime
+  dateCreated     DateTime         @default(now())
   dateUpdated     DateTime?
   featuredArticle FeaturedArticle?
 
