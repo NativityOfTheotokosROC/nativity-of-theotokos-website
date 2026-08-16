@@ -31,6 +31,7 @@ const FileSelectorButton = function ({ model, children }) {
 							input: { file },
 						});
 				}}
+				ref={inputRef}
 			/>
 			<Button
 				model={newReadonlyModel({
