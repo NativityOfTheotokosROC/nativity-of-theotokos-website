@@ -110,7 +110,7 @@ export function useReviewArticle(
 								notification: {
 									type: "submit_failure",
 									message: t("submitFailure", {
-										error: JSON.stringify(error),
+										message: JSON.stringify(error),
 									}),
 								},
 							},

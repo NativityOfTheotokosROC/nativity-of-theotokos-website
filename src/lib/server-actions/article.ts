@@ -486,6 +486,7 @@ export async function publishArticle(
 		} satisfies z.infer<typeof publishArticleFormSchema>);
 	const link = z.string().slugify().parse(title);
 	const finalSnippet = snippet ?? removeMarkup(body.split("</p>")[0]);
+	const isModification = draft.articleTicket.articleId !== null;
 
 	const newArticle = await database.article.upsert({
 		create: {
@@ -558,72 +559,83 @@ export async function publishArticle(
 				},
 			},
 		},
-		update: {
-			// TODO: Watch out, these could balloon in future
-			title: {
-				connectOrCreate: {
-					create: { english: title, englishHash: getMd5Hash(title) },
-					where: {
-						englishHash: getMd5Hash(title),
-					},
-				},
-			},
-			author: {
-				update: {
-					name: {
+		update: isModification
+			? {
+					// TODO: Watch out, these could balloon in future
+					title: {
 						connectOrCreate: {
 							create: {
-								english: authorName,
-								englishHash: getMd5Hash(authorName),
+								english: title,
+								englishHash: getMd5Hash(title),
 							},
 							where: {
-								englishHash: getMd5Hash(authorName),
+								englishHash: getMd5Hash(title),
 							},
 						},
 					},
-				},
-			},
-			body: {
-				connectOrCreate: {
-					create: { english: body, englishHash: getMd5Hash(body) },
-					where: {
-						englishHash: getMd5Hash(body),
-					},
-				},
-			},
-			snippet: {
-				connectOrCreate: {
-					create: {
-						english: finalSnippet,
-						englishHash: getMd5Hash(finalSnippet),
-					},
-					where: {
-						englishHash: getMd5Hash(finalSnippet),
-					},
-				},
-			},
-			image: {
-				connectOrCreate: {
-					create: {
-						link: imageUrl,
-						caption: {
-							connectOrCreate: {
-								create: {
-									english: imageCaption,
-									englishHash: getMd5Hash(imageCaption),
-								},
-								where: {
-									englishHash: getMd5Hash(imageCaption),
+					author: {
+						update: {
+							name: {
+								connectOrCreate: {
+									create: {
+										english: authorName,
+										englishHash: getMd5Hash(authorName),
+									},
+									where: {
+										englishHash: getMd5Hash(authorName),
+									},
 								},
 							},
 						},
 					},
-					where: { link: imageUrl },
-				},
-			},
-		},
+					body: {
+						connectOrCreate: {
+							create: {
+								english: body,
+								englishHash: getMd5Hash(body),
+							},
+							where: {
+								englishHash: getMd5Hash(body),
+							},
+						},
+					},
+					snippet: {
+						connectOrCreate: {
+							create: {
+								english: finalSnippet,
+								englishHash: getMd5Hash(finalSnippet),
+							},
+							where: {
+								englishHash: getMd5Hash(finalSnippet),
+							},
+						},
+					},
+					image: {
+						connectOrCreate: {
+							create: {
+								link: imageUrl,
+								caption: {
+									connectOrCreate: {
+										create: {
+											english: imageCaption,
+											englishHash:
+												getMd5Hash(imageCaption),
+										},
+										where: {
+											englishHash:
+												getMd5Hash(imageCaption),
+										},
+									},
+								},
+							},
+							where: { link: imageUrl },
+						},
+					},
+				}
+			: {},
 		where: {
-			link: draft.articleTicket.articleId ?? undefined, // TODO: Change articleId to articleLink in future to avoid confusion
+			// HACK: Black magic
+			link: draft.articleTicket.articleId ?? "", // TODO: Change articleId to articleLink in future to avoid confusion
 		},
 	});
 
