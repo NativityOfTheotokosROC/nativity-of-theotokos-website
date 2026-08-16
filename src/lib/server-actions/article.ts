@@ -488,79 +488,9 @@ export async function publishArticle(
 	const finalSnippet = snippet ?? removeMarkup(body.split("</p>")[0]);
 	const isModification = draft.articleTicket.articleId !== null;
 
-	const newArticle = await database.article.upsert({
-		create: {
-			link,
-			title: {
-				connectOrCreate: {
-					create: { english: title, englishHash: getMd5Hash(title) },
-					where: {
-						englishHash: getMd5Hash(title),
-					},
-				},
-			},
-			author: {
-				connectOrCreate: {
-					create: {
-						email: draft.articleTicket.userEmail,
-						name: {
-							connectOrCreate: {
-								create: {
-									english: authorName,
-									englishHash: getMd5Hash(authorName),
-								},
-								where: {
-									englishHash: getMd5Hash(authorName),
-								},
-							},
-						},
-					},
-					where: {
-						email: draft.articleTicket.userEmail,
-					},
-				},
-			},
-			body: {
-				connectOrCreate: {
-					create: { english: body, englishHash: getMd5Hash(body) },
-					where: {
-						englishHash: getMd5Hash(body),
-					},
-				},
-			},
-			snippet: {
-				connectOrCreate: {
-					create: {
-						english: finalSnippet,
-						englishHash: getMd5Hash(finalSnippet),
-					},
-					where: {
-						englishHash: getMd5Hash(finalSnippet),
-					},
-				},
-			},
-			image: {
-				connectOrCreate: {
-					create: {
-						link: imageUrl,
-						caption: {
-							connectOrCreate: {
-								create: {
-									english: imageCaption,
-									englishHash: getMd5Hash(imageCaption),
-								},
-								where: {
-									englishHash: getMd5Hash(imageCaption),
-								},
-							},
-						},
-					},
-					where: { link: imageUrl },
-				},
-			},
-		},
-		update: isModification
-			? {
+	const newArticle = draft.articleTicket.articleId
+		? await database.article.update({
+				data: {
 					// TODO: Watch out, these could balloon in future
 					title: {
 						connectOrCreate: {
@@ -631,13 +561,91 @@ export async function publishArticle(
 							where: { link: imageUrl },
 						},
 					},
-				}
-			: {},
-		where: {
-			// HACK: Black magic
-			link: draft.articleTicket.articleId ?? "", // TODO: Change articleId to articleLink in future to avoid confusion
-		},
-	});
+				},
+				where: {
+					link: draft.articleTicket.articleId, // TODO: Change articleId to articleLink in future to avoid confusion
+				},
+			})
+		: await database.article.create({
+				data: {
+					link,
+					title: {
+						connectOrCreate: {
+							create: {
+								english: title,
+								englishHash: getMd5Hash(title),
+							},
+							where: {
+								englishHash: getMd5Hash(title),
+							},
+						},
+					},
+					author: {
+						connectOrCreate: {
+							create: {
+								email: draft.articleTicket.userEmail,
+								name: {
+									connectOrCreate: {
+										create: {
+											english: authorName,
+											englishHash: getMd5Hash(authorName),
+										},
+										where: {
+											englishHash: getMd5Hash(authorName),
+										},
+									},
+								},
+							},
+							where: {
+								email: draft.articleTicket.userEmail,
+							},
+						},
+					},
+					body: {
+						connectOrCreate: {
+							create: {
+								english: body,
+								englishHash: getMd5Hash(body),
+							},
+							where: {
+								englishHash: getMd5Hash(body),
+							},
+						},
+					},
+					snippet: {
+						connectOrCreate: {
+							create: {
+								english: finalSnippet,
+								englishHash: getMd5Hash(finalSnippet),
+							},
+							where: {
+								englishHash: getMd5Hash(finalSnippet),
+							},
+						},
+					},
+					image: {
+						connectOrCreate: {
+							create: {
+								link: imageUrl,
+								caption: {
+									connectOrCreate: {
+										create: {
+											english: imageCaption,
+											englishHash:
+												getMd5Hash(imageCaption),
+										},
+										where: {
+											englishHash:
+												getMd5Hash(imageCaption),
+										},
+									},
+								},
+							},
+							where: { link: imageUrl },
+						},
+					},
+				},
+			});
 
 	await database.articleTicket.delete({ where: { id: ticketId } });
 	return newArticle;
