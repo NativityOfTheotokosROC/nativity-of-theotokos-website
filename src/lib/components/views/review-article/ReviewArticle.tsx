@@ -197,10 +197,13 @@ const ReviewArticle = function ({ model }) {
 									src={
 										imageProcessor.modelView
 											.processedImageBlobUrl ??
+										currentArticle?.articleImage.source ??
 										DEFAULT_ARTICLE_PREVIEW_IMAGE
 									}
 									placeholder="blur"
 									blurDataURL={
+										currentArticle?.articleImage
+											.placeholder ??
 										DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER
 									}
 									alt={t("imageAlt")}

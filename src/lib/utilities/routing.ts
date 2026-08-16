@@ -8,7 +8,12 @@ export function getProtectedRoutes() {
 		ENVIRONMENT !== "production" &&
 		PREPRODUCTION_PROTECTION?.toLowerCase() === "disabled"
 			? ([] as const)
-			: (["/quotes/new", "/admin", "/edit-article"] as const);
+			: ([
+					"/admin",
+					"/quotes/new",
+					"/edit-article", //TODO: Cater for /news/[slug]/edit too
+					"/review-article",
+				] as const);
 	// This should do for now lol
 	type TypeVerify =
 		PageProps<`/[locale]${(typeof protectedRoutes)[number]}`> extends never
