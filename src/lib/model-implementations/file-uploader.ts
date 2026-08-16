@@ -4,7 +4,6 @@ import {
 } from "@mvc-react/stateful";
 import {
 	FileUploaderModel,
-	FileUploaderModelInteraction,
 	FileUploaderModelView,
 	FileUploaderNotification,
 } from "../models/file-uploader";
@@ -17,7 +16,6 @@ import { ToastNotification } from "./notifier";
 import { useState } from "react";
 import { uploadFile } from "../client-only/file-uploader";
 import { useTranslations } from "next-intl";
-import { getPresignedUrl } from "../server-actions/file-transfer";
 
 export function fileUploaderNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
@@ -53,11 +51,11 @@ export function fileUploaderNotifierVIInterface(
 }
 
 export function useFileUploader(
-	toastNotifier?: NotifierModel<ToastNotification>,
+	options?: Partial<{ toastNotifier: NotifierModel<ToastNotification> }>,
 ) {
 	const t = useTranslations("fileUploader");
 	const notifier = useNewStatefulInteractiveModel(
-		fileUploaderNotifierVIInterface(toastNotifier),
+		fileUploaderNotifierVIInterface(options?.toastNotifier),
 	);
 	const [uploadedFileUrl, setUploadedFileUrl] =
 		useState<FileUploaderModelView["uploadedFileUrl"]>(null);
@@ -82,15 +80,18 @@ export function useFileUploader(
 					try {
 						const url = await uploadFile(file, presignedUrl);
 						setUploadedFileUrl(url);
-						await notifier.interact({
-							type: "NOTIFY",
-							input: {
-								notification: {
-									type: "upload_success",
-									message: t("uploadFileSuccess"),
+						await Promise.all([
+							notifier.interact({
+								type: "NOTIFY",
+								input: {
+									notification: {
+										type: "upload_success",
+										message: t("uploadFileSuccess"),
+									},
 								},
-							},
-						});
+							}),
+							interaction.input.successCallback?.(url),
+						]);
 					} catch (error) {
 						await notifier.interact({
 							type: "NOTIFY",

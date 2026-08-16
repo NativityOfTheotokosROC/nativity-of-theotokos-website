@@ -12,7 +12,7 @@ export type ImageProcessorModelView = {
 
 export type ImageProcessorModelInteraction = InputModelInteraction<
 	"PROCESS",
-	{ file: File }
+	{ file: File; successCallback?: (processedImage: File) => Promise<void> }
 >;
 
 export type ImageProcessorModel = InteractiveModel<

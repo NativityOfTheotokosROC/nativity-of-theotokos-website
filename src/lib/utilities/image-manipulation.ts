@@ -12,9 +12,9 @@ export async function compressImage(
 
 	const compressedImage = await imageCompression(file, {
 		maxSizeMB: options?.maxSizeMB,
-		useWebWorker: options?.useWebWorker ?? true,
 		maxWidthOrHeight: options?.maxWidthOrHeight,
 		fileType: "image/webp",
+		useWebWorker: options?.useWebWorker ?? true,
 	});
 
 	return compressedImage;

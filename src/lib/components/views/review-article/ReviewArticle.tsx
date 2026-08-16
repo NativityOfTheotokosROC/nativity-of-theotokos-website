@@ -20,7 +20,12 @@ import {
 	DEFAULT_ARTICLE_PREVIEW_IMAGE,
 	DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER,
 } from "@/src/lib/utilities/constants";
-import { compressImage } from "@/src/lib/utilities/image-manipulation";
+import { useImageProcessor } from "@/src/lib/model-implementations/image-processor";
+import { useToastNotifier } from "@/src/lib/model-implementations/notifier";
+import { useFileUploader } from "@/src/lib/model-implementations/file-uploader";
+import { getPresignedUrl } from "@/src/lib/server-actions/file-transfer";
+import { generateUniqueName } from "@/src/lib/utilities/miscellaneous";
+import FileSelectorButton from "../../file-selector-button/FileSelectorButton";
 
 const ReviewArticle = function ({ model }) {
 	const { modelView, interact } = model;
@@ -66,16 +71,35 @@ const ReviewArticle = function ({ model }) {
 			setValue("body", content);
 		},
 	});
+	const toastNotifier = useToastNotifier();
+	const imageProcessor = useImageProcessor({ toastNotifier });
+	const fileUploader = useFileUploader({ toastNotifier });
 	const imageSelector = useFileSelectorButton({
 		type: "image",
 		async selectCallback(file) {
-			const compressedImage = await compressImage(file, {
-				maxSizeMB: 1,
-				maxWidthOrHeight: 1920,
+			await imageProcessor.interact({
+				type: "PROCESS",
+				input: {
+					file,
+					async successCallback(processedImage) {
+						const presignedUrl = await getPresignedUrl(
+							generateUniqueName(),
+							"news",
+							processedImage.type,
+						);
+						await fileUploader.interact({
+							type: "UPLOAD",
+							input: {
+								file: processedImage,
+								presignedUrl,
+								async successCallback(imageUrl) {
+									setValue("imageUrl", imageUrl);
+								},
+							},
+						});
+					},
+				},
 			});
-			console.log(
-				`Image compressed to ${compressedImage.size / 1024} KB`,
-			);
 		},
 	});
 	register("imageUrl");
@@ -153,8 +177,8 @@ const ReviewArticle = function ({ model }) {
 							<Image
 								className="h-full w-full grow object-cover object-center"
 								src={
-									imageSelector.modelView.file?.name ??
-									DEFAULT_ARTICLE_PREVIEW_IMAGE
+									imageProcessor.modelView.processedImage
+										?.name ?? DEFAULT_ARTICLE_PREVIEW_IMAGE
 								}
 								placeholder="blur"
 								blurDataURL={
@@ -163,6 +187,11 @@ const ReviewArticle = function ({ model }) {
 								alt={t("imageAlt")}
 							/>
 						</div>
+						<FileSelectorButton model={imageSelector}>
+							{imageSelector.modelView.file
+								? t("changeImage")
+								: t("selectImage")}
+						</FileSelectorButton>
 						<input
 							{...register("imageCaption")}
 							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title ? "border-red-800" : "border-gray-400"}`}

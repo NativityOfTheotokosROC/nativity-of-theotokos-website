@@ -149,12 +149,17 @@ export function useImageProcessor(
 							maxWidthOrHeight: maxWidthHeight,
 						});
 						setProcessedImage(processedImage);
-						await notifier.interact({
-							type: "NOTIFY",
-							input: {
-								notification: { type: "processing_success" },
-							},
-						});
+						await Promise.all([
+							notifier.interact({
+								type: "NOTIFY",
+								input: {
+									notification: {
+										type: "processing_success",
+									},
+								},
+							}),
+							interaction.input.successCallback?.(processedImage),
+						]);
 					} catch (error) {
 						await notifier.interact({
 							type: "NOTIFY",

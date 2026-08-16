@@ -1,4 +1,7 @@
-import { ViewInteractionInterface } from "@mvc-react/stateful";
+import {
+	useNewStatefulInteractiveModel,
+	ViewInteractionInterface,
+} from "@mvc-react/stateful";
 import {
 	NotifierModelInteraction,
 	NotifierModelView,
@@ -59,4 +62,8 @@ export function toastNotifierVIInterface<N extends ToastNotification>() {
 		NotifierModelView<N>,
 		NotifierModelInteraction<N>
 	>;
+}
+
+export function useToastNotifier() {
+	return useNewStatefulInteractiveModel(toastNotifierVIInterface());
 }

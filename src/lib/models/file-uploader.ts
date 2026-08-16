@@ -14,7 +14,11 @@ export type FileUploaderModelView = {
 
 export type FileUploaderModelInteraction = InputModelInteraction<
 	"UPLOAD",
-	{ file: File; presignedUrl: string }
+	{
+		file: File;
+		presignedUrl: string;
+		successCallback?: (imageUrl: string) => Promise<void>;
+	}
 >;
 
 export type FileUploaderModel = InteractiveModel<
