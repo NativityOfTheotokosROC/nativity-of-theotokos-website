@@ -25,6 +25,8 @@ RUN --mount=type=secret,id=base_url,env=BASE_URL \
     --mount=type=secret,id=mailerlite_api_key,env=MAILERLITE_API_KEY \
     --mount=type=secret,id=microsoft_client_id,env=MICROSOFT_CLIENT_ID \
     --mount=type=secret,id=microsoft_client_secret,env=MICROSOFT_CLIENT_SECRET \
+    --mount=type=secret,id=aws_access_key_id,env=AWS_ACCESS_KEY_ID \
+    --mount=type=secret,id=aws_secret_access_key,env=AWS_SECRET_ACCESS_KEY \
     --mount=type=secret,id=s3_bucket,env=S3_BUCKET \
     --mount=type=secret,id=s3_bucket_region,env=S3_BUCKET_REGION \
     --mount=type=secret,id=yandex_client_id,env=YANDEX_CLIENT_ID \

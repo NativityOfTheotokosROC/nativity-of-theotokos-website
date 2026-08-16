@@ -16,8 +16,9 @@ function editorVIInterface(
 	}>,
 ) {
 	return {
-		produceModelView: async function (
-			interaction: EditorModelInteraction,
+		async produceModelView(
+			interaction,
+			currentModelView,
 		): Promise<EditorModelView> {
 			switch (interaction.type) {
 				case "UPDATE_EDITOR": {
@@ -25,6 +26,14 @@ function editorVIInterface(
 					return {
 						content: interaction.input.content,
 						className: options?.className,
+					};
+				}
+				case "TOGGLE_READONLY": {
+					if (!currentModelView)
+						throw new Error("The model is not initialized");
+					return {
+						...currentModelView,
+						isReadonly: interaction.input.value,
 					};
 				}
 			}

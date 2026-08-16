@@ -22,8 +22,11 @@ export default async function Page({
 }: PageProps<"/[locale]/news/[article]">) {
 	const { article } = await params;
 	if (!article) notFound();
-	const { ticketId, title, body, currentArticle } =
-		await makeArticleEdit(article);
+	const {
+		ticketId,
+		draft: { title, body },
+		currentArticle,
+	} = await makeArticleEdit(article);
 	return (
 		<EditArticleClient
 			model={newReadonlyModel({

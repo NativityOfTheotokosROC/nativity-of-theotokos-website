@@ -164,6 +164,42 @@
 		"continueEdit": "Продолжить редактирование",
 		"submit": "Опубликовать"
 	},
+	"reviewArticle": {
+		"title": "Проверка статьи",
+		"titleField": "Название статьи",
+		"authorNameField": "Имя автора",
+		"bodyField": "Текст статьи",
+		"modifyDraft": "Изменить черновик",
+		"snippetField": "Краткое описание",
+		"imageField": "Изображение",
+		"imageAlt": "Предпросмотр изображения статьи",
+		"imageCaptionField": "Подпись к изображению",
+		"selectImage": "Выбрать изображение",
+		"changeImage": "Изменить изображение",
+		"articlePreview": "Предпросмотр статьи",
+		"publish": "Опубликовать",
+		"featureTheArticle": "Сделать статью главной",
+		"uploadingImage": "Загрузка изображения статьи",
+		"uploadImageSuccess": "Изображение статьи успешно загружено",
+		"uploadImageFailure": "Не удалось загрузить изображение статьи. Ошибка: {message}",
+		"submitSuccess": "Статья успешно опубликована",
+		"submitFailure": "Не удалось опубликовать статью. Ошибка: {message}",
+		"mainMessage": "Статья опубликована",
+		"detailedMessage": "Статья успешно обработана и опубликована."
+	},
+	"fileUploader": {
+		"uploadingFile": "Загрузка файла",
+		"uploadFileSuccess": "Файл успешно загружен",
+		"uploadFileFailure": "Не удалось загрузить файл. Ошибка: {message}"
+	},
+	"imageProcessor": {
+		"processingImage": "Обработка изображения",
+		"processingImageFailure": "Не удалось обработать изображение. Ошибка: {message}",
+		"imageSizeTooSmall": "Изображение слишком маленькое ({size} КБ). Размер изображения должен быть не менее {min} КБ",
+		"imageSizeTooBig": "Изображение слишком большое ({size} МБ). Размер изображения должен быть не более {max} МБ",
+		"notImage": "Предоставленный файл не является изображением",
+		"formatNotSupported": "Формат изображения не поддерживается"
+	},
 	"editor": {
 		"initError": "Редактор не инициализирован"
 	},
@@ -257,11 +293,14 @@
 	"miscellaneous": {
 		"modelInitError": "Модель не инициализирована",
 		"futureContent": "Контент будет добавлен в ближайшее время!",
-		"closeButton": "Закрыть"
+		"closeButton": "Закрыть",
+		"optional": "необязательно"
 	},
 	"validation": {
 		"nonEmpty": "Поле {field} не может быть пустым",
 		"maxCharacters": "Поле {field} слишком длинное ({max} максимум символов)",
-		"minCharacters": "Поле «{field}» слишком короткое (минимум {min} символов)"
+		"minCharacters": "Поле «{field}» слишком короткое (минимум {min} символов)",
+		"invalidUrl": "Вы указали недействительный URL для поля «{field}»",
+		"invalidEmail": "Указан недействительный адрес электронной почты для поля «{field}»"
 	}
 }

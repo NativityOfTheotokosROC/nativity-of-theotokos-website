@@ -1,4 +1,7 @@
-import { ViewInteractionInterface } from "@mvc-react/stateful";
+import {
+	useNewStatefulInteractiveModel,
+	ViewInteractionInterface,
+} from "@mvc-react/stateful";
 import {
 	NotifierModelInteraction,
 	NotifierModelView,
@@ -6,7 +9,8 @@ import {
 import { Notification } from "../types/general";
 import { createToast } from "../components/miscellaneous/utility";
 
-export type ToastNotification = Notification<"success" | "failure"> & {
+// TODO: Formalize this stuff or something, can't keeping appending the message component
+export type ToastNotification = Notification<"info" | "success" | "failure"> & {
 	message: string;
 };
 
@@ -58,4 +62,8 @@ export function toastNotifierVIInterface<N extends ToastNotification>() {
 		NotifierModelView<N>,
 		NotifierModelInteraction<N>
 	>;
+}
+
+export function useToastNotifier() {
+	return useNewStatefulInteractiveModel(toastNotifierVIInterface());
 }

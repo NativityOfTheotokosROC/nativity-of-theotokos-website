@@ -10,33 +10,36 @@ import {
 	NewQuoteNotification,
 } from "../models/new-quote";
 import {
+	NotifierModel,
 	NotifierModelInteraction,
 	NotifierModelView,
 } from "../models/notifier";
 import { addNewQuote } from "../server-actions/quote";
 import { AutoCompleteInfo } from "../utilities/quote-form";
-import { toastNotifierVIInterface } from "./notifier";
+import { ToastNotification } from "./notifier";
 
-const TOAST_NOTIFIER_VI_INTERFACE = toastNotifierVIInterface();
-
-function newQuoteNotifierVIInterface() {
+function newQuoteNotifierVIInterface(
+	toastNotifier?: NotifierModel<ToastNotification>,
+) {
 	return {
-		produceModelView: async function (
-			interaction: NotifierModelInteraction<NewQuoteNotification>,
-		): Promise<NotifierModelView<NewQuoteNotification>> {
+		async produceModelView(interaction) {
 			switch (interaction.type) {
 				case "NOTIFY": {
 					const notification = interaction.input.notification;
-					switch (notification.type) {
-						case "pending": {
-							return { notification };
-						}
-						default: {
-							return TOAST_NOTIFIER_VI_INTERFACE.produceModelView(
-								{ type: "NOTIFY", input: { notification } },
-							);
-						}
-					}
+					if (notification.type === "pending")
+						return { notification };
+					const type = notification.type;
+					await toastNotifier?.interact({
+						type: "NOTIFY",
+						input: {
+							notification: {
+								type:
+									type === "success" ? "success" : "failure",
+								message: notification.message,
+							},
+						},
+					});
+					return { notification };
 				}
 			}
 		},
@@ -46,16 +49,21 @@ function newQuoteNotifierVIInterface() {
 	>;
 }
 
-export function useNewQuote(autoCompleteInfo?: AutoCompleteInfo) {
+export function useNewQuote(
+	options?: Partial<{
+		autoCompleteInfo: AutoCompleteInfo;
+		toastNotifier: NotifierModel<ToastNotification>;
+	}>,
+) {
 	const notifier = useNewStatefulInteractiveModel(
-		newQuoteNotifierVIInterface(),
+		newQuoteNotifierVIInterface(options?.toastNotifier),
 	);
 	const t = useTranslations("newQuote");
 
 	return {
 		modelView: {
 			newQuoteNotification: notifier.modelView?.notification ?? null,
-			autoCompleteInfo,
+			autoCompleteInfo: options?.autoCompleteInfo,
 		},
 		interact: async function (interaction: NewQuoteModelInteraction) {
 			switch (interaction.type) {

@@ -59,7 +59,6 @@ const EditArticle = function ({ model }) {
 				type: "SUBMIT",
 				input: {
 					draft: {
-						ticketId,
 						title: form.title,
 						body: form.body,
 					},
@@ -82,7 +81,12 @@ const EditArticle = function ({ model }) {
 		}),
 	);
 	register("body");
-	useCloseWarning(useCallback(() => hasDraftChanged, [hasDraftChanged]));
+	useCloseWarning(
+		useCallback(
+			() => !(notification?.type === "submit_success") && hasDraftChanged,
+			[notification?.type, hasDraftChanged],
+		),
+	);
 	useEffect(() => {
 		if (notification?.type === "submit_success") {
 			window.scrollTo(0, 0);
@@ -107,13 +111,13 @@ const EditArticle = function ({ model }) {
 									await articlePreviewModal.interact({
 										type: "OPEN",
 										input: {
-											draft: {
-												ticketId,
-												title: form.title,
-												body: form.body,
-											},
-											author: previewAuthor,
-											currentArticle,
+											title: form.title,
+											body: form.body,
+											authorName: previewAuthor,
+											dateCreated:
+												currentArticle?.dateCreated,
+											snippet: currentArticle?.snippet,
+											image: currentArticle?.articleImage,
 										},
 									}),
 							)}
@@ -170,7 +174,6 @@ const EditArticle = function ({ model }) {
 													type: "SAVE_DRAFT",
 													input: {
 														draft: {
-															ticketId,
 															title,
 															body,
 														},

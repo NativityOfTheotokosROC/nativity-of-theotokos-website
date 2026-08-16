@@ -2,18 +2,37 @@
 
 import { ImagePlaceholder } from "@grod56/placeholder";
 import { getTranslations } from "next-intl/server";
-import { cacheTag } from "next/cache";
+import { cacheTag, revalidateTag } from "next/cache";
 import { forbidden, notFound } from "next/navigation";
 import z from "zod";
-import { ArticleDraft, LastSavedDraft } from "../models/edit-article";
+import { ArticleDraft } from "../models/edit-article";
 import { getPlaceholder } from "../server-only/placeholder";
 import database from "../third-party/prisma";
-import { Article, ArticleAuthor, Language } from "../types/general";
-import { isRemotePath } from "../utilities/miscellaneous";
+import {
+	Article,
+	ArticleAuthor,
+	ArticleTicket,
+	Language,
+	NewArticle,
+} from "../types/general";
+import {
+	getMd5Hash,
+	isRemotePath,
+	removeMarkup,
+} from "../utilities/miscellaneous";
 import { BASE_URL, IS_AUTH_DISABLED } from "../utilities/server-constants";
 import { getEditArticleFormSchema } from "../validation/edit-article-form";
 import { getUser, protect } from "./auth";
 import { getUserInformation } from "./user";
+import { getPublishArticleFormSchema } from "../validation/publish-article-form";
+
+const FULL_ARTICLE_INCLUDES = {
+	author: { include: { name: true } },
+	title: true,
+	body: true,
+	snippet: true,
+	image: { include: { placeholder: true, caption: true } },
+};
 
 export async function getArticle(
 	articleId: string,
@@ -92,8 +111,11 @@ export async function getArticle(
 	}
 }
 
-export async function saveDraft(draft: ArticleDraft, locale?: Language) {
-	const { ticketId } = draft;
+export async function saveDraft(
+	ticketId: string,
+	draft: ArticleDraft,
+	locale?: Language,
+) {
 	const user = await getUser();
 	if (!user && !IS_AUTH_DISABLED) forbidden();
 	const ticket = await database.articleTicket.findUnique({
@@ -129,15 +151,18 @@ export async function saveDraft(draft: ArticleDraft, locale?: Language) {
 	return savedDraft;
 }
 
-export async function submitArticle(article: ArticleDraft, locale?: Language) {
-	const { ticketId } = article;
+export async function submitArticle(
+	ticketId: string,
+	article: ArticleDraft,
+	locale?: Language,
+) {
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const articleFormSchema = getEditArticleFormSchema(t);
 	const { title, body } = articleFormSchema.parse({
 		title: article.title,
 		body: article.body,
 	});
-	const { id } = await saveDraft({ ticketId, title, body }, locale);
+	const { id } = await saveDraft(ticketId, { title, body }, locale);
 	await database.pendingArticleSubmission.upsert({
 		create: {
 			articleDraftId: id,
@@ -217,13 +242,7 @@ export async function makeArticleEdit(articleId: string) {
 	const user = await getUserInformation();
 	if (!user && !IS_AUTH_DISABLED) forbidden();
 	const article = await database.article.findUnique({
-		include: {
-			author: { include: { name: true } },
-			title: true,
-			body: true,
-			snippet: true,
-			image: { include: { placeholder: true, caption: true } },
-		},
+		include: FULL_ARTICLE_INCLUDES,
 		where: { link: articleId },
 	});
 	if (!article) notFound();
@@ -246,8 +265,10 @@ export async function makeArticleEdit(articleId: string) {
 	});
 	return {
 		ticketId: ticket.id,
-		title: ticket.articleDraft?.title ?? article.title.english,
-		body: ticket.articleDraft?.body ?? article.body.english,
+		draft: {
+			title: ticket.articleDraft?.title ?? article.title.english,
+			body: ticket.articleDraft?.body ?? article.body.english,
+		},
 		currentArticle: {
 			title: article.title.english,
 			author: { name: article.author.name.english },
@@ -263,7 +284,11 @@ export async function makeArticleEdit(articleId: string) {
 						?.placeholder as ImagePlaceholder) ?? undefined,
 			},
 		},
-	} satisfies ArticleDraft & { currentArticle: Article };
+	} satisfies {
+		ticketId: string;
+		draft: ArticleDraft;
+		currentArticle: Article;
+	};
 }
 
 export async function getDraft(ticketId: string) {
@@ -276,7 +301,6 @@ export async function getDraft(ticketId: string) {
 	if (!ticket) notFound();
 	if (!IS_AUTH_DISABLED && user?.email !== ticket.userEmail) forbidden();
 	return {
-		ticketId,
 		title: ticket.articleDraft?.title ?? "",
 		body: ticket.articleDraft?.body ?? "",
 	} satisfies ArticleDraft;
@@ -301,13 +325,7 @@ export async function getLatestUnsubmittedArticle(authorEmail?: string) {
 		},
 		include: {
 			article: {
-				include: {
-					author: { include: { name: true } },
-					title: true,
-					body: true,
-					snippet: true,
-					image: { include: { placeholder: true, caption: true } },
-				},
+				include: FULL_ARTICLE_INCLUDES,
 			},
 			articleDraft: true,
 		},
@@ -323,7 +341,7 @@ export async function getLatestUnsubmittedArticle(authorEmail?: string) {
 		? ({
 				title: ticket.articleDraft.title,
 				body: ticket.articleDraft.body,
-			} satisfies LastSavedDraft)
+			} satisfies ArticleDraft)
 		: undefined;
 
 	const article = ticket.article
@@ -342,15 +360,300 @@ export async function getLatestUnsubmittedArticle(authorEmail?: string) {
 							?.placeholder as ImagePlaceholder) ?? undefined,
 				},
 			} satisfies Article)
-		: null;
+		: undefined;
 
 	return {
 		ticketId: ticket.id,
 		draft: articleDraft,
-		currentArticle: article ?? undefined,
+		currentArticle: article,
 	} satisfies {
 		ticketId: string;
-		draft?: LastSavedDraft;
+		draft?: ArticleDraft;
 		currentArticle?: Article;
 	};
+}
+
+export async function getPendingArticleSubmission() {
+	const user = await getUser();
+	if (!IS_AUTH_DISABLED && !user) forbidden();
+	if (!IS_AUTH_DISABLED) await protect({ roles: ["admin"] });
+	const ticketData = await database.articleTicket.findFirst({
+		include: {
+			article: { include: FULL_ARTICLE_INCLUDES },
+			articleDraft: { include: { pendingArticleSubmission: true } },
+		},
+		where: {
+			articleDraft: {
+				pendingArticleSubmission: IS_AUTH_DISABLED
+					? { isNot: null }
+					: {
+							editorEmail: user?.email,
+						},
+			},
+		},
+	});
+	if (!ticketData) return null;
+	if (
+		!ticketData.articleDraft!.pendingArticleSubmission!.editorEmail ===
+			null &&
+		!IS_AUTH_DISABLED
+	)
+		await database.pendingArticleSubmission.update({
+			data: { assignedEditor: { connect: { email: user!.email } } },
+			where: { articleDraftId: ticketData.articleDraft!.id },
+		});
+	const assigneeName =
+		(
+			await database.articleAuthor.findUnique({
+				include: { name: true },
+				where: { email: ticketData.userEmail },
+			})
+		)?.name.english ??
+		(ticketData.userEmail === user?.email ? user.name : undefined) ??
+		(
+			await database.user.findUnique({
+				where: { email: ticketData.userEmail },
+			})
+		)?.name;
+	const ticket = {
+		ticketId: ticketData.id,
+		assignee: { email: ticketData.userEmail, name: assigneeName },
+	} satisfies ArticleTicket;
+	const draft = {
+		title: ticketData.articleDraft!.title,
+		body: ticketData.articleDraft!.body,
+	} satisfies ArticleDraft;
+	const currentArticle = ticketData.article
+		? ({
+				title: ticketData.article.title.english,
+				author: { name: ticketData.article.author.name.english },
+				body: ticketData.article.body.english,
+				snippet: ticketData.article.snippet.english,
+				dateCreated: ticketData.article.dateCreated,
+				uri: ticketData.article.link,
+				articleImage: {
+					source: ticketData.article.image.link,
+					about: ticketData.article.image.caption.english,
+					placeholder:
+						(ticketData.article.image.placeholder
+							?.placeholder as ImagePlaceholder) ?? undefined,
+				},
+			} satisfies Article)
+		: undefined;
+	return {
+		ticket,
+		draft,
+		currentArticle,
+	} satisfies {
+		ticket: ArticleTicket;
+		draft: ArticleDraft;
+		currentArticle?: Article;
+	};
+}
+
+export async function publishArticle(
+	ticketId: string,
+	article: NewArticle,
+	locale?: Language,
+) {
+	const user = await getUser();
+	if (!IS_AUTH_DISABLED && !user) forbidden();
+	const draft = await database.articleDraft.findUnique({
+		include: {
+			pendingArticleSubmission: true,
+			articleTicket: true,
+		},
+		where: { articleTicketId: ticketId },
+	});
+	if (!draft) notFound();
+	if (!draft.pendingArticleSubmission) forbidden();
+	if (
+		!IS_AUTH_DISABLED &&
+		draft.pendingArticleSubmission.editorEmail !== user?.email
+	)
+		await protect({ roles: ["admin"] }); //TODO: Implement new roles management idea
+
+	const t = await getTranslations({ locale: locale ?? "en" });
+	const publishArticleFormSchema = getPublishArticleFormSchema(t);
+	const { title, body, authorName, imageUrl, imageCaption, snippet } =
+		publishArticleFormSchema.parse({
+			title: article.title,
+			body: article.body,
+			authorName: article.authorName,
+			snippet: article.snippet ?? "",
+			imageUrl: article.articleImage.source,
+			imageCaption: article.articleImage.about,
+		} satisfies z.infer<typeof publishArticleFormSchema>);
+	const link = z.string().slugify().parse(title);
+	const finalSnippet = snippet ?? removeMarkup(body.split("</p>")[0]);
+
+	const newArticle = await database.$transaction(async transaction => {
+		const result = draft.articleTicket.articleId
+			? await transaction.article.update({
+					data: {
+						// TODO: Watch out, these could balloon in future
+						title: {
+							connectOrCreate: {
+								create: {
+									english: title,
+									englishHash: getMd5Hash(title),
+								},
+								where: {
+									englishHash: getMd5Hash(title),
+								},
+							},
+						},
+						author: {
+							update: {
+								name: {
+									connectOrCreate: {
+										create: {
+											english: authorName,
+											englishHash: getMd5Hash(authorName),
+										},
+										where: {
+											englishHash: getMd5Hash(authorName),
+										},
+									},
+								},
+							},
+						},
+						body: {
+							connectOrCreate: {
+								create: {
+									english: body,
+									englishHash: getMd5Hash(body),
+								},
+								where: {
+									englishHash: getMd5Hash(body),
+								},
+							},
+						},
+						snippet: {
+							connectOrCreate: {
+								create: {
+									english: finalSnippet,
+									englishHash: getMd5Hash(finalSnippet),
+								},
+								where: {
+									englishHash: getMd5Hash(finalSnippet),
+								},
+							},
+						},
+						image: {
+							connectOrCreate: {
+								create: {
+									link: imageUrl,
+									caption: {
+										connectOrCreate: {
+											create: {
+												english: imageCaption,
+												englishHash:
+													getMd5Hash(imageCaption),
+											},
+											where: {
+												englishHash:
+													getMd5Hash(imageCaption),
+											},
+										},
+									},
+								},
+								where: { link: imageUrl },
+							},
+						},
+						dateUpdated: new Date(),
+					},
+					where: {
+						link: draft.articleTicket.articleId, // TODO: Change articleId to articleLink in future to avoid confusion
+					},
+				})
+			: await transaction.article.create({
+					data: {
+						link,
+						title: {
+							connectOrCreate: {
+								create: {
+									english: title,
+									englishHash: getMd5Hash(title),
+								},
+								where: {
+									englishHash: getMd5Hash(title),
+								},
+							},
+						},
+						author: {
+							connectOrCreate: {
+								create: {
+									email: draft.articleTicket.userEmail,
+									name: {
+										connectOrCreate: {
+											create: {
+												english: authorName,
+												englishHash:
+													getMd5Hash(authorName),
+											},
+											where: {
+												englishHash:
+													getMd5Hash(authorName),
+											},
+										},
+									},
+								},
+								where: {
+									email: draft.articleTicket.userEmail,
+								},
+							},
+						},
+						body: {
+							connectOrCreate: {
+								create: {
+									english: body,
+									englishHash: getMd5Hash(body),
+								},
+								where: {
+									englishHash: getMd5Hash(body),
+								},
+							},
+						},
+						snippet: {
+							connectOrCreate: {
+								create: {
+									english: finalSnippet,
+									englishHash: getMd5Hash(finalSnippet),
+								},
+								where: {
+									englishHash: getMd5Hash(finalSnippet),
+								},
+							},
+						},
+						image: {
+							connectOrCreate: {
+								create: {
+									link: imageUrl,
+									caption: {
+										connectOrCreate: {
+											create: {
+												english: imageCaption,
+												englishHash:
+													getMd5Hash(imageCaption),
+											},
+											where: {
+												englishHash:
+													getMd5Hash(imageCaption),
+											},
+										},
+									},
+								},
+								where: { link: imageUrl },
+							},
+						},
+					},
+				});
+		await transaction.articleTicket.delete({ where: { id: ticketId } });
+		return result;
+	});
+	revalidateTag("latest-articles", "max");
+	if (draft.articleTicket.articleId)
+		revalidateTag(`article_${draft.articleTicket.articleId}`, "max");
+	return newArticle;
 }

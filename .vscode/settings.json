@@ -10,5 +10,5 @@
 			"{?\\s?[\\w].*:\\s*?[\"'`]([^\"'`]*).*?,?\\s?}?"
 		]
 	],
-	"js/ts.experimental.useTsgo": true
+	"js/ts.experimental.useTsgo": false
 }

@@ -164,6 +164,43 @@
 		"continueEdit": "Continue Editing",
 		"submit": "Submit"
 	},
+	"reviewArticle": {
+		"title": "Review Article",
+		"titleField": "Article Title",
+		"authorNameField": "Author Name",
+		"bodyField": "Body",
+		"modifyDraft": "Modify Draft",
+		"snippetField": "Snippet",
+		"imageField": "Image",
+		"imageCaptionField": "Image Caption",
+		"imageAlt": "Article image preview",
+		"selectImage": "Select Image",
+		"changeImage": "Change Image",
+		"articlePreview": "Article Preview",
+		"publish": "Publish",
+		"featureTheArticle": "Feature the article",
+		"uploadingImage": "Uploading article image",
+		"uploadImageSuccess": "Article image successfully uploaded",
+		"uploadImageFailure": "Could not upload the article image. Error: {message}",
+		"submitSuccess": "Article successfully published",
+		"submitFailure": "Could not publish the article. Error: {message}",
+		"mainMessage": "Article Published",
+		"detailedMessage": "The article has been successfully processed and published.",
+		"nextButton": "Continue"
+	},
+	"fileUploader": {
+		"uploadingFile": "Uploading file",
+		"uploadFileSuccess": "File successfully uploaded",
+		"uploadFileFailure": "Could not upload the file. Error: {message}"
+	},
+	"imageProcessor": {
+		"processingImage": "Processing article image",
+		"processingImageFailure": "Could not process the image. Error: {message}",
+		"imageSizeTooSmall": "Image is too small ({size} KB). The image should be at least {min} KB",
+		"imageSizeTooBig": "Image is too big ({size} MB). The image should be at most {max} MB",
+		"notImage": "The file provided is not an image",
+		"formatNotSupported": "The format of the image is not supported"
+	},
 	"editor": {
 		"initError": "Editor is uninitialized"
 	},
@@ -257,11 +294,14 @@
 	"validation": {
 		"nonEmpty": "{field} cannot be empty",
 		"maxCharacters": "{field} is too long (maximum of {max} characters)",
-		"minCharacters": "{field} is too short (minimum of {min} characters)"
+		"minCharacters": "{field} is too short (minimum of {min} characters)",
+		"invalidUrl": "You did not provide a valid URL for {field}",
+		"invalidEmail": "Invalid email provided for {field}"
 	},
 	"miscellaneous": {
 		"modelInitError": "The model is not initialized",
 		"futureContent": "Content to be added soon!",
-		"closeButton": "Close"
+		"closeButton": "Close",
+		"optional": "optional"
 	}
 }
