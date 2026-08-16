@@ -12,7 +12,7 @@ export type ImageProcessorModelView = {
 
 export type ImageProcessorModelInteraction = InputModelInteraction<
 	"PROCESS",
-	{ image: File }
+	{ file: File }
 >;
 
 export type ImageProcessorModel = InteractiveModel<

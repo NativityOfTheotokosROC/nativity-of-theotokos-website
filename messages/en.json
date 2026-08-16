@@ -195,7 +195,11 @@
 	},
 	"imageProcessor": {
 		"processingImage": "Processing article image",
-		"processingImageFailure": "Could not process the image. Error: {message}"
+		"processingImageFailure": "Could not process the image. Error: {message}",
+		"imageSizeTooSmall": "Image is too small ({size} KB). The image should be at least {min} KB",
+		"imageSizeTooBig": "Image is too big ({size} MB). The image should be at most {max} MB",
+		"notImage": "The file provided is not an image",
+		"formatNotSupported": "The format of the image is not supported"
 	},
 	"editor": {
 		"initError": "Editor is uninitialized"
