@@ -185,6 +185,7 @@ const ReviewArticle = function ({ model }) {
 									DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER
 								}
 								alt={t("imageAlt")}
+								unoptimized={true}
 							/>
 						</div>
 						<FileSelectorButton model={imageSelector}>
