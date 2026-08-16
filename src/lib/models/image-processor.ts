@@ -7,6 +7,7 @@ export type ImageProcessorNotification =
 
 export type ImageProcessorModelView = {
 	processedImage: File | null;
+	processedImageBlobUrl: string | null;
 	notification: ImageProcessorNotification | null;
 };
 

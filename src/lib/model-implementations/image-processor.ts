@@ -64,6 +64,8 @@ export function useImageProcessor(
 	const t = useTranslations("imageProcessor");
 	const [processedImage, setProcessedImage] =
 		useState<ImageProcessorModelView["processedImage"]>(null);
+	const [processedImageBlobUrl, setProcessedImageBlobUrl] =
+		useState<ImageProcessorModelView["processedImageBlobUrl"]>(null);
 	const notifier = useNewStatefulInteractiveModel(
 		imageProcessorNotifierVIInterface(options?.toastNotifier),
 	);
@@ -72,6 +74,7 @@ export function useImageProcessor(
 		modelView: {
 			notification: notifier.modelView?.notification ?? null,
 			processedImage,
+			processedImageBlobUrl,
 		},
 		async interact(interaction) {
 			switch (interaction.type) {
@@ -149,6 +152,9 @@ export function useImageProcessor(
 							maxWidthOrHeight: maxWidthHeight,
 						});
 						setProcessedImage(processedImage);
+						setProcessedImageBlobUrl(
+							URL.createObjectURL(processedImage),
+						);
 						await Promise.all([
 							notifier.interact({
 								type: "NOTIFY",
