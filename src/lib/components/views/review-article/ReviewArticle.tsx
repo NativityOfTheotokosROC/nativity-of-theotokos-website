@@ -27,7 +27,7 @@ import { getPresignedUrl } from "@/src/lib/server-actions/file-transfer";
 import { generateUniqueName } from "@/src/lib/utilities/miscellaneous";
 import FileSelectorButton from "../../file-selector-button/FileSelectorButton";
 import { useCloseWarning } from "@/src/lib/utilities/hooks";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { georgia } from "@/src/lib/third-party/fonts";
 import GoHomeButton from "../not-found/GoHomeButton";
 import SuccessGraphic from "@/public/assets/ornament_32.svg";
@@ -109,7 +109,12 @@ const ReviewArticle = function ({ model }) {
 		},
 	});
 	register("imageUrl");
-	useCloseWarning();
+	useCloseWarning(
+		useCallback(
+			() => !(notification?.type === "submit_success"),
+			[notification?.type],
+		),
+	);
 	useEffect(() => {
 		if (notification?.type === "submit_success") {
 			window.scrollTo(0, 0);

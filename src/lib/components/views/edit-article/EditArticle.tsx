@@ -81,7 +81,12 @@ const EditArticle = function ({ model }) {
 		}),
 	);
 	register("body");
-	useCloseWarning(useCallback(() => hasDraftChanged, [hasDraftChanged]));
+	useCloseWarning(
+		useCallback(
+			() => !(notification?.type === "submit_success") && hasDraftChanged,
+			[notification?.type, hasDraftChanged],
+		),
+	);
 	useEffect(() => {
 		if (notification?.type === "submit_success") {
 			window.scrollTo(0, 0);

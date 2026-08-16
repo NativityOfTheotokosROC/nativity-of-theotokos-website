@@ -2,7 +2,7 @@
 
 import { ImagePlaceholder } from "@grod56/placeholder";
 import { getTranslations } from "next-intl/server";
-import { cacheTag } from "next/cache";
+import { cacheTag, revalidateTag } from "next/cache";
 import { forbidden, notFound } from "next/navigation";
 import z from "zod";
 import { ArticleDraft } from "../models/edit-article";
@@ -486,104 +486,25 @@ export async function publishArticle(
 		} satisfies z.infer<typeof publishArticleFormSchema>);
 	const link = z.string().slugify().parse(title);
 	const finalSnippet = snippet ?? removeMarkup(body.split("</p>")[0]);
-	const isModification = draft.articleTicket.articleId !== null;
 
-	const newArticle = draft.articleTicket.articleId
-		? await database.article.update({
-				data: {
-					// TODO: Watch out, these could balloon in future
-					title: {
-						connectOrCreate: {
-							create: {
-								english: title,
-								englishHash: getMd5Hash(title),
-							},
-							where: {
-								englishHash: getMd5Hash(title),
-							},
-						},
-					},
-					author: {
-						update: {
-							name: {
-								connectOrCreate: {
-									create: {
-										english: authorName,
-										englishHash: getMd5Hash(authorName),
-									},
-									where: {
-										englishHash: getMd5Hash(authorName),
-									},
+	const newArticle = await database.$transaction(async transaction => {
+		const result = draft.articleTicket.articleId
+			? await transaction.article.update({
+					data: {
+						// TODO: Watch out, these could balloon in future
+						title: {
+							connectOrCreate: {
+								create: {
+									english: title,
+									englishHash: getMd5Hash(title),
+								},
+								where: {
+									englishHash: getMd5Hash(title),
 								},
 							},
 						},
-					},
-					body: {
-						connectOrCreate: {
-							create: {
-								english: body,
-								englishHash: getMd5Hash(body),
-							},
-							where: {
-								englishHash: getMd5Hash(body),
-							},
-						},
-					},
-					snippet: {
-						connectOrCreate: {
-							create: {
-								english: finalSnippet,
-								englishHash: getMd5Hash(finalSnippet),
-							},
-							where: {
-								englishHash: getMd5Hash(finalSnippet),
-							},
-						},
-					},
-					image: {
-						connectOrCreate: {
-							create: {
-								link: imageUrl,
-								caption: {
-									connectOrCreate: {
-										create: {
-											english: imageCaption,
-											englishHash:
-												getMd5Hash(imageCaption),
-										},
-										where: {
-											englishHash:
-												getMd5Hash(imageCaption),
-										},
-									},
-								},
-							},
-							where: { link: imageUrl },
-						},
-					},
-				},
-				where: {
-					link: draft.articleTicket.articleId, // TODO: Change articleId to articleLink in future to avoid confusion
-				},
-			})
-		: await database.article.create({
-				data: {
-					link,
-					title: {
-						connectOrCreate: {
-							create: {
-								english: title,
-								englishHash: getMd5Hash(title),
-							},
-							where: {
-								englishHash: getMd5Hash(title),
-							},
-						},
-					},
-					author: {
-						connectOrCreate: {
-							create: {
-								email: draft.articleTicket.userEmail,
+						author: {
+							update: {
 								name: {
 									connectOrCreate: {
 										create: {
@@ -596,57 +517,140 @@ export async function publishArticle(
 									},
 								},
 							},
-							where: {
-								email: draft.articleTicket.userEmail,
+						},
+						body: {
+							connectOrCreate: {
+								create: {
+									english: body,
+									englishHash: getMd5Hash(body),
+								},
+								where: {
+									englishHash: getMd5Hash(body),
+								},
 							},
 						},
-					},
-					body: {
-						connectOrCreate: {
-							create: {
-								english: body,
-								englishHash: getMd5Hash(body),
-							},
-							where: {
-								englishHash: getMd5Hash(body),
-							},
-						},
-					},
-					snippet: {
-						connectOrCreate: {
-							create: {
-								english: finalSnippet,
-								englishHash: getMd5Hash(finalSnippet),
-							},
-							where: {
-								englishHash: getMd5Hash(finalSnippet),
+						snippet: {
+							connectOrCreate: {
+								create: {
+									english: finalSnippet,
+									englishHash: getMd5Hash(finalSnippet),
+								},
+								where: {
+									englishHash: getMd5Hash(finalSnippet),
+								},
 							},
 						},
-					},
-					image: {
-						connectOrCreate: {
-							create: {
-								link: imageUrl,
-								caption: {
-									connectOrCreate: {
-										create: {
-											english: imageCaption,
-											englishHash:
-												getMd5Hash(imageCaption),
-										},
-										where: {
-											englishHash:
-												getMd5Hash(imageCaption),
+						image: {
+							connectOrCreate: {
+								create: {
+									link: imageUrl,
+									caption: {
+										connectOrCreate: {
+											create: {
+												english: imageCaption,
+												englishHash:
+													getMd5Hash(imageCaption),
+											},
+											where: {
+												englishHash:
+													getMd5Hash(imageCaption),
+											},
 										},
 									},
 								},
+								where: { link: imageUrl },
 							},
-							where: { link: imageUrl },
 						},
 					},
-				},
-			});
-
-	await database.articleTicket.delete({ where: { id: ticketId } });
+					where: {
+						link: draft.articleTicket.articleId, // TODO: Change articleId to articleLink in future to avoid confusion
+					},
+				})
+			: await transaction.article.create({
+					data: {
+						link,
+						title: {
+							connectOrCreate: {
+								create: {
+									english: title,
+									englishHash: getMd5Hash(title),
+								},
+								where: {
+									englishHash: getMd5Hash(title),
+								},
+							},
+						},
+						author: {
+							connectOrCreate: {
+								create: {
+									email: draft.articleTicket.userEmail,
+									name: {
+										connectOrCreate: {
+											create: {
+												english: authorName,
+												englishHash:
+													getMd5Hash(authorName),
+											},
+											where: {
+												englishHash:
+													getMd5Hash(authorName),
+											},
+										},
+									},
+								},
+								where: {
+									email: draft.articleTicket.userEmail,
+								},
+							},
+						},
+						body: {
+							connectOrCreate: {
+								create: {
+									english: body,
+									englishHash: getMd5Hash(body),
+								},
+								where: {
+									englishHash: getMd5Hash(body),
+								},
+							},
+						},
+						snippet: {
+							connectOrCreate: {
+								create: {
+									english: finalSnippet,
+									englishHash: getMd5Hash(finalSnippet),
+								},
+								where: {
+									englishHash: getMd5Hash(finalSnippet),
+								},
+							},
+						},
+						image: {
+							connectOrCreate: {
+								create: {
+									link: imageUrl,
+									caption: {
+										connectOrCreate: {
+											create: {
+												english: imageCaption,
+												englishHash:
+													getMd5Hash(imageCaption),
+											},
+											where: {
+												englishHash:
+													getMd5Hash(imageCaption),
+											},
+										},
+									},
+								},
+								where: { link: imageUrl },
+							},
+						},
+					},
+				});
+		await transaction.articleTicket.delete({ where: { id: ticketId } });
+		return result;
+	});
+	revalidateTag("latest-articles", "max");
 	return newArticle;
 }

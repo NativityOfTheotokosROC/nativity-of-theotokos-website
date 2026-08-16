@@ -126,13 +126,13 @@ model ArticleDraft {
   title                    String
   body                     String
   lastSaved                DateTime                  @default(now())
-  articleTicket            ArticleTicket             @relation(fields: [articleTicketId], references: [id])
+  articleTicket            ArticleTicket             @relation(fields: [articleTicketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   articleTicketId          String                    @unique
   pendingArticleSubmission PendingArticleSubmission?
 }
 
 model PendingArticleSubmission {
-  articleDraft   ArticleDraft @relation(fields: [articleDraftId], references: [id])
+  articleDraft   ArticleDraft @relation(fields: [articleDraftId], references: [id], onDelete: Cascade)
   articleDraftId Int          @id
   assignedEditor Editor?      @relation(fields: [editorEmail], references: [email])
   editorEmail    String?
