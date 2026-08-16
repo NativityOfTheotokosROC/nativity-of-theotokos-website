@@ -652,5 +652,7 @@ export async function publishArticle(
 		return result;
 	});
 	revalidateTag("latest-articles", "max");
+	if (draft.articleTicket.articleId)
+		revalidateTag(`article_${draft.articleTicket.articleId}`, "max");
 	return newArticle;
 }

@@ -37,7 +37,7 @@ const Article = function ({ model }) {
 			? userInformation?.email === author.email
 			: false ||
 				(userInformation !== "pending" &&
-					userInformation?.roles.includes("admin")));
+					userInformation?.roles.includes("admin"))); //TODO: Tidy up
 	const path = usePathname();
 
 	return (

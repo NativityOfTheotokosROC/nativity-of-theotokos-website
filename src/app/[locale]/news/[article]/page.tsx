@@ -11,6 +11,9 @@ import {
 	getArticleMetadata,
 } from "@/src/lib/server-only/article";
 import { Article as JSONLdArticle, WithContext } from "schema-dts";
+import { cacheTag } from "next/cache";
+
+const CACHE_TAG = "article";
 
 export async function generateStaticParams() {
 	const [articlesEn, articlesRu] = await Promise.all([
@@ -48,6 +51,7 @@ export async function generateMetadata({
 	const computedLocale = hasLocale(routing.locales, locale) ? locale : "en";
 	const { title, author, snippet, uri, articleImage } =
 		await getArticleMetadata(article, computedLocale);
+	cacheTag(CACHE_TAG, `article_${uri}`);
 
 	return {
 		title,

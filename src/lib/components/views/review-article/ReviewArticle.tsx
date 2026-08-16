@@ -217,7 +217,7 @@ const ReviewArticle = function ({ model }) {
 							</FileSelectorButton>
 							<input
 								{...register("imageCaption")}
-								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title ? "border-red-800" : "border-gray-400"}`}
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.imageCaption ? "border-red-800" : "border-gray-400"}`}
 								placeholder={t("imageCaptionField")}
 								autoComplete="off"
 							/>
@@ -228,7 +228,7 @@ const ReviewArticle = function ({ model }) {
 							)}
 							<input
 								{...register("snippet")}
-								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.body ? "border-red-800" : "border-gray-400"}`}
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.snippet ? "border-red-800" : "border-gray-400"}`}
 								placeholder={`${t("snippetField")} (${tMisc("optional")})`}
 								autoComplete="off"
 							/>

@@ -37,7 +37,7 @@ export function getPublishArticleFormSchema(t?: Translator) {
 					error:
 						t &&
 						t("validation.maxCharacters", {
-							field: t("reviewArticle.bodyField"),
+							field: t("reviewArticle.snippetField"),
 							max: maxSnippet,
 						}),
 				})
@@ -45,7 +45,7 @@ export function getPublishArticleFormSchema(t?: Translator) {
 					error:
 						t &&
 						t("validation.minCharacters", {
-							field: t("reviewArticle.bodyField"),
+							field: t("reviewArticle.snippetField"),
 							min: minSnippet,
 						}),
 				})
