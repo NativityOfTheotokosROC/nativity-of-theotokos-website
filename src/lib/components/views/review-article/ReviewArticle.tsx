@@ -31,6 +31,7 @@ import { useCallback, useEffect } from "react";
 import { georgia } from "@/src/lib/third-party/fonts";
 import GoHomeButton from "../not-found/GoHomeButton";
 import SuccessGraphic from "@/public/assets/ornament_32.svg";
+import { Check, Cross, X } from "lucide-react";
 
 const ReviewArticle = function ({ model }) {
 	const { modelView, interact } = model;
@@ -108,6 +109,25 @@ const ReviewArticle = function ({ model }) {
 			});
 		},
 	});
+	const imageStatus =
+		imageProcessor.modelView.notification === null &&
+		fileUploader.modelView.notification === null
+			? null
+			: imageProcessor.modelView.notification?.type === "processing" ||
+				  fileUploader.modelView.notification?.type === "uploading"
+				? "processing"
+				: imageProcessor.modelView.notification?.type ===
+							"processing_failed" ||
+					  fileUploader.modelView.notification?.type ===
+							"upload_fail"
+					? "error"
+					: "success";
+	const imageStatusMessage =
+		imageProcessor.modelView.notification?.type === "processing" ||
+		imageProcessor.modelView.notification?.type === "processing_failed"
+			? imageProcessor.modelView.notification.message
+			: (fileUploader.modelView.notification?.message ?? null);
+
 	register("imageUrl");
 	useCloseWarning(
 		useCallback(
@@ -191,7 +211,7 @@ const ReviewArticle = function ({ model }) {
 									{errors.body.message}
 								</span>
 							)}
-							<div className="flex h-[15em] w-full items-stretch justify-stretch overflow-clip rounded-lg md:h-fit md:max-h-[25em]">
+							<div className="flex h-[15em] w-full items-stretch justify-stretch overflow-clip rounded-lg md:h-fit md:max-h-[25em] md:max-w-[33em]">
 								<Image
 									className="h-full w-full grow object-cover object-center"
 									src={
@@ -210,11 +230,39 @@ const ReviewArticle = function ({ model }) {
 									unoptimized={true}
 								/>
 							</div>
-							<FileSelectorButton model={imageSelector}>
-								{imageSelector.modelView.file
-									? t("changeImage")
-									: t("selectImage")}
-							</FileSelectorButton>
+							<div className="flex items-center gap-6">
+								<FileSelectorButton model={imageSelector}>
+									{imageSelector.modelView.file ||
+									currentArticle?.articleImage
+										? t("changeImage")
+										: t("selectImage")}
+								</FileSelectorButton>
+								{imageStatus && (
+									<div className="flex items-center gap-3">
+										{imageStatus === "processing" && (
+											<Spinner
+												model={newReadonlyModel({
+													size: 20,
+													color: "black",
+												})}
+											/>
+										)}
+										{imageStatus === "success" && (
+											<Check className="size-6 stroke-black" />
+										)}
+										{imageStatus === "error" && (
+											<X className="size-6 stroke-red-800 text-red-800" />
+										)}
+										{imageStatusMessage && (
+											<span
+												className={`text-sm ${imageStatus === "error" ? "text-red-800" : "text-black"}`}
+											>
+												{imageStatusMessage}
+											</span>
+										)}
+									</div>
+								)}
+							</div>
 							<input
 								{...register("imageCaption")}
 								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.imageCaption ? "border-red-800" : "border-gray-400"}`}

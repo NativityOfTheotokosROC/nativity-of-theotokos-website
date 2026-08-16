@@ -16,7 +16,7 @@ function fileSelectorButtonVIInterface(
 		async produceModelView(interaction, currentModelView) {
 			switch (interaction.type) {
 				case "SELECT_FILE": {
-					await selectCallback?.(interaction.input.file);
+					selectCallback?.(interaction.input.file);
 					return currentModelView
 						? {
 								...currentModelView,

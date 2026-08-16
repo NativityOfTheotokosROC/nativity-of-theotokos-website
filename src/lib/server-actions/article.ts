@@ -561,6 +561,7 @@ export async function publishArticle(
 								where: { link: imageUrl },
 							},
 						},
+						dateUpdated: new Date(),
 					},
 					where: {
 						link: draft.articleTicket.articleId, // TODO: Change articleId to articleLink in future to avoid confusion

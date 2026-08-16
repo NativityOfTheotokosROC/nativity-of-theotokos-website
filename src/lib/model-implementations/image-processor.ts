@@ -121,7 +121,7 @@ export function useImageProcessor(
 								notification: {
 									type: "processing_failed",
 									message: t("imageSizeTooSmall", {
-										size: fileSizeKB,
+										size: fileSizeKB.toPrecision(3),
 										min: minInputSizeKB,
 									}),
 								},
@@ -136,7 +136,7 @@ export function useImageProcessor(
 								notification: {
 									type: "processing_failed",
 									message: t("imageSizeTooBig", {
-										size: fileSizeMB,
+										size: fileSizeMB.toPrecision(3),
 										max: maxInputSizeMB,
 									}),
 								},
