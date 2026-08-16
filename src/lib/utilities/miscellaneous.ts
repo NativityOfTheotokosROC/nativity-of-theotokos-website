@@ -1,6 +1,14 @@
 import { createHash } from "crypto";
 import { ShareData } from "../types/general";
 
+import {
+	names,
+	colors,
+	adjectives,
+	animals,
+	uniqueNamesGenerator,
+} from "unique-names-generator";
+
 export function julianDate(date: Date) {
 	return new Date(new Date().setDate(date.getDate() - 13));
 }
@@ -8,6 +16,15 @@ export function julianDate(date: Date) {
 export function removeMarkup(markedUpText: string): string {
 	const regex: RegExp = /(<([^>]+)>)/gi;
 	return markedUpText.replace(regex, "");
+}
+
+export function generateUniqueName() {
+	return uniqueNamesGenerator({
+		dictionaries: [names, colors, adjectives, animals],
+		separator: "",
+		style: "capital",
+		length: 4,
+	});
 }
 
 export function formatPhoneNumber(phoneNumber: `+${number}`) {

@@ -6,7 +6,8 @@ import {
 import { Notification } from "../types/general";
 import { createToast } from "../components/miscellaneous/utility";
 
-export type ToastNotification = Notification<"success" | "failure"> & {
+// TODO: Formalize this stuff or something, can't keeping appending the message component
+export type ToastNotification = Notification<"info" | "success" | "failure"> & {
 	message: string;
 };
 

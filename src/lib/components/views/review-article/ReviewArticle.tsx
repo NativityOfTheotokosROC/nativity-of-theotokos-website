@@ -9,15 +9,30 @@ import { useArticlePreviewModal } from "@/src/lib/model-implementations/article-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePublishArticleFormSchema } from "@/src/lib/validation/publish-article-form";
+import Spinner from "../../spinner/Spinner";
+import Editor from "../../editor/Editor";
+import Button from "../../button/Button";
+import { useEditor } from "@/src/lib/model-implementations/editor";
+import ArticlePreviewModal from "../../article-preview-modal/ArticlePreviewModal";
+import { useFileSelectorButton } from "@/src/lib/model-implementations/file-selector-button";
+import Image from "next/image";
+import {
+	DEFAULT_ARTICLE_PREVIEW_IMAGE,
+	DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER,
+} from "@/src/lib/utilities/constants";
+import { compressImage } from "@/src/lib/utilities/image-manipulation";
 
 const ReviewArticle = function ({ model }) {
 	const { modelView, interact } = model;
-	const { ticket, draft, currentArticle } = modelView;
+	const { ticket, draft, currentArticle, notification } = modelView;
 	const t = useTranslations("reviewArticle");
+	const tMisc = useTranslations("miscellaneous");
 	const publishArticleFormSchema = usePublishArticleFormSchema();
 	const {
+		register,
 		handleSubmit,
-		formState: { errors },
+		setValue,
+		formState: { errors, isSubmitting },
 	} = useForm({
 		resolver: zodResolver(publishArticleFormSchema),
 		defaultValues: {
@@ -46,35 +61,164 @@ const ReviewArticle = function ({ model }) {
 			});
 		}),
 	);
+	const editor = useEditor(draft.body, {
+		async updateCallback(content) {
+			setValue("body", content);
+		},
+	});
+	const imageSelector = useFileSelectorButton({
+		type: "image",
+		async selectCallback(file) {
+			const compressedImage = await compressImage(file, {
+				maxSizeMB: 1,
+				maxWidthOrHeight: 1920,
+			});
+			console.log(
+				`Image compressed to ${compressedImage.size / 1024} KB`,
+			);
+		},
+	});
+	register("imageUrl");
 
 	return (
-		<PageView model={newReadonlyModel({ title: t("title") })}>
-			<form
-				onSubmit={handleSubmit(
-					async form =>
-						await articlePreviewModal.interact({
-							type: "OPEN",
-							input: {
-								title: form.title,
-								body: form.body,
-								authorName: form.authorName,
-								dateCreated:
-									currentArticle?.dateCreated ?? new Date(),
-								snippet: form.snippet,
-								image: {
-									source: form.imageUrl,
-									about: form.imageCaption,
-									placeholder:
-										currentArticle?.articleImage
-											.placeholder,
+		<>
+			<ArticlePreviewModal model={articlePreviewModal} />
+			<PageView model={newReadonlyModel({ title: t("title") })}>
+				<form
+					onSubmit={handleSubmit(
+						async form =>
+							await articlePreviewModal.interact({
+								type: "OPEN",
+								input: {
+									title: form.title,
+									body: form.body,
+									authorName: form.authorName,
+									dateCreated:
+										currentArticle?.dateCreated ??
+										new Date(),
+									snippet: form.snippet,
+									image: {
+										source: form.imageUrl,
+										about: form.imageCaption,
+										placeholder:
+											currentArticle?.articleImage
+												.placeholder,
+									},
 								},
-							},
-						}),
-				)}
-			>
-				<></>
-			</form>
-		</PageView>
+							}),
+					)}
+				>
+					<div className="flex flex-col gap-3">
+						<input
+							{...register("title")}
+							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title ? "border-red-800" : "border-gray-400"}`}
+							placeholder={t("titleField")}
+							autoComplete="off"
+							autoCapitalize="words"
+						/>
+						{errors.title && (
+							<span className="text-sm text-red-800">
+								{errors.title.message}
+							</span>
+						)}
+						<input
+							{...register("authorName")}
+							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorName ? "border-red-800" : "border-gray-400"}`}
+							placeholder={t("authorNameField")}
+							autoComplete="name"
+							autoCapitalize="words"
+						/>
+						{errors.authorName && (
+							<span className="text-sm text-red-800">
+								{errors.authorName.message}
+							</span>
+						)}
+						<Editor
+							model={{
+								...editor,
+								modelView: {
+									...editor.modelView,
+									className: errors.body
+										? "border-red-800"
+										: "border-gray-400",
+								},
+							}}
+						/>
+						{errors.body && (
+							<span className="text-sm text-red-800">
+								{errors.body.message}
+							</span>
+						)}
+						<div className="flex h-[15em] w-full items-stretch justify-stretch overflow-clip rounded-lg md:h-fit md:max-h-[25em]">
+							<Image
+								className="h-full w-full grow object-cover object-center"
+								src={
+									imageSelector.modelView.file?.name ??
+									DEFAULT_ARTICLE_PREVIEW_IMAGE
+								}
+								placeholder="blur"
+								blurDataURL={
+									DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER
+								}
+								alt={t("imageAlt")}
+							/>
+						</div>
+						<input
+							{...register("imageCaption")}
+							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title ? "border-red-800" : "border-gray-400"}`}
+							placeholder={t("imageCaptionField")}
+							autoComplete="off"
+						/>
+						{errors.imageCaption && (
+							<span className="text-sm text-red-800">
+								{errors.imageCaption.message}
+							</span>
+						)}
+						<input
+							{...register("snippet")}
+							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.body ? "border-red-800" : "border-gray-400"}`}
+							placeholder={`${t("snippetField")} (${tMisc("optional")})`}
+							autoComplete="off"
+						/>
+						{errors.snippet && (
+							<span className="text-sm text-red-800">
+								{errors.snippet.message}
+							</span>
+						)}
+						{errors.form && (
+							<span className="text-sm text-red-800">
+								{errors.form.message}
+							</span>
+						)}
+						<hr className="mt-6 w-full opacity-50" />
+						<div className="mt-1 flex w-full justify-start gap-3">
+							<Button
+								model={newReadonlyModel({
+									type: "submit",
+									variant: "standard",
+									disabled:
+										isSubmitting ||
+										notification?.type === "submitting",
+									className:
+										"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
+								})}
+							>
+								{notification?.type === "submitting" ? (
+									<Spinner
+										model={newReadonlyModel({
+											color: "white",
+											size: 20,
+										})}
+									/>
+								) : (
+									t("publish")
+								)}
+							</Button>
+						</div>
+					</div>
+				</form>
+			</PageView>
+		</>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ReviewArticleModel>>;
 

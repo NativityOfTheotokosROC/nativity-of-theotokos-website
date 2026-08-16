@@ -9,6 +9,10 @@ import {
 	ArticlePreviewModalModelView,
 } from "../../models/article-preview-modal";
 import Modal from "../modal/Modal";
+import {
+	DEFAULT_ARTICLE_PREVIEW_IMAGE,
+	DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER,
+} from "../../utilities/constants";
 
 const ArticlePreviewModal = function ({ model }) {
 	const { modelView, interact } = model;
@@ -58,10 +62,10 @@ const ArticlePreviewModal = function ({ model }) {
 								dateCreated: dateCreated ?? new Date(),
 								snippet: snippet ?? "",
 								articleImage: image ?? {
-									source: "/assets/article-preview-placeholder.svg",
+									source: DEFAULT_ARTICLE_PREVIEW_IMAGE,
 									about: t("imagePlaceholder"),
 									placeholder:
-										"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAa0lEQVR4AXyKSwoAIQxDUz8g6tKNoPe/jkdRdyLiOAVXAxOatiRPlFL2nwWOrLUwxpzvOwyMMTDn5JaI+N7FwFoLe29orZFSgvf+9mDgDXLOiDFCSokQApxzDIkjKKXQWkPvHbVW9psRER4AAAD//wDRBJ0AAAAGSURBVAMAvkw0q8hhr/QAAAAASUVORK5CYII=",
+										DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER,
 								},
 							},
 							options: {

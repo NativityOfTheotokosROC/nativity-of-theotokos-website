@@ -172,11 +172,29 @@
 		"modifyDraft": "Изменить черновик",
 		"snippetField": "Краткое описание",
 		"imageField": "Изображение",
+		"imageAlt": "Предпросмотр изображения статьи",
 		"imageCaptionField": "Подпись к изображению",
 		"selectImage": "Выбрать изображение",
 		"changeImage": "Изменить изображение",
 		"articlePreview": "Предпросмотр статьи",
-		"publish": "Опубликовать"
+		"publish": "Опубликовать",
+		"featureTheArticle": "Сделать статью главной",
+		"uploadingImage": "Загрузка изображения статьи",
+		"uploadImageSuccess": "Изображение статьи успешно загружено",
+		"uploadImageFailure": "Не удалось загрузить изображение статьи. Ошибка: {message}",
+		"submitSuccess": "Статья успешно опубликована",
+		"submitFailure": "Не удалось опубликовать статью. Ошибка: {message}",
+		"mainMessage": "Статья опубликована",
+		"detailedMessage": "Статья успешно обработана и опубликована."
+	},
+	"fileUploader": {
+		"uploadingFile": "Загрузка файла",
+		"uploadFileSuccess": "Файл успешно загружен",
+		"uploadFileFailure": "Не удалось загрузить файл. Ошибка: {message}"
+	},
+	"imageProcessor": {
+		"processingImage": "Обработка изображения статьи",
+		"processingImageFailure": "Не удалось обработать изображение. Ошибка: {message}"
 	},
 	"editor": {
 		"initError": "Редактор не инициализирован"
@@ -271,7 +289,8 @@
 	"miscellaneous": {
 		"modelInitError": "Модель не инициализирована",
 		"futureContent": "Контент будет добавлен в ближайшее время!",
-		"closeButton": "Закрыть"
+		"closeButton": "Закрыть",
+		"optional": "необязательно"
 	},
 	"validation": {
 		"nonEmpty": "Поле {field} не может быть пустым",

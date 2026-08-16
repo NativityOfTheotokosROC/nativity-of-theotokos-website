@@ -1,62 +1,59 @@
 import "server-only";
 import z from "zod";
 
-const BASE_URL = z.url().parse(process.env.BASE_URL);
-const ENVIRONMENT = z
+export const DATABASE_URL = z
+	.string()
+	.trim()
+	.nonempty()
+	.parse(process.env.DATABASE_URL);
+export const BASE_URL = z.url().parse(process.env.BASE_URL);
+export const ENVIRONMENT = z
 	.enum(["production", "preview", "development"])
 	.parse(process.env.VERCEL_ENV ?? process.env.NODE_ENV);
-const BETTER_AUTH_URL = z.url().parse(process.env.BETTER_AUTH_URL);
-const GOOGLE_CLIENT_ID = z
+export const BETTER_AUTH_URL = z.url().parse(process.env.BETTER_AUTH_URL);
+export const GOOGLE_CLIENT_ID = z
 	.string()
 	.nonempty()
 	.parse(process.env.GOOGLE_CLIENT_ID);
-const GOOGLE_CLIENT_SECRET = z
+export const GOOGLE_CLIENT_SECRET = z
 	.string()
 	.nonempty()
 	.parse(process.env.GOOGLE_CLIENT_SECRET);
-const MICROSOFT_CLIENT_ID = z
+export const MICROSOFT_CLIENT_ID = z
 	.string()
 	.nonempty()
 	.parse(process.env.MICROSOFT_CLIENT_ID);
-const MICROSOFT_CLIENT_SECRET = z
+export const MICROSOFT_CLIENT_SECRET = z
 	.string()
 	.nonempty()
 	.parse(process.env.MICROSOFT_CLIENT_SECRET);
-const YANDEX_CLIENT_ID = z
+export const YANDEX_CLIENT_ID = z
 	.string()
 	.nonempty()
 	.parse(process.env.YANDEX_CLIENT_ID);
-const YANDEX_CLIENT_SECRET = z
+export const YANDEX_CLIENT_SECRET = z
 	.string()
 	.nonempty()
 	.parse(process.env.YANDEX_CLIENT_SECRET);
-const MAILERLITE_API_KEY = z
+export const MAILERLITE_API_KEY = z
 	.string()
 	.nonempty()
 	.parse(process.env.MAILERLITE_API_KEY);
-const S3_BUCKET = z.string().nonempty().parse(process.env.S3_BUCKET);
-const S3_BUCKET_REGION = z
+export const S3_BUCKET = z.string().nonempty().parse(process.env.S3_BUCKET);
+export const AWS_ACCESS_KEY_ID = z
+	.string()
+	.nonempty()
+	.parse(process.env.AWS_ACCESS_KEY_ID);
+export const AWS_SECRET_ACCESS_KEY = z
+	.string()
+	.nonempty()
+	.parse(process.env.AWS_SECRET_ACCESS_KEY);
+// TODO: Rename bucket region
+export const S3_BUCKET_REGION = z
 	.string()
 	.nonempty()
 	.parse(process.env.S3_BUCKET_REGION);
-const PREPRODUCTION_PROTECTION = process.env.PREPRODUCTION_PROTECTION;
-const IS_AUTH_DISABLED =
+export const PREPRODUCTION_PROTECTION = process.env.PREPRODUCTION_PROTECTION;
+export const IS_AUTH_DISABLED =
 	PREPRODUCTION_PROTECTION?.toLowerCase() === "disabled" &&
 	ENVIRONMENT !== "production";
-
-export {
-	BASE_URL,
-	ENVIRONMENT,
-	BETTER_AUTH_URL,
-	GOOGLE_CLIENT_ID,
-	GOOGLE_CLIENT_SECRET,
-	YANDEX_CLIENT_ID,
-	YANDEX_CLIENT_SECRET,
-	MAILERLITE_API_KEY,
-	MICROSOFT_CLIENT_ID,
-	MICROSOFT_CLIENT_SECRET,
-	S3_BUCKET,
-	S3_BUCKET_REGION,
-	PREPRODUCTION_PROTECTION,
-	IS_AUTH_DISABLED,
-};

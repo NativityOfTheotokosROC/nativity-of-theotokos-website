@@ -173,10 +173,29 @@
 		"snippetField": "Snippet",
 		"imageField": "Image",
 		"imageCaptionField": "Image Caption",
+		"imageAlt": "Article image preview",
 		"selectImage": "Select Image",
 		"changeImage": "Change Image",
 		"articlePreview": "Article Preview",
-		"publish": "Publish"
+		"publish": "Publish",
+		"featureTheArticle": "Feature the article",
+		"uploadingImage": "Uploading article image",
+		"uploadImageSuccess": "Article image successfully uploaded",
+		"uploadImageFailure": "Could not upload the article image. Error: {message}",
+		"submitSuccess": "Article successfully published",
+		"submitFailure": "Could not publish the article. Error: {message}",
+		"mainMessage": "Article Published",
+		"detailedMessage": "The article has been successfully processed and published.",
+		"nextButton": "Continue"
+	},
+	"fileUploader": {
+		"uploadingFile": "Uploading file",
+		"uploadFileSuccess": "File successfully uploaded",
+		"uploadFileFailure": "Could not upload the file. Error: {message}"
+	},
+	"imageProcessor": {
+		"processingImage": "Processing article image",
+		"processingImageFailure": "Could not process the image. Error: {message}"
 	},
 	"editor": {
 		"initError": "Editor is uninitialized"
@@ -278,6 +297,7 @@
 	"miscellaneous": {
 		"modelInitError": "The model is not initialized",
 		"futureContent": "Content to be added soon!",
-		"closeButton": "Close"
+		"closeButton": "Close",
+		"optional": "optional"
 	}
 }

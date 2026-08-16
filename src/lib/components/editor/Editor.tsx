@@ -11,11 +11,13 @@ import { useEditorTools } from "../../model-implementations/editor-tools";
 import { EditorModel } from "../../models/editor";
 import OfficePaste from "@intevation/tiptap-extension-office-paste";
 import EditorTools from "../editor-tools/EditorTools";
+import { useEffect } from "react";
 
 const Editor = function ({ model }) {
 	const { modelView, interact } = model;
-	const { content, className } = modelView;
+	const { content, className, isReadonly } = modelView;
 	const editor = useEditor({
+		editable: !isReadonly,
 		content,
 		extensions: [
 			StarterKit,
@@ -38,6 +40,10 @@ const Editor = function ({ model }) {
 		},
 	});
 	const editorTools = useEditorTools(editor);
+
+	useEffect(() => {
+		if (isReadonly !== undefined) editor?.setEditable(!isReadonly);
+	}, [isReadonly, editor]);
 
 	return (
 		<div

@@ -1,3 +1,4 @@
+import "server-only";
 import MailerLite from "@mailerlite/mailerlite-nodejs";
 import { MAILERLITE_API_KEY } from "../utilities/server-constants";
 

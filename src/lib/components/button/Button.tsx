@@ -9,7 +9,7 @@ const Button = function ({ model, children }) {
 
 	return (
 		<button
-			type={type}
+			type={type ?? "button"}
 			className={twMerge(
 				"w-30 rounded-lg bg-[#250203]/82 p-4 text-white hover:bg-[#250203]/92 active:bg-[#250203] disabled:bg-[#250203]/50",
 				className ?? "",
