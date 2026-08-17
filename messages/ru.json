@@ -47,6 +47,7 @@
 		"signIn": "Вход"
 	},
 	"userAction": {
+		"notifications": "Уведомления",
 		"newQuote": "Новая цитата",
 		"signOut": "Выйти",
 		"writeArticle": "Написать статью",

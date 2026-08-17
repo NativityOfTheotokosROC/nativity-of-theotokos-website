@@ -7,6 +7,9 @@ const UserAction = function ({ model }) {
 	const t = useTranslations("userAction");
 
 	switch (name) {
+		case "NOTIFICATIONS": {
+			return <button onClick={action}>{t("notifications")}</button>;
+		}
 		case "NEW_QUOTE": {
 			return <button onClick={action}>{t("newQuote")}</button>;
 		}

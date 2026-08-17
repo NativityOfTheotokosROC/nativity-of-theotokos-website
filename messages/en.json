@@ -47,6 +47,7 @@
 		"signIn": "Sign In"
 	},
 	"userAction": {
+		"notifications": "Notifications",
 		"newQuote": "New Quote",
 		"signOut": "Sign Out",
 		"writeArticle": "Write Article",
