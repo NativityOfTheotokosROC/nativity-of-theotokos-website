@@ -1,5 +1,6 @@
 import { georgia } from "@/src/lib/third-party/fonts";
 import { Language } from "@/src/lib/types/general";
+import { MAILING_ADDRESS } from "@/src/lib/utilities/constants";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
@@ -198,10 +199,7 @@ const PrivacyPolicy = async function ({ model }) {
 							communications from Nativity of the Theotokos
 							Russian Orthodox Church, and request personal data
 							deletion by contacting us via{" "}
-							<a href="mailto:info@nativityoftheotokos.com">
-								email
-							</a>
-							.
+							<a href={`mailto:${MAILING_ADDRESS}`}>email</a>.
 						</p>
 					</section>
 					<section className="flex flex-col gap-3">
@@ -227,7 +225,7 @@ const PrivacyPolicy = async function ({ model }) {
 							For more information about our privacy practices, if
 							you have questions, or if you would like to make a
 							complaint, please{" "}
-							<a href="mailto:info@nativityoftheotokos.com">
+							<a href={`mailto:${MAILING_ADDRESS}`}>
 								reach out to us
 							</a>
 							.

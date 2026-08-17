@@ -21,6 +21,7 @@ export type ArticleDraft = {
 export type EditArticleModelView = {
 	ticketId: string;
 	notification: EditArticleNotification | null;
+	canDeleteTicket: boolean;
 	author?: string;
 	lastSavedDraft?: ArticleDraft;
 	currentArticle?: Article;

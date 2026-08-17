@@ -6,6 +6,7 @@ import PageLoadingBar from "@/src/lib/components/page-loading-bar/PageLoadingBar
 import { AppLayoutModel } from "@/src/lib/models/app-layout";
 import { FooterModel } from "@/src/lib/models/footer";
 import { Navlink } from "@/src/lib/types/general";
+import { MAILING_ADDRESS } from "@/src/lib/utilities/constants";
 import { ModeledContainerComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
@@ -51,7 +52,7 @@ const AppLayout = async function ({ model, children }) {
 	] satisfies Navlink[];
 	const footer = newReadonlyModel({
 		description: tFooterVariable("description"),
-		parishEmail: "info@nativityoftheotokos.com",
+		parishEmail: MAILING_ADDRESS,
 		clergy: [
 			{ name: tFooterVariable("frDimitri") },
 			{ name: tFooterVariable("frSavva") },

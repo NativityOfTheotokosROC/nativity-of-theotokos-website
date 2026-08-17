@@ -28,6 +28,7 @@ import {
 	getPublishArticleFormSchema,
 	MAX_SNIPPET,
 } from "../validation/publish-article-form";
+import { DEFAULT_PREVIEW_USER_EMAIL } from "../utilities/constants";
 
 const FULL_ARTICLE_INCLUDES = {
 	author: { include: { name: true } },
@@ -124,7 +125,7 @@ export async function saveDraft(
 	const ticket = await database.articleTicket.findUnique({
 		where: { id: ticketId },
 	});
-	if (!ticket) forbidden(); // TODO: Throw error instead
+	if (!ticket) notFound(); // TODO: Throw error instead
 	if (user && ticket.userEmail !== user.email) forbidden();
 	const isSubmitted = await database.pendingArticleSubmission.findFirst({
 		where: {
@@ -154,6 +155,40 @@ export async function saveDraft(
 	return savedDraft;
 }
 
+export async function discardDraft(ticketId: string) {
+	const user = await getUser();
+	if (!user && !IS_AUTH_DISABLED) forbidden();
+	const draft = await database.articleDraft.findUnique({
+		include: { articleTicket: true },
+		where: { articleTicketId: ticketId },
+	});
+	if (!draft) notFound();
+	if (user && draft.articleTicket.userEmail !== user.email) forbidden();
+
+	await database.articleDraft.delete({
+		where: {
+			articleTicketId: ticketId,
+		},
+	});
+}
+
+export async function deleteTicket(ticketId: string) {
+	const user = await getUser();
+	if (!user && !IS_AUTH_DISABLED) forbidden();
+	const ticket = await database.articleTicket.findUnique({
+		where: { id: ticketId },
+	});
+	if (!ticket) notFound();
+	if (user && ticket.assignerEmail !== user.email)
+		await protect({ roles: ["admin"] });
+
+	await database.articleTicket.delete({
+		where: {
+			id: ticketId,
+		},
+	});
+}
+
 export async function submitArticle(
 	ticketId: string,
 	article: ArticleDraft,
@@ -175,13 +210,14 @@ export async function submitArticle(
 	});
 }
 
+// TODO: Sloppy function. Refactor
 export async function createTicket(
 	options?: Partial<{
 		userEmail: string;
 		articleId: string;
 		useUnused: boolean;
 	}>,
-): Promise<{ ticketId: string }> {
+): Promise<{ ticketId: string; canDeleteTicket: boolean }> {
 	const parsedEmail = options?.userEmail
 		? z.email().parse(options.userEmail.trim())
 		: undefined;
@@ -194,6 +230,8 @@ export async function createTicket(
 		await protect({ roles: ["admin"] });
 	}
 	const authorEmail = parsedEmail ?? user!.email;
+	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
+
 	const article = options?.articleId
 		? await database.article.findUniqueOrThrow({
 				include: { author: true },
@@ -216,9 +254,13 @@ export async function createTicket(
 			(await database.articleTicket.create({
 				data: {
 					userEmail: authorEmail,
+					assignerEmail: userEmail,
 				},
 			}));
-		return { ticketId: ticket.id };
+		return {
+			ticketId: ticket.id,
+			canDeleteTicket: ticket.assignerEmail === userEmail,
+		};
 	}
 	if (!(article.author.email === authorEmail)) forbidden();
 	const unusedTicket = options?.useUnused
@@ -235,10 +277,14 @@ export async function createTicket(
 		(await database.articleTicket.create({
 			data: {
 				userEmail: authorEmail,
+				assignerEmail: userEmail,
 				articleId: article.link,
 			},
 		}));
-	return { ticketId: ticket.id };
+	return {
+		ticketId: ticket.id,
+		canDeleteTicket: ticket.assignerEmail === userEmail,
+	};
 }
 
 export async function makeArticleEdit(articleId: string) {
@@ -251,10 +297,13 @@ export async function makeArticleEdit(articleId: string) {
 	if (!article) notFound();
 	if (!IS_AUTH_DISABLED && user?.email !== article.author.email)
 		await protect({ roles: ["admin"] });
+	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
+
 	const ticket = await database.articleTicket.upsert({
 		include: { articleDraft: true },
 		create: {
-			userEmail: user?.email ?? "editorial@nativityoftheotokos.com",
+			userEmail,
+			assignerEmail: userEmail,
 			articleId,
 			articleDraft: {
 				create: {
@@ -272,6 +321,7 @@ export async function makeArticleEdit(articleId: string) {
 			title: ticket.articleDraft?.title ?? article.title.english,
 			body: ticket.articleDraft?.body ?? article.body.english,
 		},
+		canDeleteTicket: true,
 		currentArticle: {
 			title: article.title.english,
 			author: { name: article.author.name.english },
@@ -289,6 +339,7 @@ export async function makeArticleEdit(articleId: string) {
 		},
 	} satisfies {
 		ticketId: string;
+		canDeleteTicket: boolean;
 		draft: ArticleDraft;
 		currentArticle: Article;
 	};
@@ -367,10 +418,12 @@ export async function getLatestUnsubmittedArticle(authorEmail?: string) {
 
 	return {
 		ticketId: ticket.id,
+		canDeleteTicket: ticket.assignerEmail === user?.email,
 		draft: articleDraft,
 		currentArticle: article,
 	} satisfies {
 		ticketId: string;
+		canDeleteTicket: boolean;
 		draft?: ArticleDraft;
 		currentArticle?: Article;
 	};

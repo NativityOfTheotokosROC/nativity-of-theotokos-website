@@ -65,6 +65,7 @@ export function useEditArticle(
 		lastSavedDraft: ArticleDraft;
 		currentArticle: Article;
 		author: string;
+		canDeleteTicket: boolean;
 		toastNotifier: NotifierModel<ToastNotification>;
 	}>,
 ) {
@@ -83,6 +84,7 @@ export function useEditArticle(
 			author: options?.author,
 			lastSavedDraft,
 			currentArticle: options?.currentArticle,
+			canDeleteTicket: options?.canDeleteTicket ?? false,
 		},
 		interact: async function (
 			interaction: EditArticleModelInteraction,

@@ -10,6 +10,7 @@ import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import EditArticleClient from "../../../lib/components/views/edit-article/client";
+import { DEFAULT_PREVIEW_USER_EMAIL } from "@/src/lib/utilities/constants";
 
 export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 	const { locale } = await params;
@@ -27,7 +28,7 @@ export default async function Page() {
 	const user = await getUser();
 	const authorEmail =
 		user?.email ??
-		(IS_AUTH_DISABLED ? "editorial@nativityoftheotokos.com" : undefined);
+		(IS_AUTH_DISABLED ? DEFAULT_PREVIEW_USER_EMAIL : undefined);
 	const latestUnsubmittedArticle =
 		await getLatestUnsubmittedArticle(authorEmail);
 	const draft = latestUnsubmittedArticle?.draft ?? undefined;
@@ -45,6 +46,8 @@ export default async function Page() {
 				lastSavedDraft: draft,
 				currentArticle,
 				author: user?.name,
+				canDeleteTicket:
+					latestUnsubmittedArticle?.canDeleteTicket ?? true,
 			})}
 		/>
 	);

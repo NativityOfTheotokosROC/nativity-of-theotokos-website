@@ -26,7 +26,11 @@ const EditArticleClient = function ({ model }) {
 	ReadonlyModel<
 		Pick<
 			EditArticleModelView,
-			"ticketId" | "lastSavedDraft" | "author" | "currentArticle"
+			| "ticketId"
+			| "lastSavedDraft"
+			| "author"
+			| "currentArticle"
+			| "canDeleteTicket"
 		>
 	>
 >;
