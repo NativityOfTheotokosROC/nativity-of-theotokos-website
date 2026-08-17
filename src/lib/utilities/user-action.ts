@@ -3,8 +3,9 @@ import { Role } from "../types/general";
 
 function getAllActionNames() {
 	const actionNames = [
-		"WRITE_ARTICLE",
 		"NEW_QUOTE",
+		"WRITE_ARTICLE",
+		"REVIEW_ARTICLE",
 		"SIGN_OUT",
 	] as const satisfies ActionName[];
 	type MissingActionName = Exclude<ActionName, (typeof actionNames)[number]>;
@@ -29,6 +30,13 @@ export function getUserActionNames(roles: Role[]) {
 				specificActions = new Set([
 					...specificActions,
 					"WRITE_ARTICLE",
+				]);
+				break;
+			}
+			case "editor": {
+				specificActions = new Set([
+					...specificActions,
+					"REVIEW_ARTICLE",
 				]);
 				break;
 			}

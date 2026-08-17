@@ -34,6 +34,14 @@ export function useUserActions() {
 					},
 				});
 			}
+			case "REVIEW_ARTICLE": {
+				return newReadonlyModel({
+					name: "REVIEW_ARTICLE",
+					action: () => {
+						router.push("/review-article");
+					},
+				});
+			}
 			case "SIGN_OUT": {
 				return newReadonlyModel({
 					name: "SIGN_OUT",

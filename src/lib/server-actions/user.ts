@@ -8,27 +8,38 @@ import { getUser } from "./auth";
 export async function getUserInformation(): Promise<UserInformation> {
 	const user = await getUser();
 	if (!user) return null;
-	const roleRecords = await database.admin.findMany({
-		where: {
-			email: user.email,
-		},
-		select: {
-			role: true,
-		},
-	});
-	const isWriter = await database.articleTicket.findFirst({
-		where: { userEmail: user.email },
-	});
-	type ModifiedRole = Exclude<Role, "writer">;
+	const [roleRecords, isWriter, isEditor] = await Promise.all([
+		database.admin.findMany({
+			where: {
+				email: user.email,
+			},
+			select: {
+				role: true,
+			},
+		}),
+		database.articleTicket.findFirst({
+			where: { userEmail: user.email },
+		}),
+		database.editor.findUnique({
+			where: {
+				email: user.email,
+			},
+		}),
+	]);
+	type ModifiedRole = Exclude<Role, "writer" | "editor">;
 	const roles = roleRecords
 		.map(record => record.role as ModifiedRole)
 		.filter(role =>
 			(["admin", "quotes", "staff", "user"] as const).includes(role),
 		);
+	let finalRoles: Role[] = roles;
+	if (isWriter) finalRoles = [...finalRoles, "writer"];
+	if (isEditor) finalRoles = [...finalRoles, "editor"];
+
 	return {
 		name: user.name,
 		email: user.email,
 		avatar: { source: user.image! },
-		roles: isWriter ? [...roles, "writer"] : roles,
+		roles: finalRoles,
 	};
 }

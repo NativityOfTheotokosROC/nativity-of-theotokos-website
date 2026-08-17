@@ -43,7 +43,8 @@
 		"parishBulletin": "News"
 	},
 	"userNavigation": {
-		"greeting": "Hello"
+		"greeting": "Hello",
+		"signIn": "Sign In"
 	},
 	"userAction": {
 		"newQuote": "New Quote",

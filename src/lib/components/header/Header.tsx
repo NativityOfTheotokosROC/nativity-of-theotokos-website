@@ -42,12 +42,7 @@ const Header = function ({ model }) {
 		>
 			<div className="header-content flex flex-nowrap items-center justify-between gap-9 p-4 text-white lg:p-6 lg:px-7">
 				<Link className="contents" href="/">
-					<div
-						className="logo flex w-fit items-center justify-center gap-3 select-none hover:cursor-pointer"
-						onClick={() => {
-							router.push("/");
-						}}
-					>
+					<div className="logo flex w-fit items-center justify-center gap-3 select-none hover:cursor-pointer">
 						<div className="size-12">
 							<LogoIcon
 								className="logo-icon object-contain object-center"

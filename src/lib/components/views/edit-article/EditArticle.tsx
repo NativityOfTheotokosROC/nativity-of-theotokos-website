@@ -16,7 +16,7 @@ import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import GoHomeButton from "../not-found/GoHomeButton";
+import GoHomeButton from "../../button/GoHomeButton";
 import SuccessGraphic from "@/public/assets/icon-2.svg";
 
 const EditArticle = function ({ model }) {

@@ -43,7 +43,8 @@
 		"parishBulletin": "Новости"
 	},
 	"userNavigation": {
-		"greeting": "Привет"
+		"greeting": "Привет",
+		"signIn": "Вход"
 	},
 	"userAction": {
 		"newQuote": "Новая цитата",

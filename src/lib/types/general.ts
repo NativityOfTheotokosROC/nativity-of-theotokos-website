@@ -107,7 +107,7 @@ export type User = {
 
 export type Translator = ReturnType<typeof useTranslations<never>>;
 
-export type Role = "admin" | "staff" | "user" | "quotes" | "writer";
+export type Role = "admin" | "staff" | "user" | "quotes" | "writer" | "editor";
 
 export type Path = `/${string}`;
 

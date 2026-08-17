@@ -16,7 +16,7 @@ import {
 	newReadonlyModel,
 	ReadonlyModel,
 } from "@mvc-react/mvc";
-import { ChevronDown as DropdownIcon } from "lucide-react";
+import { ChevronDown as DropdownIcon, Link } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Fragment } from "react/jsx-runtime";
@@ -277,7 +277,12 @@ export const UserNavigationWidgetCore = function ({ model }) {
 			</>
 		</div>
 	) : (
-		<></>
+		<Link
+			href={"/sign-in"}
+			className="navlink text-base uppercase no-underline hover:text-[#ffdc4f]"
+		>
+			{t("signIn")}
+		</Link>
 	);
 } satisfies ModeledVoidComponent<UserNavigationWidgetCoreModel>;
 

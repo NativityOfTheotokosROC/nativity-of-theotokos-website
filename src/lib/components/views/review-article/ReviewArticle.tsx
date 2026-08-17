@@ -29,7 +29,7 @@ import FileSelectorButton from "../../file-selector-button/FileSelectorButton";
 import { useCloseWarning } from "@/src/lib/utilities/hooks";
 import { useCallback, useEffect } from "react";
 import { georgia } from "@/src/lib/third-party/fonts";
-import GoHomeButton from "../not-found/GoHomeButton";
+import GoHomeButton from "../../button/GoHomeButton";
 import SuccessGraphic from "@/public/assets/ornament_32.svg";
 import { Check, Cross, X } from "lucide-react";
 

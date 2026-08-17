@@ -6,7 +6,7 @@ import { Language } from "@/src/lib/types/general";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
-import GoHomeButton from "./GoHomeButton";
+import GoHomeButton from "../../button/GoHomeButton";
 
 export const NotFound = function ({}) {
 	// "use cache";
