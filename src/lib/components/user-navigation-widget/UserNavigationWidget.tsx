@@ -16,7 +16,7 @@ import {
 	newReadonlyModel,
 	ReadonlyModel,
 } from "@mvc-react/mvc";
-import { ChevronDown as DropdownIcon, Link } from "lucide-react";
+import { ChevronDown as DropdownIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Fragment } from "react/jsx-runtime";
@@ -28,6 +28,7 @@ import {
 } from "../../models/user-navigation-widget";
 import { UserInformation, useUserInformation } from "../../utilities/user";
 import UserAction from "../user-action/UserAction";
+import { Link } from "../page-loading-bar/PageLoadingBar";
 
 type WidgetVariantModel = ReadonlyModel<{
 	user: NavigationUser;
@@ -152,7 +153,7 @@ export const UserNavigationWidgetSkeleton = function ({ model }) {
 
 export const UserNavigationWidgetCore = function ({ model }) {
 	const {
-		modelView: { variant, style, userActions, userInformation },
+		modelView: { variant, style, userActions, userInformation, signIn },
 	} = model;
 
 	const t = useTranslations("userNavigation");
@@ -277,12 +278,26 @@ export const UserNavigationWidgetCore = function ({ model }) {
 			</>
 		</div>
 	) : (
-		<Link
-			href={"/sign-in"}
-			className="navlink text-base uppercase no-underline hover:text-[#ffdc4f]"
-		>
-			{t("signIn")}
-		</Link>
+		<>
+			{signIn?.navlinkVariant === "simple_link" && (
+				<Link
+					href={"/sign-in"}
+					className="navlink text-base uppercase no-underline hover:text-[#ffdc4f]"
+					onClick={signIn.action}
+				>
+					{t("signIn")}
+				</Link>
+			)}
+			{signIn?.navlinkVariant === "block" && (
+				<Link
+					href={"/sign-in"}
+					className="navlink block px-6 py-4 uppercase no-underline transition duration-200 ease-out hover:text-[#ffdc4f] active:bg-gray-950 active:text-[#ffdc4f] md:px-8"
+					onClick={signIn.action}
+				>
+					{t("signIn")}
+				</Link>
+			)}
+		</>
 	);
 } satisfies ModeledVoidComponent<UserNavigationWidgetCoreModel>;
 

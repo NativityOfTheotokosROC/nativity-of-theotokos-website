@@ -122,6 +122,7 @@ const NavMenuBar = function ({ model }) {
 						model={newReadonlyModel({
 							style: "dropdown",
 							variant: "abbreviated",
+							signIn: { navlinkVariant: "simple_link" },
 							userActions,
 						})}
 					/>

@@ -63,6 +63,12 @@ const NavigationDrawer = function ({ model }) {
 								model={newReadonlyModel({
 									style: "dropdown",
 									variant: "full",
+									signIn: {
+										navlinkVariant: "block",
+										async action() {
+											await interact({ type: "CLOSE" });
+										},
+									},
 									userActions: originalUserActions.map(
 										userAction => ({
 											modelView: {
