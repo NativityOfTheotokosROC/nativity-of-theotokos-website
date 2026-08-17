@@ -10,6 +10,7 @@ export function getProtectedRoutes() {
 			? ([] as const)
 			: ([
 					"/admin",
+					"/notifications",
 					"/quotes/new",
 					"/edit-article", //TODO: Cater for /news/[slug]/edit too
 					"/review-article",

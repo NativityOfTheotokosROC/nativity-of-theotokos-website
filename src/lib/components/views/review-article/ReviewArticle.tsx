@@ -319,7 +319,7 @@ const ReviewArticle = function ({ model }) {
 					</form>
 				</PageView>
 			) : (
-				//TODO: Refactor
+				//TODO: Extract to dedicated component
 				<main className="border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black">
 					<div className="flex h-full min-h-[94svh] grow justify-center p-8 py-15 pb-20 text-center">
 						<div className="flex h-[70svh] min-h-fit w-md flex-col items-center justify-center gap-6">

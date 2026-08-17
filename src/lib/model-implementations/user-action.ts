@@ -18,6 +18,14 @@ export function useUserActions() {
 
 	return [...actionNames].map(actionName => {
 		switch (actionName) {
+			case "NOTIFICATIONS": {
+				return newReadonlyModel({
+					name: "NOTIFICATIONS",
+					action: () => {
+						router.push("/notifications");
+					},
+				});
+			}
 			case "NEW_QUOTE": {
 				return newReadonlyModel({
 					name: "NEW_QUOTE",

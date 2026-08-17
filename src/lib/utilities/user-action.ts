@@ -3,6 +3,7 @@ import { Role } from "../types/general";
 
 function getAllActionNames() {
 	const actionNames = [
+		"NOTIFICATIONS",
 		"NEW_QUOTE",
 		"WRITE_ARTICLE",
 		"REVIEW_ARTICLE",
@@ -52,5 +53,9 @@ export function getUserActionNames(roles: Role[]) {
 			}
 		}
 	}
-	return new Set([...specificActions, "SIGN_OUT"]) satisfies Set<ActionName>;
+	return new Set([
+		...specificActions,
+		"NOTIFICATIONS",
+		"SIGN_OUT",
+	]) satisfies Set<ActionName>;
 }

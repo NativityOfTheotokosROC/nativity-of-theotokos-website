@@ -1,6 +1,7 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
 
 export type ActionName =
+	| "NOTIFICATIONS"
 	| "NEW_QUOTE"
 	| "WRITE_ARTICLE"
 	| "REVIEW_ARTICLE"

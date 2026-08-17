@@ -4,12 +4,13 @@ import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import PrivacyPolicy from "./PrivacyPolicy";
 import { newReadonlyModel } from "@mvc-react/mvc";
+import { isValidLocale } from "@/src/lib/utilities/internationalization";
 
 export async function generateMetadata({
 	params,
 }: PageProps<"/[locale]/privacy-policy">): Promise<Metadata> {
 	const { locale } = await params;
-	const language = hasLocale(routing.locales, locale) ? locale : "en";
+	const language = isValidLocale(locale) ? locale : "en";
 	const t = await getTranslations({
 		locale: language,
 		namespace: "privacyPolicy",

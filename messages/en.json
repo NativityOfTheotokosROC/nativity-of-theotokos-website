@@ -305,5 +305,16 @@
 		"futureContent": "Content to be added soon!",
 		"closeButton": "Close",
 		"optional": "optional"
+	},
+	"notifications": {
+		"metaTitle": "Notifications"
+	},
+	"emptyNotifications": {
+		"mainMessage": "Notifications Empty",
+		"detailedMessage": "You have no notifications. Check back later."
+	},
+	"emptyReviewArticle": {
+		"mainMessage": "No Pending Reviews",
+		"detailedMessage": "You have no pending article reviews assigned to you."
 	}
 }

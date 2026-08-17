@@ -304,5 +304,16 @@
 		"minCharacters": "Поле «{field}» слишком короткое (минимум {min} символов)",
 		"invalidUrl": "Вы указали недействительный URL для поля «{field}»",
 		"invalidEmail": "Указан недействительный адрес электронной почты для поля «{field}»"
+	},
+	"notifications": {
+		"metaTitle": "Уведомления"
+	},
+	"emptyNotifications": {
+		"mainMessage": "Нет уведомлений",
+		"detailedMessage": "У вас нет уведомлений. Загляните позже."
+	},
+	"emptyReviewArticle": {
+		"mainMessage": "Нет ожидающих проверок",
+		"detailedMessage": "У вас нет назначенных вам статей, ожидающих проверки."
 	}
 }
