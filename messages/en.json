@@ -305,7 +305,8 @@
 		"modelInitError": "The model is not initialized",
 		"futureContent": "Content to be added soon!",
 		"closeButton": "Close",
-		"optional": "optional"
+		"optional": "optional",
+		"goHome": "Go Home"
 	},
 	"notifications": {
 		"metaTitle": "Notifications"

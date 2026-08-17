@@ -1,6 +1,5 @@
 import { ModeledContainerComponent } from "@mvc-react/components";
 import { PageViewModel } from "../../models/page-view";
-import { InitializedModel } from "@mvc-react/mvc";
 import { georgia } from "../../third-party/fonts";
 
 const PageView = function ({ model, children }) {

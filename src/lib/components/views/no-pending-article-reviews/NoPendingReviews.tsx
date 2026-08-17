@@ -4,9 +4,11 @@ import { georgia } from "@/src/lib/third-party/fonts";
 import { useTranslations } from "next-intl";
 import PageView from "../../page-view/PageView";
 import NoPendingArticleReviewsGraphic from "@/public/assets/icon-6.svg";
+import GoHomeButton from "../../button/GoHomeButton";
 
 export default function NoPendingArticleReviews() {
 	const t = useTranslations("emptyReviewArticle");
+	const tMisc = useTranslations("miscellaneous");
 	return (
 		<PageView model={{ modelView: null }}>
 			<div className="flex h-full grow justify-center p-8 py-15 pb-20 text-center">
@@ -18,6 +20,7 @@ export default function NoPendingArticleReviews() {
 						{t("mainMessage")}
 					</span>
 					<span className="text-lg">{t("detailedMessage")}</span>
+					<GoHomeButton>{tMisc("goHome")}</GoHomeButton>
 				</div>
 			</div>
 		</PageView>

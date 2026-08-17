@@ -297,7 +297,8 @@
 		"modelInitError": "Модель не инициализирована",
 		"futureContent": "Контент будет добавлен в ближайшее время!",
 		"closeButton": "Закрыть",
-		"optional": "необязательно"
+		"optional": "необязательно",
+		"goHome": "На главную"
 	},
 	"validation": {
 		"nonEmpty": "Поле {field} не может быть пустым",
