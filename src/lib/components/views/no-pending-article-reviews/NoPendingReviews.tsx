@@ -12,7 +12,7 @@ export default function NoPendingArticleReviews() {
 	return (
 		<PageView model={{ modelView: null }}>
 			<div className="flex h-full grow justify-center text-center">
-				<div className="flex w-md flex-col items-center justify-center gap-6 landscape:h-[68svh]">
+				<div className="flex w-md flex-col items-center justify-center gap-6 landscape:h-[70svh]">
 					<NoPendingArticleReviewsGraphic className="h-64 w-80 fill-black opacity-90 md:h-48" />
 					<span
 						className={`text-4xl font-semibold ${georgia.className}`}

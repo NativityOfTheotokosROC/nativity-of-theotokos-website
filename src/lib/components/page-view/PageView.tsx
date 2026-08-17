@@ -10,7 +10,7 @@ const PageView = function ({ model, children }) {
 			style={{ borderColor: modelView?.topBarColor }}
 			className={`border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black`}
 		>
-			<div className="page-view-content flex min-h-[92svh] flex-col gap-6 p-8 py-9 md:py-10 lg:px-20">
+			<div className="page-view-content flex min-h-[90svh] flex-col gap-6 p-8 py-9 md:py-10 lg:px-20">
 				{modelView?.title && (
 					<span
 						className={`mb-2 text-[2.75rem]/tight font-semibold md:text-black ${georgia.className}`}
