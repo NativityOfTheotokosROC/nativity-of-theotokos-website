@@ -12,7 +12,7 @@ export default function EmptyNotifications() {
 	return (
 		<PageView model={{ modelView: { topBarColor: "#7F1D1D" } }}>
 			<div className="flex h-full grow justify-center text-center">
-				<div className="flex w-md flex-col items-center justify-center gap-6 landscape:h-[70svh]">
+				<div className="flex w-md flex-col items-center justify-center gap-6 landscape:h-[68svh]">
 					<EmptyNotificationsGraphic className="h-64 w-80 fill-black opacity-90 md:h-48" />
 					<span
 						className={`text-4xl font-semibold ${georgia.className}`}
