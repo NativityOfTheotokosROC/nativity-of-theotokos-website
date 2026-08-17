@@ -24,7 +24,10 @@ import { BASE_URL, IS_AUTH_DISABLED } from "../utilities/server-constants";
 import { getEditArticleFormSchema } from "../validation/edit-article-form";
 import { getUser, protect } from "./auth";
 import { getUserInformation } from "./user";
-import { getPublishArticleFormSchema } from "../validation/publish-article-form";
+import {
+	getPublishArticleFormSchema,
+	MAX_SNIPPET,
+} from "../validation/publish-article-form";
 
 const FULL_ARTICLE_INCLUDES = {
 	author: { include: { name: true } },
@@ -488,7 +491,8 @@ export async function publishArticle(
 			imageCaption: article.articleImage.about,
 		} satisfies z.infer<typeof publishArticleFormSchema>);
 	const link = z.string().slugify().parse(title);
-	const finalSnippet = snippet ?? removeMarkup(body.split("</p>")[0]);
+	const finalSnippet =
+		snippet ?? `${removeMarkup(body).substring(0, MAX_SNIPPET - 3)}...`;
 
 	const newArticle = await database.$transaction(async transaction => {
 		const result = draft.articleTicket.articleId

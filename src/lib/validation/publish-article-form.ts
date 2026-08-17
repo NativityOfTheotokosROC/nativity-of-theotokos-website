@@ -4,10 +4,14 @@ import { getEditArticleFormSchema } from "./edit-article-form";
 import { emptyStringAsUndefined } from "../utilities/miscellaneous";
 import { useLocalizedSchema } from "./general";
 
+export const MIN_SNIPPET = 100;
+export const MAX_SNIPPET = 300;
+export const MAX_IMAGE_CAPTION = 200;
+
 export function getPublishArticleFormSchema(t?: Translator) {
-	const minSnippet = 100;
-	const maxSnippet = 250;
-	const maxImageCaption = 150;
+	const minSnippet = MIN_SNIPPET;
+	const maxSnippet = MAX_SNIPPET;
+	const maxImageCaption = MAX_IMAGE_CAPTION;
 	const editArticleFormSchema = getEditArticleFormSchema(t);
 	return editArticleFormSchema.extend({
 		authorName: z.string().trim().nonempty(),
