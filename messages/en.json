@@ -49,7 +49,8 @@
 	"userAction": {
 		"newQuote": "New Quote",
 		"signOut": "Sign Out",
-		"writeArticle": "Write Article"
+		"writeArticle": "Write Article",
+		"reviewArticle": "Review Article"
 	},
 	"footer": {
 		"heading": "Nativity of the Theotokos Church",

@@ -49,7 +49,8 @@
 	"userAction": {
 		"newQuote": "Новая цитата",
 		"signOut": "Выйти",
-		"writeArticle": "Написать статью"
+		"writeArticle": "Написать статью",
+		"reviewArticle": "Проверка статьи"
 	},
 	"footer": {
 		"heading": "Храм Рождества Пресвятой Богородицы",

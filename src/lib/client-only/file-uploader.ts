@@ -1,6 +1,8 @@
 import "client-only";
+import { protect } from "../server-actions/auth";
 
 export async function uploadFile(file: File, presignedUrl: string) {
+	await protect({ roles: ["editor", "admin"] });
 	const body = new Blob([file], { type: file.type });
 	const response = await fetch(presignedUrl, {
 		method: "PUT",
