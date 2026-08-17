@@ -21,8 +21,7 @@ import SuccessGraphic from "@/public/assets/icon-2.svg";
 
 const EditArticle = function ({ model }) {
 	const { modelView, interact } = model;
-	const { ticketId, notification, lastSavedDraft, author, currentArticle } =
-		modelView;
+	const { notification, lastSavedDraft, author, currentArticle } = modelView;
 	const t = useTranslations("editArticle");
 	const defaultTitle = "";
 	const defaultBody = `<p>${t("bodyPlaceholder")}</p>`;
@@ -48,7 +47,8 @@ const EditArticle = function ({ model }) {
 	});
 	const title = watch("title");
 	const body = watch("body");
-	const previewAuthor = author ?? t("unknownAuthor");
+	const previewAuthor =
+		currentArticle?.author.name ?? author ?? t("unknownAuthor");
 	const hasDraftChanged = lastSavedDraft
 		? !(title === lastSavedDraft.title && body === lastSavedDraft.body)
 		: !(title === defaultTitle && body === defaultBody);
