@@ -387,7 +387,10 @@ export async function getPendingArticleSubmission() {
 				pendingArticleSubmission: IS_AUTH_DISABLED
 					? { isNot: null }
 					: {
-							editorEmail: user?.email ?? null,
+							OR: [
+								{ editorEmail: user?.email },
+								{ editorEmail: null },
+							],
 						},
 			},
 		},
