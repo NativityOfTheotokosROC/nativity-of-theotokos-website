@@ -11,8 +11,8 @@ export default function NoPendingArticleReviews() {
 	const tMisc = useTranslations("miscellaneous");
 	return (
 		<PageView model={{ modelView: null }}>
-			<div className="flex h-full grow justify-center p-8 py-15 pb-20 text-center">
-				<div className="flex h-[70svh] min-h-fit w-md flex-col items-center justify-center gap-6">
+			<div className="flex h-full grow justify-center text-center">
+				<div className="flex w-md flex-col items-center justify-center gap-6">
 					<NoPendingArticleReviewsGraphic className="h-64 w-80 fill-black opacity-90 md:h-48" />
 					<span
 						className={`text-4xl font-semibold ${georgia.className}`}
