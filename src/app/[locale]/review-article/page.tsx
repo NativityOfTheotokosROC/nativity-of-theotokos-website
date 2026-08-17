@@ -1,10 +1,10 @@
+import NoPendingArticleReviews from "@/src/lib/components/views/no-pending-article-reviews/NoPendingReviews";
 import ReviewArticleClient from "@/src/lib/components/views/review-article/client";
 import { getPendingArticleSubmission } from "@/src/lib/server-actions/article";
 import { isValidLocale } from "@/src/lib/utilities/internationalization";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]">) {
 	const { locale } = await params;
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]">) {
 
 export default async function Page() {
 	const pendingArticleSubmission = await getPendingArticleSubmission();
-	if (!pendingArticleSubmission) notFound(); //TODO: Replace
+	if (!pendingArticleSubmission) return <NoPendingArticleReviews />;
 	const { ticket, draft, currentArticle } = pendingArticleSubmission;
 	return (
 		<ReviewArticleClient
