@@ -28,7 +28,6 @@ const AppLayout = async function ({ model, children }) {
 		namespace: "links",
 	});
 	const navlinks = [
-		{ link: "/", text: tNavMenu("home") },
 		{
 			link: "/#bulletin",
 			text: tNavMenu("parishBulletin"),
@@ -37,6 +36,11 @@ const AppLayout = async function ({ model, children }) {
 		{
 			link: "/#resources",
 			text: tNavMenu("resources"),
+			isReplaceable: true,
+		},
+		{
+			link: "/#media",
+			text: tNavMenu("media"),
 			isReplaceable: true,
 		},
 		{
