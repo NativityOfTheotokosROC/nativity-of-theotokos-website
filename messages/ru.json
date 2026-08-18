@@ -137,7 +137,15 @@
 		"addQuote": "Добавить цитату",
 		"successMessage": "Цитата успешно добавлена",
 		"failureMessage": "Не удалось добавить цитату. Ошибка:",
-		"quotePreview": "Предпросмотр цитаты"
+		"quotePreview": "Предпросмотр цитаты",
+		"mainMessage": "Цитата добавлена",
+		"detailedMessage": "Ваша цитата успешно добавлена.",
+		"addAnother": "Добавить ещё"
+	},
+	"assignArticle": {
+		"metaTitle": "Назначить статью",
+		"userField": "Электронная почта пользователя",
+		"assignments": "Количество назначений"
 	},
 	"editArticle": {
 		"metaTitle": "Редактировать статью",
@@ -158,7 +166,14 @@
 		"saveDraftFailure": "Не удалось сохранить черновик. Ошибка: {message}",
 		"mainMessage": "Статья отправлена",
 		"detailedMessage": "Ваша статья отправлена и будет рассмотрена и обработана.",
-		"nextButton": "Продолжить"
+		"nextButton": "Продолжить",
+		"discardingDraft": "Удаление черновика",
+		"discardDraftSuccess": "Ваш черновик удалён",
+		"discardDraftMainMessage": "Черновик удалён",
+		"discardDraftFail": "Не удалось удалить ваш черновик. Ошибка: {message}",
+		"discardDraftButton": "Удалить черновик",
+		"discardDraftDialogTitle": "Удалить черновик",
+		"discardDraftDialogMessage": "Вы уверены, что хотите удалить этот черновик? Если вы уже отправляли этот черновик ранее, ваша отправленная статья будет удалена."
 	},
 	"articlePreview": {
 		"title": "Предпросмотр статьи",
@@ -298,7 +313,8 @@
 		"futureContent": "Контент будет добавлен в ближайшее время!",
 		"closeButton": "Закрыть",
 		"optional": "необязательно",
-		"goHome": "На главную"
+		"goHome": "На главную",
+		"continue": "Продолжить"
 	},
 	"validation": {
 		"nonEmpty": "Поле {field} не может быть пустым",
@@ -317,5 +333,9 @@
 	"emptyReviewArticle": {
 		"mainMessage": "Нет ожидающих проверок",
 		"detailedMessage": "У вас нет назначенных вам статей, ожидающих проверки."
+	},
+	"confirmationDialog": {
+		"defaultProceedButton": "Продолжить",
+		"defaultCancelButton": "Отмена"
 	}
 }

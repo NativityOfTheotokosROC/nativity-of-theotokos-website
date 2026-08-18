@@ -5,6 +5,7 @@ export type ButtonType = "button" | "submit" | "reset";
 
 export type ButtonModelView = {
 	action?: () => void;
+	title?: string;
 	variant?: ButtonVariant;
 	disabled?: boolean;
 	className?: string;

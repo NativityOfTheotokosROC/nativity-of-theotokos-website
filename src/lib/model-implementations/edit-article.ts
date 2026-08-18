@@ -16,27 +16,32 @@ import {
 	NotifierModelView,
 } from "../models/notifier";
 import { ToastNotification } from "../models/toast";
-import { saveDraft, submitArticle } from "../server-actions/article";
+import {
+	deleteTicket,
+	discardDraft,
+	saveDraft,
+	submitArticle,
+} from "../server-actions/article";
 import { Article } from "../types/general";
 
 export function editArticleNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
 ) {
 	return {
-		produceModelView: async function (
-			interaction: NotifierModelInteraction<EditArticleNotification>,
-		) {
+		async produceModelView(interaction) {
 			switch (interaction.type) {
 				case "NOTIFY": {
 					const notification = interaction.input.notification;
 					if (
 						notification.type === "submitting" ||
-						notification.type === "saving_draft"
+						notification.type === "saving_draft" ||
+						notification.type === "discarding_draft"
 					)
 						return { notification };
 					const toastNotificationType = (
 						notification.type === "submit_success" ||
-						notification.type === "save_draft_success"
+						notification.type === "save_draft_success" ||
+						notification.type === "discard_draft_success"
 							? "success"
 							: "failure"
 					) satisfies ToastNotification["type"];
@@ -166,6 +171,49 @@ export function useEditArticle(
 							}),
 						);
 					break;
+				}
+				case "DISCARD_DRAFT": {
+					await notifier.interact({
+						type: "NOTIFY",
+						input: {
+							notification: {
+								type: "discarding_draft",
+								message: t("discardingDraft"),
+							},
+						},
+					});
+					try {
+						if (options?.canDeleteTicket) {
+							await deleteTicket(ticketId);
+						} else {
+							await discardDraft(ticketId);
+						}
+						await notifier.interact({
+							type: "NOTIFY",
+							input: {
+								notification: {
+									type: "discard_draft_success",
+									message: t("discardDraftSuccess"),
+								},
+							},
+						});
+					} catch (error) {
+						await notifier.interact({
+							type: "NOTIFY",
+							input: {
+								notification: {
+									type: "discard_draft_failure",
+									message: t("discardDraftFail", {
+										message: JSON.stringify(error),
+									}),
+								},
+							},
+						});
+					}
+					break;
+				}
+				default: {
+					interaction satisfies never;
 				}
 			}
 		},

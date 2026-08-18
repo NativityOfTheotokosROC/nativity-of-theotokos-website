@@ -1,4 +1,8 @@
-import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
+import {
+	InputModelInteraction,
+	InteractiveModel,
+	ModelInteraction,
+} from "@mvc-react/mvc";
 import { Article, Notification } from "../types/general";
 
 export type EditArticleNotification =
@@ -8,6 +12,9 @@ export type EditArticleNotification =
 			| "save_draft_success"
 			| "save_draft_failure"
 			| "saving_draft"
+			| "discarding_draft"
+			| "discard_draft_failure"
+			| "discard_draft_success"
 	  > & {
 			message: string;
 	  })
@@ -27,13 +34,15 @@ export type EditArticleModelView = {
 	currentArticle?: Article;
 };
 
-export type EditArticleModelInteraction = InputModelInteraction<
-	"SUBMIT" | "SAVE_DRAFT",
-	{
-		draft: ArticleDraft;
-		options?: { successCallback?: () => void };
-	}
->;
+export type EditArticleModelInteraction =
+	| ModelInteraction<"DISCARD_DRAFT">
+	| InputModelInteraction<
+			"SUBMIT" | "SAVE_DRAFT",
+			{
+				draft: ArticleDraft;
+				options?: { successCallback?: () => void };
+			}
+	  >;
 
 export type EditArticleModel = InteractiveModel<
 	EditArticleModelView,

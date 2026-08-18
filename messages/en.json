@@ -137,7 +137,15 @@
 		"addQuote": "Add Quote",
 		"successMessage": "Quote successfully added",
 		"failureMessage": "Could not add the quote. Error:",
-		"quotePreview": "Quote Preview"
+		"quotePreview": "Quote Preview",
+		"mainMessage": "Quote Added",
+		"detailedMessage": "Your quote has been successfully added.",
+		"addAnother": "Add Another"
+	},
+	"assignArticle": {
+		"metaTitle": "Assign Article",
+		"userField": "User Email",
+		"assignments": "Number of Assignments"
 	},
 	"editArticle": {
 		"metaTitle": "Edit Article",
@@ -158,7 +166,14 @@
 		"saveDraftFailure": "Could not save draft. Error: {message}",
 		"mainMessage": "Article Submitted",
 		"detailedMessage": "Your article has been submitted and will be reviewed and processed.",
-		"nextButton": "Continue"
+		"nextButton": "Continue",
+		"discardingDraft": "Discarding draft",
+		"discardDraftSuccess": "Your draft has been discarded",
+		"discardDraftMainMessage": "Draft Discarded",
+		"discardDraftFail": "Could not discard your draft. Error: {message}",
+		"discardDraftButton": "Discard Draft",
+		"discardDraftDialogTitle": "Discard Draft",
+		"discardDraftDialogMessage": "Are you sure you want to discard this draft? If you have submitted this draft before, your submission will be deleted."
 	},
 	"articlePreview": {
 		"title": "Article Preview",
@@ -306,7 +321,8 @@
 		"futureContent": "Content to be added soon!",
 		"closeButton": "Close",
 		"optional": "optional",
-		"goHome": "Go Home"
+		"goHome": "Go Home",
+		"continue": "Continue"
 	},
 	"notifications": {
 		"metaTitle": "Notifications"
@@ -318,5 +334,9 @@
 	"emptyReviewArticle": {
 		"mainMessage": "No Pending Reviews",
 		"detailedMessage": "You have no pending article reviews assigned to you."
+	},
+	"confirmationDialog": {
+		"defaultProceedButton": "Proceed",
+		"defaultCancelButton": "Cancel"
 	}
 }
