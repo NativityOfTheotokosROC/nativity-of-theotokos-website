@@ -1,9 +1,8 @@
 import HymnsOrnament from "@/public/assets/ornament_9.svg";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { InitializedModel } from "@mvc-react/mvc";
+import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 import { HymnsModalModel } from "../../models/hymns-modal";
-import { ModalModel } from "../../models/modal";
 import { georgia } from "../../third-party/fonts";
 import Modal from "../modal/Modal";
 
@@ -11,29 +10,17 @@ const HymnsModal = function ({ model }) {
 	const { modelView, interact } = model;
 	const { isOpen, hymns } = modelView;
 	const t = useTranslations("hymnsModal");
-	const modal = {
-		modelView: {
-			isOpen,
-			title: t("hymnsForToday"),
-		},
-		async interact(interaction) {
-			switch (interaction.type) {
-				case "TOGGLE": {
-					const value = interaction.input.value;
-					if (value == "open")
-						return await model.interact({
-							type: "OPEN",
-							input: { hymns },
-						});
-					if (value == "close")
-						return await model.interact({ type: "CLOSE" });
-				}
-			}
-		},
-	} satisfies ModalModel;
 
 	return (
-		<Modal model={modal}>
+		<Modal
+			model={newReadonlyModel({
+				isOpen,
+				title: t("hymnsForToday"),
+				async onClose() {
+					await interact({ type: "CLOSE" });
+				},
+			})}
+		>
 			<div className="rounded-none border-0 bg-gray-800 p-4 text-[#FEF8F3]">
 				<div className="ornament flex h-[4em] w-full items-center justify-center">
 					<HymnsOrnament className="h-[4em] w-[8em] fill-[#FEF8F3] object-contain object-center" />
