@@ -10,7 +10,7 @@ const ButtonBar = function ({ model, children }) {
 	return (
 		<div
 			className={twMerge(
-				`button-bar flex w-full flex-wrap items-center gap-3 ${orientation === "vertical" && "flex-col"} ${orientation === "horizontal" && "flex-row"} ${arrangement === "left" && "justify-left"} ${arrangement === "center" && "justify-center"} ${arrangement === "right" && "justify-right"} ${arrangement === "separated" && "justify-between"} ${arrangement === "spaced_around" && "justify-around"}`,
+				`button-bar flex w-full flex-wrap items-center gap-3 ${orientation === "horizontal" ? "flex-row" : orientation === "vertical" ? "flex-col" : ""} ${arrangement === "left" ? "justify-start" : arrangement === "center" ? "justify-center" : arrangement === "right" ? "justify-end" : arrangement === "separated" ? "justify-between" : arrangement === "spaced_around" ? "justify-around" : ""}`,
 				className ?? "",
 			)}
 		>

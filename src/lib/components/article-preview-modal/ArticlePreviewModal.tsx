@@ -31,6 +31,7 @@ const ArticlePreviewModal = function ({ model }) {
 		<Modal
 			model={newReadonlyModel({
 				title: t("title"),
+				size: "large",
 				isOpen: isOpen ?? false,
 				async onClose() {
 					await interact({ type: "CLOSE" });

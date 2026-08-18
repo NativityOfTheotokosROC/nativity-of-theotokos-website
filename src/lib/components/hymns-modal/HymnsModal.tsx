@@ -16,6 +16,7 @@ const HymnsModal = function ({ model }) {
 			model={newReadonlyModel({
 				isOpen,
 				title: t("hymnsForToday"),
+				size: "small",
 				async onClose() {
 					await interact({ type: "CLOSE" });
 				},

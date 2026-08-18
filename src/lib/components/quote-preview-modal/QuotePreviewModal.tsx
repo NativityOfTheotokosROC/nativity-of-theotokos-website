@@ -31,6 +31,7 @@ const QuotePreviewModal = function ({ model }) {
 		<Modal
 			model={newReadonlyModel({
 				title: t("quotePreview"),
+				size: "small",
 				isOpen: isOpen ?? false,
 				async onClose() {
 					await interact({ type: "CLOSE" });

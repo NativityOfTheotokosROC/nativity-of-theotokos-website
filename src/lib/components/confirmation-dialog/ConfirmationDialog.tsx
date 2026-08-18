@@ -24,6 +24,7 @@ const ConfirmationDialog = function ({ model }) {
 			model={newReadonlyModel({
 				isOpen,
 				title,
+				size: "smallest",
 				async onClose() {
 					await interact({ type: "CANCEL" });
 				},
@@ -36,14 +37,14 @@ const ConfirmationDialog = function ({ model }) {
 						<ConfirmationDialogOrnament className="h-[4em] w-[8em] fill-[#FEF8F3] object-contain object-center" />
 					</div>
 				</div>
-				<div className="message-box max-h-[10svh] w-full overflow-y-auto p-4">
+				<div className="message-box flex max-h-[33svh] min-h-[5em] w-full items-center overflow-y-auto p-4">
 					<span>{message}</span>
 				</div>
 				<ButtonBar
 					model={newReadonlyModel({
-						arrangement: "right",
+						arrangement: "center",
 						orientation: "horizontal",
-						className: "mt-5 p-5",
+						className: "p-5",
 					})}
 				>
 					<Button
