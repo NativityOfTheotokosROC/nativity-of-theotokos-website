@@ -25,6 +25,7 @@ const ConfirmationDialog = function ({ model }) {
 				isOpen,
 				title,
 				size: "smallest",
+				position: "top",
 				async onClose() {
 					await interact({ type: "CANCEL" });
 				},
@@ -32,8 +33,8 @@ const ConfirmationDialog = function ({ model }) {
 		>
 			<div className="flex w-full flex-col items-center">
 				<div className="mb-4 w-full rounded-none border-0 bg-gray-800 p-4 text-[#FEF8F3]">
+					{/* //TODO: Accommodate useTitleHeading option */}
 					<div className="ornament flex h-[4em] w-full items-center justify-center">
-						{/* //TODO: Accommodate useTitleHeading option */}
 						<ConfirmationDialogOrnament className="h-[4em] w-[8em] fill-[#FEF8F3] object-contain object-center" />
 					</div>
 				</div>

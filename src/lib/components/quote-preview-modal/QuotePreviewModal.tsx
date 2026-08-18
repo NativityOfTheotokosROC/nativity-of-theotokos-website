@@ -46,7 +46,7 @@ const QuotePreviewModal = function ({ model }) {
 				</div>
 				<Tabs model={tabs}>
 					<div
-						className={`quote-box flex h-[35dvh] max-h-[35dvh] max-w-full min-w-full flex-col items-center justify-center-safe gap-4 overflow-y-auto pr-4 data-closed:overflow-hidden [@media(height<=448px)]:max-h-[7dvh]`}
+						className={`quote-box flex h-[35dvh] max-h-[35dvh] max-w-full min-w-full flex-col items-center justify-center-safe gap-4 overflow-y-auto pr-4 data-closed:overflow-hidden`}
 					>
 						<p className="quote text-lg/relaxed">
 							<span>{"“"}</span>
@@ -59,7 +59,7 @@ const QuotePreviewModal = function ({ model }) {
 						</span>
 					</div>
 					<div
-						className={`quote-box flex h-[35dvh] max-h-[35dvh] max-w-full min-w-full flex-col items-center justify-center-safe gap-4 overflow-y-auto pr-4 data-closed:overflow-hidden [@media(height<=448px)]:max-h-[15dvh]`}
+						className={`quote-box flex h-[35dvh] max-h-[35dvh] max-w-full min-w-full flex-col items-center justify-center-safe gap-4 overflow-y-auto pr-4 data-closed:overflow-hidden`}
 					>
 						<p className="quote text-lg/relaxed">
 							<span>{"«"}</span>
