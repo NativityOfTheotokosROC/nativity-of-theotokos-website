@@ -158,12 +158,13 @@ export async function saveDraft(
 export async function discardDraft(ticketId: string) {
 	const user = await getUser();
 	if (!user && !IS_AUTH_DISABLED) forbidden();
-	const draft = await database.articleDraft.findUnique({
-		include: { articleTicket: true },
-		where: { articleTicketId: ticketId },
+	const ticket = await database.articleTicket.findUnique({
+		include: { articleDraft: true },
+		where: { id: ticketId },
 	});
-	if (!draft) notFound();
-	if (user && draft.articleTicket.userEmail !== user.email) forbidden();
+	if (!ticket) notFound();
+	if (user && ticket.userEmail !== user.email) forbidden();
+	if (!ticket.articleDraft) return;
 
 	await database.articleDraft.delete({
 		where: {
