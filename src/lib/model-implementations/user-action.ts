@@ -38,7 +38,7 @@ export function useUserActions() {
 				return newReadonlyModel({
 					name: "WRITE_ARTICLE",
 					action: () => {
-						router.push("/edit-article");
+						router.push("/write-article");
 					},
 				});
 			}

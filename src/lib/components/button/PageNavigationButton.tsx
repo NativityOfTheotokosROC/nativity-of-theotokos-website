@@ -15,7 +15,6 @@ const PageNavigationButton = function ({ model, children }) {
 			model={newReadonlyModel({
 				variant: "standard",
 				action: () => {
-					// window.open(endpoint, "_self");
 					if (browserNavigation) {
 						window.open(endpoint, "_self");
 					} else {

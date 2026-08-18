@@ -14,7 +14,7 @@ const Button = function ({ model, children }) {
 			title={title}
 			type={type ?? "button"}
 			className={twMerge(
-				`w-30 rounded-lg p-4 disabled:opacity-50 ${computedVariant === "standard" && "bg-[#250203]/82 text-white hover:bg-[#250203]/92 active:bg-[#250203]"} ${computedVariant === "alternative" && "border border-[#250203]/62 bg-transparent text-[#250203]/82 hover:bg-[#250203]/52 hover:text-white active:bg-[#250203] active:text-white"}`,
+				`w-fit max-w-full rounded-lg p-4 wrap-break-word hyphens-auto disabled:opacity-50 ${computedVariant === "standard" && "bg-[#250203]/82 text-white hover:bg-[#250203]/92 active:bg-[#250203]"} ${computedVariant === "alternative" && "border border-[#250203]/62 bg-transparent text-[#250203]/82 hover:bg-[#250203]/52 hover:text-white active:bg-[#250203] active:text-white"}`,
 				className ?? "",
 			)}
 			onClick={() => action?.()}

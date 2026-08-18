@@ -432,6 +432,7 @@ export async function getPendingArticleSubmission() {
 	const user = await getUser();
 	if (!IS_AUTH_DISABLED && !user) forbidden();
 	if (!IS_AUTH_DISABLED) await protect({ roles: ["admin"] });
+	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
 	const ticketData = await database.articleTicket.findFirst({
 		include: {
 			article: { include: _FULL_ARTICLE_INCLUDES },
@@ -452,12 +453,17 @@ export async function getPendingArticleSubmission() {
 	});
 	if (!ticketData) return null;
 	if (
-		!ticketData.articleDraft!.pendingArticleSubmission!.editorEmail ===
-			null &&
-		!IS_AUTH_DISABLED
+		!ticketData.articleDraft!.pendingArticleSubmission!.editorEmail === null
 	)
 		await database.pendingArticleSubmission.update({
-			data: { assignedEditor: { connect: { email: user!.email } } },
+			data: {
+				assignedEditor: {
+					connectOrCreate: {
+						create: { email: userEmail },
+						where: { email: userEmail },
+					},
+				},
+			},
 			where: { articleDraftId: ticketData.articleDraft!.id },
 		});
 	const assigneeName =

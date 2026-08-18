@@ -126,26 +126,15 @@ const NewQuote = function ({ model }) {
 			);
 		},
 	});
-	const hasFormChanged = useCallback(
-		() =>
-			!(
-				defaultValues.authorEn === watch("authorEn") &&
-				defaultValues.authorRu === watch("authorRu") &&
-				defaultValues.sourceEn === watch("sourceEn") &&
-				defaultValues.sourceRu === watch("sourceRu") &&
-				defaultValues.quoteEn === watch("quoteEn") &&
-				defaultValues.quoteRu === watch("quoteRu")
-			),
-		[
-			defaultValues.authorEn,
-			defaultValues.authorRu,
-			defaultValues.quoteEn,
-			defaultValues.quoteRu,
-			defaultValues.sourceEn,
-			defaultValues.sourceRu,
-			watch,
-		],
-	);
+	const hasFormChanged = () =>
+		!(
+			defaultValues.authorEn === watch("authorEn") &&
+			defaultValues.authorRu === watch("authorRu") &&
+			defaultValues.sourceEn === watch("sourceEn") &&
+			defaultValues.sourceRu === watch("sourceRu") &&
+			defaultValues.quoteEn === watch("quoteEn") &&
+			defaultValues.quoteRu === watch("quoteRu")
+		);
 
 	useCloseWarning(hasFormChanged);
 

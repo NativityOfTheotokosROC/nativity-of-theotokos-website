@@ -13,7 +13,7 @@ const GoHomeButton = function ({ children }: { children: ReactNode }) {
 			model={newReadonlyModel({
 				variant: "standard",
 				endpoint: "/",
-				browserNavigation: pageLoadingBar.modelView === null, // TODO: True until 310 is fixed
+				browserNavigation: pageLoadingBar.modelView === null,
 			})}
 		>
 			{children}
