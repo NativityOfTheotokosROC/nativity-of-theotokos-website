@@ -364,15 +364,18 @@ export async function getDraft(ticketId: string) {
 export async function getLatestUnsubmittedArticle(authorEmail?: string) {
 	const parsedEmail = authorEmail
 		? z.email().parse(authorEmail.trim())
-		: undefined;
+		: null;
 	const user = await getUser();
+	// TODO: You're doing too much. Simplify
 	if (!(parsedEmail || user?.email) && IS_AUTH_DISABLED)
 		throw new Error("Not logged in and no email provided.");
 	if (!(parsedEmail || user?.email)) forbidden();
 	if (!user && !IS_AUTH_DISABLED) forbidden();
-	if (parsedEmail && parsedEmail !== user?.email) await protect();
+	if (parsedEmail && parsedEmail !== user?.email)
+		await protect({ roles: ["admin"] });
 
-	const userEmail = parsedEmail ?? user!.email;
+	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
+	const computedAuthorEmail = parsedEmail ?? userEmail;
 
 	const ticket = await database.articleTicket.findFirst({
 		orderBy: {
@@ -385,7 +388,7 @@ export async function getLatestUnsubmittedArticle(authorEmail?: string) {
 			articleDraft: true,
 		},
 		where: {
-			userEmail,
+			userEmail: computedAuthorEmail,
 			articleDraft: { pendingArticleSubmission: null },
 		},
 	});
@@ -419,7 +422,7 @@ export async function getLatestUnsubmittedArticle(authorEmail?: string) {
 
 	return {
 		ticketId: ticket.id,
-		canDeleteTicket: ticket.assignerEmail === user?.email,
+		canDeleteTicket: ticket.assignerEmail === userEmail,
 		draft: articleDraft,
 		currentArticle: article,
 	} satisfies {
