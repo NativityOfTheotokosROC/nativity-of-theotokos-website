@@ -414,6 +414,10 @@ export async function getLatestUnsubmittedArticle() {
 			} satisfies Article)
 		: null;
 
+	console.log(ticket.assignerEmail);
+	console.log(userEmail);
+	console.log(ticket.assignerEmail === userEmail);
+
 	return {
 		ticketId: ticket.id,
 		canDeleteTicket: ticket.assignerEmail === userEmail,
