@@ -221,17 +221,17 @@ export async function createTicket(
 ): Promise<{ ticketId: string; canDeleteTicket: boolean }> {
 	const parsedEmail = options?.userEmail
 		? z.email().parse(options.userEmail.trim())
-		: undefined;
+		: null;
 	const user = await getUser();
 	if (!parsedEmail) {
 		await protect({ roles: ["writer"] });
-	} else if (parsedEmail === user?.email) {
+	} else if (user && user.email === parsedEmail) {
 		await protect({ roles: ["writer"] });
 	} else {
 		await protect({ roles: ["admin"] });
 	}
-	const authorEmail = parsedEmail ?? user!.email;
 	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
+	const authorEmail = parsedEmail ?? userEmail;
 
 	const article = options?.articleId
 		? await database.article.findUniqueOrThrow({
