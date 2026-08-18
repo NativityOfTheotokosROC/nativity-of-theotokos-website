@@ -14,8 +14,13 @@ import DiscardGraphic from "@/public/assets/graphic-1.svg";
 import GoHomeButton from "../../button/GoHomeButton";
 
 const EditArticleClient = function ({ model }) {
-	const { ticketId, author, lastSavedDraft, currentArticle } =
-		model.modelView;
+	const {
+		ticketId,
+		author,
+		lastSavedDraft,
+		currentArticle,
+		canDeleteTicket,
+	} = model.modelView;
 	const toastNotifier = useNewStatefulInteractiveModel(
 		toastNotifierVIInterface(),
 	);
@@ -26,6 +31,7 @@ const EditArticleClient = function ({ model }) {
 		lastSavedDraft,
 		toastNotifier,
 		currentArticle,
+		canDeleteTicket,
 	});
 
 	if (editArticle.modelView.notification?.type === "submit_success")

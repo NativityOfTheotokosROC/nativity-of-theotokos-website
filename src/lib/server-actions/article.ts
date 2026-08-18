@@ -387,8 +387,6 @@ export async function getLatestUnsubmittedArticle() {
 		},
 	});
 
-	console.log(`ticket is ${ticket}`);
-
 	if (!ticket) return null;
 
 	const articleDraft = ticket.articleDraft
@@ -415,10 +413,6 @@ export async function getLatestUnsubmittedArticle() {
 				},
 			} satisfies Article)
 		: null;
-
-	console.log(ticket.assignerEmail);
-	console.log(userEmail);
-	console.log(ticket.assignerEmail === userEmail);
 
 	return {
 		ticketId: ticket.id,

@@ -3,14 +3,11 @@ import {
 	createTicket,
 	getLatestUnsubmittedArticle,
 } from "@/src/lib/server-actions/article";
-import { getUser } from "@/src/lib/server-actions/auth";
-import { IS_AUTH_DISABLED } from "@/src/lib/utilities/server-constants";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import EditArticleClient from "../../../lib/components/views/edit-article/client";
-import { DEFAULT_PREVIEW_USER_EMAIL } from "@/src/lib/utilities/constants";
 
 export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 	const { locale } = await params;
