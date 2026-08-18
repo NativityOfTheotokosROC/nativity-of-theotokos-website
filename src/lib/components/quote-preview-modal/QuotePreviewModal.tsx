@@ -38,7 +38,7 @@ const QuotePreviewModal = function ({ model }) {
 				},
 			})}
 		>
-			<div className="flex w-full max-w-full min-w-full flex-col items-center justify-center *:px-8 md:max-w-[25em]">
+			<div className="flex w-full max-w-full min-w-full flex-col items-center justify-center *:px-8">
 				<div className="mb-4 w-full rounded-none border-0 bg-gray-800 p-4 text-[#FEF8F3]">
 					<div className="ornament flex h-[4em] w-full items-center justify-center">
 						<HymnsOrnament className="h-[4em] w-[8em] fill-[#FEF8F3] object-contain object-center" />

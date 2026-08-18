@@ -28,7 +28,7 @@ const HymnsModal = function ({ model }) {
 				</div>
 			</div>
 			<div className="px-5 pt-6">
-				<div className="max-h-[50dvh] overflow-y-auto data-closed:overflow-hidden">
+				<div className="h-full max-h-[50dvh] min-h-[5em] shrink-2 overflow-y-auto data-closed:overflow-hidden">
 					<div className="flex items-center justify-center bg-[#FEF8F3] px-2 text-black">
 						<div className="flex max-w-[25em] flex-col items-center justify-center px-2">
 							{hymns.map((hymn, index) => (
