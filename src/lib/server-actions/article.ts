@@ -387,6 +387,8 @@ export async function getLatestUnsubmittedArticle() {
 		},
 	});
 
+	console.log(`ticket is ${ticket}`);
+
 	if (!ticket) return null;
 
 	const articleDraft = ticket.articleDraft
