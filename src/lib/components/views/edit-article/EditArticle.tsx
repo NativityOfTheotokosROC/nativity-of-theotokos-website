@@ -18,6 +18,8 @@ import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import ButtonBar from "../../button-bar/ButtonBar";
 import PageView from "../../page-view/PageView";
+import { useConfirmationDialog } from "@/src/lib/model-implementations/confirmation-dialog";
+import ConfirmationDialog from "../../confirmation-dialog/ConfirmationDialog";
 
 const EditArticle = function ({ model }) {
 	const { modelView, interact } = model;
@@ -80,6 +82,7 @@ const EditArticle = function ({ model }) {
 			});
 		}),
 	);
+	const confirmationDialog = useConfirmationDialog();
 	register("body");
 	useCloseWarning(
 		useCallback(
@@ -91,6 +94,7 @@ const EditArticle = function ({ model }) {
 	return (
 		<>
 			<ArticlePreviewModal model={articlePreviewModal} />
+			<ConfirmationDialog model={confirmationDialog} />
 			<PageView
 				model={newReadonlyModel({
 					title: t("title"),
@@ -158,7 +162,7 @@ const EditArticle = function ({ model }) {
 							<Button
 								model={newReadonlyModel({
 									title: t("discardDraftButton"),
-									type: "button",
+									variant: "alternative",
 									disabled:
 										notification?.type ===
 											"discarding_draft" ||
@@ -166,8 +170,17 @@ const EditArticle = function ({ model }) {
 									className:
 										"flex justify-center items-center w-fit",
 									async action() {
-										await interact({
-											type: "DISCARD_DRAFT",
+										await confirmationDialog.interact({
+											type: "OPEN",
+											input: {
+												message: t(
+													"discardDraftDialogMessage",
+												),
+												proceedCallback: async () =>
+													await interact({
+														type: "DISCARD_DRAFT",
+													}),
+											},
 										});
 									},
 								})}
@@ -175,7 +188,7 @@ const EditArticle = function ({ model }) {
 								{notification?.type === "discarding_draft" ? (
 									<Spinner
 										model={newReadonlyModel({
-											color: "white",
+											color: "#250203",
 											size: 20,
 										})}
 									/>
@@ -185,7 +198,6 @@ const EditArticle = function ({ model }) {
 							</Button>
 							<Button
 								model={newReadonlyModel({
-									type: "button",
 									disabled:
 										!hasDraftChanged ||
 										notification?.type === "saving_draft" ||

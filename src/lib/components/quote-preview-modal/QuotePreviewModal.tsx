@@ -15,22 +15,6 @@ const QuotePreviewModal = function ({ model }) {
 	} = model;
 	const t = useTranslations("newQuote");
 	const tMisc = useTranslations("miscellaneous");
-
-	const modal = {
-		modelView: { isOpen, title: t("quotePreview") },
-		async interact(interaction) {
-			switch (interaction.type) {
-				case "TOGGLE": {
-					if (interaction.input.value == "open")
-						await model.interact({
-							type: "OPEN",
-							input: { englishQuote, russianQuote },
-						});
-					await model.interact({ type: "CLOSE" });
-				}
-			}
-		},
-	} satisfies ModalModel;
 	const authorRu = russianQuote?.author ?? englishQuote.author;
 	const quoteRu = russianQuote?.quote ?? englishQuote.quote;
 	const sourceRu = russianQuote?.source ?? englishQuote.source;
@@ -44,7 +28,15 @@ const QuotePreviewModal = function ({ model }) {
 	);
 
 	return (
-		<Modal model={modal}>
+		<Modal
+			model={newReadonlyModel({
+				title: t("quotePreview"),
+				isOpen: isOpen ?? false,
+				async onClose() {
+					await interact({ type: "CLOSE" });
+				},
+			})}
+		>
 			<div className="flex w-full max-w-full min-w-full flex-col items-center justify-center *:px-8 md:max-w-[25em]">
 				<div className="mb-4 w-full rounded-none border-0 bg-gray-800 p-4 text-[#FEF8F3]">
 					<div className="ornament flex h-[4em] w-full items-center justify-center">

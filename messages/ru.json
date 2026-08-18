@@ -173,7 +173,7 @@
 		"discardDraftFail": "Не удалось удалить ваш черновик. Ошибка: {message}",
 		"discardDraftButton": "Удалить черновик",
 		"discardDraftDialogTitle": "Удалить черновик",
-		"discardDraftDialogMessage": "Вы уверены, что хотите удалить этот черновик? Если вы уже отправляли этот черновик ранее, ваша отправленная статья будет удалена."
+		"discardDraftDialogMessage": "Вы уверены, что хотите удалить этот черновик? Если вы уже отправляли этот черновик ранее и он ожидает утверждения, ваша отправленная статья будет удалена."
 	},
 	"articlePreview": {
 		"title": "Предпросмотр статьи",
@@ -335,6 +335,7 @@
 		"detailedMessage": "У вас нет назначенных вам статей, ожидающих проверки."
 	},
 	"confirmationDialog": {
+		"defaultTitle": "Подтвердить",
 		"defaultProceedButton": "Продолжить",
 		"defaultCancelButton": "Отмена"
 	}

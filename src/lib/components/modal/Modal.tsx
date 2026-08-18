@@ -12,16 +12,13 @@ import Spinner from "../spinner/Spinner";
 
 const Modal = function ({ model, children }) {
 	const {
-		modelView: { isOpen, title },
-		interact,
+		modelView: { isOpen, title, onClose },
 	} = model;
 
 	return (
 		<Dialog
 			open={isOpen}
-			onClose={async () =>
-				await interact({ type: "TOGGLE", input: { value: "close" } })
-			}
+			onClose={async () => await onClose()}
 			className="relative z-20"
 			as="div"
 		>

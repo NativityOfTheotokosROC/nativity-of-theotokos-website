@@ -173,7 +173,7 @@
 		"discardDraftFail": "Could not discard your draft. Error: {message}",
 		"discardDraftButton": "Discard Draft",
 		"discardDraftDialogTitle": "Discard Draft",
-		"discardDraftDialogMessage": "Are you sure you want to discard this draft? If you have submitted this draft before, your submission will be deleted."
+		"discardDraftDialogMessage": "Are you sure you want to discard this draft? If you have submitted this draft before and it is pending approval, your submission will be deleted."
 	},
 	"articlePreview": {
 		"title": "Article Preview",
@@ -336,6 +336,7 @@
 		"detailedMessage": "You have no pending article reviews assigned to you."
 	},
 	"confirmationDialog": {
+		"defaultTitle": "Confirm",
 		"defaultProceedButton": "Proceed",
 		"defaultCancelButton": "Cancel"
 	}

@@ -188,6 +188,7 @@ export function useEditArticle(
 						} else {
 							await discardDraft(ticketId);
 						}
+						setLastSavedDraft(undefined);
 						await notifier.interact({
 							type: "NOTIFY",
 							input: {
