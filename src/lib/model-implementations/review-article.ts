@@ -14,7 +14,7 @@ import {
 	NotifierModelInteraction,
 } from "../models/notifier";
 import { ToastNotification } from "./notifier";
-import { ArticleDraft } from "../models/edit-article";
+import { ArticleDraft } from "../models/write-article";
 import { Article, ArticleTicket } from "../types/general";
 import { publishArticle } from "../server-actions/article";
 import { useLocale, useTranslations } from "next-intl";

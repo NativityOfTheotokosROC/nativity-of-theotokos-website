@@ -1,10 +1,10 @@
 "use client";
 
-import { useEditArticle } from "@/src/lib/model-implementations/edit-article";
+import { useWriteArticle } from "@/src/lib/model-implementations/write-article";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
-import EditArticle from "./EditArticle";
-import { EditArticleModelView } from "@/src/lib/models/edit-article";
+import WriteArticle from "./WriteArticle";
+import { WriteArticleModelView } from "@/src/lib/models/write-article";
 import { toastNotifierVIInterface } from "@/src/lib/model-implementations/notifier";
 import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
 import InformationView from "../../information-view/InformationView";
@@ -13,7 +13,7 @@ import SubmitGraphic from "@/public/assets/icon-2.svg";
 import DiscardGraphic from "@/public/assets/graphic-1.svg";
 import GoHomeButton from "../../button/GoHomeButton";
 
-const EditArticleClient = function ({ model }) {
+const WriteArticleClient = function ({ model }) {
 	const {
 		ticketId,
 		author,
@@ -24,17 +24,18 @@ const EditArticleClient = function ({ model }) {
 	const toastNotifier = useNewStatefulInteractiveModel(
 		toastNotifierVIInterface(),
 	);
-	const t = useTranslations("editArticle");
+	const t = useTranslations("writeArticle");
 	const tMisc = useTranslations("miscellaneous");
-	const editArticle = useEditArticle(ticketId, {
+	const writeArticle = useWriteArticle(ticketId, {
 		author,
 		lastSavedDraft,
 		toastNotifier,
 		currentArticle,
 		canDeleteTicket,
 	});
+	const { notification: writeArticleNotification } = writeArticle.modelView;
 
-	if (editArticle.modelView.notification?.type === "submit_success")
+	if (writeArticleNotification?.type === "submit_success")
 		return (
 			<InformationView
 				model={newReadonlyModel({
@@ -46,7 +47,7 @@ const EditArticleClient = function ({ model }) {
 				<GoHomeButton>{tMisc("continue")}</GoHomeButton>
 			</InformationView>
 		);
-	if (editArticle.modelView.notification?.type === "discard_draft_success")
+	if (writeArticleNotification?.type === "discard_draft_success")
 		return (
 			<InformationView
 				model={newReadonlyModel({
@@ -58,11 +59,11 @@ const EditArticleClient = function ({ model }) {
 				<GoHomeButton>{tMisc("continue")}</GoHomeButton>
 			</InformationView>
 		);
-	return <EditArticle model={editArticle} />;
+	return <WriteArticle model={writeArticle} />;
 } satisfies ModeledVoidComponent<
 	ReadonlyModel<
 		Pick<
-			EditArticleModelView,
+			WriteArticleModelView,
 			| "ticketId"
 			| "lastSavedDraft"
 			| "author"
@@ -72,4 +73,4 @@ const EditArticleClient = function ({ model }) {
 	>
 >;
 
-export default EditArticleClient;
+export default WriteArticleClient;

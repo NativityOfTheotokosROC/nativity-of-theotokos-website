@@ -1,6 +1,6 @@
 import z, { string } from "zod";
 import { Translator } from "../types/general";
-import { getEditArticleFormSchema } from "./edit-article-form";
+import { getWriteArticleFormSchema } from "./write-article-form";
 import { emptyStringAsUndefined } from "../utilities/miscellaneous";
 import { useLocalizedSchema } from "./general";
 
@@ -12,8 +12,8 @@ export function getPublishArticleFormSchema(t?: Translator) {
 	const minSnippet = MIN_SNIPPET;
 	const maxSnippet = MAX_SNIPPET;
 	const maxImageCaption = MAX_IMAGE_CAPTION;
-	const editArticleFormSchema = getEditArticleFormSchema(t);
-	return editArticleFormSchema.extend({
+	const writeArticleFormSchema = getWriteArticleFormSchema(t);
+	return writeArticleFormSchema.extend({
 		authorName: z.string().trim().nonempty(),
 		imageUrl: z.httpUrl({
 			error:

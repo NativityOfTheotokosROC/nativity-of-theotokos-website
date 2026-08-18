@@ -6,10 +6,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import {
 	ArticleDraft,
-	EditArticleModel,
-	EditArticleModelInteraction,
-	EditArticleNotification,
-} from "../models/edit-article";
+	WriteArticleModel,
+	WriteArticleModelInteraction,
+	WriteArticleNotification,
+} from "../models/write-article";
 import {
 	NotifierModel,
 	NotifierModelInteraction,
@@ -24,7 +24,7 @@ import {
 } from "../server-actions/article";
 import { Article } from "../types/general";
 
-export function editArticleNotifierVIInterface(
+export function writeArticleNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
 ) {
 	return {
@@ -59,12 +59,12 @@ export function editArticleNotifierVIInterface(
 			}
 		},
 	} satisfies ViewInteractionInterface<
-		NotifierModelView<EditArticleNotification>,
-		NotifierModelInteraction<EditArticleNotification>
+		NotifierModelView<WriteArticleNotification>,
+		NotifierModelInteraction<WriteArticleNotification>
 	>;
 }
 
-export function useEditArticle(
+export function useWriteArticle(
 	ticketId: string,
 	options?: Partial<{
 		lastSavedDraft: ArticleDraft;
@@ -75,9 +75,9 @@ export function useEditArticle(
 	}>,
 ) {
 	const notifier = useNewStatefulInteractiveModel(
-		editArticleNotifierVIInterface(options?.toastNotifier),
+		writeArticleNotifierVIInterface(options?.toastNotifier),
 	);
-	const t = useTranslations("editArticle");
+	const t = useTranslations("writeArticle");
 	const [lastSavedDraft, setLastSavedDraft] = useState<
 		ArticleDraft | undefined
 	>(options?.lastSavedDraft);
@@ -92,7 +92,7 @@ export function useEditArticle(
 			canDeleteTicket: options?.canDeleteTicket ?? false,
 		},
 		interact: async function (
-			interaction: EditArticleModelInteraction,
+			interaction: WriteArticleModelInteraction,
 		): Promise<void> {
 			switch (interaction.type) {
 				case "SAVE_DRAFT": {
@@ -218,5 +218,5 @@ export function useEditArticle(
 				}
 			}
 		},
-	} satisfies EditArticleModel;
+	} satisfies WriteArticleModel;
 }

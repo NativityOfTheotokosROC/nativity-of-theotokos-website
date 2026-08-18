@@ -5,7 +5,7 @@ import {
 } from "@mvc-react/mvc";
 import { Article, Notification } from "../types/general";
 
-export type EditArticleNotification =
+export type WriteArticleNotification =
 	| (Notification<
 			| "submit_success"
 			| "submit_failure"
@@ -25,16 +25,16 @@ export type ArticleDraft = {
 	body: string;
 };
 
-export type EditArticleModelView = {
+export type WriteArticleModelView = {
 	ticketId: string;
-	notification: EditArticleNotification | null;
+	notification: WriteArticleNotification | null;
 	canDeleteTicket: boolean;
 	author?: string;
 	lastSavedDraft?: ArticleDraft;
 	currentArticle?: Article;
 };
 
-export type EditArticleModelInteraction =
+export type WriteArticleModelInteraction =
 	| ModelInteraction<"DISCARD_DRAFT">
 	| InputModelInteraction<
 			"SUBMIT" | "SAVE_DRAFT",
@@ -44,7 +44,7 @@ export type EditArticleModelInteraction =
 			}
 	  >;
 
-export type EditArticleModel = InteractiveModel<
-	EditArticleModelView,
-	EditArticleModelInteraction
+export type WriteArticleModel = InteractiveModel<
+	WriteArticleModelView,
+	WriteArticleModelInteraction
 >;

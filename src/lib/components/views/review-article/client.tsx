@@ -1,7 +1,7 @@
 "use client";
 
 import { useReviewArticle } from "@/src/lib/model-implementations/review-article";
-import { ArticleDraft } from "@/src/lib/models/edit-article";
+import { ArticleDraft } from "@/src/lib/models/write-article";
 import { Article, ArticleTicket } from "@/src/lib/types/general";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ReadonlyModel } from "@mvc-react/mvc";

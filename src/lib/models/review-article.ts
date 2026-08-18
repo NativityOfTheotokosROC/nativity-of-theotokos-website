@@ -1,6 +1,6 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 import { Article, ArticleTicket, Notification } from "../types/general";
-import { ArticleDraft } from "./edit-article";
+import { ArticleDraft } from "./write-article";
 
 export type ReviewArticleNotification =
 	| Notification<"submitting">

@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { cacheTag, revalidateTag } from "next/cache";
 import { forbidden, notFound } from "next/navigation";
 import z from "zod";
-import { ArticleDraft } from "../models/edit-article";
+import { ArticleDraft } from "../models/write-article";
 import { getPlaceholder } from "../server-only/placeholder";
 import database from "../third-party/prisma";
 import {
@@ -21,7 +21,7 @@ import {
 	removeMarkup,
 } from "../utilities/miscellaneous";
 import { BASE_URL, IS_AUTH_DISABLED } from "../utilities/server-constants";
-import { getEditArticleFormSchema } from "../validation/edit-article-form";
+import { getWriteArticleFormSchema } from "../validation/write-article-form";
 import { getUser, protect } from "./auth";
 import { getUserInformation } from "./user";
 import {
@@ -133,7 +133,7 @@ export async function saveDraft(
 		},
 	});
 	const t = await getTranslations({ locale: locale ?? "en" });
-	const articleFormSchema = getEditArticleFormSchema(t);
+	const articleFormSchema = getWriteArticleFormSchema(t);
 	const { title, body } = isSubmitted
 		? articleFormSchema.parse({ title: draft.title, body: draft.body })
 		: draft;
@@ -196,7 +196,7 @@ export async function submitArticle(
 	locale?: Language,
 ) {
 	const t = await getTranslations({ locale: locale ?? "en" });
-	const articleFormSchema = getEditArticleFormSchema(t);
+	const articleFormSchema = getWriteArticleFormSchema(t);
 	const { title, body } = articleFormSchema.parse({
 		title: article.title,
 		body: article.body,
@@ -310,6 +310,7 @@ export async function makeArticleEdit(articleId: string) {
 				create: {
 					title: article.title.english,
 					body: article.body.english,
+					lastSaved: new Date(),
 				},
 			},
 		},

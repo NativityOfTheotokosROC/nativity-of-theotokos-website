@@ -12,7 +12,7 @@ export function getProtectedRoutes() {
 					"/admin",
 					"/notifications",
 					"/quotes/new",
-					"/edit-article", //TODO: Cater for /news/[slug]/edit too
+					"/write-article", //TODO: Cater for /news/[slug]/edit too
 					"/review-article",
 				] as const);
 	// This should do for now lol

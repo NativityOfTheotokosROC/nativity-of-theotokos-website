@@ -6,9 +6,9 @@ import Editor from "@/src/lib/components/editor/Editor";
 import Spinner from "@/src/lib/components/spinner/Spinner";
 import { useArticlePreviewModal } from "@/src/lib/model-implementations/article-preview-modal";
 import { useEditor } from "@/src/lib/model-implementations/editor";
-import { EditArticleModel } from "@/src/lib/models/edit-article";
+import { WriteArticleModel } from "@/src/lib/models/write-article";
 import { useCloseWarning } from "@/src/lib/utilities/hooks";
-import { useEditArticleFormSchema } from "@/src/lib/validation/edit-article-form";
+import { useWriteArticleFormSchema } from "@/src/lib/validation/write-article-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
@@ -21,13 +21,13 @@ import PageView from "../../page-view/PageView";
 import { useConfirmationDialog } from "@/src/lib/model-implementations/confirmation-dialog";
 import ConfirmationDialog from "../../confirmation-dialog/ConfirmationDialog";
 
-const EditArticle = function ({ model }) {
+const WriteArticle = function ({ model }) {
 	const { modelView, interact } = model;
 	const { notification, lastSavedDraft, author, currentArticle } = modelView;
-	const t = useTranslations("editArticle");
+	const t = useTranslations("writeArticle");
 	const defaultTitle = "";
 	const defaultBody = `<p>${t("bodyPlaceholder")}</p>`;
-	const articleFormSchema = useEditArticleFormSchema();
+	const articleFormSchema = useWriteArticleFormSchema();
 	const {
 		register,
 		handleSubmit,
@@ -255,6 +255,6 @@ const EditArticle = function ({ model }) {
 			</PageView>
 		</>
 	);
-} satisfies ModeledVoidComponent<InitializedModel<EditArticleModel>>;
+} satisfies ModeledVoidComponent<InitializedModel<WriteArticleModel>>;
 
-export default EditArticle;
+export default WriteArticle;

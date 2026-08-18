@@ -7,14 +7,14 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import EditArticleClient from "../../../lib/components/views/edit-article/client";
+import WriteArticleClient from "../../../lib/components/views/write-article/client";
 
 export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 	const { locale } = await params;
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 	const t = await getTranslations({
 		locale: language,
-		namespace: "editArticle",
+		namespace: "writeArticle",
 	});
 	return {
 		title: t("metaTitle"),
@@ -30,7 +30,7 @@ export default async function Page() {
 		latestUnsubmittedArticle ?? (await createTicket({ useUnused: true }));
 
 	return (
-		<EditArticleClient
+		<WriteArticleClient
 			model={newReadonlyModel({
 				ticketId,
 				lastSavedDraft: draft,

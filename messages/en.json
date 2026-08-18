@@ -147,9 +147,9 @@
 		"userField": "User Email",
 		"assignments": "Number of Assignments"
 	},
-	"editArticle": {
-		"metaTitle": "Edit Article",
-		"title": "Edit Article",
+	"writeArticle": {
+		"metaTitle": "Write Article",
+		"title": "Write Article",
 		"titleField": "Article Title",
 		"bodyField": "Body",
 		"bodyPlaceholder": "Start writing here...",
