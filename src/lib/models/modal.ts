@@ -1,18 +1,11 @@
-import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
+import { Model } from "@mvc-react/mvc";
 
 export type ModalModelView = {
 	isOpen: boolean;
 	title: string;
+	size: "smallest" | "small" | "medium" | "large";
+	position?: "top" | "center";
+	onClose: () => Promise<void>;
 };
 
-export type ModalToggleValue = "open" | "close";
-
-export type ModalModelInteraction = InputModelInteraction<
-	"TOGGLE",
-	{ value: ModalToggleValue }
->;
-
-export type ModalModel = InteractiveModel<
-	ModalModelView,
-	ModalModelInteraction
->;
+export type ModalModel = Model<ModalModelView>;

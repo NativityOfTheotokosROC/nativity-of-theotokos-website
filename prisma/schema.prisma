@@ -114,11 +114,12 @@ model FeaturedArticle {
 }
 
 model ArticleTicket {
-  id           String        @id @default(uuid())
-  userEmail    String
-  articleDraft ArticleDraft?
-  article      Article?      @relation(fields: [articleId], references: [link])
-  articleId    String?       @unique
+  id            String        @id @default(uuid())
+  userEmail     String
+  assignerEmail String?
+  articleDraft  ArticleDraft?
+  article       Article?      @relation(fields: [articleId], references: [link])
+  articleId     String?       @unique
 }
 
 model ArticleDraft {

@@ -24,6 +24,7 @@ export default async function Page({
 	if (!article) notFound();
 	const {
 		ticketId,
+		canDeleteTicket,
 		draft: { title, body },
 		currentArticle,
 	} = await makeArticleEdit(article);
@@ -31,6 +32,7 @@ export default async function Page({
 		<EditArticleClient
 			model={newReadonlyModel({
 				ticketId,
+				canDeleteTicket,
 				lastSavedDraft: { title, body },
 				currentArticle,
 			})}

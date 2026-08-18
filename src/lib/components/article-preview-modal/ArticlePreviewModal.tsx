@@ -29,26 +29,20 @@ const ArticlePreviewModal = function ({ model }) {
 
 	return (
 		<Modal
-			model={{
-				modelView: { title: t("title"), isOpen: isOpen ?? false },
-				async interact(interaction) {
-					switch (interaction.type) {
-						case "TOGGLE": {
-							switch (interaction.input.value) {
-								case "close": {
-									return await interact({ type: "CLOSE" });
-								}
-							}
-						}
-					}
+			model={newReadonlyModel({
+				title: t("title"),
+				size: "large",
+				isOpen: isOpen ?? false,
+				async onClose() {
+					await interact({ type: "CLOSE" });
 				},
-			}}
+			})}
 		>
 			<div className="flex w-full flex-col items-center justify-center">
 				<div className="w-full rounded-none border-0 bg-gray-800 p-6 text-[#FEF8F3]">
 					<span className="text-xl">{t("title")}</span>
 				</div>
-				<div className="article-box max-h-[65svh] w-full overflow-y-auto">
+				<div className="article-box h-full max-h-[65svh] min-h-[5em] w-full shrink-2 overflow-y-auto">
 					<Article
 						model={newReadonlyModel({
 							permalink: "#",

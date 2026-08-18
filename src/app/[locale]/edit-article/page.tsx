@@ -3,8 +3,6 @@ import {
 	createTicket,
 	getLatestUnsubmittedArticle,
 } from "@/src/lib/server-actions/article";
-import { getUser } from "@/src/lib/server-actions/auth";
-import { IS_AUTH_DISABLED } from "@/src/lib/utilities/server-constants";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
@@ -24,19 +22,12 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 }
 
 export default async function Page() {
-	const user = await getUser();
-	const authorEmail =
-		user?.email ??
-		(IS_AUTH_DISABLED ? "editorial@nativityoftheotokos.com" : undefined);
-	const latestUnsubmittedArticle =
-		await getLatestUnsubmittedArticle(authorEmail);
+	const latestUnsubmittedArticle = await getLatestUnsubmittedArticle();
 	const draft = latestUnsubmittedArticle?.draft ?? undefined;
 	const currentArticle =
 		latestUnsubmittedArticle?.currentArticle ?? undefined;
-	const ticketId = latestUnsubmittedArticle
-		? latestUnsubmittedArticle.ticketId
-		: (await createTicket({ userEmail: authorEmail, useUnused: true }))
-				.ticketId;
+	const { ticketId, canDeleteTicket } =
+		latestUnsubmittedArticle ?? (await createTicket({ useUnused: true }));
 
 	return (
 		<EditArticleClient
@@ -44,7 +35,7 @@ export default async function Page() {
 				ticketId,
 				lastSavedDraft: draft,
 				currentArticle,
-				author: user?.name,
+				canDeleteTicket,
 			})}
 		/>
 	);

@@ -1,4 +1,4 @@
-import DailyQuoteGraphic from "@/public/assets/daily-thought.jpg";
+import DailyQuoteGraphic from "@/public/assets/daily-thought.webp";
 import { DailyQuoteSectionModel } from "@/src/lib/models/daily-quote-section";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { useTranslations } from "next-intl";
