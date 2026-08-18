@@ -30,7 +30,7 @@ import {
 } from "../validation/publish-article-form";
 import { DEFAULT_PREVIEW_USER_EMAIL } from "../utilities/constants";
 
-const FULL_ARTICLE_INCLUDES = {
+const _FULL_ARTICLE_INCLUDES = {
 	author: { include: { name: true } },
 	title: true,
 	body: true,
@@ -292,7 +292,7 @@ export async function makeArticleEdit(articleId: string) {
 	const user = await getUserInformation();
 	if (!user && !IS_AUTH_DISABLED) forbidden();
 	const article = await database.article.findUnique({
-		include: FULL_ARTICLE_INCLUDES,
+		include: _FULL_ARTICLE_INCLUDES,
 		where: { link: articleId },
 	});
 	if (!article) notFound();
@@ -361,21 +361,10 @@ export async function getDraft(ticketId: string) {
 	} satisfies ArticleDraft;
 }
 
-export async function getLatestUnsubmittedArticle(authorEmail?: string) {
-	const parsedEmail = authorEmail
-		? z.email().parse(authorEmail.trim())
-		: null;
+export async function getLatestUnsubmittedArticle() {
 	const user = await getUser();
-	// TODO: You're doing too much. Simplify
-	if (!(parsedEmail || user?.email) && IS_AUTH_DISABLED)
-		throw new Error("Not logged in and no email provided.");
-	if (!(parsedEmail || user?.email)) forbidden();
 	if (!user && !IS_AUTH_DISABLED) forbidden();
-	if (parsedEmail && parsedEmail !== user?.email)
-		await protect({ roles: ["admin"] });
-
 	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
-	const computedAuthorEmail = parsedEmail ?? userEmail;
 
 	const ticket = await database.articleTicket.findFirst({
 		orderBy: {
@@ -383,12 +372,12 @@ export async function getLatestUnsubmittedArticle(authorEmail?: string) {
 		},
 		include: {
 			article: {
-				include: FULL_ARTICLE_INCLUDES,
+				include: _FULL_ARTICLE_INCLUDES,
 			},
 			articleDraft: true,
 		},
 		where: {
-			userEmail: computedAuthorEmail,
+			userEmail,
 			articleDraft: { pendingArticleSubmission: null },
 		},
 	});
@@ -400,7 +389,7 @@ export async function getLatestUnsubmittedArticle(authorEmail?: string) {
 				title: ticket.articleDraft.title,
 				body: ticket.articleDraft.body,
 			} satisfies ArticleDraft)
-		: undefined;
+		: null;
 
 	const article = ticket.article
 		? ({
@@ -418,13 +407,13 @@ export async function getLatestUnsubmittedArticle(authorEmail?: string) {
 							?.placeholder as ImagePlaceholder) ?? undefined,
 				},
 			} satisfies Article)
-		: undefined;
+		: null;
 
 	return {
 		ticketId: ticket.id,
 		canDeleteTicket: ticket.assignerEmail === userEmail,
-		draft: articleDraft,
-		currentArticle: article,
+		draft: articleDraft ?? undefined,
+		currentArticle: article ?? undefined,
 	} satisfies {
 		ticketId: string;
 		canDeleteTicket: boolean;
@@ -439,7 +428,7 @@ export async function getPendingArticleSubmission() {
 	if (!IS_AUTH_DISABLED) await protect({ roles: ["admin"] });
 	const ticketData = await database.articleTicket.findFirst({
 		include: {
-			article: { include: FULL_ARTICLE_INCLUDES },
+			article: { include: _FULL_ARTICLE_INCLUDES },
 			articleDraft: { include: { pendingArticleSubmission: true } },
 		},
 		where: {

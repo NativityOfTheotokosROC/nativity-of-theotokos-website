@@ -25,19 +25,12 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 }
 
 export default async function Page() {
-	const user = await getUser();
-	const authorEmail =
-		user?.email ??
-		(IS_AUTH_DISABLED ? DEFAULT_PREVIEW_USER_EMAIL : undefined);
-	const latestUnsubmittedArticle =
-		await getLatestUnsubmittedArticle(authorEmail);
+	const latestUnsubmittedArticle = await getLatestUnsubmittedArticle();
 	const draft = latestUnsubmittedArticle?.draft ?? undefined;
 	const currentArticle =
 		latestUnsubmittedArticle?.currentArticle ?? undefined;
-	const ticketId = latestUnsubmittedArticle
-		? latestUnsubmittedArticle.ticketId
-		: (await createTicket({ userEmail: authorEmail, useUnused: true }))
-				.ticketId;
+	const { ticketId, canDeleteTicket } =
+		latestUnsubmittedArticle ?? (await createTicket({ useUnused: true }));
 
 	return (
 		<EditArticleClient
@@ -45,9 +38,7 @@ export default async function Page() {
 				ticketId,
 				lastSavedDraft: draft,
 				currentArticle,
-				author: user?.name,
-				canDeleteTicket:
-					latestUnsubmittedArticle?.canDeleteTicket ?? true,
+				canDeleteTicket,
 			})}
 		/>
 	);
