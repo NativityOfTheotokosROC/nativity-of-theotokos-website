@@ -91,7 +91,11 @@ const WriteArticle = function ({ model }) {
 	register("body");
 	useCloseWarning(
 		useCallback(
-			() => !(notification?.type === "submit_success") && hasDraftChanged,
+			() =>
+				!(
+					notification?.type === "submit_success" ||
+					notification?.type === "discard_draft_success"
+				) && hasDraftChanged,
 			[notification?.type, hasDraftChanged],
 		),
 	);

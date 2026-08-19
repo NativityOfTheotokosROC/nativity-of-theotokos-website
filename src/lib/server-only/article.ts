@@ -143,15 +143,23 @@ export async function validateNewArticle(
 ) {
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const publishArticleFormSchema = getPublishArticleFormSchema(t);
-	const { title, body, authorName, imageUrl, imageCaption, snippet } =
-		publishArticleFormSchema.parse({
-			title: newArticle.title,
-			body: newArticle.body,
-			authorName: newArticle.authorName,
-			snippet: newArticle.snippet ?? "",
-			imageUrl: newArticle.articleImage.source,
-			imageCaption: newArticle.articleImage.about,
-		} satisfies z.infer<typeof publishArticleFormSchema>);
+	const {
+		title,
+		body,
+		authorName,
+		imageUrl,
+		imageCaption,
+		snippet,
+		isArticleFeatured,
+	} = publishArticleFormSchema.parse({
+		title: newArticle.title,
+		body: newArticle.body,
+		authorName: newArticle.authorName,
+		snippet: newArticle.snippet ?? "",
+		imageUrl: newArticle.articleImage.source,
+		imageCaption: newArticle.articleImage.about,
+		isArticleFeatured: newArticle.isArticleFeatured,
+	} satisfies z.infer<typeof publishArticleFormSchema>);
 	const link = z.string().slugify().parse(title);
 	const finalSnippet =
 		snippet ?? `${removeMarkup(body).substring(0, MAX_SNIPPET - 3)}...`;
@@ -163,5 +171,6 @@ export async function validateNewArticle(
 		body,
 		snippet: finalSnippet,
 		articleImage: { source: imageUrl, about: imageCaption },
+		isArticleFeatured,
 	} satisfies NewArticle & { link: string };
 }

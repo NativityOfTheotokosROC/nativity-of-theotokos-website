@@ -6,7 +6,7 @@ import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import PageView from "../../page-view/PageView";
 import { useTranslations } from "next-intl";
 import { useArticlePreviewModal } from "@/src/lib/model-implementations/article-preview-modal";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePublishArticleFormSchema } from "@/src/lib/validation/publish-article-form";
 import Spinner from "../../spinner/Spinner";
@@ -30,6 +30,7 @@ import GoHomeButton from "../../button/GoHomeButton";
 import SuccessGraphic from "@/public/assets/ornament_32.svg";
 import { Check, X } from "lucide-react";
 import InformationView from "../../information-view/InformationView";
+import Checkbox from "../../checkbox/Checkbox";
 
 const ReviewArticle = function ({ model }) {
 	const { modelView, interact } = model;
@@ -39,6 +40,7 @@ const ReviewArticle = function ({ model }) {
 	const tMisc = useTranslations("miscellaneous");
 	const publishArticleFormSchema = usePublishArticleFormSchema();
 	const {
+		control,
 		register,
 		handleSubmit,
 		setValue,
@@ -52,13 +54,21 @@ const ReviewArticle = function ({ model }) {
 			snippet: currentArticle?.snippet ?? "",
 			imageUrl: currentArticle?.articleImage.source ?? "",
 			imageCaption: currentArticle?.articleImage.about ?? "",
+			isArticleFeatured: false,
 		},
 	});
 	const articlePreviewModal = useArticlePreviewModal(
 		handleSubmit(async form => {
 			await articlePreviewModal.interact({ type: "CLOSE" });
-			const { title, body, authorName, imageUrl, imageCaption, snippet } =
-				form;
+			const {
+				title,
+				body,
+				authorName,
+				imageUrl,
+				imageCaption,
+				snippet,
+				isArticleFeatured,
+			} = form;
 			await interact({
 				type: "PUBLISH",
 				input: {
@@ -67,6 +77,7 @@ const ReviewArticle = function ({ model }) {
 					imageCaption,
 					authorName: authorName ?? draftAssigneeName,
 					snippet,
+					isArticleFeatured,
 				},
 			});
 		}),
@@ -295,6 +306,21 @@ const ReviewArticle = function ({ model }) {
 							<span className="text-sm text-red-800">
 								{errors.snippet.message}
 							</span>
+						)}
+						{!currentArticle?.isArticleFeatured && (
+							<Controller
+								control={control}
+								name={"isArticleFeatured"}
+								render={({ field: { onChange, value } }) => (
+									<Checkbox
+										model={newReadonlyModel({
+											isChecked: value,
+											label: t("featureTheArticle"),
+											checkedChangeCallback: onChange,
+										})}
+									/>
+								)}
+							/>
 						)}
 						{errors.form && (
 							<span className="text-sm text-red-800">

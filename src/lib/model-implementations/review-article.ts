@@ -10,6 +10,7 @@ import {
 } from "../models/notifier";
 import {
 	ReviewArticleModel,
+	ReviewArticleModelView,
 	ReviewArticleNotification,
 } from "../models/review-article";
 import { ArticleDraft } from "../models/write-article";
@@ -56,7 +57,7 @@ export function useReviewArticle(
 	draft: ArticleDraft,
 	draftAssigneeName: string,
 	ticketId?: string,
-	currentArticle?: Article,
+	currentArticle?: ReviewArticleModelView["currentArticle"],
 	options?: Partial<{ toastNotifier: NotifierModel<ToastNotification> }>,
 ) {
 	if (!ticketId && !currentArticle)
@@ -89,6 +90,7 @@ export function useReviewArticle(
 						imageCaption,
 						authorName,
 						snippet,
+						isArticleFeatured,
 					} = interaction.input;
 					try {
 						if (currentArticle) {
@@ -103,6 +105,7 @@ export function useReviewArticle(
 										about: imageCaption,
 									},
 									snippet: snippet ?? "",
+									isArticleFeatured,
 								},
 								ticketId,
 								locale,
@@ -131,6 +134,7 @@ export function useReviewArticle(
 									about: imageCaption,
 								},
 								snippet: snippet ?? "",
+								isArticleFeatured,
 							},
 							locale,
 						});

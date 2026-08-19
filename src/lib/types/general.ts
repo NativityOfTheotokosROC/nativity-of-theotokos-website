@@ -78,6 +78,7 @@ export type NewArticle = {
 	body: string;
 	snippet: string;
 	articleImage: Required<Pick<Image, "source" | "about">>;
+	isArticleFeatured: boolean;
 	authorName?: string;
 };
 

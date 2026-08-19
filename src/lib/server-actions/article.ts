@@ -25,6 +25,7 @@ import { BASE_URL, IS_AUTH_DISABLED } from "../utilities/server-constants";
 import { getWriteArticleFormSchema } from "../validation/write-article-form";
 import { getUser, protect } from "./auth";
 import { getUserInformation } from "./user";
+import { hasArticleChanged } from "../utilities/article";
 
 const _FULL_ARTICLE_INCLUDES = {
 	author: { include: { name: true } },
@@ -616,6 +617,7 @@ export async function publishNewArticle({
 		body,
 		snippet,
 		articleImage: { source, about },
+		isArticleFeatured,
 	} = await validateNewArticle(incomingArticle, locale);
 
 	const newArticle = database.$transaction(async transaction => {
@@ -682,6 +684,12 @@ export async function publishNewArticle({
 				},
 			},
 		});
+		if (isArticleFeatured) {
+			await transaction.featuredArticle.deleteMany({});
+			await transaction.featuredArticle.create({
+				data: { articleId: result.id },
+			});
+		}
 		await transaction.articleTicket.delete({ where: { id: ticketId } });
 		return result;
 	});
@@ -704,13 +712,11 @@ export async function publishExistingArticle({
 	if (!IS_AUTH_DISABLED && !user) forbidden();
 	if (!IS_AUTH_DISABLED) await protect({ roles: ["editor"] });
 	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
-
-	if (
-		!(await database.article.findUnique({
-			where: { link: articleId },
-		}))
-	)
-		notFound();
+	const existingArticle = await database.article.findUnique({
+		include: _FULL_ARTICLE_INCLUDES,
+		where: { link: articleId },
+	});
+	if (!existingArticle) notFound();
 
 	const draft = ticketId
 		? await database.articleDraft.findUnique({
@@ -740,6 +746,7 @@ export async function publishExistingArticle({
 		snippet,
 		authorName,
 		articleImage: { source, about },
+		isArticleFeatured,
 	} = await validateNewArticle(incomingArticle, locale);
 
 	const newArticle = await database.$transaction(async transaction => {
@@ -815,7 +822,36 @@ export async function publishExistingArticle({
 						where: { link: source },
 					},
 				},
-				dateUpdated: new Date(),
+				dateUpdated: hasArticleChanged(
+					{
+						title: existingArticle.title.english,
+						author: { name: existingArticle.author.name.english },
+						snippet: existingArticle.snippet.english,
+						body: existingArticle.body.english,
+						articleImage: {
+							source: existingArticle.image.link,
+							about: existingArticle.image.caption.english,
+						},
+					},
+					incomingArticle,
+				)
+					? new Date()
+					: undefined,
+				featuredArticle: isArticleFeatured
+					? {
+							connectOrCreate: {
+								create: { articleId: existingArticle.id },
+								where: {
+									articleId: existingArticle.id,
+								},
+							},
+							delete: {
+								NOT: {
+									articleId: existingArticle.id,
+								},
+							},
+						}
+					: undefined,
 			},
 			where: {
 				link: articleId, // TODO: Change articleId to articleLink in future to avoid confusion

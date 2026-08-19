@@ -58,6 +58,7 @@ export function getPublishArticleFormSchema(t?: Translator) {
 				})
 				.optional(),
 		),
+		isArticleFeatured: z.boolean(),
 	});
 }
 

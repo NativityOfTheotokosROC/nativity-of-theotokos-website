@@ -9,7 +9,7 @@ export type ReviewArticleNotification =
 export type ReviewArticleModelView = {
 	draft: ArticleDraft;
 	draftAssigneeName: string;
-	currentArticle?: Article;
+	currentArticle?: Article & { isArticleFeatured: boolean };
 	notification: ReviewArticleNotification | null;
 };
 
@@ -19,6 +19,7 @@ export type ReviewArticleModelInteraction = InputModelInteraction<
 		draft: ArticleDraft;
 		imageUrl: string;
 		imageCaption: string;
+		isArticleFeatured: boolean;
 		authorName?: string;
 		snippet?: string;
 	}
