@@ -115,6 +115,7 @@ export function useReviewArticle(
 									},
 								},
 							});
+							break;
 						}
 						if (!ticket?.ticketId)
 							throw new Error("No article ticket was provided");

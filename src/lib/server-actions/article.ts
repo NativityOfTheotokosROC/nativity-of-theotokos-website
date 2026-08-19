@@ -779,6 +779,5 @@ export async function publishExistingArticle({
 	});
 	revalidateTag("latest-articles", "max");
 	revalidateTag(`article_${articleId}`, "max");
-	console.log(`Success? ${JSON.stringify(newArticle)}`);
 	return newArticle;
 }
