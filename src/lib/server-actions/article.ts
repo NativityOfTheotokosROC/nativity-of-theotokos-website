@@ -455,9 +455,9 @@ export async function getLatestUnsubmittedArticle() {
 		},
 		where: {
 			OR: [
-				{ userEmail, articleDraft: null },
+				{ assigneeEmail: userEmail, articleDraft: null },
 				{
-					userEmail,
+					assigneeEmail: userEmail,
 					articleDraft: { pendingArticleSubmission: null },
 				},
 			],
@@ -521,7 +521,7 @@ export async function getPendingArticleSubmission() {
 					? { isNot: null }
 					: {
 							OR: [
-								{ editorEmail: user?.email },
+								{ editorEmail: userEmail },
 								{ editorEmail: null },
 							],
 						},
