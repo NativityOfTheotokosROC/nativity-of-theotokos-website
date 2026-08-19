@@ -1,7 +1,15 @@
 import { cacheTag, cacheLife } from "next/cache";
 import database from "../third-party/prisma";
-import { Language, Article, ArticleAuthor } from "../types/general";
+import { Language, Article, ArticleAuthor, NewArticle } from "../types/general";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import { locale } from "next/root-params";
+import z from "zod";
+import { removeMarkup } from "../utilities/miscellaneous";
+import {
+	getPublishArticleFormSchema,
+	MAX_SNIPPET,
+} from "../validation/publish-article-form";
 
 export async function getAllArticles(language: Language): Promise<Article[]> {
 	"use cache: remote";
@@ -127,4 +135,33 @@ export async function getArticleMetadata(
 			notFound();
 		throw error;
 	}
+}
+
+export async function validateNewArticle(
+	newArticle: NewArticle,
+	locale?: Language,
+) {
+	const t = await getTranslations({ locale: locale ?? "en" });
+	const publishArticleFormSchema = getPublishArticleFormSchema(t);
+	const { title, body, authorName, imageUrl, imageCaption, snippet } =
+		publishArticleFormSchema.parse({
+			title: newArticle.title,
+			body: newArticle.body,
+			authorName: newArticle.authorName,
+			snippet: newArticle.snippet ?? "",
+			imageUrl: newArticle.articleImage.source,
+			imageCaption: newArticle.articleImage.about,
+		} satisfies z.infer<typeof publishArticleFormSchema>);
+	const link = z.string().slugify().parse(title);
+	const finalSnippet =
+		snippet ?? `${removeMarkup(body).substring(0, MAX_SNIPPET - 3)}...`;
+
+	return {
+		link,
+		title,
+		authorName,
+		body,
+		snippet: finalSnippet,
+		articleImage: { source: imageUrl, about: imageCaption },
+	} satisfies NewArticle & { link: string };
 }

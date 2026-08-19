@@ -1,5 +1,5 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
-import { Article, ArticleTicket, Notification } from "../types/general";
+import { Article, Notification } from "../types/general";
 import { ArticleDraft } from "./write-article";
 
 export type ReviewArticleNotification =
@@ -7,9 +7,9 @@ export type ReviewArticleNotification =
 	| (Notification<"submit_success" | "submit_failure"> & { message: string });
 
 export type ReviewArticleModelView = {
-	ticket: ArticleTicket;
 	draft: ArticleDraft;
 	currentArticle?: Article;
+	draftAssigneeName?: string;
 	notification: ReviewArticleNotification | null;
 };
 

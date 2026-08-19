@@ -3,8 +3,6 @@ import {
 	ViewInteractionInterface,
 } from "@mvc-react/stateful";
 import {
-	ReviewArticleModelView,
-	ReviewArticleModelInteraction,
 	ReviewArticleModel,
 	ReviewArticleNotification,
 } from "../models/review-article";
@@ -16,8 +14,11 @@ import {
 import { ToastNotification } from "./notifier";
 import { ArticleDraft } from "../models/write-article";
 import { Article, ArticleTicket } from "../types/general";
-import { publishArticle } from "../server-actions/article";
 import { useLocale, useTranslations } from "next-intl";
+import {
+	publishExistingArticle,
+	publishNewArticle,
+} from "../server-actions/article";
 
 export function reviewArticleNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
@@ -52,11 +53,15 @@ export function reviewArticleNotifierVIInterface(
 }
 
 export function useReviewArticle(
-	ticket: ArticleTicket,
 	draft: ArticleDraft,
+	ticket?: ArticleTicket,
 	currentArticle?: Article,
 	options?: Partial<{ toastNotifier: NotifierModel<ToastNotification> }>,
 ) {
+	if (!ticket?.ticketId && !currentArticle)
+		throw new Error(
+			"No article ticket or existing article ID was provided",
+		);
 	const t = useTranslations("reviewArticle");
 	const notifier = useNewStatefulInteractiveModel(
 		reviewArticleNotifierVIInterface(options?.toastNotifier),
@@ -64,7 +69,12 @@ export function useReviewArticle(
 	const notification = notifier.modelView?.notification ?? null;
 	const locale = useLocale();
 	return {
-		modelView: { ticket, draft, currentArticle, notification },
+		modelView: {
+			draftAssigneeName: ticket?.assignee.name,
+			draft,
+			currentArticle,
+			notification,
+		},
 		async interact(interaction) {
 			switch (interaction.type) {
 				case "PUBLISH": {
@@ -80,9 +90,27 @@ export function useReviewArticle(
 						snippet,
 					} = interaction.input;
 					try {
-						await publishArticle(
-							ticket.ticketId,
-							{
+						if (currentArticle)
+							await publishExistingArticle({
+								articleId: currentArticle.uri,
+								incomingArticle: {
+									title,
+									body,
+									authorName,
+									articleImage: {
+										source: imageUrl,
+										about: imageCaption,
+									},
+									snippet: snippet ?? "",
+								},
+								ticketId: ticket?.ticketId,
+								locale,
+							});
+						if (!ticket?.ticketId)
+							throw new Error("No article ticket was provided");
+						await publishNewArticle({
+							ticketId: ticket.ticketId,
+							incomingArticle: {
 								title,
 								body,
 								authorName,
@@ -93,7 +121,7 @@ export function useReviewArticle(
 								snippet: snippet ?? "",
 							},
 							locale,
-						);
+						});
 						await notifier.interact({
 							type: "NOTIFY",
 							input: {

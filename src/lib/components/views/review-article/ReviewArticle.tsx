@@ -21,7 +21,6 @@ import {
 	DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER,
 } from "@/src/lib/utilities/constants";
 import { useImageProcessor } from "@/src/lib/model-implementations/image-processor";
-import { useToastNotifier } from "@/src/lib/model-implementations/notifier";
 import { useFileUploader } from "@/src/lib/model-implementations/file-uploader";
 import { getPresignedUrl } from "@/src/lib/server-actions/file-transfer";
 import { generateUniqueName } from "@/src/lib/utilities/miscellaneous";
@@ -31,11 +30,12 @@ import { useCallback, useEffect } from "react";
 import { georgia } from "@/src/lib/third-party/fonts";
 import GoHomeButton from "../../button/GoHomeButton";
 import SuccessGraphic from "@/public/assets/ornament_32.svg";
-import { Check, Cross, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 
 const ReviewArticle = function ({ model }) {
 	const { modelView, interact } = model;
-	const { ticket, draft, currentArticle, notification } = modelView;
+	const { draftAssigneeName, draft, currentArticle, notification } =
+		modelView;
 	const t = useTranslations("reviewArticle");
 	const tMisc = useTranslations("miscellaneous");
 	const publishArticleFormSchema = usePublishArticleFormSchema();
@@ -49,8 +49,7 @@ const ReviewArticle = function ({ model }) {
 		defaultValues: {
 			title: draft.title,
 			body: draft.body,
-			authorName:
-				currentArticle?.author.name ?? ticket.assignee.name ?? "",
+			authorName: currentArticle?.author.name ?? draftAssigneeName ?? "",
 			snippet: currentArticle?.snippet ?? "",
 			imageUrl: currentArticle?.articleImage.source ?? "",
 			imageCaption: currentArticle?.articleImage.about ?? "",
@@ -78,9 +77,8 @@ const ReviewArticle = function ({ model }) {
 			setValue("body", content);
 		},
 	});
-	const toastNotifier = useToastNotifier();
-	const imageProcessor = useImageProcessor({ toastNotifier });
-	const fileUploader = useFileUploader({ toastNotifier });
+	const imageProcessor = useImageProcessor();
+	const fileUploader = useFileUploader();
 	const imageSelector = useFileSelectorButton({
 		type: "image",
 		async selectCallback(file) {
@@ -248,10 +246,10 @@ const ReviewArticle = function ({ model }) {
 											/>
 										)}
 										{imageStatus === "success" && (
-											<Check className="size-6 stroke-black" />
+											<Check className="size-8 stroke-black" />
 										)}
 										{imageStatus === "error" && (
-											<X className="size-6 stroke-red-800 text-red-800" />
+											<X className="size-8 stroke-red-800 text-red-800" />
 										)}
 										{imageStatusMessage && (
 											<span

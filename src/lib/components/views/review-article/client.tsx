@@ -9,8 +9,8 @@ import ReviewArticle from "./ReviewArticle";
 import { useToastNotifier } from "@/src/lib/model-implementations/notifier";
 
 type ReviewArticleClientModel = ReadonlyModel<{
-	articleTicket: ArticleTicket;
 	articleDraft: ArticleDraft;
+	articleTicket?: ArticleTicket;
 	article?: Article;
 }>;
 
@@ -18,8 +18,8 @@ const ReviewArticleClient = function ({ model }) {
 	const { articleTicket, articleDraft, article } = model.modelView;
 	const toastNotifier = useToastNotifier();
 	const reviewArticle = useReviewArticle(
-		articleTicket,
 		articleDraft,
+		articleTicket,
 		article,
 		{
 			toastNotifier,
