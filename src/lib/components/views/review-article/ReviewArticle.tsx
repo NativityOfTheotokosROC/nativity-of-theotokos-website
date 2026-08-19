@@ -26,11 +26,10 @@ import { getPresignedUrl } from "@/src/lib/server-actions/file-transfer";
 import { generateUniqueName } from "@/src/lib/utilities/miscellaneous";
 import FileSelectorButton from "../../file-selector-button/FileSelectorButton";
 import { useCloseWarning } from "@/src/lib/utilities/hooks";
-import { useCallback, useEffect } from "react";
-import { georgia } from "@/src/lib/third-party/fonts";
 import GoHomeButton from "../../button/GoHomeButton";
 import SuccessGraphic from "@/public/assets/ornament_32.svg";
 import { Check, X } from "lucide-react";
+import InformationView from "../../information-view/InformationView";
 
 const ReviewArticle = function ({ model }) {
 	const { modelView, interact } = model;
@@ -82,29 +81,35 @@ const ReviewArticle = function ({ model }) {
 	const imageSelector = useFileSelectorButton({
 		type: "image",
 		async selectCallback(file) {
-			await imageProcessor.interact({
-				type: "PROCESS",
-				input: {
-					file,
-					async successCallback(processedImage) {
-						const presignedUrl = await getPresignedUrl(
-							generateUniqueName(),
-							"news",
-							processedImage.type,
-						);
-						await fileUploader.interact({
-							type: "UPLOAD",
-							input: {
-								file: processedImage,
-								presignedUrl,
-								async successCallback(imageUrl) {
-									setValue("imageUrl", imageUrl);
+			if (
+				!(
+					notification?.type === "submitting" ||
+					notification?.type === "submit_success"
+				)
+			)
+				await imageProcessor.interact({
+					type: "PROCESS",
+					input: {
+						file,
+						async successCallback(processedImage) {
+							const presignedUrl = await getPresignedUrl(
+								generateUniqueName(),
+								"news",
+								processedImage.type,
+							);
+							await fileUploader.interact({
+								type: "UPLOAD",
+								input: {
+									file: processedImage,
+									presignedUrl,
+									async successCallback(imageUrl) {
+										setValue("imageUrl", imageUrl);
+									},
 								},
-							},
-						});
+							});
+						},
 					},
-				},
-			});
+				});
 		},
 	});
 	const imageStatus =
@@ -127,221 +132,203 @@ const ReviewArticle = function ({ model }) {
 			: (fileUploader.modelView.notification?.message ?? null);
 
 	register("imageUrl");
-	useCloseWarning(
-		useCallback(
-			() => !(notification?.type === "submit_success"),
-			[notification?.type],
-		),
-	);
-	useEffect(() => {
-		if (notification?.type === "submit_success") {
-			window.scrollTo(0, 0);
-		}
-	}, [notification?.type]);
+	useCloseWarning(() => !(notification?.type === "submit_success"));
+
+	if (notification?.type === "submit_success")
+		return (
+			<InformationView
+				model={newReadonlyModel({
+					mainMessage: t("mainMessage"),
+					detailedMessage: t("detailedMessage"),
+					Graphic: SuccessGraphic,
+				})}
+			>
+				<GoHomeButton>{t("nextButton")}</GoHomeButton>
+			</InformationView>
+		);
 
 	return (
 		<>
 			<ArticlePreviewModal model={articlePreviewModal} />
-			{notification?.type !== "submit_success" ? (
-				<PageView model={newReadonlyModel({ title: t("title") })}>
-					<form
-						onSubmit={handleSubmit(
-							async form =>
-								await articlePreviewModal.interact({
-									type: "OPEN",
-									input: {
-										title: form.title,
-										body: form.body,
-										authorName:
-											form.authorName ??
-											draftAssigneeName,
-										dateCreated:
-											currentArticle?.dateCreated ??
-											new Date(),
-										snippet: form.snippet,
-										image: {
-											source: form.imageUrl,
-											about: form.imageCaption,
-											placeholder:
-												currentArticle?.articleImage
-													.placeholder,
-										},
+			<PageView model={newReadonlyModel({ title: t("title") })}>
+				<form
+					onSubmit={handleSubmit(
+						async form =>
+							await articlePreviewModal.interact({
+								type: "OPEN",
+								input: {
+									title: form.title,
+									body: form.body,
+									authorName:
+										form.authorName ?? draftAssigneeName,
+									dateCreated:
+										currentArticle?.dateCreated ??
+										new Date(),
+									snippet: form.snippet,
+									image: {
+										source: form.imageUrl,
+										about: form.imageCaption,
+										placeholder:
+											currentArticle?.articleImage
+												.placeholder,
 									},
-								}),
+								},
+							}),
+					)}
+				>
+					<div className="flex flex-col gap-3">
+						<input
+							{...register("title")}
+							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title ? "border-red-800" : "border-gray-400"}`}
+							placeholder={t("titleField")}
+							autoComplete="off"
+							autoCapitalize="words"
+						/>
+						{errors.title && (
+							<span className="text-sm text-red-800">
+								{errors.title.message}
+							</span>
 						)}
-					>
-						<div className="flex flex-col gap-3">
-							<input
-								{...register("title")}
-								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title ? "border-red-800" : "border-gray-400"}`}
-								placeholder={t("titleField")}
-								autoComplete="off"
-								autoCapitalize="words"
+						<input
+							{...register("authorName")}
+							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorName ? "border-red-800" : "border-gray-400"}`}
+							placeholder={t("authorNameField")}
+							autoComplete="name"
+							autoCapitalize="words"
+							disabled={!currentArticle}
+						/>
+						{errors.authorName && (
+							<span className="text-sm text-red-800">
+								{errors.authorName.message}
+							</span>
+						)}
+						<Editor
+							model={{
+								...editor,
+								modelView: {
+									...editor.modelView,
+									className: errors.body
+										? "border-red-800"
+										: "border-gray-400",
+								},
+							}}
+						/>
+						{errors.body && (
+							<span className="text-sm text-red-800">
+								{errors.body.message}
+							</span>
+						)}
+						<div className="flex h-[15em] w-full items-stretch justify-stretch overflow-clip rounded-lg md:h-fit md:max-h-[25em] md:max-w-[33em]">
+							<Image
+								className="h-full w-full grow object-cover object-center"
+								src={
+									imageProcessor.modelView
+										.processedImageBlobUrl ??
+									currentArticle?.articleImage.source ??
+									DEFAULT_ARTICLE_PREVIEW_IMAGE
+								}
+								placeholder="blur"
+								blurDataURL={
+									currentArticle?.articleImage.placeholder ??
+									DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER
+								}
+								alt={t("imageAlt")}
+								unoptimized={true}
 							/>
-							{errors.title && (
-								<span className="text-sm text-red-800">
-									{errors.title.message}
-								</span>
-							)}
-							<input
-								{...register("authorName")}
-								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorName ? "border-red-800" : "border-gray-400"}`}
-								placeholder={t("authorNameField")}
-								autoComplete="name"
-								autoCapitalize="words"
-							/>
-							{errors.authorName && (
-								<span className="text-sm text-red-800">
-									{errors.authorName.message}
-								</span>
-							)}
-							<Editor
-								model={{
-									...editor,
-									modelView: {
-										...editor.modelView,
-										className: errors.body
-											? "border-red-800"
-											: "border-gray-400",
-									},
-								}}
-							/>
-							{errors.body && (
-								<span className="text-sm text-red-800">
-									{errors.body.message}
-								</span>
-							)}
-							<div className="flex h-[15em] w-full items-stretch justify-stretch overflow-clip rounded-lg md:h-fit md:max-h-[25em] md:max-w-[33em]">
-								<Image
-									className="h-full w-full grow object-cover object-center"
-									src={
-										imageProcessor.modelView
-											.processedImageBlobUrl ??
-										currentArticle?.articleImage.source ??
-										DEFAULT_ARTICLE_PREVIEW_IMAGE
-									}
-									placeholder="blur"
-									blurDataURL={
-										currentArticle?.articleImage
-											.placeholder ??
-										DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER
-									}
-									alt={t("imageAlt")}
-									unoptimized={true}
-								/>
-							</div>
-							{errors.imageUrl && (
-								<span className="text-sm text-red-800">
-									{errors.imageUrl.message}
-								</span>
-							)}
-							<div className="flex items-center gap-6">
-								<FileSelectorButton model={imageSelector}>
-									{imageSelector.modelView.file ||
-									currentArticle?.articleImage
-										? t("changeImage")
-										: t("selectImage")}
-								</FileSelectorButton>
-								{imageStatus && (
-									<div className="flex items-center gap-3">
-										{imageStatus === "processing" && (
-											<Spinner
-												model={newReadonlyModel({
-													size: 20,
-													color: "black",
-												})}
-											/>
-										)}
-										{imageStatus === "success" && (
-											<Check className="size-8 stroke-black" />
-										)}
-										{imageStatus === "error" && (
-											<X className="size-8 stroke-red-800 text-red-800" />
-										)}
-										{imageStatusMessage && (
-											<span
-												className={`text-sm ${imageStatus === "error" ? "text-red-800" : "text-black"}`}
-											>
-												{imageStatusMessage}
-											</span>
-										)}
-									</div>
-								)}
-							</div>
-							<input
-								{...register("imageCaption")}
-								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.imageCaption ? "border-red-800" : "border-gray-400"}`}
-								placeholder={t("imageCaptionField")}
-								autoComplete="off"
-							/>
-							{errors.imageCaption && (
-								<span className="text-sm text-red-800">
-									{errors.imageCaption.message}
-								</span>
-							)}
-							<input
-								{...register("snippet")}
-								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.snippet ? "border-red-800" : "border-gray-400"}`}
-								placeholder={`${t("snippetField")} (${tMisc("optional")})`}
-								autoComplete="off"
-							/>
-							{errors.snippet && (
-								<span className="text-sm text-red-800">
-									{errors.snippet.message}
-								</span>
-							)}
-							{errors.form && (
-								<span className="text-sm text-red-800">
-									{errors.form.message}
-								</span>
-							)}
-							<hr className="mt-6 w-full opacity-50" />
-							<div className="mt-1 flex w-full justify-start gap-3">
-								<Button
-									model={newReadonlyModel({
-										type: "submit",
-										variant: "standard",
-										disabled:
-											isSubmitting ||
-											notification?.type === "submitting",
-										className:
-											"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
-									})}
-								>
-									{notification?.type === "submitting" ? (
+						</div>
+						{errors.imageUrl && (
+							<span className="text-sm text-red-800">
+								{errors.imageUrl.message}
+							</span>
+						)}
+						<div className="flex items-center gap-6">
+							<FileSelectorButton model={imageSelector}>
+								{imageSelector.modelView.file ||
+								currentArticle?.articleImage
+									? t("changeImage")
+									: t("selectImage")}
+							</FileSelectorButton>
+							{imageStatus && (
+								<div className="flex items-center gap-3">
+									{imageStatus === "processing" && (
 										<Spinner
 											model={newReadonlyModel({
-												color: "white",
 												size: 20,
+												color: "black",
 											})}
 										/>
-									) : (
-										t("publish")
 									)}
-								</Button>
-							</div>
+									{imageStatus === "success" && (
+										<Check className="size-8 stroke-black" />
+									)}
+									{imageStatus === "error" && (
+										<X className="size-8 stroke-red-800 text-red-800" />
+									)}
+									{imageStatusMessage && (
+										<span
+											className={`text-sm ${imageStatus === "error" ? "text-red-800" : "text-black"}`}
+										>
+											{imageStatusMessage}
+										</span>
+									)}
+								</div>
+							)}
 						</div>
-					</form>
-				</PageView>
-			) : (
-				//TODO: Extract to dedicated component
-				<main className="border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black">
-					<div className="flex h-full min-h-[94svh] grow justify-center p-8 py-15 pb-20 text-center">
-						<div className="flex h-[70svh] min-h-fit w-md flex-col items-center justify-center gap-6">
-							<SuccessGraphic className="h-64 w-80 fill-black opacity-90 md:h-48" />
-							<span
-								className={`text-4xl font-semibold ${georgia.className}`}
+						<input
+							{...register("imageCaption")}
+							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.imageCaption ? "border-red-800" : "border-gray-400"}`}
+							placeholder={t("imageCaptionField")}
+							autoComplete="off"
+						/>
+						{errors.imageCaption && (
+							<span className="text-sm text-red-800">
+								{errors.imageCaption.message}
+							</span>
+						)}
+						<input
+							{...register("snippet")}
+							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.snippet ? "border-red-800" : "border-gray-400"}`}
+							placeholder={`${t("snippetField")} (${tMisc("optional")})`}
+							autoComplete="off"
+						/>
+						{errors.snippet && (
+							<span className="text-sm text-red-800">
+								{errors.snippet.message}
+							</span>
+						)}
+						{errors.form && (
+							<span className="text-sm text-red-800">
+								{errors.form.message}
+							</span>
+						)}
+						<hr className="mt-6 w-full opacity-50" />
+						<div className="mt-1 flex w-full justify-start gap-3">
+							<Button
+								model={newReadonlyModel({
+									type: "submit",
+									variant: "standard",
+									disabled:
+										isSubmitting ||
+										notification?.type === "submitting",
+									className:
+										"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
+								})}
 							>
-								{t("mainMessage")}
-							</span>
-							<span className="text-lg">
-								{t("detailedMessage")}
-							</span>
-							<GoHomeButton>{t("nextButton")}</GoHomeButton>
+								{notification?.type === "submitting" ? (
+									<Spinner
+										model={newReadonlyModel({
+											color: "white",
+											size: 20,
+										})}
+									/>
+								) : (
+									t("publish")
+								)}
+							</Button>
 						</div>
 					</div>
-				</main>
-			)}
+				</form>
+			</PageView>
 		</>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ReviewArticleModel>>;

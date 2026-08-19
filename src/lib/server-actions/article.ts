@@ -615,7 +615,6 @@ export async function publishNewArticle({
 		title,
 		body,
 		snippet,
-		authorName,
 		articleImage: { source, about },
 	} = await validateNewArticle(incomingArticle, locale);
 
@@ -638,19 +637,6 @@ export async function publishNewArticle({
 				author: {
 					connect: {
 						email: draft.articleTicket.assigneeEmail,
-						name: authorName
-							? {
-									connectOrCreate: {
-										create: {
-											english: authorName,
-											englishHash: getMd5Hash(authorName),
-										},
-										where: {
-											englishHash: getMd5Hash(authorName),
-										},
-									},
-								}
-							: undefined,
 					},
 				},
 				body: {
