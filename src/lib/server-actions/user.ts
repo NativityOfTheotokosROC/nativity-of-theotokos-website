@@ -18,7 +18,7 @@ export async function getUserInformation(): Promise<UserInformation> {
 			},
 		}),
 		database.articleTicket.findFirst({
-			where: { userEmail: user.email },
+			where: { assigneeEmail: user.email },
 		}),
 		database.editor.findUnique({
 			where: {

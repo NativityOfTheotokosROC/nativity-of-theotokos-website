@@ -25,8 +25,9 @@ export default async function Page() {
 	return (
 		<ReviewArticleClient
 			model={newReadonlyModel({
-				articleTicket: ticket,
+				draftAssigneeName: ticket.assignee.name,
 				articleDraft: draft,
+				ticketId: ticket.ticketId,
 				article: currentArticle,
 			})}
 		/>
