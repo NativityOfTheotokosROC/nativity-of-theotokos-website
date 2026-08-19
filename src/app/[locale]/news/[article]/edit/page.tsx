@@ -37,6 +37,7 @@ export default async function Page({
 			<ReviewArticleClient
 				model={newReadonlyModel({
 					articleDraft: { title: article.title, body: article.body },
+					draftAssigneeName: article.author.name,
 					article,
 				})}
 			/>

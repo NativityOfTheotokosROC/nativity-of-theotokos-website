@@ -8,6 +8,10 @@ import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import WriteArticleClient from "../../../lib/components/views/write-article/client";
+import { getUser } from "@/src/lib/server-actions/auth";
+import { DEFAULT_PREVIEW_USER_EMAIL } from "@/src/lib/utilities/constants";
+import { IS_AUTH_DISABLED } from "@/src/lib/utilities/server-constants";
+import { forbidden } from "next/navigation";
 
 export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 	const { locale } = await params;
@@ -22,12 +26,18 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 }
 
 export default async function Page() {
+	const userEmail = IS_AUTH_DISABLED
+		? DEFAULT_PREVIEW_USER_EMAIL
+		: (await getUser())?.email;
+	if (!userEmail) forbidden();
 	const latestUnsubmittedArticle = await getLatestUnsubmittedArticle();
 	const draft = latestUnsubmittedArticle?.draft ?? undefined;
 	const currentArticle =
 		latestUnsubmittedArticle?.currentArticle ?? undefined;
+
 	const { ticketId, canDeleteTicket } =
-		latestUnsubmittedArticle ?? (await createTicket({ useUnused: true }));
+		latestUnsubmittedArticle ??
+		(await createTicket(userEmail, { useUnused: true }));
 
 	return (
 		<WriteArticleClient

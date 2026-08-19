@@ -19,6 +19,7 @@ import {
 	publishExistingArticle,
 	publishNewArticle,
 } from "../server-actions/article";
+import { locale } from "next/root-params";
 
 export function reviewArticleNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
@@ -54,11 +55,12 @@ export function reviewArticleNotifierVIInterface(
 
 export function useReviewArticle(
 	draft: ArticleDraft,
-	ticket?: ArticleTicket,
+	draftAssigneeName: string,
+	ticketId?: string,
 	currentArticle?: Article,
 	options?: Partial<{ toastNotifier: NotifierModel<ToastNotification> }>,
 ) {
-	if (!ticket?.ticketId && !currentArticle)
+	if (!ticketId && !currentArticle)
 		throw new Error(
 			"No article ticket or existing article ID was provided",
 		);
@@ -70,7 +72,7 @@ export function useReviewArticle(
 	const locale = useLocale();
 	return {
 		modelView: {
-			draftAssigneeName: ticket?.assignee.name,
+			draftAssigneeName,
 			draft,
 			currentArticle,
 			notification,
@@ -103,7 +105,7 @@ export function useReviewArticle(
 									},
 									snippet: snippet ?? "",
 								},
-								ticketId: ticket?.ticketId,
+								ticketId,
 								locale,
 							});
 							await notifier.interact({
@@ -117,10 +119,10 @@ export function useReviewArticle(
 							});
 							break;
 						}
-						if (!ticket?.ticketId)
+						if (!ticketId)
 							throw new Error("No article ticket was provided");
 						await publishNewArticle({
-							ticketId: ticket.ticketId,
+							ticketId,
 							incomingArticle: {
 								title,
 								body,

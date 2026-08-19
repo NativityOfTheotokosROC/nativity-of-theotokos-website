@@ -8,8 +8,8 @@ export type ReviewArticleNotification =
 
 export type ReviewArticleModelView = {
 	draft: ArticleDraft;
+	draftAssigneeName: string;
 	currentArticle?: Article;
-	draftAssigneeName?: string;
 	notification: ReviewArticleNotification | null;
 };
 
@@ -17,9 +17,9 @@ export type ReviewArticleModelInteraction = InputModelInteraction<
 	"PUBLISH",
 	{
 		draft: ArticleDraft;
-		authorName: string;
 		imageUrl: string;
 		imageCaption: string;
+		authorName?: string;
 		snippet?: string;
 	}
 >;

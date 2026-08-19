@@ -14,7 +14,10 @@ export function getPublishArticleFormSchema(t?: Translator) {
 	const maxImageCaption = MAX_IMAGE_CAPTION;
 	const writeArticleFormSchema = getWriteArticleFormSchema(t);
 	return writeArticleFormSchema.extend({
-		authorName: z.string().trim().nonempty(),
+		authorName: z.preprocess(
+			emptyStringAsUndefined,
+			z.string().trim().optional(),
+		),
 		imageUrl: z.httpUrl({
 			error:
 				t &&

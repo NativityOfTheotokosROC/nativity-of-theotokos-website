@@ -6,6 +6,7 @@ import { cacheTag, revalidateTag } from "next/cache";
 import { forbidden, notFound } from "next/navigation";
 import z from "zod";
 import { ArticleDraft } from "../models/write-article";
+import { validateNewArticle } from "../server-only/article";
 import { getPlaceholder } from "../server-only/placeholder";
 import database from "../third-party/prisma";
 import {
@@ -16,22 +17,14 @@ import {
 	NewArticle,
 } from "../types/general";
 import {
-	getMd5Hash,
-	isRemotePath,
-	removeMarkup,
-} from "../utilities/miscellaneous";
+	DEFAULT_PREVIEW_USER_EMAIL,
+	DEFAULT_PREVIEW_USER_NAME,
+} from "../utilities/constants";
+import { getMd5Hash, isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL, IS_AUTH_DISABLED } from "../utilities/server-constants";
 import { getWriteArticleFormSchema } from "../validation/write-article-form";
 import { getUser, protect } from "./auth";
 import { getUserInformation } from "./user";
-import {
-	getPublishArticleFormSchema,
-	MAX_SNIPPET,
-} from "../validation/publish-article-form";
-import { DEFAULT_PREVIEW_USER_EMAIL } from "../utilities/constants";
-import { link } from "fs";
-import { title } from "process";
-import { validateNewArticle } from "../server-only/article";
 
 const _FULL_ARTICLE_INCLUDES = {
 	author: { include: { name: true } },
@@ -46,7 +39,7 @@ export async function getArticle(
 	language: Language,
 ): Promise<Omit<Article, "url">> {
 	"use cache: remote";
-	cacheTag("bulletin_article");
+	cacheTag(`article_${articleId}`);
 
 	const locale = language;
 	try {
@@ -118,6 +111,176 @@ export async function getArticle(
 	}
 }
 
+export async function createTicket(
+	email: string,
+	options?: Partial<{
+		articleId: string;
+		useUnused: boolean;
+		name: string;
+	}>,
+): Promise<{ ticketId: string; canDeleteTicket: boolean }> {
+	const user = await getUser();
+	if (!IS_AUTH_DISABLED) await protect({ roles: ["editor"] });
+	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
+	const userName = user?.name ?? DEFAULT_PREVIEW_USER_NAME;
+
+	const assigneeEmail = z.email().parse(email.trim());
+	const assigneeName =
+		options?.name === undefined
+			? ((
+					await database.articleAuthor.findUnique({
+						include: { name: true },
+						where: {
+							email: assigneeEmail,
+						},
+					})
+				)?.name.english ?? assigneeEmail === userEmail)
+				? userName
+				: null
+			: z.string().trim().nonempty().parse(options.name);
+
+	if (!assigneeName)
+		throw new Error("Assignee does not have an existing name");
+
+	if (options?.articleId) {
+		const article = await database.article.findUniqueOrThrow({
+			include: { author: true },
+			where: {
+				link: options.articleId,
+			},
+		});
+		if (!(article.author.email === assigneeEmail)) forbidden();
+		const ticket = options?.useUnused
+			? await database.articleTicket.upsert({
+					create: {
+						assignerEmail: userEmail,
+						assignee: {
+							connectOrCreate: {
+								create: {
+									name: {
+										connectOrCreate: {
+											create: {
+												english: assigneeName,
+												englishHash:
+													getMd5Hash(assigneeName),
+											},
+											where: {
+												englishHash:
+													getMd5Hash(assigneeName),
+											},
+										},
+									},
+									email: assigneeEmail,
+								},
+								where: { email: assigneeEmail },
+							},
+						},
+						article: {
+							connect: {
+								link: options.articleId,
+							},
+						},
+					},
+					update: {},
+					where: { articleId: options.articleId },
+				})
+			: await database.articleTicket.create({
+					data: {
+						assignerEmail: userEmail,
+						assignee: {
+							connectOrCreate: {
+								create: {
+									name: {
+										connectOrCreate: {
+											create: {
+												english: assigneeName,
+												englishHash:
+													getMd5Hash(assigneeName),
+											},
+											where: {
+												englishHash:
+													getMd5Hash(assigneeName),
+											},
+										},
+									},
+									email: assigneeEmail,
+								},
+								where: { email: assigneeEmail },
+							},
+						},
+						article: {
+							connect: {
+								link: options.articleId,
+							},
+						},
+					},
+				});
+		return {
+			ticketId: ticket.id,
+			canDeleteTicket: ticket.assigneeEmail === userEmail,
+		};
+	}
+
+	const unusedTicket = options?.useUnused
+		? await database.articleTicket.findFirst({
+				where: {
+					assigneeEmail,
+					articleDraft: null,
+				},
+			})
+		: null;
+	const ticket =
+		unusedTicket ??
+		(await database.articleTicket.create({
+			data: {
+				assignerEmail: userEmail,
+				assignee: {
+					connectOrCreate: {
+						create: {
+							name: {
+								connectOrCreate: {
+									create: {
+										english: assigneeName,
+										englishHash: getMd5Hash(assigneeName),
+									},
+									where: {
+										englishHash: getMd5Hash(assigneeName),
+									},
+								},
+							},
+							email: assigneeEmail,
+						},
+						where: { email: assigneeEmail },
+					},
+				},
+			},
+		}));
+
+	return {
+		ticketId: ticket.id,
+		canDeleteTicket: ticket.assignerEmail === userEmail,
+	};
+}
+
+export async function deleteTicket(ticketId: string) {
+	const user = await getUser();
+	if (!user && !IS_AUTH_DISABLED) forbidden();
+	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
+
+	const ticket = await database.articleTicket.findUnique({
+		where: { id: ticketId },
+	});
+	if (!ticket) notFound();
+	if (user && ticket.assignerEmail !== userEmail)
+		await protect({ roles: ["editor"] });
+
+	await database.articleTicket.delete({
+		where: {
+			id: ticketId,
+		},
+	});
+}
+
 export async function saveDraft(
 	ticketId: string,
 	draft: ArticleDraft,
@@ -125,11 +288,12 @@ export async function saveDraft(
 ) {
 	const user = await getUser();
 	if (!user && !IS_AUTH_DISABLED) forbidden();
+	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
 	const ticket = await database.articleTicket.findUnique({
 		where: { id: ticketId },
 	});
-	if (!ticket) notFound(); // TODO: Throw error instead
-	if (user && ticket.userEmail !== user.email) forbidden();
+	if (!ticket) throw new Error("Article ticket does not exist");
+	if (ticket.assigneeEmail !== userEmail) forbidden();
 	const isSubmitted = await database.pendingArticleSubmission.findFirst({
 		where: {
 			articleDraft: { articleTicketId: ticketId },
@@ -161,34 +325,19 @@ export async function saveDraft(
 export async function discardDraft(ticketId: string) {
 	const user = await getUser();
 	if (!user && !IS_AUTH_DISABLED) forbidden();
+	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
+
 	const ticket = await database.articleTicket.findUnique({
 		include: { articleDraft: true },
 		where: { id: ticketId },
 	});
 	if (!ticket) notFound();
-	if (user && ticket.userEmail !== user.email) forbidden();
+	if (ticket.assigneeEmail !== userEmail) forbidden();
 	if (!ticket.articleDraft) return;
 
 	await database.articleDraft.delete({
 		where: {
 			articleTicketId: ticketId,
-		},
-	});
-}
-
-export async function deleteTicket(ticketId: string) {
-	const user = await getUser();
-	if (!user && !IS_AUTH_DISABLED) forbidden();
-	const ticket = await database.articleTicket.findUnique({
-		where: { id: ticketId },
-	});
-	if (!ticket) notFound();
-	if (user && ticket.assignerEmail !== user.email)
-		await protect({ roles: ["admin"] });
-
-	await database.articleTicket.delete({
-		where: {
-			id: ticketId,
 		},
 	});
 }
@@ -214,83 +363,6 @@ export async function submitArticle(
 	});
 }
 
-// TODO: Sloppy function. Refactor
-export async function createTicket(
-	options?: Partial<{
-		userEmail: string;
-		articleId: string;
-		useUnused: boolean;
-	}>,
-): Promise<{ ticketId: string; canDeleteTicket: boolean }> {
-	const parsedEmail = options?.userEmail
-		? z.email().parse(options.userEmail.trim())
-		: null;
-	const user = await getUser();
-	if (!parsedEmail) {
-		await protect({ roles: ["writer"] });
-	} else if (user && user.email === parsedEmail) {
-		await protect({ roles: ["writer"] });
-	} else {
-		await protect({ roles: ["admin"] });
-	}
-	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
-	const authorEmail = parsedEmail ?? userEmail;
-
-	const article = options?.articleId
-		? await database.article.findUniqueOrThrow({
-				include: { author: true },
-				where: {
-					link: options.articleId,
-				},
-			})
-		: null;
-	if (!article) {
-		const unusedTicket = options?.useUnused
-			? await database.articleTicket.findFirst({
-					where: {
-						userEmail: authorEmail,
-						articleDraft: null,
-					},
-				})
-			: null;
-		const ticket =
-			unusedTicket ??
-			(await database.articleTicket.create({
-				data: {
-					userEmail: authorEmail,
-					assignerEmail: userEmail,
-				},
-			}));
-		return {
-			ticketId: ticket.id,
-			canDeleteTicket: ticket.assignerEmail === userEmail,
-		};
-	}
-	if (!(article.author.email === authorEmail)) forbidden();
-	const unusedTicket = options?.useUnused
-		? await database.articleTicket.findFirst({
-				where: {
-					userEmail: authorEmail,
-					articleDraft: null,
-					articleId: article.link,
-				},
-			})
-		: null;
-	const ticket =
-		unusedTicket ??
-		(await database.articleTicket.create({
-			data: {
-				userEmail: authorEmail,
-				assignerEmail: userEmail,
-				articleId: article.link,
-			},
-		}));
-	return {
-		ticketId: ticket.id,
-		canDeleteTicket: ticket.assignerEmail === userEmail,
-	};
-}
-
 export async function makeArticleEdit(articleId: string) {
 	const user = await getUserInformation();
 	if (!user && !IS_AUTH_DISABLED) forbidden();
@@ -300,13 +372,13 @@ export async function makeArticleEdit(articleId: string) {
 	});
 	if (!article) notFound();
 	if (!IS_AUTH_DISABLED && user?.email !== article.author.email)
-		await protect({ roles: ["admin"] });
+		await protect({ roles: ["editor"] });
 	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
 
 	const ticket = await database.articleTicket.upsert({
 		include: { articleDraft: true },
 		create: {
-			userEmail,
+			assigneeEmail: userEmail,
 			assignerEmail: userEmail,
 			articleId,
 			articleDraft: {
@@ -353,12 +425,13 @@ export async function makeArticleEdit(articleId: string) {
 export async function getDraft(ticketId: string) {
 	const user = await getUser();
 	if (!user && !IS_AUTH_DISABLED) forbidden();
+	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
 	const ticket = await database.articleTicket.findUnique({
 		include: { articleDraft: true },
 		where: { id: ticketId },
 	});
 	if (!ticket) notFound();
-	if (!IS_AUTH_DISABLED && user?.email !== ticket.userEmail) forbidden();
+	if (userEmail !== ticket.assigneeEmail) forbidden();
 	return {
 		title: ticket.articleDraft?.title ?? "",
 		body: ticket.articleDraft?.body ?? "",
@@ -434,10 +507,11 @@ export async function getLatestUnsubmittedArticle() {
 export async function getPendingArticleSubmission() {
 	const user = await getUser();
 	if (!IS_AUTH_DISABLED && !user) forbidden();
-	if (!IS_AUTH_DISABLED) await protect({ roles: ["admin"] });
+	if (!IS_AUTH_DISABLED) await protect({ roles: ["editor"] });
 	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
 	const ticketData = await database.articleTicket.findFirst({
 		include: {
+			assignee: { include: { name: true } },
 			article: { include: _FULL_ARTICLE_INCLUDES },
 			articleDraft: { include: { pendingArticleSubmission: true } },
 		},
@@ -469,22 +543,10 @@ export async function getPendingArticleSubmission() {
 			},
 			where: { articleDraftId: ticketData.articleDraft!.id },
 		});
-	const assigneeName =
-		(
-			await database.articleAuthor.findUnique({
-				include: { name: true },
-				where: { email: ticketData.userEmail },
-			})
-		)?.name.english ??
-		(ticketData.userEmail === user?.email ? user.name : undefined) ??
-		(
-			await database.user.findUnique({
-				where: { email: ticketData.userEmail },
-			})
-		)?.name;
+	const assigneeName = ticketData.assignee.name.english;
 	const ticket = {
 		ticketId: ticketData.id,
-		assignee: { email: ticketData.userEmail, name: assigneeName },
+		assignee: { email: ticketData.assigneeEmail, name: assigneeName },
 	} satisfies ArticleTicket;
 	const draft = {
 		title: ticketData.articleDraft!.title,
@@ -529,7 +591,7 @@ export async function publishNewArticle({
 }) {
 	const user = await getUser();
 	if (!IS_AUTH_DISABLED && !user) forbidden();
-	if (!IS_AUTH_DISABLED) await protect({ roles: ["admin", "editor"] });
+	if (!IS_AUTH_DISABLED) await protect({ roles: ["editor"] });
 	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
 
 	const draft = await database.articleDraft.findUnique({
@@ -572,25 +634,23 @@ export async function publishNewArticle({
 						},
 					},
 				},
+				// TODO: Disable this once there is dedicated article edit place
 				author: {
-					connectOrCreate: {
-						create: {
-							email: draft.articleTicket.userEmail,
-							name: {
-								connectOrCreate: {
-									create: {
-										english: authorName,
-										englishHash: getMd5Hash(authorName),
+					connect: {
+						email: draft.articleTicket.assigneeEmail,
+						name: authorName
+							? {
+									connectOrCreate: {
+										create: {
+											english: authorName,
+											englishHash: getMd5Hash(authorName),
+										},
+										where: {
+											englishHash: getMd5Hash(authorName),
+										},
 									},
-									where: {
-										englishHash: getMd5Hash(authorName),
-									},
-								},
-							},
-						},
-						where: {
-							email: draft.articleTicket.userEmail,
-						},
+								}
+							: undefined,
 					},
 				},
 				body: {
@@ -656,7 +716,7 @@ export async function publishExistingArticle({
 }) {
 	const user = await getUser();
 	if (!IS_AUTH_DISABLED && !user) forbidden();
-	if (!IS_AUTH_DISABLED) await protect({ roles: ["admin", "editor"] });
+	if (!IS_AUTH_DISABLED) await protect({ roles: ["editor"] });
 	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
 
 	if (
@@ -711,21 +771,23 @@ export async function publishExistingArticle({
 						},
 					},
 				},
-				author: {
-					update: {
-						name: {
-							connectOrCreate: {
-								create: {
-									english: authorName,
-									englishHash: getMd5Hash(authorName),
-								},
-								where: {
-									englishHash: getMd5Hash(authorName),
+				author: authorName
+					? {
+							update: {
+								name: {
+									connectOrCreate: {
+										create: {
+											english: authorName,
+											englishHash: getMd5Hash(authorName),
+										},
+										where: {
+											englishHash: getMd5Hash(authorName),
+										},
+									},
 								},
 							},
-						},
-					},
-				},
+						}
+					: undefined,
 				body: {
 					connectOrCreate: {
 						create: {

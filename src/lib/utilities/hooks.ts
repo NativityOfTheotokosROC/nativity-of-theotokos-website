@@ -16,5 +16,8 @@ export function useCloseWarning(predicate?: () => boolean) {
 		} else {
 			window.removeEventListener("beforeunload", beforeUnloadHandler);
 		}
+		return () => {
+			window.removeEventListener("beforeunload", beforeUnloadHandler);
+		};
 	}, [predicate]);
 }

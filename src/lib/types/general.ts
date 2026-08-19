@@ -53,10 +53,7 @@ export type Image = {
 
 export type ArticleTicket = {
 	ticketId: string;
-	assignee: {
-		email: string;
-		name?: string;
-	};
+	assignee: ArticleAuthor;
 };
 
 export type ArticleAuthor = {
@@ -78,10 +75,10 @@ export type Article = {
 
 export type NewArticle = {
 	title: string;
-	authorName: string;
 	body: string;
 	snippet: string;
 	articleImage: Required<Pick<Image, "source" | "about">>;
+	authorName?: string;
 };
 
 export type GalleryImage = {

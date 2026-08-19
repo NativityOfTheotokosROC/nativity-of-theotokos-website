@@ -49,7 +49,7 @@ const ReviewArticle = function ({ model }) {
 		defaultValues: {
 			title: draft.title,
 			body: draft.body,
-			authorName: currentArticle?.author.name ?? draftAssigneeName ?? "",
+			authorName: draftAssigneeName,
 			snippet: currentArticle?.snippet ?? "",
 			imageUrl: currentArticle?.articleImage.source ?? "",
 			imageCaption: currentArticle?.articleImage.about ?? "",
@@ -66,7 +66,7 @@ const ReviewArticle = function ({ model }) {
 					draft: { title, body },
 					imageUrl,
 					imageCaption,
-					authorName,
+					authorName: authorName ?? draftAssigneeName,
 					snippet,
 				},
 			});
@@ -152,7 +152,9 @@ const ReviewArticle = function ({ model }) {
 									input: {
 										title: form.title,
 										body: form.body,
-										authorName: form.authorName,
+										authorName:
+											form.authorName ??
+											draftAssigneeName,
 										dateCreated:
 											currentArticle?.dateCreated ??
 											new Date(),
@@ -228,6 +230,11 @@ const ReviewArticle = function ({ model }) {
 									unoptimized={true}
 								/>
 							</div>
+							{errors.imageUrl && (
+								<span className="text-sm text-red-800">
+									{errors.imageUrl.message}
+								</span>
+							)}
 							<div className="flex items-center gap-6">
 								<FileSelectorButton model={imageSelector}>
 									{imageSelector.modelView.file ||
