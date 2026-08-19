@@ -14,10 +14,10 @@ export async function generateMetadata({ params }: PageProps<"/[locale]">) {
 	const { locale } = await params;
 	const language = hasLocale(routing.locales, locale) ? locale : notFound();
 	const t = await getTranslations({
-		namespace: "writeArticle",
+		namespace: "editArticle",
 		locale: language,
 	});
-	return { title: t("metaTitle") } satisfies Metadata;
+	return { title: t("title") } satisfies Metadata;
 }
 
 export default async function Page({

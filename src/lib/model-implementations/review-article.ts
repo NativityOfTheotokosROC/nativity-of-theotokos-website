@@ -90,7 +90,7 @@ export function useReviewArticle(
 						snippet,
 					} = interaction.input;
 					try {
-						if (currentArticle)
+						if (currentArticle) {
 							await publishExistingArticle({
 								articleId: currentArticle.uri,
 								incomingArticle: {
@@ -106,6 +106,16 @@ export function useReviewArticle(
 								ticketId: ticket?.ticketId,
 								locale,
 							});
+							await notifier.interact({
+								type: "NOTIFY",
+								input: {
+									notification: {
+										type: "submit_success",
+										message: t("submitSuccess"),
+									},
+								},
+							});
+						}
 						if (!ticket?.ticketId)
 							throw new Error("No article ticket was provided");
 						await publishNewArticle({
