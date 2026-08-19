@@ -2,24 +2,23 @@ import {
 	useNewStatefulInteractiveModel,
 	ViewInteractionInterface,
 } from "@mvc-react/stateful";
+import { useLocale, useTranslations } from "next-intl";
+import {
+	NotifierModel,
+	NotifierModelInteraction,
+	NotifierModelView,
+} from "../models/notifier";
 import {
 	ReviewArticleModel,
 	ReviewArticleNotification,
 } from "../models/review-article";
-import {
-	NotifierModel,
-	NotifierModelView,
-	NotifierModelInteraction,
-} from "../models/notifier";
-import { ToastNotification } from "./notifier";
 import { ArticleDraft } from "../models/write-article";
-import { Article, ArticleTicket } from "../types/general";
-import { useLocale, useTranslations } from "next-intl";
 import {
 	publishExistingArticle,
 	publishNewArticle,
 } from "../server-actions/article";
-import { locale } from "next/root-params";
+import { Article } from "../types/general";
+import { ToastNotification } from "./notifier";
 
 export function reviewArticleNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
