@@ -18,25 +18,25 @@ const AssignArticle = function ({ model }) {
 	const {
 		register,
 		handleSubmit,
-		setValues,
+		setValue,
 		reset,
 		formState: { errors, isSubmitting },
 	} = useForm({
 		defaultValues: { name: "", email: "" },
 		resolver: zodResolver(useAssignArticleFormSchema()),
 	});
-	// TODO: It's been a run we start from here next time
+	// TODO: It's been a run; we start from here next time
 	const authorNamesAutoCompleteBox = useAutoCompleteBox({
 		id: "author-name",
 		isOpen: false,
 		items: suggestions?.map(author => author.name) ?? [],
 		query: "",
 		selectCallback: value => {
-			setValues({
-				name: value,
-				email: suggestions!.filter(author => author.name == value)[0]
-					.email,
-			});
+			setValue("name", value);
+			setValue(
+				"email",
+				suggestions!.filter(author => author.name == value)[0].email,
+			);
 		},
 	});
 	const authorEmailsAutoCompleteBox = useAutoCompleteBox({
@@ -45,11 +45,11 @@ const AssignArticle = function ({ model }) {
 		items: suggestions?.map(author => author.email) ?? [],
 		query: "",
 		selectCallback: value => {
-			setValues({
-				email: value,
-				name: suggestions!.filter(author => author.email == value)[0]
-					.name,
-			});
+			setValue("email", value);
+			setValue(
+				"name",
+				suggestions!.filter(author => author.email == value)[0].name,
+			);
 		},
 	});
 
