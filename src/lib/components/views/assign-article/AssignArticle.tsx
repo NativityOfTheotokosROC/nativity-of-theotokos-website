@@ -65,7 +65,7 @@ const AssignArticle = function ({ model }) {
 						</span>
 					)}
 
-					<hr className="mt-6 w-full" />
+					<hr className="mt-13 w-full" />
 					<Button
 						model={newReadonlyModel({
 							type: "submit",
