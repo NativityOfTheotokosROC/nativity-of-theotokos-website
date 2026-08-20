@@ -3,7 +3,6 @@ import database from "../third-party/prisma";
 import { Language, Article, ArticleAuthor, NewArticle } from "../types/general";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { locale } from "next/root-params";
 import z from "zod";
 import { removeMarkup } from "../utilities/miscellaneous";
 import {
@@ -11,6 +10,14 @@ import {
 	MAX_SNIPPET,
 } from "../validation/publish-article-form";
 
+export const _FULL_ARTICLE_INCLUDES = {
+	author: { include: { name: true } },
+	title: true,
+	body: true,
+	snippet: true,
+	image: { include: { placeholder: true, caption: true } },
+	featuredArticle: true,
+};
 export async function getAllArticles(language: Language): Promise<Article[]> {
 	"use cache: remote";
 	cacheTag("bulletin_articles");
@@ -18,13 +25,7 @@ export async function getAllArticles(language: Language): Promise<Article[]> {
 
 	const articles: Article[] = await database.article
 		.findMany({
-			include: {
-				title: true,
-				author: { include: { name: true } },
-				body: true,
-				snippet: true,
-				image: { include: { caption: true } },
-			},
+			include: _FULL_ARTICLE_INCLUDES,
 		})
 		.then(records =>
 			records.map(record => {
@@ -37,6 +38,7 @@ export async function getAllArticles(language: Language): Promise<Article[]> {
 					image,
 					dateCreated,
 					dateUpdated,
+					featuredArticle,
 				} = record;
 				if (language === "ru")
 					return {
@@ -55,6 +57,7 @@ export async function getAllArticles(language: Language): Promise<Article[]> {
 							about:
 								image.caption.russian ?? image.caption.english,
 						},
+						isArticleFeatured: featuredArticle !== null,
 					} satisfies Article;
 				return {
 					uri: link,
@@ -71,6 +74,7 @@ export async function getAllArticles(language: Language): Promise<Article[]> {
 						source: image.link,
 						about: image.caption.russian ?? image.caption.english,
 					},
+					isArticleFeatured: featuredArticle !== null,
 				} satisfies Article;
 			}),
 		);
@@ -88,12 +92,7 @@ export async function getArticleMetadata(
 	const locale = language;
 	try {
 		const article = await database.article.findUniqueOrThrow({
-			include: {
-				title: true,
-				author: { include: { name: true } },
-				snippet: true,
-				image: { include: { caption: true } },
-			},
+			include: _FULL_ARTICLE_INCLUDES,
 			where: { link: articleId },
 			omit: { dateCreated: true, dateUpdated: true },
 		});

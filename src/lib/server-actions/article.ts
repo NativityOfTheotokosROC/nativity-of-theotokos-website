@@ -6,7 +6,10 @@ import { cacheTag, revalidateTag } from "next/cache";
 import { forbidden, notFound } from "next/navigation";
 import z from "zod";
 import { ArticleDraft } from "../models/write-article";
-import { validateNewArticle } from "../server-only/article";
+import {
+	_FULL_ARTICLE_INCLUDES,
+	validateNewArticle,
+} from "../server-only/article";
 import { getPlaceholder } from "../server-only/placeholder";
 import database from "../third-party/prisma";
 import {
@@ -27,14 +30,6 @@ import { getUser, protect } from "./auth";
 import { getUserInformation } from "./user";
 import { hasArticleChanged } from "../utilities/article";
 
-const _FULL_ARTICLE_INCLUDES = {
-	author: { include: { name: true } },
-	title: true,
-	body: true,
-	snippet: true,
-	image: { include: { placeholder: true, caption: true } },
-};
-
 export async function getArticle(
 	articleId: string,
 	language: Language,
@@ -46,13 +41,7 @@ export async function getArticle(
 	try {
 		const article = await database.article.findUniqueOrThrow({
 			where: { link: articleId },
-			include: {
-				author: { include: { name: true } },
-				title: true,
-				body: true,
-				snippet: true,
-				image: { include: { caption: true, placeholder: true } },
-			},
+			include: _FULL_ARTICLE_INCLUDES,
 		});
 		const baseUrl = BASE_URL;
 
@@ -100,6 +89,7 @@ export async function getArticle(
 				about: imageCaption ?? undefined,
 				placeholder,
 			},
+			isArticleFeatured: article.featuredArticle !== null,
 		};
 	} catch (error) {
 		if (
@@ -414,6 +404,7 @@ export async function makeArticleEdit(articleId: string) {
 					(article.image.placeholder
 						?.placeholder as ImagePlaceholder) ?? undefined,
 			},
+			isArticleFeatured: article.featuredArticle !== null,
 		},
 	} satisfies {
 		ticketId: string;
@@ -489,6 +480,7 @@ export async function getLatestUnsubmittedArticle() {
 						(ticket.article.image.placeholder
 							?.placeholder as ImagePlaceholder) ?? undefined,
 				},
+				isArticleFeatured: ticket.article.featuredArticle !== null,
 			} satisfies Article)
 		: null;
 
@@ -568,6 +560,7 @@ export async function getPendingArticleSubmission() {
 						(ticketData.article.image.placeholder
 							?.placeholder as ImagePlaceholder) ?? undefined,
 				},
+				isArticleFeatured: ticketData.article.featuredArticle !== null,
 			} satisfies Article)
 		: undefined;
 	return {

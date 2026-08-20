@@ -71,6 +71,7 @@ export type Article = {
 	snippet: string;
 	articleImage: Required<Pick<Image, "source" | "about">> &
 		Partial<Pick<Image, "placeholder">>;
+	isArticleFeatured: boolean;
 };
 
 export type NewArticle = {

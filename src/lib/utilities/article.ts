@@ -1,7 +1,10 @@
 import { Article, NewArticle } from "../types/general";
 
 export function hasArticleChanged(
-	existingArticle: Omit<Article, "dateUpdated" | "dateCreated" | "uri">,
+	existingArticle: Omit<
+		Article,
+		"dateUpdated" | "dateCreated" | "uri" | "isArticleFeatured"
+	>,
 	newArticle: NewArticle,
 ) {
 	return (
