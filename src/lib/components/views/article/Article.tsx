@@ -33,11 +33,11 @@ const Article = function ({ model }) {
 	const userInformation = useUserInformation();
 	const canEdit =
 		!options?.editingDisabled &&
-		(author.email && userInformation !== "pending"
+		((author.email && userInformation !== "pending"
 			? userInformation?.email === author.email
-			: false ||
-				(userInformation !== "pending" &&
-					userInformation?.roles.includes("admin"))); //TODO: Tidy up
+			: false) ||
+			(userInformation !== "pending" &&
+				userInformation?.roles.includes("admin"))); //TODO: Tidy up
 	const path = usePathname();
 
 	return (
