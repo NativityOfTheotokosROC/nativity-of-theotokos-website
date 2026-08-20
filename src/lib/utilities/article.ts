@@ -1,0 +1,20 @@
+import { Article, NewArticle } from "../types/general";
+
+export function hasArticleChanged(
+	existingArticle: Omit<
+		Article,
+		"dateUpdated" | "dateCreated" | "uri" | "isArticleFeatured"
+	>,
+	newArticle: NewArticle,
+) {
+	return !(existingArticle.title === newArticle.title && newArticle.snippet
+		? existingArticle.snippet === newArticle.snippet
+		: true && newArticle.authorName
+			? existingArticle.author.name === newArticle.authorName
+			: true &&
+				existingArticle.articleImage.source ===
+					newArticle.articleImage.source &&
+				existingArticle.articleImage.about ===
+					newArticle.articleImage.about &&
+				existingArticle.body === newArticle.body);
+}

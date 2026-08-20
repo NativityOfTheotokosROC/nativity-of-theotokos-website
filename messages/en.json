@@ -175,6 +175,9 @@
 		"discardDraftDialogTitle": "Discard Draft",
 		"discardDraftDialogMessage": "Are you sure you want to discard this draft? If you have submitted this draft before and it is pending approval, your submission will be deleted."
 	},
+	"editArticle": {
+		"title": "Edit Article"
+	},
 	"articlePreview": {
 		"title": "Article Preview",
 		"imagePlaceholder": "The article image will be placed here",

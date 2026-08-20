@@ -91,11 +91,12 @@ model Article {
 }
 
 model ArticleAuthor {
-  id                Int         @id @default(autoincrement())
-  name              Translation @relation(fields: [nameTranslationId], references: [id])
-  email             String?     @unique
-  nameTranslationId Int         @unique
+  id                Int             @id @default(autoincrement())
+  name              Translation     @relation(fields: [nameTranslationId], references: [id])
+  email             String          @unique
+  nameTranslationId Int             @unique
   articles          Article[]
+  articleTickets    ArticleTicket[]
 }
 
 model ArticleImage {
@@ -115,7 +116,8 @@ model FeaturedArticle {
 
 model ArticleTicket {
   id            String        @id @default(uuid())
-  userEmail     String
+  assignee      ArticleAuthor @relation(fields: [assigneeEmail], references: [email])
+  assigneeEmail String
   assignerEmail String?
   articleDraft  ArticleDraft?
   article       Article?      @relation(fields: [articleId], references: [link])

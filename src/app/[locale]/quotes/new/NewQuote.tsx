@@ -13,15 +13,13 @@ import { georgia } from "@/src/lib/third-party/fonts";
 import { getDateString } from "@/src/lib/utilities/date-time";
 import { getDefaultValues } from "@/src/lib/utilities/quote-form";
 import { useQuoteFormSchema } from "@/src/lib/validation/quote-form";
-import { Checkbox, Field, Label } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import { useCloseWarning } from "@/src/lib/utilities/hooks";
-import { useCallback } from "react";
+import Checkbox from "@/src/lib/components/checkbox/Checkbox";
 
 const NewQuote = function ({ model }) {
 	const { modelView, interact } = model;
@@ -464,28 +462,21 @@ const NewQuote = function ({ model }) {
 								</div>
 							</Tabs>
 							<div className="flex flex-col gap-3">
-								<Field className="flex items-center gap-3">
-									<Controller
-										control={control}
-										name={"isQuoteScheduled"}
-										render={({
-											field: { onChange, value },
-										}) => (
-											<Checkbox
-												className={`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white data-checked:bg-gray-900`}
-												onChange={onChange}
-												checked={value}
-											>
-												<Check
-													className={
-														"hidden size-4 stroke-white group-data-checked:block"
-													}
-												/>
-											</Checkbox>
-										)}
-									/>
-									<Label>{t("schedulerCheckLabel")}</Label>
-								</Field>
+								<Controller
+									control={control}
+									name={"isQuoteScheduled"}
+									render={({
+										field: { onChange, value },
+									}) => (
+										<Checkbox
+											model={newReadonlyModel({
+												isChecked: value,
+												label: t("schedulerCheckLabel"),
+												checkedChangeCallback: onChange,
+											})}
+										/>
+									)}
+								/>
 								{isQuoteScheduled && (
 									<>
 										<input

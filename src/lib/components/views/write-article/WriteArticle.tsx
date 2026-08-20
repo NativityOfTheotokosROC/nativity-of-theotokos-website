@@ -20,11 +20,16 @@ import ButtonBar from "../../button-bar/ButtonBar";
 import PageView from "../../page-view/PageView";
 import { useConfirmationDialog } from "@/src/lib/model-implementations/confirmation-dialog";
 import ConfirmationDialog from "../../confirmation-dialog/ConfirmationDialog";
+import SubmitGraphic from "@/public/assets/icon-2.svg";
+import DiscardGraphic from "@/public/assets/graphic-1.svg";
+import GoHomeButton from "../../button/GoHomeButton";
+import InformationView from "../../information-view/InformationView";
 
 const WriteArticle = function ({ model }) {
 	const { modelView, interact } = model;
 	const { notification, lastSavedDraft, author, currentArticle } = modelView;
 	const t = useTranslations("writeArticle");
+	const tMisc = useTranslations("miscellaneous");
 	const defaultTitle = "";
 	const defaultBody = `<p>${t("bodyPlaceholder")}</p>`;
 	const articleFormSchema = useWriteArticleFormSchema();
@@ -86,11 +91,39 @@ const WriteArticle = function ({ model }) {
 	register("body");
 	useCloseWarning(
 		useCallback(
-			() => !(notification?.type === "submit_success") && hasDraftChanged,
+			() =>
+				!(
+					notification?.type === "submit_success" ||
+					notification?.type === "discard_draft_success"
+				) && hasDraftChanged,
 			[notification?.type, hasDraftChanged],
 		),
 	);
 
+	if (notification?.type === "submit_success")
+		return (
+			<InformationView
+				model={newReadonlyModel({
+					mainMessage: t("mainMessage"),
+					detailedMessage: t("detailedMessage"),
+					Graphic: SubmitGraphic,
+				})}
+			>
+				<GoHomeButton>{tMisc("continue")}</GoHomeButton>
+			</InformationView>
+		);
+	if (notification?.type === "discard_draft_success")
+		return (
+			<InformationView
+				model={newReadonlyModel({
+					mainMessage: t("discardDraftMainMessage"),
+					detailedMessage: t("discardDraftSuccess"),
+					Graphic: DiscardGraphic,
+				})}
+			>
+				<GoHomeButton>{tMisc("continue")}</GoHomeButton>
+			</InformationView>
+		);
 	return (
 		<>
 			<ArticlePreviewModal model={articlePreviewModal} />
@@ -166,6 +199,7 @@ const WriteArticle = function ({ model }) {
 									disabled:
 										notification?.type ===
 											"discarding_draft" ||
+										notification?.type === "saving_draft" ||
 										notification?.type === "submitting",
 									className:
 										"flex justify-center items-center w-fit",
@@ -201,6 +235,8 @@ const WriteArticle = function ({ model }) {
 									disabled:
 										!hasDraftChanged ||
 										notification?.type === "saving_draft" ||
+										notification?.type ===
+											"discarding_draft" ||
 										notification?.type === "submitting",
 									className:
 										"flex justify-center items-center w-fit max-w-1/2 min-w-[8em]",
@@ -233,7 +269,9 @@ const WriteArticle = function ({ model }) {
 									variant: "standard",
 									disabled:
 										isSubmitting ||
-										notification?.type === "submitting",
+										notification?.type === "submitting" ||
+										notification?.type ===
+											"discarding_draft",
 									className:
 										"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
 								})}

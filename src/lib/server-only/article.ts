@@ -1,8 +1,23 @@
 import { cacheTag, cacheLife } from "next/cache";
 import database from "../third-party/prisma";
-import { Language, Article, ArticleAuthor } from "../types/general";
+import { Language, Article, ArticleAuthor, NewArticle } from "../types/general";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import z from "zod";
+import { removeMarkup } from "../utilities/miscellaneous";
+import {
+	getPublishArticleFormSchema,
+	MAX_SNIPPET,
+} from "../validation/publish-article-form";
 
+export const _FULL_ARTICLE_INCLUDES = {
+	author: { include: { name: true } },
+	title: true,
+	body: true,
+	snippet: true,
+	image: { include: { placeholder: true, caption: true } },
+	featuredArticle: true,
+};
 export async function getAllArticles(language: Language): Promise<Article[]> {
 	"use cache: remote";
 	cacheTag("bulletin_articles");
@@ -10,13 +25,7 @@ export async function getAllArticles(language: Language): Promise<Article[]> {
 
 	const articles: Article[] = await database.article
 		.findMany({
-			include: {
-				title: true,
-				author: { include: { name: true } },
-				body: true,
-				snippet: true,
-				image: { include: { caption: true } },
-			},
+			include: _FULL_ARTICLE_INCLUDES,
 		})
 		.then(records =>
 			records.map(record => {
@@ -29,6 +38,7 @@ export async function getAllArticles(language: Language): Promise<Article[]> {
 					image,
 					dateCreated,
 					dateUpdated,
+					featuredArticle,
 				} = record;
 				if (language === "ru")
 					return {
@@ -47,6 +57,7 @@ export async function getAllArticles(language: Language): Promise<Article[]> {
 							about:
 								image.caption.russian ?? image.caption.english,
 						},
+						isArticleFeatured: featuredArticle !== null,
 					} satisfies Article;
 				return {
 					uri: link,
@@ -63,6 +74,7 @@ export async function getAllArticles(language: Language): Promise<Article[]> {
 						source: image.link,
 						about: image.caption.russian ?? image.caption.english,
 					},
+					isArticleFeatured: featuredArticle !== null,
 				} satisfies Article;
 			}),
 		);
@@ -80,12 +92,7 @@ export async function getArticleMetadata(
 	const locale = language;
 	try {
 		const article = await database.article.findUniqueOrThrow({
-			include: {
-				title: true,
-				author: { include: { name: true } },
-				snippet: true,
-				image: { include: { caption: true } },
-			},
+			include: _FULL_ARTICLE_INCLUDES,
 			where: { link: articleId },
 			omit: { dateCreated: true, dateUpdated: true },
 		});
@@ -127,4 +134,42 @@ export async function getArticleMetadata(
 			notFound();
 		throw error;
 	}
+}
+
+export async function validateNewArticle(
+	newArticle: NewArticle,
+	locale?: Language,
+) {
+	const t = await getTranslations({ locale: locale ?? "en" });
+	const publishArticleFormSchema = getPublishArticleFormSchema(t);
+	const {
+		title,
+		body,
+		authorName,
+		imageUrl,
+		imageCaption,
+		snippet,
+		isArticleFeatured,
+	} = publishArticleFormSchema.parse({
+		title: newArticle.title,
+		body: newArticle.body,
+		authorName: newArticle.authorName,
+		snippet: newArticle.snippet,
+		imageUrl: newArticle.articleImage.source,
+		imageCaption: newArticle.articleImage.about,
+		isArticleFeatured: newArticle.isArticleFeatured,
+	} satisfies z.infer<typeof publishArticleFormSchema>);
+	const link = z.string().slugify().parse(title);
+	const finalSnippet =
+		snippet ?? `${removeMarkup(body).substring(0, MAX_SNIPPET - 3)}...`;
+
+	return {
+		link,
+		title,
+		authorName,
+		body,
+		snippet: finalSnippet,
+		articleImage: { source: imageUrl, about: imageCaption },
+		isArticleFeatured,
+	} satisfies NewArticle & { link: string };
 }
