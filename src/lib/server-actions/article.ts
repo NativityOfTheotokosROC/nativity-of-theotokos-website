@@ -830,29 +830,17 @@ export async function publishExistingArticle({
 				)
 					? new Date()
 					: undefined,
-				featuredArticle: isArticleFeatured
-					? {
-							upsert: {
-								create: {
-									articleId: existingArticle.id,
-								},
-								update: {},
-								where: {
-									articleId: existingArticle.id,
-								},
-							},
-							delete: {
-								NOT: {
-									articleId: existingArticle.id,
-								},
-							},
-						}
-					: undefined,
 			},
 			where: {
 				link: articleId, // TODO: Change articleId to articleLink in future to avoid confusion
 			},
 		});
+		if (isArticleFeatured) {
+			await transaction.featuredArticle.deleteMany({});
+			await transaction.featuredArticle.create({
+				data: { articleId: result.id },
+			});
+		}
 		if (ticketId)
 			await transaction.articleTicket.delete({ where: { id: ticketId } });
 		return result;
