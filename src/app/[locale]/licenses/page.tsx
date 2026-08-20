@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import Attribution from "./Attribution";
+import { isValidLocale } from "@/src/lib/utilities/internationalization";
 
 export async function generateMetadata({
 	params,
@@ -13,14 +14,14 @@ export async function generateMetadata({
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 	const t = await getTranslations({
 		locale: language,
-		namespace: "licenses",
+		namespace: "attribution",
 	});
-	return { title: t("alternateTitle") };
+	return { title: t("title") };
 }
 
 export default async function Page({ params }: PageProps<"/[locale]">) {
 	const { locale } = await params;
-	const language = hasLocale(routing.locales, locale) ? locale : "en";
+	const language = isValidLocale(locale) ? locale : "en";
 	const t = await getTranslations({
 		locale: language,
 		namespace: "licenses_variable",
@@ -34,6 +35,11 @@ export default async function Page({ params }: PageProps<"/[locale]">) {
 			text: t("dailyReadingsLicense"),
 			link: tLinks("holyTrinityChurch"),
 			linkLabel: "Holy Trinity Orthodox Church",
+		},
+		{
+			text: t("orthoGraphicsLicense"),
+			link: "https://orthodoxartsjournal.org/orthodox-illustration-project/",
+			linkLabel: "The Orthodox Illustration Project",
 		},
 		{
 			text: t("logoIconLicense"),

@@ -110,13 +110,13 @@
 		"title": "Условия использования",
 		"lastModified": "Последнее обновление"
 	},
-	"licenses": {
-		"title": "Лицензии",
-		"alternateTitle": "Атрибуция"
+	"attribution": {
+		"title": "Лицензии"
 	},
 	"licenses_variable": {
 		"dailyReadingsLicense": "Ежедневные чтения, памятования и песнопения предоставлены",
-		"logoIconLicense": "Иконка логотипа"
+		"logoIconLicense": "Иконка логотипа",
+		"orthoGraphicsLicense": "Традиционная православная графика (то есть эмблемы, заголовки, иконки и другие символы) — работа команды"
 	},
 	"news": {
 		"metaTitle": "Новости",

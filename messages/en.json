@@ -110,13 +110,13 @@
 		"title": "Terms of Service",
 		"lastModified": "Last Updated"
 	},
-	"licenses": {
-		"title": "Licenses",
-		"alternateTitle": "Attribution"
+	"attribution": {
+		"title": "Attribution"
 	},
 	"licenses_variable": {
 		"dailyReadingsLicense": "Daily readings, commemorations, and hymns sourced from",
-		"logoIconLicense": "Logo icon by"
+		"logoIconLicense": "Logo icon by",
+		"orthoGraphicsLicense": "Traditional Orthodox graphics (i.e. emblems, headers, icons, and other symbols) by the team at"
 	},
 	"news": {
 		"metaTitle": "News",

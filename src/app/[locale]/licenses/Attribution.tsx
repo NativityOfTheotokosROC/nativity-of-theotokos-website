@@ -8,7 +8,7 @@ const Attribution = async function ({ model }) {
 	const { language, licenses } = model.modelView;
 	const t = await getTranslations({
 		locale: language,
-		namespace: "licenses",
+		namespace: "attribution",
 	});
 
 	return (
@@ -17,7 +17,7 @@ const Attribution = async function ({ model }) {
 				<span
 					className={`mb-2 text-[2.75rem]/tight font-semibold wrap-break-word hyphens-auto md:w-3/4 ${georgia.className}`}
 				>
-					{t("alternateTitle")}
+					{t("title")}
 					<hr className="mt-4 mb-0 md:w-full" />
 				</span>
 				<div className="flex flex-col gap-6 [&_a]:underline [&_a]:hover:text-[#dcb042] [&_a]:active:text-[#dcb042]">

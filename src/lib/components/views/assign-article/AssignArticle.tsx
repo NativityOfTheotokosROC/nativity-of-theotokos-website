@@ -32,6 +32,7 @@ const AssignArticle = function ({ model }) {
 		items: suggestions?.map(author => author.name) ?? [],
 		query: "",
 		selectCallback: value => {
+			// Don't know why setValues is not working here
 			setValue("name", value);
 			setValue(
 				"email",
