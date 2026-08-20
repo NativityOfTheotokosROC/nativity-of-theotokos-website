@@ -14,6 +14,7 @@ export function getProtectedRoutes() {
 					"/quotes/new",
 					"/write-article", //TODO: Cater for /news/[slug]/edit too
 					"/review-article",
+					"/assign-article",
 				] as const);
 	// This should do for now lol
 	type TypeVerify =

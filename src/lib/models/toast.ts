@@ -1,14 +1,12 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { Notification } from "../types/general";
+import { MessageNotification } from "../types/general";
 
-export type ToastNotification = { message: string } & Notification<
+export type ToastNotification = MessageNotification<
 	"info" | "success" | "failure"
 >;
 
 export type ToastModelView = {
 	notification: ToastNotification;
 };
-
-// export type ToastModelInteraction = ModelInteraction<"DISMISS">;
 
 export type ToastModel = ReadonlyModel<ToastModelView>;

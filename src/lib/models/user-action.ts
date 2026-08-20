@@ -5,6 +5,7 @@ export type ActionName =
 	| "NEW_QUOTE"
 	| "WRITE_ARTICLE"
 	| "REVIEW_ARTICLE"
+	| "ASSIGN_ARTICLE"
 	| "SIGN_OUT";
 
 export type UserActionModelView = {

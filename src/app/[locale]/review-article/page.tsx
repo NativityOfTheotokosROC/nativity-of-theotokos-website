@@ -1,3 +1,4 @@
+import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
 import NoPendingArticleReviews from "@/src/lib/components/views/no-pending-article-reviews/NoPendingReviews";
 import ReviewArticleClient from "@/src/lib/components/views/review-article/client";
 import { getPendingArticleSubmission } from "@/src/lib/server-actions/article";
@@ -23,13 +24,15 @@ export default async function Page() {
 	if (!pendingArticleSubmission) return <NoPendingArticleReviews />;
 	const { ticket, draft, currentArticle } = pendingArticleSubmission;
 	return (
-		<ReviewArticleClient
-			model={newReadonlyModel({
-				draftAssigneeName: ticket.assignee.name,
-				articleDraft: draft,
-				ticketId: ticket.ticketId,
-				article: currentArticle,
-			})}
-		/>
+		<ProtectedComponent model={newReadonlyModel({ roles: ["editor"] })}>
+			<ReviewArticleClient
+				model={newReadonlyModel({
+					draftAssigneeName: ticket.assignee.name,
+					articleDraft: draft,
+					ticketId: ticket.ticketId,
+					article: currentArticle,
+				})}
+			/>
+		</ProtectedComponent>
 	);
 }

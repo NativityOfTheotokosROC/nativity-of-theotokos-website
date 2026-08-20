@@ -12,7 +12,7 @@ import {
 	NotifierModelInteraction,
 	NotifierModel,
 } from "../models/notifier";
-import { ToastNotification } from "./notifier";
+import { ToastNotification } from "../models/toast";
 import { useState } from "react";
 import { uploadFile } from "../client-only/file-uploader";
 import { useTranslations } from "next-intl";

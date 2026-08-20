@@ -3,16 +3,15 @@ import {
 	ViewInteractionInterface,
 } from "@mvc-react/stateful";
 import {
+	NotifierModel,
 	NotifierModelInteraction,
 	NotifierModelView,
 } from "../models/notifier";
+import { ToastNotification } from "../models/toast";
 import { Notification } from "../types/general";
 import { createToast } from "../components/miscellaneous/utility";
 
-// TODO: Formalize this stuff or something, can't keeping appending the message component
-export type ToastNotification = Notification<"info" | "success" | "failure"> & {
-	message: string;
-};
+export type ToastNotifierModel = NotifierModel<ToastNotification>;
 
 export function notifierVIInterface<
 	N extends Notification<T>,

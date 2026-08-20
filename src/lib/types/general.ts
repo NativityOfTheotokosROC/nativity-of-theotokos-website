@@ -87,9 +87,11 @@ export type GalleryImage = {
 	image: Image;
 };
 
-export interface Notification<T> {
+export type Notification<T> = {
 	type: T;
-}
+};
+
+export type MessageNotification<T> = Notification<T> & { message: string };
 
 export type Language = typeof routing.defaultLocale;
 

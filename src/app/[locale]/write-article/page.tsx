@@ -1,6 +1,6 @@
 import { routing } from "@/src/i18n/routing";
 import {
-	createTicket,
+	assignArticle,
 	getLatestUnsubmittedArticle,
 } from "@/src/lib/server-actions/article";
 import { newReadonlyModel } from "@mvc-react/mvc";
@@ -12,6 +12,7 @@ import { getUser } from "@/src/lib/server-actions/auth";
 import { DEFAULT_PREVIEW_USER_EMAIL } from "@/src/lib/utilities/constants";
 import { IS_AUTH_DISABLED } from "@/src/lib/utilities/server-constants";
 import { forbidden } from "next/navigation";
+import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
 
 export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 	const { locale } = await params;
@@ -37,16 +38,18 @@ export default async function Page() {
 
 	const { ticketId, canDeleteTicket } =
 		latestUnsubmittedArticle ??
-		(await createTicket(userEmail, { useUnused: true }));
+		(await assignArticle(userEmail, { useUnused: true }));
 
 	return (
-		<WriteArticleClient
-			model={newReadonlyModel({
-				ticketId,
-				lastSavedDraft: draft,
-				currentArticle,
-				canDeleteTicket,
-			})}
-		/>
+		<ProtectedComponent model={newReadonlyModel({ roles: ["writer"] })}>
+			<WriteArticleClient
+				model={newReadonlyModel({
+					ticketId,
+					lastSavedDraft: draft,
+					currentArticle,
+					canDeleteTicket,
+				})}
+			/>
+		</ProtectedComponent>
 	);
 }
