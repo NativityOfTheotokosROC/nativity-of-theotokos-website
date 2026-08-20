@@ -52,7 +52,7 @@ export function useUserActions() {
 			}
 			case "ASSIGN_ARTICLE": {
 				return newReadonlyModel({
-					name: "REVIEW_ARTICLE",
+					name: "ASSIGN_ARTICLE",
 					action: () => {
 						router.push("/assign-article");
 					},
