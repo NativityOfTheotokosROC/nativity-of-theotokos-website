@@ -61,6 +61,7 @@ const ArticlePreviewModal = function ({ model }) {
 									placeholder:
 										DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER,
 								},
+								isArticleFeatured: false,
 							},
 							options: {
 								sharingDisabled: true,
