@@ -39,8 +39,6 @@ export default async function Page() {
 		latestUnsubmittedArticle ??
 		(await assignArticle(userEmail, { useUnused: true }));
 
-	console.log("we got here at least");
-
 	return (
 		<ProtectedComponent model={newReadonlyModel({ roles: ["writer"] })}>
 			<WriteArticleClient

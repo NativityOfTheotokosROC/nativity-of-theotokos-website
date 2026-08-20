@@ -17,13 +17,32 @@ export async function protect(protectParams?: { roles?: Role[] }) {
 
 async function isAuthorized(user: User, roles?: Role[]) {
 	const computedRoles: Role[] = ["admin", ...(roles ? roles : [])];
-	const record = await database.admin.findFirst({
+	const result = await database.admin.findFirst({
 		where: {
 			email: user.email,
 			AND: { role: { in: computedRoles } },
 		},
 	});
-	return record != null;
+	if (result) return true;
+	for (const role of computedRoles) {
+		if (role === "writer") {
+			const result = await database.articleTicket.findFirst({
+				where: {
+					assigneeEmail: user.email,
+				},
+			});
+			if (result) return true;
+		}
+		if (role === "editor") {
+			const result = await database.editor.findFirst({
+				where: {
+					email: user.email,
+				},
+			});
+			if (result) return true;
+		}
+	}
+	return false;
 }
 
 export async function getUser() {
