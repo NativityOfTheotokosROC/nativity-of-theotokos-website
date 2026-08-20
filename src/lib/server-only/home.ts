@@ -17,6 +17,7 @@ import { getDateString } from "../utilities/date-time";
 import { getMd5Hash, isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
 import { getGalleryImages } from "./gallery";
+import { _FULL_ARTICLE_INCLUDES } from "./article";
 
 export const getDailyReadings = async (
 	currentDate: Date,
@@ -246,15 +247,8 @@ export async function getLatestArticles(
 	"use cache: remote";
 	cacheTag("latest-articles");
 
-	const articleIncludes = {
-		title: true,
-		body: true,
-		snippet: true,
-		author: { include: { name: true } },
-		image: { include: { placeholder: true, caption: true } },
-	};
 	const featuredArticle = await database.featuredArticle.findFirstOrThrow({
-		include: { article: { include: articleIncludes } },
+		include: { article: { include: _FULL_ARTICLE_INCLUDES } },
 	});
 	const otherArticles = await database.article.findMany({
 		where: {
@@ -262,7 +256,7 @@ export async function getLatestArticles(
 				is: null,
 			},
 		},
-		include: articleIncludes,
+		include: _FULL_ARTICLE_INCLUDES,
 		orderBy: {
 			dateCreated: "desc",
 		},
@@ -322,6 +316,7 @@ export async function getLatestArticles(
 						?.placeholder as ImagePlaceholder) ??
 					newPlaceholders.get(featuredArticle.article.id),
 			},
+			isArticleFeatured: true,
 		},
 		otherNewsArticles: otherArticles.map(article => {
 			const title =
@@ -357,6 +352,7 @@ export async function getLatestArticles(
 							?.placeholder as ImagePlaceholder) ??
 						newPlaceholders.get(article.id),
 				},
+				isArticleFeatured: article.featuredArticle !== null,
 			};
 		}),
 	};
