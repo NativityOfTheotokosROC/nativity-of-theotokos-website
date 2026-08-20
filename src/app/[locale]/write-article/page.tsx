@@ -35,10 +35,11 @@ export default async function Page() {
 	const draft = latestUnsubmittedArticle?.draft ?? undefined;
 	const currentArticle =
 		latestUnsubmittedArticle?.currentArticle ?? undefined;
-
 	const { ticketId, canDeleteTicket } =
 		latestUnsubmittedArticle ??
 		(await assignArticle(userEmail, { useUnused: true }));
+
+	console.log("we got here at least");
 
 	return (
 		<ProtectedComponent model={newReadonlyModel({ roles: ["writer"] })}>
