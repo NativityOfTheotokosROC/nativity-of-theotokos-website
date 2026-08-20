@@ -51,7 +51,8 @@
 		"newQuote": "New Quote",
 		"signOut": "Sign Out",
 		"writeArticle": "Write Article",
-		"reviewArticle": "Review Article"
+		"reviewArticle": "Review Article",
+		"assignArticle": "Assign Article"
 	},
 	"footer": {
 		"heading": "Nativity of the Theotokos Church",
@@ -144,7 +145,11 @@
 	},
 	"assignArticle": {
 		"metaTitle": "Assign Article",
-		"userField": "User Email",
+		"authorNameField": "Author Name",
+		"emailField": "Email",
+		"assignArticle": "Assign Article",
+		"assignSuccess": "Article successfully assigned",
+		"assignFail": "Could not assign article. Error: {message}",
 		"assignments": "Number of Assignments"
 	},
 	"writeArticle": {

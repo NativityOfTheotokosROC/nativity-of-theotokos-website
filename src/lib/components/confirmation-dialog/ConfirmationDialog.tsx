@@ -52,6 +52,7 @@ const ConfirmationDialog = function ({ model }) {
 						model={newReadonlyModel({
 							action: async () =>
 								await interact({ type: "CANCEL" }),
+							className: "min-w-[8em]",
 						})}
 					>
 						{cancelButtonText}
@@ -60,6 +61,7 @@ const ConfirmationDialog = function ({ model }) {
 						model={newReadonlyModel({
 							action: async () =>
 								await interact({ type: "PROCEED" }),
+							className: "min-w-[8em]",
 						})}
 					>
 						{proceedButtonText}

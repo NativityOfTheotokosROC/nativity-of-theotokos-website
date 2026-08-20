@@ -51,7 +51,8 @@
 		"newQuote": "Новая цитата",
 		"signOut": "Выйти",
 		"writeArticle": "Написать статью",
-		"reviewArticle": "Проверка статьи"
+		"reviewArticle": "Проверка статьи",
+		"assignArticle": "Назначить статью"
 	},
 	"footer": {
 		"heading": "Храм Рождества Пресвятой Богородицы",
@@ -144,7 +145,11 @@
 	},
 	"assignArticle": {
 		"metaTitle": "Назначить статью",
-		"userField": "Электронная почта пользователя",
+		"authorNameField": "Имя автора",
+		"emailField": "Электронная почта",
+		"assignArticle": "Назначить статью",
+		"assignSuccess": "Статья успешно назначена",
+		"assignFail": "Не удалось назначить статью. Ошибка: {message}",
 		"assignments": "Количество назначений"
 	},
 	"writeArticle": {

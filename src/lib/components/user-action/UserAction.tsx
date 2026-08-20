@@ -19,6 +19,9 @@ const UserAction = function ({ model }) {
 		case "REVIEW_ARTICLE": {
 			return <button onClick={action}>{t("reviewArticle")}</button>;
 		}
+		case "ASSIGN_ARTICLE": {
+			return <button onClick={action}>{t("assignArticle")}</button>;
+		}
 		case "SIGN_OUT": {
 			return <button onClick={action}>{t("signOut")}</button>;
 		}

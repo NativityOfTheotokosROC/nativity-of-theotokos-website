@@ -29,6 +29,7 @@ import { getWriteArticleFormSchema } from "../validation/write-article-form";
 import { getUser, protect } from "./auth";
 import { getUserInformation } from "./user";
 import { hasArticleChanged } from "../utilities/article";
+import { getAssignArticleFormSchema } from "../validation/assign-article-form";
 
 export async function getArticle(
 	articleId: string,
@@ -102,12 +103,13 @@ export async function getArticle(
 	}
 }
 
-export async function createTicket(
+export async function assignArticle(
 	email: string,
 	options?: Partial<{
 		articleId: string;
 		useUnused: boolean;
 		name: string;
+		locale: Language;
 	}>,
 ): Promise<{ ticketId: string; canDeleteTicket: boolean }> {
 	const user = await getUser();
@@ -115,8 +117,13 @@ export async function createTicket(
 	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
 	const userName = user?.name ?? DEFAULT_PREVIEW_USER_NAME;
 
-	const assigneeEmail = z.email().parse(email.trim());
-	const assigneeName =
+	const t = await getTranslations({ locale: options?.locale ?? "en" });
+	const assignArticleFormSchema = getAssignArticleFormSchema(t);
+
+	const assigneeEmail = assignArticleFormSchema
+		.pick({ email: true })
+		.parse(email).email;
+	const assigneeName = assignArticleFormSchema.pick({ name: true }).parse(
 		options?.name === undefined
 			? ((
 					await database.articleAuthor.findUnique({
@@ -128,10 +135,8 @@ export async function createTicket(
 				)?.name.english ?? assigneeEmail === userEmail)
 				? userName
 				: null
-			: z.string().trim().nonempty().parse(options.name);
-
-	if (!assigneeName)
-		throw new Error("Assignee does not have an existing name");
+			: options.name,
+	).name;
 
 	if (options?.articleId) {
 		const article = await database.article.findUniqueOrThrow({
@@ -206,6 +211,7 @@ export async function createTicket(
 						},
 					},
 				});
+		revalidateTag("article_authors", "max");
 		return {
 			ticketId: ticket.id,
 			canDeleteTicket: ticket.assigneeEmail === userEmail,

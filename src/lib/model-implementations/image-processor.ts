@@ -12,7 +12,7 @@ import {
 	NotifierModelView,
 	NotifierModelInteraction,
 } from "../models/notifier";
-import { ToastNotification } from "./notifier";
+import { ToastNotification } from "../models/toast";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { compressImage } from "../utilities/image-manipulation";

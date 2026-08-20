@@ -9,6 +9,7 @@ import WriteArticleClient from "../../../../../lib/components/views/write-articl
 import { getUserInformation } from "@/src/lib/server-actions/user";
 import ReviewArticleClient from "@/src/lib/components/views/review-article/client";
 import { IS_AUTH_DISABLED } from "@/src/lib/utilities/server-constants";
+import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]">) {
 	const { locale } = await params;
@@ -50,13 +51,15 @@ export default async function Page({
 		currentArticle,
 	} = await makeArticleEdit(articleUri);
 	return (
-		<WriteArticleClient
-			model={newReadonlyModel({
-				ticketId,
-				canDeleteTicket,
-				lastSavedDraft: { title, body },
-				currentArticle,
-			})}
-		/>
+		<ProtectedComponent model={newReadonlyModel({ roles: ["writer"] })}>
+			<WriteArticleClient
+				model={newReadonlyModel({
+					ticketId,
+					canDeleteTicket,
+					lastSavedDraft: { title, body },
+					currentArticle,
+				})}
+			/>
+		</ProtectedComponent>
 	);
 }

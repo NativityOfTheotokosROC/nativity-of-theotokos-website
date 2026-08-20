@@ -19,7 +19,7 @@ import {
 	publishNewArticle,
 } from "../server-actions/article";
 import { Article } from "../types/general";
-import { ToastNotification } from "./notifier";
+import { ToastNotification } from "../models/toast";
 
 export function reviewArticleNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,

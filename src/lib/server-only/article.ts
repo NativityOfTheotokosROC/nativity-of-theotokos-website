@@ -88,6 +88,7 @@ export async function getArticleMetadata(
 	Pick<Article, "uri" | "title" | "author" | "snippet" | "articleImage">
 > {
 	"use cache";
+	cacheTag(`article_${articleId}`);
 
 	const locale = language;
 	try {
@@ -134,6 +135,21 @@ export async function getArticleMetadata(
 			notFound();
 		throw error;
 	}
+}
+
+export async function getArticleAuthors() {
+	"use cache: remote";
+	cacheTag(`article_authors`);
+	const authors = (
+		await database.articleAuthor.findMany({ include: { name: true } })
+	).map(
+		record =>
+			({
+				name: record.name.english,
+				email: record.email,
+			}) satisfies Required<ArticleAuthor>,
+	);
+	return authors satisfies Required<ArticleAuthor>[];
 }
 
 export async function validateNewArticle(

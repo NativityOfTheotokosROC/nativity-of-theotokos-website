@@ -16,7 +16,7 @@ import {
 } from "../models/notifier";
 import { addNewQuote } from "../server-actions/quote";
 import { AutoCompleteInfo } from "../utilities/quote-form";
-import { ToastNotification } from "./notifier";
+import { ToastNotification } from "../models/toast";
 
 function newQuoteNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,

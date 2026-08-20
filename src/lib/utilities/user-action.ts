@@ -7,6 +7,7 @@ function getAllActionNames() {
 		"NEW_QUOTE",
 		"WRITE_ARTICLE",
 		"REVIEW_ARTICLE",
+		"ASSIGN_ARTICLE",
 		"SIGN_OUT",
 	] as const satisfies ActionName[];
 	type MissingActionName = Exclude<ActionName, (typeof actionNames)[number]>;
