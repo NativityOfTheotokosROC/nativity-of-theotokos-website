@@ -154,7 +154,7 @@ export async function validateNewArticle(
 		title: newArticle.title,
 		body: newArticle.body,
 		authorName: newArticle.authorName,
-		snippet: newArticle.snippet ?? "",
+		snippet: newArticle.snippet,
 		imageUrl: newArticle.articleImage.source,
 		imageCaption: newArticle.articleImage.about,
 		isArticleFeatured: newArticle.isArticleFeatured,

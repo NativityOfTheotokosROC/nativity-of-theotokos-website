@@ -832,8 +832,11 @@ export async function publishExistingArticle({
 					: undefined,
 				featuredArticle: isArticleFeatured
 					? {
-							connectOrCreate: {
-								create: { articleId: existingArticle.id },
+							upsert: {
+								create: {
+									articleId: existingArticle.id,
+								},
+								update: {},
 								where: {
 									articleId: existingArticle.id,
 								},

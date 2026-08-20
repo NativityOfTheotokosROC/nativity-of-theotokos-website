@@ -7,13 +7,14 @@ export function hasArticleChanged(
 	>,
 	newArticle: NewArticle,
 ) {
-	return (
-		existingArticle.title === newArticle.title &&
-		existingArticle.snippet === newArticle.snippet &&
-		existingArticle.author.name === newArticle.authorName &&
-		existingArticle.articleImage.source ===
-			newArticle.articleImage.source &&
-		existingArticle.articleImage.about === newArticle.articleImage.about &&
-		existingArticle.body === newArticle.body
-	);
+	return !(existingArticle.title === newArticle.title && newArticle.snippet
+		? existingArticle.snippet === newArticle.snippet
+		: true && newArticle.authorName
+			? existingArticle.author.name === newArticle.authorName
+			: true &&
+				existingArticle.articleImage.source ===
+					newArticle.articleImage.source &&
+				existingArticle.articleImage.about ===
+					newArticle.articleImage.about &&
+				existingArticle.body === newArticle.body);
 }
