@@ -55,8 +55,9 @@ const AssignArticle = function ({ model }) {
 					<input
 						{...register("email")}
 						className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.email ? "border-red-800" : "border-gray-400"}`}
-						placeholder={t("authorNameField")}
+						placeholder={t("emailField")}
 						autoComplete="off"
+						type="email"
 					/>
 					{errors.email && (
 						<span className="text-sm text-red-800">
@@ -64,7 +65,7 @@ const AssignArticle = function ({ model }) {
 						</span>
 					)}
 
-					<hr className="mt-1 w-full" />
+					<hr className="mt-6 w-full" />
 					<Button
 						model={newReadonlyModel({
 							type: "submit",

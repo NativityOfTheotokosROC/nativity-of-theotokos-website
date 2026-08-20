@@ -122,21 +122,22 @@ export async function assignArticle(
 
 	const assigneeEmail = assignArticleFormSchema
 		.pick({ email: true })
-		.parse(email).email;
-	const assigneeName = assignArticleFormSchema.pick({ name: true }).parse(
-		options?.name === undefined
-			? ((
-					await database.articleAuthor.findUnique({
-						include: { name: true },
-						where: {
-							email: assigneeEmail,
-						},
-					})
-				)?.name.english ?? assigneeEmail === userEmail)
-				? userName
-				: null
-			: options.name,
-	).name;
+		.parse({ email }).email;
+	const assigneeName = assignArticleFormSchema.pick({ name: true }).parse({
+		name:
+			options?.name === undefined
+				? ((
+						await database.articleAuthor.findUnique({
+							include: { name: true },
+							where: {
+								email: assigneeEmail,
+							},
+						})
+					)?.name.english ?? assigneeEmail === userEmail)
+					? userName
+					: null
+				: options.name,
+	}).name;
 
 	if (options?.articleId) {
 		const article = await database.article.findUniqueOrThrow({
