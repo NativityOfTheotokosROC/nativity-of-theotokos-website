@@ -1,3 +1,5 @@
+"use client";
+
 import { useAssignArticle } from "@/src/lib/model-implementations/assign-article";
 import { useToastNotifier } from "@/src/lib/model-implementations/notifier";
 import { AssignArticleModelView } from "@/src/lib/models/assign-article";
