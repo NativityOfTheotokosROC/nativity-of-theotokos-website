@@ -11,13 +11,7 @@ import { UninitializedModelError } from "../utilities/errors";
 
 export function autoCompleteBoxVIInterface() {
 	return {
-		produceModelView: async function (
-			interaction: AutoCompleteBoxModelInteraction,
-			currentModelView?:
-				| Readonly<AutoCompleteBoxModelView>
-				| null
-				| undefined,
-		): Promise<AutoCompleteBoxModelView> {
+		async produceModelView(interaction, currentModelView) {
 			if (!currentModelView) throw new UninitializedModelError();
 			switch (interaction.type) {
 				case "TOGGLE": {
@@ -39,8 +33,8 @@ export function autoCompleteBoxVIInterface() {
 					};
 				}
 				case "SELECT": {
-					const value = interaction.input.value;
-					currentModelView.selectCallback(value);
+					const { value, index } = interaction.input;
+					currentModelView.selectCallback(value, index);
 					return { ...currentModelView, query: value, isOpen: false };
 				}
 			}

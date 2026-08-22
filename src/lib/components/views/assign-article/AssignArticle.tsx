@@ -2,7 +2,7 @@ import { AssignArticleModel } from "@/src/lib/models/assign-article";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import PageView from "../../page-view/PageView";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAssignArticleFormSchema } from "@/src/lib/validation/assign-article-form";
@@ -16,6 +16,7 @@ const AssignArticle = function ({ model }) {
 	const { suggestions, notification } = modelView;
 	const t = useTranslations("assignArticle");
 	const {
+		control,
 		register,
 		handleSubmit,
 		setValue,
@@ -31,13 +32,10 @@ const AssignArticle = function ({ model }) {
 		isOpen: false,
 		items: suggestions?.map(author => author.name) ?? [],
 		query: "",
-		selectCallback: value => {
+		selectCallback(value, index) {
 			// Don't know why setValues is not working here
 			setValue("name", value);
-			setValue(
-				"email",
-				suggestions!.filter(author => author.name == value)[0].email,
-			);
+			setValue("email", suggestions![index].email);
 		},
 	});
 	const authorEmailsAutoCompleteBox = useAutoCompleteBox({
@@ -45,12 +43,9 @@ const AssignArticle = function ({ model }) {
 		isOpen: false,
 		items: suggestions?.map(author => author.email) ?? [],
 		query: "",
-		selectCallback: value => {
+		selectCallback(value, index) {
 			setValue("email", value);
-			setValue(
-				"name",
-				suggestions!.filter(author => author.email == value)[0].name,
-			);
+			setValue("name", suggestions![index].name);
 		},
 	});
 
@@ -77,82 +72,112 @@ const AssignArticle = function ({ model }) {
 					})}
 				>
 					<div className="flex flex-col gap-3 md:max-w-1/2 lg:max-w-1/3">
-						<input
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.name ? "border-red-800" : "border-gray-400"}`}
-							placeholder={t("authorNameField")}
-							autoComplete="off"
-							autoCapitalize="words"
-							{...register("name")}
-							data-tooltip-id={
-								authorNamesAutoCompleteBox.modelView.id
-							}
-							onChange={async e => {
-								register("name").onChange(e);
-								await authorNamesAutoCompleteBox.interact({
-									type: "TOGGLE",
-									input: {
-										value:
-											e.target.value.trim() === ""
-												? "close"
-												: "open",
-									},
-								});
-								await authorNamesAutoCompleteBox.interact({
-									type: "FILTER",
-									input: {
-										query: e.target.value,
-									},
-								});
-							}}
-							onBlur={() =>
-								authorNamesAutoCompleteBox.interact({
-									type: "TOGGLE",
-									input: {
-										value: "close",
-									},
-								})
-							}
+						<Controller
+							name="name"
+							control={control}
+							render={({
+								field: { onChange, onBlur, name, value },
+							}) => (
+								<input
+									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.name ? "border-red-800" : "border-gray-400"}`}
+									placeholder={t("authorNameField")}
+									autoComplete="off"
+									autoCapitalize="words"
+									name={name}
+									value={value}
+									data-tooltip-id={
+										authorNamesAutoCompleteBox.modelView.id
+									}
+									onChange={async e => {
+										onChange(e);
+										await authorNamesAutoCompleteBox.interact(
+											{
+												type: "TOGGLE",
+												input: {
+													value:
+														e.target.value.trim() ===
+														""
+															? "close"
+															: "open",
+												},
+											},
+										);
+										await authorNamesAutoCompleteBox.interact(
+											{
+												type: "FILTER",
+												input: {
+													query: e.target.value,
+												},
+											},
+										);
+									}}
+									onBlur={() => {
+										onBlur();
+										authorNamesAutoCompleteBox.interact({
+											type: "TOGGLE",
+											input: {
+												value: "close",
+											},
+										});
+									}}
+								/>
+							)}
 						/>
-						{errors.name && (
+						{errors?.name && (
 							<span className="text-sm text-red-800">
 								{errors.name.message}
 							</span>
 						)}
-						<input
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.email ? "border-red-800" : "border-gray-400"}`}
-							placeholder={t("emailField")}
-							autoComplete="off"
-							type="email"
-							{...register("email")}
-							data-tooltip-id={
-								authorEmailsAutoCompleteBox.modelView.id
-							}
-							onChange={async e => {
-								register("email").onChange(e);
-								await authorEmailsAutoCompleteBox.interact({
-									type: "TOGGLE",
-									input: {
-										value:
-											e.target.value.trim() === ""
-												? "close"
-												: "open",
-									},
-								});
-								await authorEmailsAutoCompleteBox.interact({
-									type: "FILTER",
-									input: {
-										query: e.target.value,
-									},
-								});
-							}}
-							onBlur={() =>
-								authorEmailsAutoCompleteBox.interact({
-									type: "TOGGLE",
-									input: {
-										value: "close",
-									},
-								})
-							}
+						<Controller
+							name="email"
+							control={control}
+							render={({
+								field: { onChange, onBlur, name, value },
+							}) => (
+								<input
+									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.email ? "border-red-800" : "border-gray-400"}`}
+									placeholder={t("emailField")}
+									autoComplete="off"
+									type="email"
+									name={name}
+									value={value}
+									data-tooltip-id={
+										authorEmailsAutoCompleteBox.modelView.id
+									}
+									onChange={async e => {
+										onChange(e);
+										await authorEmailsAutoCompleteBox.interact(
+											{
+												type: "TOGGLE",
+												input: {
+													value:
+														e.target.value.trim() ===
+														""
+															? "close"
+															: "open",
+												},
+											},
+										);
+										await authorEmailsAutoCompleteBox.interact(
+											{
+												type: "FILTER",
+												input: {
+													query: e.target.value,
+												},
+											},
+										);
+									}}
+									onBlur={() => {
+										onBlur();
+										authorEmailsAutoCompleteBox.interact({
+											type: "TOGGLE",
+											input: {
+												value: "close",
+											},
+										});
+									}}
+								/>
+							)}
 						/>
 						{errors.email && (
 							<span className="text-sm text-red-800">

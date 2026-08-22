@@ -9,11 +9,16 @@ const AutoCompleteBox = function ({ model }) {
 	const { modelView, interact } = model;
 	const { id, items, query, isOpen } = modelView;
 	const queryParts = query.split(/\s+/).map(part => part.toLowerCase());
-	const filteredItems = items.filter(item => {
-		const lowercasedItem = item.toLowerCase();
-		return queryParts.every(part => lowercasedItem.includes(part));
-	});
-	const computedOpen = filteredItems.length > 0 && isOpen;
+	const filteredItemsDictionary = items
+		.map((item, index) => ({ item, index }))
+		.filter(({ item, index }) => {
+			const lowercasedItem = item.toLowerCase();
+			return {
+				index,
+				item: queryParts.every(part => lowercasedItem.includes(part)),
+			};
+		});
+	const computedOpen = filteredItemsDictionary.length > 0 && isOpen;
 	const [isClickable, setClickable] = useState(computedOpen); //TODO: Not ideal
 
 	return (
@@ -27,13 +32,13 @@ const AutoCompleteBox = function ({ model }) {
 			place="bottom-start"
 			content={
 				<div className="auto-complete-items flex max-h-[9em] w-[17em] max-w-[17em] flex-col overflow-y-auto pr-3 text-sm">
-					{filteredItems.map(item => (
+					{filteredItemsDictionary.map(({ index, item }) => (
 						<button
-							key={`${item}`}
+							key={`${index}`}
 							onClick={async () => {
 								await interact({
 									type: "SELECT",
-									input: { value: item },
+									input: { value: item, index },
 								});
 							}}
 							className="bg-transparent p-3 text-left hover:text-[#ffdc4f] active:text-[#ffdc4f]"
