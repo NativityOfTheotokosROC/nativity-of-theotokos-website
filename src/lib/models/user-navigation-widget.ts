@@ -3,7 +3,7 @@ import { Image, Role, User } from "../types/general";
 import { UserActionModel } from "./user-action";
 
 export type NavigationUserDetails = Pick<User, "name"> & {
-	avatar: Pick<Image, "source" | "about">;
+	avatar?: Pick<Image, "source" | "about">;
 	roles: Role[];
 };
 

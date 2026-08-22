@@ -1,4 +1,12 @@
 import imageCompression from "browser-image-compression";
+import z from "zod";
+
+// export async function getDefaultAvatar(
+// 	name: string,
+// 	options?: Partial<{ email: string }>,
+// ) {
+// 	const parsedName = z.string().trim().nonempty().parse(name);
+// }
 
 export async function compressImage(
 	file: File,

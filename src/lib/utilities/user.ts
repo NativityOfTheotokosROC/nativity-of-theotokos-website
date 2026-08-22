@@ -6,7 +6,7 @@ import { Role } from "../types/general";
 export type UserInformation = {
 	name: string;
 	email: string;
-	avatar: {
+	avatar?: {
 		source: string;
 	};
 	roles: Role[];

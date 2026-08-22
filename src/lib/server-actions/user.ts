@@ -39,7 +39,7 @@ export async function getUserInformation(): Promise<UserInformation> {
 	return {
 		name: user.name,
 		email: user.email,
-		avatar: { source: user.image! },
+		avatar: user.image ? { source: user.image } : undefined,
 		roles: finalRoles,
 	};
 }

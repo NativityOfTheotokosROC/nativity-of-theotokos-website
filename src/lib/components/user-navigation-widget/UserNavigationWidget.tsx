@@ -55,10 +55,13 @@ const UserDisplay = function ({ model }) {
 					<div className="avatar-frame flex size-10 min-w-10 items-stretch justify-stretch overflow-clip rounded-lg border border-white/15">
 						<Image
 							className="grow object-cover object-center"
-							alt={user.avatar.about ?? user.name}
+							alt={user.avatar?.about ?? user.name}
 							width={40}
 							height={40}
-							src={user.avatar.source}
+							src={
+								user.avatar?.source ??
+								"/assets/default-profile-photo-min.webp"
+							}
 						/>
 					</div>
 				</div>
@@ -81,10 +84,13 @@ const UserDisplay = function ({ model }) {
 					<div className="avatar-frame flex size-10 min-w-10 items-stretch justify-stretch overflow-clip rounded-lg border border-white/15">
 						<Image
 							className="grow object-cover object-center"
-							alt={user.avatar.about ?? user.name}
+							alt={user.avatar?.about ?? user.name}
 							width={40}
 							height={40}
-							src={user.avatar.source}
+							src={
+								user.avatar?.source ??
+								"/assets/default-profile-photo-min.webp"
+							}
 						/>
 					</div>
 					<span
