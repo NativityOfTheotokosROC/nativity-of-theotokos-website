@@ -11,12 +11,9 @@ const AutoCompleteBox = function ({ model }) {
 	const queryParts = query.split(/\s+/).map(part => part.toLowerCase());
 	const filteredItemsDictionary = items
 		.map((item, index) => ({ item, index }))
-		.filter(({ item, index }) => {
+		.filter(({ item }) => {
 			const lowercasedItem = item.toLowerCase();
-			return {
-				index,
-				item: queryParts.every(part => lowercasedItem.includes(part)),
-			};
+			return queryParts.every(part => lowercasedItem.includes(part));
 		});
 	const computedOpen = filteredItemsDictionary.length > 0 && isOpen;
 	const [isClickable, setClickable] = useState(computedOpen); //TODO: Not ideal
