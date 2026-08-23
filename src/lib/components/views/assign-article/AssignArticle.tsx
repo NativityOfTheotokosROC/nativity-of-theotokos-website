@@ -17,7 +17,6 @@ const AssignArticle = function ({ model }) {
 	const t = useTranslations("assignArticle");
 	const {
 		control,
-		register,
 		handleSubmit,
 		setValue,
 		reset,
@@ -94,11 +93,10 @@ const AssignArticle = function ({ model }) {
 											{
 												type: "TOGGLE",
 												input: {
-													value:
+													value: !(
 														e.target.value.trim() ===
 														""
-															? "close"
-															: "open",
+													),
 												},
 											},
 										);
@@ -116,7 +114,7 @@ const AssignArticle = function ({ model }) {
 										authorNamesAutoCompleteBox.interact({
 											type: "TOGGLE",
 											input: {
-												value: "close",
+												value: false,
 											},
 										});
 									}}
@@ -150,11 +148,10 @@ const AssignArticle = function ({ model }) {
 											{
 												type: "TOGGLE",
 												input: {
-													value:
+													value: !(
 														e.target.value.trim() ===
 														""
-															? "close"
-															: "open",
+													),
 												},
 											},
 										);
@@ -172,7 +169,7 @@ const AssignArticle = function ({ model }) {
 										authorEmailsAutoCompleteBox.interact({
 											type: "TOGGLE",
 											input: {
-												value: "close",
+												value: false,
 											},
 										});
 									}}

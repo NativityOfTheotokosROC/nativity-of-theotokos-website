@@ -15,7 +15,7 @@ const AutoCompleteBox = function ({ model }) {
 			const lowercasedItem = item.toLowerCase();
 			return queryParts.every(part => lowercasedItem.includes(part));
 		});
-	const computedOpen = filteredItemsDictionary.length > 0 && isOpen;
+	const computedOpen = isOpen && filteredItemsDictionary.length > 0;
 	const [isClickable, setClickable] = useState(computedOpen); //TODO: Not ideal
 
 	return (

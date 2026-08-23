@@ -60,14 +60,12 @@ const NewQuote = function ({ model }) {
 			autoCompleteInfo?.existingAuthors.map(author => author.english) ??
 			[],
 		query: "",
-		selectCallback: value => {
+		selectCallback(value, index) {
 			setValue("authorEn", value);
 			setValue(
 				// TODO: Refactor
 				"authorRu",
-				autoCompleteInfo!.existingAuthors.filter(
-					author => author.english == value,
-				)[0].russian ?? "",
+				autoCompleteInfo!.existingAuthors[index].russian ?? "",
 			);
 		},
 	});
@@ -79,13 +77,11 @@ const NewQuote = function ({ model }) {
 				.map(author => author.russian)
 				.filter(russianName => russianName !== null) ?? [],
 		query: "",
-		selectCallback: value => {
+		selectCallback(value, index) {
 			setValue("authorRu", value);
 			setValue(
 				"authorEn",
-				autoCompleteInfo!.existingAuthors.filter(
-					author => author.russian == value,
-				)[0].english,
+				autoCompleteInfo!.existingAuthors[index].english,
 			);
 		},
 	});
@@ -96,13 +92,11 @@ const NewQuote = function ({ model }) {
 			autoCompleteInfo?.existingSources.map(source => source.english) ??
 			[],
 		query: "",
-		selectCallback: value => {
+		selectCallback(value, index) {
 			setValue("sourceEn", value);
 			setValue(
 				"sourceRu",
-				autoCompleteInfo!.existingSources.filter(
-					source => source.english == value,
-				)[0].russian ?? "",
+				autoCompleteInfo!.existingSources[index].russian ?? "",
 			);
 		},
 	});
@@ -114,13 +108,11 @@ const NewQuote = function ({ model }) {
 				.map(source => source.russian)
 				.filter(russianName => russianName !== null) ?? [],
 		query: "",
-		selectCallback: value => {
+		selectCallback(value, index) {
 			setValue("sourceRu", value);
 			setValue(
 				"sourceEn",
-				autoCompleteInfo!.existingSources.filter(
-					source => source.russian == value,
-				)[0].english,
+				autoCompleteInfo!.existingSources[index].english,
 			);
 		},
 	});
@@ -138,14 +130,7 @@ const NewQuote = function ({ model }) {
 
 	return (
 		<>
-			{quotePreviewModal.modelView && (
-				<QuotePreviewModal
-					model={{
-						...quotePreviewModal,
-						modelView: quotePreviewModal.modelView,
-					}}
-				/>
-			)}
+			<QuotePreviewModal model={quotePreviewModal} />
 			{autoCompleteInfo && (
 				<>
 					<AutoCompleteBox model={englishAuthorAutoCompleteBox} />
@@ -232,101 +217,117 @@ const NewQuote = function ({ model }) {
 						<div className="flex flex-col gap-6 md:w-3/4 lg:w-6/10">
 							<Tabs model={tabs}>
 								<div className="flex flex-col gap-3">
-									<input
-										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorEn ? "border-red-800" : "border-gray-400"}`}
-										placeholder={t("author")}
-										id="quote-author"
-										formNoValidate
-										autoCapitalize="words"
-										autoComplete="off"
-										{...register("authorEn")}
-										data-tooltip-id={
-											englishAuthorAutoCompleteBox
-												.modelView.id
-										}
-										onChange={async e => {
-											register("authorEn").onChange(e);
-											await englishAuthorAutoCompleteBox.interact(
-												{
-													type: "TOGGLE",
-													input: {
-														value:
-															e.target.value.trim() ===
-															""
-																? "close"
-																: "open",
-													},
-												},
-											);
-											await englishAuthorAutoCompleteBox.interact(
-												{
-													type: "FILTER",
-													input: {
-														query: e.target.value,
-													},
-												},
-											);
-										}}
-										onBlur={() =>
-											englishAuthorAutoCompleteBox.interact(
-												{
-													type: "TOGGLE",
-													input: {
-														value: "close",
-													},
-												},
-											)
-										}
+									<Controller
+										control={control}
+										name={"authorEn"}
+										render={({
+											field: { name, onChange, onBlur },
+										}) => (
+											<input
+												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorEn ? "border-red-800" : "border-gray-400"}`}
+												placeholder={t("author")}
+												name={name}
+												formNoValidate
+												autoCapitalize="words"
+												autoComplete="off"
+												data-tooltip-id={
+													englishAuthorAutoCompleteBox
+														.modelView.id
+												}
+												onChange={async e => {
+													onChange(e);
+													await englishAuthorAutoCompleteBox.interact(
+														{
+															type: "TOGGLE",
+															input: {
+																value: !(
+																	e.target.value.trim() ===
+																	""
+																),
+															},
+														},
+													);
+													await englishAuthorAutoCompleteBox.interact(
+														{
+															type: "FILTER",
+															input: {
+																query: e.target
+																	.value,
+															},
+														},
+													);
+												}}
+												onBlur={() => {
+													onBlur();
+													englishAuthorAutoCompleteBox.interact(
+														{
+															type: "TOGGLE",
+															input: {
+																value: false,
+															},
+														},
+													);
+												}}
+											/>
+										)}
 									/>
 									{errors.authorEn && (
 										<span className="text-sm text-red-800">
 											{errors.authorEn.message}
 										</span>
 									)}
-									<input
-										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceEn ? "border-red-800" : "border-gray-400"}`}
-										placeholder={`${t("source")} (${t("optional")})`}
-										id="quote-source"
-										autoComplete="off"
-										formNoValidate
-										{...register("sourceEn")}
-										data-tooltip-id={
-											englishSourceAutoCompleteBox
-												.modelView.id
-										}
-										onChange={async e => {
-											register("sourceEn").onChange(e);
-											await englishSourceAutoCompleteBox.interact(
-												{
-													type: "TOGGLE",
-													input: {
-														value:
-															e.target.value.trim() ===
-															""
-																? "close"
-																: "open",
-													},
-												},
-											);
-											await englishSourceAutoCompleteBox.interact(
-												{
-													type: "FILTER",
-													input: {
-														query: e.target.value,
-													},
-												},
-											);
-										}}
-										onBlur={() =>
-											englishSourceAutoCompleteBox.interact(
-												{
-													type: "TOGGLE",
-													input: {
-														value: "close",
-													},
-												},
-											)
-										}
+									<Controller
+										control={control}
+										name={"sourceEn"}
+										render={({
+											field: { name, onChange, onBlur },
+										}) => (
+											<input
+												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceEn ? "border-red-800" : "border-gray-400"}`}
+												placeholder={`${t("source")} (${t("optional")})`}
+												autoComplete="off"
+												name={name}
+												formNoValidate
+												data-tooltip-id={
+													englishSourceAutoCompleteBox
+														.modelView.id
+												}
+												onChange={async e => {
+													onChange(e);
+													await englishSourceAutoCompleteBox.interact(
+														{
+															type: "TOGGLE",
+															input: {
+																value: !(
+																	e.target.value.trim() ===
+																	""
+																),
+															},
+														},
+													);
+													await englishSourceAutoCompleteBox.interact(
+														{
+															type: "FILTER",
+															input: {
+																query: e.target
+																	.value,
+															},
+														},
+													);
+												}}
+												onBlur={() => {
+													onBlur();
+													englishSourceAutoCompleteBox.interact(
+														{
+															type: "TOGGLE",
+															input: {
+																value: false,
+															},
+														},
+													);
+												}}
+											/>
+										)}
 									/>
 									{errors.sourceEn && (
 										<span className="text-sm text-red-800">
@@ -347,99 +348,114 @@ const NewQuote = function ({ model }) {
 									)}
 								</div>
 								<div className="flex flex-col gap-3">
-									<input
-										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorRu ? "border-red-800" : "border-gray-400"}`}
-										placeholder={`${t("author")} (${t("optional")})`}
-										id="quote-author-ru"
-										autoCapitalize="words"
-										autoComplete="off"
-										{...register("authorRu")}
-										data-tooltip-id={
-											russianAuthorAutoCompleteBox
-												.modelView.id
-										}
-										onChange={async e => {
-											register("authorRu").onChange(e);
-											await russianAuthorAutoCompleteBox.interact(
-												{
-													type: "TOGGLE",
-													input: {
-														value:
-															e.target.value.trim() ===
-															""
-																? "close"
-																: "open",
-													},
-												},
-											);
-											await russianAuthorAutoCompleteBox.interact(
-												{
-													type: "FILTER",
-													input: {
-														query: e.target.value,
-													},
-												},
-											);
-										}}
-										onBlur={() =>
-											russianAuthorAutoCompleteBox.interact(
-												{
-													type: "TOGGLE",
-													input: {
-														value: "close",
-													},
-												},
-											)
-										}
+									<Controller
+										control={control}
+										name={"authorRu"}
+										render={({
+											field: { name, onChange, onBlur },
+										}) => (
+											<input
+												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorRu ? "border-red-800" : "border-gray-400"}`}
+												placeholder={`${t("author")} (${t("optional")})`}
+												name={name}
+												autoCapitalize="words"
+												autoComplete="off"
+												data-tooltip-id={
+													russianAuthorAutoCompleteBox
+														.modelView.id
+												}
+												onChange={async e => {
+													onChange(e);
+													await russianAuthorAutoCompleteBox.interact(
+														{
+															type: "TOGGLE",
+															input: {
+																value: !(
+																	e.target.value.trim() ===
+																	""
+																),
+															},
+														},
+													);
+													await russianAuthorAutoCompleteBox.interact(
+														{
+															type: "FILTER",
+															input: {
+																query: e.target
+																	.value,
+															},
+														},
+													);
+												}}
+												onBlur={() => {
+													onBlur();
+													russianAuthorAutoCompleteBox.interact(
+														{
+															type: "TOGGLE",
+															input: {
+																value: false,
+															},
+														},
+													);
+												}}
+											/>
+										)}
 									/>
 									{errors.authorRu && (
 										<span className="text-sm text-red-800">
 											{errors.authorRu.message}
 										</span>
 									)}
-									<input
-										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceRu ? "border-red-800" : "border-gray-400"}`}
-										placeholder={`${t("source")} (${t("optional")})`}
-										id="quote-source-ru"
-										autoComplete="off"
-										{...register("sourceRu")}
-										data-tooltip-id={
-											russianSourceAutoCompleteBox
-												.modelView.id
-										}
-										onChange={async e => {
-											register("sourceRu").onChange(e);
-											await russianSourceAutoCompleteBox.interact(
-												{
-													type: "TOGGLE",
-													input: {
-														value:
-															e.target.value.trim() ===
-															""
-																? "close"
-																: "open",
-													},
-												},
-											);
-											await russianSourceAutoCompleteBox.interact(
-												{
-													type: "FILTER",
-													input: {
-														query: e.target.value,
-													},
-												},
-											);
-										}}
-										onBlur={() =>
-											russianSourceAutoCompleteBox.interact(
-												{
-													type: "TOGGLE",
-													input: {
-														value: "close",
-													},
-												},
-											)
-										}
+									<Controller
+										control={control}
+										name={"sourceRu"}
+										render={({
+											field: { name, onChange, onBlur },
+										}) => (
+											<input
+												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceRu ? "border-red-800" : "border-gray-400"}`}
+												placeholder={`${t("source")} (${t("optional")})`}
+												name={name}
+												autoComplete="off"
+												data-tooltip-id={
+													russianSourceAutoCompleteBox
+														.modelView.id
+												}
+												onChange={async e => {
+													onChange(e);
+													await russianSourceAutoCompleteBox.interact(
+														{
+															type: "TOGGLE",
+															input: {
+																value: !(
+																	e.target.value.trim() ===
+																	""
+																),
+															},
+														},
+													);
+													await russianSourceAutoCompleteBox.interact(
+														{
+															type: "FILTER",
+															input: {
+																query: e.target
+																	.value,
+															},
+														},
+													);
+												}}
+												onBlur={() =>
+													russianSourceAutoCompleteBox.interact(
+														{
+															type: "TOGGLE",
+															input: {
+																value: false,
+															},
+														},
+													)
+												}
+											/>
+										)}
 									/>
 									{errors.sourceRu && (
 										<span className="text-sm text-red-800">
