@@ -1,6 +1,6 @@
 import HymnsOrnament from "@/public/assets/ornament_9.svg";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
+import { newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 import { HymnsModalModel } from "../../models/hymns-modal";
 import { georgia } from "../../third-party/fonts";
@@ -8,7 +8,8 @@ import Modal from "../modal/Modal";
 
 const HymnsModal = function ({ model }) {
 	const { modelView, interact } = model;
-	const { isOpen, hymns } = modelView;
+	const isOpen = modelView?.isOpen ?? false;
+	const hymns = modelView?.hymns ?? [];
 	const t = useTranslations("hymnsModal");
 
 	return (
@@ -67,6 +68,6 @@ const HymnsModal = function ({ model }) {
 			</div>
 		</Modal>
 	);
-} as ModeledVoidComponent<InitializedModel<HymnsModalModel>>;
+} as ModeledVoidComponent<HymnsModalModel>;
 
 export default HymnsModal;
