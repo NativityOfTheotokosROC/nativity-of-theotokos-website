@@ -29,7 +29,10 @@ export function autoCompleteBoxVIInterface(
 					const { isOpen: isActivated } = currentModelView;
 					const isBlank = query.trim() === "";
 					console.log(
-						`isBlank: ${isBlank}; closeOption: ${options?.closeOnBlank}`,
+						`isBlank: ${isBlank}; closeOption: ${options?.closeOnBlank}; compound: ${isBlank && options?.closeOnBlank}`,
+					);
+					console.log(
+						`isOpen: ${isActivated}; items: ${currentModelView.items.length}`,
 					);
 					return {
 						...currentModelView,
