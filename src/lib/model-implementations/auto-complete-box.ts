@@ -20,14 +20,19 @@ export function autoCompleteBoxVIInterface(
 					return {
 						...currentModelView,
 						isOpen:
-							currentModelView.items.length > 0 &&
-							interaction.input.value,
+							interaction.input.value &&
+							currentModelView.items.length > 0,
 					};
 				}
 				case "FILTER": {
 					const { query } = interaction.input;
 					const { isOpen: isActivated } = currentModelView;
 					const isBlank = query.trim() === "";
+					console.log(
+						isActivated &&
+							currentModelView.items.length > 0 &&
+							!(options?.closeOnBlank && isBlank),
+					);
 					return {
 						...currentModelView,
 						query: query,
