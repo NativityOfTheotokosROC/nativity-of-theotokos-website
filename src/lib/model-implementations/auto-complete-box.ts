@@ -29,9 +29,7 @@ export function autoCompleteBoxVIInterface(
 					const { isOpen: isActivated } = currentModelView;
 					const isBlank = query.trim() === "";
 					console.log(
-						isActivated &&
-							currentModelView.items.length > 0 &&
-							!(options?.closeOnBlank && isBlank),
+						`isBlank: ${isBlank}; closeOption: ${options?.closeOnBlank}`,
 					);
 					return {
 						...currentModelView,
@@ -57,7 +55,7 @@ export function autoCompleteBoxVIInterface(
 
 export function useAutoCompleteBox(
 	initialModelView: AutoCompleteBoxModelView,
-	options?: { closeOnBlank: boolean },
+	options?: Partial<{ closeOnBlank: boolean }>,
 ) {
 	const model = useInitializedStatefulInteractiveModel(
 		autoCompleteBoxVIInterface(options),
