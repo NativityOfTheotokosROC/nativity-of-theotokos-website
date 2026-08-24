@@ -1,8 +1,8 @@
-import { InputModelInteraction, InteractiveModel, Model } from "@mvc-react/mvc";
+import { Model } from "@mvc-react/mvc";
 
 export type EditorModelView = {
+	changeCallback: (content: string) => Promise<void>;
 	initialContent?: string;
-	changeCallback?: (content: string) => Promise<void>;
 	isReadonly?: boolean;
 	className?: string;
 };
