@@ -14,11 +14,11 @@ import EditorTools from "../editor-tools/EditorTools";
 import { useEffect } from "react";
 
 const Editor = function ({ model }) {
-	const { modelView, interact } = model;
-	const { content, className, isReadonly } = modelView;
+	const { modelView } = model;
+	const { initialContent, changeCallback, className, isReadonly } = modelView;
 	const editor = useEditor({
 		editable: !isReadonly,
-		content,
+		content: initialContent,
 		extensions: [
 			StarterKit,
 			TextStyleKit,
@@ -27,11 +27,8 @@ const Editor = function ({ model }) {
 			OfficePaste,
 		],
 		immediatelyRender: false,
-		onUpdate({ editor }) {
-			return interact({
-				type: "UPDATE_EDITOR",
-				input: { content: editor.getHTML() },
-			});
+		async onUpdate({ editor }) {
+			await changeCallback?.(editor.getHTML());
 		},
 		editorProps: {
 			transformPastedHTML(html) {
@@ -49,7 +46,7 @@ const Editor = function ({ model }) {
 		<div
 			className={twMerge(
 				"flex w-full flex-col gap-4 rounded-lg border border-gray-400 bg-white p-6 md:p-8 md:px-[8em] lg:px-[13em]",
-				className ?? "",
+				className,
 			)}
 		>
 			{editorTools.modelView ? (

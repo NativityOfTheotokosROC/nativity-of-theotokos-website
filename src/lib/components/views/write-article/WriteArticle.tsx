@@ -5,7 +5,6 @@ import Button from "@/src/lib/components/button/Button";
 import Editor from "@/src/lib/components/editor/Editor";
 import Spinner from "@/src/lib/components/spinner/Spinner";
 import { useArticlePreviewModal } from "@/src/lib/model-implementations/article-preview-modal";
-import { useEditor } from "@/src/lib/model-implementations/editor";
 import { WriteArticleModel } from "@/src/lib/models/write-article";
 import { useCloseWarning } from "@/src/lib/utilities/hooks";
 import { useWriteArticleFormSchema } from "@/src/lib/validation/write-article-form";
@@ -15,7 +14,7 @@ import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import ButtonBar from "../../button-bar/ButtonBar";
 import PageView from "../../page-view/PageView";
 import { useConfirmationDialog } from "@/src/lib/model-implementations/confirmation-dialog";
@@ -34,6 +33,7 @@ const WriteArticle = function ({ model }) {
 	const defaultBody = `<p>${t("bodyPlaceholder")}</p>`;
 	const articleFormSchema = useWriteArticleFormSchema();
 	const {
+		control,
 		register,
 		handleSubmit,
 		reset,
@@ -48,9 +48,6 @@ const WriteArticle = function ({ model }) {
 			title: lastSavedDraft?.title ?? defaultTitle,
 			body: lastSavedDraft?.body ?? defaultBody,
 		},
-	});
-	const editor = useEditor(lastSavedDraft?.body ?? defaultBody, {
-		updateCallback: async content => setValue("body", content),
 	});
 	const title = watch("title");
 	const body = watch("body");
@@ -71,12 +68,6 @@ const WriteArticle = function ({ model }) {
 					},
 					options: {
 						async successCallback() {
-							await editor.interact({
-								type: "UPDATE_EDITOR",
-								input: {
-									content: defaultBody,
-								},
-							});
 							reset({
 								title: defaultTitle,
 								body: defaultBody,
@@ -163,16 +154,23 @@ const WriteArticle = function ({ model }) {
 								{errors.title.message}
 							</span>
 						)}
-						<Editor
-							model={{
-								...editor,
-								modelView: {
-									...editor.modelView,
-									className: errors.body
-										? "border-red-800"
-										: "border-gray-400",
-								},
-							}}
+						<Controller
+							control={control}
+							name={"body"}
+							render={({ field: { onChange } }) => (
+								<Editor
+									model={newReadonlyModel({
+										initialContent:
+											lastSavedDraft?.body ?? defaultBody,
+										className: errors.body
+											? "border-red-800"
+											: "border-gray-400",
+										async changeCallback(content) {
+											onChange(new InputEvent(content));
+										},
+									})}
+								/>
+							)}
 						/>
 						{errors.body && (
 							<span className="text-sm text-red-800">

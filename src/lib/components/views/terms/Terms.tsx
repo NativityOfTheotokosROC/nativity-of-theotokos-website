@@ -18,6 +18,7 @@ const TermsOfService = async function ({ model }) {
 			model={newReadonlyModel({
 				title: t("title"),
 				topBarColor: "#82181a",
+				contentClassName: "md:px-20",
 			})}
 		>
 			<span className="text-sm">{`${t("lastModified")}: ${new Date("2026-05-09").toLocaleDateString(dateLocale, { dateStyle: "medium" })}`}</span>
