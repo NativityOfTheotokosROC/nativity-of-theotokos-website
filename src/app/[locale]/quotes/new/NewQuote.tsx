@@ -221,12 +221,18 @@ const NewQuote = function ({ model }) {
 										control={control}
 										name={"authorEn"}
 										render={({
-											field: { name, onChange, onBlur },
+											field: {
+												name,
+												onChange,
+												onBlur,
+												value,
+											},
 										}) => (
 											<input
 												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorEn ? "border-red-800" : "border-gray-400"}`}
 												placeholder={t("author")}
 												name={name}
+												value={value}
 												formNoValidate
 												autoCapitalize="words"
 												autoComplete="off"
@@ -280,13 +286,23 @@ const NewQuote = function ({ model }) {
 										control={control}
 										name={"sourceEn"}
 										render={({
-											field: { name, onChange, onBlur },
+											field: {
+												name,
+												onChange,
+												onBlur,
+												value,
+											},
 										}) => (
 											<input
 												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceEn ? "border-red-800" : "border-gray-400"}`}
 												placeholder={`${t("source")} (${t("optional")})`}
 												autoComplete="off"
 												name={name}
+												value={
+													typeof value === "string"
+														? value
+														: ""
+												}
 												formNoValidate
 												data-tooltip-id={
 													englishSourceAutoCompleteBox
@@ -352,12 +368,22 @@ const NewQuote = function ({ model }) {
 										control={control}
 										name={"authorRu"}
 										render={({
-											field: { name, onChange, onBlur },
+											field: {
+												name,
+												onChange,
+												onBlur,
+												value,
+											},
 										}) => (
 											<input
 												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorRu ? "border-red-800" : "border-gray-400"}`}
 												placeholder={`${t("author")} (${t("optional")})`}
 												name={name}
+												value={
+													typeof value === "string"
+														? value
+														: ""
+												}
 												autoCapitalize="words"
 												autoComplete="off"
 												data-tooltip-id={
@@ -410,12 +436,22 @@ const NewQuote = function ({ model }) {
 										control={control}
 										name={"sourceRu"}
 										render={({
-											field: { name, onChange, onBlur },
+											field: {
+												name,
+												onChange,
+												onBlur,
+												value,
+											},
 										}) => (
 											<input
 												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceRu ? "border-red-800" : "border-gray-400"}`}
 												placeholder={`${t("source")} (${t("optional")})`}
 												name={name}
+												value={
+													typeof value === "string"
+														? value
+														: ""
+												}
 												autoComplete="off"
 												data-tooltip-id={
 													russianSourceAutoCompleteBox
@@ -444,7 +480,8 @@ const NewQuote = function ({ model }) {
 														},
 													);
 												}}
-												onBlur={() =>
+												onBlur={() => {
+													onBlur();
 													russianSourceAutoCompleteBox.interact(
 														{
 															type: "TOGGLE",
@@ -452,8 +489,8 @@ const NewQuote = function ({ model }) {
 																value: false,
 															},
 														},
-													)
-												}
+													);
+												}}
 											/>
 										)}
 									/>
