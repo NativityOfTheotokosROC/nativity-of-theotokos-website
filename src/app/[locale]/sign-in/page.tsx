@@ -3,7 +3,7 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import SignInClient from "./client";
+import SignInClient from "../../../lib/components/views/sign-in/client";
 import { getUser } from "@/src/lib/server-actions/auth";
 import { redirect } from "next/navigation";
 

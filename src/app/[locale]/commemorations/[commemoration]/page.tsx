@@ -6,7 +6,7 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
-import Commemoration from "./Commemoration";
+import Commemoration from "../../../../lib/components/views/commemoration/Commemoration";
 import { getPlaceholder } from "@/src/lib/server-only/placeholder";
 import { Commemoration as CommemorationType } from "@/src/lib/models/commemoration";
 import { Article, Organization, WithContext } from "schema-dts";

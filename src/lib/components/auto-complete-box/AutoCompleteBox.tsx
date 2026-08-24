@@ -7,6 +7,7 @@ import "./auto-complete-box.css";
 
 const AutoCompleteBox = function ({ model }) {
 	const { modelView, interact } = model;
+	// TODO: Modify so transition out of vis maintains previous list of items for better UX
 	const { id, items, query, isOpen } = modelView;
 	const queryParts = query.split(/\s+/).map(part => part.toLowerCase());
 	const filteredItemsDictionary = items

@@ -3,7 +3,7 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import TermsOfService from "./Terms";
+import TermsOfService from "../../../lib/components/views/terms/Terms";
 
 export async function generateMetadata({
 	params,
