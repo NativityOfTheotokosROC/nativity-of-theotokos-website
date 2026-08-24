@@ -10,7 +10,7 @@ export type AutoCompleteBoxModelView = {
 
 export type AutoCompleteBoxModelInteraction =
 	| InputModelInteraction<"FILTER", { query: string }>
-	| InputModelInteraction<"TOGGLE", { value: "open" | "close" }>
+	| InputModelInteraction<"TOGGLE", { value: boolean }>
 	| InputModelInteraction<"SELECT", { value: string; index: number }>;
 
 export type AutoCompleteBoxModel = InteractiveModel<

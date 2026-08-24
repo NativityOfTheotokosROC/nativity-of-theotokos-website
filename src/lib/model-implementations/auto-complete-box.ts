@@ -9,28 +9,34 @@ import {
 } from "../models/auto-complete-box";
 import { UninitializedModelError } from "../utilities/errors";
 
-export function autoCompleteBoxVIInterface() {
+export function autoCompleteBoxVIInterface(
+	options?: Partial<{ closeWhenBlank: boolean }>,
+) {
 	return {
 		async produceModelView(interaction, currentModelView) {
 			if (!currentModelView) throw new UninitializedModelError();
 			switch (interaction.type) {
 				case "TOGGLE": {
+					const { items } = currentModelView;
 					return {
 						...currentModelView,
-						isOpen:
-							currentModelView.items.length > 0 &&
-							interaction.input.value == "open",
+						isOpen: interaction.input.value && items.length > 0,
 					};
 				}
 				case "FILTER": {
 					const { query } = interaction.input;
-					const close =
-						currentModelView.isOpen && query.trim() === "";
-					return {
-						...currentModelView,
-						query: query,
-						isOpen: currentModelView.items.length > 0 && !close,
-					};
+					const queryBlank = query.trim() === "";
+					const close = options?.closeWhenBlank && queryBlank;
+					return close
+						? {
+								...currentModelView,
+								query,
+								isOpen: false,
+							}
+						: {
+								...currentModelView,
+								query,
+							};
 				}
 				case "SELECT": {
 					const { value, index } = interaction.input;
@@ -45,9 +51,12 @@ export function autoCompleteBoxVIInterface() {
 	>;
 }
 
-export function useAutoCompleteBox(initialModelView: AutoCompleteBoxModelView) {
+export function useAutoCompleteBox(
+	initialModelView: AutoCompleteBoxModelView,
+	options?: Partial<{ closeWhenBlank: boolean }>,
+) {
 	const model = useInitializedStatefulInteractiveModel(
-		autoCompleteBoxVIInterface(),
+		autoCompleteBoxVIInterface(options),
 		initialModelView,
 	);
 	return model satisfies AutoCompleteBoxModel;

@@ -1,16 +1,17 @@
 "use client";
 
-import HymnsModal from "@/src/lib/components/hymns-modal/HymnsModal";
 import AboutOurParishGraphic from "@/public/assets/about-our-parish.webp";
 import LiturgicalResourcesGraphic from "@/public/assets/liturgical-resources.webp";
 import WhatIsOrthodoxyGraphic from "@/public/assets/what-is-orthodoxy.webp";
+import HymnsModal from "@/src/lib/components/hymns-modal/HymnsModal";
 import SplashScreen from "@/src/lib/components/splash-screen/SplashScreen";
 import { hymnsModalVIInterface } from "@/src/lib/model-implementations/hymns-modal";
 import { useMailingListRepository } from "@/src/lib/model-implementations/mailing-list-repository";
 import { HomeModel } from "@/src/lib/models/home";
+import { LoginTooltipContext } from "@/src/lib/utilities/contexts";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
-import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
+import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
 import { useTranslations } from "next-intl";
 import { useContext, useState } from "react";
 import BulletinSection from "./bulletin/BulletinSection";
@@ -20,14 +21,10 @@ import GallerySection from "./gallery/GallerySection";
 import HeroSection from "./hero/HeroSection";
 import MailingListSection from "./mailing-list/MailingListSection";
 import ResourcesSection from "./resources/ResourcesSection";
-import { LoginTooltipContext } from "@/src/lib/utilities/contexts";
 
 const Home = function ({ model }) {
 	const { modelView } = model;
-	const hymnsModal = useInitializedStatefulInteractiveModel(
-		hymnsModalVIInterface(),
-		{ isOpen: false, hymns: [] },
-	);
+	const hymnsModal = useNewStatefulInteractiveModel(hymnsModalVIInterface());
 	const mailingListRepository = useMailingListRepository();
 	const [splashExited, setSplashExited] = useState(false);
 	const t = useTranslations("home");

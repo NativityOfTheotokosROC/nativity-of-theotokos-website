@@ -4,7 +4,7 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import Attribution from "./Attribution";
+import Attribution from "../../../lib/components/views/attribution/Attribution";
 import { isValidLocale } from "@/src/lib/utilities/internationalization";
 
 export async function generateMetadata({

@@ -7,6 +7,7 @@ import "./auto-complete-box.css";
 
 const AutoCompleteBox = function ({ model }) {
 	const { modelView, interact } = model;
+	// TODO: Modify so transition out of vis maintains previous list of items for better UX
 	const { id, items, query, isOpen } = modelView;
 	const queryParts = query.split(/\s+/).map(part => part.toLowerCase());
 	const filteredItemsDictionary = items
@@ -15,7 +16,7 @@ const AutoCompleteBox = function ({ model }) {
 			const lowercasedItem = item.toLowerCase();
 			return queryParts.every(part => lowercasedItem.includes(part));
 		});
-	const computedOpen = filteredItemsDictionary.length > 0 && isOpen;
+	const computedOpen = isOpen && filteredItemsDictionary.length > 0;
 	const [isClickable, setClickable] = useState(computedOpen); //TODO: Not ideal
 
 	return (

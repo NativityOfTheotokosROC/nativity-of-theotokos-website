@@ -1,23 +1,22 @@
+import HymnsOrnament from "@/public/assets/ornament_19.svg";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
+import { newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 import { useTabs } from "../../model-implementations/tabs";
-import { ModalModel } from "../../models/modal";
 import { QuotePreviewModalModel } from "../../models/quote-preview-modal";
 import Modal from "../modal/Modal";
 import Tabs from "../tabs/Tabs";
-import HymnsOrnament from "@/public/assets/ornament_19.svg";
 
 const QuotePreviewModal = function ({ model }) {
-	const {
-		modelView: { isOpen, englishQuote, russianQuote },
-		interact,
-	} = model;
+	const { modelView, interact } = model;
 	const t = useTranslations("newQuote");
 	const tMisc = useTranslations("miscellaneous");
-	const authorRu = russianQuote?.author ?? englishQuote.author;
-	const quoteRu = russianQuote?.quote ?? englishQuote.quote;
-	const sourceRu = russianQuote?.source ?? englishQuote.source;
+	const authorEn = modelView?.englishQuote.author;
+	const quoteEn = modelView?.englishQuote.quote;
+	const sourceEn = modelView?.englishQuote.source;
+	const authorRu = modelView?.russianQuote?.author ?? authorEn;
+	const quoteRu = modelView?.russianQuote?.quote ?? quoteEn;
+	const sourceRu = modelView?.russianQuote?.source ?? sourceEn;
 
 	const tabs = useTabs(
 		[
@@ -32,7 +31,7 @@ const QuotePreviewModal = function ({ model }) {
 			model={newReadonlyModel({
 				title: t("quotePreview"),
 				size: "small",
-				isOpen: isOpen ?? false,
+				isOpen: modelView?.isOpen ?? false,
 				async onClose() {
 					await interact({ type: "CLOSE" });
 				},
@@ -50,12 +49,12 @@ const QuotePreviewModal = function ({ model }) {
 					>
 						<p className="quote text-lg/relaxed">
 							<span>{"“"}</span>
-							{englishQuote.quote}
+							{quoteEn}
 							<span>{"”"}</span>
 						</p>
 						<span className="author w-full text-right">
-							— {englishQuote.author}
-							{englishQuote.source && `, ${englishQuote.source}`}
+							— {authorEn}
+							{sourceEn && `, ${sourceEn}`}
 						</span>
 					</div>
 					<div
@@ -85,6 +84,6 @@ const QuotePreviewModal = function ({ model }) {
 			</div>
 		</Modal>
 	);
-} satisfies ModeledVoidComponent<InitializedModel<QuotePreviewModalModel>>;
+} satisfies ModeledVoidComponent<QuotePreviewModalModel>;
 
 export default QuotePreviewModal;

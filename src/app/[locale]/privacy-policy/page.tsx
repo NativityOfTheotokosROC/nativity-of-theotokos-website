@@ -2,7 +2,7 @@ import { routing } from "@/src/i18n/routing";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import PrivacyPolicy from "./PrivacyPolicy";
+import PrivacyPolicy from "../../../lib/components/views/privacy-policy/PrivacyPolicy";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { isValidLocale } from "@/src/lib/utilities/internationalization";
 

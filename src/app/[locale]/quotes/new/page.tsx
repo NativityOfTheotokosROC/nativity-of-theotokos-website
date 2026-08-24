@@ -5,7 +5,7 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import NewQuoteClient from "./client";
+import NewQuoteClient from "../../../../lib/components/views/write-quote/client";
 
 export async function generateMetadata({
 	params,

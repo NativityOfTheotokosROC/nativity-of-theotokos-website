@@ -6,14 +6,15 @@ import PageView from "../page-view/PageView";
 import { useEffect } from "react";
 
 const InformationView = function ({ model, children }) {
-	const { mainMessage, detailedMessage, Graphic } = model.modelView;
+	const { mainMessage, detailedMessage, Graphic, topBarColor } =
+		model.modelView;
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
 	}, []);
 
 	return (
-		<PageView model={{ modelView: null }}>
+		<PageView model={{ modelView: { topBarColor } }}>
 			<div className="information-view flex h-full grow justify-center text-center">
 				<div className="flex w-md flex-col items-center justify-center gap-6 landscape:h-[70svh]">
 					<Graphic className="h-64 w-80 fill-black opacity-90 md:h-48" />

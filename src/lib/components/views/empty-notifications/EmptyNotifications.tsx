@@ -1,28 +1,25 @@
 "use client";
 
-import { georgia } from "@/src/lib/third-party/fonts";
-import { useTranslations } from "next-intl";
-import PageView from "../../page-view/PageView";
 import EmptyNotificationsGraphic from "@/public/assets/icon-5.svg";
+import { useTranslations } from "next-intl";
 import GoHomeButton from "../../button/GoHomeButton";
+import InformationView from "../../information-view/InformationView";
 
 export default function EmptyNotifications() {
 	const t = useTranslations("emptyNotifications");
 	const tMisc = useTranslations("miscellaneous");
 	return (
-		<PageView model={{ modelView: { topBarColor: "#7F1D1D" } }}>
-			<div className="flex h-full grow justify-center text-center">
-				<div className="flex w-md flex-col items-center justify-center gap-6 landscape:h-[70svh]">
-					<EmptyNotificationsGraphic className="h-64 w-80 fill-black opacity-90 md:h-48" />
-					<span
-						className={`text-4xl font-semibold ${georgia.className}`}
-					>
-						{t("mainMessage")}
-					</span>
-					<span className="text-lg">{t("detailedMessage")}</span>
-					<GoHomeButton>{tMisc("goHome")}</GoHomeButton>
-				</div>
-			</div>
-		</PageView>
+		<InformationView
+			model={{
+				modelView: {
+					mainMessage: t("mainMessage"),
+					detailedMessage: t("detailedMessage"),
+					Graphic: EmptyNotificationsGraphic,
+					topBarColor: "#7F1D1D",
+				},
+			}}
+		>
+			<GoHomeButton>{tMisc("goHome")}</GoHomeButton>
+		</InformationView>
 	);
 }
