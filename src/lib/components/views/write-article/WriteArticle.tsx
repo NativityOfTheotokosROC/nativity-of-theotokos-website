@@ -166,7 +166,7 @@ const WriteArticle = function ({ model }) {
 											? "border-red-800"
 											: "border-gray-400",
 										async changeCallback(content) {
-											onChange(new InputEvent(content));
+											onChange(content);
 										},
 									})}
 								/>

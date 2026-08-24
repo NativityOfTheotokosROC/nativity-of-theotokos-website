@@ -17,7 +17,7 @@ const Attribution = async function ({ model }) {
 			model={newReadonlyModel({
 				title: t("title"),
 				topBarColor: "#9F2D00",
-				contentClassName: "md:px-20",
+				contentClassName: "md:px-20 lg:w-3/4",
 			})}
 		>
 			<div className="flex flex-col gap-6 [&_a]:underline [&_a]:hover:text-[#dcb042] [&_a]:active:text-[#dcb042]">
