@@ -74,16 +74,13 @@ const AssignArticle = function ({ model }) {
 						<Controller
 							name="name"
 							control={control}
-							render={({
-								field: { onChange, onBlur, name, value },
-							}) => (
+							render={({ field: { onChange, onBlur, name } }) => (
 								<input
 									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.name ? "border-red-800" : "border-gray-400"}`}
 									placeholder={t("authorNameField")}
 									autoComplete="off"
 									autoCapitalize="words"
 									name={name}
-									value={value}
 									data-tooltip-id={
 										authorNamesAutoCompleteBox.modelView.id
 									}
@@ -129,16 +126,13 @@ const AssignArticle = function ({ model }) {
 						<Controller
 							name="email"
 							control={control}
-							render={({
-								field: { onChange, onBlur, name, value },
-							}) => (
+							render={({ field: { onChange, onBlur, name } }) => (
 								<input
 									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.email ? "border-red-800" : "border-gray-400"}`}
 									placeholder={t("emailField")}
 									autoComplete="off"
 									type="email"
 									name={name}
-									value={value}
 									data-tooltip-id={
 										authorEmailsAutoCompleteBox.modelView.id
 									}

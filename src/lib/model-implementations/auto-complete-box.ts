@@ -10,38 +10,33 @@ import {
 import { UninitializedModelError } from "../utilities/errors";
 
 export function autoCompleteBoxVIInterface(
-	options?: Partial<{ closeOnBlank: boolean }>,
+	options?: Partial<{ closeWhenBlank: boolean }>,
 ) {
 	return {
 		async produceModelView(interaction, currentModelView) {
 			if (!currentModelView) throw new UninitializedModelError();
 			switch (interaction.type) {
 				case "TOGGLE": {
+					const { items } = currentModelView;
 					return {
 						...currentModelView,
-						isOpen:
-							interaction.input.value &&
-							currentModelView.items.length > 0,
+						isOpen: interaction.input.value && items.length > 0,
 					};
 				}
 				case "FILTER": {
 					const { query } = interaction.input;
-					const { isOpen: isActivated } = currentModelView;
-					const isBlank = query.trim() === "";
-					console.log(
-						`isBlank: ${isBlank}; closeOption: ${options?.closeOnBlank}; compound: ${isBlank && options?.closeOnBlank}`,
-					);
-					console.log(
-						`isOpen: ${isActivated}; items: ${currentModelView.items.length}`,
-					);
-					return {
-						...currentModelView,
-						query: query,
-						isOpen:
-							isActivated &&
-							currentModelView.items.length > 0 &&
-							!(options?.closeOnBlank && isBlank),
-					};
+					const queryBlank = query.trim() === "";
+					const close = options?.closeWhenBlank && queryBlank;
+					return close
+						? {
+								...currentModelView,
+								query,
+								isOpen: false,
+							}
+						: {
+								...currentModelView,
+								query,
+							};
 				}
 				case "SELECT": {
 					const { value, index } = interaction.input;
@@ -58,7 +53,7 @@ export function autoCompleteBoxVIInterface(
 
 export function useAutoCompleteBox(
 	initialModelView: AutoCompleteBoxModelView,
-	options?: Partial<{ closeOnBlank: boolean }>,
+	options?: Partial<{ closeWhenBlank: boolean }>,
 ) {
 	const model = useInitializedStatefulInteractiveModel(
 		autoCompleteBoxVIInterface(options),
