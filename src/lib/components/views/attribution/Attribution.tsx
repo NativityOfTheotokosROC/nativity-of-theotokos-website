@@ -1,7 +1,6 @@
 import { Link } from "@/src/lib/components/page-loading-bar/PageLoadingBar";
 import PageView from "@/src/lib/components/page-view/PageView";
 import { AttributionModel } from "@/src/lib/models/attribution";
-import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
@@ -18,6 +17,7 @@ const Attribution = async function ({ model }) {
 			model={newReadonlyModel({
 				title: t("title"),
 				topBarColor: "#9F2D00",
+				contentClassName: "md:px-20 lg:w-3/4",
 			})}
 		>
 			<div className="flex flex-col gap-6 [&_a]:underline [&_a]:hover:text-[#dcb042] [&_a]:active:text-[#dcb042]">

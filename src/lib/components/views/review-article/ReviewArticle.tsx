@@ -12,7 +12,6 @@ import { usePublishArticleFormSchema } from "@/src/lib/validation/publish-articl
 import Spinner from "../../spinner/Spinner";
 import Editor from "../../editor/Editor";
 import Button from "../../button/Button";
-import { useEditor } from "@/src/lib/model-implementations/editor";
 import ArticlePreviewModal from "../../article-preview-modal/ArticlePreviewModal";
 import { useFileSelectorButton } from "@/src/lib/model-implementations/file-selector-button";
 import Image from "next/image";
@@ -82,11 +81,6 @@ const ReviewArticle = function ({ model }) {
 			});
 		}),
 	);
-	const editor = useEditor(draft.body, {
-		async updateCallback(content) {
-			setValue("body", content);
-		},
-	});
 	const imageProcessor = useImageProcessor();
 	const fileUploader = useFileUploader();
 	const imageSelector = useFileSelectorButton({
@@ -213,16 +207,22 @@ const ReviewArticle = function ({ model }) {
 								{errors.authorName.message}
 							</span>
 						)}
-						<Editor
-							model={{
-								...editor,
-								modelView: {
-									...editor.modelView,
-									className: errors.body
-										? "border-red-800"
-										: "border-gray-400",
-								},
-							}}
+						<Controller
+							control={control}
+							name={"body"}
+							render={({ field: { onChange } }) => (
+								<Editor
+									model={newReadonlyModel({
+										initialContent: draft.body,
+										className: errors.body
+											? "border-red-800"
+											: "border-gray-400",
+										async changeCallback(content) {
+											onChange(content);
+										},
+									})}
+								/>
+							)}
 						/>
 						{errors.body && (
 							<span className="text-sm text-red-800">

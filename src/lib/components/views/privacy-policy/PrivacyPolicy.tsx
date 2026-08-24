@@ -18,6 +18,7 @@ const PrivacyPolicy = async function ({ model }) {
 			model={newReadonlyModel({
 				title: t("title"),
 				topBarColor: "#9F2D00",
+				contentClassName: "md:px-20 lg:w-3/4",
 			})}
 		>
 			<span className="text-sm">{`${t("lastModified")}: ${new Date("2026-04-25").toLocaleDateString(dateLocale, { dateStyle: "medium" })}`}</span>
