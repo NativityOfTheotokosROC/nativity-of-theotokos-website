@@ -4,7 +4,6 @@ import { ImagePlaceholder } from "@grod56/placeholder";
 import { getTranslations } from "next-intl/server";
 import { cacheTag, revalidateTag } from "next/cache";
 import { forbidden, notFound } from "next/navigation";
-import z from "zod";
 import { ArticleDraft } from "../models/write-article";
 import {
 	_FULL_ARTICLE_INCLUDES,
@@ -19,17 +18,16 @@ import {
 	Language,
 	NewArticle,
 } from "../types/general";
+import { hasArticleChanged } from "../utilities/article";
 import {
 	DEFAULT_PREVIEW_USER_EMAIL,
 	DEFAULT_PREVIEW_USER_NAME,
 } from "../utilities/constants";
 import { getMd5Hash, isRemotePath } from "../utilities/miscellaneous";
-import { BASE_URL, IS_AUTH_DISABLED } from "../utilities/server-constants";
+import { BASE_URL } from "../utilities/server-constants";
+import { getAssignArticleFormSchema } from "../validation/assign-article-form";
 import { getWriteArticleFormSchema } from "../validation/write-article-form";
 import { getUser, protect } from "./auth";
-import { getUserInformation } from "./user";
-import { hasArticleChanged } from "../utilities/article";
-import { getAssignArticleFormSchema } from "../validation/assign-article-form";
 
 export async function getArticle(
 	articleId: string,
@@ -113,7 +111,7 @@ export async function assignArticle(
 	}>,
 ): Promise<{ ticketId: string; canDeleteTicket: boolean }> {
 	const user = await getUser();
-	if (!IS_AUTH_DISABLED) await protect({ roles: ["editor"] });
+	await protect({ roles: ["editor"] });
 	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
 	const userName = user?.name ?? DEFAULT_PREVIEW_USER_NAME;
 
@@ -262,15 +260,14 @@ export async function assignArticle(
 
 export async function deleteTicket(ticketId: string) {
 	const user = await getUser();
-	if (!user && !IS_AUTH_DISABLED) forbidden();
-	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
+	if (!user) forbidden();
 
 	const ticket = await database.articleTicket.findUnique({
 		where: { id: ticketId },
 	});
 	if (!ticket) notFound();
-	if (user && ticket.assignerEmail !== userEmail)
-		await protect({ roles: ["editor"] });
+	if (ticket.assignerEmail !== user.email)
+		await protect({ roles: ["admin"] });
 
 	await database.articleTicket.delete({
 		where: {
@@ -285,20 +282,20 @@ export async function saveDraft(
 	locale?: Language,
 ) {
 	const user = await getUser();
-	if (!user && !IS_AUTH_DISABLED) forbidden();
-	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
+	if (!user) forbidden();
 	const ticket = await database.articleTicket.findUnique({
 		where: { id: ticketId },
 	});
 	if (!ticket) throw new Error("Article ticket does not exist");
-	if (ticket.assigneeEmail !== userEmail) forbidden();
+	if (ticket.assigneeEmail !== user.email) forbidden();
+
+	const t = await getTranslations({ locale: locale ?? "en" });
+	const articleFormSchema = getWriteArticleFormSchema(t);
 	const isSubmitted = await database.pendingArticleSubmission.findFirst({
 		where: {
 			articleDraft: { articleTicketId: ticketId },
 		},
 	});
-	const t = await getTranslations({ locale: locale ?? "en" });
-	const articleFormSchema = getWriteArticleFormSchema(t);
 	const { title, body } = isSubmitted
 		? articleFormSchema.parse({ title: draft.title, body: draft.body })
 		: draft;
@@ -322,15 +319,14 @@ export async function saveDraft(
 
 export async function discardDraft(ticketId: string) {
 	const user = await getUser();
-	if (!user && !IS_AUTH_DISABLED) forbidden();
-	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
+	if (!user) forbidden();
 
 	const ticket = await database.articleTicket.findUnique({
 		include: { articleDraft: true },
 		where: { id: ticketId },
 	});
 	if (!ticket) notFound();
-	if (ticket.assigneeEmail !== userEmail) forbidden();
+	if (ticket.assigneeEmail !== user.email) forbidden();
 	if (!ticket.articleDraft) return;
 
 	await database.articleDraft.delete({
@@ -351,6 +347,7 @@ export async function submitArticle(
 		title: article.title,
 		body: article.body,
 	});
+	// Auth will be done in here, don't worry
 	const { id } = await saveDraft(ticketId, { title, body }, locale);
 	await database.pendingArticleSubmission.upsert({
 		create: {
@@ -362,22 +359,21 @@ export async function submitArticle(
 }
 
 export async function makeArticleEdit(articleId: string) {
-	const user = await getUserInformation();
-	if (!user && !IS_AUTH_DISABLED) forbidden();
+	const user = await getUser();
+	if (!user) forbidden();
 	const article = await database.article.findUnique({
 		include: _FULL_ARTICLE_INCLUDES,
 		where: { link: articleId },
 	});
-	if (!article) notFound();
-	if (!IS_AUTH_DISABLED && user?.email !== article.author.email)
+	if (!article) notFound(); // Or maybe throw error?
+	if (article.author.email !== user.email)
 		await protect({ roles: ["editor"] });
-	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
 
 	const ticket = await database.articleTicket.upsert({
 		include: { articleDraft: true },
 		create: {
-			assigneeEmail: userEmail,
-			assignerEmail: userEmail,
+			assigneeEmail: user.email,
+			assignerEmail: user.email,
 			articleId,
 			articleDraft: {
 				create: {
@@ -423,24 +419,23 @@ export async function makeArticleEdit(articleId: string) {
 
 export async function getDraft(ticketId: string) {
 	const user = await getUser();
-	if (!user && !IS_AUTH_DISABLED) forbidden();
-	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
+	if (!user) forbidden();
 	const ticket = await database.articleTicket.findUnique({
 		include: { articleDraft: true },
 		where: { id: ticketId },
 	});
 	if (!ticket) notFound();
-	if (userEmail !== ticket.assigneeEmail) forbidden();
+	if (ticket.assigneeEmail !== user.email) forbidden();
 	return {
 		title: ticket.articleDraft?.title ?? "",
 		body: ticket.articleDraft?.body ?? "",
+		lastSaved: ticket.articleDraft?.lastSaved,
 	} satisfies ArticleDraft;
 }
 
 export async function getLatestUnsubmittedArticle() {
 	const user = await getUser();
-	if (!user && !IS_AUTH_DISABLED) forbidden();
-	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
+	if (!user) forbidden();
 
 	const ticket = await database.articleTicket.findFirst({
 		orderBy: {
@@ -454,9 +449,9 @@ export async function getLatestUnsubmittedArticle() {
 		},
 		where: {
 			OR: [
-				{ assigneeEmail: userEmail, articleDraft: null },
+				{ assigneeEmail: user.email, articleDraft: null },
 				{
-					assigneeEmail: userEmail,
+					assigneeEmail: user.email,
 					articleDraft: { pendingArticleSubmission: null },
 				},
 			],
@@ -493,7 +488,7 @@ export async function getLatestUnsubmittedArticle() {
 
 	return {
 		ticketId: ticket.id,
-		canDeleteTicket: ticket.assignerEmail === userEmail,
+		canDeleteTicket: ticket.assignerEmail === user.email,
 		draft: articleDraft ?? undefined,
 		currentArticle: article ?? undefined,
 	} satisfies {
@@ -505,10 +500,7 @@ export async function getLatestUnsubmittedArticle() {
 }
 
 export async function getPendingArticleSubmission() {
-	const user = await getUser();
-	if (!IS_AUTH_DISABLED && !user) forbidden();
-	if (!IS_AUTH_DISABLED) await protect({ roles: ["editor"] });
-	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
+	const user = await protect({ roles: ["editor"] });
 	const ticketData = await database.articleTicket.findFirst({
 		include: {
 			assignee: { include: { name: true } },
@@ -517,14 +509,9 @@ export async function getPendingArticleSubmission() {
 		},
 		where: {
 			articleDraft: {
-				pendingArticleSubmission: IS_AUTH_DISABLED
-					? { isNot: null }
-					: {
-							OR: [
-								{ editorEmail: userEmail },
-								{ editorEmail: null },
-							],
-						},
+				pendingArticleSubmission: {
+					OR: [{ editorEmail: user.email }, { editorEmail: null }],
+				},
 			},
 		},
 	});
@@ -536,8 +523,8 @@ export async function getPendingArticleSubmission() {
 			data: {
 				assignedEditor: {
 					connectOrCreate: {
-						create: { email: userEmail },
-						where: { email: userEmail },
+						create: { email: user.email },
+						where: { email: user.email },
 					},
 				},
 			},
@@ -590,10 +577,7 @@ export async function publishNewArticle({
 	ticketId: string;
 	locale?: Language;
 }) {
-	const user = await getUser();
-	if (!IS_AUTH_DISABLED && !user) forbidden();
-	if (!IS_AUTH_DISABLED) await protect({ roles: ["editor"] });
-	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
+	const user = await protect({ roles: ["editor"] });
 
 	const draft = await database.articleDraft.findUnique({
 		include: {
@@ -605,9 +589,8 @@ export async function publishNewArticle({
 	if (!draft) notFound();
 	if (!draft.pendingArticleSubmission) forbidden();
 	if (
-		!IS_AUTH_DISABLED &&
 		draft.pendingArticleSubmission.editorEmail &&
-		draft.pendingArticleSubmission.editorEmail !== userEmail
+		draft.pendingArticleSubmission.editorEmail !== user.email
 	)
 		forbidden();
 
@@ -708,10 +691,7 @@ export async function publishExistingArticle({
 	ticketId?: string;
 	locale?: Language;
 }) {
-	const user = await getUser();
-	if (!IS_AUTH_DISABLED && !user) forbidden();
-	if (!IS_AUTH_DISABLED) await protect({ roles: ["editor"] });
-	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
+	const user = await protect({ roles: ["editor"] });
 	const existingArticle = await database.article.findUnique({
 		include: _FULL_ARTICLE_INCLUDES,
 		where: { link: articleId },
@@ -733,9 +713,8 @@ export async function publishExistingArticle({
 	if (draft) {
 		if (!draft.pendingArticleSubmission) forbidden();
 		if (
-			!IS_AUTH_DISABLED &&
 			draft.pendingArticleSubmission.editorEmail &&
-			draft.pendingArticleSubmission.editorEmail !== userEmail
+			draft.pendingArticleSubmission.editorEmail !== user.email
 		)
 			forbidden();
 	}

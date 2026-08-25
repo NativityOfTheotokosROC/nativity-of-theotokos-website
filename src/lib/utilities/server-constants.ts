@@ -54,6 +54,3 @@ export const S3_BUCKET_REGION = z
 	.nonempty()
 	.parse(process.env.S3_BUCKET_REGION);
 export const PREPRODUCTION_PROTECTION = process.env.PREPRODUCTION_PROTECTION;
-export const IS_AUTH_DISABLED =
-	PREPRODUCTION_PROTECTION?.toLowerCase() === "disabled" &&
-	ENVIRONMENT !== "production";
