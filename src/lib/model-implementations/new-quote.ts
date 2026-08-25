@@ -4,19 +4,16 @@ import {
 	ViewInteractionInterface,
 } from "@mvc-react/stateful";
 import { useTranslations } from "next-intl";
-import {
-	NewQuoteModel,
-	NewQuoteModelInteraction,
-	NewQuoteNotification,
-} from "../models/new-quote";
+import { useRouter } from "next/navigation";
+import { NewQuoteModel, NewQuoteNotification } from "../models/new-quote";
 import {
 	NotifierModel,
 	NotifierModelInteraction,
 	NotifierModelView,
 } from "../models/notifier";
+import { ToastNotification } from "../models/toast";
 import { addNewQuote } from "../server-actions/quote";
 import { AutoCompleteInfo } from "../utilities/quote-form";
-import { ToastNotification } from "../models/toast";
 
 function newQuoteNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
@@ -59,13 +56,14 @@ export function useNewQuote(
 		newQuoteNotifierVIInterface(options?.toastNotifier),
 	);
 	const t = useTranslations("newQuote");
+	const router = useRouter();
 
 	return {
 		modelView: {
 			newQuoteNotification: notifier.modelView?.notification ?? null,
 			autoCompleteInfo: options?.autoCompleteInfo,
 		},
-		interact: async function (interaction: NewQuoteModelInteraction) {
+		async interact(interaction) {
 			switch (interaction.type) {
 				case "ADD_QUOTE": {
 					await notifier.interact({
@@ -74,32 +72,32 @@ export function useNewQuote(
 							notification: { type: "pending" },
 						},
 					});
-					await addNewQuote(interaction.input.newQuote)
-						.then(() =>
-							Promise.all([
-								notifier.interact({
-									type: "NOTIFY",
-									input: {
-										notification: {
-											type: "success",
-											message: t("successMessage"),
-										},
-									},
-								}),
-								interaction.input.options?.successCallback?.(),
-							]),
-						)
-						.catch(reason =>
+					try {
+						await addNewQuote(interaction.input.newQuote);
+						await Promise.all([
 							notifier.interact({
 								type: "NOTIFY",
 								input: {
 									notification: {
-										type: "failure",
-										message: `${t("failureMessage")} ${reason} `,
+										type: "success",
+										message: t("successMessage"),
 									},
 								},
 							}),
-						);
+							interaction.input.options?.successCallback?.(),
+						]);
+						router.refresh();
+					} catch (error) {
+						await notifier.interact({
+							type: "NOTIFY",
+							input: {
+								notification: {
+									type: "failure",
+									message: `${t("failureMessage")} ${error}`,
+								},
+							},
+						});
+					}
 				}
 			}
 		},

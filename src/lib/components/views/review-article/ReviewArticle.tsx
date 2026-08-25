@@ -117,6 +117,7 @@ const ReviewArticle = function ({ model }) {
 				});
 		},
 	});
+	// TODO: Combine both into its own component I think
 	const imageStatus =
 		imageProcessor.modelView.notification === null &&
 		fileUploader.modelView.notification === null

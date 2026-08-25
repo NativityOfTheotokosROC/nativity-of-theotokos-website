@@ -19,10 +19,6 @@ import {
 	NewArticle,
 } from "../types/general";
 import { hasArticleChanged } from "../utilities/article";
-import {
-	DEFAULT_PREVIEW_USER_EMAIL,
-	DEFAULT_PREVIEW_USER_NAME,
-} from "../utilities/constants";
 import { getMd5Hash, isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
 import { getAssignArticleFormSchema } from "../validation/assign-article-form";
@@ -110,10 +106,7 @@ export async function assignArticle(
 		locale: Language;
 	}>,
 ): Promise<{ ticketId: string; canDeleteTicket: boolean }> {
-	const user = await getUser();
-	await protect({ roles: ["editor"] });
-	const userEmail = user?.email ?? DEFAULT_PREVIEW_USER_EMAIL;
-	const userName = user?.name ?? DEFAULT_PREVIEW_USER_NAME;
+	const user = await protect({ roles: ["editor"] });
 
 	const t = await getTranslations({ locale: options?.locale ?? "en" });
 	const assignArticleFormSchema = getAssignArticleFormSchema(t);
@@ -131,8 +124,8 @@ export async function assignArticle(
 								email: assigneeEmail,
 							},
 						})
-					)?.name.english ?? assigneeEmail === userEmail)
-					? userName
+					)?.name.english ?? assigneeEmail === user.email)
+					? user.name
 					: null
 				: options.name,
 	}).name;
@@ -148,7 +141,7 @@ export async function assignArticle(
 		const ticket = options?.useUnused
 			? await database.articleTicket.upsert({
 					create: {
-						assignerEmail: userEmail,
+						assignerEmail: user.email,
 						assignee: {
 							connectOrCreate: {
 								create: {
@@ -181,7 +174,7 @@ export async function assignArticle(
 				})
 			: await database.articleTicket.create({
 					data: {
-						assignerEmail: userEmail,
+						assignerEmail: user.email,
 						assignee: {
 							connectOrCreate: {
 								create: {
@@ -213,7 +206,7 @@ export async function assignArticle(
 		revalidateTag("article_authors", "max");
 		return {
 			ticketId: ticket.id,
-			canDeleteTicket: ticket.assigneeEmail === userEmail,
+			canDeleteTicket: ticket.assigneeEmail === user.email,
 		};
 	}
 
@@ -229,7 +222,7 @@ export async function assignArticle(
 		unusedTicket ??
 		(await database.articleTicket.create({
 			data: {
-				assignerEmail: userEmail,
+				assignerEmail: user.email,
 				assignee: {
 					connectOrCreate: {
 						create: {
@@ -254,7 +247,7 @@ export async function assignArticle(
 
 	return {
 		ticketId: ticket.id,
-		canDeleteTicket: ticket.assignerEmail === userEmail,
+		canDeleteTicket: ticket.assignerEmail === user.email,
 	};
 }
 
