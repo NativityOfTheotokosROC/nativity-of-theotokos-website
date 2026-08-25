@@ -17,11 +17,11 @@ export function getProtectedRoutes() {
 					"/assign-article",
 				] as const);
 	// This should do for now lol
-	type TypeVerify =
+	type VerifiedRoutes =
 		PageProps<`/[locale]${(typeof protectedRoutes)[number]}`> extends never
 			? never
 			: typeof protectedRoutes;
-	return new Set(protectedRoutes satisfies TypeVerify);
+	return new Set(protectedRoutes satisfies VerifiedRoutes);
 }
 
 export const redirects = new Map<Path, Path>(); // TODO
