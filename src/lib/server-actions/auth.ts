@@ -1,48 +1,18 @@
 "use server";
 
 import { auth } from "@/auth";
-import database from "@/src/lib/third-party/prisma";
 import { headers } from "next/headers";
 import { forbidden } from "next/navigation";
-import { Role, User } from "../types/general";
-import { IS_AUTH_DISABLED } from "../utilities/server-constants";
+import { Role } from "../types/general";
+import { getUserInformation } from "./user";
 
-export async function protect(protectParams?: { roles?: Role[] }) {
-	const roles = protectParams?.roles;
-	const user = await getUser();
+export async function protect(options?: Partial<{ roles: Role[] }>) {
+	const requiredRoles: Role[] = ["admin", ...(options?.roles ?? [])];
+	const user = await getUserInformation();
 
-	if (IS_AUTH_DISABLED) return;
-	if (!(user && (await isAuthorized(user, roles)))) return forbidden();
-}
-
-async function isAuthorized(user: User, roles?: Role[]) {
-	const computedRoles: Role[] = ["admin", ...(roles ? roles : [])];
-	const result = await database.admin.findFirst({
-		where: {
-			email: user.email,
-			AND: { role: { in: computedRoles } },
-		},
-	});
-	if (result) return true;
-	for (const role of computedRoles) {
-		if (role === "writer") {
-			const result = await database.articleTicket.findFirst({
-				where: {
-					assigneeEmail: user.email,
-				},
-			});
-			if (result) return true;
-		}
-		if (role === "editor") {
-			const result = await database.editor.findFirst({
-				where: {
-					email: user.email,
-				},
-			});
-			if (result) return true;
-		}
-	}
-	return false;
+	if (!(user && user.roles.some(role => requiredRoles.includes(role))))
+		forbidden();
+	return user;
 }
 
 export async function getUser() {

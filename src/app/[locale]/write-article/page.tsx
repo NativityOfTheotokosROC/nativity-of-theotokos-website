@@ -1,22 +1,18 @@
-import { routing } from "@/src/i18n/routing";
 import {
 	assignArticle,
 	getLatestUnsubmittedArticle,
 } from "@/src/lib/server-actions/article";
+import { getUserInformation } from "@/src/lib/server-actions/user";
+import { isValidLocale } from "@/src/lib/utilities/internationalization";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import WriteArticleClient from "../../../lib/components/views/write-article/client";
-import { getUser } from "@/src/lib/server-actions/auth";
-import { DEFAULT_PREVIEW_USER_EMAIL } from "@/src/lib/utilities/constants";
-import { IS_AUTH_DISABLED } from "@/src/lib/utilities/server-constants";
 import { forbidden } from "next/navigation";
-import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
+import WriteArticleClient from "../../../lib/components/views/write-article/client";
 
 export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 	const { locale } = await params;
-	const language = hasLocale(routing.locales, locale) ? locale : "en";
+	const language = isValidLocale(locale) ? locale : "en";
 	const t = await getTranslations({
 		locale: language,
 		namespace: "writeArticle",
@@ -27,9 +23,7 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 }
 
 export default async function Page() {
-	const userEmail = IS_AUTH_DISABLED
-		? DEFAULT_PREVIEW_USER_EMAIL
-		: (await getUser())?.email;
+	const userEmail = (await getUserInformation())?.email;
 	if (!userEmail) forbidden();
 	const latestUnsubmittedArticle = await getLatestUnsubmittedArticle();
 	const draft = latestUnsubmittedArticle?.draft ?? undefined;
@@ -40,15 +34,13 @@ export default async function Page() {
 		(await assignArticle(userEmail, { useUnused: true }));
 
 	return (
-		<ProtectedComponent model={newReadonlyModel({ roles: ["writer"] })}>
-			<WriteArticleClient
-				model={newReadonlyModel({
-					ticketId,
-					lastSavedDraft: draft,
-					currentArticle,
-					canDeleteTicket,
-				})}
-			/>
-		</ProtectedComponent>
+		<WriteArticleClient
+			model={newReadonlyModel({
+				ticketId,
+				lastSavedDraft: draft,
+				currentArticle,
+				canDeleteTicket,
+			})}
+		/>
 	);
 }

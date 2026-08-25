@@ -1,15 +1,14 @@
 import { routing } from "@/src/i18n/routing";
+import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
+import ReviewArticleClient from "@/src/lib/components/views/review-article/client";
 import { getArticle, makeArticleEdit } from "@/src/lib/server-actions/article";
+import { getUserInformation } from "@/src/lib/server-actions/user";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import WriteArticleClient from "../../../../../lib/components/views/write-article/client";
-import { getUserInformation } from "@/src/lib/server-actions/user";
-import ReviewArticleClient from "@/src/lib/components/views/review-article/client";
-import { IS_AUTH_DISABLED } from "@/src/lib/utilities/server-constants";
-import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]">) {
 	const { locale } = await params;
@@ -28,10 +27,9 @@ export default async function Page({
 	if (!articleUri) notFound();
 	const userInformation = await getUserInformation();
 	if (
-		IS_AUTH_DISABLED ||
-		(userInformation &&
-			(userInformation.roles.includes("admin") ||
-				userInformation.roles.includes("editor")))
+		userInformation &&
+		(userInformation.roles.includes("admin") ||
+			userInformation.roles.includes("editor"))
 	) {
 		const article = await getArticle(articleUri, "en"); // TODO: Modify function to include info for all locales in future
 		return (

@@ -23,6 +23,7 @@ export type WriteArticleNotification =
 export type ArticleDraft = {
 	title: string;
 	body: string;
+	lastSaved?: Date;
 };
 
 export type WriteArticleModelView = {
