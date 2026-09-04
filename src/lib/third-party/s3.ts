@@ -5,15 +5,15 @@ import {
 	AWS_ACCESS_KEY_ID,
 	AWS_SECRET_ACCESS_KEY,
 	S3_BUCKET,
-	S3_BUCKET_REGION,
+	AWS_REGION,
 } from "../utilities/server-constants";
 
 export function getObjectPublicURL(object: _Object) {
-	return `https://${S3_BUCKET}.s3.${S3_BUCKET_REGION}.amazonaws.com/${object.Key}`;
+	return `https://${S3_BUCKET}.s3.${AWS_REGION}.amazonaws.com/${object.Key}`;
 }
 
 export const s3 = new S3Client({
-	region: S3_BUCKET_REGION,
+	region: AWS_REGION,
 	credentials: {
 		accessKeyId: AWS_ACCESS_KEY_ID,
 		secretAccessKey: AWS_SECRET_ACCESS_KEY,

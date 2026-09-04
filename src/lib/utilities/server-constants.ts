@@ -48,9 +48,5 @@ export const AWS_SECRET_ACCESS_KEY = z
 	.string()
 	.nonempty()
 	.parse(process.env.AWS_SECRET_ACCESS_KEY);
-// TODO: Rename bucket region
-export const S3_BUCKET_REGION = z
-	.string()
-	.nonempty()
-	.parse(process.env.S3_BUCKET_REGION);
+export const AWS_REGION = z.string().nonempty().parse(process.env.AWS_REGION);
 export const PREPRODUCTION_PROTECTION = process.env.PREPRODUCTION_PROTECTION;

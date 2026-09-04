@@ -18,7 +18,7 @@ services:
                 - microsoft_client_id
                 - microsoft_client_secret
                 - s3_bucket
-                - s3_bucket_region
+                - aws_region
                 - yandex_client_id
                 - yandex_client_secret
         ports:
@@ -51,8 +51,8 @@ secrets:
         environment: MICROSOFT_CLIENT_SECRET
     s3_bucket:
         environment: S3_BUCKET
-    s3_bucket_region:
-        environment: S3_BUCKET_REGION
+    aws_region:
+        environment: AWS_REGION
     yandex_client_id:
         environment: YANDEX_CLIENT_ID
     yandex_client_secret:
