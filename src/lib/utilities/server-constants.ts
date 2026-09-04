@@ -6,11 +6,11 @@ export const DATABASE_URL = z
 	.trim()
 	.nonempty()
 	.parse(process.env.DATABASE_URL);
-export const BASE_URL = z.url().parse(process.env.BASE_URL);
+export const BASE_URL = z.httpUrl().parse(process.env.BASE_URL);
 export const ENVIRONMENT = z
 	.enum(["production", "preview", "development"])
 	.parse(process.env.VERCEL_ENV ?? process.env.NODE_ENV);
-export const BETTER_AUTH_URL = z.url().parse(process.env.BETTER_AUTH_URL);
+export const BETTER_AUTH_URL = z.httpUrl().parse(process.env.BETTER_AUTH_URL);
 export const GOOGLE_CLIENT_ID = z
 	.string()
 	.nonempty()
@@ -39,7 +39,7 @@ export const MAILERLITE_API_KEY = z
 	.string()
 	.nonempty()
 	.parse(process.env.MAILERLITE_API_KEY);
-export const S3_BUCKET = z.string().nonempty().parse(process.env.S3_BUCKET);
+export const AWS_REGION = z.string().nonempty().parse(process.env.AWS_REGION);
 export const AWS_ACCESS_KEY_ID = z
 	.string()
 	.nonempty()
@@ -48,5 +48,5 @@ export const AWS_SECRET_ACCESS_KEY = z
 	.string()
 	.nonempty()
 	.parse(process.env.AWS_SECRET_ACCESS_KEY);
-export const AWS_REGION = z.string().nonempty().parse(process.env.AWS_REGION);
+export const S3_BUCKET = z.string().nonempty().parse(process.env.S3_BUCKET);
 export const PREPRODUCTION_PROTECTION = process.env.PREPRODUCTION_PROTECTION;
