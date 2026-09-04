@@ -430,7 +430,7 @@ export async function getLatestUnsubmittedArticle() {
 	const user = await getUser();
 	if (!user) forbidden();
 
-	const ticket = await database.articleTicket.findFirst({
+	const unsubmittedDraftTicket = await database.articleTicket.findFirst({
 		orderBy: {
 			articleDraft: { lastSaved: "desc" },
 		},
@@ -441,8 +441,8 @@ export async function getLatestUnsubmittedArticle() {
 			articleDraft: true,
 		},
 		where: {
-			OR: [
-				{ assigneeEmail: user.email, articleDraft: null },
+			AND: [
+				{ articleDraft: { isNot: null } },
 				{
 					assigneeEmail: user.email,
 					articleDraft: { pendingArticleSubmission: null },
@@ -451,38 +451,86 @@ export async function getLatestUnsubmittedArticle() {
 		},
 	});
 
-	if (!ticket) return null;
+	if (unsubmittedDraftTicket)
+		return {
+			ticketId: unsubmittedDraftTicket.id,
+			canDeleteTicket:
+				unsubmittedDraftTicket.assignerEmail === user.email,
+			draft: {
+				title: unsubmittedDraftTicket.articleDraft!.title,
+				body: unsubmittedDraftTicket.articleDraft!.body,
+				lastSaved: unsubmittedDraftTicket.articleDraft!.lastSaved,
+			},
+			currentArticle: unsubmittedDraftTicket.article
+				? ({
+						title: unsubmittedDraftTicket.article.title.english,
+						author: {
+							name: unsubmittedDraftTicket.article.author.name
+								.english,
+						},
+						body: unsubmittedDraftTicket.article.body.english,
+						snippet: unsubmittedDraftTicket.article.snippet.english,
+						dateCreated: unsubmittedDraftTicket.article.dateCreated,
+						uri: unsubmittedDraftTicket.article.link,
+						articleImage: {
+							source: unsubmittedDraftTicket.article.image.link,
+							about: unsubmittedDraftTicket.article.image.caption
+								.english,
+							placeholder:
+								(unsubmittedDraftTicket.article.image
+									.placeholder
+									?.placeholder as ImagePlaceholder) ??
+								undefined,
+						},
+						isArticleFeatured:
+							unsubmittedDraftTicket.article.featuredArticle !==
+							null,
+					} satisfies Article)
+				: undefined,
+		} satisfies {
+			ticketId: string;
+			canDeleteTicket: boolean;
+			draft?: ArticleDraft;
+			currentArticle?: Article;
+		};
 
-	const articleDraft = ticket.articleDraft
-		? ({
-				title: ticket.articleDraft.title,
-				body: ticket.articleDraft.body,
-			} satisfies ArticleDraft)
-		: null;
+	const unusedTicket = await database.articleTicket.findFirst({
+		include: {
+			article: {
+				include: _FULL_ARTICLE_INCLUDES,
+			},
+		},
+		where: {
+			assigneeEmail: user.email,
+			articleDraft: null,
+		},
+	});
 
-	const article = ticket.article
+	if (!unusedTicket) return null;
+
+	const article = unusedTicket.article
 		? ({
-				title: ticket.article.title.english,
-				author: { name: ticket.article.author.name.english },
-				body: ticket.article.body.english,
-				snippet: ticket.article.snippet.english,
-				dateCreated: ticket.article.dateCreated,
-				uri: ticket.article.link,
+				title: unusedTicket.article.title.english,
+				author: { name: unusedTicket.article.author.name.english },
+				body: unusedTicket.article.body.english,
+				snippet: unusedTicket.article.snippet.english,
+				dateCreated: unusedTicket.article.dateCreated,
+				uri: unusedTicket.article.link,
 				articleImage: {
-					source: ticket.article.image.link,
-					about: ticket.article.image.caption.english,
+					source: unusedTicket.article.image.link,
+					about: unusedTicket.article.image.caption.english,
 					placeholder:
-						(ticket.article.image.placeholder
+						(unusedTicket.article.image.placeholder
 							?.placeholder as ImagePlaceholder) ?? undefined,
 				},
-				isArticleFeatured: ticket.article.featuredArticle !== null,
+				isArticleFeatured:
+					unusedTicket.article.featuredArticle !== null,
 			} satisfies Article)
 		: null;
 
 	return {
-		ticketId: ticket.id,
-		canDeleteTicket: ticket.assignerEmail === user.email,
-		draft: articleDraft ?? undefined,
+		ticketId: unusedTicket.id,
+		canDeleteTicket: unusedTicket.assignerEmail === user.email,
 		currentArticle: article ?? undefined,
 	} satisfies {
 		ticketId: string;
