@@ -1,11 +1,7 @@
 import "server-only";
 import z from "zod";
 
-export const DATABASE_URL = z
-	.string()
-	.trim()
-	.nonempty()
-	.parse(process.env.DATABASE_URL);
+export const DATABASE_URL = z.url().parse(process.env.DATABASE_URL);
 export const BASE_URL = z.httpUrl().parse(process.env.BASE_URL);
 export const ENVIRONMENT = z
 	.enum(["production", "preview", "development"])
