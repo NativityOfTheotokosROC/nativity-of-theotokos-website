@@ -269,6 +269,15 @@
 		"closingQuote": "»"
 	},
 	"scheduleItem": {
+		"titleField": "Название",
+		"venueField": "Место проведения",
+		"designationField": "Обозначение",
+		"timeField": "Время",
+		"dateField": "Дата",
+		"recurringPatternField": "Шаблон повторения",
+		"emptyTimes": "Добавьте хотя бы одно время",
+		"timeConflict": "Время конфликтует с другим временем",
+		"schedule": "Расписание",
 		"liturgyService": "Божественная литургия",
 		"typikaService": "Служба Типики",
 		"mainLocation": "Приход Рождества Пресвятой Богородицы",
@@ -328,6 +337,8 @@
 		"nonEmpty": "Поле {field} не может быть пустым",
 		"maxCharacters": "Поле {field} слишком длинное ({max} максимум символов)",
 		"minCharacters": "Поле «{field}» слишком короткое (минимум {min} символов)",
+		"invalidField": "{field} недействительно",
+		"emptyFieldSet": "Необходимо указать хотя бы одно значение для поля «{field}»",
 		"invalidUrl": "Вы указали недействительный URL для поля «{field}»",
 		"invalidEmail": "Указан недействительный адрес электронной почты для поля «{field}»"
 	},

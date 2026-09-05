@@ -122,26 +122,26 @@ export async function addNewQuote(newQuote: NewQuote) {
 				nameTranslationId: authorTranslation.id,
 			},
 		});
-		return await transaction.quote
-			.create({
-				data: {
-					quoteTranslationId: quoteTranslation.id,
-					sourceTranslationId: sourceTranslation
-						? sourceTranslation.id
-						: null,
-					authorId: quoteAuthor.id,
-					dailyQuotes: scheduledLocalDate && {
-						connectOrCreate: {
-							where: {
-								date: scheduledLocalDate,
-							},
-							create: {
-								date: scheduledLocalDate,
-							},
+		const result = await transaction.quote.create({
+			data: {
+				quoteTranslationId: quoteTranslation.id,
+				sourceTranslationId: sourceTranslation
+					? sourceTranslation.id
+					: null,
+				authorId: quoteAuthor.id,
+				dailyQuotes: scheduledLocalDate && {
+					connectOrCreate: {
+						where: {
+							date: scheduledLocalDate,
+						},
+						create: {
+							date: scheduledLocalDate,
 						},
 					},
 				},
-			})
-			.then(() => revalidateTag("daily-quote", "max"));
+			},
+		});
+		revalidateTag("daily-quote", "max");
+		return result;
 	});
 }

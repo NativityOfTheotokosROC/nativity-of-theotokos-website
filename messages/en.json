@@ -270,6 +270,15 @@
 		"closingQuote": "”"
 	},
 	"scheduleItem": {
+		"titleField": "Title",
+		"venueField": "Venue",
+		"designationField": "Designation",
+		"timeField": "Time",
+		"dateField": "Date",
+		"recurringPatternField": "Recurring Pattern",
+		"emptyTimes": "Add at least 1 time",
+		"timeConflict": "Time is conflicting with another time",
+		"schedule": "Schedule",
 		"liturgyService": "Divine Liturgy",
 		"typikaService": "Typika Service",
 		"mainLocation": "Nativity of the Theotokos Parish",
@@ -321,6 +330,8 @@
 		"nonEmpty": "{field} cannot be empty",
 		"maxCharacters": "{field} is too long (maximum of {max} characters)",
 		"minCharacters": "{field} is too short (minimum of {min} characters)",
+		"invalidField": "{field} is invalid",
+		"emptyFieldSet": "You must provide at least one {field}",
 		"invalidUrl": "You did not provide a valid URL for {field}",
 		"invalidEmail": "Invalid email provided for {field}"
 	},
