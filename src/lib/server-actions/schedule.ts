@@ -23,7 +23,7 @@ import { cacheTag } from "next/cache";
 import { cacheLife } from "next/cache";
 
 export async function getSchedule(
-	referenceDate: Date,
+	referenceDate: Date | string,
 	limit: number = 4,
 	locale: Language = "en",
 ) {
@@ -31,7 +31,8 @@ export async function getSchedule(
 	cacheTag("schedule");
 	cacheLife("hours");
 
-	const dateToday = getDateString(referenceDate, true);
+	const parsedReferenceDate = z.iso.date().parse(referenceDate);
+
 	const [
 		instantaneousScheduleItemRecords,
 		recurringScheduleItemRecords,
@@ -52,7 +53,7 @@ export async function getSchedule(
 			},
 			where: {
 				date: {
-					gte: dateToday,
+					gte: parsedReferenceDate,
 				},
 				removedScheduleItem: null,
 			},
@@ -85,7 +86,7 @@ export async function getSchedule(
 			where: {
 				scheduleItem: {
 					date: {
-						gte: dateToday,
+						gte: parsedReferenceDate,
 					},
 				},
 			},
@@ -132,7 +133,7 @@ export async function getSchedule(
 			const nextDates = getNextRecurringScheduleItemDates(
 				pattern,
 				limit,
-				dateToday,
+				parsedReferenceDate,
 			);
 			nextDates.forEach(date => {
 				if (
@@ -532,7 +533,7 @@ export async function restoreInstantaneousItem(scheduleItemId: number) {
 export async function removeNextRecurringItem(
 	scheduleItemId: number,
 	instance?: number,
-	referenceDate?: string,
+	referenceDate?: Date | string,
 ) {
 	await protect({ roles: ["admin"] });
 	const recurringScheduleItem =

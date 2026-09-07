@@ -21,7 +21,7 @@ export function validateRecurringPattern(
 
 export function getNextRecurringScheduleItemDate(
 	pattern: string,
-	referenceDate?: string,
+	referenceDate?: Date | string,
 ) {
 	const cron = validateRecurringPattern(pattern, { useLocalTimezone: true });
 	if (!cron) throw new Error("Invalid recurring pattern");
@@ -31,7 +31,7 @@ export function getNextRecurringScheduleItemDate(
 export function getNextRecurringScheduleItemDates(
 	pattern: string,
 	instances: number,
-	referenceDate?: string,
+	referenceDate?: Date | string,
 ) {
 	const cron = validateRecurringPattern(pattern, { useLocalTimezone: true });
 	if (!cron) throw new Error("Invalid recurring pattern");
