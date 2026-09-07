@@ -13,8 +13,12 @@ const SplashScreen = function ({ model }) {
 
 	useLayoutEffect(() => {
 		// HACK: Revisit
-		window.onscroll = () => {
+		const scrollEventCallback = () => {
 			if (isShown && fullscreen) window.scrollTo(0, 0);
+		};
+		window.addEventListener("scroll", scrollEventCallback);
+		return () => {
+			window.removeEventListener("scroll", scrollEventCallback);
 		};
 	}, [isShown, fullscreen]);
 

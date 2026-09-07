@@ -4,7 +4,7 @@ import { FC, SVGProps } from "react";
 export type InformationViewModelView = {
 	Graphic: FC<SVGProps<SVGElement>>;
 	mainMessage: string;
-	detailedMessage: string;
+	detailedMessage?: string;
 	topBarColor?: string;
 };
 

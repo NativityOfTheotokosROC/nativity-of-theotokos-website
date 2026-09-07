@@ -23,7 +23,9 @@ const InformationView = function ({ model, children }) {
 					>
 						{mainMessage}
 					</span>
-					<span className="text-lg">{detailedMessage}</span>
+					{detailedMessage && (
+						<span className="text-lg">{detailedMessage}</span>
+					)}
 					{children} {/*TODO: Make children optional mvc-react */}
 				</div>
 			</div>
