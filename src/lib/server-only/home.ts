@@ -101,151 +101,6 @@ export async function getDailyQuote(currentDate: Date, language: Language) {
 	) satisfies DailyQuote;
 }
 
-export async function getScheduleItems(
-	count: number,
-	currentDate: Date,
-	language: Language,
-) {
-	"use cache: remote";
-	cacheTag("latest-schedule-items");
-	cacheLife("days");
-
-	const localDate = new Date(getDateString(currentDate, true));
-	const data = await database.scheduleItem.findMany({
-		where: {
-			date: { gte: localDate },
-			AND: { removedScheduleItem: { is: null } },
-		},
-		orderBy: {
-			date: "asc",
-		},
-		take: count,
-		include: {
-			title: true,
-			venue: true,
-			scheduleItemTimes: {
-				include: { designation: true },
-				orderBy: { time: "asc" },
-			},
-		},
-	});
-	const scheduleItems = data.map(
-		(record): ScheduleItem => ({
-			date: record.date,
-			title:
-				language === "ru"
-					? (record.title.russian ?? record.title.english)
-					: record.title.english,
-			venue:
-				language === "ru"
-					? (record.venue.russian ?? record.venue.english)
-					: record.venue.english,
-			times: record.scheduleItemTimes.map(time => ({
-				time: time.time,
-				designation:
-					language === "ru"
-						? (time.designation.russian ?? time.designation.english)
-						: time.designation.english,
-			})),
-		}),
-	);
-	let nextScheduleItemDate = new Date(localDate);
-	while (scheduleItems.length < count) {
-		const nextScheduleItem = await _getNextDefaultScheduleItem(
-			nextScheduleItemDate,
-		).then(scheduleItem => ({
-			...scheduleItem,
-			times: scheduleItem.times.map(time => ({
-				...time,
-				time: new Date(
-					Date.UTC(
-						time.time.getFullYear(),
-						time.time.getMonth() + 1,
-						time.time.getDate(),
-						time.time.getHours() - 2,
-						time.time.getMinutes(),
-					),
-				),
-			})),
-		}));
-		// TODO: Revisit
-		const isPresent = await database.scheduleItem.findFirst({
-			where: {
-				date: nextScheduleItem.date,
-				venue: {
-					englishHash: getMd5Hash(nextScheduleItem.venue),
-				},
-			},
-		});
-		if (!isPresent) {
-			const {
-				date,
-				venue: location,
-				title,
-				times,
-				titleRu,
-			} = nextScheduleItem;
-
-			await database.scheduleItem.create({
-				data: {
-					date,
-					title: {
-						connectOrCreate: {
-							create: {
-								english: title,
-								englishHash: getMd5Hash(title),
-								russian: titleRu,
-							},
-							where: {
-								englishHash: getMd5Hash(title),
-							},
-						},
-					},
-					venue: {
-						connectOrCreate: {
-							create: {
-								english: location,
-								englishHash: getMd5Hash(location),
-							},
-							where: {
-								englishHash: getMd5Hash(location),
-							},
-						},
-					},
-					scheduleItemTimes: {
-						create: times.map(time => ({
-							time: time.time,
-							designation: {
-								connectOrCreate: {
-									create: {
-										english: time.designation,
-										russian: time.designationRu,
-										englishHash: getMd5Hash(
-											time.designation,
-										),
-									},
-									where: {
-										englishHash: getMd5Hash(
-											time.designation,
-										),
-									},
-								},
-							},
-						})),
-					},
-				},
-			});
-			scheduleItems.push(nextScheduleItem);
-		}
-		nextScheduleItemDate = new Date(
-			new Date(nextScheduleItem.date).setDate(
-				nextScheduleItem.date.getDate() + 1,
-			),
-		);
-	}
-	return scheduleItems;
-}
-
 export async function getLatestArticles(
 	otherArticlesCount: number,
 	language: Language,
@@ -480,7 +335,7 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 		if (nextSundayDate.getMonth() != previousSundayDate.getMonth()) {
 			scheduleItem = {
 				date: scheduleItemDate,
-				location: tEn("secondaryLocation"),
+				venue: tEn("secondaryLocation"),
 				title: tEn("liturgyService"),
 				titleRu: tRu("liturgyService"),
 				times: [
@@ -526,7 +381,7 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 		}
 		scheduleItem = {
 			date: nextSundayDate,
-			location: tEn("secondaryLocation"),
+			venue: tEn("secondaryLocation"),
 			title: tEn("typikaService"),
 			titleRu: tRu("typikaService"),
 			times: [
@@ -575,7 +430,7 @@ async function _getNextDefaultScheduleItem(date: Date): Promise<
 		if (scheduleItemDate.getMonth() != previousSundayDate.getMonth()) {
 			scheduleItem = {
 				date: scheduleItemDate,
-				location: tEn("mainLocation"),
+				venue: tEn("mainLocation"),
 				title: tEn("liturgyService"),
 				titleRu: tRu("liturgyService"),
 				times: [

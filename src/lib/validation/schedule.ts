@@ -1,7 +1,7 @@
 import z from "zod";
 import { Translator } from "../types/general";
 import { getTranslationSchema } from "./general";
-import { isValidRecurringPattern } from "../utilities/schedule";
+import { validateRecurringPattern } from "../utilities/schedule";
 
 export type NewInstantaneousScheduleItem = z.infer<
 	ReturnType<typeof getInstantaneousScheduleItemSchema>
@@ -75,7 +75,7 @@ export function getRecurringScheduleItemSchema(t?: Translator) {
 						field: t("scheduleItem.recurringPatternField"),
 					}),
 			})
-			.refine(pattern => isValidRecurringPattern(pattern), {
+			.refine(pattern => validateRecurringPattern(pattern), {
 				error:
 					t &&
 					t("validation.invalidField", {

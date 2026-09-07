@@ -16,16 +16,22 @@ import {
 import { getTranslations } from "next-intl/server";
 import { getMd5Hash } from "../utilities/miscellaneous";
 import { protect } from "./auth";
-import { getNextRecurringScheduleItemTimestamps } from "../utilities/schedule";
+import { getNextRecurringScheduleItemDates } from "../utilities/schedule";
 import z from "zod";
 import { getDateString } from "../utilities/date-time";
 import { cacheTag } from "next/cache";
+import { cacheLife } from "next/cache";
 
-export async function getSchedule(limit: number = 4, locale: Language = "en") {
+export async function getSchedule(
+	referenceDate: Date,
+	limit: number = 4,
+	locale: Language = "en",
+) {
 	"use cache: remote";
 	cacheTag("schedule");
+	cacheLife("hours");
 
-	const dateToday = getDateString(new Date(), true);
+	const dateToday = getDateString(referenceDate, true);
 	const [
 		instantaneousScheduleItemRecords,
 		recurringScheduleItemRecords,
@@ -123,7 +129,7 @@ export async function getSchedule(limit: number = 4, locale: Language = "en") {
 		new Array<RecurringScheduleItemInstance>();
 	recurringScheduleItemRecords.forEach(
 		({ id, title, venue, pattern, recurringScheduleItemTimes }) => {
-			const nextDates = getNextRecurringScheduleItemTimestamps(
+			const nextDates = getNextRecurringScheduleItemDates(
 				pattern,
 				limit,
 				dateToday,
@@ -504,7 +510,7 @@ export async function removeInstantaneousItem(
 											},
 										)
 									).id,
-									date: identifier.date,
+									date: z.iso.date().parse(identifier.date),
 								},
 							},
 			},
@@ -540,7 +546,7 @@ export async function removeNextRecurringItem(
 			},
 		});
 	const parsedReferenceDate = z.iso.date().optional().parse(referenceDate);
-	const specificDate = getNextRecurringScheduleItemTimestamps(
+	const specificDate = getNextRecurringScheduleItemDates(
 		recurringScheduleItem.pattern,
 		instance ?? 1,
 		parsedReferenceDate,

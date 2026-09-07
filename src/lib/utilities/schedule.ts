@@ -1,28 +1,39 @@
 import { Cron } from "croner";
 import { getLocalTimeZone } from "./date-time";
 
-export function isValidRecurringPattern(pattern: string) {
+export function validateRecurringPattern(
+	pattern: string,
+	options?: Partial<{ useLocalTimezone: boolean }>,
+) {
 	try {
-		new Cron(pattern);
-		return true;
+		const cron = new Cron(
+			pattern,
+			options?.useLocalTimezone
+				? { timezone: getLocalTimeZone() }
+				: undefined,
+		);
+		if (!cron.getPattern()?.startsWith("0 0 0")) return null;
+		return cron;
 	} catch {
-		return false;
+		return null;
 	}
 }
 
-export function getNextRecurringScheduleItemTimestamp(
+export function getNextRecurringScheduleItemDate(
 	pattern: string,
 	referenceDate?: string,
 ) {
-	const cron = new Cron(pattern, { timezone: getLocalTimeZone() });
+	const cron = validateRecurringPattern(pattern, { useLocalTimezone: true });
+	if (!cron) throw new Error("Invalid recurring pattern");
 	return cron.nextRun(referenceDate);
 }
 
-export function getNextRecurringScheduleItemTimestamps(
+export function getNextRecurringScheduleItemDates(
 	pattern: string,
 	instances: number,
 	referenceDate?: string,
 ) {
-	const cron = new Cron(pattern, { timezone: getLocalTimeZone() });
+	const cron = validateRecurringPattern(pattern, { useLocalTimezone: true });
+	if (!cron) throw new Error("Invalid recurring pattern");
 	return cron.nextRuns(instances, referenceDate);
 }
