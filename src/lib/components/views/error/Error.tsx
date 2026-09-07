@@ -16,35 +16,29 @@ const Error = function ({ model }) {
 	const t = useTranslations("error");
 
 	return (
-		<PageView model={{ modelView: { topBarColor: "#460809" } }}>
-			<InformationView
-				model={{
-					modelView: {
-						topBarColor: "#460809",
-						mainMessage: t("title"),
-						Graphic: ErrorGraphic,
-					},
+		<InformationView
+			model={{
+				modelView: {
+					topBarColor: "#460809",
+					mainMessage: t("title"),
+					Graphic: ErrorGraphic,
+				},
+			}}
+		>
+			<span className="text-lg [&_a]:underline [&_a:hover]:text-[#ffdc4f]">
+				{`${t("description")}, `}
+				<Link href="mailto:info@nativityoftheotokos.com">{`${t("contactUs")}.`}</Link>
+			</span>
+			<span className="text-xs">{message}</span>
+			<button
+				className="w-30 max-w-3/4 min-w-fit rounded-lg bg-[#250203]/82 p-4 text-white hover:bg-[#250203]/92 active:bg-[#250203]"
+				onClick={() => {
+					interact({ type: "RETRY" });
 				}}
 			>
-				<span className="text-lg [&_a]:underline [&_a:hover]:text-[#ffdc4f]">
-					{`${t("description")}, `}
-					<Link href="mailto:info@nativityoftheotokos.com">{`${t("contactUs")}.`}</Link>
-				</span>
-				<span className="text-xs">{message}</span>
-				<button
-					className="w-30 max-w-3/4 min-w-fit rounded-lg bg-[#250203]/82 p-4 text-white hover:bg-[#250203]/92 active:bg-[#250203]"
-					onClick={() => {
-						interact({ type: "RETRY" });
-					}}
-				>
-					{t("tryAgain")}
-				</button>
-			</InformationView>
-			<ErrorGraphic className="h-54 w-64 md:h-48" opacity={0.9} />
-			<span className={`text-4xl font-semibold ${georgia.className}`}>
-				{t("title")}
-			</span>
-		</PageView>
+				{t("tryAgain")}
+			</button>
+		</InformationView>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ErrorPageModel>>;
 
