@@ -31,7 +31,10 @@ export async function getSchedule(
 	cacheTag("schedule");
 	cacheLife("hours");
 
-	const parsedReferenceDate = z.iso.date().parse(referenceDate);
+	const parsedReferenceDate =
+		typeof referenceDate === "string"
+			? z.iso.date().optional().parse(referenceDate)
+			: referenceDate;
 
 	const [
 		instantaneousScheduleItemRecords,
@@ -546,7 +549,10 @@ export async function removeNextRecurringItem(
 				id: scheduleItemId,
 			},
 		});
-	const parsedReferenceDate = z.iso.date().optional().parse(referenceDate);
+	const parsedReferenceDate =
+		typeof referenceDate === "string"
+			? z.iso.date().optional().parse(referenceDate)
+			: referenceDate;
 	const specificDate = getNextRecurringScheduleItemDates(
 		recurringScheduleItem.pattern,
 		instance ?? 1,
