@@ -57,11 +57,14 @@ const BulletinSection = function ({ model }) {
 							className="schedule flex flex-1 flex-col gap-4 lg:max-w-5/10"
 						>
 							<span className="text-xl">{t("schedule")}</span>
-							<SchedulePreviewWidget
-								model={newReadonlyModel({
-									scheduleItems: modelView.schedulePreview,
-								})}
-							/>
+							{modelView.schedulePreview.length && (
+								<SchedulePreviewWidget
+									model={newReadonlyModel({
+										scheduleItems:
+											modelView.schedulePreview,
+									})}
+								/>
+							)}
 						</motion.div>
 					</div>
 					<div className="other-stories flex flex-col gap-4 border-t-2 border-t-[#dcb042] bg-white/70 px-8 pt-10 pb-15 lg:px-20">

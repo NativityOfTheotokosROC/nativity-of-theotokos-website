@@ -1,13 +1,11 @@
 "use client";
 
-import { georgia } from "@/src/lib/third-party/fonts";
-import { ModeledVoidComponent } from "@mvc-react/components";
+import ErrorGraphic from "@/public/assets/graphic-3.svg";
 import { ErrorPageModel } from "@/src/lib/models/error-page";
+import { ModeledVoidComponent } from "@mvc-react/components";
+import { InitializedModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import ErrorGraphic from "@/public/assets/graphic-3.svg";
-import { InitializedModel } from "@mvc-react/mvc";
-import PageView from "../../page-view/PageView";
 import InformationView from "../../information-view/InformationView";
 
 const Error = function ({ model }) {
