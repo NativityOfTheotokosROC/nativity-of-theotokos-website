@@ -11,6 +11,7 @@ import { useTranslations } from "next-intl";
 const BulletinSection = function ({ model }) {
 	const { modelView } = model;
 	const t = useTranslations("home");
+	const isScheduleEmpty = modelView?.schedulePreview.length === 0;
 
 	return (
 		<section id="bulletin" className="news pt-4 text-black">
@@ -56,14 +57,18 @@ const BulletinSection = function ({ model }) {
 							}}
 							className="schedule flex flex-1 flex-col gap-4 lg:max-w-5/10"
 						>
-							<span className="text-xl">{t("schedule")}</span>
-							{modelView.schedulePreview.length && (
-								<SchedulePreviewWidget
-									model={newReadonlyModel({
-										scheduleItems:
-											modelView.schedulePreview,
-									})}
-								/>
+							{!isScheduleEmpty && (
+								<>
+									<span className="text-xl">
+										{t("schedule")}
+									</span>
+									<SchedulePreviewWidget
+										model={newReadonlyModel({
+											scheduleItems:
+												modelView.schedulePreview,
+										})}
+									/>
+								</>
 							)}
 						</motion.div>
 					</div>
