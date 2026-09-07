@@ -14,7 +14,7 @@ import {
 	ScheduleItem,
 } from "../types/general";
 import { getDateString } from "../utilities/date-time";
-import { getMd5Hash, isRemotePath } from "../utilities/miscellaneous";
+import { isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
 import { getGalleryImages } from "./gallery";
 import { _FULL_ARTICLE_INCLUDES } from "./article";
@@ -108,10 +108,11 @@ export async function getLatestArticles(
 	"use cache: remote";
 	cacheTag("latest-articles");
 
-	const featuredArticle = await database.featuredArticle.findFirstOrThrow({
-		include: { article: { include: _FULL_ARTICLE_INCLUDES } },
-	});
-	const otherArticles = await database.article.findMany({
+	const featuredArticleRecord =
+		await database.featuredArticle.findFirstOrThrow({
+			include: { article: { include: _FULL_ARTICLE_INCLUDES } },
+		});
+	const otherArticleRecords = await database.article.findMany({
 		where: {
 			featuredArticle: {
 				is: null,
@@ -123,8 +124,11 @@ export async function getLatestArticles(
 		},
 		take: otherArticlesCount,
 	});
-	const allArticles = [featuredArticle.article, ...otherArticles];
-	const unplaceholderedArticles = allArticles.filter(
+	const allArticleRecords = [
+		featuredArticleRecord.article,
+		...otherArticleRecords,
+	];
+	const unplaceholderedArticles = allArticleRecords.filter(
 		article => article.image.placeholder === null,
 	);
 	const newPlaceholders = new Map<number, ImagePlaceholder>();
@@ -142,44 +146,45 @@ export async function getLatestArticles(
 		}
 	}
 
-	const article = featuredArticle.article;
+	const featuredArticle = featuredArticleRecord.article;
 	const title =
-		language === "ru" && article.title.russian
-			? article.title.russian
-			: article.title.english;
+		language === "ru" && featuredArticle.title.russian
+			? featuredArticle.title.russian
+			: featuredArticle.title.english;
 	const author = {
 		name:
-			language === "ru" && article.author.name.russian != null
-				? article.author.name.russian
-				: article.author.name.english,
-		email: article.author.email ?? undefined,
+			language === "ru" && featuredArticle.author.name.russian != null
+				? featuredArticle.author.name.russian
+				: featuredArticle.author.name.english,
+		email: featuredArticle.author.email ?? undefined,
 	} satisfies ArticleAuthor;
 	const snippet =
-		language === "ru" && article.snippet.russian
-			? article.snippet.russian
-			: article.snippet.english;
+		language === "ru" && featuredArticle.snippet.russian
+			? featuredArticle.snippet.russian
+			: featuredArticle.snippet.english;
 	return {
 		featuredArticle: {
-			...featuredArticle.article,
+			...featuredArticleRecord.article,
 			title,
 			author,
 			snippet,
-			uri: featuredArticle.article.link,
+			uri: featuredArticleRecord.article.link,
 			articleImage: {
-				source: featuredArticle.article.image.link,
+				source: featuredArticleRecord.article.image.link,
 				about:
 					language === "ru"
-						? (featuredArticle.article.image.caption.russian ??
-							featuredArticle.article.image.caption.english)
-						: featuredArticle.article.image.caption.english,
+						? (featuredArticleRecord.article.image.caption
+								.russian ??
+							featuredArticleRecord.article.image.caption.english)
+						: featuredArticleRecord.article.image.caption.english,
 				placeholder:
-					(featuredArticle.article.image.placeholder
+					(featuredArticleRecord.article.image.placeholder
 						?.placeholder as ImagePlaceholder) ??
-					newPlaceholders.get(featuredArticle.article.id),
+					newPlaceholders.get(featuredArticleRecord.article.id),
 			},
 			isArticleFeatured: true,
 		},
-		otherNewsArticles: otherArticles.map(article => {
+		otherNewsArticles: otherArticleRecords.map(article => {
 			const title =
 				language === "ru" && article.title.russian
 					? article.title.russian

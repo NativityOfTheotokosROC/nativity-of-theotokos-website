@@ -1,6 +1,6 @@
 import z from "zod";
 import { Translator } from "../types/general";
-import { getTranslationSchema } from "./general";
+import { getTranslationSchema, useLocalizedSchema } from "./general";
 import { validateRecurringPattern } from "../utilities/schedule";
 
 export type NewInstantaneousScheduleItem = z.infer<
@@ -83,4 +83,12 @@ export function getRecurringScheduleItemSchema(t?: Translator) {
 					}),
 			}),
 	});
+}
+
+export function useInstantaneousScheduleItemSchema() {
+	return useLocalizedSchema(getInstantaneousScheduleItemSchema);
+}
+
+export function useRecurringScheduleItemSchema() {
+	return useLocalizedSchema(getRecurringScheduleItemSchema);
 }

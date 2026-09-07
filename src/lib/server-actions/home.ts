@@ -8,7 +8,6 @@ import {
 	getDailyQuote,
 	getDailyReadings,
 	getLatestArticles,
-	getScheduleItems,
 } from "../server-only/home";
 import mailerLite from "../third-party/mailer-lite";
 import {
@@ -19,6 +18,7 @@ import {
 	ScheduleItem,
 } from "../types/general";
 import { getDateString } from "../utilities/date-time";
+import { getSchedule } from "./schedule";
 
 export type LatestArticles = {
 	featuredArticle: ArticlePreview;
@@ -49,7 +49,7 @@ export async function getHomeSnapshot(
 		dailyGalleryImages,
 	] = await Promise.all([
 		getDailyReadings(currentDate, locale),
-		getScheduleItems(scheduleItemCount, currentDate, locale),
+		getSchedule(currentDate, scheduleItemCount, locale),
 		getLatestArticles(otherArticleCount, locale),
 		getDailyQuote(currentDate, locale),
 		getDailyGalleryImages(dailyGalleryImagesCount, currentDate),

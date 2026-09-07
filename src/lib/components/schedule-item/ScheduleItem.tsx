@@ -10,12 +10,7 @@ import { getLocalTimeZone } from "../../utilities/date-time";
 
 const ScheduleItem = function ({ model }) {
 	const { scheduleItem, isFeatured } = model.modelView;
-	const {
-		date: rawDate,
-		venue: location,
-		times: rawTimes,
-		title,
-	} = scheduleItem;
+	const { title, venue, date: rawDate, times: rawTimes } = scheduleItem;
 	const locale = useLocale();
 	const dateLocale = locale === "en" ? "en-uk" : "ru-RU";
 	const date = toZonedTime(rawDate, getLocalTimeZone());
@@ -42,7 +37,7 @@ const ScheduleItem = function ({ model }) {
 			</div>
 			<div className="flex flex-col gap-1 px-5.5 py-4">
 				<span className="text-xl">{title}</span>
-				<span>{location}</span>
+				<span>{venue}</span>
 				{times.map((time, index) => (
 					<div
 						key={index}
@@ -79,7 +74,7 @@ const ScheduleItem = function ({ model }) {
 			</div>
 			<div className="flex flex-col gap-1 px-4 py-2">
 				<span className="text-lg">{title}</span>
-				<span className="text-sm">{location}</span>
+				<span className="text-sm">{venue}</span>
 				<span className="text-sm">
 					{times[0].time
 						.toLocaleTimeString(dateLocale, {

@@ -16,7 +16,15 @@ export function useHome(): HomeModel {
 		refetchOnWindowFocus: false,
 	});
 	const interact = async (interaction: HomeModelInteraction) => {
-		if (interaction.type === "REFRESH") refetch();
+		switch (interaction.type) {
+			case "REFRESH": {
+				refetch();
+				break;
+			}
+			default: {
+				interaction.type satisfies never;
+			}
+		}
 	};
 
 	if (isSuccess) {

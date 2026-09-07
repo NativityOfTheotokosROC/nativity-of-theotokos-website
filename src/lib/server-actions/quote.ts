@@ -72,24 +72,23 @@ export async function addNewQuote(newQuote: NewQuote) {
 		: undefined;
 
 	await database.$transaction(async transaction => {
-		const [authorTranslation, sourceTranslation, quoteTranslation] =
-			await Promise.all([
-				transaction.translation.upsert({
-					select: { id: true },
-					create: {
-						english: authorEn,
-						russian: authorRu,
-						englishHash: getMd5Hash(authorEn),
-					},
-					update: {
-						russian: authorRu,
-					},
-					where: {
-						englishHash: getMd5Hash(authorEn),
-					},
-				}),
-				sourceEn &&
-					transaction.translation.upsert({
+		const [authorTranslation, sourceTranslation] = await Promise.all([
+			transaction.translation.upsert({
+				select: { id: true },
+				create: {
+					english: authorEn,
+					russian: authorRu,
+					englishHash: getMd5Hash(authorEn),
+				},
+				update: {
+					russian: authorRu,
+				},
+				where: {
+					englishHash: getMd5Hash(authorEn),
+				},
+			}),
+			sourceEn
+				? transaction.translation.upsert({
 						select: { id: true },
 						create: {
 							english: sourceEn,
@@ -102,16 +101,9 @@ export async function addNewQuote(newQuote: NewQuote) {
 						where: {
 							englishHash: getMd5Hash(sourceEn),
 						},
-					}),
-				transaction.translation.create({
-					select: { id: true },
-					data: {
-						english: quoteEn,
-						russian: quoteRu,
-						englishHash: getMd5Hash(quoteEn),
-					},
-				}),
-			]);
+					})
+				: undefined,
+		]);
 		const quoteAuthor = await transaction.quoteAuthor.upsert({
 			select: { id: true },
 			create: {
@@ -124,11 +116,25 @@ export async function addNewQuote(newQuote: NewQuote) {
 		});
 		const result = await transaction.quote.create({
 			data: {
-				quoteTranslationId: quoteTranslation.id,
-				sourceTranslationId: sourceTranslation
-					? sourceTranslation.id
-					: null,
-				authorId: quoteAuthor.id,
+				author: {
+					connect: {
+						id: quoteAuthor.id,
+					},
+				},
+				source: sourceTranslation?.id
+					? {
+							connect: {
+								id: sourceTranslation.id,
+							},
+						}
+					: undefined,
+				quote: {
+					create: {
+						english: quoteEn,
+						russian: quoteRu,
+						englishHash: getMd5Hash(quoteEn),
+					},
+				},
 				dailyQuotes: scheduledLocalDate && {
 					connectOrCreate: {
 						where: {
