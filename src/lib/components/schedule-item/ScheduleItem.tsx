@@ -10,7 +10,12 @@ import { getLocalTimeZone } from "../../utilities/date-time";
 
 const ScheduleItem = function ({ model }) {
 	const { scheduleItem, isFeatured } = model.modelView;
-	const { date: rawDate, location, times: rawTimes, title } = scheduleItem;
+	const {
+		date: rawDate,
+		venue: location,
+		times: rawTimes,
+		title,
+	} = scheduleItem;
 	const locale = useLocale();
 	const dateLocale = locale === "en" ? "en-uk" : "ru-RU";
 	const date = toZonedTime(rawDate, getLocalTimeZone());

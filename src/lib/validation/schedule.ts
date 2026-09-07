@@ -1,7 +1,15 @@
 import z from "zod";
 import { Translator } from "../types/general";
 import { getTranslationSchema } from "./general";
-import { Cron } from "croner";
+import { isValidRecurringPattern } from "../utilities/schedule";
+
+export type NewInstantaneousScheduleItem = z.infer<
+	ReturnType<typeof getInstantaneousScheduleItemSchema>
+>;
+
+export type NewRecurringScheduleItem = z.infer<
+	ReturnType<typeof getRecurringScheduleItemSchema>
+>;
 
 function getSharedSchema(t?: Translator) {
 	return z.object({
@@ -67,22 +75,12 @@ export function getRecurringScheduleItemSchema(t?: Translator) {
 						field: t("scheduleItem.recurringPatternField"),
 					}),
 			})
-			.refine(
-				pattern => {
-					try {
-						new Cron(pattern);
-						return true;
-					} catch {
-						return false;
-					}
-				},
-				{
-					error:
-						t &&
-						t("validation.invalidField", {
-							field: t("scheduleItem.recurringPatternField"),
-						}),
-				},
-			),
+			.refine(pattern => isValidRecurringPattern(pattern), {
+				error:
+					t &&
+					t("validation.invalidField", {
+						field: t("scheduleItem.recurringPatternField"),
+					}),
+			}),
 	});
 }

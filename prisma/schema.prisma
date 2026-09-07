@@ -43,7 +43,7 @@ model InstantaneousScheduleItem {
   title                          Translation                        @relation("ScheduleItemTitleTranslation", fields: [titleTranslationId], references: [id])
   venue                          Translation                        @relation("ScheduleItemVenueTranslation", fields: [venueTranslationId], references: [id])
   date                           DateTime                           @db.Date
-  removedScheduleItems           RemovedInstantaneousScheduleItem[]
+  removedScheduleItem           RemovedInstantaneousScheduleItem?
   instantaneousScheduleItemTimes InstantaneousScheduleItemTime[]
   titleTranslationId             Int
   venueTranslationId             Int
@@ -52,14 +52,14 @@ model InstantaneousScheduleItem {
 }
 
 model RecurringScheduleItem {
-  id                             Int                             @id @default(autoincrement())
-  title                          Translation                     @relation("ScheduleItemTitleTranslation", fields: [titleTranslationId], references: [id])
-  venue                          Translation                     @relation("ScheduleItemVenueTranslation", fields: [venueTranslationId], references: [id])
-  pattern                        String
-  disabledRecurringScheduleItems DisabledRecurringScheduleItem[]
-  recurringScheduleItemTimes     RecurringScheduleItemTime[]
-  titleTranslationId             Int
-  venueTranslationId             Int
+  id                            Int                            @id @default(autoincrement())
+  title                         Translation                    @relation("ScheduleItemTitleTranslation", fields: [titleTranslationId], references: [id])
+  venue                         Translation                    @relation("ScheduleItemVenueTranslation", fields: [venueTranslationId], references: [id])
+  pattern                       String
+  disabledRecurringScheduleItem DisabledRecurringScheduleItem?
+  recurringScheduleItemTimes    RecurringScheduleItemTime[]
+  titleTranslationId            Int
+  venueTranslationId            Int
 
   @@unique([venueTranslationId, pattern])
 }

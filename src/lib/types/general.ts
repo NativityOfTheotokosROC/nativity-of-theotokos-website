@@ -36,13 +36,25 @@ export type DailyQuote = {
 };
 
 export type ScheduleItem = {
-	date: Date;
 	title: string;
-	location: string;
+	venue: string;
+	date: Date;
 	times: {
 		time: Date;
 		designation: string;
 	}[];
+};
+
+export type RecurringScheduleItem = Omit<ScheduleItem, "date"> & {
+	recurringPattern: string;
+};
+
+export type InstantaneousScheduleItem = ScheduleItem & {
+	id: number;
+};
+
+export type RecurringScheduleItemInstance = ScheduleItem & {
+	recurringItemId: number;
 };
 
 export type Image = {

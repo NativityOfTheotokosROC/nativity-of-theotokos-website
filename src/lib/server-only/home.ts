@@ -136,7 +136,7 @@ export async function getScheduleItems(
 				language === "ru"
 					? (record.title.russian ?? record.title.english)
 					: record.title.english,
-			location:
+			venue:
 				language === "ru"
 					? (record.venue.russian ?? record.venue.english)
 					: record.venue.english,
@@ -173,12 +173,18 @@ export async function getScheduleItems(
 			where: {
 				date: nextScheduleItem.date,
 				venue: {
-					englishHash: getMd5Hash(nextScheduleItem.location),
+					englishHash: getMd5Hash(nextScheduleItem.venue),
 				},
 			},
 		});
 		if (!isPresent) {
-			const { date, location, title, times, titleRu } = nextScheduleItem;
+			const {
+				date,
+				venue: location,
+				title,
+				times,
+				titleRu,
+			} = nextScheduleItem;
 
 			await database.scheduleItem.create({
 				data: {
