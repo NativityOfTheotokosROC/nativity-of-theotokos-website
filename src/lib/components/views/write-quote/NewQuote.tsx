@@ -64,11 +64,11 @@ const NewQuote = function ({ model }) {
 			isOpen: false,
 			items: autoCompleteInfo?.existingAuthors ?? [],
 			query: "",
-			transformer: item => item.english,
+			transformer: author => author.english,
 		},
-		item => {
-			setValue("authorEn", item.english);
-			setValue("authorRu", item.russian ?? "");
+		author => {
+			setValue("authorEn", author.english);
+			setValue("authorRu", author.russian ?? "");
 		},
 	);
 	const russianAuthorAutoCompleteBox = useAutoCompleteBox(
@@ -79,11 +79,11 @@ const NewQuote = function ({ model }) {
 				author => author.russian !== null,
 			) ?? []) as CompleteTranslation[],
 			query: "",
-			transformer: item => item.russian,
+			transformer: author => author.russian,
 		},
-		item => {
-			setValue("authorRu", item.russian);
-			setValue("authorEn", item.english);
+		author => {
+			setValue("authorRu", author.russian);
+			setValue("authorEn", author.english);
 		},
 	);
 	const englishSourceAutoCompleteBox = useAutoCompleteBox(
@@ -92,11 +92,11 @@ const NewQuote = function ({ model }) {
 			isOpen: false,
 			items: autoCompleteInfo?.existingSources ?? [],
 			query: "",
-			transformer: item => item.english,
+			transformer: source => source.english,
 		},
-		item => {
-			setValue("sourceEn", item.english);
-			setValue("sourceRu", item.russian ?? "");
+		source => {
+			setValue("sourceEn", source.english);
+			setValue("sourceRu", source.russian ?? "");
 		},
 	);
 	const russianSourceAutoCompleteBox = useAutoCompleteBox(
@@ -107,11 +107,11 @@ const NewQuote = function ({ model }) {
 				source => source.russian !== null,
 			) ?? []) as CompleteTranslation[],
 			query: "",
-			transformer: item => item.russian,
+			transformer: source => source.russian,
 		},
-		item => {
-			setValue("sourceRu", item.russian);
-			setValue("sourceEn", item.english);
+		source => {
+			setValue("sourceRu", source.russian);
+			setValue("sourceEn", source.english);
 		},
 	);
 	const hasFormChanged = () =>
