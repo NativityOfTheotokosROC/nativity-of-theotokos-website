@@ -1,7 +1,9 @@
 "use client";
 
-import Button from "@/src/lib/components/button/Button";
 import AutoCompleteBox from "@/src/lib/components/auto-complete-box/AutoCompleteBox";
+import Button from "@/src/lib/components/button/Button";
+import Checkbox from "@/src/lib/components/checkbox/Checkbox";
+import PageView from "@/src/lib/components/page-view/PageView";
 import QuotePreviewModal from "@/src/lib/components/quote-preview-modal/QuotePreviewModal";
 import Spinner from "@/src/lib/components/spinner/Spinner";
 import Tabs from "@/src/lib/components/tabs/Tabs";
@@ -9,8 +11,9 @@ import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complet
 import { useQuotePreviewModal } from "@/src/lib/model-implementations/quote-preview-model";
 import { useTabs } from "@/src/lib/model-implementations/tabs";
 import { NewQuoteModel } from "@/src/lib/models/new-quote";
-import { georgia } from "@/src/lib/third-party/fonts";
+import { Translation } from "@/src/lib/types/general";
 import { getDateString } from "@/src/lib/utilities/date-time";
+import { useCloseWarning } from "@/src/lib/utilities/hooks";
 import { getDefaultValues } from "@/src/lib/utilities/quote-form";
 import { useQuoteFormSchema } from "@/src/lib/validation/quote-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,9 +21,10 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
-import { useCloseWarning } from "@/src/lib/utilities/hooks";
-import Checkbox from "@/src/lib/components/checkbox/Checkbox";
-import PageView from "@/src/lib/components/page-view/PageView";
+
+type CompleteTranslation = {
+	[P in keyof Translation]: NonNullable<Translation[P]>;
+};
 
 const NewQuote = function ({ model }) {
 	const { modelView, interact } = model;
@@ -54,69 +58,62 @@ const NewQuote = function ({ model }) {
 		newReadonlyModel({ name: t("russian") }),
 	]);
 	const quotePreviewModal = useQuotePreviewModal();
-	const englishAuthorAutoCompleteBox = useAutoCompleteBox({
-		id: "english-author",
-		isOpen: false,
-		items:
-			autoCompleteInfo?.existingAuthors.map(author => author.english) ??
-			[],
-		query: "",
-		selectCallback(value, index) {
-			setValue("authorEn", value);
-			setValue(
-				// TODO: Refactor
-				"authorRu",
-				autoCompleteInfo!.existingAuthors[index].russian ?? "",
-			);
+	const englishAuthorAutoCompleteBox = useAutoCompleteBox(
+		{
+			id: "english-author",
+			isOpen: false,
+			items: autoCompleteInfo?.existingAuthors ?? [],
+			query: "",
+			transformer: item => item.english,
 		},
-	});
-	const russianAuthorAutoCompleteBox = useAutoCompleteBox({
-		id: "russian-author",
-		isOpen: false,
-		items:
-			autoCompleteInfo?.existingAuthors
-				.map(author => author.russian)
-				.filter(russianName => russianName !== null) ?? [],
-		query: "",
-		selectCallback(value, index) {
-			setValue("authorRu", value);
-			setValue(
-				"authorEn",
-				autoCompleteInfo!.existingAuthors[index].english,
-			);
+		item => {
+			setValue("authorEn", item.english);
+			setValue("authorRu", item.russian ?? "");
 		},
-	});
-	const englishSourceAutoCompleteBox = useAutoCompleteBox({
-		id: "english-source",
-		isOpen: false,
-		items:
-			autoCompleteInfo?.existingSources.map(source => source.english) ??
-			[],
-		query: "",
-		selectCallback(value, index) {
-			setValue("sourceEn", value);
-			setValue(
-				"sourceRu",
-				autoCompleteInfo!.existingSources[index].russian ?? "",
-			);
+	);
+	const russianAuthorAutoCompleteBox = useAutoCompleteBox(
+		{
+			id: "russian-author",
+			isOpen: false,
+			items: (autoCompleteInfo?.existingAuthors.filter(
+				author => author.russian !== null,
+			) ?? []) as CompleteTranslation[],
+			query: "",
+			transformer: item => item.russian,
 		},
-	});
-	const russianSourceAutoCompleteBox = useAutoCompleteBox({
-		id: "russian-source",
-		isOpen: false,
-		items:
-			autoCompleteInfo?.existingSources
-				.map(source => source.russian)
-				.filter(russianName => russianName !== null) ?? [],
-		query: "",
-		selectCallback(value, index) {
-			setValue("sourceRu", value);
-			setValue(
-				"sourceEn",
-				autoCompleteInfo!.existingSources[index].english,
-			);
+		item => {
+			setValue("authorRu", item.russian);
+			setValue("authorEn", item.english);
 		},
-	});
+	);
+	const englishSourceAutoCompleteBox = useAutoCompleteBox(
+		{
+			id: "english-source",
+			isOpen: false,
+			items: autoCompleteInfo?.existingSources ?? [],
+			query: "",
+			transformer: item => item.english,
+		},
+		item => {
+			setValue("sourceEn", item.english);
+			setValue("sourceRu", item.russian ?? "");
+		},
+	);
+	const russianSourceAutoCompleteBox = useAutoCompleteBox(
+		{
+			id: "russian-source",
+			isOpen: false,
+			items: (autoCompleteInfo?.existingSources.filter(
+				russianName => russianName !== null,
+			) ?? []) as CompleteTranslation[],
+			query: "",
+			transformer: item => item.russian,
+		},
+		item => {
+			setValue("sourceRu", item.russian);
+			setValue("sourceEn", item.english);
+		},
+	);
 	const hasFormChanged = () =>
 		!(
 			defaultValues.authorEn === watch("authorEn") &&

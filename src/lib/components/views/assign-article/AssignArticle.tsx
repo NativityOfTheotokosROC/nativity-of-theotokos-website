@@ -1,16 +1,15 @@
+import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complete-box";
 import { AssignArticleModel } from "@/src/lib/models/assign-article";
+import { useAssignArticleFormSchema } from "@/src/lib/validation/assign-article-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import PageView from "../../page-view/PageView";
-import { Controller, useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useAssignArticleFormSchema } from "@/src/lib/validation/assign-article-form";
-import Button from "../../button/Button";
-import Spinner from "../../spinner/Spinner";
-import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complete-box";
+import { Controller, useForm } from "react-hook-form";
 import AutoCompleteBox from "../../auto-complete-box/AutoCompleteBox";
-import { useEffect } from "react";
+import Button from "../../button/Button";
+import PageView from "../../page-view/PageView";
+import Spinner from "../../spinner/Spinner";
 
 const AssignArticle = function ({ model }) {
 	const { modelView, interact } = model;
@@ -26,28 +25,33 @@ const AssignArticle = function ({ model }) {
 		defaultValues: { name: "", email: "" },
 		resolver: zodResolver(useAssignArticleFormSchema()),
 	});
-	// TODO: It's been a run; we start from here next time
-	const authorNamesAutoCompleteBox = useAutoCompleteBox({
-		id: "author-name",
-		isOpen: false,
-		items: suggestions?.map(author => author.name) ?? [],
-		query: "",
-		selectCallback(value, index) {
-			// Don't know why setValues is not working here
-			setValue("name", value);
-			setValue("email", suggestions![index].email);
+	const autoCompleteSelectCallback = (
+		author: NonNullable<typeof suggestions>[number],
+	) => {
+		// Don't know why setValues is not working here
+		setValue("name", author.name);
+		setValue("email", author.email);
+	};
+	const authorNamesAutoCompleteBox = useAutoCompleteBox(
+		{
+			id: "author-name",
+			isOpen: false,
+			items: suggestions ?? [],
+			query: "",
+			transformer: author => author.name,
 		},
-	});
-	const authorEmailsAutoCompleteBox = useAutoCompleteBox({
-		id: "author-email",
-		isOpen: false,
-		items: suggestions?.map(author => author.email) ?? [],
-		query: "",
-		selectCallback(value, index) {
-			setValue("email", value);
-			setValue("name", suggestions![index].name);
+		autoCompleteSelectCallback,
+	);
+	const authorEmailsAutoCompleteBox = useAutoCompleteBox(
+		{
+			id: "author-email",
+			isOpen: false,
+			items: suggestions ?? [],
+			query: "",
+			transformer: author => author.email,
 		},
-	});
+		autoCompleteSelectCallback,
+	);
 
 	return (
 		<>
