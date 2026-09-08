@@ -104,7 +104,7 @@ const NewQuote = function ({ model }) {
 			id: "russian-source",
 			isOpen: false,
 			items: (autoCompleteInfo?.existingSources.filter(
-				russianName => russianName !== null,
+				source => source.russian !== null,
 			) ?? []) as CompleteTranslation[],
 			query: "",
 			transformer: item => item.russian,
