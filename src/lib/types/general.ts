@@ -47,10 +47,12 @@ export type ScheduleItem = {
 
 export type RecurringScheduleItem = Omit<ScheduleItem, "date"> & {
 	recurringPattern: string;
+	isDisabled: boolean;
 };
 
 export type InstantaneousScheduleItem = ScheduleItem & {
 	id: number;
+	isRemoved: boolean;
 };
 
 export type RecurringScheduleItemInstance = ScheduleItem & {

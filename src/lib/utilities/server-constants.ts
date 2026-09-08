@@ -45,4 +45,3 @@ export const AWS_SECRET_ACCESS_KEY = z
 	.nonempty()
 	.parse(process.env.AWS_SECRET_ACCESS_KEY);
 export const S3_BUCKET = z.string().nonempty().parse(process.env.S3_BUCKET);
-export const PREPRODUCTION_PROTECTION = process.env.PREPRODUCTION_PROTECTION;

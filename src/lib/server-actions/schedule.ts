@@ -117,6 +117,7 @@ export async function getSchedule(
 								: designation.english,
 					}),
 				),
+				isRemoved: false,
 			}),
 		);
 	const recurringScheduleItemInstanceExclusions = new Set([
