@@ -1,7 +1,6 @@
 import { routing } from "@/src/i18n/routing";
 import { ImagePlaceholder } from "@grod56/placeholder";
-import { useTranslations } from "next-intl";
-import { Translation } from "./general";
+import { getTranslations } from "next-intl/server";
 
 export type Navlink = {
 	text: string;
@@ -121,7 +120,7 @@ export type User = {
 	email: string;
 };
 
-export type Translator = ReturnType<typeof useTranslations<never>>;
+export type Translator = Awaited<ReturnType<typeof getTranslations<never>>>;
 
 export type Role = "admin" | "staff" | "user" | "quotes" | "writer" | "editor";
 
