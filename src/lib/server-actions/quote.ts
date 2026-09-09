@@ -3,11 +3,10 @@
 import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
 import { revalidateTag } from "next/cache";
-import { NewQuote } from "../models/new-quote";
 import database from "../third-party/prisma";
 import { getLocalTimeZone } from "../utilities/date-time";
 import { getMd5Hash } from "../utilities/miscellaneous";
-import { getQuoteSchema } from "../validation/quote";
+import { getQuoteSchema, NewQuote } from "../validation/quote";
 import { protect } from "./auth";
 import { Translation } from "../types/general";
 import { AutoCompleteInfo } from "../utilities/quote-form";
@@ -53,20 +52,10 @@ export async function getAutoCompleteInfo() {
 
 export async function addNewQuote(newQuote: NewQuote) {
 	await protect({ roles: ["quotes"] });
-	const { englishQuote, russianQuote, scheduledDate } = newQuote;
-	const { author, quote, source } = englishQuote;
 	const t = await getTranslations();
 	const quoteSchema = getQuoteSchema(t);
-	const { authorEn, quoteEn, sourceEn, authorRu, quoteRu, sourceRu } =
-		quoteSchema.parse({
-			authorEn: author,
-			quoteEn: quote,
-			sourceEn: source,
-			authorRu: russianQuote?.author,
-			quoteRu: russianQuote?.quote,
-			sourceRu: russianQuote?.source,
-			scheduledDate,
-		});
+	const { author, quote, source, scheduledDate } =
+		quoteSchema.parse(newQuote);
 	const scheduledLocalDate = scheduledDate
 		? toZonedTime(scheduledDate, getLocalTimeZone())
 		: undefined;
@@ -76,30 +65,30 @@ export async function addNewQuote(newQuote: NewQuote) {
 			transaction.translation.upsert({
 				select: { id: true },
 				create: {
-					english: authorEn,
-					russian: authorRu,
-					englishHash: getMd5Hash(authorEn),
+					english: author.english,
+					russian: author.russian,
+					englishHash: getMd5Hash(author.english),
 				},
 				update: {
-					russian: authorRu,
+					russian: author.russian,
 				},
 				where: {
-					englishHash: getMd5Hash(authorEn),
+					englishHash: getMd5Hash(author.english),
 				},
 			}),
-			sourceEn
+			source.english
 				? transaction.translation.upsert({
 						select: { id: true },
 						create: {
-							english: sourceEn,
-							russian: sourceRu,
-							englishHash: getMd5Hash(sourceEn),
+							english: source.english,
+							russian: source.russian,
+							englishHash: getMd5Hash(source.english),
 						},
 						update: {
-							russian: sourceRu,
+							russian: source.russian,
 						},
 						where: {
-							englishHash: getMd5Hash(sourceEn),
+							englishHash: getMd5Hash(source.english),
 						},
 					})
 				: undefined,
@@ -130,9 +119,9 @@ export async function addNewQuote(newQuote: NewQuote) {
 					: undefined,
 				quote: {
 					create: {
-						english: quoteEn,
-						russian: quoteRu,
-						englishHash: getMd5Hash(quoteEn),
+						english: quote.english,
+						russian: quote.russian,
+						englishHash: getMd5Hash(quote.english),
 					},
 				},
 				dailyQuotes: scheduledLocalDate && {

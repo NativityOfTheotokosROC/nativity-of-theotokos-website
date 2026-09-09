@@ -2,8 +2,8 @@ import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 
 export type AutoCompleteBoxModelView<I> = {
 	id: string;
-	isOpen: boolean;
-	query: string;
+	isOpen?: boolean;
+	query?: string;
 	items: I[];
 	transformer: (item: I) => string;
 };

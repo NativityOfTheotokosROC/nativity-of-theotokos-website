@@ -12,14 +12,16 @@ export default function AutoCompleteBox<I>({
 	const { modelView, interact } = model;
 	// TODO: Modify so transition out of vis maintains previous list of items for better UX
 	const { id, items, query, isOpen, transformer } = modelView;
-	const queryParts = query.split(/\s+/).map(part => part.toLowerCase());
+	const queryParts =
+		query?.split(/\s+/).map(part => part.toLowerCase()) ?? [];
 	const filteredItemsDictionary = items
 		.map((item, arrayIndex) => ({ item, arrayIndex }))
 		.filter(({ item }) => {
 			const lowercasedItem = transformer(item).toLowerCase();
 			return queryParts.every(part => lowercasedItem.includes(part));
 		});
-	const computedOpen = isOpen && filteredItemsDictionary.length > 0;
+	const computedOpen =
+		(isOpen && filteredItemsDictionary.length > 0) ?? false;
 	const [isClickable, setClickable] = useState(computedOpen); //TODO: Not ideal
 
 	return (

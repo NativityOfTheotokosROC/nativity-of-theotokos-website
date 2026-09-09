@@ -35,9 +35,7 @@ const AssignArticle = function ({ model }) {
 	const authorNamesAutoCompleteBox = useAutoCompleteBox(
 		{
 			id: "author-name",
-			isOpen: false,
 			items: suggestions ?? [],
-			query: "",
 			transformer: author => author.name,
 		},
 		autoCompleteSelectCallback,
@@ -45,9 +43,7 @@ const AssignArticle = function ({ model }) {
 	const authorEmailsAutoCompleteBox = useAutoCompleteBox(
 		{
 			id: "author-email",
-			isOpen: false,
 			items: suggestions ?? [],
-			query: "",
 			transformer: author => author.email,
 		},
 		autoCompleteSelectCallback,

@@ -11,7 +11,7 @@ import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complet
 import { useQuotePreviewModal } from "@/src/lib/model-implementations/quote-preview-model";
 import { useTabs } from "@/src/lib/model-implementations/tabs";
 import { NewQuoteModel } from "@/src/lib/models/new-quote";
-import { Translation } from "@/src/lib/types/general";
+import { CompleteTranslation } from "@/src/lib/types/general";
 import { getDateString } from "@/src/lib/utilities/date-time";
 import { useCloseWarning } from "@/src/lib/utilities/hooks";
 import { getDefaultValues } from "@/src/lib/utilities/quote-form";
@@ -21,10 +21,6 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
-
-type CompleteTranslation = {
-	[P in keyof Translation]: NonNullable<Translation[P]>;
-};
 
 const NewQuote = function ({ model }) {
 	const { modelView, interact } = model;
@@ -46,10 +42,7 @@ const NewQuote = function ({ model }) {
 		mode: "onChange",
 		resolver: zodResolver(quoteFormSchema),
 		shouldUnregister: true,
-		defaultValues: {
-			...defaultValues,
-			scheduledDate: getDateString(defaultValues.scheduledDate, true),
-		},
+		defaultValues,
 	});
 	const isQuoteScheduled = watch("isQuoteScheduled");
 
@@ -61,42 +54,33 @@ const NewQuote = function ({ model }) {
 	const englishAuthorAutoCompleteBox = useAutoCompleteBox(
 		{
 			id: "english-author",
-			isOpen: false,
 			items: autoCompleteInfo?.existingAuthors ?? [],
-			query: "",
 			transformer: author => author.english,
 		},
 		author => {
-			setValue("authorEn", author.english);
-			setValue("authorRu", author.russian ?? "");
+			setValue("author", author);
 		},
 	);
 	const russianAuthorAutoCompleteBox = useAutoCompleteBox(
 		{
 			id: "russian-author",
-			isOpen: false,
 			items: (autoCompleteInfo?.existingAuthors.filter(
 				author => author.russian !== null,
 			) ?? []) as CompleteTranslation[],
-			query: "",
 			transformer: author => author.russian,
 		},
 		author => {
-			setValue("authorRu", author.russian);
-			setValue("authorEn", author.english);
+			setValue("author", author);
 		},
 	);
 	const englishSourceAutoCompleteBox = useAutoCompleteBox(
 		{
 			id: "english-source",
-			isOpen: false,
 			items: autoCompleteInfo?.existingSources ?? [],
-			query: "",
 			transformer: source => source.english,
 		},
 		source => {
-			setValue("sourceEn", source.english);
-			setValue("sourceRu", source.russian ?? "");
+			setValue("source", source);
 		},
 	);
 	const russianSourceAutoCompleteBox = useAutoCompleteBox(
@@ -110,18 +94,17 @@ const NewQuote = function ({ model }) {
 			transformer: source => source.russian,
 		},
 		source => {
-			setValue("sourceRu", source.russian);
-			setValue("sourceEn", source.english);
+			setValue("source", source);
 		},
 	);
 	const hasFormChanged = () =>
 		!(
-			defaultValues.authorEn === watch("authorEn") &&
-			defaultValues.authorRu === watch("authorRu") &&
-			defaultValues.sourceEn === watch("sourceEn") &&
-			defaultValues.sourceRu === watch("sourceRu") &&
-			defaultValues.quoteEn === watch("quoteEn") &&
-			defaultValues.quoteRu === watch("quoteRu")
+			defaultValues.author.english === getValues("author.english") &&
+			defaultValues.author.russian === getValues("author.russian") &&
+			defaultValues.source.english === getValues("source.english") &&
+			defaultValues.source.russian === getValues("source.russian") &&
+			defaultValues.quote.english === getValues("quote.english") &&
+			defaultValues.quote.russian === getValues("quote.russian")
 		);
 
 	useCloseWarning(hasFormChanged);
@@ -146,36 +129,10 @@ const NewQuote = function ({ model }) {
 				<form
 					onSubmit={handleSubmit(
 						async form => {
-							const {
-								authorEn,
-								quoteEn,
-								sourceEn,
-								authorRu,
-								quoteRu,
-								sourceRu,
-								scheduledDate,
-							} = form;
 							await interact({
 								type: "ADD_QUOTE",
 								input: {
-									newQuote: {
-										englishQuote: {
-											author: authorEn,
-											quote: quoteEn,
-											source: sourceEn,
-										},
-										russianQuote: {
-											author: authorRu,
-											quote: quoteRu,
-											source: sourceRu,
-										},
-										scheduledDate:
-											scheduledDate === undefined //TODO: Revisit
-												? undefined
-												: (getValues(
-														"scheduledDate",
-													) as string),
-									},
+									newQuote: form,
 									options: {
 										successCallback: async () => {
 											reset();
@@ -190,18 +147,18 @@ const NewQuote = function ({ model }) {
 						},
 						async errors => {
 							if (
-								errors.authorEn ||
-								errors.sourceEn ||
-								errors.quoteEn
+								errors.author?.english ||
+								errors.source?.english ||
+								errors.quote?.english
 							)
 								return await tabs.interact({
 									type: "SWITCH_TAB",
 									input: { id: 0 },
 								});
 							if (
-								errors.authorRu ||
-								errors.sourceRu ||
-								errors.quoteRu
+								errors.author?.russian ||
+								errors.source?.russian ||
+								errors.quote?.russian
 							)
 								return await tabs.interact({
 									type: "SWITCH_TAB",
@@ -215,7 +172,7 @@ const NewQuote = function ({ model }) {
 							<div className="flex flex-col gap-3">
 								<Controller
 									control={control}
-									name={"authorEn"}
+									name={"author.english"}
 									render={({
 										field: {
 											name,
@@ -225,7 +182,7 @@ const NewQuote = function ({ model }) {
 										},
 									}) => (
 										<input
-											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorEn ? "border-red-800" : "border-gray-400"}`}
+											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.author?.english ? "border-red-800" : "border-gray-400"}`}
 											placeholder={t("author")}
 											name={name}
 											value={value}
@@ -273,14 +230,14 @@ const NewQuote = function ({ model }) {
 										/>
 									)}
 								/>
-								{errors.authorEn && (
+								{errors.author?.english && (
 									<span className="text-sm text-red-800">
-										{errors.authorEn.message}
+										{errors.author.english.message}
 									</span>
 								)}
 								<Controller
 									control={control}
-									name={"sourceEn"}
+									name={"source.english"}
 									render={({
 										field: {
 											name,
@@ -290,7 +247,7 @@ const NewQuote = function ({ model }) {
 										},
 									}) => (
 										<input
-											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceEn ? "border-red-800" : "border-gray-400"}`}
+											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.source?.english ? "border-red-800" : "border-gray-400"}`}
 											placeholder={`${t("source")} (${t("optional")})`}
 											autoComplete="off"
 											name={name}
@@ -341,28 +298,28 @@ const NewQuote = function ({ model }) {
 										/>
 									)}
 								/>
-								{errors.sourceEn && (
+								{errors.source?.english && (
 									<span className="text-sm text-red-800">
-										{errors.sourceEn.message}
+										{errors.source.english.message}
 									</span>
 								)}
 								<textarea
-									className={`w-full resize-none rounded-lg border bg-white p-4 ${errors.quoteEn ? "border-red-800" : "border-gray-400"}`}
+									className={`w-full resize-none rounded-lg border bg-white p-4 ${errors.quote?.english ? "border-red-800" : "border-gray-400"}`}
 									placeholder={t("quote")}
 									rows={5}
 									autoComplete="off"
-									{...register("quoteEn")}
+									{...register("quote.english")}
 								/>
-								{errors.quoteEn && (
+								{errors.quote?.english && (
 									<span className="text-sm text-red-800">
-										{errors.quoteEn.message}
+										{errors.quote.english.message}
 									</span>
 								)}
 							</div>
 							<div className="flex flex-col gap-3">
 								<Controller
 									control={control}
-									name={"authorRu"}
+									name={"author.russian"}
 									render={({
 										field: {
 											name,
@@ -372,7 +329,7 @@ const NewQuote = function ({ model }) {
 										},
 									}) => (
 										<input
-											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorRu ? "border-red-800" : "border-gray-400"}`}
+											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.author?.russian ? "border-red-800" : "border-gray-400"}`}
 											placeholder={`${t("author")} (${t("optional")})`}
 											name={name}
 											value={
@@ -423,14 +380,14 @@ const NewQuote = function ({ model }) {
 										/>
 									)}
 								/>
-								{errors.authorRu && (
+								{errors.author?.russian && (
 									<span className="text-sm text-red-800">
-										{errors.authorRu.message}
+										{errors.author.russian.message}
 									</span>
 								)}
 								<Controller
 									control={control}
-									name={"sourceRu"}
+									name={"source.russian"}
 									render={({
 										field: {
 											name,
@@ -440,7 +397,7 @@ const NewQuote = function ({ model }) {
 										},
 									}) => (
 										<input
-											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.sourceRu ? "border-red-800" : "border-gray-400"}`}
+											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.source?.russian ? "border-red-800" : "border-gray-400"}`}
 											placeholder={`${t("source")} (${t("optional")})`}
 											name={name}
 											value={
@@ -490,22 +447,21 @@ const NewQuote = function ({ model }) {
 										/>
 									)}
 								/>
-								{errors.sourceRu && (
+								{errors.source?.russian && (
 									<span className="text-sm text-red-800">
-										{errors.sourceRu.message}
+										{errors.source.russian.message}
 									</span>
 								)}
 								<textarea
-									className={`w-full resize-none rounded-lg border bg-white p-4 ${errors.quoteRu ? "border-red-800" : "border-gray-400"}`}
+									className={`w-full resize-none rounded-lg border bg-white p-4 ${errors.quote?.russian ? "border-red-800" : "border-gray-400"}`}
 									placeholder={`${t("quote")} (${t("optional")})`}
 									rows={5}
-									id="quote-ru"
 									autoComplete="off"
-									{...register("quoteRu")}
+									{...register("quote.russian")}
 								/>
-								{errors.quoteRu && (
+								{errors.quote?.russian && (
 									<span className="text-sm text-red-800">
-										{errors.quoteRu.message}
+										{errors.quote.russian.message}
 									</span>
 								)}
 							</div>
@@ -529,7 +485,6 @@ const NewQuote = function ({ model }) {
 									<input
 										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.scheduledDate ? "border-red-800" : "border-gray-400"}`}
 										type="date"
-										id="scheduled-date"
 										formNoValidate
 										min={currentDate}
 										{...register("scheduledDate")}
@@ -555,26 +510,19 @@ const NewQuote = function ({ model }) {
 									disabled: !isValid,
 									className: "w-fit max-w-1/2 min-w-[8em]",
 									action: handleSubmit(async form => {
-										const {
-											authorEn,
-											quoteEn,
-											sourceEn,
-											authorRu,
-											quoteRu,
-											sourceRu,
-										} = form;
+										const { author, quote, source } = form;
 										await quotePreviewModal.interact({
 											type: "OPEN",
 											input: {
 												englishQuote: {
-													author: authorEn,
-													quote: quoteEn,
-													source: sourceEn,
+													author: author.english,
+													quote: quote.english,
+													source: source.english,
 												},
 												russianQuote: {
-													author: authorRu,
-													quote: quoteRu,
-													source: sourceRu,
+													author: author.russian,
+													quote: quote.russian,
+													source: source.russian,
 												},
 											},
 										});

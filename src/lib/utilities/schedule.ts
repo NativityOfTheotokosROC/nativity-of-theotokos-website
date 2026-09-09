@@ -12,7 +12,11 @@ export function validateRecurringPattern(
 				? { timezone: getLocalTimeZone() }
 				: undefined,
 		);
-		if (!cron.getPattern()?.startsWith("0 0 0")) return null;
+		if (
+			!cron.getPattern()?.startsWith("0 0 0") ||
+			cron.getPattern()?.endsWith("* * *")
+		)
+			return null;
 		return cron;
 	} catch {
 		return null;
