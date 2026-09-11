@@ -36,7 +36,6 @@ const NewQuote = function ({ model }) {
 		handleSubmit,
 		getValues,
 		setValue,
-		watch,
 		reset,
 		formState: { isSubmitting, errors, isValid },
 	} = useForm({
@@ -45,7 +44,6 @@ const NewQuote = function ({ model }) {
 		shouldUnregister: true,
 		defaultValues,
 	});
-	const isQuoteScheduled = watch("isQuoteScheduled");
 
 	const tabs = useTabs([
 		newReadonlyModel({ name: t("english") }),
@@ -124,20 +122,20 @@ const NewQuote = function ({ model }) {
 	return (
 		<>
 			<QuotePreviewModal model={quotePreviewModal} />
-			{autoCompleteInfo && (
-				<>
-					<AutoCompleteBox model={englishAuthorAutoCompleteBox} />
-					<AutoCompleteBox model={russianAuthorAutoCompleteBox} />
-					<AutoCompleteBox model={englishSourceAutoCompleteBox} />
-					<AutoCompleteBox model={russianSourceAutoCompleteBox} />
-				</>
-			)}
 			<PageView
 				model={newReadonlyModel({
 					title: t("title"),
 					topBarColor: "#976029",
 				})}
 			>
+				{autoCompleteInfo && (
+					<>
+						<AutoCompleteBox model={englishAuthorAutoCompleteBox} />
+						<AutoCompleteBox model={russianAuthorAutoCompleteBox} />
+						<AutoCompleteBox model={englishSourceAutoCompleteBox} />
+						<AutoCompleteBox model={russianSourceAutoCompleteBox} />
+					</>
+				)}
 				<form
 					onSubmit={handleSubmit(
 						async form => {
@@ -389,31 +387,38 @@ const NewQuote = function ({ model }) {
 								control={control}
 								name={"isQuoteScheduled"}
 								render={({ field: { onChange, value } }) => (
-									<Checkbox
-										model={newReadonlyModel({
-											isChecked: value,
-											label: t("schedulerCheckLabel"),
-											checkedChangeCallback: onChange,
-										})}
-									/>
+									<>
+										<Checkbox
+											model={newReadonlyModel({
+												isChecked: value,
+												label: t("schedulerCheckLabel"),
+												checkedChangeCallback: onChange,
+											})}
+										/>
+										{value && (
+											<>
+												<input
+													className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.scheduledDate ? "border-red-800" : "border-gray-400"}`}
+													type="date"
+													formNoValidate
+													min={currentDate}
+													{...register(
+														"scheduledDate",
+													)}
+												/>
+												{errors.scheduledDate && (
+													<span className="text-sm text-red-800">
+														{
+															errors.scheduledDate
+																.message
+														}
+													</span>
+												)}
+											</>
+										)}
+									</>
 								)}
 							/>
-							{isQuoteScheduled && (
-								<>
-									<input
-										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.scheduledDate ? "border-red-800" : "border-gray-400"}`}
-										type="date"
-										formNoValidate
-										min={currentDate}
-										{...register("scheduledDate")}
-									/>
-									{errors.scheduledDate && (
-										<span className="text-sm text-red-800">
-											{errors.scheduledDate.message}
-										</span>
-									)}
-								</>
-							)}
 						</div>
 						{errors.form && (
 							<span className="text-sm text-red-800">
