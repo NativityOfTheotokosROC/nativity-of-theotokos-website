@@ -8,12 +8,12 @@ export type AutoCompleteBoxModelView<I> = {
 	transformer: (item: I) => string;
 };
 
-export type AutoCompleteBoxModelInteraction<I> =
+export type AutoCompleteBoxModelInteraction =
 	| InputModelInteraction<"FILTER", { query: string }>
 	| InputModelInteraction<"TOGGLE", { value: boolean }>
 	| InputModelInteraction<"SELECT", { index: number }>;
 
-export type AutoCompleteBoxModel<I = unknown> = InteractiveModel<
+export type AutoCompleteBoxModel<I> = InteractiveModel<
 	AutoCompleteBoxModelView<I>,
-	AutoCompleteBoxModelInteraction<I>
+	AutoCompleteBoxModelInteraction
 >;

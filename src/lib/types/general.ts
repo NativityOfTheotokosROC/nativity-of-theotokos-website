@@ -139,3 +139,9 @@ export type Translation = {
 export type CompleteTranslation = {
 	[P in keyof Translation]: NonNullable<Translation[P]>;
 };
+
+export type Options<T extends Record<string, unknown>> =
+	| {
+			options?: Partial<T>;
+	  }
+	| undefined;

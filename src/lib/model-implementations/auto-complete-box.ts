@@ -55,7 +55,7 @@ export function autoCompleteBoxVIInterface<I>(
 		},
 	} satisfies ViewInteractionInterface<
 		AutoCompleteBoxModelView<I>,
-		AutoCompleteBoxModelInteraction<I>
+		AutoCompleteBoxModelInteraction
 	>;
 }
 

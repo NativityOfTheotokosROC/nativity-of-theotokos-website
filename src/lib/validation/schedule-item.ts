@@ -11,7 +11,7 @@ export type NewRecurringScheduleItem = z.infer<
 	ReturnType<typeof getRecurringScheduleItemSchema>
 >;
 
-function getSharedSchema(t?: Translator) {
+export function getScheduleItemSchema(t?: Translator) {
 	return z.object({
 		title: getTranslationSchema(
 			t && { t, fieldName: t("scheduleItem.titleField") },
@@ -53,7 +53,7 @@ function getSharedSchema(t?: Translator) {
 }
 
 export function getInstantaneousScheduleItemSchema(t?: Translator) {
-	return getSharedSchema(t).extend({
+	return getScheduleItemSchema(t).extend({
 		date: z.iso.date({
 			error:
 				t &&
@@ -65,7 +65,7 @@ export function getInstantaneousScheduleItemSchema(t?: Translator) {
 }
 
 export function getRecurringScheduleItemSchema(t?: Translator) {
-	return getSharedSchema(t).extend({
+	return getScheduleItemSchema(t).extend({
 		recurringPattern: z
 			.string()
 			.nonempty({

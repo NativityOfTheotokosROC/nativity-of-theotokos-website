@@ -7,7 +7,7 @@ import {
 	getRecurringScheduleItemSchema,
 	NewInstantaneousScheduleItem,
 	NewRecurringScheduleItem,
-} from "../validation/schedule";
+} from "../validation/schedule-item";
 import {
 	InstantaneousScheduleItem,
 	Language,

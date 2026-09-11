@@ -12,6 +12,7 @@ import { useQuotePreviewModal } from "@/src/lib/model-implementations/quote-prev
 import { useTabs } from "@/src/lib/model-implementations/tabs";
 import { NewQuoteModel } from "@/src/lib/models/new-quote";
 import { CompleteTranslation } from "@/src/lib/types/general";
+import { autoCompleteFields } from "@/src/lib/utilities/auto-complete-box";
 import { getDateString } from "@/src/lib/utilities/date-time";
 import { useCloseWarning } from "@/src/lib/utilities/hooks";
 import { getDefaultValues } from "@/src/lib/utilities/quote-form";
@@ -86,17 +87,28 @@ const NewQuote = function ({ model }) {
 	const russianSourceAutoCompleteBox = useAutoCompleteBox(
 		{
 			id: "russian-source",
-			isOpen: false,
 			items: (autoCompleteInfo?.existingSources.filter(
 				source => source.russian !== null,
 			) ?? []) as CompleteTranslation[],
-			query: "",
 			transformer: source => source.russian,
 		},
 		source => {
 			setValue("source", source);
 		},
 	);
+	const englishAuthorFields = autoCompleteFields(
+		englishAuthorAutoCompleteBox,
+	);
+	const russianAuthorFields = autoCompleteFields(
+		russianAuthorAutoCompleteBox,
+	);
+	const englishSourceFields = autoCompleteFields(
+		englishSourceAutoCompleteBox,
+	);
+	const russianSourceFields = autoCompleteFields(
+		russianSourceAutoCompleteBox,
+	);
+
 	const hasFormChanged = () =>
 		!(
 			defaultValues.author.english === getValues("author.english") &&
@@ -151,7 +163,7 @@ const NewQuote = function ({ model }) {
 								errors.source?.english ||
 								errors.quote?.english
 							)
-								return await tabs.interact({
+								await tabs.interact({
 									type: "SWITCH_TAB",
 									input: { id: 0 },
 								});
@@ -160,7 +172,7 @@ const NewQuote = function ({ model }) {
 								errors.source?.russian ||
 								errors.quote?.russian
 							)
-								return await tabs.interact({
+								await tabs.interact({
 									type: "SWITCH_TAB",
 									input: { id: 1 },
 								});
@@ -186,46 +198,22 @@ const NewQuote = function ({ model }) {
 											placeholder={t("author")}
 											name={name}
 											value={value}
-											formNoValidate
 											autoCapitalize="words"
-											autoComplete="off"
+											autoComplete={
+												englishAuthorFields.autoComplete
+											}
 											data-tooltip-id={
-												englishAuthorAutoCompleteBox
-													.modelView.id
+												englishAuthorFields.dataTooltipId
 											}
 											onChange={async e => {
 												onChange(e);
-												await englishAuthorAutoCompleteBox.interact(
-													{
-														type: "TOGGLE",
-														input: {
-															value: !(
-																e.target.value.trim() ===
-																""
-															),
-														},
-													},
-												);
-												await englishAuthorAutoCompleteBox.interact(
-													{
-														type: "FILTER",
-														input: {
-															query: e.target
-																.value,
-														},
-													},
+												englishAuthorFields.onChange(
+													e.target.value,
 												);
 											}}
 											onBlur={() => {
 												onBlur();
-												englishAuthorAutoCompleteBox.interact(
-													{
-														type: "TOGGLE",
-														input: {
-															value: false,
-														},
-													},
-												);
+												englishAuthorFields.onBlur();
 											}}
 										/>
 									)}
@@ -249,51 +237,27 @@ const NewQuote = function ({ model }) {
 										<input
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.source?.english ? "border-red-800" : "border-gray-400"}`}
 											placeholder={`${t("source")} (${t("optional")})`}
-											autoComplete="off"
 											name={name}
 											value={
 												typeof value === "string"
 													? value
 													: ""
 											}
-											formNoValidate
+											autoComplete={
+												englishSourceFields.autoComplete
+											}
 											data-tooltip-id={
-												englishSourceAutoCompleteBox
-													.modelView.id
+												englishSourceFields.dataTooltipId
 											}
 											onChange={async e => {
 												onChange(e);
-												await englishSourceAutoCompleteBox.interact(
-													{
-														type: "TOGGLE",
-														input: {
-															value: !(
-																e.target.value.trim() ===
-																""
-															),
-														},
-													},
-												);
-												await englishSourceAutoCompleteBox.interact(
-													{
-														type: "FILTER",
-														input: {
-															query: e.target
-																.value,
-														},
-													},
+												englishSourceFields.onChange(
+													e.target.value,
 												);
 											}}
 											onBlur={() => {
 												onBlur();
-												englishSourceAutoCompleteBox.interact(
-													{
-														type: "TOGGLE",
-														input: {
-															value: false,
-														},
-													},
-												);
+												englishSourceFields.onBlur();
 											}}
 										/>
 									)}
@@ -338,44 +302,21 @@ const NewQuote = function ({ model }) {
 													: ""
 											}
 											autoCapitalize="words"
-											autoComplete="off"
+											autoComplete={
+												russianAuthorFields.autoComplete
+											}
 											data-tooltip-id={
-												russianAuthorAutoCompleteBox
-													.modelView.id
+												russianAuthorFields.dataTooltipId
 											}
 											onChange={async e => {
 												onChange(e);
-												await russianAuthorAutoCompleteBox.interact(
-													{
-														type: "TOGGLE",
-														input: {
-															value: !(
-																e.target.value.trim() ===
-																""
-															),
-														},
-													},
-												);
-												await russianAuthorAutoCompleteBox.interact(
-													{
-														type: "FILTER",
-														input: {
-															query: e.target
-																.value,
-														},
-													},
+												russianAuthorFields.onChange(
+													e.target.value,
 												);
 											}}
 											onBlur={() => {
 												onBlur();
-												russianAuthorAutoCompleteBox.interact(
-													{
-														type: "TOGGLE",
-														input: {
-															value: false,
-														},
-													},
-												);
+												russianAuthorFields.onBlur();
 											}}
 										/>
 									)}
@@ -405,44 +346,21 @@ const NewQuote = function ({ model }) {
 													? value
 													: ""
 											}
-											autoComplete="off"
+											autoComplete={
+												russianSourceFields.autoComplete
+											}
 											data-tooltip-id={
-												russianSourceAutoCompleteBox
-													.modelView.id
+												russianSourceFields.dataTooltipId
 											}
 											onChange={async e => {
 												onChange(e);
-												await russianSourceAutoCompleteBox.interact(
-													{
-														type: "TOGGLE",
-														input: {
-															value: !(
-																e.target.value.trim() ===
-																""
-															),
-														},
-													},
-												);
-												await russianSourceAutoCompleteBox.interact(
-													{
-														type: "FILTER",
-														input: {
-															query: e.target
-																.value,
-														},
-													},
+												russianSourceFields.onChange(
+													e.target.value,
 												);
 											}}
 											onBlur={() => {
 												onBlur();
-												russianSourceAutoCompleteBox.interact(
-													{
-														type: "TOGGLE",
-														input: {
-															value: false,
-														},
-													},
-												);
+												russianSourceFields.onBlur();
 											}}
 										/>
 									)}

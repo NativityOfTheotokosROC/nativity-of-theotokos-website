@@ -7,7 +7,7 @@ import {
 import {
 	NewInstantaneousScheduleItem,
 	NewRecurringScheduleItem,
-} from "../validation/schedule";
+} from "../validation/schedule-item";
 
 type BaseScheduleEvent<
 	T extends string,
