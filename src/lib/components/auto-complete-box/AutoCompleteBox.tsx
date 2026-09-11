@@ -1,5 +1,5 @@
 import { InitializedModel } from "@mvc-react/mvc";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import { AutoCompleteBoxModel } from "../../models/auto-complete-box";
 import "./auto-complete-box.css";
@@ -10,19 +10,26 @@ export default function AutoCompleteBox<I>({
 	model: InitializedModel<AutoCompleteBoxModel<I>>;
 }) {
 	const { modelView, interact } = model;
-	// TODO: Modify so transition out of vis maintains previous list of items for better UX
 	const { id, items, query, isOpen, transformer } = modelView;
 	const queryParts =
 		query?.split(/\s+/).map(part => part.toLowerCase()) ?? [];
-	const filteredItemsDictionary = items
+	const filteredItems = items
 		.map((item, arrayIndex) => ({ item, arrayIndex }))
 		.filter(({ item }) => {
 			const lowercasedItem = transformer(item).toLowerCase();
 			return queryParts.every(part => lowercasedItem.includes(part));
 		});
-	const computedOpen =
-		(isOpen && filteredItemsDictionary.length > 0) ?? false;
+	const computedOpen = (isOpen && filteredItems.length > 0) ?? false;
 	const [isClickable, setClickable] = useState(computedOpen); //TODO: Not ideal
+	// DONE: Modify so transition out of vis maintains previous list of items for better UX
+	const [lastVisibleItems, setLastVisibleItems] = useState(filteredItems);
+	const displayedItems = computedOpen ? filteredItems : lastVisibleItems;
+
+	useEffect(() => {
+		if (computedOpen) {
+			setLastVisibleItems(filteredItems);
+		}
+	}, [computedOpen, JSON.stringify(filteredItems)]);
 
 	return (
 		<Tooltip
@@ -35,7 +42,7 @@ export default function AutoCompleteBox<I>({
 			place="bottom-start"
 			content={
 				<div className="auto-complete-items flex max-h-[9em] w-[17em] max-w-[17em] flex-col overflow-y-auto pr-3 text-sm">
-					{filteredItemsDictionary.map(({ item, arrayIndex }) => (
+					{displayedItems.map(({ item, arrayIndex }) => (
 						<button
 							key={`${arrayIndex}`}
 							onClick={async () => {
