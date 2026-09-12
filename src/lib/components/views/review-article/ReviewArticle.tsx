@@ -165,28 +165,28 @@ const ReviewArticle = function ({ model }) {
 				>
 					<div className="flex flex-col gap-3">
 						<input
-							{...register("title")}
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title ? "border-red-800" : "border-gray-400"}`}
+							{...register("title.english")}
+							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title?.english ? "border-red-800" : "border-gray-400"}`}
 							placeholder={t("titleField")}
 							autoComplete="off"
 							autoCapitalize="words"
 						/>
-						{errors.title && (
+						{errors.title?.english && (
 							<span className="text-sm text-red-800">
-								{errors.title.message}
+								{errors.title.english.message}
 							</span>
 						)}
 						<input
-							{...register("authorName")}
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorName ? "border-red-800" : "border-gray-400"}`}
+							{...register("authorName.english")}
+							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorName?.english ? "border-red-800" : "border-gray-400"}`}
 							placeholder={t("authorNameField")}
 							autoComplete="name"
 							autoCapitalize="words"
 							disabled={!currentArticle}
 						/>
-						{errors.authorName && (
+						{errors.authorName?.english && (
 							<span className="text-sm text-red-800">
-								{errors.authorName.message}
+								{errors.authorName.english.message}
 							</span>
 						)}
 						<Controller
@@ -204,7 +204,7 @@ const ReviewArticle = function ({ model }) {
 								/>
 							)}
 						/>
-						{errors.body && (
+						{errors.body?.english && (
 							<span className="text-sm text-red-800">
 								{errors.body.message}
 							</span>
