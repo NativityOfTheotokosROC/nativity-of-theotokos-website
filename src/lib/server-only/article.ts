@@ -196,7 +196,7 @@ export async function validateNewArticle(
 						)
 					: undefined),
 		} satisfies Translation,
-		link: z.string().slugify().parse(newArticle.title),
+		link: z.string().slugify().parse(newArticle.title.english),
 	}));
 
 	return articleSchema.parse(newArticle) satisfies NewArticle & {
