@@ -818,6 +818,7 @@ export async function publishExistingArticle({
 		include: _FULL_ARTICLE_INCLUDES,
 		where: { link: articleId },
 	});
+	console.log(articleId);
 	if (!existingArticle) notFound();
 
 	const draft = ticketId
