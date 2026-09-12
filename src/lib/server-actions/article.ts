@@ -174,24 +174,23 @@ export async function assignArticle(
 	const t = await getTranslations({ locale: options?.locale ?? "en" });
 	const assignArticleFormSchema = getArticleAuthorSchema(t);
 
-	const assigneeEmail = assignArticleFormSchema
-		.pick({ email: true })
-		.parse({ email }).email;
-	const assigneeName = assignArticleFormSchema.pick({ name: true }).parse(
-		options?.name ?? {
-			english:
-				((
-					await database.articleAuthor.findUnique({
-						include: { name: true },
-						where: {
-							email: assigneeEmail,
-						},
-					})
-				)?.name.english ?? assigneeEmail === user.email)
-					? user.name
-					: null,
-		},
-	).name;
+	const { email: assigneeEmail, name: assigneeName } =
+		assignArticleFormSchema.parse({
+			email,
+			name: options?.name ?? {
+				english:
+					((
+						await database.articleAuthor.findUnique({
+							include: { name: true },
+							where: {
+								email,
+							},
+						})
+					)?.name.english ?? email === user.email)
+						? user.name
+						: null,
+			},
+		});
 
 	if (options?.articleId) {
 		const article = await database.article.findUniqueOrThrow({
