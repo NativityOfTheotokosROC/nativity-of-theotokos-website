@@ -70,11 +70,15 @@ export function getStringSchema(options?: StringValidationOptions) {
 }
 
 export function getOptionalStringSchema(
-	options?: Omit<StringValidationOptions, "nonEmpty">,
+	options?:
+		| Omit<StringValidationOptions, "nonEmpty">
+		| ReturnType<typeof z.string>,
 ) {
 	return z.preprocess(
 		emptyStringAsUndefined,
-		getStringSchema(options).optional(),
+		options && "_zod" in options
+			? options
+			: getStringSchema(options).optional(),
 	);
 }
 

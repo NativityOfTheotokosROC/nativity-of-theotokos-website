@@ -2,7 +2,11 @@ import z from "zod";
 import { Translator } from "../utilities/types";
 import { getDateString } from "../utilities/date-time";
 import { emptyStringAsUndefined } from "../utilities/miscellaneous";
-import { useLocalizedSchema } from "./utilities";
+import {
+	getOptionalStringSchema,
+	getTranslationSchema,
+	useLocalizedSchema,
+} from "./utilities";
 
 export type NewQuote = z.infer<ReturnType<typeof getQuoteSchema>>;
 
@@ -10,78 +14,54 @@ export function getQuoteSchema(t?: Translator) {
 	const maxQuoteEn = 600;
 	const maxQuoteRu = maxQuoteEn;
 	const quoteSchema = z.object({
-		author: z.object({
-			english: z
-				.string()
-				.trim()
-				.nonempty({
-					error:
-						t &&
-						t("validation.nonEmpty", {
-							field: t("newQuote.author"),
-						}),
-				}),
-			russian: z.preprocess(
-				emptyStringAsUndefined,
-				z.string().trim().optional(),
-			),
-		}),
-		quote: z.object({
-			english: z
-				.string()
-				.trim()
-				.nonempty({
-					error:
+		author: getTranslationSchema(
+			t && { t, fieldName: t("newQuote.author") },
+		),
+		quote: getTranslationSchema({
+			englishValidationOptions: {
+				trim: true,
+				nonEmpty: {
+					value: true,
+					invalidMessage:
 						t &&
 						t("validation.nonEmpty", {
 							field: t("newQuote.quote"),
 						}),
-				})
-				.max(maxQuoteEn, {
-					error:
+				},
+				max: {
+					value: maxQuoteEn,
+					invalidMessage:
 						t &&
 						t("validation.maxCharacters", {
 							field: t("newQuote.quote"),
 							max: maxQuoteEn,
 						}),
-				}),
-			russian: z.preprocess(
-				emptyStringAsUndefined,
-				z
-					.string()
-					.trim()
-					.max(maxQuoteRu, {
-						error:
-							t &&
-							t("validation.maxCharacters", {
-								field: t("newQuote.quote"),
-								max: maxQuoteRu,
-							}),
-					})
-					.optional(),
-			),
+				},
+			},
+			russianValidationOptions: {
+				trim: true,
+				max: {
+					value: maxQuoteRu,
+					invalidMessage:
+						t &&
+						t("validation.maxCharacters", {
+							field: t("newQuote.quote"),
+							max: maxQuoteRu,
+						}),
+				},
+			},
 		}),
-		source: z.object({
-			english: z.preprocess(
-				emptyStringAsUndefined,
-				z.string().trim().optional(),
-			),
-			russian: z.preprocess(
-				emptyStringAsUndefined,
-				z.string().trim().optional(),
-			),
+		source: getTranslationSchema().extend({
+			english: getOptionalStringSchema(),
 		}),
-		scheduledDate: z.preprocess(
-			emptyStringAsUndefined,
-			//TODO: Add date error messages
+		scheduledDate: getOptionalStringSchema(
 			z.iso
 				.date()
 				.refine(
 					date =>
 						new Date(date).getTime() >=
 						new Date(getDateString(new Date())).getTime(),
-				)
-				.optional(),
+				),
 		),
 	});
 	return quoteSchema;

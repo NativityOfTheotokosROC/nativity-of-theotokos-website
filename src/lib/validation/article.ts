@@ -128,6 +128,14 @@ export function getArticleSchema(t?: Translator) {
 			caption: getTranslationSchema({
 				englishValidationOptions: {
 					trim: true,
+					nonEmpty: {
+						value: true,
+						invalidMessage:
+							t &&
+							t("validation.nonEmpty", {
+								field: t("reviewArticle.imageCaptionField"),
+							}),
+					},
 					max: {
 						value: maxImageCaption,
 						invalidMessage:
