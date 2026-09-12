@@ -1,4 +1,4 @@
-const ALL_DAYS_ARRAY = [
+export const ALL_DAYS_ARRAY = [
 	"Sun",
 	"Mon",
 	"Tue",
@@ -20,8 +20,7 @@ function isDaysPatternValid(pattern: string) {
 
 export function transformDaysToPattern(days: Set<Day>, cronPattern?: string) {
 	const pattern = cronPattern ?? "0 0 * * *";
-	if (!isCronPatternValid(pattern))
-		throw new Error("Invalid cron pattern provided");
+	if (!isCronPatternValid(pattern)) return null;
 	const patternArray = pattern.split(" ");
 	const cronDays = [...days].map(day => {
 		switch (day) {
@@ -46,12 +45,10 @@ export function transformDaysToPattern(days: Set<Day>, cronPattern?: string) {
 }
 
 export function transformPatternToDays(cronPattern: string) {
-	if (!isCronPatternValid(cronPattern))
-		throw new Error("Invalid cron pattern provided");
+	if (!isCronPatternValid(cronPattern)) return null;
 	const patternArray = cronPattern.split(" ");
 	const daysPattern = patternArray[patternArray.length - 1];
-	if (!isDaysPatternValid(daysPattern))
-		throw new Error("Days pattern is invalid");
+	if (!isDaysPatternValid(daysPattern)) return null;
 	if (daysPattern === "*") return new Set(ALL_DAYS_ARRAY);
 	return new Set<Day>(
 		daysPattern.split(",").map(value => {

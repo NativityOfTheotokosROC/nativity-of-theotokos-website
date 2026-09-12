@@ -18,6 +18,13 @@ import AutoCompleteBox from "../../auto-complete-box/AutoCompleteBox";
 import Button from "@/src/lib/components/button/Button";
 import { BLANK_TRANSLATION } from "@/src/lib/utilities/constants";
 import { Trash2Icon } from "lucide-react";
+import {
+	ALL_DAYS_ARRAY,
+	Day,
+	transformDaysToPattern,
+	transformPatternToDays,
+} from "@/src/lib/utilities/weekday-selector";
+import Checkbox from "../../checkbox/Checkbox";
 
 const ScheduleEvent = function ({ model }) {
 	const {
@@ -144,13 +151,31 @@ const ScheduleEvent = function ({ model }) {
 			<AutoCompleteBox model={russianVenueAutoCompleteBox} />
 			{/* <AutoCompleteBox model={englishDesignationAutoCompleteBox} />
 			<AutoCompleteBox model={russianDesignationAutoCompleteBox} /> */}
-			<form onSubmit={handleSubmit(async form => {})}>
+			<form
+				onSubmit={handleSubmit(async form => {
+					await interact({
+						type: "SCHEDULE_NEW_ITEM",
+						input: {
+							newScheduleItem:
+								"recurringPattern" in form
+									? {
+											type: "recurring",
+											scheduleItem: form,
+										}
+									: {
+											type: "specific",
+											scheduleItem: form,
+										},
+						},
+					});
+				})}
+			>
 				<div className="flex flex-col gap-4">
 					<span className="text-xl">{t("eventSection")}</span>
 					<div className="flex flex-col gap-3">
 						<Controller
-							name="title.english"
 							control={control}
+							name="title.english"
 							render={({
 								field: { onChange, onBlur, name, value },
 								fieldState: { error },
@@ -181,8 +206,8 @@ const ScheduleEvent = function ({ model }) {
 							)}
 						/>
 						<Controller
-							name="title.russian"
 							control={control}
+							name="title.russian"
 							render={({
 								field: { onChange, onBlur, name, value },
 							}) => (
@@ -214,8 +239,8 @@ const ScheduleEvent = function ({ model }) {
 							)}
 						/>
 						<Controller
-							name="venue.english"
 							control={control}
+							name="venue.english"
 							render={({
 								field: { onChange, onBlur, name, value },
 							}) => (
@@ -245,8 +270,8 @@ const ScheduleEvent = function ({ model }) {
 							)}
 						/>
 						<Controller
-							name="venue.russian"
 							control={control}
+							name="venue.russian"
 							render={({
 								field: { onChange, onBlur, name, value },
 							}) => (
@@ -293,7 +318,125 @@ const ScheduleEvent = function ({ model }) {
 								)}
 							</>
 						)}
-						{scheduleEvent.type === "recurring" && <></>}
+						{scheduleEvent.type === "recurring" && (
+							<>
+								<Controller
+									control={control}
+									name="recurringPattern"
+									render={({
+										field: { value, onChange },
+										fieldState: {},
+									}) => {
+										const days =
+											typeof value === "string"
+												? (transformPatternToDays(
+														value,
+													) ?? new Set<Day>())
+												: new Set<Day>();
+										const dayTranslationMap = new Map(
+											ALL_DAYS_ARRAY.map(DAY => {
+												let translation;
+												switch (DAY) {
+													case "Sun":
+														translation =
+															t("sundayAbbrev");
+														break;
+													case "Mon":
+														translation =
+															t("mondayAbbrev");
+														break;
+													case "Tue":
+														translation =
+															t("tuesdayAbbrev");
+														break;
+													case "Wed":
+														translation =
+															t(
+																"wednesdayAbbrev",
+															);
+														break;
+													case "Thur":
+														translation =
+															t("thursdayAbbrev");
+														break;
+													case "Fri":
+														translation =
+															t("fridayAbbrev");
+														break;
+													case "Sat":
+														translation =
+															t("saturdayAbbrev");
+														break;
+												}
+												return [
+													DAY,
+													translation,
+												] as const;
+											}),
+										);
+										return (
+											<div className="flex gap-1">
+												{dayTranslationMap
+													.entries()
+													.map(
+														([
+															day,
+															translation,
+														]) => (
+															<Checkbox
+																key={day}
+																model={newReadonlyModel(
+																	{
+																		label: translation,
+																		isChecked:
+																			days.has(
+																				day,
+																			),
+																		options:
+																			{
+																				labelPosition:
+																					"top",
+																			},
+																		checkedChangeCallback(
+																			checked,
+																		) {
+																			const newPattern =
+																				transformDaysToPattern(
+																					checked
+																						? days.union(
+																								new Set(
+																									[
+																										day,
+																									],
+																								),
+																							)
+																						: days.difference(
+																								new Set(
+																									[
+																										day,
+																									],
+																								),
+																							),
+																					days.size >
+																						0
+																						? value
+																						: undefined,
+																				);
+																			onChange(
+																				newPattern,
+																			);
+																		},
+																	},
+																)}
+															/>
+														),
+													)}
+											</div>
+										);
+									}}
+								/>
+							</>
+						)}
 					</div>
 					<span className="text-xl">{t("timesSection")}</span>
 					<div className="flex flex-col gap-3">
@@ -318,6 +461,7 @@ const ScheduleEvent = function ({ model }) {
 							{watch("scheduleItemTimes").map((_, index) => (
 								<div className="flex gap-1">
 									<Controller
+										control={control}
 										name={`scheduleItemTimes.${index}.designation.english`}
 										render={({
 											field: {
@@ -356,6 +500,7 @@ const ScheduleEvent = function ({ model }) {
 										)}
 									/>
 									<Controller
+										control={control}
 										name={`scheduleItemTimes.${index}.designation.russian`}
 										render={({
 											field: {
@@ -374,7 +519,12 @@ const ScheduleEvent = function ({ model }) {
 													)}
 													autoCapitalize="words"
 													name={name}
-													value={value ?? ""}
+													value={
+														typeof value ===
+														"string"
+															? value
+															: ""
+													}
 													autoComplete={"off"}
 													// data-tooltip-id={
 													// 	englishTitleFields.dataTooltipId
@@ -394,7 +544,8 @@ const ScheduleEvent = function ({ model }) {
 										)}
 									/>
 									<Controller
-										name={`scheduleItemTimes.${index}.designation.time`}
+										control={control}
+										name={`scheduleItemTimes.${index}.time`}
 										render={({
 											field: {
 												name,
