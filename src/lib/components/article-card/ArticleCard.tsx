@@ -12,7 +12,7 @@ import { ViewTransition } from "react";
 const ArticleCard = function ({ model }) {
 	const { articlePreview: article, isDetailed } = model.modelView;
 	const { title, author, dateCreated, snippet, articleImage, uri } = article;
-	const { placeholder, source } = articleImage;
+	const { placeholder } = articleImage;
 	const articleLink = `/news/${uri}`;
 	const dateString = getNewsArticleDateString(dateCreated);
 	const tCaptions = useTranslations("imageCaptions");
@@ -30,7 +30,7 @@ const ArticleCard = function ({ model }) {
 							height={538}
 							width={538}
 							alt={tCaptions("featuredArticleImage")}
-							src={source}
+							src={articleImage.url}
 							placeholder="blur"
 							blurDataURL={placeholder}
 						/>
@@ -64,7 +64,7 @@ const ArticleCard = function ({ model }) {
 							height={150}
 							width={150}
 							alt={tCaptions("newsArticleImage")}
-							src={source}
+							src={articleImage.url}
 							placeholder="blur"
 							blurDataURL={placeholder}
 						/>

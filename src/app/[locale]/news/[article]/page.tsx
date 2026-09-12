@@ -38,7 +38,7 @@ function articleJsonLd(article: ArticleType) {
 			"@type": "Person",
 			name: author.name,
 		},
-		image: articleImage.source,
+		image: articleImage.url,
 	} satisfies WithContext<JSONLdArticle>;
 }
 
@@ -69,13 +69,13 @@ export async function generateMetadata({
 			url: `/news/${uri}`,
 			authors: author.name,
 			type: "article",
-			images: [articleImage.source],
+			images: [articleImage.url],
 		},
 		twitter: {
 			card: "summary_large_image",
 			title,
 			description: snippet,
-			images: [articleImage.source],
+			images: [articleImage.url],
 		},
 	};
 }

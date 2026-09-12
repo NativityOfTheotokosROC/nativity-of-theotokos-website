@@ -170,8 +170,8 @@ export async function getLatestArticles(
 			snippet,
 			uri: featuredArticleRecord.article.link,
 			articleImage: {
-				source: featuredArticleRecord.article.image.link,
-				about:
+				url: featuredArticleRecord.article.image.link,
+				caption:
 					language === "ru"
 						? (featuredArticleRecord.article.image.caption
 								.russian ??
@@ -207,8 +207,8 @@ export async function getLatestArticles(
 				snippet,
 				uri: article.link,
 				articleImage: {
-					source: article.image.link,
-					about:
+					url: article.image.link,
+					caption:
 						language === "ru"
 							? (article.image.caption.russian ??
 								article.image.caption.english)

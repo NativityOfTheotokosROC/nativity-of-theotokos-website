@@ -22,7 +22,7 @@ const Article = function ({ model }) {
 	const { article, permalink, options } = model.modelView;
 	const { title, author, articleImage, dateCreated, dateUpdated, body, uri } =
 		article;
-	const { source, about, placeholder } = articleImage;
+	const { url: imageUrl, caption, placeholder } = articleImage;
 	const t = useTranslations("news");
 	const tCaptions = useTranslations("imageCaptions");
 	const shareData = {
@@ -72,7 +72,7 @@ const Article = function ({ model }) {
 						<div className="flex h-[15em] w-full items-stretch justify-stretch overflow-clip rounded-lg md:h-fit md:max-h-[25em]">
 							<Link
 								className="contents"
-								href={source}
+								href={imageUrl}
 								target="_blank"
 							>
 								<ViewTransition
@@ -84,8 +84,8 @@ const Article = function ({ model }) {
 										height={600}
 										width={600}
 										alt={tCaptions("newsArticleImage")}
-										title={about}
-										src={source}
+										title={caption}
+										src={imageUrl}
 										placeholder={
 											placeholder ? "blur" : undefined
 										}
@@ -94,9 +94,9 @@ const Article = function ({ model }) {
 								</ViewTransition>
 							</Link>
 						</div>
-						{about && (
+						{caption && (
 							<span className={`text-xs/relaxed uppercase`}>
-								{about}
+								{caption}
 							</span>
 						)}
 					</div>
