@@ -1,23 +1,32 @@
 import { format, formatInTimeZone, toZonedTime } from "date-fns-tz";
 
-const DATEPICKER_DATE_FORMAT = "yyyy-MM-dd" as const;
+const DATE_FORMAT = "yyyy-MM-dd" as const;
+const TIME_FORMAT = "HH:mm";
 
-export function getLocalTimeZone() {
+export function getNativeTimeZone() {
 	return "Africa/Harare" as const;
 }
 
-export function getDateString(date: Date, localTimezone?: boolean) {
-	if (localTimezone)
-		return formatInTimeZone(
-			date,
-			getLocalTimeZone(),
-			DATEPICKER_DATE_FORMAT,
-		);
-	return format(date, DATEPICKER_DATE_FORMAT);
+export function getFormattedDateString(
+	date: Date,
+	dateFormat: string,
+	nativeTimezone?: boolean,
+) {
+	if (nativeTimezone)
+		return formatInTimeZone(date, getNativeTimeZone(), dateFormat);
+	return format(date, dateFormat);
+}
+
+export function getDateString(date: Date, nativeTimezone?: boolean) {
+	return getFormattedDateString(date, DATE_FORMAT, nativeTimezone);
+}
+
+export function getTimeString(date: Date, nativeTimezone?: boolean) {
+	return getFormattedDateString(date, TIME_FORMAT, nativeTimezone);
 }
 
 export function getNewsArticleDateString(date: Date) {
-	return toZonedTime(date, getLocalTimeZone()).toLocaleDateString("ru-RU", {
+	return toZonedTime(date, getNativeTimeZone()).toLocaleDateString("ru-RU", {
 		dateStyle: "short",
 	});
 }

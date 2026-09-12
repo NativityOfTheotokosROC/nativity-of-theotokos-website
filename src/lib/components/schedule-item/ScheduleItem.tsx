@@ -6,17 +6,17 @@ import { georgia } from "../../third-party/fonts";
 import { useLocale } from "next-intl";
 import { toZonedTime } from "date-fns-tz";
 import FeaturedItemOrnament from "@/public/assets/ornament_12.svg";
-import { getLocalTimeZone } from "../../utilities/date-time";
+import { getNativeTimeZone } from "../../utilities/date-time";
 
 const ScheduleItem = function ({ model }) {
 	const { scheduleItem, isFeatured } = model.modelView;
 	const { title, venue, date: rawDate, times: rawTimes } = scheduleItem;
 	const locale = useLocale();
 	const dateLocale = locale === "en" ? "en-uk" : "ru-RU";
-	const date = toZonedTime(rawDate, getLocalTimeZone());
+	const date = toZonedTime(rawDate, getNativeTimeZone());
 	const times = rawTimes.map(time => ({
 		...time,
-		time: toZonedTime(time.time, getLocalTimeZone()),
+		time: toZonedTime(time.time, getNativeTimeZone()),
 	}));
 
 	return isFeatured ? (

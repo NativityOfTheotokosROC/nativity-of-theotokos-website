@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { cacheLife, cacheTag } from "next/cache";
 import { Commemoration } from "../models/commemoration";
 import { DailyReadings, Hymn, Image, Language } from "../utilities/types";
-import { getLocalTimeZone } from "../utilities/date-time";
+import { getNativeTimeZone } from "../utilities/date-time";
 import { removeMarkup } from "../utilities/miscellaneous";
 
 const MONTHS = [
@@ -26,7 +26,7 @@ export async function dailyReadings(date: Date, language: Language) {
 	"use cache: remote";
 	cacheLife("weeks");
 	cacheTag("holytrinity-readings");
-	const localDate = toZonedTime(date, getLocalTimeZone());
+	const localDate = toZonedTime(date, getNativeTimeZone());
 	const [
 		liturgicalWeek,
 		saints,
@@ -104,7 +104,7 @@ export async function getDailySaint(date: Date, language: Language) {
 	cacheTag("daily-saint");
 	cacheLife("weeks");
 
-	const localDate = toZonedTime(date, getLocalTimeZone());
+	const localDate = toZonedTime(date, getNativeTimeZone());
 	const saints = await getSaints(localDate, language);
 	const $ = load(saints);
 	const commemorationPathParts = $("a").attr("href")!.split("/");

@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { DailySaintsWidgetModel } from "../../models/daily-saints-widget";
-import { getLocalTimeZone } from "../../utilities/date-time";
+import { getNativeTimeZone } from "../../utilities/date-time";
 import { usePageLoadingBarRouter } from "../../utilities/page-loading-bar";
 
 const DailySaintsWidget = function ({ model }) {
@@ -18,7 +18,7 @@ const DailySaintsWidget = function ({ model }) {
 	const tCaptions = useTranslations("imageCaptions");
 	const dateString = toZonedTime(
 		currentDate,
-		getLocalTimeZone(),
+		getNativeTimeZone(),
 	).toLocaleDateString(locale === "en" ? "en-uk" : "ru-RU", {
 		dateStyle: "full",
 	});

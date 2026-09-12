@@ -45,6 +45,18 @@ export type ScheduleItem = {
 	}[];
 };
 
+export type ScheduleItemWithTranslations = {
+	[K in keyof ScheduleItem]: K extends "title" | "venue"
+		? Translation
+		: K extends "times"
+			? {
+					[A in keyof ScheduleItem[K][number]]: A extends "designation"
+						? Translation
+						: ScheduleItem[K][number][A];
+				}[]
+			: ScheduleItem[K];
+};
+
 export type RecurringScheduleItem = Omit<ScheduleItem, "date"> & {
 	recurringPattern: string;
 	isDisabled: boolean;
@@ -54,6 +66,23 @@ export type InstantaneousScheduleItem = ScheduleItem & {
 	id: number;
 	isRemoved: boolean;
 };
+
+export type TypeDiff<
+	T extends Record<string, unknown>,
+	U extends Record<string, unknown>,
+> = { [K in Exclude<keyof T, keyof U>]: K extends keyof U ? never : T[K] };
+
+export type InstantaneousScheduleItemWithTranslations = TypeDiff<
+	InstantaneousScheduleItem,
+	ScheduleItem
+> &
+	ScheduleItemWithTranslations;
+
+export type RecurringScheduleItemWithTranslations = TypeDiff<
+	RecurringScheduleItem,
+	ScheduleItem
+> &
+	ScheduleItemWithTranslations;
 
 export type RecurringScheduleItemInstance = ScheduleItem & {
 	recurringItemId: number;

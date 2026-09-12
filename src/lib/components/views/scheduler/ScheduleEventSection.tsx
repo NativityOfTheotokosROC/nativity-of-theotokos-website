@@ -1,5 +1,7 @@
 import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complete-box";
 import { ScheduleEventModel } from "@/src/lib/models/schedule-event";
+import { autoCompleteFields } from "@/src/lib/utilities/auto-complete-box";
+import { getDateString } from "@/src/lib/utilities/date-time";
 import { CompleteTranslation } from "@/src/lib/utilities/types";
 import {
 	useInstantaneousScheduleItemSchema,
@@ -7,11 +9,15 @@ import {
 } from "@/src/lib/validation/schedule-item";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { InitializedModel } from "@mvc-react/mvc";
+import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
+import { addDays } from "date-fns";
+import { useTranslations } from "next-intl";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import AutoCompleteBox from "../../auto-complete-box/AutoCompleteBox";
-import { autoCompleteFields } from "@/src/lib/utilities/auto-complete-box";
-import { useTranslations } from "next-intl";
+import Button from "@/src/lib/components/button/Button";
+import { BLANK_TRANSLATION } from "@/src/lib/utilities/constants";
+import { Trash2Icon } from "lucide-react";
 
 const ScheduleEvent = function ({ model }) {
 	const {
@@ -23,7 +29,9 @@ const ScheduleEvent = function ({ model }) {
 	const recurringScheduleItemSchema = useRecurringScheduleItemSchema();
 	const t = useTranslations("scheduler");
 	const {
+		getValues,
 		setValue,
+		watch,
 		reset,
 		register,
 		handleSubmit,
@@ -36,7 +44,10 @@ const ScheduleEvent = function ({ model }) {
 				: recurringScheduleItemSchema,
 		),
 		shouldUnregister: true,
-		defaultValues: scheduleEvent.type === "specific" ? {} : {},
+		defaultValues: {
+			date: getDateString(addDays(new Date(), 1), true),
+			scheduleItemTimes: [{ time: "09:00" }],
+		},
 	});
 	const englishTitleAutoCompleteBox = useAutoCompleteBox(
 		{
@@ -114,6 +125,16 @@ const ScheduleEvent = function ({ model }) {
 	// const russianDesignationFieldCallbacks = autoCompleteFields(
 	// 	russianDesignationAutoCompleteBox,
 	// );
+	const currentDate = getDateString(new Date(), true);
+
+	useEffect(() => {
+		const { scheduleItem } = scheduleEvent;
+		if (scheduleItem) {
+			reset(scheduleItem);
+		} else {
+			reset();
+		}
+	}, [JSON.stringify(scheduleEvent.scheduleItem)]);
 
 	return (
 		<>
@@ -132,9 +153,10 @@ const ScheduleEvent = function ({ model }) {
 							control={control}
 							render={({
 								field: { onChange, onBlur, name, value },
+								fieldState: { error },
 							}) => (
 								<input
-									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title?.english ? "border-red-800" : "border-gray-400"}`}
+									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 									placeholder={t("titleFieldEn")}
 									autoCapitalize="words"
 									name={name}
@@ -255,9 +277,169 @@ const ScheduleEvent = function ({ model }) {
 								/>
 							)}
 						/>
+						{scheduleEvent.type === "specific" && (
+							<>
+								<input
+									{...register("date")}
+									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors && "date" in errors && errors.date ? "border-red-800" : "border-gray-400"}`}
+									type="date"
+									formNoValidate
+									min={currentDate}
+								/>
+								{errors && "date" in errors && errors.date && (
+									<span className="text-sm text-red-800">
+										{errors.date.message}
+									</span>
+								)}
+							</>
+						)}
+						{scheduleEvent.type === "recurring" && <></>}
 					</div>
 					<span className="text-xl">{t("timesSection")}</span>
-					<div className="flex flex-col gap-3"></div>
+					<div className="flex flex-col gap-3">
+						<Button
+							model={newReadonlyModel({
+								title: t("addTime"),
+								variant: "alternative",
+								action() {
+									setValue("scheduleItemTimes", [
+										...getValues("scheduleItemTimes"),
+										{
+											designation: BLANK_TRANSLATION,
+											time: "09:00",
+										},
+									]);
+								},
+							})}
+						>
+							{t("addTime")}
+						</Button>
+						<div className="flex flex-col gap-2">
+							{watch("scheduleItemTimes").map((_, index) => (
+								<div className="flex gap-1">
+									<Controller
+										name={`scheduleItemTimes.${index}.designation.english`}
+										render={({
+											field: {
+												name,
+												onChange,
+												onBlur,
+												value,
+											},
+											fieldState: { error },
+										}) => (
+											<>
+												<input
+													className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+													placeholder={t(
+														"designationFieldEn",
+													)}
+													autoCapitalize="words"
+													name={name}
+													value={value}
+													autoComplete={"off"}
+													// data-tooltip-id={
+													// 	englishTitleFields.dataTooltipId
+													// }
+													onChange={async e => {
+														onChange(e);
+														// englishTitleFields.onChange(
+														// 	e.target.value,
+														// );
+													}}
+													onBlur={() => {
+														onBlur();
+														// englishTitleFields.onBlur();
+													}}
+												/>
+											</>
+										)}
+									/>
+									<Controller
+										name={`scheduleItemTimes.${index}.designation.russian`}
+										render={({
+											field: {
+												name,
+												onChange,
+												onBlur,
+												value,
+											},
+											fieldState: { error },
+										}) => (
+											<>
+												<input
+													className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+													placeholder={t(
+														"designationFieldRu",
+													)}
+													autoCapitalize="words"
+													name={name}
+													value={value ?? ""}
+													autoComplete={"off"}
+													// data-tooltip-id={
+													// 	englishTitleFields.dataTooltipId
+													// }
+													onChange={async e => {
+														onChange(e);
+														// englishTitleFields.onChange(
+														// 	e.target.value,
+														// );
+													}}
+													onBlur={() => {
+														onBlur();
+														// englishTitleFields.onBlur();
+													}}
+												/>
+											</>
+										)}
+									/>
+									<Controller
+										name={`scheduleItemTimes.${index}.designation.time`}
+										render={({
+											field: {
+												name,
+												onChange,
+												onBlur,
+												value,
+											},
+											fieldState: { error },
+										}) => (
+											<>
+												<input
+													className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+													type="time"
+													placeholder={t("timeField")}
+													name={name}
+													value={value}
+													onChange={onChange}
+													onBlur={onBlur}
+													formNoValidate
+												/>
+											</>
+										)}
+									/>
+									<Button
+										model={newReadonlyModel({
+											title: t("deleteTime"),
+											variant: "alternative",
+											className:
+												"flex justify-center items-center w-fit",
+											action() {
+												setValue(
+													"scheduleItemTimes",
+													getValues(
+														"scheduleItemTimes",
+													).toSpliced(index, 1),
+												);
+											},
+										})}
+									>
+										<Trash2Icon strokeWidth={1.5} />
+									</Button>
+								</div>
+							))}
+						</div>
+					</div>
 				</div>
 			</form>
 		</>

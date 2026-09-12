@@ -1,7 +1,7 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 import {
-	InstantaneousScheduleItem,
-	RecurringScheduleItem,
+	InstantaneousScheduleItemWithTranslations,
+	RecurringScheduleItemWithTranslations,
 	Translation,
 } from "../utilities/types";
 import {
@@ -11,12 +11,14 @@ import {
 
 type BaseScheduleEvent<
 	T extends string,
-	I extends InstantaneousScheduleItem | RecurringScheduleItem,
+	I extends
+		| InstantaneousScheduleItemWithTranslations
+		| RecurringScheduleItemWithTranslations,
 > = { type: T; scheduleItem?: I };
 
 type ScheduleEvent =
-	| BaseScheduleEvent<"specific", InstantaneousScheduleItem>
-	| BaseScheduleEvent<"recurring", RecurringScheduleItem>;
+	| BaseScheduleEvent<"specific", InstantaneousScheduleItemWithTranslations>
+	| BaseScheduleEvent<"recurring", RecurringScheduleItemWithTranslations>;
 
 type NewScheduleItem = {
 	[T in ScheduleEvent["type"]]: {

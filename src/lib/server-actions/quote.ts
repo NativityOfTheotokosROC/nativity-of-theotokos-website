@@ -4,7 +4,7 @@ import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
 import { revalidateTag } from "next/cache";
 import database from "../third-party/prisma";
-import { getLocalTimeZone } from "../utilities/date-time";
+import { getNativeTimeZone } from "../utilities/date-time";
 import { getMd5Hash } from "../utilities/miscellaneous";
 import { getQuoteSchema, NewQuote } from "../validation/quote";
 import { protect } from "./auth";
@@ -57,7 +57,7 @@ export async function addNewQuote(newQuote: NewQuote) {
 	const { author, quote, source, scheduledDate } =
 		quoteSchema.parse(newQuote);
 	const scheduledLocalDate = scheduledDate
-		? toZonedTime(scheduledDate, getLocalTimeZone())
+		? toZonedTime(scheduledDate, getNativeTimeZone())
 		: undefined;
 
 	await database.$transaction(async transaction => {

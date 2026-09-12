@@ -1,5 +1,5 @@
 import { Cron } from "croner";
-import { getLocalTimeZone } from "./date-time";
+import { getNativeTimeZone } from "./date-time";
 
 export function validateRecurringPattern(
 	pattern: string,
@@ -9,7 +9,7 @@ export function validateRecurringPattern(
 		const cron = new Cron(
 			pattern,
 			options?.useLocalTimezone
-				? { timezone: getLocalTimeZone() }
+				? { timezone: getNativeTimeZone() }
 				: undefined,
 		);
 		if (
