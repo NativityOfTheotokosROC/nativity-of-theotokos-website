@@ -40,7 +40,6 @@ export function getTranslationSchema(
 								: undefined,
 					},
 				});
-
 	return z.object({
 		english: englishSchema,
 		russian: getOptionalStringSchema(russianValidationOptions),
@@ -70,14 +69,12 @@ export function getStringSchema(options?: StringValidationOptions) {
 }
 
 export function getOptionalStringSchema(
-	options?:
-		| Omit<StringValidationOptions, "nonEmpty">
-		| ReturnType<typeof z.string>,
+	options?: Omit<StringValidationOptions, "nonEmpty"> | z.ZodStringFormat, // Works ig
 ) {
 	return z.preprocess(
 		emptyStringAsUndefined,
 		options && "_zod" in options
-			? options
+			? options.optional()
 			: getStringSchema(options).optional(),
 	);
 }
