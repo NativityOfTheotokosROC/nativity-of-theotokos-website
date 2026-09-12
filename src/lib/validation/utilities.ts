@@ -51,7 +51,9 @@ export function getStringSchema(options?: StringValidationOptions) {
 	let expression = z.string({ error: options?.invalidStringMessage });
 	if (options?.trim) expression = expression.trim();
 	if (options?.nonEmpty)
-		expression.nonempty({ error: options.nonEmpty.invalidMessage });
+		expression = expression.nonempty({
+			error: options.nonEmpty.invalidMessage,
+		});
 	if (options?.min) {
 		const { value, invalidMessage } = options.min;
 		expression = expression.min(value, { error: invalidMessage });

@@ -145,6 +145,9 @@ export async function getArticleMetadata(
 }
 
 export async function getArticleAuthors() {
+	// "use cache: remote";
+	// cacheTag(`article_authors`);
+
 	const authors = (
 		await database.articleAuthor.findMany({ include: { name: true } })
 	).map(
@@ -158,8 +161,8 @@ export async function getArticleAuthors() {
 }
 
 export async function getArticleAuthorsWithTranslations() {
-	"use cache: remote";
-	cacheTag(`article_authors`);
+	// "use cache: remote";
+	// cacheTag(`article_authors`);
 
 	const authors = (
 		await database.articleAuthor.findMany({ include: { name: true } })
