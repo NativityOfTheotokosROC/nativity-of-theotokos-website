@@ -81,7 +81,7 @@ export async function getArticle(
 				: article.image.caption.english;
 
 		return {
-			uri: article.link.toString(),
+			uri: articleId,
 			title,
 			author,
 			dateCreated: article.dateCreated,
@@ -113,7 +113,6 @@ export async function getArticleWithTranslations(articleId: string) {
 
 	try {
 		const {
-			link,
 			title,
 			author,
 			body,
@@ -135,7 +134,7 @@ export async function getArticleWithTranslations(articleId: string) {
 					: `${baseUrl}${image.link}`,
 			));
 		return {
-			uri: image.link,
+			uri: articleId,
 			title,
 			author,
 			dateCreated,
@@ -818,7 +817,6 @@ export async function publishExistingArticle({
 		include: _FULL_ARTICLE_INCLUDES,
 		where: { link: articleId },
 	});
-	console.log(articleId);
 	if (!existingArticle) notFound();
 
 	const draft = ticketId
