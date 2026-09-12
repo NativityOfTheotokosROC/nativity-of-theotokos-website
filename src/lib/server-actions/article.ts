@@ -5,7 +5,11 @@ import { getTranslations } from "next-intl/server";
 import { cacheTag, revalidateTag } from "next/cache";
 import { forbidden, notFound } from "next/navigation";
 import { ArticleDraft, NewArticleDraft } from "../models/write-article";
-import { ArticleWithTranslations } from "../utilities/types";
+import {
+	ArticleAuthorWithTranslations,
+	ArticleWithTranslations,
+	ReplacePropertyType,
+} from "../utilities/types";
 import {
 	_FULL_ARTICLE_INCLUDES,
 	validateNewArticle,
@@ -646,11 +650,16 @@ export async function getPendingArticleSubmission() {
 			},
 			where: { articleDraftId: ticketData.articleDraft!.id },
 		});
-	const assigneeName = ticketData.assignee.name.english;
+	const assigneeName = ticketData.assignee.name;
+	type ArticleTicketWithAssigneeTranslations = ReplacePropertyType<
+		ArticleTicket,
+		"assignee",
+		ArticleAuthorWithTranslations
+	>;
 	const ticket = {
 		ticketId: ticketData.id,
 		assignee: { email: ticketData.assigneeEmail, name: assigneeName },
-	} satisfies ArticleTicket;
+	} satisfies ArticleTicketWithAssigneeTranslations;
 	const draft = {
 		title: { english: ticketData.articleDraft!.title, russian: null },
 		body: { english: ticketData.articleDraft!.body, russian: null },
@@ -678,7 +687,7 @@ export async function getPendingArticleSubmission() {
 		draft,
 		currentArticle,
 	} satisfies {
-		ticket: ArticleTicket;
+		ticket: ArticleTicketWithAssigneeTranslations;
 		draft: ArticleDraft;
 		currentArticle?: ArticleWithTranslations;
 	};
