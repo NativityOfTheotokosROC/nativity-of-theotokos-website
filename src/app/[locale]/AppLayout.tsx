@@ -5,7 +5,7 @@ import LayoutLoadingSkeleton from "@/src/lib/components/layout-loading-skeleton/
 import PageLoadingBar from "@/src/lib/components/page-loading-bar/PageLoadingBar";
 import { AppLayoutModel } from "@/src/lib/models/app-layout";
 import { FooterModel } from "@/src/lib/models/footer";
-import { Navlink } from "@/src/lib/types/general";
+import { Navlink } from "@/src/lib/utilities/types";
 import { MAILING_ADDRESS } from "@/src/lib/utilities/constants";
 import { ModeledContainerComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";

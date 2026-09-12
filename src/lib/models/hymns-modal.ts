@@ -3,7 +3,7 @@ import {
 	InteractiveModel,
 	ModelInteraction,
 } from "@mvc-react/mvc";
-import { Hymn } from "../types/general";
+import { Hymn } from "../utilities/types";
 
 export type HymnsModalModelView = {
 	isOpen: boolean;

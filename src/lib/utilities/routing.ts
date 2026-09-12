@@ -1,6 +1,6 @@
 import "server-only";
 
-import { Path } from "../types/general";
+import { Path } from "./types";
 
 export function getProtectedRoutes() {
 	const protectedRoutes = [

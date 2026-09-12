@@ -1,7 +1,7 @@
 "use server";
 
 import database from "../third-party/prisma";
-import { Role } from "../types/general";
+import { Role } from "../utilities/types";
 import { UserInformation } from "../utilities/user";
 import { getUser } from "./auth";
 

@@ -1,6 +1,6 @@
 import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complete-box";
 import { ScheduleEventModel } from "@/src/lib/models/schedule-event";
-import { CompleteTranslation } from "@/src/lib/types/general";
+import { CompleteTranslation } from "@/src/lib/utilities/types";
 import {
 	useInstantaneousScheduleItemSchema,
 	useRecurringScheduleItemSchema,

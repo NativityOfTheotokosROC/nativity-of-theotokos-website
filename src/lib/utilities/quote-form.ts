@@ -1,6 +1,6 @@
 import z from "zod";
 import { addDays } from "date-fns";
-import { Translation } from "../types/general";
+import { Translation } from "./types";
 import { getQuoteFormSchema } from "../validation/quote-form";
 import { getDateString } from "./date-time";
 

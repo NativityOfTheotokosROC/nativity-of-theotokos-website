@@ -48,16 +48,19 @@ const ArticlePreviewModal = function ({ model }) {
 							permalink: "#",
 							article: {
 								uri: "#",
-								title: title ?? "",
-								body: body ?? "",
+								title: title?.english ?? "",
+								body: body?.english ?? "",
 								author: {
-									name: authorName ?? "",
+									name: authorName?.english ?? "",
 								},
 								dateCreated: dateCreated ?? new Date(),
-								snippet: snippet ?? "",
-								articleImage: image ?? {
-									source: DEFAULT_ARTICLE_PREVIEW_IMAGE,
-									about: t("imagePlaceholder"),
+								snippet: snippet?.english ?? "",
+								articleImage: (image && {
+									...image,
+									caption: image.caption.english,
+								}) ?? {
+									url: DEFAULT_ARTICLE_PREVIEW_IMAGE,
+									caption: t("imagePlaceholder"),
 									placeholder:
 										DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER,
 								},

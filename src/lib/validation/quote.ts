@@ -1,8 +1,8 @@
 import z from "zod";
-import { Translator } from "../types/general";
+import { Translator } from "../utilities/types";
 import { getDateString } from "../utilities/date-time";
 import { emptyStringAsUndefined } from "../utilities/miscellaneous";
-import { useLocalizedSchema } from "./general";
+import { useLocalizedSchema } from "./utilities";
 
 export type NewQuote = z.infer<ReturnType<typeof getQuoteSchema>>;
 

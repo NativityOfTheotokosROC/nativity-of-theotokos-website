@@ -3,7 +3,7 @@ import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
 import { cacheLife, cacheTag } from "next/cache";
 import { Commemoration } from "../models/commemoration";
-import { DailyReadings, Hymn, Image, Language } from "../types/general";
+import { DailyReadings, Hymn, Image, Language } from "../utilities/types";
 import { getLocalTimeZone } from "../utilities/date-time";
 import { removeMarkup } from "../utilities/miscellaneous";
 

@@ -1,7 +1,10 @@
 import { routing } from "@/src/i18n/routing";
 import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
 import ReviewArticleClient from "@/src/lib/components/views/review-article/client";
-import { getArticle, makeArticleEdit } from "@/src/lib/server-actions/article";
+import {
+	getArticleWithTranslations,
+	makeArticleEdit,
+} from "@/src/lib/server-actions/article";
 import { getUserInformation } from "@/src/lib/server-actions/user";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
@@ -31,7 +34,7 @@ export default async function Page({
 		(userInformation.roles.includes("admin") ||
 			userInformation.roles.includes("editor"))
 	) {
-		const article = await getArticle(articleUri, "en"); // TODO: Modify function to include info for all locales in future
+		const article = await getArticleWithTranslations(articleUri);
 		return (
 			<ReviewArticleClient
 				model={newReadonlyModel({

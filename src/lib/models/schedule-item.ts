@@ -1,5 +1,5 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { ScheduleItem } from "../types/general";
+import { ScheduleItem } from "../utilities/types";
 
 export type ScheduleItemModelView = {
 	scheduleItem: ScheduleItem;

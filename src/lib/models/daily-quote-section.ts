@@ -1,5 +1,5 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { DailyQuote } from "../types/general";
+import { DailyQuote } from "../utilities/types";
 
 export type DailyQuoteSectionModelView = {
 	dailyQuote: DailyQuote | null;

@@ -75,6 +75,31 @@ export type ArticleAuthor = {
 	email?: string;
 };
 
+export type RenameProperty<
+	T extends Record<string, unknown>,
+	O extends keyof T,
+	N extends string,
+> = Omit<T, O> & { [K in N]: T[O] };
+
+export type RenameProperties<
+	T extends Record<string, unknown>,
+	N extends [keyof T, string][],
+> = Omit<T, N[number][0]> & { [K in N[number][1]]: T[N[number][0]] };
+
+export type ReplacePropertyType<
+	T extends Record<string, unknown>,
+	K extends keyof T,
+	N,
+> = Omit<T, K> & { [P in K]: N };
+let x: ReplacePropertyType<Article, "uri", URL>;
+
+export type ReplacePropertyTypes<
+	T extends Record<string, unknown>,
+	N extends [keyof T, unknown][],
+> = Omit<T, N[number][0]> & {
+	[P in N[number][0]]: N[number][1];
+};
+
 export type Article = {
 	uri: string;
 	title: string;
@@ -83,8 +108,11 @@ export type Article = {
 	dateCreated: Date;
 	dateUpdated?: Date;
 	snippet: string;
-	articleImage: Required<Pick<Image, "source" | "about">> &
-		Partial<Pick<Image, "placeholder">>;
+	articleImage: RenameProperties<
+		Required<Pick<Image, "source" | "about">> &
+			Partial<Pick<Image, "placeholder"> & {}>,
+		[["source", "url"], ["about", "caption"]]
+	>;
 	isArticleFeatured: boolean;
 };
 
@@ -134,10 +162,10 @@ export type ShareData = {
 
 export type Translation = {
 	english: string;
-	russian: string | null;
+	russian?: string | null;
 };
 export type CompleteTranslation = {
-	[P in keyof Translation]: NonNullable<Translation[P]>;
+	[P in keyof Translation]-?: NonNullable<Translation[P]>;
 };
 
 export type Options<T extends Record<string, unknown>> =
@@ -145,3 +173,21 @@ export type Options<T extends Record<string, unknown>> =
 			options?: Partial<T>;
 	  }
 	| undefined;
+export type ArticleAuthorWithTranslations = ReplacePropertyType<
+	ArticleAuthor,
+	"name",
+	Translation
+>;
+export type ArticleWithTranslations = {
+	[K in keyof Article]: K extends "title" | "body" | "snippet"
+		? Translation
+		: K extends "author"
+			? ArticleAuthorWithTranslations
+			: K extends "articleImage"
+				? {
+						[A in keyof Article[K]]: A extends "caption"
+							? Translation
+							: Article[K][A];
+					}
+				: Article[K];
+};

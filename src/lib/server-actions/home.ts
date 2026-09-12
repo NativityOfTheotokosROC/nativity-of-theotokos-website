@@ -16,7 +16,7 @@ import {
 	GalleryImage,
 	Language,
 	ScheduleItem,
-} from "../types/general";
+} from "../utilities/types";
 import { getDateString } from "../utilities/date-time";
 import { getSchedule } from "./schedule";
 

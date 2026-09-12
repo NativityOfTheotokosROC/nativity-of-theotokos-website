@@ -3,7 +3,7 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
 import { JSX } from "react";
-import { Language } from "../../types/general";
+import { Language } from "../../utilities/types";
 import { LanguageToggleModel } from "../../models/language-toggle";
 import "./language-toggle.css";
 import EnglishIcon from "@/public/assets/english.svg";

@@ -5,24 +5,24 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import {
-	ArticleDraft,
-	WriteArticleModel,
-	WriteArticleModelInteraction,
-	WriteArticleNotification,
-} from "../models/write-article";
-import {
 	NotifierModel,
 	NotifierModelInteraction,
 	NotifierModelView,
 } from "../models/notifier";
 import { ToastNotification } from "../models/toast";
 import {
+	ArticleDraft,
+	WriteArticleModel,
+	WriteArticleModelInteraction,
+	WriteArticleNotification,
+} from "../models/write-article";
+import {
 	deleteTicket,
 	discardDraft,
 	saveDraft,
 	submitArticle,
 } from "../server-actions/article";
-import { Article } from "../types/general";
+import { ArticleWithTranslations, Translation } from "../utilities/types";
 
 export function writeArticleNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
@@ -68,8 +68,8 @@ export function useWriteArticle(
 	ticketId: string,
 	options?: Partial<{
 		lastSavedDraft: ArticleDraft;
-		currentArticle: Article;
-		author: string;
+		currentArticle: ArticleWithTranslations;
+		authorName: Translation;
 		canDeleteTicket: boolean;
 		toastNotifier: NotifierModel<ToastNotification>;
 	}>,
@@ -86,7 +86,7 @@ export function useWriteArticle(
 		modelView: {
 			ticketId,
 			notification: notifier.modelView?.notification ?? null,
-			author: options?.author,
+			authorName: options?.authorName,
 			lastSavedDraft,
 			currentArticle: options?.currentArticle,
 			canDeleteTicket: options?.canDeleteTicket ?? false,
@@ -136,40 +136,37 @@ export function useWriteArticle(
 					break;
 				}
 				case "SUBMIT": {
-					const draft = interaction.input.draft;
+					const submission = interaction.input.submission;
 					await notifier.interact({
 						type: "NOTIFY",
 						input: {
 							notification: { type: "submitting" },
 						},
 					});
-					await submitArticle(ticketId, draft, locale)
-						.then(() => setLastSavedDraft(draft))
-						.then(() =>
-							Promise.all([
-								notifier.interact({
-									type: "NOTIFY",
-									input: {
-										notification: {
-											type: "submit_success",
-											message: t("submitSuccess"),
-										},
-									},
-								}),
-								interaction.input.options?.successCallback?.(),
-							]),
-						)
-						.catch(reason =>
-							notifier.interact({
-								type: "NOTIFY",
-								input: {
-									notification: {
-										type: "submit_failure",
-										message: `${t("submitFailure", { message: reason })}`,
-									},
+					try {
+						await submitArticle(ticketId, submission, locale);
+						setLastSavedDraft(submission);
+						await notifier.interact({
+							type: "NOTIFY",
+							input: {
+								notification: {
+									type: "submit_success",
+									message: t("submitSuccess"),
 								},
-							}),
-						);
+							},
+						});
+						interaction.input.options?.successCallback?.();
+					} catch (error) {
+						await notifier.interact({
+							type: "NOTIFY",
+							input: {
+								notification: {
+									type: "submit_failure",
+									message: `${t("submitFailure", { message: JSON.stringify(error) })}`,
+								},
+							},
+						});
+					}
 					break;
 				}
 				case "DISCARD_DRAFT": {

@@ -1,6 +1,8 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
-import { Article, Notification } from "../types/general";
+import { Notification, Translation } from "../utilities/types";
+import { NewArticle, NewArticleSubmission } from "../validation/article";
 import { ArticleDraft } from "./write-article";
+import { ArticleWithTranslations } from "../utilities/types";
 
 export type ReviewArticleNotification =
 	| Notification<"submitting">
@@ -8,20 +10,15 @@ export type ReviewArticleNotification =
 
 export type ReviewArticleModelView = {
 	draft: ArticleDraft;
-	draftAssigneeName: string;
-	currentArticle?: Article;
+	draftAssigneeName: Translation;
+	currentArticle?: ArticleWithTranslations;
 	notification: ReviewArticleNotification | null;
 };
 
 export type ReviewArticleModelInteraction = InputModelInteraction<
 	"PUBLISH",
 	{
-		draft: ArticleDraft;
-		imageUrl: string;
-		imageCaption: string;
-		isArticleFeatured: boolean;
-		authorName?: string;
-		snippet?: string;
+		article: NewArticle;
 	}
 >;
 

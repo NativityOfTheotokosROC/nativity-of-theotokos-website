@@ -1,7 +1,7 @@
 "use client";
 
 import { useSignOut } from "@/src/lib/model-implementations/sign-out";
-import { Path } from "@/src/lib/types/general";
+import { Path } from "@/src/lib/utilities/types";
 import { ModeledContainerComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import Spinner from "../spinner/Spinner";

@@ -1,14 +1,21 @@
-import { cacheTag, cacheLife } from "next/cache";
-import database from "../third-party/prisma";
-import { Language, Article, ArticleAuthor, NewArticle } from "../types/general";
-import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { cacheLife, cacheTag } from "next/cache";
+import { notFound } from "next/navigation";
 import z from "zod";
-import { removeMarkup } from "../utilities/miscellaneous";
+import database from "../third-party/prisma";
+import { removeMarkup, snippetify } from "../utilities/miscellaneous";
 import {
-	getPublishArticleFormSchema,
+	Article,
+	ArticleAuthor,
+	ArticleAuthorWithTranslations,
+	Language,
+	Translation,
+} from "../utilities/types";
+import {
+	getArticleSchema,
 	MAX_SNIPPET,
-} from "../validation/publish-article-form";
+	NewArticle,
+} from "../validation/article";
 
 export const _FULL_ARTICLE_INCLUDES = {
 	author: { include: { name: true } },
@@ -53,8 +60,8 @@ export async function getAllArticles(language: Language): Promise<Article[]> {
 						dateUpdated: dateUpdated ?? undefined,
 						snippet: snippet.russian ?? snippet.english,
 						articleImage: {
-							source: image.link,
-							about:
+							url: image.link,
+							caption:
 								image.caption.russian ?? image.caption.english,
 						},
 						isArticleFeatured: featuredArticle !== null,
@@ -71,8 +78,8 @@ export async function getAllArticles(language: Language): Promise<Article[]> {
 					dateUpdated: dateUpdated ?? undefined,
 					snippet: snippet.english,
 					articleImage: {
-						source: image.link,
-						about: image.caption.russian ?? image.caption.english,
+						url: image.link,
+						caption: image.caption.russian ?? image.caption.english,
 					},
 					isArticleFeatured: featuredArticle !== null,
 				} satisfies Article;
@@ -122,8 +129,8 @@ export async function getArticleMetadata(
 			author,
 			snippet,
 			articleImage: {
-				source: article.image.link,
-				about: caption,
+				url: article.image.link,
+				caption,
 			},
 		};
 	} catch (error) {
@@ -152,40 +159,45 @@ export async function getArticleAuthors() {
 	return authors satisfies Required<ArticleAuthor>[];
 }
 
+export async function getArticleAuthorsWithTranslations() {
+	"use cache: remote";
+	cacheTag(`article_authors`);
+	const authors = (
+		await database.articleAuthor.findMany({ include: { name: true } })
+	).map(
+		record =>
+			({
+				name: record.name,
+				email: record.email,
+			}) satisfies Required<ArticleAuthorWithTranslations>,
+	);
+	return authors satisfies Required<ArticleAuthorWithTranslations>[];
+}
+
 export async function validateNewArticle(
 	newArticle: NewArticle,
 	locale?: Language,
 ) {
 	const t = await getTranslations({ locale: locale ?? "en" });
-	const publishArticleFormSchema = getPublishArticleFormSchema(t);
-	const {
-		title,
-		body,
-		authorName,
-		imageUrl,
-		imageCaption,
-		snippet,
-		isArticleFeatured,
-	} = publishArticleFormSchema.parse({
-		title: newArticle.title,
-		body: newArticle.body,
-		authorName: newArticle.authorName,
-		snippet: newArticle.snippet,
-		imageUrl: newArticle.articleImage.source,
-		imageCaption: newArticle.articleImage.about,
-		isArticleFeatured: newArticle.isArticleFeatured,
-	} satisfies z.infer<typeof publishArticleFormSchema>);
-	const link = z.string().slugify().parse(title);
-	const finalSnippet =
-		snippet ?? `${removeMarkup(body).substring(0, MAX_SNIPPET - 3)}...`;
+	const articleSchema = getArticleSchema(t).transform(newArticle => ({
+		...newArticle,
+		snippet: {
+			english:
+				newArticle.snippet.english ??
+				snippetify(removeMarkup(newArticle.body.english), MAX_SNIPPET),
+			russian:
+				newArticle.snippet.russian ??
+				(newArticle.body.russian
+					? snippetify(
+							removeMarkup(newArticle.body.russian),
+							MAX_SNIPPET,
+						)
+					: undefined),
+		} satisfies Translation,
+		link: z.string().slugify().parse(newArticle.title),
+	}));
 
-	return {
-		link,
-		title,
-		authorName,
-		body,
-		snippet: finalSnippet,
-		articleImage: { source: imageUrl, about: imageCaption },
-		isArticleFeatured,
-	} satisfies NewArticle & { link: string };
+	return articleSchema.parse(newArticle) satisfies NewArticle & {
+		link: string;
+	};
 }

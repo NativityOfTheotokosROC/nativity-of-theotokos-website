@@ -1,5 +1,5 @@
 import { Model } from "@mvc-react/mvc";
-import { Options } from "../types/general";
+import { Options } from "../utilities/types";
 
 export type CheckboxModelView = {
 	isChecked: boolean;

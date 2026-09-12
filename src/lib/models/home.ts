@@ -4,7 +4,7 @@ import {
 	DailyReadings,
 	GalleryImage,
 	ScheduleItem,
-} from "../types/general";
+} from "../utilities/types";
 import { LatestArticles } from "../server-actions/home";
 
 export type HomeModelView = {

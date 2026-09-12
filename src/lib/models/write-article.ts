@@ -3,7 +3,13 @@ import {
 	InteractiveModel,
 	ModelInteraction,
 } from "@mvc-react/mvc";
-import { Article, Notification } from "../types/general";
+import {
+	ArticleWithTranslations,
+	Notification,
+	Options,
+	Translation,
+} from "../utilities/types";
+import { NewArticleSubmission } from "../validation/article";
 
 export type WriteArticleNotification =
 	| (Notification<
@@ -21,28 +27,35 @@ export type WriteArticleNotification =
 	| Notification<"submitting">;
 
 export type ArticleDraft = {
-	title: string;
-	body: string;
+	title: Translation;
+	body: Translation;
 	lastSaved?: Date;
 };
+
+export type NewArticleDraft = NewArticleSubmission;
 
 export type WriteArticleModelView = {
 	ticketId: string;
 	notification: WriteArticleNotification | null;
 	canDeleteTicket: boolean;
-	author?: string;
+	authorName?: Translation;
 	lastSavedDraft?: ArticleDraft;
-	currentArticle?: Article;
+	currentArticle?: ArticleWithTranslations;
 };
 
 export type WriteArticleModelInteraction =
 	| ModelInteraction<"DISCARD_DRAFT">
 	| InputModelInteraction<
-			"SUBMIT" | "SAVE_DRAFT",
+			"SAVE_DRAFT",
 			{
-				draft: ArticleDraft;
-				options?: { successCallback?: () => void };
-			}
+				draft: NewArticleDraft;
+			} & Options<{ successCallback: () => void }>
+	  >
+	| InputModelInteraction<
+			"SUBMIT",
+			{ submission: NewArticleSubmission } & Options<{
+				successCallback: () => void;
+			}>
 	  >;
 
 export type WriteArticleModel = InteractiveModel<

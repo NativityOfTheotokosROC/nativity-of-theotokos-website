@@ -1,13 +1,17 @@
-import { ModeledContainerComponent } from "@mvc-react/components";
-import { FileSelectorButtonModel } from "../../models/file-selector-button";
+import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { useRef } from "react";
+import { FileSelectorButtonModel } from "../../models/file-selector-button";
 import Button from "../button/Button";
 
-const FileSelectorButton = function ({ model, children }) {
-	const { modelView, interact } = model;
+const FileSelectorButton = function ({ model }) {
+	const {
+		fileSelector: { modelView: fileSelectorModelView, interact },
+		contents,
+		contentsWhenFile,
+	} = model.modelView;
+	const { file, type } = fileSelectorModelView;
 	const inputRef = useRef<HTMLInputElement>(null);
-	const type = modelView?.type;
 	const acceptedFileType =
 		type && type === "image"
 			? "image/*"
@@ -43,10 +47,10 @@ const FileSelectorButton = function ({ model, children }) {
 					},
 				})}
 			>
-				{children}
+				{file ? contents : (contentsWhenFile ?? contents)}
 			</Button>
 		</>
 	);
-} satisfies ModeledContainerComponent<FileSelectorButtonModel>;
+} satisfies ModeledVoidComponent<InitializedModel<FileSelectorButtonModel>>;
 
 export default FileSelectorButton;

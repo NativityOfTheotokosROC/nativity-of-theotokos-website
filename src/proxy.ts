@@ -3,7 +3,7 @@ import { routing } from "./i18n/routing";
 import { NextRequest, NextResponse } from "next/server";
 import { getProtectedRoutes, redirects } from "./lib/utilities/routing";
 import { getUser } from "./lib/server-actions/auth";
-import { Path } from "./lib/types/general";
+import { Path } from "./lib/utilities/types";
 
 const nextIntlMiddleware = createMiddleware(routing);
 

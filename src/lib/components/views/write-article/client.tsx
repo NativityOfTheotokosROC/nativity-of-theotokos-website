@@ -11,7 +11,7 @@ import WriteArticle from "./WriteArticle";
 const WriteArticleClient = function ({ model }) {
 	const {
 		ticketId,
-		author,
+		authorName,
 		lastSavedDraft,
 		currentArticle,
 		canDeleteTicket,
@@ -20,7 +20,7 @@ const WriteArticleClient = function ({ model }) {
 		toastNotifierVIInterface(),
 	);
 	const writeArticle = useWriteArticle(ticketId, {
-		author,
+		authorName,
 		lastSavedDraft,
 		toastNotifier,
 		currentArticle,
@@ -34,7 +34,7 @@ const WriteArticleClient = function ({ model }) {
 			WriteArticleModelView,
 			| "ticketId"
 			| "lastSavedDraft"
-			| "author"
+			| "authorName"
 			| "currentArticle"
 			| "canDeleteTicket"
 		>

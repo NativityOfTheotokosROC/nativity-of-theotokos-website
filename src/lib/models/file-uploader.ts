@@ -1,5 +1,5 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
-import { Notification } from "../types/general";
+import { Notification } from "../utilities/types";
 
 export type FileUploaderNotification = Notification<
 	"uploading" | "upload_success" | "upload_fail"
@@ -17,7 +17,7 @@ export type FileUploaderModelInteraction = InputModelInteraction<
 	{
 		file: File;
 		presignedUrl: string;
-		successCallback?: (imageUrl: string) => Promise<void>;
+		successCallback?: (imageUrl: string) => void;
 	}
 >;
 

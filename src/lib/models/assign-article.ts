@@ -1,22 +1,23 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 import {
-	ArticleAuthor,
+	ArticleAuthorWithTranslations,
 	MessageNotification,
 	Notification,
-} from "../types/general";
+} from "../utilities/types";
+import { NewArticleAuthor } from "../validation/article";
 
 export type AssignArticleNotification =
 	| Notification<"submitting">
 	| MessageNotification<"submit_success" | "submit_failure">;
 
 export type AssignArticleModelView = {
-	suggestions?: Required<ArticleAuthor>[];
+	suggestions?: Required<ArticleAuthorWithTranslations>[];
 	notification: AssignArticleNotification | null;
 };
 
 export type AssignArticleModelInteraction = InputModelInteraction<
 	"ASSIGN_ARTICLE",
-	{ author: Required<ArticleAuthor>; successCallback?: () => Promise<void> }
+	{ author: NewArticleAuthor; successCallback?: () => void }
 >;
 
 export type AssignArticleModel = InteractiveModel<

@@ -7,7 +7,7 @@ import {
 	googleSans,
 	googleSansFlex,
 } from "@/src/lib/third-party/fonts";
-import { Language } from "@/src/lib/types/general";
+import { Language } from "@/src/lib/utilities/types";
 import { BASE_URL } from "@/src/lib/utilities/server-constants";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import type { Metadata } from "next";

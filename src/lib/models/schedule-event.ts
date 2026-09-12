@@ -3,7 +3,7 @@ import {
 	InstantaneousScheduleItem,
 	RecurringScheduleItem,
 	Translation,
-} from "../types/general";
+} from "../utilities/types";
 import {
 	NewInstantaneousScheduleItem,
 	NewRecurringScheduleItem,

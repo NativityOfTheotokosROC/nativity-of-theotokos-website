@@ -8,7 +8,7 @@ import {
 	NotifierModelView,
 } from "../models/notifier";
 import { ToastNotification } from "../models/toast";
-import { Notification } from "../types/general";
+import { Notification } from "../utilities/types";
 import { createToast } from "../components/miscellaneous/utility";
 
 export type ToastNotifierModel = NotifierModel<ToastNotification>;

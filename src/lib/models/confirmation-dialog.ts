@@ -23,8 +23,8 @@ export type ConfirmationDialogModelInteraction =
 			"OPEN",
 			{
 				message: string;
-				proceedCallback: () => Promise<void>;
-				cancelCallback?: () => Promise<void>;
+				proceedCallback: () => void;
+				cancelCallback?: () => void;
 			}
 	  >;
 

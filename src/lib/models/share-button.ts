@@ -1,5 +1,5 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { ShareData } from "../types/general";
+import { ShareData } from "../utilities/types";
 
 export type ShareButtonModelView = {
 	shareData: ShareData;

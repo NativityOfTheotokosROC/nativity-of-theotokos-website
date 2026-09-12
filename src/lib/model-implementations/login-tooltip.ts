@@ -5,7 +5,7 @@ import {
 	LoginTooltipModel,
 	LoginTooltipModelView,
 } from "../models/login-tooltip";
-import { Path } from "../types/general";
+import { Path } from "../utilities/types";
 import { useUserInformation } from "../utilities/user";
 
 type LoginTooltipOptions = Partial<{

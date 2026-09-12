@@ -1,6 +1,9 @@
 import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
 import AssignArticleClient from "@/src/lib/components/views/assign-article/client";
-import { getArticleAuthors } from "@/src/lib/server-only/article";
+import {
+	getArticleAuthors,
+	getArticleAuthorsWithTranslations,
+} from "@/src/lib/server-only/article";
 import { isValidLocale } from "@/src/lib/utilities/internationalization";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
@@ -15,7 +18,7 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 }
 
 export default async function Page() {
-	const articleAuthors = await getArticleAuthors();
+	const articleAuthors = await getArticleAuthorsWithTranslations();
 	return (
 		<ProtectedComponent model={newReadonlyModel({ roles: ["admin"] })}>
 			<AssignArticleClient

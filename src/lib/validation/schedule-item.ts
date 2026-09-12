@@ -1,6 +1,6 @@
 import z from "zod";
-import { Translator } from "../types/general";
-import { getTranslationSchema, useLocalizedSchema } from "./general";
+import { Translator } from "../utilities/types";
+import { getTranslationSchema, useLocalizedSchema } from "./utilities";
 import { validateRecurringPattern } from "../utilities/schedule";
 
 export type NewInstantaneousScheduleItem = z.infer<

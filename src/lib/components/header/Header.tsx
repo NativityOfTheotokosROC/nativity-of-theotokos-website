@@ -11,7 +11,7 @@ import { useNavigationDrawer } from "../../model-implementations/navigation-draw
 import { useUserActions } from "../../model-implementations/user-action";
 import { HeaderModel } from "../../models/header";
 import { georgia } from "../../third-party/fonts";
-import { Navlink } from "../../types/general";
+import { Navlink } from "../../utilities/types";
 import { LoginTooltipContext } from "../../utilities/contexts";
 import { usePageLoadingBarRouter } from "../../utilities/page-loading-bar";
 import { useUserInformation } from "../../utilities/user";

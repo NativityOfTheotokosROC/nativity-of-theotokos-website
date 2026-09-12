@@ -1,5 +1,5 @@
 import { ActionName } from "../models/user-action";
-import { Role } from "../types/general";
+import { Role } from "./types";
 
 function getAllActionNames() {
 	const actionNames = [

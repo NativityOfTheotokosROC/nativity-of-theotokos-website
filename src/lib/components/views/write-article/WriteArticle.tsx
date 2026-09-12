@@ -1,73 +1,85 @@
 "use client";
 
+import DiscardGraphic from "@/public/assets/graphic-1.svg";
+import SubmitGraphic from "@/public/assets/icon-2.svg";
 import ArticlePreviewModal from "@/src/lib/components/article-preview-modal/ArticlePreviewModal";
 import Button from "@/src/lib/components/button/Button";
 import Editor from "@/src/lib/components/editor/Editor";
 import Spinner from "@/src/lib/components/spinner/Spinner";
 import { useArticlePreviewModal } from "@/src/lib/model-implementations/article-preview-modal";
+import { useConfirmationDialog } from "@/src/lib/model-implementations/confirmation-dialog";
 import { WriteArticleModel } from "@/src/lib/models/write-article";
 import { useCloseWarning } from "@/src/lib/utilities/hooks";
-import { useWriteArticleFormSchema } from "@/src/lib/validation/write-article-form";
+import { CompleteTranslation } from "@/src/lib/utilities/types";
+import { useArticleSubmissionSchema } from "@/src/lib/validation/article";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useCallback } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ButtonBar from "../../button-bar/ButtonBar";
-import PageView from "../../page-view/PageView";
-import { useConfirmationDialog } from "@/src/lib/model-implementations/confirmation-dialog";
-import ConfirmationDialog from "../../confirmation-dialog/ConfirmationDialog";
-import SubmitGraphic from "@/public/assets/icon-2.svg";
-import DiscardGraphic from "@/public/assets/graphic-1.svg";
 import GoHomeButton from "../../button/GoHomeButton";
+import ConfirmationDialog from "../../confirmation-dialog/ConfirmationDialog";
 import InformationView from "../../information-view/InformationView";
+import PageView from "../../page-view/PageView";
+import { BLANK_TRANSLATION } from "@/src/lib/utilities/constants";
 
 const WriteArticle = function ({ model }) {
 	const { modelView, interact } = model;
-	const { notification, lastSavedDraft, author, currentArticle } = modelView;
+	const {
+		notification,
+		lastSavedDraft,
+		authorName: author,
+		currentArticle,
+	} = modelView;
 	const t = useTranslations("writeArticle");
 	const tMisc = useTranslations("miscellaneous");
-	const defaultTitle = "";
-	const defaultBody = `<p>${t("bodyPlaceholder")}</p>`;
-	const articleFormSchema = useWriteArticleFormSchema();
+	const defaultTitle = BLANK_TRANSLATION;
+	const defaultBody = {
+		english: `<p>${t("bodyPlaceholder")}</p>`,
+		russian: `<p>${t("bodyPlaceholder")}</p>`,
+	} satisfies CompleteTranslation;
 	const {
 		control,
 		register,
 		handleSubmit,
 		reset,
 		formState: { isSubmitting, errors },
-		setValue,
-		watch,
+		getValues,
 	} = useForm({
 		mode: "onChange",
-		resolver: zodResolver(articleFormSchema),
+		resolver: zodResolver(useArticleSubmissionSchema()),
 		shouldUnregister: true,
 		defaultValues: {
 			title: lastSavedDraft?.title ?? defaultTitle,
 			body: lastSavedDraft?.body ?? defaultBody,
 		},
 	});
-	const title = watch("title");
-	const body = watch("body");
-	const previewAuthor =
-		currentArticle?.author.name ?? author ?? t("unknownAuthor");
+	const previewAuthor = currentArticle?.author.name ??
+		author ?? { english: t("unknownAuthor"), russian: t("unknownAuthor") };
 	const hasDraftChanged = lastSavedDraft
-		? !(title === lastSavedDraft.title && body === lastSavedDraft.body)
-		: !(title === defaultTitle && body === defaultBody);
+		? !(
+				getValues("title.english") === lastSavedDraft.title.english &&
+				getValues("body.english") === lastSavedDraft.body.english &&
+				getValues("title.russian") === lastSavedDraft.title.russian &&
+				getValues("body.russian") === lastSavedDraft.body.russian
+			)
+		: !(
+				getValues("title.english") === defaultTitle.english &&
+				getValues("body.english") === defaultBody.english &&
+				getValues("title.russian") === defaultTitle.russian &&
+				getValues("body.russian") === defaultBody.russian
+			);
 	const articlePreviewModal = useArticlePreviewModal(
 		handleSubmit(async form => {
-			await articlePreviewModal.interact({ type: "CLOSE" });
+			articlePreviewModal.interact({ type: "CLOSE" });
 			await interact({
 				type: "SUBMIT",
 				input: {
-					draft: {
-						title: form.title,
-						body: form.body,
-					},
+					submission: form,
 					options: {
-						async successCallback() {
+						successCallback() {
 							reset({
 								title: defaultTitle,
 								body: defaultBody,
@@ -79,16 +91,12 @@ const WriteArticle = function ({ model }) {
 		}),
 	);
 	const confirmationDialog = useConfirmationDialog();
-	register("body");
 	useCloseWarning(
-		useCallback(
-			() =>
-				!(
-					notification?.type === "submit_success" ||
-					notification?.type === "discard_draft_success"
-				) && hasDraftChanged,
-			[notification?.type, hasDraftChanged],
-		),
+		() =>
+			!(
+				notification?.type === "submit_success" ||
+				notification?.type === "discard_draft_success"
+			) && hasDraftChanged,
 	);
 
 	if (notification?.type === "submit_success")
@@ -156,18 +164,17 @@ const WriteArticle = function ({ model }) {
 						)}
 						<Controller
 							control={control}
-							name={"body"}
+							name={"body.english"}
 							render={({ field: { onChange } }) => (
 								<Editor
 									model={newReadonlyModel({
 										initialContent:
-											lastSavedDraft?.body ?? defaultBody,
-										className: errors.body
+											lastSavedDraft?.body.english ??
+											defaultBody.english,
+										className: errors.body?.english
 											? "border-red-800"
 											: "border-gray-400",
-										async changeCallback(content) {
-											onChange(content);
-										},
+										changeCallback: onChange,
 									})}
 								/>
 							)}
@@ -201,8 +208,8 @@ const WriteArticle = function ({ model }) {
 										notification?.type === "submitting",
 									className:
 										"flex justify-center items-center w-fit",
-									async action() {
-										await confirmationDialog.interact({
+									action() {
+										confirmationDialog.interact({
 											type: "OPEN",
 											input: {
 												message: t(
@@ -238,16 +245,39 @@ const WriteArticle = function ({ model }) {
 										notification?.type === "submitting",
 									className:
 										"flex justify-center items-center w-fit max-w-1/2 min-w-[8em]",
-									action: async () =>
+									action: async () => {
+										const {
+											english: titleEnglish,
+											russian: titleRussian,
+										} = getValues("title");
+										const {
+											english: bodyEnglish,
+											russian: bodyRussian,
+										} = getValues("body");
 										await interact({
 											type: "SAVE_DRAFT",
 											input: {
 												draft: {
-													title,
-													body,
+													title: {
+														english: titleEnglish,
+														russian:
+															typeof titleRussian ===
+															"string"
+																? titleRussian
+																: undefined,
+													},
+													body: {
+														english: bodyEnglish,
+														russian:
+															typeof bodyRussian ===
+															"string"
+																? bodyRussian
+																: undefined,
+													},
 												},
 											},
-										}),
+										});
+									},
 								})}
 							>
 								{notification?.type === "saving_draft" ? (

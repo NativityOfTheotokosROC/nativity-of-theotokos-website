@@ -8,7 +8,7 @@ import {
 	LanguageToggleModelView,
 } from "../models/language-toggle";
 import EventEmitter from "node:events";
-import { Language } from "../types/general";
+import { Language } from "../utilities/types";
 import { useState, useEffect } from "react";
 
 export function languageToggleVIInterface(

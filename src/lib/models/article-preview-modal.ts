@@ -3,32 +3,27 @@ import {
 	InteractiveModel,
 	ModelInteraction,
 } from "@mvc-react/mvc";
-import { Article, Image } from "../types/general";
-
-type ArticleImage = Article["articleImage"];
+import { Article, Translation } from "../utilities/types";
 
 export type ArticlePreviewModalModelView = {
 	isOpen: boolean;
-	title: string;
-	body: string;
-	authorName: string;
+	title: Translation;
+	body: Translation;
+	authorName: Translation;
 	dateCreated?: Date;
-	image?: ArticleImage;
-	snippet?: string;
+	image?: {
+		[K in keyof Article["articleImage"]]: K extends "caption"
+			? Translation
+			: Article["articleImage"][K];
+	};
+	snippet?: Partial<Translation>;
 };
 
 export type ArticlePreviewModalModelInteraction =
 	| ModelInteraction<"SUBMIT">
 	| InputModelInteraction<
 			"OPEN",
-			{
-				title: string;
-				body: string;
-				authorName: string;
-				dateCreated?: Date;
-				image?: ArticleImage;
-				snippet?: string;
-			}
+			Omit<ArticlePreviewModalModelView, "isOpen">
 	  >
 	| ModelInteraction<"CLOSE">;
 

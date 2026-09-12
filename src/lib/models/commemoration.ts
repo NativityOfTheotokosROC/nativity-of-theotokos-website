@@ -1,5 +1,5 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { Image } from "../types/general";
+import { Image } from "../utilities/types";
 
 export type Commemoration = {
 	title: string;

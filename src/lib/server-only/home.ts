@@ -12,7 +12,7 @@ import {
 	GalleryImage,
 	Language,
 	ScheduleItem,
-} from "../types/general";
+} from "../utilities/types";
 import { getDateString } from "../utilities/date-time";
 import { isRemotePath } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";

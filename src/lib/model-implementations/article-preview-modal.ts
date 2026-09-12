@@ -16,22 +16,9 @@ export function articlePreviewModalVIInterface(
 			const initErrorMessage = "The model is uninitialized";
 			switch (interaction.type) {
 				case "OPEN": {
-					const {
-						title,
-						body,
-						authorName,
-						dateCreated,
-						snippet,
-						image,
-					} = interaction.input;
 					return {
+						...interaction.input,
 						isOpen: true,
-						title,
-						body,
-						authorName,
-						dateCreated,
-						snippet,
-						image,
 					};
 				}
 				case "CLOSE": {

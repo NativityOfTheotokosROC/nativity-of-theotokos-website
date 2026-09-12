@@ -11,7 +11,7 @@ import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complet
 import { useQuotePreviewModal } from "@/src/lib/model-implementations/quote-preview-model";
 import { useTabs } from "@/src/lib/model-implementations/tabs";
 import { NewQuoteModel } from "@/src/lib/models/new-quote";
-import { CompleteTranslation } from "@/src/lib/types/general";
+import { CompleteTranslation } from "@/src/lib/utilities/types";
 import { autoCompleteFields } from "@/src/lib/utilities/auto-complete-box";
 import { getDateString } from "@/src/lib/utilities/date-time";
 import { useCloseWarning } from "@/src/lib/utilities/hooks";
@@ -27,7 +27,6 @@ const NewQuote = function ({ model }) {
 	const { modelView, interact } = model;
 	const { newQuoteNotification, autoCompleteInfo } = modelView;
 	const t = useTranslations("newQuote");
-	const quoteFormSchema = useQuoteFormSchema();
 	const defaultValues = getDefaultValues();
 	const currentDate = getDateString(new Date(), true);
 	const {
@@ -40,7 +39,7 @@ const NewQuote = function ({ model }) {
 		formState: { isSubmitting, errors, isValid },
 	} = useForm({
 		mode: "onChange",
-		resolver: zodResolver(quoteFormSchema),
+		resolver: zodResolver(useQuoteFormSchema()),
 		shouldUnregister: true,
 		defaultValues,
 	});
@@ -144,9 +143,9 @@ const NewQuote = function ({ model }) {
 								input: {
 									newQuote: form,
 									options: {
-										successCallback: async () => {
+										successCallback() {
 											reset();
-											await tabs.interact({
+											tabs.interact({
 												type: "SWITCH_TAB",
 												input: { id: 0 },
 											});
@@ -155,13 +154,13 @@ const NewQuote = function ({ model }) {
 								},
 							});
 						},
-						async errors => {
+						errors => {
 							if (
 								errors.author?.english ||
 								errors.source?.english ||
 								errors.quote?.english
 							)
-								await tabs.interact({
+								tabs.interact({
 									type: "SWITCH_TAB",
 									input: { id: 0 },
 								});
@@ -170,7 +169,7 @@ const NewQuote = function ({ model }) {
 								errors.source?.russian ||
 								errors.quote?.russian
 							)
-								await tabs.interact({
+								tabs.interact({
 									type: "SWITCH_TAB",
 									input: { id: 1 },
 								});
@@ -203,7 +202,7 @@ const NewQuote = function ({ model }) {
 											data-tooltip-id={
 												englishAuthorFields.dataTooltipId
 											}
-											onChange={async e => {
+											onChange={e => {
 												onChange(e);
 												englishAuthorFields.onChange(
 													e.target.value,
@@ -247,7 +246,7 @@ const NewQuote = function ({ model }) {
 											data-tooltip-id={
 												englishSourceFields.dataTooltipId
 											}
-											onChange={async e => {
+											onChange={e => {
 												onChange(e);
 												englishSourceFields.onChange(
 													e.target.value,
@@ -306,7 +305,7 @@ const NewQuote = function ({ model }) {
 											data-tooltip-id={
 												russianAuthorFields.dataTooltipId
 											}
-											onChange={async e => {
+											onChange={e => {
 												onChange(e);
 												russianAuthorFields.onChange(
 													e.target.value,
@@ -350,7 +349,7 @@ const NewQuote = function ({ model }) {
 											data-tooltip-id={
 												russianSourceFields.dataTooltipId
 											}
-											onChange={async e => {
+											onChange={e => {
 												onChange(e);
 												russianSourceFields.onChange(
 													e.target.value,
@@ -432,9 +431,9 @@ const NewQuote = function ({ model }) {
 									type: "button",
 									disabled: !isValid,
 									className: "w-fit max-w-1/2 min-w-[8em]",
-									action: handleSubmit(async form => {
+									action: handleSubmit(form => {
 										const { author, quote, source } = form;
-										await quotePreviewModal.interact({
+										quotePreviewModal.interact({
 											type: "OPEN",
 											input: {
 												englishQuote: {

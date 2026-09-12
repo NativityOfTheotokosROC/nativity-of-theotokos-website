@@ -12,7 +12,7 @@ import {
 	InstantaneousScheduleItem,
 	Language,
 	RecurringScheduleItemInstance,
-} from "../types/general";
+} from "../utilities/types";
 import { getTranslations } from "next-intl/server";
 import { getMd5Hash } from "../utilities/miscellaneous";
 import { protect } from "./auth";

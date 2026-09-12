@@ -1,7 +1,7 @@
 import { usePathname } from "@/src/i18n/navigation";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { UserActionModel } from "../models/user-action";
-import { Path } from "../types/general";
+import { Path } from "../utilities/types";
 import { usePageLoadingBarRouter } from "../utilities/page-loading-bar";
 import { useUserInformation } from "../utilities/user";
 import { getUserActionNames } from "../utilities/user-action";

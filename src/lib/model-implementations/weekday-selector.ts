@@ -8,7 +8,7 @@ import {
 } from "../models/weekday-selector";
 import { Day } from "../utilities/weekday-selector";
 import { UninitializedModelError } from "../utilities/errors";
-import { Options } from "../types/general";
+import { Options } from "../utilities/types";
 
 type VIInterfaceOptions = Options<{
 	updateCallback: (

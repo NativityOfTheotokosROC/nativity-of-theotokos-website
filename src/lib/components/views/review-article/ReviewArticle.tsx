@@ -8,14 +8,15 @@ import { useTranslations } from "next-intl";
 import { useArticlePreviewModal } from "@/src/lib/model-implementations/article-preview-modal";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { usePublishArticleFormSchema } from "@/src/lib/validation/publish-article-form";
+import { useArticleSchema } from "@/src/lib/validation/article";
 import Spinner from "../../spinner/Spinner";
 import Editor from "../../editor/Editor";
 import Button from "../../button/Button";
 import ArticlePreviewModal from "../../article-preview-modal/ArticlePreviewModal";
-import { useFileSelectorButton } from "@/src/lib/model-implementations/file-selector-button";
+import { useFileSelector } from "@/src/lib/model-implementations/file-selector";
 import Image from "next/image";
 import {
+	BLANK_TRANSLATION,
 	DEFAULT_ARTICLE_PREVIEW_IMAGE,
 	DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER,
 } from "@/src/lib/utilities/constants";
@@ -37,7 +38,6 @@ const ReviewArticle = function ({ model }) {
 		modelView;
 	const t = useTranslations("reviewArticle");
 	const tMisc = useTranslations("miscellaneous");
-	const publishArticleFormSchema = usePublishArticleFormSchema();
 	const {
 		control,
 		register,
@@ -45,45 +45,35 @@ const ReviewArticle = function ({ model }) {
 		setValue,
 		formState: { errors, isSubmitting },
 	} = useForm({
-		resolver: zodResolver(publishArticleFormSchema),
+		resolver: zodResolver(useArticleSchema()),
 		defaultValues: {
 			title: draft.title,
 			body: draft.body,
 			authorName: draftAssigneeName,
-			snippet: currentArticle?.snippet ?? "",
-			imageUrl: currentArticle?.articleImage.source ?? "",
-			imageCaption: currentArticle?.articleImage.about ?? "",
+			snippet: currentArticle?.snippet ?? BLANK_TRANSLATION,
+			image: {
+				url: currentArticle?.articleImage.url,
+				caption:
+					currentArticle?.articleImage.caption ?? BLANK_TRANSLATION,
+			},
 			isArticleFeatured: false,
 		},
+		shouldUnregister: true,
 	});
 	const articlePreviewModal = useArticlePreviewModal(
 		handleSubmit(async form => {
 			await articlePreviewModal.interact({ type: "CLOSE" });
-			const {
-				title,
-				body,
-				authorName,
-				imageUrl,
-				imageCaption,
-				snippet,
-				isArticleFeatured,
-			} = form;
 			await interact({
 				type: "PUBLISH",
 				input: {
-					draft: { title, body },
-					imageUrl,
-					imageCaption,
-					authorName: authorName ?? draftAssigneeName,
-					snippet,
-					isArticleFeatured,
+					article: form,
 				},
 			});
 		}),
 	);
 	const imageProcessor = useImageProcessor();
 	const fileUploader = useFileUploader();
-	const imageSelector = useFileSelectorButton({
+	const imageSelector = useFileSelector({
 		type: "image",
 		async selectCallback(file) {
 			if (
@@ -107,8 +97,8 @@ const ReviewArticle = function ({ model }) {
 								input: {
 									file: processedImage,
 									presignedUrl,
-									async successCallback(imageUrl) {
-										setValue("imageUrl", imageUrl);
+									successCallback(imageUrl) {
+										setValue("image.url", imageUrl);
 									},
 								},
 							});
@@ -117,7 +107,7 @@ const ReviewArticle = function ({ model }) {
 				});
 		},
 	});
-	// TODO: Combine both into its own component I think
+	// TODO: Combine both into their own component I think
 	const imageStatus =
 		imageProcessor.modelView.notification === null &&
 		fileUploader.modelView.notification === null
@@ -137,7 +127,6 @@ const ReviewArticle = function ({ model }) {
 			? imageProcessor.modelView.notification.message
 			: (fileUploader.modelView.notification?.message ?? null);
 
-	register("imageUrl");
 	useCloseWarning(() => !(notification?.type === "submit_success"));
 
 	if (notification?.type === "submit_success")
@@ -152,34 +141,26 @@ const ReviewArticle = function ({ model }) {
 				<GoHomeButton>{t("nextButton")}</GoHomeButton>
 			</InformationView>
 		);
+	register("image.url");
 
 	return (
 		<>
 			<ArticlePreviewModal model={articlePreviewModal} />
 			<PageView model={newReadonlyModel({ title: t("title") })}>
 				<form
-					onSubmit={handleSubmit(
-						async form =>
-							await articlePreviewModal.interact({
-								type: "OPEN",
-								input: {
-									title: form.title,
-									body: form.body,
-									authorName:
-										form.authorName ?? draftAssigneeName,
-									dateCreated:
-										currentArticle?.dateCreated ??
-										new Date(),
-									snippet: form.snippet,
-									image: {
-										source: form.imageUrl,
-										about: form.imageCaption,
-										placeholder:
-											currentArticle?.articleImage
-												.placeholder,
-									},
-								},
-							}),
+					onSubmit={handleSubmit(form =>
+						articlePreviewModal.interact({
+							type: "OPEN",
+							input: {
+								title: form.title,
+								body: form.body,
+								authorName: form.authorName,
+								dateCreated:
+									currentArticle?.dateCreated ?? new Date(),
+								snippet: form.snippet,
+								image: form.image,
+							},
+						}),
 					)}
 				>
 					<div className="flex flex-col gap-3">
@@ -210,17 +191,15 @@ const ReviewArticle = function ({ model }) {
 						)}
 						<Controller
 							control={control}
-							name={"body"}
+							name={"body.english"}
 							render={({ field: { onChange } }) => (
 								<Editor
 									model={newReadonlyModel({
-										initialContent: draft.body,
-										className: errors.body
+										initialContent: draft.body.english,
+										className: errors.body?.english
 											? "border-red-800"
 											: "border-gray-400",
-										async changeCallback(content) {
-											onChange(content);
-										},
+										changeCallback: onChange,
 									})}
 								/>
 							)}
@@ -236,7 +215,7 @@ const ReviewArticle = function ({ model }) {
 								src={
 									imageProcessor.modelView
 										.processedImageBlobUrl ??
-									currentArticle?.articleImage.source ??
+									currentArticle?.articleImage.url ??
 									DEFAULT_ARTICLE_PREVIEW_IMAGE
 								}
 								placeholder="blur"
@@ -248,18 +227,21 @@ const ReviewArticle = function ({ model }) {
 								unoptimized={true}
 							/>
 						</div>
-						{errors.imageUrl && (
+						{errors.image?.url && (
 							<span className="text-sm text-red-800">
-								{errors.imageUrl.message}
+								{errors.image.url.message}
 							</span>
 						)}
 						<div className="flex items-center gap-6">
-							<FileSelectorButton model={imageSelector}>
-								{imageSelector.modelView.file ||
-								currentArticle?.articleImage
-									? t("changeImage")
-									: t("selectImage")}
-							</FileSelectorButton>
+							<FileSelectorButton
+								model={newReadonlyModel({
+									fileSelector: imageSelector,
+									contents: currentArticle?.articleImage
+										? t("changeImage")
+										: t("selectImage"),
+									contentsWhenFile: t("changeImage"),
+								})}
+							/>
 							{imageStatus && (
 								<div className="flex items-center gap-3">
 									{imageStatus === "processing" && (
@@ -287,25 +269,25 @@ const ReviewArticle = function ({ model }) {
 							)}
 						</div>
 						<input
-							{...register("imageCaption")}
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.imageCaption ? "border-red-800" : "border-gray-400"}`}
+							{...register("image.caption.english")}
+							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.image?.caption?.english ? "border-red-800" : "border-gray-400"}`}
 							placeholder={t("imageCaptionField")}
 							autoComplete="off"
 						/>
-						{errors.imageCaption && (
+						{errors.image?.caption?.english && (
 							<span className="text-sm text-red-800">
-								{errors.imageCaption.message}
+								{errors.image.caption?.english.message}
 							</span>
 						)}
 						<input
-							{...register("snippet")}
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.snippet ? "border-red-800" : "border-gray-400"}`}
+							{...register("snippet.english")}
+							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.snippet?.english ? "border-red-800" : "border-gray-400"}`}
 							placeholder={`${t("snippetField")} (${tMisc("optional")})`}
 							autoComplete="off"
 						/>
-						{errors.snippet && (
+						{errors.snippet?.english && (
 							<span className="text-sm text-red-800">
-								{errors.snippet.message}
+								{errors.snippet?.english?.message}
 							</span>
 						)}
 						{!currentArticle?.isArticleFeatured && (
