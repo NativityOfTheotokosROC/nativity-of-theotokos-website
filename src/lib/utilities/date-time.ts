@@ -1,7 +1,7 @@
 import { format, formatInTimeZone, toZonedTime } from "date-fns-tz";
 
-const DATE_FORMAT = "yyyy-MM-dd" as const;
-const TIME_FORMAT = "HH:mm";
+export const DATE_FORMAT = "yyyy-MM-dd" as const;
+export const TIME_FORMAT = "HH:mm";
 
 export function getNativeTimeZone() {
 	return "Africa/Harare" as const;

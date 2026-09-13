@@ -29,64 +29,61 @@ export type DailyReadings = {
 	hymns: Hymn[];
 };
 
-export type DailyQuote = {
-	quote: string;
-	author: string;
-	source: string | null;
+export type Text = string | Translation;
+
+export type DailyQuote<T extends Text = string> = {
+	quote: T;
+	author: T;
+	source: T | null;
 };
 
-export type ScheduleItem = {
-	id: number;
-	title: string;
-	venue: string;
+export type ScheduleItem<T extends Text = string> = {
+	title: T;
+	venue: T;
 	date: Date;
 	times: {
 		time: Date;
-		designation: string;
+		designation: T;
 	}[];
 };
 
-export type ScheduleItemWithTranslations = {
-	[K in keyof ScheduleItem]: K extends "title" | "venue"
-		? Translation
-		: K extends "times"
-			? {
-					[A in keyof ScheduleItem[K][number]]: A extends "designation"
-						? Translation
-						: ScheduleItem[K][number][A];
-				}[]
-			: ScheduleItem[K];
-};
+export type ScheduleItemWithTranslations = ScheduleItem<Translation>;
 
-export type RecurringScheduleItem = Omit<ScheduleItem, "date"> & {
+export type RecurringScheduleItem<T extends Text = string> = Omit<
+	ScheduleItem<T>,
+	"date"
+> & {
+	id: number;
 	recurringPattern: string;
 	isDisabled: boolean;
 };
 
-export type InstantaneousScheduleItem = ScheduleItem & {
-	isRemoved: boolean;
-};
+export type InstantaneousScheduleItem<T extends Text = string> =
+	ScheduleItem<T> & {
+		id: number;
+		isRemoved: boolean;
+	};
 
 export type TypeDiff<
 	T extends Record<string, unknown>,
 	U extends Record<string, unknown>,
 > = { [K in Exclude<keyof T, keyof U>]: K extends keyof U ? never : T[K] };
 
-export type InstantaneousScheduleItemWithTranslations = TypeDiff<
-	InstantaneousScheduleItem,
-	ScheduleItem
-> &
-	ScheduleItemWithTranslations;
+export type InstantaneousScheduleItemWithTranslations =
+	InstantaneousScheduleItem<Translation>;
 
-export type RecurringScheduleItemWithTranslations = TypeDiff<
-	RecurringScheduleItem,
-	ScheduleItem
-> &
-	ScheduleItemWithTranslations;
+export type RecurringScheduleItemWithTranslations =
+	RecurringScheduleItem<Translation>;
 
-export type RecurringScheduleItemInstance = ScheduleItem & {
-	recurringItemId: number;
-};
+export type RecurringScheduleItemInstance<T extends Text = string> =
+	ScheduleItem<T> & {
+		recurringItemId: number;
+	};
+
+export type MakeOptional<
+	T extends Record<string, unknown>,
+	P extends keyof T,
+> = { [K in P]?: T[K] } & { [K in Exclude<keyof T, P>]: T[K] };
 
 export type Image = {
 	source: string;
