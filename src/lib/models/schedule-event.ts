@@ -1,6 +1,7 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 import {
 	InstantaneousScheduleItemWithTranslations,
+	Options,
 	RecurringScheduleItemWithTranslations,
 	Translation,
 } from "../utilities/types";
@@ -20,7 +21,7 @@ type ScheduleEvent =
 	| BaseScheduleEvent<"specific", InstantaneousScheduleItemWithTranslations>
 	| BaseScheduleEvent<"recurring", RecurringScheduleItemWithTranslations>;
 
-type NewScheduleItem = {
+type NewScheduleEvent = {
 	[T in ScheduleEvent["type"]]: {
 		type: T;
 		scheduleItem: T extends "specific"
@@ -31,8 +32,6 @@ type NewScheduleItem = {
 	};
 }[ScheduleEvent["type"]];
 
-type ModifiedScheduleItem = NewScheduleItem & { id: number };
-
 export type ScheduleEventModelView = {
 	scheduleEvent: ScheduleEvent;
 	autoCompleteInfo?: Partial<{
@@ -40,25 +39,26 @@ export type ScheduleEventModelView = {
 		venueTranslations: Translation[];
 		designationTranslations: Translation[];
 	}>;
-};
+} & Options<{
+	isNewEventValidCallback: (
+		newEvent?: NewScheduleEvent,
+		existingId?: number,
+	) => void;
+	previewCallback: (newEvent: NewScheduleEvent, existingId?: number) => void;
+}>;
 
 export type ScheduleEventModelInteraction =
 	| InputModelInteraction<
 			"UPDATE_SCHEDULE_EVENT",
 			{
-				scheduleEvent: ScheduleEvent;
+				event: ScheduleEvent;
 			}
 	  >
 	| InputModelInteraction<
-			"SCHEDULE_NEW_ITEM",
+			"SCHEDULE_EVENT",
 			{
-				newScheduleItem: NewScheduleItem;
-			}
-	  >
-	| InputModelInteraction<
-			"MODIFY_ITEM",
-			{
-				modifiedScheduleItem: ModifiedScheduleItem;
+				newEvent: NewScheduleEvent;
+				existingId?: number;
 			}
 	  >;
 

@@ -1,8 +1,16 @@
+import Button from "@/src/lib/components/button/Button";
 import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complete-box";
 import { ScheduleEventModel } from "@/src/lib/models/schedule-event";
 import { autoCompleteFields } from "@/src/lib/utilities/auto-complete-box";
+import { BLANK_TRANSLATION } from "@/src/lib/utilities/constants";
 import { getDateString } from "@/src/lib/utilities/date-time";
 import { CompleteTranslation, Translation } from "@/src/lib/utilities/types";
+import {
+	ALL_DAYS_ARRAY,
+	Day,
+	transformDaysToPattern,
+	transformPatternToDays,
+} from "@/src/lib/utilities/weekday-selector";
 import {
 	useInstantaneousScheduleItemSchema,
 	useRecurringScheduleItemSchema,
@@ -11,24 +19,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { addDays } from "date-fns";
+import { Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import AutoCompleteBox from "../../auto-complete-box/AutoCompleteBox";
-import Button from "@/src/lib/components/button/Button";
-import { BLANK_TRANSLATION } from "@/src/lib/utilities/constants";
-import { Trash2Icon } from "lucide-react";
-import {
-	ALL_DAYS_ARRAY,
-	Day,
-	transformDaysToPattern,
-	transformPatternToDays,
-} from "@/src/lib/utilities/weekday-selector";
 import Checkbox from "../../checkbox/Checkbox";
+import ButtonBar from "../../button-bar/ButtonBar";
 
 const ScheduleEvent = function ({ model }) {
 	const {
-		modelView: { scheduleEvent, autoCompleteInfo },
+		modelView: { scheduleEvent, autoCompleteInfo, options },
 		interact,
 	} = model;
 	const instantaneousScheduleItemSchema =
@@ -58,7 +59,7 @@ const ScheduleEvent = function ({ model }) {
 	});
 	const englishTitleAutoCompleteBox = useAutoCompleteBox(
 		{
-			id: "english-title",
+			id: "title.english",
 			items: autoCompleteInfo?.titleTranslations ?? [],
 			transformer: title => title.english,
 		},
@@ -68,7 +69,7 @@ const ScheduleEvent = function ({ model }) {
 	);
 	const russianTitleAutoCompleteBox = useAutoCompleteBox(
 		{
-			id: "russian-title",
+			id: "title.russian",
 			items: (autoCompleteInfo?.titleTranslations?.filter(
 				title => title.russian !== null,
 			) ?? []) as CompleteTranslation[],
@@ -80,7 +81,7 @@ const ScheduleEvent = function ({ model }) {
 	);
 	const englishVenueAutoCompleteBox = useAutoCompleteBox(
 		{
-			id: "english-venue",
+			id: "venue.english",
 			items: autoCompleteInfo?.venueTranslations ?? [],
 			transformer: venue => venue.english,
 		},
@@ -90,7 +91,7 @@ const ScheduleEvent = function ({ model }) {
 	);
 	const russianVenueAutoCompleteBox = useAutoCompleteBox(
 		{
-			id: "russian-venue",
+			id: "venue.russian",
 			items: (autoCompleteInfo?.venueTranslations?.filter(
 				venue => venue.russian !== null,
 			) ?? []) as CompleteTranslation[],
@@ -100,7 +101,7 @@ const ScheduleEvent = function ({ model }) {
 			setValue("venue", venue);
 		},
 	);
-	const englishDesignationAutoCompleteBox = useAutoCompleteBox<
+	const englishDesignationsAutoCompleteBox = useAutoCompleteBox<
 		Translation,
 		`scheduleItemTimes.${number}.designation`
 	>(
@@ -111,12 +112,12 @@ const ScheduleEvent = function ({ model }) {
 		},
 		designation => {
 			setValue(
-				englishDesignationAutoCompleteBox.modelView.id,
+				englishDesignationsAutoCompleteBox.modelView.id,
 				designation,
 			);
 		},
 	);
-	const russianDesignationAutoCompleteBox = useAutoCompleteBox<
+	const russianDesignationsAutoCompleteBox = useAutoCompleteBox<
 		CompleteTranslation,
 		`scheduleItemTimes.${number}.designation`
 	>(
@@ -129,7 +130,7 @@ const ScheduleEvent = function ({ model }) {
 		},
 		designation => {
 			setValue(
-				englishDesignationAutoCompleteBox.modelView.id,
+				englishDesignationsAutoCompleteBox.modelView.id,
 				designation,
 			);
 		},
@@ -139,12 +140,16 @@ const ScheduleEvent = function ({ model }) {
 	const englishVenueFields = autoCompleteFields(englishVenueAutoCompleteBox);
 	const russianVenueFields = autoCompleteFields(russianVenueAutoCompleteBox);
 	const englishDesignationFields = autoCompleteFields(
-		englishDesignationAutoCompleteBox,
+		englishDesignationsAutoCompleteBox,
 	);
 	const russianDesignationFields = autoCompleteFields(
-		russianDesignationAutoCompleteBox,
+		russianDesignationsAutoCompleteBox,
 	);
 	const currentDate = getDateString(new Date(), true);
+	const existingItemId =
+		scheduleEvent.scheduleItem && "id" in scheduleEvent.scheduleItem
+			? scheduleEvent.scheduleItem.id
+			: undefined;
 
 	useEffect(() => {
 		const { scheduleItem } = scheduleEvent;
@@ -155,30 +160,61 @@ const ScheduleEvent = function ({ model }) {
 		}
 	}, [JSON.stringify(scheduleEvent.scheduleItem)]);
 
+	useEffect(() => {
+		if (isValid && options?.isNewEventValidCallback) {
+			const form = getValues();
+			options.isNewEventValidCallback!(
+				scheduleEvent.type === "recurring"
+					? {
+							type: "recurring",
+							scheduleItem:
+								recurringScheduleItemSchema.parse(form),
+						}
+					: {
+							type: "specific",
+							scheduleItem:
+								instantaneousScheduleItemSchema.parse(form),
+						},
+				existingItemId,
+			);
+		} else {
+			options?.isNewEventValidCallback?.(undefined);
+		}
+	}, [
+		isValid,
+		isValid && getValues,
+		scheduleEvent.type,
+		options?.isNewEventValidCallback,
+	]);
+
 	return (
 		<>
 			<AutoCompleteBox model={englishTitleAutoCompleteBox} />
 			<AutoCompleteBox model={russianTitleAutoCompleteBox} />
 			<AutoCompleteBox model={englishVenueAutoCompleteBox} />
 			<AutoCompleteBox model={russianVenueAutoCompleteBox} />
-			<AutoCompleteBox model={englishDesignationAutoCompleteBox} />
-			<AutoCompleteBox model={russianDesignationAutoCompleteBox} />
+			<AutoCompleteBox model={englishDesignationsAutoCompleteBox} />
+			<AutoCompleteBox model={russianDesignationsAutoCompleteBox} />
 			<form
 				onSubmit={handleSubmit(async form => {
 					await interact({
-						type: "SCHEDULE_NEW_ITEM",
-						input: {
-							newScheduleItem:
-								"recurringPattern" in form
-									? {
+						type: "SCHEDULE_EVENT",
+						input:
+							"recurringPattern" in form
+								? {
+										existingId: existingItemId,
+										newEvent: {
 											type: "recurring",
 											scheduleItem: form,
-										}
-									: {
+										},
+									}
+								: {
+										existingId: existingItemId,
+										newEvent: {
 											type: "specific",
 											scheduleItem: form,
 										},
-						},
+									},
 					});
 				})}
 			>
@@ -585,6 +621,57 @@ const ScheduleEvent = function ({ model }) {
 							))}
 						</div>
 					</div>
+					<ButtonBar
+						model={newReadonlyModel({
+							arrangement: "right",
+							orientation: "horizontal",
+						})}
+					>
+						{options?.previewCallback && (
+							<Button
+								model={newReadonlyModel({
+									disabled: !isValid,
+									action: () => {
+										const form = getValues();
+										options.previewCallback!(
+											scheduleEvent.type === "recurring"
+												? {
+														type: "recurring",
+														scheduleItem:
+															recurringScheduleItemSchema.parse(
+																form,
+															),
+													}
+												: {
+														type: "specific",
+														scheduleItem:
+															instantaneousScheduleItemSchema.parse(
+																form,
+															),
+													},
+											existingItemId,
+										);
+									},
+								})}
+							>
+								{scheduleEvent.scheduleItem &&
+								"id" in scheduleEvent.scheduleItem
+									? t("modifyButton")
+									: t("scheduleButton")}
+							</Button>
+						)}
+						<Button
+							model={newReadonlyModel({
+								disabled: !isValid || isSubmitting,
+								type: "submit",
+							})}
+						>
+							{scheduleEvent.scheduleItem &&
+							"id" in scheduleEvent.scheduleItem
+								? t("modifyButton")
+								: t("scheduleButton")}
+						</Button>
+					</ButtonBar>
 				</div>
 			</form>
 		</>

@@ -36,6 +36,7 @@ export type DailyQuote = {
 };
 
 export type ScheduleItem = {
+	id: number;
 	title: string;
 	venue: string;
 	date: Date;
@@ -63,7 +64,6 @@ export type RecurringScheduleItem = Omit<ScheduleItem, "date"> & {
 };
 
 export type InstantaneousScheduleItem = ScheduleItem & {
-	id: number;
 	isRemoved: boolean;
 };
 
