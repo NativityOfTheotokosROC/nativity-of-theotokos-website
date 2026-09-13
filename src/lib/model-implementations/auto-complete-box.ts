@@ -10,7 +10,7 @@ import {
 import { UninitializedModelError } from "../utilities/errors";
 
 export function autoCompleteBoxVIInterface<I, K extends string>(
-	selectCallback?: (item: I) => void,
+	selectCallback: (item: I) => void,
 	options?: Partial<{ closeWhenBlank: boolean }>,
 ) {
 	return {
@@ -51,7 +51,7 @@ export function autoCompleteBoxVIInterface<I, K extends string>(
 					const { transformer, items } = currentModelView;
 					const item = items[index];
 					if (!item) throw new Error("Invalid selection");
-					selectCallback?.(item);
+					selectCallback(item);
 					return {
 						...currentModelView,
 						query: transformer(item),
@@ -68,7 +68,7 @@ export function autoCompleteBoxVIInterface<I, K extends string>(
 
 export function useAutoCompleteBox<I, K extends string>(
 	initialModelView: AutoCompleteBoxModelView<I, K>,
-	selectCallback?: (item: I, id?: K) => void,
+	selectCallback: (item: I) => void,
 	options?: Partial<{ closeWhenBlank: boolean }>,
 ) {
 	const model = useInitializedStatefulInteractiveModel(
@@ -76,4 +76,12 @@ export function useAutoCompleteBox<I, K extends string>(
 		initialModelView,
 	);
 	return model satisfies AutoCompleteBoxModel<I, K>;
+}
+
+export function useSharedAutoCompleteBox<I, K extends string>(
+	initialModelView: AutoCompleteBoxModelView<I, K>,
+	selectCallback: (item: I) => void,
+	options?: Partial<{ closeWhenBlank: boolean }>,
+) {
+	return useAutoCompleteBox(initialModelView, selectCallback, options);
 }

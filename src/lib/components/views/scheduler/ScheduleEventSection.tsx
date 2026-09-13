@@ -102,22 +102,38 @@ const ScheduleEvent = function ({ model }) {
 	);
 	const englishDesignationAutoCompleteBox = useAutoCompleteBox<
 		Translation,
-		`scheduleItemTimes.${number}.designation.english`
-	>({
-		id: "scheduleItemTimes.0.designation.english",
-		items: autoCompleteInfo?.designationTranslations ?? [],
-		transformer: designation => designation.english,
-	});
+		`scheduleItemTimes.${number}.designation`
+	>(
+		{
+			id: "scheduleItemTimes.0.designation",
+			items: autoCompleteInfo?.designationTranslations ?? [],
+			transformer: designation => designation.english,
+		},
+		designation => {
+			setValue(
+				englishDesignationAutoCompleteBox.modelView.id,
+				designation,
+			);
+		},
+	);
 	const russianDesignationAutoCompleteBox = useAutoCompleteBox<
 		CompleteTranslation,
-		`scheduleItemTimes.${number}.designation.russian`
-	>({
-		id: "scheduleItemTimes.0.designation.russian",
-		items: (autoCompleteInfo?.designationTranslations?.filter(
-			designation => designation.russian !== null,
-		) ?? []) as CompleteTranslation[],
-		transformer: designation => designation.russian,
-	});
+		`scheduleItemTimes.${number}.designation`
+	>(
+		{
+			id: "scheduleItemTimes.0.designation",
+			items: (autoCompleteInfo?.designationTranslations?.filter(
+				designation => designation.russian !== null,
+			) ?? []) as CompleteTranslation[],
+			transformer: designation => designation.russian,
+		},
+		designation => {
+			setValue(
+				englishDesignationAutoCompleteBox.modelView.id,
+				designation,
+			);
+		},
+	);
 	const englishTitleFields = autoCompleteFields(englishTitleAutoCompleteBox);
 	const russianTitleFields = autoCompleteFields(russianTitleAutoCompleteBox);
 	const englishVenueFields = autoCompleteFields(englishVenueAutoCompleteBox);
@@ -458,7 +474,7 @@ const ScheduleEvent = function ({ model }) {
 								<div className="flex gap-1">
 									<Controller
 										control={control}
-										name={`scheduleItemTimes.${index}.designation.english`}
+										name={`scheduleItemTimes.${index}.designation`}
 										render={({
 											field: {
 												name,
@@ -475,10 +491,10 @@ const ScheduleEvent = function ({ model }) {
 														"designationFieldEn",
 													)}
 													autoCapitalize="words"
-													name={name}
-													value={value}
+													name={`${name}.english`}
+													value={value.english}
 													autoComplete={"off"}
-													data-tooltip-id={name}
+													data-tooltip-id={`${name}.english`}
 													onChange={async e => {
 														onChange(e);
 														englishDesignationFields.onChange(
@@ -491,37 +507,21 @@ const ScheduleEvent = function ({ model }) {
 														englishDesignationFields.onBlur();
 													}}
 												/>
-											</>
-										)}
-									/>
-									<Controller
-										control={control}
-										name={`scheduleItemTimes.${index}.designation.russian`}
-										render={({
-											field: {
-												name,
-												onChange,
-												onBlur,
-												value,
-											},
-											fieldState: { error },
-										}) => (
-											<>
 												<input
 													className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 													placeholder={t(
 														"designationFieldRu",
 													)}
 													autoCapitalize="words"
-													name={name}
+													name={`${name}.russian`}
 													value={
-														typeof value ===
+														typeof value.russian ===
 														"string"
-															? value
+															? value.russian
 															: ""
 													}
 													autoComplete={"off"}
-													data-tooltip-id={name}
+													data-tooltip-id={`${name}.russian`}
 													onChange={async e => {
 														onChange(e);
 														russianDesignationFields.onChange(
