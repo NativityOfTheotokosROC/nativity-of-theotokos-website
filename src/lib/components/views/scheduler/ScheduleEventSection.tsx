@@ -2,7 +2,7 @@ import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complet
 import { ScheduleEventModel } from "@/src/lib/models/schedule-event";
 import { autoCompleteFields } from "@/src/lib/utilities/auto-complete-box";
 import { getDateString } from "@/src/lib/utilities/date-time";
-import { CompleteTranslation } from "@/src/lib/utilities/types";
+import { CompleteTranslation, Translation } from "@/src/lib/utilities/types";
 import {
 	useInstantaneousScheduleItemSchema,
 	useRecurringScheduleItemSchema,
@@ -100,38 +100,34 @@ const ScheduleEvent = function ({ model }) {
 			setValue("venue", venue);
 		},
 	);
-	// const englishDesignationAutoCompleteBox = useAutoCompleteBox(
-	// 	{
-	// 		id: "english-designation",
-	// 		items: autoCompleteInfo?.designationTranslations ?? [],
-	// 		transformer: designation => designation.english,
-	// 	},
-	// 	designation => {
-	// 		setValue("designation", designation);
-	// 	},
-	// );
-	// const russianDesignationAutoCompleteBox = useAutoCompleteBox(
-	// 	{
-	// 		id: "russian-designation",
-	// 		items: (autoCompleteInfo?.designationTranslations?.filter(
-	// 			designation => designation.russian !== null,
-	// 		) ?? []) as CompleteTranslation[],
-	// 		transformer: designation => designation.russian,
-	// 	},
-	// 	designation => {
-	// 		setValue("designation", designation);
-	// 	},
-	// );
+	const englishDesignationAutoCompleteBox = useAutoCompleteBox<
+		Translation,
+		`scheduleItemTimes.${number}.designation.english`
+	>({
+		id: "scheduleItemTimes.0.designation.english",
+		items: autoCompleteInfo?.designationTranslations ?? [],
+		transformer: designation => designation.english,
+	});
+	const russianDesignationAutoCompleteBox = useAutoCompleteBox<
+		CompleteTranslation,
+		`scheduleItemTimes.${number}.designation.russian`
+	>({
+		id: "scheduleItemTimes.0.designation.russian",
+		items: (autoCompleteInfo?.designationTranslations?.filter(
+			designation => designation.russian !== null,
+		) ?? []) as CompleteTranslation[],
+		transformer: designation => designation.russian,
+	});
 	const englishTitleFields = autoCompleteFields(englishTitleAutoCompleteBox);
 	const russianTitleFields = autoCompleteFields(russianTitleAutoCompleteBox);
 	const englishVenueFields = autoCompleteFields(englishVenueAutoCompleteBox);
 	const russianVenueFields = autoCompleteFields(russianVenueAutoCompleteBox);
-	// const englishDesignations = autoCompleteFields(
-	// 	englishDesignationAutoCompleteBox,
-	// );
-	// const russianDesignationFieldCallbacks = autoCompleteFields(
-	// 	russianDesignationAutoCompleteBox,
-	// );
+	const englishDesignationFields = autoCompleteFields(
+		englishDesignationAutoCompleteBox,
+	);
+	const russianDesignationFields = autoCompleteFields(
+		russianDesignationAutoCompleteBox,
+	);
 	const currentDate = getDateString(new Date(), true);
 
 	useEffect(() => {
@@ -149,8 +145,8 @@ const ScheduleEvent = function ({ model }) {
 			<AutoCompleteBox model={russianTitleAutoCompleteBox} />
 			<AutoCompleteBox model={englishVenueAutoCompleteBox} />
 			<AutoCompleteBox model={russianVenueAutoCompleteBox} />
-			{/* <AutoCompleteBox model={englishDesignationAutoCompleteBox} />
-			<AutoCompleteBox model={russianDesignationAutoCompleteBox} /> */}
+			<AutoCompleteBox model={englishDesignationAutoCompleteBox} />
+			<AutoCompleteBox model={russianDesignationAutoCompleteBox} />
 			<form
 				onSubmit={handleSubmit(async form => {
 					await interact({
@@ -482,18 +478,17 @@ const ScheduleEvent = function ({ model }) {
 													name={name}
 													value={value}
 													autoComplete={"off"}
-													// data-tooltip-id={
-													// 	englishTitleFields.dataTooltipId
-													// }
+													data-tooltip-id={name}
 													onChange={async e => {
 														onChange(e);
-														// englishTitleFields.onChange(
-														// 	e.target.value,
-														// );
+														englishDesignationFields.onChange(
+															e.target.value,
+															name,
+														);
 													}}
 													onBlur={() => {
 														onBlur();
-														// englishTitleFields.onBlur();
+														englishDesignationFields.onBlur();
 													}}
 												/>
 											</>
@@ -526,18 +521,17 @@ const ScheduleEvent = function ({ model }) {
 															: ""
 													}
 													autoComplete={"off"}
-													// data-tooltip-id={
-													// 	englishTitleFields.dataTooltipId
-													// }
+													data-tooltip-id={name}
 													onChange={async e => {
 														onChange(e);
-														// englishTitleFields.onChange(
-														// 	e.target.value,
-														// );
+														russianDesignationFields.onChange(
+															e.target.value,
+															name,
+														);
 													}}
 													onBlur={() => {
 														onBlur();
-														// englishTitleFields.onBlur();
+														englishDesignationFields.onBlur();
 													}}
 												/>
 											</>

@@ -9,19 +9,26 @@ import {
 } from "../models/auto-complete-box";
 import { UninitializedModelError } from "../utilities/errors";
 
-export function autoCompleteBoxVIInterface<I>(
-	selectCallback: (item: I) => void,
+export function autoCompleteBoxVIInterface<I, K extends string>(
+	selectCallback?: (item: I) => void,
 	options?: Partial<{ closeWhenBlank: boolean }>,
 ) {
 	return {
 		async produceModelView(interaction, currentModelView) {
 			if (!currentModelView) throw new UninitializedModelError();
 			switch (interaction.type) {
-				case "TOGGLE": {
+				case "OPEN": {
 					const { items } = currentModelView;
 					return {
 						...currentModelView,
-						isOpen: interaction.input.value && items.length > 0,
+						id: interaction.input.newId ?? currentModelView.id,
+						isOpen: true && items.length > 0,
+					};
+				}
+				case "CLOSE": {
+					return {
+						...currentModelView,
+						isOpen: false,
 					};
 				}
 				case "FILTER": {
@@ -44,7 +51,7 @@ export function autoCompleteBoxVIInterface<I>(
 					const { transformer, items } = currentModelView;
 					const item = items[index];
 					if (!item) throw new Error("Invalid selection");
-					selectCallback(item);
+					selectCallback?.(item);
 					return {
 						...currentModelView,
 						query: transformer(item),
@@ -54,19 +61,19 @@ export function autoCompleteBoxVIInterface<I>(
 			}
 		},
 	} satisfies ViewInteractionInterface<
-		AutoCompleteBoxModelView<I>,
-		AutoCompleteBoxModelInteraction
+		AutoCompleteBoxModelView<I, K>,
+		AutoCompleteBoxModelInteraction<K>
 	>;
 }
 
-export function useAutoCompleteBox<I>(
-	initialModelView: AutoCompleteBoxModelView<I>,
-	selectCallback: (item: I) => void,
+export function useAutoCompleteBox<I, K extends string>(
+	initialModelView: AutoCompleteBoxModelView<I, K>,
+	selectCallback?: (item: I, id?: K) => void,
 	options?: Partial<{ closeWhenBlank: boolean }>,
 ) {
 	const model = useInitializedStatefulInteractiveModel(
-		autoCompleteBoxVIInterface<I>(selectCallback, options),
+		autoCompleteBoxVIInterface<I, K>(selectCallback, options),
 		initialModelView,
 	);
-	return model satisfies AutoCompleteBoxModel<I>;
+	return model satisfies AutoCompleteBoxModel<I, K>;
 }

@@ -1,19 +1,24 @@
-import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
+import {
+	InputModelInteraction,
+	InteractiveModel,
+	ModelInteraction,
+} from "@mvc-react/mvc";
 
-export type AutoCompleteBoxModelView<I> = {
-	id: string;
+export type AutoCompleteBoxModelView<I, K extends string> = {
+	id: K;
 	isOpen?: boolean;
 	query?: string;
 	items: I[];
 	transformer: (item: I) => string;
 };
 
-export type AutoCompleteBoxModelInteraction =
+export type AutoCompleteBoxModelInteraction<K extends string> =
 	| InputModelInteraction<"FILTER", { query: string }>
-	| InputModelInteraction<"TOGGLE", { value: boolean }>
+	| InputModelInteraction<"OPEN", { newId?: K }>
+	| ModelInteraction<"CLOSE">
 	| InputModelInteraction<"SELECT", { index: number }>;
 
-export type AutoCompleteBoxModel<I> = InteractiveModel<
-	AutoCompleteBoxModelView<I>,
-	AutoCompleteBoxModelInteraction
+export type AutoCompleteBoxModel<I, K extends string> = InteractiveModel<
+	AutoCompleteBoxModelView<I, K>,
+	AutoCompleteBoxModelInteraction<K>
 >;
