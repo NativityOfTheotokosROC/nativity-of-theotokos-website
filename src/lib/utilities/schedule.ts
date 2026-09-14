@@ -2,11 +2,15 @@ import { Cron } from "croner";
 import { getDateString, getNativeTimeZone } from "./date-time";
 import {
 	InstantaneousScheduleItem,
+	Language,
 	MakeOptional,
 	RecurringScheduleItem,
 	RecurringScheduleItemInstance,
+	ScheduleItem,
 	Text,
+	Translation,
 } from "./types";
+import { pickTranslation } from "./miscellaneous";
 
 export type InstantaneousScheduleItemWithOptionalId<T extends Text = string> =
 	MakeOptional<InstantaneousScheduleItem<T>, "id">;
@@ -137,4 +141,18 @@ export function generateSchedule<T extends Text = string>(
 		.toArray()
 		.toSorted((a, b) => a.date.getTime() - b.date.getTime())
 		.toSpliced(0, maxItems);
+}
+
+export function pickScheduleItemTranslation<
+	T extends ScheduleItem<Translation>,
+>(scheduleItem: T, target: Language) {
+	return {
+		...scheduleItem,
+		title: pickTranslation(scheduleItem.title, target),
+		venue: pickTranslation(scheduleItem.venue, target),
+		times: scheduleItem.times.map(({ time, designation }) => ({
+			time,
+			designation: pickTranslation(designation, target),
+		})),
+	} satisfies ScheduleItem<string>;
 }

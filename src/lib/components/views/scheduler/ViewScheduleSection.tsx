@@ -1,11 +1,15 @@
+import EnglishGraphic from "@/public/assets/english.svg";
+import RussianGraphic from "@/public/assets/russian.svg";
 import { ViewScheduleSectionModel } from "@/src/lib/models/view-schedule-section";
-import { generateSchedule } from "@/src/lib/utilities/schedule";
+import {
+	generateSchedule,
+	pickScheduleItemTranslation,
+} from "@/src/lib/utilities/schedule";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import RussianGraphic from "@/public/assets/russian.svg";
-import EnglishGraphic from "@/public/assets/english.svg";
-import Button from "../../button/Button";
 import { useTranslations } from "next-intl";
+import Button from "../../button/Button";
+import SchedulePreviewWidget from "../../schedule-preview-widget/SchedulePreviewWidget";
 
 const ViewScheduleSection = function ({ model }) {
 	const { modelView, interact } = model;
@@ -17,17 +21,26 @@ const ViewScheduleSection = function ({ model }) {
 		pendingScheduleItem,
 		modifyCallbacks,
 		language,
-		maxItems,
+		maxItems = 10,
 	} = modelView;
-	const schedule = generateSchedule(
-		pendingScheduleItem && "date" in pendingScheduleItem
-			? [...instantaneousScheduleItems, pendingScheduleItem]
-			: instantaneousScheduleItems,
-		pendingScheduleItem && "recurringPattern" in pendingScheduleItem
-			? [...recurringScheduleItems, pendingScheduleItem]
-			: recurringScheduleItems,
-		maxItems ?? 10,
-	);
+	const currentSchedule = generateSchedule(
+		instantaneousScheduleItems,
+		recurringScheduleItems,
+		maxItems,
+	).map(scheduleItem => pickScheduleItemTranslation(scheduleItem, language));
+	const newSchedule = pendingScheduleItem
+		? generateSchedule(
+				pendingScheduleItem && "date" in pendingScheduleItem
+					? [...instantaneousScheduleItems, pendingScheduleItem]
+					: instantaneousScheduleItems,
+				pendingScheduleItem && "recurringPattern" in pendingScheduleItem
+					? [...recurringScheduleItems, pendingScheduleItem]
+					: recurringScheduleItems,
+				maxItems,
+			).map(scheduleItem =>
+				pickScheduleItemTranslation(scheduleItem, language),
+			)
+		: currentSchedule;
 	const t = useTranslations("scheduler");
 	const tMisc = useTranslations("miscellaneous");
 
@@ -56,6 +69,36 @@ const ViewScheduleSection = function ({ model }) {
 					)}
 				</span>
 			</Button>
+			{pendingScheduleItem && (
+				<>
+					<span className="text-xl">{t("newScheduleSection")}</span>
+					<SchedulePreviewWidget
+						model={newReadonlyModel({
+							schedule: newSchedule,
+							displayRemoved: true,
+							maxDisplayedItems: maxItems,
+							highlightedScheduleItem:
+								"date" in pendingScheduleItem
+									? pickScheduleItemTranslation(
+											pendingScheduleItem,
+											language,
+										)
+									: undefined,
+						})}
+					/>
+				</>
+			)}
+			<>
+				<span className="text-xl">{t("currentScheduleSection")}</span>
+				<SchedulePreviewWidget
+					model={newReadonlyModel({
+						schedule: currentSchedule,
+						displayRemoved: true,
+						maxDisplayedItems: maxItems,
+						modifyCallbacks,
+					})}
+				/>
+			</>
 		</div>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ViewScheduleSectionModel>>;

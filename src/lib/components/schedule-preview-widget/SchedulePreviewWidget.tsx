@@ -5,16 +5,16 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 
 const SchedulePreviewWidget = function ({ model }) {
 	const {
-		scheduleItems,
+		schedule,
 		maxDisplayedItems,
 		displayRemoved,
 		highlightedScheduleItem,
 		scheduleItemOptions,
 	} = model.modelView;
-	const orderedScheduleItems = [
+	const orderedSchedule = [
 		...(displayRemoved
-			? scheduleItems
-			: scheduleItems.filter(
+			? schedule
+			: schedule.filter(
 					scheduleItem =>
 						"isRemoved" in scheduleItem && !scheduleItem.isRemoved,
 				)),
@@ -26,7 +26,7 @@ const SchedulePreviewWidget = function ({ model }) {
 				<ScheduleItem
 					model={newReadonlyModel({
 						scheduleItem:
-							highlightedScheduleItem ?? orderedScheduleItems[0],
+							highlightedScheduleItem ?? orderedSchedule[0],
 						variant: "detailed",
 						options: scheduleItemOptions,
 					})}
@@ -34,8 +34,11 @@ const SchedulePreviewWidget = function ({ model }) {
 			</div>
 			<hr className="my-2 text-black/50" />
 			<div className="flex flex-col gap-3 lg:w-3/4">
-				{orderedScheduleItems
-					.slice(1, maxDisplayedItems && maxDisplayedItems - 1)
+				{orderedSchedule
+					.slice(
+						highlightedScheduleItem ? 0 : 1,
+						maxDisplayedItems && maxDisplayedItems - 1,
+					)
 					.map((scheduleItem, index) => (
 						<ScheduleItem
 							key={index}

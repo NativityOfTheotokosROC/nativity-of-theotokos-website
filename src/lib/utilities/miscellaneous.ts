@@ -1,5 +1,5 @@
 import { createHash } from "crypto";
-import { ShareData } from "./types";
+import { Language, ShareData, Translation } from "./types";
 
 import {
 	names,
@@ -63,4 +63,10 @@ export function getEncodedShareData(shareData: ShareData) {
 
 export function snippetify(text: string, capOff: number = 300) {
 	return `${text.substring(0, capOff - 3)}...`;
+}
+
+export function pickTranslation(translation: Translation, target: Language) {
+	return target === "ru"
+		? (translation.russian ?? translation.english)
+		: translation.english;
 }

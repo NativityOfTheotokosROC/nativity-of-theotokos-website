@@ -10,7 +10,7 @@ export type SchedulePreviewWidgetModelView<
 		| InstantaneousScheduleItemWithOptionalId
 		| RecurringScheduleItemInstanceWithOptionalId,
 > = {
-	scheduleItems: T[];
+	schedule: T[];
 	highlightedScheduleItem?: T;
 	maxDisplayedItems?: number;
 	displayRemoved?: boolean;
