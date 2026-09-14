@@ -8,8 +8,13 @@ import {
 	Text,
 } from "./types";
 
-type RecurringScheduleItemWithOptionalId<T extends Text = string> =
+export type InstantaneousScheduleItemWithOptionalId<T extends Text = string> =
+	MakeOptional<InstantaneousScheduleItem<T>, "id">;
+export type RecurringScheduleItemWithOptionalId<T extends Text = string> =
 	MakeOptional<RecurringScheduleItem<T>, "id">;
+export type RecurringScheduleItemInstanceWithOptionalId<
+	T extends Text = string,
+> = MakeOptional<RecurringScheduleItemInstance<T>, "recurringItemId">;
 
 export function validateRecurringPattern(
 	pattern: string,
@@ -82,25 +87,20 @@ export function getNextRecurringScheduleItemInstances<T extends Text = string>(
 	);
 }
 
-export function generateSchedule<
-	I extends InstantaneousScheduleItem<T>,
-	R extends RecurringScheduleItemWithOptionalId,
-	T extends Text = string,
->(
-	instantaneousScheduleItems: I[],
-	recurringScheduleItems: R[],
+export function generateSchedule<T extends Text = string>(
+	instantaneousScheduleItems: InstantaneousScheduleItemWithOptionalId<T>[],
+	recurringScheduleItems: RecurringScheduleItemWithOptionalId<T>[],
 	maxItems: number,
 	referenceDate?: Date,
 ) {
 	const resolvedReferenceDate = new Date(
 		getDateString(referenceDate ?? new Date(), true),
 	);
-	const scheduleItems = [
-		...instantaneousScheduleItems.filter(
-			scheduleItem =>
-				!scheduleItem.isRemoved &&
-				scheduleItem.date.getTime() >= resolvedReferenceDate.getTime(),
-		),
+	const scheduleItemsMap = new Map<
+		string,
+		| InstantaneousScheduleItemWithOptionalId<T>
+		| RecurringScheduleItemInstanceWithOptionalId<T>
+	>([
 		...recurringScheduleItems
 			.filter(scheduleItem => scheduleItem.isDisabled)
 			.flatMap(activeItem =>
@@ -109,9 +109,32 @@ export function generateSchedule<
 					maxItems,
 					resolvedReferenceDate,
 				),
+			)
+			.map(
+				scheduleItem =>
+					[
+						`${getDateString(scheduleItem.date)}_${scheduleItem.venue}`,
+						scheduleItem,
+					] as const,
 			),
-	];
-	return scheduleItems
+		...instantaneousScheduleItems
+			.filter(
+				scheduleItem =>
+					!scheduleItem.isRemoved &&
+					scheduleItem.date.getTime() >=
+						resolvedReferenceDate.getTime(),
+			)
+			.map(
+				scheduleItem =>
+					[
+						`${getDateString(scheduleItem.date)}_${scheduleItem.venue}`,
+						scheduleItem,
+					] as const,
+			),
+	]);
+	return scheduleItemsMap
+		.values()
+		.toArray()
 		.toSorted((a, b) => a.date.getTime() - b.date.getTime())
 		.toSpliced(0, maxItems);
 }

@@ -85,6 +85,11 @@ export type MakeOptional<
 	P extends keyof T,
 > = { [K in P]?: T[K] } & { [K in Exclude<keyof T, P>]: T[K] };
 
+export type MakeRequired<
+	T extends Record<string, unknown>,
+	P extends keyof T,
+> = { [K in P]-?: T[K] } & { [K in Exclude<keyof T, P>]: T[K] };
+
 export type Image = {
 	source: string;
 	placeholder: ImagePlaceholder;
@@ -100,6 +105,8 @@ export type ArticleAuthor = {
 	name: string;
 	email?: string;
 };
+
+export type Unravel<T> = { [K in keyof T]: T[K] };
 
 export type RenameProperty<
 	T extends Record<string, unknown>,

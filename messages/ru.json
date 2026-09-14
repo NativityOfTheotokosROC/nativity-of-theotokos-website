@@ -375,7 +375,9 @@
 		"closeButton": "Закрыть",
 		"optional": "необязательно",
 		"goHome": "На главную",
-		"continue": "Продолжить"
+		"continue": "Продолжить",
+		"english": "Английский",
+		"russian": "Русский"
 	},
 	"validation": {
 		"nonEmpty": "Поле {field} не может быть пустым",

@@ -385,7 +385,9 @@
 		"closeButton": "Close",
 		"optional": "optional",
 		"goHome": "Go Home",
-		"continue": "Continue"
+		"continue": "Continue",
+		"english": "English",
+		"russian": "Russian"
 	},
 	"notifications": {
 		"metaTitle": "Notifications"
