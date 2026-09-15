@@ -2,25 +2,21 @@
 
 import FeaturedItemOrnament from "@/public/assets/ornament_12.svg";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
+import { newReadonlyModel } from "@mvc-react/mvc";
 import { toZonedTime } from "date-fns-tz";
-import { BanIcon, CheckIcon, Edit2Icon } from "lucide-react";
 import { useLocale } from "next-intl";
 import { twMerge } from "tailwind-merge";
-import {
-	ScheduleItemModel,
-	ScheduleItemModelView,
-} from "../../models/schedule-item";
+import { ScheduleItemModel } from "../../models/schedule-item";
 import { georgia } from "../../third-party/fonts";
 import { getNativeTimeZone } from "../../utilities/date-time";
-import { MakeRequired } from "../../utilities/types";
+import EditScheduleItemPanel from "./EditScheduleItemPanel";
 
 const ScheduleItem = function ({ model }) {
 	const { scheduleItem, variant, maxDisplayedTimes, options } =
 		model.modelView;
 	const { title, venue, date, times } = scheduleItem;
 	const locale = useLocale();
-	const dateLocale = locale === "en" ? "en-uk" : "ru-RU";
+	const dateLocale = locale === "ru" ? "ru-RU" : "en-uk";
 	const nativeDate = toZonedTime(date, getNativeTimeZone());
 	const nativeTimes = times
 		.map(time => ({
@@ -32,7 +28,7 @@ const ScheduleItem = function ({ model }) {
 	const isPending =
 		("id" in scheduleItem && !scheduleItem.id) ||
 		("recurringItemId" in scheduleItem && !scheduleItem.recurringItemId);
-	const isEditable = !isPending && options?.callbacks;
+	const isEditable = !isPending && options?.modifyCallbacks;
 
 	return variant === "detailed" ? (
 		<div
@@ -112,10 +108,10 @@ const ScheduleItem = function ({ model }) {
 				</span>
 				{isEditable && (
 					<div className="contents pointer-fine:invisible pointer-fine:group-hover/edit-bar:visible">
-						<EditBar
+						<EditScheduleItemPanel
 							model={newReadonlyModel({
 								scheduleItem,
-								callbacks: options?.callbacks,
+								callbacks: options?.modifyCallbacks,
 							})}
 						/>
 					</div>
@@ -126,60 +122,5 @@ const ScheduleItem = function ({ model }) {
 		<></>
 	);
 } as ModeledVoidComponent<ScheduleItemModel>;
-
-const EditBar = function ({ model }) {
-	const { scheduleItem, callbacks } = model.modelView;
-
-	if (!callbacks) return <></>;
-	if ("id" in scheduleItem && scheduleItem.id === undefined) return <></>;
-	if (
-		"recurringItemId" in scheduleItem &&
-		scheduleItem.recurringItemId === undefined
-	)
-		return <></>;
-	const scheduleItemId =
-		"id" in scheduleItem
-			? scheduleItem.id!
-			: "recurringItemId" in scheduleItem
-				? scheduleItem.recurringItemId!
-				: (undefined as never);
-
-	return (
-		<div className="flex gap-1 text-xs">
-			{/* TODO: Add titles */}
-			<button
-				className="no-outline"
-				onClick={() => callbacks.editCallback(scheduleItemId)}
-			>
-				<Edit2Icon strokeWidth={1} />
-			</button>
-			<button
-				className="no-outline"
-				onClick={() => callbacks.toggleCallback(scheduleItemId)}
-			>
-				{"isRemoved" in scheduleItem && scheduleItem.isRemoved ? (
-					<CheckIcon strokeWidth={1} />
-				) : (
-					<BanIcon strokeWidth={1} />
-				)}
-			</button>
-			{"id" in scheduleItem && (
-				<button
-					className="no-outline"
-					onClick={() => callbacks.deleteCallback(scheduleItemId)}
-				>
-					<Edit2Icon strokeWidth={1} />
-				</button>
-			)}
-		</div>
-	);
-} satisfies ModeledVoidComponent<
-	ReadonlyModel<{
-		scheduleItem: ScheduleItemModelView["scheduleItem"];
-		callbacks?: Required<
-			NonNullable<ScheduleItemModelView["options"]>
-		>["callbacks"];
-	}>
->;
 
 export default ScheduleItem;

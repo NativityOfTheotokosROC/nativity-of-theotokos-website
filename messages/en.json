@@ -333,6 +333,17 @@
 		"scheduleFailure": "Could not schedule the event: Error: {message}",
 		"modifyFailure": "Could not modify the event: Error: {message}"
 	},
+	"recurringScheduleItem": {
+		"description": "Event recurs {parsedCronString}"
+	},
+	"editScheduleItem": {
+		"edit": "Edit",
+		"enable": "Enable",
+		"reinstate": "Reinstate",
+		"disable": "Disable",
+		"remove": "Remove",
+		"delete": "Delete"
+	},
 	"mailingList": {
 		"mailingListHeader": "Join our Mailing List",
 		"mailingListDescription": "Stay up to date with the latest church news, announcements, and events straight from your mailbox. Enter your email below and subscribe if you haven't already.",

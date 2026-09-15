@@ -4,6 +4,7 @@ import {
 	RecurringScheduleItemInstanceWithOptionalId,
 } from "../utilities/schedule";
 import { Options } from "../utilities/types";
+import { EditScheduleItemPanelModelView } from "./edit-schedule-item-panel";
 
 export type ScheduleItemModelView<
 	T =
@@ -15,11 +16,7 @@ export type ScheduleItemModelView<
 	maxDisplayedTimes?: number;
 } & Options<{
 	className: string;
-	callbacks: {
-		editCallback: (scheduleItemId: number) => void;
-		toggleCallback: (scheduleItemId: number) => void;
-		deleteCallback: (scheduleItemId: number) => void;
-	};
+	modifyCallbacks: NonNullable<EditScheduleItemPanelModelView["callbacks"]>;
 }>;
 
 export type ScheduleItemModel = ReadonlyModel<ScheduleItemModelView>;

@@ -332,6 +332,17 @@
 		"scheduleFailure": "Не удалось запланировать событие. Ошибка: {message}",
 		"modifyFailure": "Не удалось изменить событие. Ошибка: {message}"
 	},
+	"recurringScheduleItem": {
+		"description": "Событие повторяется {parsedCronString}"
+	},
+	"editScheduleItem": {
+		"edit": "Изменить",
+		"enable": "Включить",
+		"reinstate": "Восстановить",
+		"disable": "Отключить",
+		"remove": "Убрать",
+		"delete": "Удалить"
+	},
 	"mailingList": {
 		"mailingListHeader": "Присоединяйтесь к нашей рассылке",
 		"mailingListDescription": "Получайте последние новости прихода, объявления и события по электронной почте. Введите ваш адрес ниже, чтобы подписаться.",

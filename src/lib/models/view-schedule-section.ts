@@ -9,7 +9,7 @@ import {
 	RecurringScheduleItem,
 	Translation,
 } from "../utilities/types";
-import { ScheduleItemModelView } from "./schedule-item";
+import { EditScheduleItemPanelModelView } from "./edit-schedule-item-panel";
 
 export type ViewScheduleSectionModelView = {
 	currentScheduleItems: {
@@ -20,9 +20,7 @@ export type ViewScheduleSectionModelView = {
 	pendingScheduleItem?:
 		| RecurringScheduleItemWithOptionalId<Translation>
 		| InstantaneousScheduleItemWithOptionalId<Translation>;
-	modifyCallbacks: Required<
-		NonNullable<ScheduleItemModelView["options"]>
-	>["callbacks"];
+	modifyCallbacks: NonNullable<EditScheduleItemPanelModelView["callbacks"]>;
 	maxItems?: number;
 };
 

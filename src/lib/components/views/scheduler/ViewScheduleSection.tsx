@@ -70,7 +70,7 @@ const ViewScheduleSection = function ({ model }) {
 				</span>
 			</Button>
 			{pendingScheduleItem && (
-				<>
+				<div className="flex flex-col gap-3">
 					<span className="text-xl">{t("newScheduleSection")}</span>
 					<SchedulePreviewWidget
 						model={newReadonlyModel({
@@ -86,9 +86,9 @@ const ViewScheduleSection = function ({ model }) {
 									: undefined,
 						})}
 					/>
-				</>
+				</div>
 			)}
-			<>
+			<div className="flex flex-col gap-3">
 				<span className="text-xl">{t("currentScheduleSection")}</span>
 				<SchedulePreviewWidget
 					model={newReadonlyModel({
@@ -98,7 +98,7 @@ const ViewScheduleSection = function ({ model }) {
 						modifyCallbacks,
 					})}
 				/>
-			</>
+			</div>
 		</div>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ViewScheduleSectionModel>>;

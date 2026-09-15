@@ -12,6 +12,16 @@ import {
 } from "./types";
 import { pickTranslation } from "./miscellaneous";
 
+type BaseScheduleEvent<
+	T extends string,
+	I extends InstantaneousScheduleItem<U> | RecurringScheduleItem<U>,
+	U extends Text = string,
+> = { type: T; scheduleItem: I };
+
+export type ScheduleEvent<T extends Text = string> =
+	| BaseScheduleEvent<"specific", InstantaneousScheduleItem<T>, T>
+	| BaseScheduleEvent<"recurring", RecurringScheduleItem<T>, T>;
+
 export type InstantaneousScheduleItemWithOptionalId<T extends Text = string> =
 	MakeOptional<InstantaneousScheduleItem<T>, "id">;
 export type RecurringScheduleItemWithOptionalId<T extends Text = string> =
