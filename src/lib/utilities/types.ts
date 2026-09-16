@@ -41,7 +41,7 @@ export type ScheduleItem<T extends Text = string> = {
 	title: T;
 	venue: T;
 	times: {
-		time: Date;
+		time: string;
 		designation: T;
 	}[];
 };
@@ -78,6 +78,7 @@ export type RecurringScheduleItemWithTranslations =
 export type RecurringScheduleItemInstance<T extends Text = string> =
 	ScheduleItem<T> & {
 		recurringItemId: number;
+		isRemoved: boolean;
 		date: Date;
 	};
 

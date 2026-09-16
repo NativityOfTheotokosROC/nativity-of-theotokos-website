@@ -2,18 +2,11 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
 import { BanIcon, CheckIcon, Edit2Icon } from "lucide-react";
 import { EditScheduleItemPanelModel } from "../../models/edit-schedule-item-panel";
+import { ScheduleEvent } from "../../utilities/schedule";
 
 const EditScheduleItemPanel = function ({ model }) {
 	const { event, callbacks } = model.modelView;
 	const { scheduleItem } = event;
-
-	if (!callbacks) return <></>;
-	if ("id" in scheduleItem && scheduleItem.id === undefined) return <></>;
-	if (
-		"recurringItemId" in scheduleItem &&
-		scheduleItem.recurringItemId === undefined
-	)
-		return <></>;
 
 	return (
 		<div className="flex gap-1 text-xs">
@@ -38,10 +31,12 @@ const EditScheduleItemPanel = function ({ model }) {
 			</button>
 			{event.type !== "recurringInstance" &&
 				"id" in event.scheduleItem &&
-				event.scheduleItem.id && (
+				event.scheduleItem.id !== undefined && (
 					<button
 						className="no-outline"
-						onClick={() => callbacks.deleteCallback(event)}
+						onClick={() =>
+							callbacks.deleteCallback(event as ScheduleEvent)
+						}
 					>
 						<Edit2Icon strokeWidth={1} />
 					</button>

@@ -333,7 +333,9 @@
 		"scheduleFailure": "Could not schedule the event: Error: {message}",
 		"modifyFailure": "Could not modify the event: Error: {message}",
 		"scheduleSummaryTab": "Schedule Summary",
-		"altScheduleSummaryTab": "Schedule Details"
+		"altScheduleSummaryTab": "Schedule Details",
+		"confirmDeleteSpecific": "Are you sure you want to delete the event '{title}' scheduled for {date}?",
+		"confirmDeleteRecurring": "Are you sure you want to delete the recurring event '{title}'?"
 	},
 	"recurringScheduleItem": {
 		"description": "Event recurs {parsedCronString}"

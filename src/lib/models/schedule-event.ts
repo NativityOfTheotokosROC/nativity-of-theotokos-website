@@ -5,6 +5,7 @@ import {
 	NewInstantaneousScheduleItem,
 	NewRecurringScheduleItem,
 } from "../validation/schedule-item";
+import { ScheduleEventWithOptionalId } from "./scheduler";
 
 export type NewScheduleEvent = {
 	[T in ScheduleEvent["type"]]: {
@@ -18,7 +19,10 @@ export type NewScheduleEvent = {
 }[ScheduleEvent["type"]];
 
 export type ScheduleEventModelView = {
-	scheduleEvent: MakeOptional<ScheduleEvent<Translation>, "scheduleItem">;
+	scheduleEvent: MakeOptional<
+		ScheduleEventWithOptionalId<Translation>,
+		"scheduleItem"
+	>;
 	autoCompleteInfo?: Partial<{
 		titleTranslations: Translation[];
 		venueTranslations: Translation[];

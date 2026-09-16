@@ -61,6 +61,7 @@ export function getInstantaneousScheduleItemSchema(t?: Translator) {
 					field: t("scheduleItem.dateField"),
 				}),
 		}),
+		isRemoved: z.boolean().optional(),
 	});
 }
 
@@ -82,6 +83,7 @@ export function getRecurringScheduleItemSchema(t?: Translator) {
 						field: t("scheduleItem.recurringPatternField"),
 					}),
 			}),
+		isDisabled: z.boolean().optional(),
 	});
 }
 

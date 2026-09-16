@@ -64,7 +64,6 @@ export function getEncodedShareData(shareData: ShareData) {
 export function snippetify(text: string, capOff: number = 300) {
 	return `${text.substring(0, capOff - 3)}...`;
 }
-
 export function pickTranslation(translation: Translation, target: Language) {
 	return target === "ru"
 		? (translation.russian ?? translation.english)

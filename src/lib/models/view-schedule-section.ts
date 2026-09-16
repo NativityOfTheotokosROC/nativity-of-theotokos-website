@@ -1,15 +1,12 @@
 import { InteractiveModel, ModelInteraction } from "@mvc-react/mvc";
 import {
-	InstantaneousScheduleItemWithOptionalId,
-	RecurringScheduleItemWithOptionalId,
-} from "../utilities/schedule";
-import {
 	InstantaneousScheduleItem,
 	Language,
 	RecurringScheduleItem,
 	Translation,
 } from "../utilities/types";
 import { EditScheduleItemPanelModelView } from "./edit-schedule-item-panel";
+import { NewScheduleEvent } from "./schedule-event";
 
 export type ViewScheduleSectionModelView = {
 	currentScheduleItems: {
@@ -17,9 +14,7 @@ export type ViewScheduleSectionModelView = {
 		instantaneousScheduleItems: InstantaneousScheduleItem<Translation>[];
 	};
 	language: Language;
-	pendingScheduleItem?:
-		| RecurringScheduleItemWithOptionalId<Translation>
-		| InstantaneousScheduleItemWithOptionalId<Translation>;
+	newEvent?: NewScheduleEvent;
 	modifyCallbacks: NonNullable<EditScheduleItemPanelModelView["callbacks"]>;
 	maxItems?: number;
 };

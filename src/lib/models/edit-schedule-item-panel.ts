@@ -1,18 +1,22 @@
 import { Model } from "@mvc-react/mvc";
-import { ScheduleEvent } from "../utilities/schedule";
-import { RecurringScheduleItemInstance } from "../utilities/types";
+import {
+	RecurringScheduleItemInstanceWithOptionalId,
+	ScheduleEvent,
+	UniversalScheduleEvent,
+} from "../utilities/schedule";
+import { ScheduleEventWithOptionalId } from "./scheduler";
 
-export type ModifiedScheduleEvent =
-	| ScheduleEvent
+export type UniversalScheduleEventWithOptionalId =
+	| ScheduleEventWithOptionalId<string>
 	| {
 			type: "recurringInstance";
-			scheduleItem: RecurringScheduleItemInstance;
+			scheduleItem: RecurringScheduleItemInstanceWithOptionalId;
 	  };
 export type EditScheduleItemPanelModelView = {
-	event: ModifiedScheduleEvent;
-	callbacks?: {
-		editCallback: (event: ModifiedScheduleEvent) => void;
-		toggleCallback: (event: ModifiedScheduleEvent) => void;
+	event: UniversalScheduleEvent;
+	callbacks: {
+		editCallback: (event: UniversalScheduleEvent) => void;
+		toggleCallback: (event: UniversalScheduleEvent) => void;
 		deleteCallback: (event: ScheduleEvent) => void;
 	};
 };

@@ -1,5 +1,5 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
-import { ScheduleEvent } from "../utilities/schedule";
+import { ScheduleEvent, UniversalScheduleEvent } from "../utilities/schedule";
 import {
 	InstantaneousScheduleItem,
 	MakeOptional,
@@ -9,6 +9,7 @@ import {
 	Text,
 	Translation,
 } from "../utilities/types";
+import { NewScheduleEvent } from "./schedule-event";
 
 export type ScheduleEventWithOptionalId<T extends Text = Translation> = {
 	[U in ScheduleEvent["type"]]: ReplacePropertyType<
@@ -20,40 +21,45 @@ export type ScheduleEventWithOptionalId<T extends Text = Translation> = {
 		>
 	>;
 }[ScheduleEvent["type"]];
+type EventToEdit = MakeOptional<
+	ScheduleEventWithOptionalId<Translation>,
+	"scheduleItem"
+>;
 
 export type SchedulerModelView = {
 	scheduleItems: {
 		instantaneousScheduleItems: InstantaneousScheduleItem<Translation>[];
 		recurringScheduleItems: RecurringScheduleItem<Translation>[];
-		// instantaneousScheduleItemsPage: number;
 	};
 	autoCompleteInfo?: Partial<{
 		titleTranslations: Translation[];
 		venueTranslations: Translation[];
 		designationTranslations: Translation[];
 	}>;
-	eventToEdit: ScheduleEvent<Translation>;
+	eventToEdit: EventToEdit;
 };
 
 export type SchedulerModelInteraction =
 	| InputModelInteraction<
 			"SCHEDULE_EVENT",
 			{
-				newEvent: ScheduleEventWithOptionalId;
+				id?: number;
+				newEvent: NewScheduleEvent;
 			}
 	  >
 	| InputModelInteraction<
 			"UPDATE_EVENT_TO_EDIT",
 			{
-				event: ScheduleEventWithOptionalId;
+				event: EventToEdit;
 			}
-	  >;
-// | InputModelInteraction<
-// 		"UPDATE_SCHEDULE_ITEMS",
-// 		{
-// 			instantaneousScheduleItemsPage: number;
-// 		}
-//   >;
+	  >
+	| InputModelInteraction<
+			"TOGGLE_EVENT",
+			{
+				event: UniversalScheduleEvent;
+			}
+	  >
+	| InputModelInteraction<"DELETE_EVENT", { event: ScheduleEvent }>;
 
 export type SchedulerModel = InteractiveModel<
 	SchedulerModelView,

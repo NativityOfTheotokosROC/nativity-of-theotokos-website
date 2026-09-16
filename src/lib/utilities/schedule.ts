@@ -11,17 +11,27 @@ import {
 	Translation,
 } from "./types";
 import { pickTranslation } from "./miscellaneous";
+import {
+	NewInstantaneousScheduleItem,
+	NewRecurringScheduleItem,
+} from "../validation/schedule-item";
 
-type BaseScheduleEvent<
+export type BaseScheduleEvent<
 	T extends string,
-	I extends InstantaneousScheduleItem<U> | RecurringScheduleItem<U>,
+	I extends ScheduleItem<U>,
 	U extends Text = string,
 > = { type: T; scheduleItem: I };
 
 export type ScheduleEvent<T extends Text = string> =
 	| BaseScheduleEvent<"specific", InstantaneousScheduleItem<T>, T>
 	| BaseScheduleEvent<"recurring", RecurringScheduleItem<T>, T>;
-
+export type UniversalScheduleEvent<T extends Text = string> =
+	| ScheduleEvent<T>
+	| BaseScheduleEvent<
+			"recurringInstance",
+			RecurringScheduleItemInstance<T>,
+			T
+	  >;
 export type InstantaneousScheduleItemWithOptionalId<T extends Text = string> =
 	MakeOptional<InstantaneousScheduleItem<T>, "id">;
 export type RecurringScheduleItemWithOptionalId<T extends Text = string> =
@@ -78,6 +88,7 @@ export function getNextRecurringScheduleItemInstances<T extends Text = string>(
 		title,
 		venue,
 		times,
+		isDisabled,
 	}: RecurringScheduleItemWithOptionalId<T>,
 	instances: number,
 	referenceDate?: Date,
@@ -94,6 +105,7 @@ export function getNextRecurringScheduleItemInstances<T extends Text = string>(
 				venue,
 				date,
 				times,
+				isRemoved: isDisabled,
 			}) satisfies MakeOptional<
 				RecurringScheduleItemInstance<T>,
 				"recurringItemId"
@@ -165,4 +177,42 @@ export function pickScheduleItemTranslation<
 			designation: pickTranslation(designation, target),
 		})),
 	} satisfies ScheduleItem<string>;
+}
+
+export function parseNewScheduleItem(
+	scheduleItem: NewInstantaneousScheduleItem,
+): Omit<InstantaneousScheduleItem<Translation>, "id">;
+export function parseNewScheduleItem(
+	scheduleItem: NewRecurringScheduleItem,
+): Omit<RecurringScheduleItem<Translation>, "id">;
+export function parseNewScheduleItem(
+	scheduleItem: NewInstantaneousScheduleItem | NewRecurringScheduleItem,
+) {
+	if ("recurringPattern" in scheduleItem)
+		return {
+			...scheduleItem,
+			isDisabled: scheduleItem.isDisabled ?? false,
+		};
+	return {
+		...scheduleItem,
+		times: scheduleItem.times,
+		date: new Date(scheduleItem.date),
+		isRemoved: scheduleItem.isRemoved ?? false,
+	};
+}
+
+export function recurringScheduleItemHasId<T extends Text>(
+	item: RecurringScheduleItemWithOptionalId<T>,
+): item is RecurringScheduleItem<T> {
+	return "id" in item && item.id !== undefined;
+}
+export function recurringScheduleItemInstanceHasId<T extends Text>(
+	item: RecurringScheduleItemInstanceWithOptionalId<T>,
+): item is RecurringScheduleItemInstance<T> {
+	return "recurringItemId" in item && item.recurringItemId !== undefined;
+}
+export function instantaneousScheduleItemHasId<T extends Text>(
+	item: InstantaneousScheduleItemWithOptionalId<T>,
+): item is InstantaneousScheduleItem<T> {
+	return "id" in item && item.id !== undefined;
 }

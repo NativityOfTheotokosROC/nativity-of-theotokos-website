@@ -3,6 +3,7 @@ import RussianGraphic from "@/public/assets/russian.svg";
 import { ViewScheduleSectionModel } from "@/src/lib/models/view-schedule-section";
 import {
 	generateSchedule,
+	parseNewScheduleItem,
 	pickScheduleItemTranslation,
 } from "@/src/lib/utilities/schedule";
 import { ModeledVoidComponent } from "@mvc-react/components";
@@ -18,7 +19,7 @@ const ViewScheduleSection = function ({ model }) {
 			instantaneousScheduleItems,
 			recurringScheduleItems,
 		},
-		pendingScheduleItem,
+		newEvent,
 		modifyCallbacks,
 		language,
 		maxItems = 10,
@@ -28,13 +29,19 @@ const ViewScheduleSection = function ({ model }) {
 		recurringScheduleItems,
 		maxItems,
 	).map(scheduleItem => pickScheduleItemTranslation(scheduleItem, language));
-	const newSchedule = pendingScheduleItem
+	const newSchedule = newEvent
 		? generateSchedule(
-				pendingScheduleItem && "date" in pendingScheduleItem
-					? [...instantaneousScheduleItems, pendingScheduleItem]
+				newEvent && "date" in newEvent.scheduleItem
+					? [
+							...instantaneousScheduleItems,
+							parseNewScheduleItem(newEvent.scheduleItem),
+						]
 					: instantaneousScheduleItems,
-				pendingScheduleItem && "recurringPattern" in pendingScheduleItem
-					? [...recurringScheduleItems, pendingScheduleItem]
+				newEvent && "recurringPattern" in newEvent.scheduleItem
+					? [
+							...recurringScheduleItems,
+							parseNewScheduleItem(newEvent.scheduleItem),
+						]
 					: recurringScheduleItems,
 				maxItems,
 			).map(scheduleItem =>
@@ -69,7 +76,7 @@ const ViewScheduleSection = function ({ model }) {
 					)}
 				</span>
 			</Button>
-			{pendingScheduleItem && (
+			{newEvent && (
 				<div className="flex flex-col gap-3">
 					<span className="text-xl">{t("newScheduleSection")}</span>
 					<SchedulePreviewWidget
@@ -78,9 +85,11 @@ const ViewScheduleSection = function ({ model }) {
 							displayRemoved: true,
 							maxDisplayedItems: maxItems,
 							highlightedScheduleItem:
-								"date" in pendingScheduleItem
+								"date" in newEvent.scheduleItem
 									? pickScheduleItemTranslation(
-											pendingScheduleItem,
+											parseNewScheduleItem(
+												newEvent.scheduleItem,
+											),
 											language,
 										)
 									: undefined,

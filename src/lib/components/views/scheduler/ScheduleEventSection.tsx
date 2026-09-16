@@ -3,7 +3,7 @@ import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complet
 import { ScheduleEventModel } from "@/src/lib/models/schedule-event";
 import { autoCompleteFields } from "@/src/lib/utilities/auto-complete-box";
 import { BLANK_TRANSLATION } from "@/src/lib/utilities/constants";
-import { getDateString, getTimeString } from "@/src/lib/utilities/date-time";
+import { getDateString } from "@/src/lib/utilities/date-time";
 import { CompleteTranslation, Translation } from "@/src/lib/utilities/types";
 import {
 	ALL_DAYS_ARRAY,
@@ -154,13 +154,7 @@ const ScheduleEventSection = function ({ model }) {
 	useEffect(() => {
 		const { scheduleItem } = scheduleEvent;
 		if (scheduleItem) {
-			reset({
-				...scheduleItem,
-				times: scheduleItem.times.map(({ time, designation }) => ({
-					designation,
-					time: getTimeString(time),
-				})),
-			});
+			reset(scheduleItem);
 		} else {
 			reset();
 		}

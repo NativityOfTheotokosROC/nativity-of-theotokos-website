@@ -8,7 +8,16 @@ import { useLocale } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import { ScheduleItemModel } from "../../models/schedule-item";
 import { georgia } from "../../third-party/fonts";
-import { getNativeTimeZone } from "../../utilities/date-time";
+import {
+	getDateString,
+	getNativeTimeZone,
+	pickDateTranslation,
+	pickTimeTranslation,
+} from "../../utilities/date-time";
+import {
+	instantaneousScheduleItemHasId,
+	recurringScheduleItemInstanceHasId,
+} from "../../utilities/schedule";
 import EditScheduleItemPanel from "./EditScheduleItemPanel";
 
 const ScheduleItem = function ({ model }) {
@@ -16,19 +25,20 @@ const ScheduleItem = function ({ model }) {
 		model.modelView;
 	const { title, venue, date, times } = scheduleItem;
 	const locale = useLocale();
-	const dateLocale = locale === "ru" ? "ru-RU" : "en-uk";
 	const nativeDate = toZonedTime(date, getNativeTimeZone());
 	const nativeTimes = times
-		.map(time => ({
-			...time,
-			time: toZonedTime(time.time, getNativeTimeZone()),
+		.map(({ designation, time }) => ({
+			designation,
+			time: toZonedTime(
+				`${getDateString(date)}T${time}`,
+				getNativeTimeZone(),
+			),
 		}))
 		.slice(0, maxDisplayedTimes ?? 3);
 	const isItemRemoved = "isRemoved" in scheduleItem && scheduleItem.isRemoved;
 	const isPending =
 		("id" in scheduleItem && !scheduleItem.id) ||
 		("recurringItemId" in scheduleItem && !scheduleItem.recurringItemId);
-	const isEditable = !isPending && options?.modifyCallbacks;
 
 	return variant === "detailed" ? (
 		<div
@@ -43,14 +53,12 @@ const ScheduleItem = function ({ model }) {
 				className={`flex max-w-25 min-w-24 grow flex-col items-center gap-2 self-stretch bg-gray-900 p-4 px-5 text-center text-white ${georgia.className}`}
 			>
 				<span className="text-4xl">
-					{nativeDate.toLocaleDateString(dateLocale, {
-						day: "2-digit",
-					})}
+					{pickDateTranslation(nativeDate, locale, { day: true })}
 				</span>
 				<span className="uppercase">
-					{nativeDate.toLocaleDateString(dateLocale, {
-						month: "short",
-						year: "2-digit",
+					{pickDateTranslation(nativeDate, locale, {
+						month: true,
+						year: true,
 					})}
 				</span>
 				<FeaturedItemOrnament className="h-10 w-10" fill="#fff" />
@@ -58,21 +66,19 @@ const ScheduleItem = function ({ model }) {
 			<div className="flex flex-col gap-1 px-5.5 py-4">
 				<span className="text-xl">{title}</span>
 				<span>{venue}</span>
-				{nativeTimes.map((time, index) => (
+				{nativeTimes.map(({ time, designation }, index) => (
 					<div
 						key={index}
 						className="inline-flex max-w-full flex-wrap gap-1 text-sm"
 					>
 						<span className="w-17">
-							{time.time
-								.toLocaleTimeString(dateLocale, {
-									hour: "numeric",
-									minute: "2-digit",
-									hour12: true,
-								})
-								.toUpperCase()}
+							{pickTimeTranslation(time, locale, {
+								hour: true,
+								minute: true,
+								twelveHour: true,
+							})}
 						</span>
-						<span className="underline">{time.designation}</span>
+						<span className="underline">{designation}</span>
 					</div>
 				))}
 			</div>
@@ -83,14 +89,12 @@ const ScheduleItem = function ({ model }) {
 				className={`flex w-full max-w-[5em] grow flex-col items-center gap-1 self-stretch bg-gray-900 p-4 text-center text-white ${georgia.className}`}
 			>
 				<span className="text-xl">
-					{nativeDate.toLocaleDateString(dateLocale, {
-						day: "2-digit",
-					})}
+					{pickDateTranslation(nativeDate, locale, { day: true })}
 				</span>
 				<span className="text-xs uppercase">
-					{nativeDate.toLocaleDateString(dateLocale, {
-						month: "short",
-						year: "2-digit",
+					{pickDateTranslation(nativeDate, locale, {
+						month: true,
+						year: true,
 					})}
 				</span>
 			</div>
@@ -98,24 +102,36 @@ const ScheduleItem = function ({ model }) {
 				<span className="text-lg">{title}</span>
 				<span className="text-sm">{venue}</span>
 				<span className="text-sm">
-					{nativeTimes[0].time
-						.toLocaleTimeString(dateLocale, {
-							hour: "numeric",
-							minute: "2-digit",
-							hour12: true,
-						})
-						.toUpperCase()}
+					{pickTimeTranslation(nativeTimes[0].time, locale, {
+						hour: true,
+						minute: true,
+						twelveHour: true,
+					})}
 				</span>
-				{isEditable && (
-					<div className="contents pointer-fine:invisible pointer-fine:group-hover/edit-bar:visible">
-						<EditScheduleItemPanel
-							model={newReadonlyModel({
-								scheduleItem,
-								callbacks: options?.modifyCallbacks,
-							})}
-						/>
-					</div>
-				)}
+				{options &&
+					options.modifyCallbacks &&
+					(("recurringItemId" in scheduleItem &&
+						recurringScheduleItemInstanceHasId(scheduleItem)) ||
+						("id" in scheduleItem &&
+							instantaneousScheduleItemHasId(scheduleItem))) && (
+						<div className="contents pointer-fine:invisible pointer-fine:group-hover/edit-bar:visible">
+							<EditScheduleItemPanel
+								model={newReadonlyModel({
+									event:
+										"recurringItemId" in scheduleItem
+											? {
+													type: "recurringInstance",
+													scheduleItem,
+												}
+											: {
+													type: "specific",
+													scheduleItem,
+												},
+									callbacks: options.modifyCallbacks,
+								})}
+							/>
+						</div>
+					)}
 			</div>
 		</div>
 	) : (

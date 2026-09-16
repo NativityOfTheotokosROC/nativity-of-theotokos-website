@@ -29,6 +29,7 @@ const ScheduleSummarySection = function ({ model }) {
 					<div className="flex max-h-100 w-full flex-col gap-2 overflow-y-auto pr-2">
 						{orderedInstantaneousItems.map(scheduleItem => (
 							<ScheduleItem
+								key={scheduleItem.id}
 								model={newReadonlyModel({
 									scheduleItem,
 									variant: "detailed",
@@ -45,6 +46,7 @@ const ScheduleSummarySection = function ({ model }) {
 					<div className="flex max-h-100 w-full flex-col gap-2 overflow-y-auto pr-2">
 						{orderedRecurringItems.map(scheduleItem => (
 							<RecurringScheduleItem
+								key={scheduleItem.id}
 								model={newReadonlyModel({
 									scheduleItem,
 									options: { modifyCallbacks },

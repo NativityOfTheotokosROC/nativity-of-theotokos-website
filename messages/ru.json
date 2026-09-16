@@ -332,7 +332,9 @@
 		"scheduleFailure": "Не удалось запланировать событие. Ошибка: {message}",
 		"modifyFailure": "Не удалось изменить событие. Ошибка: {message}",
 		"scheduleSummaryTab": "Обзор расписания",
-		"altScheduleSummaryTab": "Детали расписания"
+		"altScheduleSummaryTab": "Детали расписания",
+		"confirmDeleteSpecific": "Вы уверены, что хотите удалить событие «{title}», запланированное на {date}?",
+		"confirmDeleteRecurring": "Вы уверены, что хотите удалить повторяющееся событие «{title}»?"
 	},
 	"recurringScheduleItem": {
 		"description": "Событие повторяется {parsedCronString}"
