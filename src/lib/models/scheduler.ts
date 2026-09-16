@@ -1,80 +1,59 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
+import { ScheduleEvent } from "../utilities/schedule";
 import {
 	InstantaneousScheduleItem,
+	MakeOptional,
 	RecurringScheduleItem,
+	ReplacePropertyType,
+	SelectByDiscriminator,
+	Text,
 	Translation,
 } from "../utilities/types";
-import {
-	NewInstantaneousScheduleItem,
-	NewRecurringScheduleItem,
-} from "../validation/schedule-item";
+
+export type ScheduleEventWithOptionalId<T extends Text = Translation> = {
+	[U in ScheduleEvent["type"]]: ReplacePropertyType<
+		SelectByDiscriminator<ScheduleEvent<T>, "type", U>,
+		"scheduleItem",
+		MakeOptional<
+			SelectByDiscriminator<ScheduleEvent<T>, "type", U>["scheduleItem"],
+			"id"
+		>
+	>;
+}[ScheduleEvent["type"]];
 
 export type SchedulerModelView = {
 	scheduleItems: {
-		instantaneousScheduleItems: InstantaneousScheduleItem[];
-		recurringScheduleItems: RecurringScheduleItem[];
-		instantaneousScheduleItemsPage: number;
+		instantaneousScheduleItems: InstantaneousScheduleItem<Translation>[];
+		recurringScheduleItems: RecurringScheduleItem<Translation>[];
+		// instantaneousScheduleItemsPage: number;
 	};
 	autoCompleteInfo?: Partial<{
 		titleTranslations: Translation[];
 		venueTranslations: Translation[];
 		designationTranslations: Translation[];
 	}>;
+	eventToEdit: ScheduleEvent<Translation>;
 };
 
 export type SchedulerModelInteraction =
 	| InputModelInteraction<
-			"SCHEDULE_SPECIFIC_EVENT",
+			"SCHEDULE_EVENT",
 			{
-				specificEvent: NewInstantaneousScheduleItem;
+				newEvent: ScheduleEventWithOptionalId;
 			}
 	  >
 	| InputModelInteraction<
-			"SCHEDULE_RECURRING_EVENT",
+			"UPDATE_EVENT_TO_EDIT",
 			{
-				recurringEvent: NewRecurringScheduleItem;
-			}
-	  >
-	| InputModelInteraction<
-			"MODIFY_SPECIFIC_EVENT",
-			{
-				id: number;
-			} & (
-				| {
-						modifiedEvent: NewInstantaneousScheduleItem;
-				  }
-				| { isRemoved: boolean }
-			)
-	  >
-	| InputModelInteraction<
-			"MODIFY_RECURRING_EVENT",
-			{
-				id: number;
-			} & (
-				| {
-						modifiedEvent: NewRecurringScheduleItem;
-				  }
-				| { isDisabled: boolean }
-			)
-	  >
-	| InputModelInteraction<
-			"DELETE_SPECIFIC_EVENT",
-			{
-				id: number;
-			}
-	  >
-	| InputModelInteraction<
-			"DELETE_RECURRING_EVENT",
-			{
-				id: number;
-			}
-	  >
-	| InputModelInteraction<
-			"UPDATE_SCHEDULE_ITEMS",
-			{
-				instantaneousScheduleItemsPage: number;
+				event: ScheduleEventWithOptionalId;
 			}
 	  >;
+// | InputModelInteraction<
+// 		"UPDATE_SCHEDULE_ITEMS",
+// 		{
+// 			instantaneousScheduleItemsPage: number;
+// 		}
+//   >;
 
 export type SchedulerModel = InteractiveModel<
 	SchedulerModelView,

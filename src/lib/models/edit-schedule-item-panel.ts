@@ -1,21 +1,19 @@
 import { Model } from "@mvc-react/mvc";
-import {
-	InstantaneousScheduleItemWithOptionalId,
-	RecurringScheduleItemInstanceWithOptionalId,
-	RecurringScheduleItemWithOptionalId,
-	ScheduleEvent,
-} from "../utilities/schedule";
+import { ScheduleEvent } from "../utilities/schedule";
+import { RecurringScheduleItemInstance } from "../utilities/types";
 
-export type ScheduleItemType = ScheduleEvent["type"] | "recurringInstance";
+export type ModifiedScheduleEvent =
+	| ScheduleEvent
+	| {
+			type: "recurringInstance";
+			scheduleItem: RecurringScheduleItemInstance;
+	  };
 export type EditScheduleItemPanelModelView = {
-	scheduleItem:
-		| InstantaneousScheduleItemWithOptionalId
-		| RecurringScheduleItemInstanceWithOptionalId
-		| RecurringScheduleItemWithOptionalId;
+	event: ModifiedScheduleEvent;
 	callbacks?: {
-		editCallback: (id: number, type: ScheduleItemType) => void;
-		deleteCallback: (id: number, type: ScheduleItemType) => void;
-		toggleCallback: (id: number, type: ScheduleItemType) => void;
+		editCallback: (event: ModifiedScheduleEvent) => void;
+		toggleCallback: (event: ModifiedScheduleEvent) => void;
+		deleteCallback: (event: ScheduleEvent) => void;
 	};
 };
 export type EditScheduleItemPanelModel = Model<EditScheduleItemPanelModelView>;

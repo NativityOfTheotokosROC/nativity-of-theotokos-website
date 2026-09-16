@@ -3,7 +3,7 @@ import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complet
 import { ScheduleEventModel } from "@/src/lib/models/schedule-event";
 import { autoCompleteFields } from "@/src/lib/utilities/auto-complete-box";
 import { BLANK_TRANSLATION } from "@/src/lib/utilities/constants";
-import { getDateString } from "@/src/lib/utilities/date-time";
+import { getDateString, getTimeString } from "@/src/lib/utilities/date-time";
 import { CompleteTranslation, Translation } from "@/src/lib/utilities/types";
 import {
 	ALL_DAYS_ARRAY,
@@ -24,10 +24,10 @@ import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import AutoCompleteBox from "../../auto-complete-box/AutoCompleteBox";
-import Checkbox from "../../checkbox/Checkbox";
 import ButtonBar from "../../button-bar/ButtonBar";
+import Checkbox from "../../checkbox/Checkbox";
 
-const ScheduleEvent = function ({ model }) {
+const ScheduleEventSection = function ({ model }) {
 	const {
 		modelView: { scheduleEvent, autoCompleteInfo, options },
 		interact,
@@ -54,7 +54,7 @@ const ScheduleEvent = function ({ model }) {
 		shouldUnregister: true,
 		defaultValues: {
 			date: getDateString(addDays(new Date(), 1), true),
-			scheduleItemTimes: [{ time: "09:00" }],
+			times: [{ time: "09:00" }],
 		},
 	});
 	const englishTitleAutoCompleteBox = useAutoCompleteBox(
@@ -103,10 +103,10 @@ const ScheduleEvent = function ({ model }) {
 	);
 	const englishDesignationsAutoCompleteBox = useAutoCompleteBox<
 		Translation,
-		`scheduleItemTimes.${number}.designation`
+		`times.${number}.designation`
 	>(
 		{
-			id: "scheduleItemTimes.0.designation",
+			id: "times.0.designation",
 			items: autoCompleteInfo?.designationTranslations ?? [],
 			transformer: designation => designation.english,
 		},
@@ -119,10 +119,10 @@ const ScheduleEvent = function ({ model }) {
 	);
 	const russianDesignationsAutoCompleteBox = useAutoCompleteBox<
 		CompleteTranslation,
-		`scheduleItemTimes.${number}.designation`
+		`times.${number}.designation`
 	>(
 		{
-			id: "scheduleItemTimes.0.designation",
+			id: "times.0.designation",
 			items: (autoCompleteInfo?.designationTranslations?.filter(
 				designation => designation.russian !== null,
 			) ?? []) as CompleteTranslation[],
@@ -154,11 +154,17 @@ const ScheduleEvent = function ({ model }) {
 	useEffect(() => {
 		const { scheduleItem } = scheduleEvent;
 		if (scheduleItem) {
-			reset(scheduleItem);
+			reset({
+				...scheduleItem,
+				times: scheduleItem.times.map(({ time, designation }) => ({
+					designation,
+					time: getTimeString(time),
+				})),
+			});
 		} else {
 			reset();
 		}
-	}, [JSON.stringify(scheduleEvent.scheduleItem)]);
+	}, [reset, scheduleEvent]);
 
 	useEffect(() => {
 		if (isValid && options?.isNewEventValidCallback) {
@@ -175,16 +181,19 @@ const ScheduleEvent = function ({ model }) {
 							scheduleItem:
 								instantaneousScheduleItemSchema.parse(form),
 						},
-				existingItemId,
 			);
 		} else {
 			options?.isNewEventValidCallback?.(undefined);
 		}
 	}, [
 		isValid,
-		isValid && getValues,
+		getValues,
 		scheduleEvent.type,
 		options?.isNewEventValidCallback,
+		options,
+		recurringScheduleItemSchema,
+		instantaneousScheduleItemSchema,
+		existingItemId,
 	]);
 
 	return (
@@ -493,8 +502,8 @@ const ScheduleEvent = function ({ model }) {
 								title: t("addTime"),
 								variant: "alternative",
 								action() {
-									setValue("scheduleItemTimes", [
-										...getValues("scheduleItemTimes"),
+									setValue("times", [
+										...getValues("times"),
 										{
 											designation: BLANK_TRANSLATION,
 											time: "09:00",
@@ -506,11 +515,11 @@ const ScheduleEvent = function ({ model }) {
 							{t("addTime")}
 						</Button>
 						<div className="flex flex-col gap-2">
-							{watch("scheduleItemTimes").map((_, index) => (
-								<div className="flex gap-1">
+							{watch("times").map((_, index) => (
+								<div key={index} className="flex gap-1">
 									<Controller
 										control={control}
-										name={`scheduleItemTimes.${index}.designation`}
+										name={`times.${index}.designation`}
 										render={({
 											field: {
 												name,
@@ -575,7 +584,7 @@ const ScheduleEvent = function ({ model }) {
 									/>
 									<Controller
 										control={control}
-										name={`scheduleItemTimes.${index}.time`}
+										name={`times.${index}.time`}
 										render={({
 											field: {
 												name,
@@ -607,9 +616,9 @@ const ScheduleEvent = function ({ model }) {
 												"flex justify-center items-center w-fit",
 											action() {
 												setValue(
-													"scheduleItemTimes",
+													"times",
 													getValues(
-														"scheduleItemTimes",
+														"times",
 													).toSpliced(index, 1),
 												);
 											},
@@ -623,7 +632,7 @@ const ScheduleEvent = function ({ model }) {
 					</div>
 					<ButtonBar
 						model={newReadonlyModel({
-							arrangement: "right",
+							arrangement: "start",
 							orientation: "horizontal",
 						})}
 					>
@@ -632,25 +641,7 @@ const ScheduleEvent = function ({ model }) {
 								model={newReadonlyModel({
 									disabled: !isValid,
 									action: () => {
-										const form = getValues();
-										options.previewCallback!(
-											scheduleEvent.type === "recurring"
-												? {
-														type: "recurring",
-														scheduleItem:
-															recurringScheduleItemSchema.parse(
-																form,
-															),
-													}
-												: {
-														type: "specific",
-														scheduleItem:
-															instantaneousScheduleItemSchema.parse(
-																form,
-															),
-													},
-											existingItemId,
-										);
+										options.previewCallback!();
 									},
 								})}
 							>
@@ -678,4 +669,4 @@ const ScheduleEvent = function ({ model }) {
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ScheduleEventModel>>;
 
-export default ScheduleEvent;
+export default ScheduleEventSection;

@@ -19,7 +19,7 @@ export function getScheduleItemSchema(t?: Translator) {
 		venue: getTranslationSchema(
 			t && { t, fieldName: t("scheduleItem.venueField") },
 		),
-		scheduleItemTimes: z
+		times: z
 			.array(
 				z.object({
 					time: z.iso.time({

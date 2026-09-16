@@ -40,7 +40,6 @@ export type DailyQuote<T extends Text = string> = {
 export type ScheduleItem<T extends Text = string> = {
 	title: T;
 	venue: T;
-	date: Date;
 	times: {
 		time: Date;
 		designation: T;
@@ -60,6 +59,7 @@ export type RecurringScheduleItem<T extends Text = string> = Omit<
 
 export type InstantaneousScheduleItem<T extends Text = string> =
 	ScheduleItem<T> & {
+		date: Date;
 		id: number;
 		isRemoved: boolean;
 	};
@@ -78,17 +78,32 @@ export type RecurringScheduleItemWithTranslations =
 export type RecurringScheduleItemInstance<T extends Text = string> =
 	ScheduleItem<T> & {
 		recurringItemId: number;
+		date: Date;
 	};
+
+type ToggleOptional<
+	T extends Record<string, unknown>,
+	P extends keyof T,
+	V extends boolean,
+> = V extends true
+	? { [K in P]?: T[K] } & { [K in Exclude<keyof T, P>]: T[K] }
+	: { [K in P]-?: T[K] } & { [K in Exclude<keyof T, P>]: T[K] };
 
 export type MakeOptional<
 	T extends Record<string, unknown>,
 	P extends keyof T,
-> = { [K in P]?: T[K] } & { [K in Exclude<keyof T, P>]: T[K] };
+> = ToggleOptional<T, P, true>;
 
 export type MakeRequired<
 	T extends Record<string, unknown>,
 	P extends keyof T,
-> = { [K in P]-?: T[K] } & { [K in Exclude<keyof T, P>]: T[K] };
+> = ToggleOptional<T, P, false>;
+
+export type SelectByDiscriminator<
+	T extends Record<string, unknown>,
+	K extends keyof T,
+	U extends string,
+> = U extends T[K] ? Unravel<Extract<T, Record<K, U>>> : never;
 
 export type Image = {
 	source: string;
@@ -124,7 +139,6 @@ export type ReplacePropertyType<
 	K extends keyof T,
 	N,
 > = Omit<T, K> & { [P in K]: N };
-let x: ReplacePropertyType<Article, "uri", URL>;
 
 export type ReplacePropertyTypes<
 	T extends Record<string, unknown>,

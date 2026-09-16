@@ -291,7 +291,7 @@
 	"scheduler": {
 		"title": "Планировщик",
 		"scheduleSpecific": "Запланировать на определённую дату",
-		"schedule": "Запланировать повторяющееся событие",
+		"scheduleRecurring": "Запланировать новое повторяющееся событие",
 		"scheduleEventTab": "Запланировать событие",
 		"viewScheduleTab": "Просмотреть расписание",
 		"modifyExistingTab": "Изменить существующее",
@@ -330,7 +330,9 @@
 		"scheduleSuccess": "Событие успешно запланировано",
 		"modifySuccess": "Событие успешно изменено",
 		"scheduleFailure": "Не удалось запланировать событие. Ошибка: {message}",
-		"modifyFailure": "Не удалось изменить событие. Ошибка: {message}"
+		"modifyFailure": "Не удалось изменить событие. Ошибка: {message}",
+		"scheduleSummaryTab": "Обзор расписания",
+		"altScheduleSummaryTab": "Детали расписания"
 	},
 	"recurringScheduleItem": {
 		"description": "Событие повторяется {parsedCronString}"

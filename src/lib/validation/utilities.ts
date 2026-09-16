@@ -42,7 +42,7 @@ export function getTranslationSchema(
 				});
 	return z.object({
 		english: englishSchema,
-		russian: getOptionalStringSchema(russianValidationOptions),
+		russian: z.nullable(getOptionalStringSchema(russianValidationOptions)),
 	});
 }
 

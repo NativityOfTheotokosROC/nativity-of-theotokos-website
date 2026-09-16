@@ -6,7 +6,7 @@ import {
 	NewRecurringScheduleItem,
 } from "../validation/schedule-item";
 
-type NewScheduleEvent = {
+export type NewScheduleEvent = {
 	[T in ScheduleEvent["type"]]: {
 		type: T;
 		scheduleItem: T extends "specific"
@@ -25,27 +25,17 @@ export type ScheduleEventModelView = {
 		designationTranslations: Translation[];
 	}>;
 } & Options<{
-	isNewEventValidCallback: (
-		newEvent?: NewScheduleEvent,
-		existingId?: number,
-	) => void;
-	previewCallback: (newEvent: NewScheduleEvent, existingId?: number) => void;
+	isNewEventValidCallback: (newEvent?: NewScheduleEvent) => void;
+	previewCallback: () => void;
 }>;
 
-export type ScheduleEventModelInteraction =
-	| InputModelInteraction<
-			"UPDATE_SCHEDULE_EVENT",
-			{
-				event: ScheduleEvent;
-			}
-	  >
-	| InputModelInteraction<
-			"SCHEDULE_EVENT",
-			{
-				newEvent: NewScheduleEvent;
-				existingId?: number;
-			}
-	  >;
+export type ScheduleEventModelInteraction = InputModelInteraction<
+	"SCHEDULE_EVENT",
+	{
+		newEvent: NewScheduleEvent;
+		existingId?: number;
+	}
+>;
 
 export type ScheduleEventModel = InteractiveModel<
 	ScheduleEventModelView,

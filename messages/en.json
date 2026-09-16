@@ -292,7 +292,7 @@
 	"scheduler": {
 		"title": "Scheduler",
 		"scheduleSpecific": "Schedule for Specific Date",
-		"schedule": "Schedule Recurring Event",
+		"scheduleRecurring": "Schedule New Recurring Event",
 		"scheduleEventTab": "Schedule Event",
 		"viewScheduleTab": "View Schedule",
 		"modifyExistingTab": "Modify Existing",
@@ -331,7 +331,9 @@
 		"scheduleSuccess": "Event Successfully Scheduled",
 		"modifySuccess": "Event Successfully Modified",
 		"scheduleFailure": "Could not schedule the event: Error: {message}",
-		"modifyFailure": "Could not modify the event: Error: {message}"
+		"modifyFailure": "Could not modify the event: Error: {message}",
+		"scheduleSummaryTab": "Schedule Summary",
+		"altScheduleSummaryTab": "Schedule Details"
 	},
 	"recurringScheduleItem": {
 		"description": "Event recurs {parsedCronString}"

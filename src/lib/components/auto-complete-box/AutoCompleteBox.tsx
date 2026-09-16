@@ -1,22 +1,22 @@
 import { InitializedModel } from "@mvc-react/mvc";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Tooltip } from "react-tooltip";
 import { AutoCompleteBoxModel } from "../../models/auto-complete-box";
 import "./auto-complete-box.css";
 
-export default function AutoCompleteBox<I>({
+export default function AutoCompleteBox<I, K extends string>({
 	model,
 }: {
-	model: InitializedModel<AutoCompleteBoxModel<I>>;
+	model: InitializedModel<AutoCompleteBoxModel<I, K>>;
 }) {
 	const { modelView, interact } = model;
 	const { id, items, query, isOpen, transformer } = modelView;
-	const queryParts =
-		query?.split(/\s+/).map(part => part.toLowerCase()) ?? [];
 	const filteredItems = items
 		.map((item, arrayIndex) => ({ item, arrayIndex }))
 		.filter(({ item }) => {
 			const lowercasedItem = transformer(item).toLowerCase();
+			const queryParts =
+				query?.split(/\s+/).map(part => part.toLowerCase()) ?? [];
 			return queryParts.every(part => lowercasedItem.includes(part));
 		});
 	const computedOpen = (isOpen && filteredItems.length > 0) ?? false;
@@ -24,12 +24,9 @@ export default function AutoCompleteBox<I>({
 	// DONE: Modify so transition out of vis maintains previous list of items for better UX
 	const [lastVisibleItems, setLastVisibleItems] = useState(filteredItems);
 	const displayedItems = computedOpen ? filteredItems : lastVisibleItems;
-
-	useEffect(() => {
-		if (computedOpen) {
-			setLastVisibleItems(filteredItems);
-		}
-	}, [computedOpen, JSON.stringify(filteredItems)]);
+	if (computedOpen) {
+		setLastVisibleItems(filteredItems);
+	}
 
 	return (
 		<Tooltip

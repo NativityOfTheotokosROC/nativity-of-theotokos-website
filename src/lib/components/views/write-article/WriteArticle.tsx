@@ -194,7 +194,7 @@ const WriteArticle = function ({ model }) {
 							model={newReadonlyModel({
 								className: "mt-1",
 								orientation: "horizontal",
-								arrangement: "left",
+								arrangement: "start",
 							})}
 						>
 							<Button
