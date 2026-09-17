@@ -26,6 +26,7 @@ import { Controller, useForm } from "react-hook-form";
 import AutoCompleteBox from "../../auto-complete-box/AutoCompleteBox";
 import ButtonBar from "../../button-bar/ButtonBar";
 import Checkbox from "../../checkbox/Checkbox";
+import { useCloseWarning } from "@/src/lib/utilities/hooks";
 
 const ScheduleEventSection = function ({ model }) {
 	const {
@@ -44,7 +45,7 @@ const ScheduleEventSection = function ({ model }) {
 		register,
 		handleSubmit,
 		control,
-		formState: { isSubmitting, isValid, errors },
+		formState: { isSubmitting, isValid, errors, isDirty },
 	} = useForm({
 		resolver: zodResolver(
 			scheduleEvent.type === "specific"
@@ -189,6 +190,8 @@ const ScheduleEventSection = function ({ model }) {
 		instantaneousScheduleItemSchema,
 		existingItemId,
 	]);
+
+	useCloseWarning(() => isDirty);
 
 	return (
 		<>

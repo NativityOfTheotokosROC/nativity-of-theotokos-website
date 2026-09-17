@@ -329,6 +329,8 @@
 		"continueEdit": "Продолжить редактирование",
 		"scheduleSuccess": "Событие успешно запланировано",
 		"modifySuccess": "Событие успешно изменено",
+		"deleteSuccess": "Событие успешно удалено",
+		"deleteFailure": "Не удалось удалить событие. Ошибка: {message}",
 		"scheduleFailure": "Не удалось запланировать событие. Ошибка: {message}",
 		"modifyFailure": "Не удалось изменить событие. Ошибка: {message}",
 		"scheduleSummaryTab": "Обзор расписания",

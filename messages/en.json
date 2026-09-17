@@ -330,6 +330,8 @@
 		"continueEdit": "Continue Editing",
 		"scheduleSuccess": "Event Successfully Scheduled",
 		"modifySuccess": "Event Successfully Modified",
+		"deleteSuccess": "Event successfully deleted",
+		"deleteFailure": "Could not delete the event. Error: {message}",
 		"scheduleFailure": "Could not schedule the event: Error: {message}",
 		"modifyFailure": "Could not modify the event: Error: {message}",
 		"scheduleSummaryTab": "Schedule Summary",
