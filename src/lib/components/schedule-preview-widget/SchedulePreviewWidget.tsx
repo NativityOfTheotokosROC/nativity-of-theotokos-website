@@ -20,6 +20,9 @@ const SchedulePreviewWidget = function ({ model }) {
 				)),
 	].sort((a, b) => a.date.getTime() - b.date.getTime());
 
+	if (schedule.length < 1)
+		return <></>
+
 	return (
 		<div className="schedule-list flex h-[27em] max-h-[27em] w-full flex-col gap-4 overflow-y-auto pr-3 lg:h-[30em] lg:max-h-[30em] lg:pr-6">
 			<div className="flex grow [&_.featured-schedule-item]:grow">
