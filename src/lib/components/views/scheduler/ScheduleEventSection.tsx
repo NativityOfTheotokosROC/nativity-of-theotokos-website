@@ -54,8 +54,10 @@ const ScheduleEventSection = function ({ model }) {
 		),
 		shouldUnregister: true,
 		defaultValues: {
+			title: BLANK_TRANSLATION,
+			venue: BLANK_TRANSLATION,
 			date: getDateString(addDays(new Date(), 1), true),
-			times: [{ time: "09:00" }],
+			times: [{ designation: BLANK_TRANSLATION, time: "09:00" }],
 		},
 	});
 	const englishTitleAutoCompleteBox = useAutoCompleteBox(
