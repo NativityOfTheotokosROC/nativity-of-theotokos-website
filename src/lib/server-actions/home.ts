@@ -10,14 +10,15 @@ import {
 	getLatestArticles,
 } from "../server-only/home";
 import mailerLite from "../third-party/mailer-lite";
+import { getDateString } from "../utilities/date-time";
 import {
 	DailyQuote,
 	DailyReadings,
 	GalleryImage,
+	InstantaneousScheduleItem,
 	Language,
-	ScheduleItem,
+	RecurringScheduleItemInstance,
 } from "../utilities/types";
-import { getDateString } from "../utilities/date-time";
 import { getSchedule } from "./schedule";
 
 export type LatestArticles = {
@@ -28,7 +29,10 @@ export type LatestArticles = {
 export type HomeSnapshot = {
 	dailyReadings: DailyReadings;
 	dailyQuote: DailyQuote;
-	scheduleItems: ScheduleItem[];
+	scheduleItems: (
+		| InstantaneousScheduleItem
+		| RecurringScheduleItemInstance
+	)[];
 	articles: LatestArticles;
 	dailyGalleryImages: GalleryImage[];
 };

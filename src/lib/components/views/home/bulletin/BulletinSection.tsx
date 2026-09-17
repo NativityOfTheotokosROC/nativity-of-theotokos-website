@@ -61,8 +61,7 @@ const BulletinSection = function ({ model }) {
 								<span className="text-xl">{t("schedule")}</span>
 								<SchedulePreviewWidget
 									model={newReadonlyModel({
-										scheduleItems:
-											modelView.schedulePreview,
+										schedule: modelView.schedulePreview,
 									})}
 								/>
 							</motion.div>

@@ -28,8 +28,8 @@ type EventToEdit = MakeOptional<
 
 export type SchedulerModelView = {
 	scheduleItems: {
-		instantaneousScheduleItems: InstantaneousScheduleItem<Translation>[];
-		recurringScheduleItems: RecurringScheduleItem<Translation>[];
+		instantaneous: InstantaneousScheduleItem<Translation>[];
+		recurring: RecurringScheduleItem<Translation>[];
 	};
 	autoCompleteInfo?: Partial<{
 		titleTranslations: Translation[];

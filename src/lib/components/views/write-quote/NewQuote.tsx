@@ -442,9 +442,15 @@ const NewQuote = function ({ model }) {
 													source: source.english,
 												},
 												russianQuote: {
-													author: author.russian,
-													quote: quote.russian,
-													source: source.russian,
+													author:
+														author.russian ??
+														undefined,
+													quote:
+														quote.russian ??
+														undefined,
+													source:
+														source.russian ??
+														undefined,
 												},
 											},
 										});

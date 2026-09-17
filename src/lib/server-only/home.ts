@@ -1,23 +1,21 @@
 import { ImagePlaceholder, getPlaceholder } from "@grod56/placeholder";
 import { arrayToShuffled } from "array-shuffle";
-import { getTranslations } from "next-intl/server";
 import { cacheLife, cacheTag } from "next/cache";
 import "server-only";
 import { LatestArticles } from "../server-actions/home";
 import { dailyReadings } from "../third-party/holytrinityorthodox";
 import database from "../third-party/prisma";
+import { getDateString } from "../utilities/date-time";
+import { isRemotePath } from "../utilities/miscellaneous";
+import { BASE_URL } from "../utilities/server-constants";
 import {
 	ArticleAuthor,
 	DailyQuote,
 	GalleryImage,
 	Language,
-	ScheduleItem,
 } from "../utilities/types";
-import { getDateString } from "../utilities/date-time";
-import { isRemotePath } from "../utilities/miscellaneous";
-import { BASE_URL } from "../utilities/server-constants";
-import { getGalleryImages } from "./gallery";
 import { _FULL_ARTICLE_INCLUDES } from "./article";
+import { getGalleryImages } from "./gallery";
 
 export const getDailyReadings = async (
 	currentDate: Date,
@@ -309,183 +307,4 @@ export async function getDailyGalleryImages(count: number, currentDate: Date) {
 		});
 	}
 	return placeholderedGalleryImages;
-}
-
-// TODO: To be refactored to something less ... static
-async function _getNextDefaultScheduleItem(date: Date): Promise<
-	Omit<ScheduleItem, "times"> & {
-		times: { time: Date; designation: string; designationRu: string }[];
-	} & { titleRu: string }
-> {
-	let scheduleItem;
-	const tEn = await getTranslations({
-		locale: "en",
-		namespace: "scheduleItem",
-	});
-	const tRu = await getTranslations({
-		locale: "ru",
-		namespace: "scheduleItem",
-	});
-	const scheduleItemDate = new Date(date);
-	while (scheduleItemDate.getDay() > 0 && scheduleItemDate.getDay() < 6) {
-		scheduleItemDate.setDate(scheduleItemDate.getDate() + 1);
-	}
-	if (scheduleItemDate.getDay() === 6) {
-		const nextSundayDate = new Date(
-			new Date(scheduleItemDate).setDate(scheduleItemDate.getDate() + 1),
-		);
-		const previousSundayDate = new Date(
-			new Date(scheduleItemDate).setDate(scheduleItemDate.getDate() - 6),
-		);
-		if (nextSundayDate.getMonth() != previousSundayDate.getMonth()) {
-			scheduleItem = {
-				date: scheduleItemDate,
-				venue: tEn("secondaryLocation"),
-				title: tEn("liturgyService"),
-				titleRu: tRu("liturgyService"),
-				times: [
-					{
-						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(
-								9,
-								0,
-								0,
-								0,
-							),
-						),
-						designation: tEn("orthros"),
-						designationRu: tRu("orthros"),
-					},
-					{
-						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(
-								9,
-								30,
-								0,
-								0,
-							),
-						),
-						designation: tEn("confessions"),
-						designationRu: tRu("confessions"),
-					},
-					{
-						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(
-								10,
-								30,
-								0,
-								0,
-							),
-						),
-						designation: tEn("liturgy"),
-						designationRu: tRu("liturgy"),
-					},
-				],
-			};
-			return scheduleItem;
-		}
-		scheduleItem = {
-			date: nextSundayDate,
-			venue: tEn("secondaryLocation"),
-			title: tEn("typikaService"),
-			titleRu: tRu("typikaService"),
-			times: [
-				{
-					time: new Date(
-						new Date(nextSundayDate.toDateString()).setHours(
-							9,
-							0,
-							0,
-							0,
-						), // TODO: Fix these
-					),
-					designation: tEn("orthros"),
-					designationRu: tRu("orthros"),
-				},
-				{
-					time: new Date(
-						new Date(nextSundayDate.toDateString()).setHours(
-							9,
-							30,
-							0,
-							0,
-						),
-					),
-					designation: tEn("typika"),
-					designationRu: tRu("typika"),
-				},
-				{
-					time: new Date(
-						new Date(nextSundayDate.toDateString()).setHours(
-							10,
-							30,
-							0,
-							0,
-						),
-					),
-					designation: tEn("catechism"),
-					designationRu: tRu("catechism"),
-				},
-			],
-		};
-	} else {
-		const previousSundayDate = new Date(
-			new Date(scheduleItemDate).setDate(scheduleItemDate.getDate() - 7),
-		);
-		if (scheduleItemDate.getMonth() != previousSundayDate.getMonth()) {
-			scheduleItem = {
-				date: scheduleItemDate,
-				venue: tEn("mainLocation"),
-				title: tEn("liturgyService"),
-				titleRu: tRu("liturgyService"),
-				times: [
-					{
-						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(
-								12,
-								0,
-								0,
-								0,
-							),
-						),
-						designation: tEn("orthros"),
-						designationRu: tRu("orthros"),
-					},
-					{
-						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(
-								12,
-								30,
-								0,
-								0,
-							),
-						),
-						designation: tEn("confessions"),
-						designationRu: tRu("confessions"),
-					},
-					{
-						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(
-								13,
-								0,
-								0,
-								0,
-							),
-						),
-						designation: tEn("liturgy"),
-						designationRu: tRu("liturgy"),
-					},
-				],
-			};
-			return scheduleItem;
-		}
-		scheduleItem = await _getNextDefaultScheduleItem(
-			new Date(
-				new Date(scheduleItemDate).setDate(
-					scheduleItemDate.getDate() - 1,
-				),
-			),
-		); // HACK
-	}
-	return scheduleItem;
 }

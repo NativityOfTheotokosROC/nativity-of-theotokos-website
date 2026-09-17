@@ -1,4 +1,9 @@
 import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
+import SchedulerClient from "@/src/lib/components/views/scheduler/client";
+import {
+	getAutoCompleteInfo,
+	getScheduleItems,
+} from "@/src/lib/server-only/schedule";
 import { isValidLocale } from "@/src/lib/utilities/internationalization";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
@@ -14,9 +19,19 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 }
 
 export default async function Page() {
+	const [scheduleItems, autoCompleteInfo] = await Promise.all([
+		getScheduleItems(new Date()),
+		getAutoCompleteInfo(),
+	]);
 	return (
 		<ProtectedComponent model={newReadonlyModel({ roles: ["admin"] })}>
-			<></>
+			<SchedulerClient
+				model={newReadonlyModel({
+					eventToEdit: { type: "specific" },
+					scheduleItems,
+					autoCompleteInfo,
+				})}
+			/>
 		</ProtectedComponent>
 	);
 }

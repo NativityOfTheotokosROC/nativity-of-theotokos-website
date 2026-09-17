@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { cacheLife, cacheTag, revalidateTag } from "next/cache";
 import z from "zod";
 import database from "../third-party/prisma";
-import { getTimeString } from "../utilities/date-time";
+import { getDateString, getTimeString } from "../utilities/date-time";
 import { getMd5Hash } from "../utilities/miscellaneous";
 import {
 	getNextRecurringScheduleItemDates,
@@ -25,8 +25,9 @@ import { protect } from "./auth";
 
 export async function getSchedule(
 	referenceDate: Date | string,
-	limit: number = 4,
+	limit: number = 10,
 	locale: Language = "en",
+	includeInactive: boolean = false,
 ) {
 	"use cache: remote";
 	cacheTag("schedule");
@@ -35,7 +36,7 @@ export async function getSchedule(
 	const parsedReferenceDate =
 		typeof referenceDate === "string"
 			? z.iso.date().optional().parse(referenceDate)
-			: referenceDate;
+			: getDateString(referenceDate, true);
 
 	const [
 		instantaneousScheduleItemRecords,
@@ -54,12 +55,13 @@ export async function getSchedule(
 						time: "asc",
 					},
 				},
+				removedScheduleItem: true,
 			},
 			where: {
 				date: {
 					gte: parsedReferenceDate,
 				},
-				removedScheduleItem: null,
+				removedScheduleItem: includeInactive ? undefined : null,
 			},
 			orderBy: {
 				date: "asc",
@@ -81,7 +83,9 @@ export async function getSchedule(
 				disabledRecurringScheduleItem: true,
 			},
 			where: {
-				disabledRecurringScheduleItem: null,
+				disabledRecurringScheduleItem: includeInactive
+					? undefined
+					: null,
 			},
 		}),
 		database.removedInstantaneousScheduleItem.findMany({
@@ -99,7 +103,14 @@ export async function getSchedule(
 	]);
 	const instantaneousScheduleItems: Array<InstantaneousScheduleItem> =
 		instantaneousScheduleItemRecords.map(
-			({ id, title, venue, date, instantaneousScheduleItemTimes }) => ({
+			({
+				id,
+				title,
+				venue,
+				date,
+				instantaneousScheduleItemTimes,
+				removedScheduleItem,
+			}) => ({
 				id,
 				title:
 					locale === "ru"
@@ -119,23 +130,37 @@ export async function getSchedule(
 								: designation.english,
 					}),
 				),
-				isRemoved: false,
+				isRemoved: removedScheduleItem !== null,
 			}),
 		);
-	const recurringScheduleItemInstanceExclusions = new Set([
-		...instantaneousScheduleItemRecords.map(
-			({ venueTranslationId, date }) =>
-				JSON.stringify({ date, venueTranslationId }),
-		),
-		...removedInstantaneousScheduleItemRecords.map(
-			({ scheduleItem: { date, venueTranslationId } }) =>
-				JSON.stringify({ date, venueTranslationId }),
-		),
-	]);
+	const recurringScheduleItemInstanceExclusions = includeInactive
+		? new Set([
+				...instantaneousScheduleItemRecords.map(
+					({ venueTranslationId, date }) =>
+						JSON.stringify({ date, venueTranslationId }),
+				),
+			])
+		: new Set([
+				...instantaneousScheduleItemRecords.map(
+					({ venueTranslationId, date }) =>
+						JSON.stringify({ date, venueTranslationId }),
+				),
+				...removedInstantaneousScheduleItemRecords.map(
+					({ scheduleItem: { date, venueTranslationId } }) =>
+						JSON.stringify({ date, venueTranslationId }),
+				),
+			]);
 	const recurringScheduleItemInstances =
 		new Array<RecurringScheduleItemInstance>();
 	recurringScheduleItemRecords.forEach(
-		({ id, title, venue, pattern, recurringScheduleItemTimes }) => {
+		({
+			id,
+			title,
+			venue,
+			pattern,
+			recurringScheduleItemTimes,
+			disabledRecurringScheduleItem,
+		}) => {
 			const nextDates = getNextRecurringScheduleItemDates(
 				pattern,
 				limit,
@@ -168,7 +193,7 @@ export async function getSchedule(
 								time: getTimeString(time),
 							}),
 						),
-						isRemoved: false,
+						isRemoved: disabledRecurringScheduleItem !== null,
 					});
 			});
 		},
@@ -607,7 +632,9 @@ export async function removeNextRecurringItem(
 	const parsedReferenceDate =
 		typeof referenceDate === "string"
 			? z.iso.date().optional().parse(referenceDate)
-			: referenceDate;
+			: referenceDate !== undefined
+				? getDateString(referenceDate, true)
+				: undefined;
 	const specificDate = getNextRecurringScheduleItemDates(
 		recurringScheduleItem.pattern,
 		instance ?? 1,

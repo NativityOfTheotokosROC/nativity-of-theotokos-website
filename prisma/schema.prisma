@@ -205,20 +205,20 @@ model Translation {
   russian     String?
   englishHash String  @unique
 
-  articleImageCaptions             ArticleImage[]
-  articleAuthors                   ArticleAuthor[]
-  quoteAuthors                     QuoteAuthor[]
-  quoteTranslations                Quote[]                         @relation("QuoteTranslation")
-  quoteSourceTranslations          Quote[]                         @relation("QuoteSourceTranslation")
-  articleTitleTranslations         Article[]                       @relation("ArticleTitleTranslation")
-  articleBodyTranslations          Article[]                       @relation("ArticleBodyTranslation")
-  articleSnippetTranslations       Article[]                       @relation("ArticleSnippetTranslation")
-  instantaneousScheduleItemTimes   InstantaneousScheduleItemTime[]
-  recurringScheduleItemTimes       RecurringScheduleItemTime[]
-  instantaneousScheduleItemTitles  InstantaneousScheduleItem[]     @relation("ScheduleItemTitleTranslation")
-  instantaneousScheduleItemsVenues InstantaneousScheduleItem[]     @relation("ScheduleItemVenueTranslation")
-  recurringScheduleItemTitles      RecurringScheduleItem[]         @relation("ScheduleItemTitleTranslation")
-  recurringScheduleItemVenues      RecurringScheduleItem[]         @relation("ScheduleItemVenueTranslation")
+  articleImageCaptions                     ArticleImage[]
+  articleAuthors                           ArticleAuthor[]
+  quoteAuthors                             QuoteAuthor[]
+  quoteTranslations                        Quote[]                         @relation("QuoteTranslation")
+  quoteSourceTranslations                  Quote[]                         @relation("QuoteSourceTranslation")
+  articleTitleTranslations                 Article[]                       @relation("ArticleTitleTranslation")
+  articleBodyTranslations                  Article[]                       @relation("ArticleBodyTranslation")
+  articleSnippetTranslations               Article[]                       @relation("ArticleSnippetTranslation")
+  instantaneousTimeDesignationTranslations InstantaneousScheduleItemTime[]
+  recurringTimeDesignationTranslations     RecurringScheduleItemTime[]
+  instantaneousScheduleItemTitles          InstantaneousScheduleItem[]     @relation("ScheduleItemTitleTranslation")
+  instantaneousScheduleItemsVenues         InstantaneousScheduleItem[]     @relation("ScheduleItemVenueTranslation")
+  recurringScheduleItemTitles              RecurringScheduleItem[]         @relation("ScheduleItemTitleTranslation")
+  recurringScheduleItemVenues              RecurringScheduleItem[]         @relation("ScheduleItemVenueTranslation")
 }
 
 model Commemoration {

@@ -2,6 +2,7 @@ import {
 	useInitializedStatefulInteractiveModel,
 	ViewInteractionInterface,
 } from "@mvc-react/stateful";
+import { useTranslations } from "next-intl";
 import {
 	SchedulerModelInteraction,
 	SchedulerModelView,
@@ -17,17 +18,11 @@ import {
 	updateInstantaneousItem,
 	updateRecurringItem,
 } from "../server-actions/schedule";
+import { getDateString } from "../utilities/date-time";
 import { UninitializedModelError } from "../utilities/errors";
 import { parseNewScheduleItemWithId } from "../utilities/schedule";
-import { getDateString } from "../utilities/date-time";
-import {
-	InstantaneousScheduleItem,
-	Translation,
-	RecurringScheduleItem,
-	Translator,
-} from "../utilities/types";
+import { Translator } from "../utilities/types";
 import { ToastNotifierModel } from "./notifier";
-import { useTranslations } from "next-intl";
 
 export function schedulerVIInterface(notification?: {
 	notifier: ToastNotifierModel;
@@ -41,8 +36,9 @@ export function schedulerVIInterface(notification?: {
 					const { id, newEvent } = interaction.input;
 					switch (newEvent.type) {
 						case "specific": {
-							const { instantaneousScheduleItems } =
-								currentModelView.scheduleItems;
+							const {
+								instantaneous: instantaneousScheduleItems,
+							} = currentModelView.scheduleItems;
 							let newInstantaneousScheduleItems =
 								instantaneousScheduleItems;
 							if (id !== undefined) {
@@ -138,14 +134,14 @@ export function schedulerVIInterface(notification?: {
 								...currentModelView,
 								scheduleItems: {
 									...currentModelView.scheduleItems,
-									instantaneousScheduleItems:
+									instantaneous:
 										newInstantaneousScheduleItems,
 								},
 								eventToEdit: { type: newEvent.type },
 							};
 						}
 						case "recurring": {
-							const { recurringScheduleItems } =
+							const { recurring: recurringScheduleItems } =
 								currentModelView.scheduleItems;
 							let newRecurringScheduleItems =
 								recurringScheduleItems;
@@ -242,8 +238,7 @@ export function schedulerVIInterface(notification?: {
 								...currentModelView,
 								scheduleItems: {
 									...currentModelView.scheduleItems,
-									recurringScheduleItems:
-										newRecurringScheduleItems,
+									recurring: newRecurringScheduleItems,
 								},
 								eventToEdit: { type: newEvent.type },
 							};
@@ -284,7 +279,7 @@ export function schedulerVIInterface(notification?: {
 								});
 								const instantaneousScheduleItems =
 									currentModelView.scheduleItems
-										.instantaneousScheduleItems;
+										.instantaneous;
 								const newInstantaneousScheduleItems = [
 									{
 										...instantaneousScheduleItems.find(
@@ -306,7 +301,7 @@ export function schedulerVIInterface(notification?: {
 									...currentModelView,
 									scheduleItems: {
 										...currentModelView.scheduleItems,
-										instantaneousScheduleItems:
+										instantaneous:
 											newInstantaneousScheduleItems,
 									},
 								};
@@ -328,8 +323,7 @@ export function schedulerVIInterface(notification?: {
 									},
 								});
 								const recurringScheduleItems =
-									currentModelView.scheduleItems
-										.recurringScheduleItems;
+									currentModelView.scheduleItems.recurring;
 								const newRecurringScheduleItems = [
 									{
 										...recurringScheduleItems.find(
@@ -350,14 +344,13 @@ export function schedulerVIInterface(notification?: {
 									...currentModelView,
 									scheduleItems: {
 										...currentModelView.scheduleItems,
-										recurringScheduleItems:
-											newRecurringScheduleItems,
+										recurring: newRecurringScheduleItems,
 									},
 								};
 							}
 							case "recurringInstance": {
 								const recurringScheduleItem =
-									currentModelView.scheduleItems.recurringScheduleItems.find(
+									currentModelView.scheduleItems.recurring.find(
 										scheduleItem =>
 											scheduleItem.id ===
 											event.scheduleItem.recurringItemId,
@@ -385,14 +378,14 @@ export function schedulerVIInterface(notification?: {
 								});
 								const newInstantaneousScheduleItems = [
 									...currentModelView.scheduleItems
-										.instantaneousScheduleItems,
+										.instantaneous,
 									newScheduleItem,
 								];
 								return {
 									...currentModelView,
 									scheduleItems: {
 										...currentModelView.scheduleItems,
-										instantaneousScheduleItems:
+										instantaneous:
 											newInstantaneousScheduleItems,
 									},
 								};
@@ -454,13 +447,14 @@ export function schedulerVIInterface(notification?: {
 									},
 								},
 							});
-							const { instantaneousScheduleItems } =
-								currentModelView.scheduleItems;
+							const {
+								instantaneous: instantaneousScheduleItems,
+							} = currentModelView.scheduleItems;
 							return {
 								...currentModelView,
 								scheduleItems: {
 									...currentModelView.scheduleItems,
-									instantaneousScheduleItems:
+									instantaneous:
 										instantaneousScheduleItems.filter(
 											scheduleItem =>
 												scheduleItem.id !== id,
@@ -502,17 +496,15 @@ export function schedulerVIInterface(notification?: {
 									},
 								},
 							});
-							const { recurringScheduleItems } =
+							const { recurring: recurringScheduleItems } =
 								currentModelView.scheduleItems;
 							return {
 								...currentModelView,
 								scheduleItems: {
 									...currentModelView.scheduleItems,
-									recurringScheduleItems:
-										recurringScheduleItems.filter(
-											scheduleItem =>
-												scheduleItem.id !== id,
-										),
+									recurring: recurringScheduleItems.filter(
+										scheduleItem => scheduleItem.id !== id,
+									),
 								},
 							};
 						}
@@ -527,22 +519,13 @@ export function schedulerVIInterface(notification?: {
 }
 
 export function useScheduler(
-	scheduleItems: {
-		instantaneous: InstantaneousScheduleItem<Translation>[];
-		recurring: RecurringScheduleItem<Translation>[];
-	},
+	initialModelView: SchedulerModelView,
 	notifier?: ToastNotifierModel,
 ) {
 	const t = useTranslations();
 	const model = useInitializedStatefulInteractiveModel(
 		schedulerVIInterface(notifier ? { notifier, t } : undefined),
-		{
-			eventToEdit: { type: "specific" },
-			scheduleItems: {
-				instantaneousScheduleItems: scheduleItems.instantaneous,
-				recurringScheduleItems: scheduleItems.recurring,
-			},
-		},
+		initialModelView,
 	);
 	return model;
 }

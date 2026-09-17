@@ -24,7 +24,10 @@ import { pickDateTranslation } from "@/src/lib/utilities/date-time";
 const Scheduler = function ({ model }) {
 	const { modelView, interact } = model;
 	const {
-		scheduleItems: { instantaneousScheduleItems, recurringScheduleItems },
+		scheduleItems: {
+			instantaneous: instantaneousScheduleItems,
+			recurring: recurringScheduleItems,
+		},
 		autoCompleteInfo,
 		eventToEdit,
 	} = modelView;

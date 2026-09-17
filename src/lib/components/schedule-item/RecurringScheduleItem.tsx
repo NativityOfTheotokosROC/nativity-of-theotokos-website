@@ -57,7 +57,7 @@ const RecurringScheduleItem = function ({ model }) {
 				<div className="contents pointer-fine:invisible pointer-fine:group-hover/edit-bar:visible">
 					<EditScheduleItemPanel
 						model={newReadonlyModel({
-							scheduleItem,
+							event: { type: "recurring", scheduleItem },
 							callbacks: options.modifyCallbacks,
 						})}
 					/>
