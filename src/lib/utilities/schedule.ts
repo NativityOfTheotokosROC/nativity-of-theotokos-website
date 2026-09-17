@@ -201,6 +201,21 @@ export function parseNewScheduleItem(
 	};
 }
 
+export function parseNewScheduleItemWithId(
+	scheduleItem: NewInstantaneousScheduleItem,
+	id: number,
+): InstantaneousScheduleItem<Translation>;
+export function parseNewScheduleItemWithId(
+	scheduleItem: NewRecurringScheduleItem,
+	id: number,
+): RecurringScheduleItem<Translation>;
+export function parseNewScheduleItemWithId(
+	scheduleItem: NewInstantaneousScheduleItem | NewRecurringScheduleItem,
+	id: number,
+) {
+	return { ...parseNewScheduleItem, id };
+}
+
 export function recurringScheduleItemHasId<T extends Text>(
 	item: RecurringScheduleItemWithOptionalId<T>,
 ): item is RecurringScheduleItem<T> {

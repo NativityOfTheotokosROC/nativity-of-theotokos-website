@@ -1,26 +1,27 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { getTranslations } from "next-intl/server";
+import { cacheLife, cacheTag, revalidateTag } from "next/cache";
+import z from "zod";
 import database from "../third-party/prisma";
+import { getTimeString } from "../utilities/date-time";
+import { getMd5Hash } from "../utilities/miscellaneous";
+import {
+	getNextRecurringScheduleItemDates,
+	parseNewScheduleItemWithId,
+} from "../utilities/schedule";
+import {
+	InstantaneousScheduleItem,
+	Language,
+	RecurringScheduleItemInstance,
+} from "../utilities/types";
 import {
 	getInstantaneousScheduleItemSchema,
 	getRecurringScheduleItemSchema,
 	NewInstantaneousScheduleItem,
 	NewRecurringScheduleItem,
 } from "../validation/schedule-item";
-import {
-	InstantaneousScheduleItem,
-	Language,
-	RecurringScheduleItemInstance,
-} from "../utilities/types";
-import { getTranslations } from "next-intl/server";
-import { getMd5Hash } from "../utilities/miscellaneous";
 import { protect } from "./auth";
-import { getNextRecurringScheduleItemDates } from "../utilities/schedule";
-import z from "zod";
-import { getDateString } from "../utilities/date-time";
-import { cacheTag } from "next/cache";
-import { cacheLife } from "next/cache";
 
 export async function getSchedule(
 	referenceDate: Date | string,
@@ -77,6 +78,7 @@ export async function getSchedule(
 						time: "asc",
 					},
 				},
+				disabledRecurringScheduleItem: true,
 			},
 			where: {
 				disabledRecurringScheduleItem: null,
@@ -110,7 +112,7 @@ export async function getSchedule(
 				date,
 				times: instantaneousScheduleItemTimes.map(
 					({ designation, time }) => ({
-						time,
+						time: getTimeString(time),
 						designation:
 							locale === "ru"
 								? (designation.russian ?? designation.english)
@@ -163,9 +165,10 @@ export async function getSchedule(
 										? (designation.russian ??
 											designation.english)
 										: designation.english,
-								time,
+								time: getTimeString(time),
 							}),
 						),
+						isRemoved: false,
 					});
 			});
 		},
@@ -185,9 +188,9 @@ export async function scheduleInstantaneousItem(
 	await protect({ roles: ["admin"] });
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const scheduleItemSchema = getInstantaneousScheduleItemSchema(t);
-	const { title, venue, date, scheduleItemTimes } =
+	const { title, venue, date, times, isRemoved } =
 		scheduleItemSchema.parse(newScheduleItem);
-	await database.$transaction(async transaction => {
+	const result = await database.$transaction(async transaction => {
 		const venueTranslation = await transaction.translation.findUnique({
 			where: {
 				englishHash: getMd5Hash(venue.english),
@@ -231,10 +234,11 @@ export async function scheduleInstantaneousItem(
 						},
 					},
 					date,
+					removedScheduleItem: isRemoved ? { create: {} } : undefined,
 				},
 			},
 		);
-		for (const { designation, time } of scheduleItemTimes) {
+		for (const { designation, time } of times) {
 			await transaction.instantaneousScheduleItemTime.create({
 				data: {
 					instantaneousScheduledItem: {
@@ -258,8 +262,13 @@ export async function scheduleInstantaneousItem(
 				},
 			});
 		}
+		return scheduleItem;
 	});
 	revalidateTag("schedule", "max");
+	return parseNewScheduleItemWithId(
+		{ title, venue, times, date, isRemoved },
+		result.id,
+	);
 }
 
 export async function scheduleRecurringItem(
@@ -269,9 +278,9 @@ export async function scheduleRecurringItem(
 	await protect({ roles: ["admin"] });
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const scheduleItemSchema = getRecurringScheduleItemSchema(t);
-	const { title, venue, recurringPattern, scheduleItemTimes } =
+	const { title, venue, recurringPattern, times, isDisabled } =
 		scheduleItemSchema.parse(newScheduleItem);
-	await database.$transaction(async transaction => {
+	const result = await database.$transaction(async transaction => {
 		const scheduleItem = await transaction.recurringScheduleItem.create({
 			data: {
 				title: {
@@ -299,9 +308,12 @@ export async function scheduleRecurringItem(
 					},
 				},
 				pattern: recurringPattern,
+				disabledRecurringScheduleItem: isDisabled
+					? { create: {} }
+					: undefined,
 			},
 		});
-		for (const { designation, time } of scheduleItemTimes) {
+		for (const { designation, time } of times) {
 			await transaction.recurringScheduleItemTime.create({
 				data: {
 					recurringScheduledItem: {
@@ -325,8 +337,13 @@ export async function scheduleRecurringItem(
 				},
 			});
 		}
+		return scheduleItem;
 	});
 	revalidateTag("schedule", "max");
+	return parseNewScheduleItemWithId(
+		{ title, venue, times, recurringPattern, isDisabled },
+		result.id,
+	);
 }
 
 export async function updateInstantaneousItem(
@@ -336,7 +353,7 @@ export async function updateInstantaneousItem(
 ) {
 	await protect({ roles: ["admin"] });
 	const t = await getTranslations({ locale: locale ?? "en" });
-	const { title, venue, date, scheduleItemTimes } =
+	const { title, venue, date, times, isRemoved } =
 		getInstantaneousScheduleItemSchema(t).parse(newScheduleItem);
 	await database.$transaction(async transaction => {
 		await transaction.instantaneousScheduleItem.update({
@@ -370,7 +387,7 @@ export async function updateInstantaneousItem(
 				date,
 				instantaneousScheduleItemTimes: {
 					set: await Promise.all(
-						scheduleItemTimes.map(
+						times.map(
 							async ({
 								time,
 								designation: { english, russian },
@@ -400,6 +417,25 @@ export async function updateInstantaneousItem(
 						),
 					),
 				},
+				removedScheduleItem:
+					isRemoved !== undefined
+						? isRemoved
+							? {
+									connectOrCreate: {
+										create: {},
+										where: {
+											instantaneousScheduleItemId:
+												scheduleItemId,
+										},
+									},
+								}
+							: {
+									delete: {
+										instantaneousScheduleItemId:
+											scheduleItemId,
+									},
+								}
+						: undefined,
 			},
 			where: {
 				id: scheduleItemId,
@@ -416,7 +452,7 @@ export async function updateRecurringItem(
 ) {
 	await protect({ roles: ["admin"] });
 	const t = await getTranslations({ locale: locale ?? "en" });
-	const { title, venue, recurringPattern, scheduleItemTimes } =
+	const { title, venue, recurringPattern, times, isDisabled } =
 		getRecurringScheduleItemSchema(t).parse(newScheduleItem);
 
 	await database.$transaction(async transaction => {
@@ -451,7 +487,7 @@ export async function updateRecurringItem(
 				pattern: recurringPattern,
 				recurringScheduleItemTimes: {
 					set: await Promise.all(
-						scheduleItemTimes.map(
+						times.map(
 							async ({
 								time,
 								designation: { english, russian },
@@ -481,6 +517,24 @@ export async function updateRecurringItem(
 						),
 					),
 				},
+				disabledRecurringScheduleItem:
+					isDisabled !== undefined
+						? isDisabled
+							? {
+									connectOrCreate: {
+										create: {},
+										where: {
+											recurringScheduleItemId:
+												scheduleItemId,
+										},
+									},
+								}
+							: {
+									delete: {
+										recurringScheduleItemId: scheduleItemId,
+									},
+								}
+						: undefined,
 			},
 			where: {
 				id: scheduleItemId,
