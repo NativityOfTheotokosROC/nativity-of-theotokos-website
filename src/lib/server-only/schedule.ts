@@ -11,10 +11,11 @@ import { getDateString, getTimeString } from "../utilities/date-time";
 
 export async function getScheduleItems(referenceDate: Date | string) {
 	await protect({ roles: ["admin"] });
-	const parsedReferenceDate =
+	const parsedReferenceDate = new Date(
 		typeof referenceDate === "string"
 			? z.iso.date().parse(referenceDate)
-			: getDateString(referenceDate, true);
+			: getDateString(referenceDate, true),
+	);
 
 	const [instantaneousScheduleItemRecords, recurringScheduleItemRecords] =
 		await Promise.all([

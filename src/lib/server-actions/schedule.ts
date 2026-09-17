@@ -33,10 +33,11 @@ export async function getSchedule(
 	cacheTag("schedule");
 	cacheLife("hours");
 
-	const parsedReferenceDate =
+	const parsedReferenceDate = new Date(
 		typeof referenceDate === "string"
-			? z.iso.date().optional().parse(referenceDate)
-			: getDateString(referenceDate, true);
+			? z.iso.date().parse(referenceDate)
+			: getDateString(referenceDate, true),
+	);
 
 	const [
 		instantaneousScheduleItemRecords,
