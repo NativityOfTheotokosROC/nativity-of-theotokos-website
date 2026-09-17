@@ -25,6 +25,7 @@ export default async function Page() {
 		getScheduleItems(new Date()),
 		getAutoCompleteInfo(),
 	]);
+	console.log(scheduleItems);
 	return (
 		<ProtectedComponent model={newReadonlyModel({ roles: ["admin"] })}>
 			<SchedulerClient

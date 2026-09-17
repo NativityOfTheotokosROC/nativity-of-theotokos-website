@@ -50,6 +50,7 @@ const ViewScheduleSection = function ({ model }) {
 		: currentSchedule;
 	const t = useTranslations("scheduler");
 	const tMisc = useTranslations("miscellaneous");
+	console.log(currentSchedule);
 
 	return (
 		<div className="flex flex-col gap-4">
