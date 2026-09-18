@@ -41,7 +41,7 @@ export function pickTimeTranslation(
 	const dateLocale =
 		target === "ru" ? RUSSIAN_DATE_LOCALE : ENGLISH_DATE_LOCALE;
 	const pickDefault =
-		(picks?.hour && picks?.minute && picks?.twelveHour) === undefined;
+		(picks?.hour || picks?.minute || picks?.twelveHour) === undefined;
 	return date
 		.toLocaleTimeString(
 			dateLocale,
@@ -51,7 +51,11 @@ export function pickTimeTranslation(
 						minute: "2-digit",
 						hour12: true,
 					}
-				: {},
+				: {
+						hour: picks?.hour ? "numeric" : undefined,
+						minute: picks?.minute ? "2-digit" : undefined,
+						hour12: picks?.twelveHour,
+					},
 		)
 		.toUpperCase();
 }
@@ -63,7 +67,7 @@ export function pickDateTranslation(
 	const dateLocale =
 		target === "ru" ? RUSSIAN_DATE_LOCALE : ENGLISH_DATE_LOCALE;
 	const pickDefault =
-		(picks?.day && picks?.month && picks?.year) === undefined;
+		(picks?.day || picks?.month || picks?.year) === undefined;
 	return date.toLocaleDateString(
 		dateLocale,
 		pickDefault

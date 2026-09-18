@@ -120,7 +120,7 @@ export function generateSchedule<T extends Text = string>(
 	referenceDate?: Date,
 ) {
 	const resolvedReferenceDate = new Date(
-		getDateString(referenceDate ?? new Date(), true),
+		getDateString(referenceDate ?? new Date()),
 	);
 	const scheduleItemsMap = new Map<
 		string,
@@ -139,7 +139,7 @@ export function generateSchedule<T extends Text = string>(
 			.map(
 				scheduleItem =>
 					[
-						`${getDateString(scheduleItem.date)}_${scheduleItem.venue}`,
+						`${getDateString(scheduleItem.date)}_${JSON.stringify(scheduleItem.venue)}`,
 						scheduleItem,
 					] as const,
 			),
@@ -153,7 +153,7 @@ export function generateSchedule<T extends Text = string>(
 			.map(
 				scheduleItem =>
 					[
-						`${getDateString(scheduleItem.date)}_${scheduleItem.venue}`,
+						`${getDateString(scheduleItem.date)}_${JSON.stringify(scheduleItem.venue)}`,
 						scheduleItem,
 					] as const,
 			),
@@ -162,7 +162,7 @@ export function generateSchedule<T extends Text = string>(
 		.values()
 		.toArray()
 		.toSorted((a, b) => a.date.getTime() - b.date.getTime())
-		.toSpliced(0, maxItems);
+		.slice(0, maxItems);
 }
 
 export function pickScheduleItemTranslation<
@@ -213,7 +213,9 @@ export function parseNewScheduleItemWithId(
 	scheduleItem: NewInstantaneousScheduleItem | NewRecurringScheduleItem,
 	id: number,
 ) {
-	return { ...parseNewScheduleItem, id };
+	if ("recurringPattern" in scheduleItem)
+		return { ...parseNewScheduleItem(scheduleItem), id };
+	return { ...parseNewScheduleItem(scheduleItem), id };
 }
 
 export function recurringScheduleItemHasId<T extends Text>(

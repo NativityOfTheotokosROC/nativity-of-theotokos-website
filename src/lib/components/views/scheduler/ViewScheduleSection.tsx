@@ -31,13 +31,13 @@ const ViewScheduleSection = function ({ model }) {
 	).map(scheduleItem => pickScheduleItemTranslation(scheduleItem, language));
 	const newSchedule = newEvent
 		? generateSchedule(
-				newEvent && "date" in newEvent.scheduleItem
+				newEvent.type === "specific"
 					? [
 							...instantaneousScheduleItems,
 							parseNewScheduleItem(newEvent.scheduleItem),
 						]
 					: instantaneousScheduleItems,
-				newEvent && "recurringPattern" in newEvent.scheduleItem
+				newEvent.type === "recurring"
 					? [
 							...recurringScheduleItems,
 							parseNewScheduleItem(newEvent.scheduleItem),

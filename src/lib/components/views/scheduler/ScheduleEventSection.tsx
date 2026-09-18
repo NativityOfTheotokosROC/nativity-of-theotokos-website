@@ -44,6 +44,7 @@ const ScheduleEventSection = function ({ model }) {
 		reset,
 		register,
 		handleSubmit,
+		trigger,
 		control,
 		formState: { isSubmitting, isValid, errors, isDirty },
 	} = useForm({
@@ -154,7 +155,6 @@ const ScheduleEventSection = function ({ model }) {
 			? scheduleEvent.scheduleItem.id
 			: undefined;
 	const [lastForm, setLastForm] = useState(JSON.stringify(getValues()));
-	console.log(getValues());
 
 	if (lastForm !== JSON.stringify(getValues())) {
 		setLastForm(JSON.stringify(getValues()));
@@ -186,8 +186,8 @@ const ScheduleEventSection = function ({ model }) {
 		} else {
 			reset();
 		}
-		console.log("Resetter effect run");
-	}, [reset, scheduleEvent]);
+		trigger();
+	}, [reset, trigger, scheduleEvent]);
 
 	useCloseWarning(() => isDirty);
 

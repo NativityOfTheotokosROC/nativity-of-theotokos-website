@@ -20,11 +20,10 @@ const SchedulePreviewWidget = function ({ model }) {
 				)),
 	].sort((a, b) => a.date.getTime() - b.date.getTime());
 
-	if (schedule.length < 1)
-		return <></>
+	if (schedule.length < 1) return <></>;
 
 	return (
-		<div className="schedule-list flex h-[27em] max-h-[27em] w-full flex-col gap-4 overflow-y-auto pr-3 lg:h-[30em] lg:max-h-[30em] lg:pr-6">
+		<div className="schedule-list flex h-[27em] max-h-[27em] w-full flex-col items-stretch gap-4 overflow-y-auto pr-3 lg:h-[30em] lg:max-h-[30em] lg:pr-6">
 			<div className="flex grow [&_.featured-schedule-item]:grow">
 				<ScheduleItem
 					model={newReadonlyModel({
@@ -39,7 +38,11 @@ const SchedulePreviewWidget = function ({ model }) {
 			<div className="flex flex-col gap-3 lg:w-3/4">
 				{orderedSchedule
 					.slice(
-						highlightedScheduleItem ? 0 : 1,
+						highlightedScheduleItem ||
+							JSON.stringify(highlightedScheduleItem) ===
+								JSON.stringify(orderedSchedule[0])
+							? 0
+							: 1,
 						maxDisplayedItems && maxDisplayedItems - 1,
 					)
 					.map((scheduleItem, index) => (
