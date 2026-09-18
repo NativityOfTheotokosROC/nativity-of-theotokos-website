@@ -4,6 +4,7 @@ import { ScheduleEventModel } from "@/src/lib/models/schedule-event";
 import { autoCompleteFields } from "@/src/lib/utilities/auto-complete-box";
 import { BLANK_TRANSLATION } from "@/src/lib/utilities/constants";
 import { getDateString } from "@/src/lib/utilities/date-time";
+import { useCloseWarning } from "@/src/lib/utilities/hooks";
 import { CompleteTranslation, Translation } from "@/src/lib/utilities/types";
 import {
 	ALL_DAYS_ARRAY,
@@ -26,7 +27,6 @@ import { Controller, useForm } from "react-hook-form";
 import AutoCompleteBox from "../../auto-complete-box/AutoCompleteBox";
 import ButtonBar from "../../button-bar/ButtonBar";
 import Checkbox from "../../checkbox/Checkbox";
-import { useCloseWarning } from "@/src/lib/utilities/hooks";
 
 const ScheduleEventSection = function ({ model }) {
 	const {
@@ -106,36 +106,36 @@ const ScheduleEventSection = function ({ model }) {
 	);
 	const englishDesignationsAutoCompleteBox = useAutoCompleteBox<
 		Translation,
-		`times.${number}.designation`
+		`times.${number}.designation.english`
 	>(
 		{
-			id: "times.0.designation",
+			id: "times.0.designation.english",
 			items: autoCompleteInfo?.designationTranslations ?? [],
 			transformer: designation => designation.english,
 		},
 		designation => {
-			setValue(
-				englishDesignationsAutoCompleteBox.modelView.id,
-				designation,
+			const index = Number(
+				russianDesignationsAutoCompleteBox.modelView.id.split(".")[1],
 			);
+			setValue(`times.${index}.designation`, designation);
 		},
 	);
 	const russianDesignationsAutoCompleteBox = useAutoCompleteBox<
 		CompleteTranslation,
-		`times.${number}.designation`
+		`times.${number}.designation.russian`
 	>(
 		{
-			id: "times.0.designation",
+			id: "times.0.designation.russian",
 			items: (autoCompleteInfo?.designationTranslations?.filter(
 				designation => designation.russian !== null,
 			) ?? []) as CompleteTranslation[],
 			transformer: designation => designation.russian,
 		},
 		designation => {
-			setValue(
-				englishDesignationsAutoCompleteBox.modelView.id,
-				designation,
+			const index = Number(
+				englishDesignationsAutoCompleteBox.modelView.id.split(".")[1],
 			);
+			setValue(`times.${index}.designation`, designation);
 		},
 	);
 	const englishTitleFields = autoCompleteFields(englishTitleAutoCompleteBox);
@@ -154,6 +154,7 @@ const ScheduleEventSection = function ({ model }) {
 			? scheduleEvent.scheduleItem.id
 			: undefined;
 	const [lastForm, setLastForm] = useState(JSON.stringify(getValues()));
+	console.log(getValues());
 
 	if (lastForm !== JSON.stringify(getValues())) {
 		setLastForm(JSON.stringify(getValues()));
@@ -538,7 +539,7 @@ const ScheduleEventSection = function ({ model }) {
 														onChange(e);
 														englishDesignationFields.onChange(
 															e.target.value,
-															name,
+															`${name}.english`,
 														);
 													}}
 													onBlur={() => {
@@ -565,12 +566,12 @@ const ScheduleEventSection = function ({ model }) {
 														onChange(e);
 														russianDesignationFields.onChange(
 															e.target.value,
-															name,
+															`${name}.russian`,
 														);
 													}}
 													onBlur={() => {
 														onBlur();
-														englishDesignationFields.onBlur();
+														russianDesignationFields.onBlur();
 													}}
 												/>
 											</>
@@ -647,7 +648,7 @@ const ScheduleEventSection = function ({ model }) {
 						)}
 						<Button
 							model={newReadonlyModel({
-								disabled: !isValid || isSubmitting,
+								disabled: isSubmitting,
 								type: "submit",
 							})}
 						>

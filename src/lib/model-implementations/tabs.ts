@@ -29,10 +29,14 @@ export function tabsVIInterface() {
 	} satisfies ViewInteractionInterface<TabsModelView, TabsModelInteraction>;
 }
 
-export function useTabs(tabs: TabModel[], tabsPosition?: TabsPosition) {
+export function useTabs(
+	tabs: TabModel[],
+	tabsPosition?: TabsPosition,
+	selectedTab: number = 0,
+) {
 	const model = useInitializedStatefulInteractiveModel(tabsVIInterface(), {
 		tabs,
-		selectedTab: 0,
+		selectedTab,
 		tabsPosition,
 	});
 	return model;

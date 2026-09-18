@@ -8,14 +8,16 @@ export function autoCompleteFields<I, K extends string>(
 		autoComplete: "off" as const,
 		dataTooltipId: autoCompleteBox.modelView.id,
 		async onChange(query: string, id?: K) {
-			query.trim() === ""
-				? await autoCompleteBox.interact({
-						type: "CLOSE",
-					})
-				: await autoCompleteBox.interact({
-						type: "OPEN",
-						input: { newId: id },
-					});
+			if (query.trim() === "") {
+				await autoCompleteBox.interact({
+					type: "CLOSE",
+				});
+			} else {
+				await autoCompleteBox.interact({
+					type: "OPEN",
+					input: { newId: id },
+				});
+			}
 			await autoCompleteBox.interact({
 				type: "FILTER",
 				input: {

@@ -45,6 +45,7 @@ const Scheduler = function ({ model }) {
 			{ modelView: { name: t("altScheduleSummaryTab") } },
 		],
 		"center",
+		1,
 	);
 	const confirmationDialog = useConfirmationDialog();
 	const modifyCallbacks = {
