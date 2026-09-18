@@ -21,7 +21,7 @@ import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { addDays } from "date-fns";
 import { Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import AutoCompleteBox from "../../auto-complete-box/AutoCompleteBox";
 import ButtonBar from "../../button-bar/ButtonBar";
@@ -153,6 +153,30 @@ const ScheduleEventSection = function ({ model }) {
 		scheduleEvent.scheduleItem && "id" in scheduleEvent.scheduleItem
 			? scheduleEvent.scheduleItem.id
 			: undefined;
+	const [lastForm, setLastForm] = useState(JSON.stringify(getValues()));
+
+	if (lastForm !== JSON.stringify(getValues())) {
+		setLastForm(JSON.stringify(getValues()));
+		if (isValid && options?.isNewEventValidCallback) {
+			options.isNewEventValidCallback!(
+				scheduleEvent.type === "recurring"
+					? {
+							type: "recurring",
+							scheduleItem:
+								recurringScheduleItemSchema.parse(getValues()),
+						}
+					: {
+							type: "specific",
+							scheduleItem:
+								instantaneousScheduleItemSchema.parse(
+									getValues(),
+								),
+						},
+			);
+		} else {
+			options?.isNewEventValidCallback?.(undefined);
+		}
+	}
 
 	useEffect(() => {
 		const { scheduleItem } = scheduleEvent;
@@ -161,37 +185,8 @@ const ScheduleEventSection = function ({ model }) {
 		} else {
 			reset();
 		}
+		console.log("Resetter effect run");
 	}, [reset, scheduleEvent]);
-
-	useEffect(() => {
-		if (isValid && options?.isNewEventValidCallback) {
-			const form = getValues();
-			options.isNewEventValidCallback!(
-				scheduleEvent.type === "recurring"
-					? {
-							type: "recurring",
-							scheduleItem:
-								recurringScheduleItemSchema.parse(form),
-						}
-					: {
-							type: "specific",
-							scheduleItem:
-								instantaneousScheduleItemSchema.parse(form),
-						},
-			);
-		} else {
-			options?.isNewEventValidCallback?.(undefined);
-		}
-	}, [
-		isValid,
-		getValues,
-		scheduleEvent.type,
-		options?.isNewEventValidCallback,
-		options,
-		recurringScheduleItemSchema,
-		instantaneousScheduleItemSchema,
-		existingItemId,
-	]);
 
 	useCloseWarning(() => isDirty);
 

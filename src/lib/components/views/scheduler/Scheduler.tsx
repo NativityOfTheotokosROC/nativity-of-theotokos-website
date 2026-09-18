@@ -143,10 +143,6 @@ const Scheduler = function ({ model }) {
 		},
 	} satisfies EditScheduleItemPanelModelView["callbacks"];
 
-	// useEffect(() => {
-	// 	setReadyEvent(eventToEdit.scheduleItem ? eventToEdit : undefined);
-	// }, [eventToEdit]);
-
 	return (
 		<>
 			<ConfirmationDialog model={confirmationDialog} />

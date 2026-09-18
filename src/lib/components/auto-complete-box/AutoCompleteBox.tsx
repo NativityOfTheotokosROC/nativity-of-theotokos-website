@@ -24,7 +24,7 @@ export default function AutoCompleteBox<I, K extends string>({
 	// DONE: Modify so transition out of vis maintains previous list of items for better UX
 	const [lastVisibleItems, setLastVisibleItems] = useState(filteredItems);
 	const displayedItems = computedOpen ? filteredItems : lastVisibleItems;
-	if (computedOpen) {
+	if (computedOpen && filteredItems !== lastVisibleItems) {
 		setLastVisibleItems(filteredItems);
 	}
 
