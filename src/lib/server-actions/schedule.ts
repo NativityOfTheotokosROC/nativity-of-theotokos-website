@@ -227,7 +227,7 @@ export async function scheduleInstantaneousItem(
 				where: {
 					venueTranslationId_date: {
 						venueTranslationId: venueTranslation.id,
-						date,
+						date: new Date(date),
 					},
 					removedScheduleItem: { isNot: null },
 				},

@@ -158,7 +158,7 @@ const Scheduler = function ({ model }) {
 					<Button
 						model={newReadonlyModel({
 							variant: "alternative",
-							className: "w-full md:min-w-fit",
+							className: "flex w-full md:min-w-fit",
 							action() {
 								interact({
 									type: "UPDATE_EVENT_TO_EDIT",
@@ -180,7 +180,7 @@ const Scheduler = function ({ model }) {
 					<Button
 						model={newReadonlyModel({
 							variant: "alternative",
-							className: "w-full md:min-w-fit",
+							className: "flex w-full md:min-w-fit",
 							action() {
 								interact({
 									type: "UPDATE_EVENT_TO_EDIT",

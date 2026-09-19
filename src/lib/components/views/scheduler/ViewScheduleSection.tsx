@@ -95,6 +95,7 @@ const ViewScheduleSection = function ({ model }) {
 									: undefined,
 							scheduleItemOptions: {
 								className: "bg-white",
+								language,
 							},
 						})}
 					/>
