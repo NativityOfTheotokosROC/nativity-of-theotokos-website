@@ -157,8 +157,8 @@ const ScheduleEventSection = function ({ model }) {
 			: undefined;
 	const [lastForm, setLastForm] = useState(JSON.stringify(getValues()));
 
-	if (lastForm !== JSON.stringify(getValues())) {
-		setLastForm(JSON.stringify(getValues()));
+	if (lastForm !== JSON.stringify(watch())) {
+		setLastForm(JSON.stringify(watch()));
 		if (isValid && options?.isNewEventValidCallback) {
 			options.isNewEventValidCallback!(
 				scheduleEvent.type === "recurring"
@@ -542,7 +542,8 @@ const ScheduleEventSection = function ({ model }) {
 													onChange={e => {
 														onChange({
 															...value,
-															english: e,
+															english:
+																e.target.value,
 														});
 														englishDesignationFields.onChange(
 															e.target.value,
@@ -572,7 +573,8 @@ const ScheduleEventSection = function ({ model }) {
 													onChange={e => {
 														onChange({
 															...value,
-															russian: e,
+															russian:
+																e.target.value,
 														});
 														russianDesignationFields.onChange(
 															e.target.value,
