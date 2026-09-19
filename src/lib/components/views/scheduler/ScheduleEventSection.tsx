@@ -155,24 +155,22 @@ const ScheduleEventSection = function ({ model }) {
 		scheduleEvent.scheduleItem && "id" in scheduleEvent.scheduleItem
 			? scheduleEvent.scheduleItem.id
 			: undefined;
-	const [lastForm, setLastForm] = useState(JSON.stringify(getValues()));
+	const [lastForm, setLastForm] = useState(JSON.stringify(watch()));
 
 	if (lastForm !== JSON.stringify(watch())) {
 		setLastForm(JSON.stringify(watch()));
-		if (isValid && options?.isNewEventValidCallback) {
+		if (isValid && isDirty && options?.isNewEventValidCallback) {
 			options.isNewEventValidCallback!(
 				scheduleEvent.type === "recurring"
 					? {
 							type: "recurring",
 							scheduleItem:
-								recurringScheduleItemSchema.parse(getValues()),
+								recurringScheduleItemSchema.parse(watch()),
 						}
 					: {
 							type: "specific",
 							scheduleItem:
-								instantaneousScheduleItemSchema.parse(
-									getValues(),
-								),
+								instantaneousScheduleItemSchema.parse(watch()),
 						},
 			);
 		} else {
@@ -184,7 +182,6 @@ const ScheduleEventSection = function ({ model }) {
 		const { scheduleItem } = scheduleEvent;
 		if (scheduleItem) {
 			reset(scheduleItem);
-			trigger();
 		} else {
 			reset();
 		}

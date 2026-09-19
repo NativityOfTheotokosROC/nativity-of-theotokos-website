@@ -44,7 +44,7 @@ const Scheduler = function ({ model }) {
 			{ modelView: { name: t("viewScheduleTab") } },
 			{ modelView: { name: t("altScheduleSummaryTab") } },
 		],
-		"center",
+		"start",
 		1,
 	);
 	const confirmationDialog = useConfirmationDialog();
@@ -152,11 +152,13 @@ const Scheduler = function ({ model }) {
 					model={newReadonlyModel({
 						orientation: "vertical",
 						arrangement: "start",
+						className: "md:flex-row",
 					})}
 				>
 					<Button
 						model={newReadonlyModel({
 							variant: "alternative",
+							className: "w-full md:min-w-fit",
 							action() {
 								interact({
 									type: "UPDATE_EVENT_TO_EDIT",
@@ -178,6 +180,7 @@ const Scheduler = function ({ model }) {
 					<Button
 						model={newReadonlyModel({
 							variant: "alternative",
+							className: "w-full md:min-w-fit",
 							action() {
 								interact({
 									type: "UPDATE_EVENT_TO_EDIT",

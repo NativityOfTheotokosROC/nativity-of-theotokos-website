@@ -35,8 +35,8 @@ const SchedulePreviewWidget = function ({ model }) {
 			<div className="flex flex-col gap-3 lg:w-3/4">
 				{orderedSchedule
 					.slice(
-						highlightedScheduleItem ||
-							JSON.stringify(highlightedScheduleItem) ===
+						highlightedScheduleItem &&
+							JSON.stringify(highlightedScheduleItem) !==
 								JSON.stringify(orderedSchedule[0])
 							? 0
 							: 1,

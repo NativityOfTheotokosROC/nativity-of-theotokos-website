@@ -1,6 +1,6 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
-import { BanIcon, CheckIcon, Edit2Icon } from "lucide-react";
+import { BanIcon, CheckIcon, Edit2Icon, Trash2Icon } from "lucide-react";
 import { EditScheduleItemPanelModel } from "../../models/edit-schedule-item-panel";
 import { ScheduleEvent } from "../../utilities/schedule";
 
@@ -9,36 +9,36 @@ const EditScheduleItemPanel = function ({ model }) {
 	const { scheduleItem } = event;
 
 	return (
-		<div className="flex gap-1 text-xs">
+		<div className="flex gap-2 text-xs">
 			{/* TODO: Add titles for accessibility*/}
 			<button
-				className="no-outline"
+				className="no-outline flex items-center"
 				onClick={() => callbacks.editCallback(event)}
 			>
-				<Edit2Icon strokeWidth={1} />
+				<Edit2Icon className="size-10" strokeWidth={1} />
 			</button>
 			<button
-				className="no-outline"
+				className="no-outline flex items-center"
 				onClick={() => callbacks.toggleCallback(event)}
 			>
 				{("isRemoved" in scheduleItem && scheduleItem.isRemoved) ||
 				("recurringPattern" in scheduleItem &&
 					scheduleItem.isDisabled) ? (
-					<CheckIcon strokeWidth={1} />
+					<CheckIcon className="size-10" strokeWidth={1} />
 				) : (
-					<BanIcon strokeWidth={1} />
+					<BanIcon className="size-10" strokeWidth={1} />
 				)}
 			</button>
 			{event.type !== "recurringInstance" &&
 				"id" in event.scheduleItem &&
 				event.scheduleItem.id !== undefined && (
 					<button
-						className="no-outline"
+						className="no-outline flex items-center"
 						onClick={() =>
 							callbacks.deleteCallback(event as ScheduleEvent)
 						}
 					>
-						<Edit2Icon strokeWidth={1} />
+						<Trash2Icon strokeWidth={1} />
 					</button>
 				)}
 		</div>

@@ -3,7 +3,7 @@ import {
 	InstantaneousScheduleItemWithOptionalId,
 	RecurringScheduleItemInstanceWithOptionalId,
 } from "../utilities/schedule";
-import { Options } from "../utilities/types";
+import { Language, Options } from "../utilities/types";
 import { EditScheduleItemPanelModelView } from "./edit-schedule-item-panel";
 
 export type ScheduleItemModelView<
@@ -15,6 +15,7 @@ export type ScheduleItemModelView<
 	variant: "basic" | "detailed";
 	maxDisplayedTimes?: number;
 } & Options<{
+	language: Language;
 	className: string;
 	modifyCallbacks: NonNullable<EditScheduleItemPanelModelView["callbacks"]>;
 }>;

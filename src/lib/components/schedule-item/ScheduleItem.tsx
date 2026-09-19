@@ -25,6 +25,7 @@ const ScheduleItem = function ({ model }) {
 		model.modelView;
 	const { title, venue, date, times } = scheduleItem;
 	const locale = useLocale();
+	const language = options?.language ?? locale;
 	const nativeDate = toZonedTime(date, getNativeTimeZone());
 	const nativeTimes = times
 		.map(({ designation, time }) => ({
@@ -46,7 +47,7 @@ const ScheduleItem = function ({ model }) {
 				className={twMerge(
 					"schedule-item group/edit-bar flex h-fit overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3]",
 					isItemRemoved && "grayscale",
-					isPending && "border border-dashed",
+					isPending && "border-dashed",
 					options?.className,
 				)}
 			>
@@ -54,10 +55,12 @@ const ScheduleItem = function ({ model }) {
 					className={`flex max-w-25 min-w-24 grow flex-col items-center gap-2 self-stretch bg-gray-900 p-4 px-5 text-center text-white ${georgia.className}`}
 				>
 					<span className="text-4xl">
-						{pickDateTranslation(nativeDate, locale, { day: true })}
+						{pickDateTranslation(nativeDate, language, {
+							day: true,
+						})}
 					</span>
 					<span className="uppercase">
-						{pickDateTranslation(nativeDate, locale, {
+						{pickDateTranslation(nativeDate, language, {
 							month: true,
 							year: true,
 						})}
@@ -73,7 +76,7 @@ const ScheduleItem = function ({ model }) {
 							className="inline-flex max-w-full flex-wrap gap-1 text-sm"
 						>
 							<span className="w-17">
-								{pickTimeTranslation(time, locale, {
+								{pickTimeTranslation(time, language, {
 									hour: true,
 									minute: true,
 									twelveHour: true,
@@ -113,7 +116,14 @@ const ScheduleItem = function ({ model }) {
 		);
 	if (variant === "basic")
 		return (
-			<div className="schedule-item flex h-fit items-center overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3]">
+			<div
+				className={twMerge(
+					"schedule-item flex h-fit items-center overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3]",
+					isItemRemoved && "grayscale",
+					isPending && "border-dashed",
+					options?.className,
+				)}
+			>
 				<div
 					className={`flex w-full max-w-[5em] grow flex-col items-center gap-1 self-stretch bg-gray-900 p-4 text-center text-white ${georgia.className}`}
 				>
