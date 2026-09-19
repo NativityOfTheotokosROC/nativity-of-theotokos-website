@@ -217,16 +217,19 @@ export async function scheduleInstantaneousItem(
 	const { title, venue, date, times, isRemoved } =
 		scheduleItemSchema.parse(newScheduleItem);
 	const result = await database.$transaction(async transaction => {
-		const venueTranslation = await transaction.translation.findUnique({
+		const existingRecord = await transaction.translation.findUnique({
 			where: {
 				englishHash: getMd5Hash(venue.english),
+				instantaneousScheduleItemsVenues: {
+					some: { date: new Date(date) },
+				},
 			},
 		});
-		if (venueTranslation)
+		if (existingRecord)
 			await transaction.instantaneousScheduleItem.delete({
 				where: {
 					venueTranslationId_date: {
-						venueTranslationId: venueTranslation.id,
+						venueTranslationId: existingRecord.id,
 						date: new Date(date),
 					},
 					removedScheduleItem: { isNot: null },
