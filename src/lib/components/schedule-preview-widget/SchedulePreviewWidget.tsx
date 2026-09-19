@@ -24,16 +24,13 @@ const SchedulePreviewWidget = function ({ model }) {
 
 	return (
 		<div className="schedule-list flex h-[27em] max-h-[27em] w-full flex-col items-stretch gap-4 overflow-y-auto pr-3 lg:h-[30em] lg:max-h-[30em] lg:pr-6">
-			<div className="flex grow [&_.featured-schedule-item]:grow">
-				<ScheduleItem
-					model={newReadonlyModel({
-						scheduleItem:
-							highlightedScheduleItem ?? orderedSchedule[0],
-						variant: "detailed",
-						options: scheduleItemOptions,
-					})}
-				/>
-			</div>
+			<ScheduleItem
+				model={newReadonlyModel({
+					scheduleItem: highlightedScheduleItem ?? orderedSchedule[0],
+					variant: "detailed",
+					options: scheduleItemOptions,
+				})}
+			/>
 			<hr className="my-2 text-black/50" />
 			<div className="flex flex-col gap-3 lg:w-3/4">
 				{orderedSchedule

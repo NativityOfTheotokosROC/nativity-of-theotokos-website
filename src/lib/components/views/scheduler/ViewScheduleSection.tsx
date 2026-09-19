@@ -93,21 +93,31 @@ const ViewScheduleSection = function ({ model }) {
 											language,
 										)
 									: undefined,
+							scheduleItemOptions: {
+								className: "bg-white",
+							},
 						})}
 					/>
 				</div>
 			)}
-			<div className="flex flex-col gap-3">
-				<span className="text-xl">{t("currentScheduleSection")}</span>
-				<SchedulePreviewWidget
-					model={newReadonlyModel({
-						schedule: currentSchedule,
-						displayRemoved: true,
-						maxDisplayedItems: maxItems,
-						modifyCallbacks,
-					})}
-				/>
-			</div>
+			{currentSchedule.length > 0 && (
+				<div className="flex flex-col gap-3">
+					<span className="text-xl">
+						{t("currentScheduleSection")}
+					</span>
+					<SchedulePreviewWidget
+						model={newReadonlyModel({
+							schedule: currentSchedule,
+							displayRemoved: true,
+							maxDisplayedItems: maxItems,
+							scheduleItemOptions: {
+								className: "bg-white",
+								modifyCallbacks,
+							},
+						})}
+					/>
+				</div>
+			)}
 		</div>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ViewScheduleSectionModel>>;

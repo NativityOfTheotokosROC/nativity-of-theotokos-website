@@ -14,7 +14,7 @@ export type SchedulePreviewWidgetModelView<
 	highlightedScheduleItem?: T;
 	maxDisplayedItems?: number;
 	displayRemoved?: boolean;
-	scheduleItemOptions?: Required<ScheduleItemModelView["options"]>;
+	scheduleItemOptions?: ScheduleItemModelView["options"];
 };
 
 export type SchedulePreviewWidgetModel =

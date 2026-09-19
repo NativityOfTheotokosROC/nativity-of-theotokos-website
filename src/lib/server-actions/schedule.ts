@@ -259,7 +259,7 @@ export async function scheduleInstantaneousItem(
 							},
 						},
 					},
-					date,
+					date: new Date(date),
 					removedScheduleItem: isRemoved ? { create: {} } : undefined,
 				},
 			},
@@ -284,7 +284,7 @@ export async function scheduleInstantaneousItem(
 							},
 						},
 					},
-					time,
+					time: new Date(`${date}T${time}`),
 				},
 			});
 		}
@@ -306,6 +306,7 @@ export async function scheduleRecurringItem(
 	const scheduleItemSchema = getRecurringScheduleItemSchema(t);
 	const { title, venue, recurringPattern, times, isDisabled } =
 		scheduleItemSchema.parse(newScheduleItem);
+	const date = getDateString(new Date());
 	const result = await database.$transaction(async transaction => {
 		const scheduleItem = await transaction.recurringScheduleItem.create({
 			data: {
@@ -359,7 +360,7 @@ export async function scheduleRecurringItem(
 							},
 						},
 					},
-					time,
+					time: new Date(`${date}T${time}`),
 				},
 			});
 		}
@@ -410,7 +411,7 @@ export async function updateInstantaneousItem(
 						where: { englishHash: getMd5Hash(venue.english) },
 					},
 				},
-				date,
+				date: new Date(date),
 				instantaneousScheduleItemTimes: {
 					set: await Promise.all(
 						times.map(
@@ -434,7 +435,7 @@ export async function updateInstantaneousItem(
 									});
 								return {
 									designationTranslationId_time: {
-										time,
+										time: new Date(`${date}T${time}`),
 										designationTranslationId:
 											designationTranslation.id,
 									},
@@ -480,6 +481,7 @@ export async function updateRecurringItem(
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const { title, venue, recurringPattern, times, isDisabled } =
 		getRecurringScheduleItemSchema(t).parse(newScheduleItem);
+	const date = getDateString(new Date());
 
 	await database.$transaction(async transaction => {
 		await transaction.recurringScheduleItem.update({
@@ -534,7 +536,7 @@ export async function updateRecurringItem(
 									});
 								return {
 									designationTranslationId_time: {
-										time,
+										time: new Date(`${date}T${time}`),
 										designationTranslationId:
 											designationTranslation.id,
 									},
@@ -595,7 +597,9 @@ export async function removeInstantaneousItem(
 											},
 										)
 									).id,
-									date: z.iso.date().parse(identifier.date),
+									date: new Date(
+										z.iso.date().parse(identifier.date),
+									),
 								},
 							},
 			},

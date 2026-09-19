@@ -116,26 +116,26 @@ export async function getAutoCompleteInfo() {
 			database.translation.findMany({
 				where: {
 					OR: [
-						{ recurringScheduleItemTitles: { every: {} } },
-						{ instantaneousScheduleItemTitles: { every: {} } },
+						{ recurringScheduleItemTitles: { some: {} } },
+						{ instantaneousScheduleItemTitles: { some: {} } },
 					],
 				},
 			}),
 			database.translation.findMany({
 				where: {
 					OR: [
-						{ recurringScheduleItemVenues: { every: {} } },
-						{ instantaneousScheduleItemsVenues: { every: {} } },
+						{ recurringScheduleItemVenues: { some: {} } },
+						{ instantaneousScheduleItemsVenues: { some: {} } },
 					],
 				},
 			}),
 			database.translation.findMany({
 				where: {
 					OR: [
-						{ recurringTimeDesignationTranslations: { every: {} } },
+						{ recurringTimeDesignationTranslations: { some: {} } },
 						{
 							instantaneousTimeDesignationTranslations: {
-								every: {},
+								some: {},
 							},
 						},
 					],
