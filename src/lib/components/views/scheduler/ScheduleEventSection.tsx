@@ -184,10 +184,10 @@ const ScheduleEventSection = function ({ model }) {
 		const { scheduleItem } = scheduleEvent;
 		if (scheduleItem) {
 			reset(scheduleItem);
+			trigger();
 		} else {
 			reset();
 		}
-		trigger();
 	}, [reset, trigger, scheduleEvent]);
 
 	useCloseWarning(() => isDirty);
@@ -540,7 +540,10 @@ const ScheduleEventSection = function ({ model }) {
 													autoComplete={"off"}
 													data-tooltip-id={`${name}.english`}
 													onChange={e => {
-														onChange(e);
+														onChange({
+															...value,
+															english: e,
+														});
 														englishDesignationFields.onChange(
 															e.target.value,
 															`${name}.english`,
@@ -567,7 +570,10 @@ const ScheduleEventSection = function ({ model }) {
 													autoComplete={"off"}
 													data-tooltip-id={`${name}.russian`}
 													onChange={e => {
-														onChange(e);
+														onChange({
+															...value,
+															russian: e,
+														});
 														russianDesignationFields.onChange(
 															e.target.value,
 															`${name}.russian`,
