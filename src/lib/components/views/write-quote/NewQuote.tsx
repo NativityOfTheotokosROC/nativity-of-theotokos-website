@@ -33,10 +33,9 @@ const NewQuote = function ({ model }) {
 		control,
 		register,
 		handleSubmit,
-		getValues,
 		setValue,
 		reset,
-		formState: { isSubmitting, errors, isValid },
+		formState: { isSubmitting, errors, isValid, isDirty },
 	} = useForm({
 		mode: "onChange",
 		resolver: zodResolver(useQuoteFormSchema()),
@@ -106,17 +105,7 @@ const NewQuote = function ({ model }) {
 		russianSourceAutoCompleteBox,
 	);
 
-	const hasFormChanged = () =>
-		!(
-			defaultValues.author.english === getValues("author.english") &&
-			defaultValues.author.russian === getValues("author.russian") &&
-			defaultValues.source.english === getValues("source.english") &&
-			defaultValues.source.russian === getValues("source.russian") &&
-			defaultValues.quote.english === getValues("quote.english") &&
-			defaultValues.quote.russian === getValues("quote.russian")
-		);
-
-	useCloseWarning(hasFormChanged);
+	useCloseWarning(() => isDirty);
 
 	return (
 		<>

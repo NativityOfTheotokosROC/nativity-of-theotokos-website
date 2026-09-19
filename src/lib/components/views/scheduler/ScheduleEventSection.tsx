@@ -60,6 +60,7 @@ const ScheduleEventSection = function ({ model }) {
 			date: getDateString(addDays(new Date(), 1), true),
 			times: [{ designation: BLANK_TRANSLATION, time: "09:00" }],
 		},
+		mode: "onChange",
 	});
 	const englishTitleAutoCompleteBox = useAutoCompleteBox(
 		{
@@ -244,7 +245,7 @@ const ScheduleEventSection = function ({ model }) {
 									data-tooltip-id={
 										englishTitleFields.dataTooltipId
 									}
-									onChange={async e => {
+									onChange={e => {
 										onChange(e);
 										englishTitleFields.onChange(
 											e.target.value,
@@ -277,7 +278,7 @@ const ScheduleEventSection = function ({ model }) {
 									data-tooltip-id={
 										russianTitleFields.dataTooltipId
 									}
-									onChange={async e => {
+									onChange={e => {
 										onChange(e);
 										russianTitleFields.onChange(
 											e.target.value,
@@ -308,7 +309,7 @@ const ScheduleEventSection = function ({ model }) {
 									data-tooltip-id={
 										englishVenueFields.dataTooltipId
 									}
-									onChange={async e => {
+									onChange={e => {
 										onChange(e);
 										englishVenueFields.onChange(
 											e.target.value,
@@ -341,7 +342,7 @@ const ScheduleEventSection = function ({ model }) {
 									data-tooltip-id={
 										russianVenueFields.dataTooltipId
 									}
-									onChange={async e => {
+									onChange={e => {
 										onChange(e);
 										russianVenueFields.onChange(
 											e.target.value,
@@ -511,7 +512,10 @@ const ScheduleEventSection = function ({ model }) {
 						</Button>
 						<div className="flex flex-col gap-2">
 							{watch("times").map((_, index) => (
-								<div key={index} className="flex gap-1">
+								<div
+									key={index}
+									className="flex flex-col gap-1 md:flex-row"
+								>
 									<Controller
 										control={control}
 										name={`times.${index}.designation`}
@@ -535,7 +539,7 @@ const ScheduleEventSection = function ({ model }) {
 													value={value.english}
 													autoComplete={"off"}
 													data-tooltip-id={`${name}.english`}
-													onChange={async e => {
+													onChange={e => {
 														onChange(e);
 														englishDesignationFields.onChange(
 															e.target.value,
@@ -562,7 +566,7 @@ const ScheduleEventSection = function ({ model }) {
 													}
 													autoComplete={"off"}
 													data-tooltip-id={`${name}.russian`}
-													onChange={async e => {
+													onChange={e => {
 														onChange(e);
 														russianDesignationFields.onChange(
 															e.target.value,
@@ -640,10 +644,7 @@ const ScheduleEventSection = function ({ model }) {
 									},
 								})}
 							>
-								{scheduleEvent.scheduleItem &&
-								"id" in scheduleEvent.scheduleItem
-									? t("modifyButton")
-									: t("scheduleButton")}
+								{t("previewButton")}
 							</Button>
 						)}
 						<Button
