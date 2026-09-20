@@ -398,7 +398,6 @@ export async function updateInstantaneousItem(
 						update: {
 							russian: title.russian,
 						},
-						where: { englishHash: getMd5Hash(title.english) },
 					},
 				},
 				venue: {
@@ -411,7 +410,6 @@ export async function updateInstantaneousItem(
 						update: {
 							russian: venue.russian,
 						},
-						where: { englishHash: getMd5Hash(venue.english) },
 					},
 				},
 				date: new Date(date),
@@ -502,7 +500,6 @@ export async function updateRecurringItem(
 						update: {
 							russian: title.russian,
 						},
-						where: { englishHash: getMd5Hash(title.english) },
 					},
 				},
 				venue: {
@@ -515,7 +512,6 @@ export async function updateRecurringItem(
 						update: {
 							russian: venue.russian,
 						},
-						where: { englishHash: getMd5Hash(venue.english) },
 					},
 				},
 				pattern: recurringPattern,
