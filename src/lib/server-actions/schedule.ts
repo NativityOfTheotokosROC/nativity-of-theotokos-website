@@ -396,6 +396,7 @@ export async function updateInstantaneousItem(
 							englishHash: getMd5Hash(title.english),
 						},
 						update: {
+							english: title.english,
 							russian: title.russian,
 						},
 					},
@@ -408,6 +409,7 @@ export async function updateInstantaneousItem(
 							englishHash: getMd5Hash(venue.english),
 						},
 						update: {
+							english: venue.english,
 							russian: venue.russian,
 						},
 					},
@@ -498,6 +500,7 @@ export async function updateRecurringItem(
 							englishHash: getMd5Hash(title.english),
 						},
 						update: {
+							english: title.english,
 							russian: title.russian,
 						},
 					},
@@ -510,6 +513,7 @@ export async function updateRecurringItem(
 							englishHash: getMd5Hash(venue.english),
 						},
 						update: {
+							english: venue.english,
 							russian: venue.russian,
 						},
 					},
