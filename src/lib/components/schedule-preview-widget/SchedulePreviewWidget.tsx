@@ -50,10 +50,7 @@ const SchedulePreviewWidget = function ({ model }) {
 			<hr className="my-2 text-black/50" />
 			<div className="flex flex-col gap-3 lg:w-3/4">
 				{orderedSchedule
-					.slice(
-						highlightedScheduleItem ? 0 : 1,
-						maxDisplayedItems && maxDisplayedItems - 1,
-					)
+					.slice(highlightedScheduleItem ? 0 : 1, maxDisplayedItems)
 					.map((scheduleItem, index) => (
 						<ScheduleItem
 							key={index}
