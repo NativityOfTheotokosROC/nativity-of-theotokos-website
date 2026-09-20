@@ -12,10 +12,23 @@ import { twMerge } from "tailwind-merge";
 const Checkbox = function ({ model }) {
 	const { isChecked, checkedChangeCallback, label, options } =
 		model.modelView;
+	const labelPosition = options?.labelPosition ?? "right";
 
 	return (
 		<Field
-			className={twMerge("flex items-center gap-3", options?.className)}
+			className={twMerge(
+				"flex items-center gap-3",
+				labelPosition === "right"
+					? "flex-row"
+					: labelPosition === "left"
+						? "flex-row-reverse"
+						: labelPosition === "bottom"
+							? "flex-col"
+							: labelPosition === "top"
+								? "flex-col-reverse"
+								: null,
+				options?.className,
+			)}
 		>
 			<HeadlessUICheckbox
 				className={twMerge(

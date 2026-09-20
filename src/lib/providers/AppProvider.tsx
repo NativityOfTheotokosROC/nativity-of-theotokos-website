@@ -4,7 +4,7 @@ import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { CookiesProvider } from "react-cookie";
-import { Language, Path } from "../types/general";
+import { Language, Path } from "../utilities/types";
 import LoginTooltipProvider from "./LoginTooltipProvider";
 import PageLoadingBarProvider from "./PageLoadingBarProvider";
 import { ModeledContainerComponent } from "@mvc-react/components";

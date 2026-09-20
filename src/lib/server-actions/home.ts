@@ -8,17 +8,18 @@ import {
 	getDailyQuote,
 	getDailyReadings,
 	getLatestArticles,
-	getScheduleItems,
 } from "../server-only/home";
 import mailerLite from "../third-party/mailer-lite";
+import { getDateString } from "../utilities/date-time";
 import {
 	DailyQuote,
 	DailyReadings,
 	GalleryImage,
+	InstantaneousScheduleItem,
 	Language,
-	ScheduleItem,
-} from "../types/general";
-import { getDateString } from "../utilities/date-time";
+	RecurringScheduleItemInstance,
+} from "../utilities/types";
+import { getSchedule } from "./schedule";
 
 export type LatestArticles = {
 	featuredArticle: ArticlePreview;
@@ -28,7 +29,10 @@ export type LatestArticles = {
 export type HomeSnapshot = {
 	dailyReadings: DailyReadings;
 	dailyQuote: DailyQuote;
-	scheduleItems: ScheduleItem[];
+	scheduleItems: (
+		| InstantaneousScheduleItem
+		| RecurringScheduleItemInstance
+	)[];
 	articles: LatestArticles;
 	dailyGalleryImages: GalleryImage[];
 };
@@ -49,7 +53,7 @@ export async function getHomeSnapshot(
 		dailyGalleryImages,
 	] = await Promise.all([
 		getDailyReadings(currentDate, locale),
-		getScheduleItems(scheduleItemCount, currentDate, locale),
+		getSchedule(currentDate, scheduleItemCount, locale),
 		getLatestArticles(otherArticleCount, locale),
 		getDailyQuote(currentDate, locale),
 		getDailyGalleryImages(dailyGalleryImagesCount, currentDate),

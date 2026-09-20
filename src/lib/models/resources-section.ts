@@ -1,5 +1,5 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { Resource } from "../types/general";
+import { Resource } from "../utilities/types";
 
 export type ResourcesSectionModelView = {
 	resources: Resource[];

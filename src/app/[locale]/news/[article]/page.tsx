@@ -1,6 +1,6 @@
 import { routing } from "@/src/i18n/routing";
 import { getArticle } from "@/src/lib/server-actions/article";
-import { Article as ArticleType } from "@/src/lib/types/general";
+import { Article as ArticleType } from "@/src/lib/utilities/types";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
@@ -38,7 +38,7 @@ function articleJsonLd(article: ArticleType) {
 			"@type": "Person",
 			name: author.name,
 		},
-		image: articleImage.source,
+		image: articleImage.url,
 	} satisfies WithContext<JSONLdArticle>;
 }
 
@@ -69,13 +69,13 @@ export async function generateMetadata({
 			url: `/news/${uri}`,
 			authors: author.name,
 			type: "article",
-			images: [articleImage.source],
+			images: [articleImage.url],
 		},
 		twitter: {
 			card: "summary_large_image",
 			title,
 			description: snippet,
-			images: [articleImage.source],
+			images: [articleImage.url],
 		},
 	};
 }

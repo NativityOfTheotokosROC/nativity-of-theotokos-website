@@ -1,7 +1,7 @@
 import { Model } from "@mvc-react/mvc";
 
 export type EditorModelView = {
-	changeCallback: (content: string) => Promise<void>;
+	changeCallback: (content: string) => void;
 	initialContent?: string;
 	isReadonly?: boolean;
 	className?: string;

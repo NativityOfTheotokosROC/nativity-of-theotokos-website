@@ -4,11 +4,20 @@
 	},
 	"tailwindCSS.classAttributes": ["class", "className", "theme"],
 	"tailwindCSS.experimental.classRegex": [
-		["twMerge\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+		[
+			"twMerge\\(([^)]*)\\)",
+			"[\"'`]([^\"'`]*).*?[\"'`]",
+			"newReadonlyModel\\(([^)]*)\\)",
+			"[\"'`]([^\"'`]*).*?[\"'`]"
+		],
 		[
 			"createTheme(?:<\\w+>)?\\s*\\(([^)]*)\\)",
 			"{?\\s?[\\w].*:\\s*?[\"'`]([^\"'`]*).*?,?\\s?}?"
 		]
 	],
-	"js/ts.experimental.useTsgo": false
+	"js/ts.experimental.useTsgo": false,
+	"[tailwindcss]": {
+		"tailwindCSS.lint.invalidTailwindDirective": "warning",
+		"tailwindCSS.validate": true
+	}
 }

@@ -1,5 +1,5 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { Role } from "../types/general";
+import { Role } from "../utilities/types";
 
 export type ProtectedComponentModelView = {
 	roles?: Role[];

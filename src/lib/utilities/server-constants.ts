@@ -2,11 +2,21 @@ import "server-only";
 import z from "zod";
 
 export const DATABASE_URL = z.url().parse(process.env.DATABASE_URL);
-export const BASE_URL = z.httpUrl().parse(process.env.BASE_URL);
+export const BASE_URL = z
+	.union([
+		z.httpUrl(),
+		z.url({ protocol: /^https?$/, hostname: /^localhost$/ }),
+	])
+	.parse(process.env.BASE_URL);
 export const ENVIRONMENT = z
 	.enum(["production", "preview", "development"])
 	.parse(process.env.VERCEL_ENV ?? process.env.NODE_ENV);
-export const BETTER_AUTH_URL = z.httpUrl().parse(process.env.BETTER_AUTH_URL);
+export const BETTER_AUTH_URL = z
+	.union([
+		z.httpUrl(),
+		z.url({ protocol: /^https?$/, hostname: /^localhost$/ }),
+	])
+	.parse(process.env.BETTER_AUTH_URL);
 export const GOOGLE_CLIENT_ID = z
 	.string()
 	.nonempty()
@@ -45,4 +55,3 @@ export const AWS_SECRET_ACCESS_KEY = z
 	.nonempty()
 	.parse(process.env.AWS_SECRET_ACCESS_KEY);
 export const S3_BUCKET = z.string().nonempty().parse(process.env.S3_BUCKET);
-export const PREPRODUCTION_PROTECTION = process.env.PREPRODUCTION_PROTECTION;

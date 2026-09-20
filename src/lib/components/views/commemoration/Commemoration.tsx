@@ -3,7 +3,7 @@ import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ViewTransition } from "react";
 import CommemorationBorder from "@/public/assets/border-8.webp";
-import { ShareData } from "@/src/lib/types/general";
+import { ShareData } from "@/src/lib/utilities/types";
 import { getEncodedShareData } from "@/src/lib/utilities/miscellaneous";
 import ShareButton from "@/src/lib/components/share-button/ShareButton";
 import SocialLink from "@/src/lib/components/social-link/SocialLink";

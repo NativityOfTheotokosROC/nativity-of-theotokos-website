@@ -1,7 +1,7 @@
 import { Model } from "@mvc-react/mvc";
 
 export type ButtonBarModelView = {
-	arrangement: "left" | "center" | "right" | "separated" | "spaced_around";
+	arrangement: "start" | "center" | "end" | "separated" | "spaced_around";
 	orientation: "vertical" | "horizontal";
 	className?: string;
 };

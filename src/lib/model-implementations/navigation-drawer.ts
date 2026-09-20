@@ -1,7 +1,7 @@
 import { InitializedModel } from "@mvc-react/mvc";
 import { useState } from "react";
 import { NavigationDrawerModel } from "../models/navigation-drawer";
-import { Navlink } from "../types/general";
+import { Navlink } from "../utilities/types";
 
 export function useNavigationDrawer(
 	navlinks: Navlink[],

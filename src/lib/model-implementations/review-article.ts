@@ -13,12 +13,12 @@ import {
 	ReviewArticleModelView,
 	ReviewArticleNotification,
 } from "../models/review-article";
-import { ArticleDraft } from "../models/write-article";
+import { ArticleDraft, NewArticleDraft } from "../models/write-article";
 import {
 	publishExistingArticle,
 	publishNewArticle,
 } from "../server-actions/article";
-import { Article } from "../types/general";
+import { Article, Translation } from "../utilities/types";
 import { ToastNotification } from "../models/toast";
 
 export function reviewArticleNotifierVIInterface(
@@ -55,7 +55,7 @@ export function reviewArticleNotifierVIInterface(
 
 export function useReviewArticle(
 	draft: ArticleDraft,
-	draftAssigneeName: string,
+	draftAssigneeName: Translation,
 	ticketId?: string,
 	currentArticle?: ReviewArticleModelView["currentArticle"],
 	options?: Partial<{ toastNotifier: NotifierModel<ToastNotification> }>,
@@ -84,29 +84,11 @@ export function useReviewArticle(
 						type: "NOTIFY",
 						input: { notification: { type: "submitting" } },
 					});
-					const {
-						draft: { title, body },
-						imageUrl,
-						imageCaption,
-						authorName,
-						snippet,
-						isArticleFeatured,
-					} = interaction.input;
 					try {
 						if (currentArticle) {
 							await publishExistingArticle({
 								articleId: currentArticle.uri,
-								incomingArticle: {
-									title,
-									body,
-									authorName,
-									articleImage: {
-										source: imageUrl,
-										about: imageCaption,
-									},
-									snippet,
-									isArticleFeatured,
-								},
+								incomingArticle: interaction.input.article,
 								ticketId,
 								locale,
 							});
@@ -125,17 +107,7 @@ export function useReviewArticle(
 							throw new Error("No article ticket was provided");
 						await publishNewArticle({
 							ticketId,
-							incomingArticle: {
-								title,
-								body,
-								authorName,
-								articleImage: {
-									source: imageUrl,
-									about: imageCaption,
-								},
-								snippet,
-								isArticleFeatured,
-							},
+							incomingArticle: interaction.input.article,
 							locale,
 						});
 						await notifier.interact({

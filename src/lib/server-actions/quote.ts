@@ -3,13 +3,12 @@
 import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
 import { revalidateTag } from "next/cache";
-import { NewQuote } from "../models/new-quote";
 import database from "../third-party/prisma";
-import { getLocalTimeZone } from "../utilities/date-time";
+import { getNativeTimeZone } from "../utilities/date-time";
 import { getMd5Hash } from "../utilities/miscellaneous";
-import { getQuoteSchema } from "../validation/quote";
+import { getQuoteSchema, NewQuote } from "../validation/quote";
 import { protect } from "./auth";
-import { Translation } from "../types/general";
+import { Translation } from "../utilities/types";
 import { AutoCompleteInfo } from "../utilities/quote-form";
 
 export async function getAutoCompleteInfo() {
@@ -53,65 +52,47 @@ export async function getAutoCompleteInfo() {
 
 export async function addNewQuote(newQuote: NewQuote) {
 	await protect({ roles: ["quotes"] });
-	const { englishQuote, russianQuote, scheduledDate } = newQuote;
-	const { author, quote, source } = englishQuote;
 	const t = await getTranslations();
 	const quoteSchema = getQuoteSchema(t);
-	const { authorEn, quoteEn, sourceEn, authorRu, quoteRu, sourceRu } =
-		quoteSchema.parse({
-			authorEn: author,
-			quoteEn: quote,
-			sourceEn: source,
-			authorRu: russianQuote?.author,
-			quoteRu: russianQuote?.quote,
-			sourceRu: russianQuote?.source,
-			scheduledDate,
-		});
+	const { author, quote, source, scheduledDate } =
+		quoteSchema.parse(newQuote);
 	const scheduledLocalDate = scheduledDate
-		? toZonedTime(scheduledDate, getLocalTimeZone())
+		? toZonedTime(scheduledDate, getNativeTimeZone())
 		: undefined;
 
 	await database.$transaction(async transaction => {
-		const [authorTranslation, sourceTranslation, quoteTranslation] =
-			await Promise.all([
-				transaction.translation.upsert({
-					select: { id: true },
-					create: {
-						english: authorEn,
-						russian: authorRu,
-						englishHash: getMd5Hash(authorEn),
-					},
-					update: {
-						russian: authorRu,
-					},
-					where: {
-						englishHash: getMd5Hash(authorEn),
-					},
-				}),
-				sourceEn &&
-					transaction.translation.upsert({
+		const [authorTranslation, sourceTranslation] = await Promise.all([
+			transaction.translation.upsert({
+				select: { id: true },
+				create: {
+					english: author.english,
+					russian: author.russian,
+					englishHash: getMd5Hash(author.english),
+				},
+				update: {
+					russian: author.russian,
+				},
+				where: {
+					englishHash: getMd5Hash(author.english),
+				},
+			}),
+			source.english
+				? transaction.translation.upsert({
 						select: { id: true },
 						create: {
-							english: sourceEn,
-							russian: sourceRu,
-							englishHash: getMd5Hash(sourceEn),
+							english: source.english,
+							russian: source.russian,
+							englishHash: getMd5Hash(source.english),
 						},
 						update: {
-							russian: sourceRu,
+							russian: source.russian,
 						},
 						where: {
-							englishHash: getMd5Hash(sourceEn),
+							englishHash: getMd5Hash(source.english),
 						},
-					}),
-				transaction.translation.create({
-					select: { id: true },
-					data: {
-						english: quoteEn,
-						russian: quoteRu,
-						englishHash: getMd5Hash(quoteEn),
-					},
-				}),
-			]);
+					})
+				: undefined,
+		]);
 		const quoteAuthor = await transaction.quoteAuthor.upsert({
 			select: { id: true },
 			create: {
@@ -122,26 +103,40 @@ export async function addNewQuote(newQuote: NewQuote) {
 				nameTranslationId: authorTranslation.id,
 			},
 		});
-		return await transaction.quote
-			.create({
-				data: {
-					quoteTranslationId: quoteTranslation.id,
-					sourceTranslationId: sourceTranslation
-						? sourceTranslation.id
-						: null,
-					authorId: quoteAuthor.id,
-					dailyQuotes: scheduledLocalDate && {
-						connectOrCreate: {
-							where: {
-								date: scheduledLocalDate,
+		const result = await transaction.quote.create({
+			data: {
+				author: {
+					connect: {
+						id: quoteAuthor.id,
+					},
+				},
+				source: sourceTranslation?.id
+					? {
+							connect: {
+								id: sourceTranslation.id,
 							},
-							create: {
-								date: scheduledLocalDate,
-							},
+						}
+					: undefined,
+				quote: {
+					create: {
+						english: quote.english,
+						russian: quote.russian,
+						englishHash: getMd5Hash(quote.english),
+					},
+				},
+				dailyQuotes: scheduledLocalDate && {
+					connectOrCreate: {
+						where: {
+							date: scheduledLocalDate,
+						},
+						create: {
+							date: scheduledLocalDate,
 						},
 					},
 				},
-			})
-			.then(() => revalidateTag("daily-quote", "max"));
+			},
+		});
+		revalidateTag("daily-quote", "max");
+		return result;
 	});
 }

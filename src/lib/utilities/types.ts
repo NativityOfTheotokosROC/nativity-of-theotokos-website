@@ -1,0 +1,239 @@
+import { routing } from "@/src/i18n/routing";
+import { ImagePlaceholder } from "@grod56/placeholder";
+import { getTranslations } from "next-intl/server";
+
+export type Navlink = {
+	text: string;
+	link: string;
+	isReplaceable?: boolean;
+};
+
+export type DailyReadingsScripture = {
+	scriptureText: string;
+	designation: string;
+	link: string;
+};
+
+export type Hymn = {
+	title: string;
+	text: string;
+};
+
+export type DailyReadings = {
+	currentDate: Date;
+	liturgicalWeek: string;
+	saints: string;
+	scriptures: DailyReadingsScripture[];
+	fastingInfo: string;
+	iconOfTheDay: Pick<Image, "source" | "about"> & Partial<Image>;
+	hymns: Hymn[];
+};
+
+export type Text = string | Translation;
+
+export type DailyQuote<T extends Text = string> = {
+	quote: T;
+	author: T;
+	source: T | null;
+};
+
+export type ScheduleItem<T extends Text = string> = {
+	title: T;
+	venue: T;
+	times: {
+		time: string;
+		designation: T;
+	}[];
+};
+
+export type ScheduleItemWithTranslations = ScheduleItem<Translation>;
+
+export type RecurringScheduleItem<T extends Text = string> = Omit<
+	ScheduleItem<T>,
+	"date"
+> & {
+	id: number;
+	recurringPattern: string;
+	isDisabled: boolean;
+};
+
+export type InstantaneousScheduleItem<T extends Text = string> =
+	ScheduleItem<T> & {
+		date: Date;
+		id: number;
+		isRemoved: boolean;
+	};
+
+export type TypeDiff<
+	T extends Record<string, unknown>,
+	U extends Record<string, unknown>,
+> = { [K in Exclude<keyof T, keyof U>]: K extends keyof U ? never : T[K] };
+
+export type InstantaneousScheduleItemWithTranslations =
+	InstantaneousScheduleItem<Translation>;
+
+export type RecurringScheduleItemWithTranslations =
+	RecurringScheduleItem<Translation>;
+
+export type RecurringScheduleItemInstance<T extends Text = string> =
+	ScheduleItem<T> & {
+		recurringItemId: number;
+		isRemoved: boolean;
+		date: Date;
+	};
+
+type ToggleOptional<
+	T extends Record<string, unknown>,
+	P extends keyof T,
+	V extends boolean,
+> = V extends true
+	? { [K in P]?: T[K] } & { [K in Exclude<keyof T, P>]: T[K] }
+	: { [K in P]-?: T[K] } & { [K in Exclude<keyof T, P>]: T[K] };
+
+export type MakeOptional<
+	T extends Record<string, unknown>,
+	P extends keyof T,
+> = ToggleOptional<T, P, true>;
+
+export type MakeRequired<
+	T extends Record<string, unknown>,
+	P extends keyof T,
+> = ToggleOptional<T, P, false>;
+
+export type SelectByDiscriminator<
+	T extends Record<string, unknown>,
+	K extends keyof T,
+	U extends string,
+> = U extends T[K] ? Unravel<Extract<T, Record<K, U>>> : never;
+
+export type Image = {
+	source: string;
+	placeholder: ImagePlaceholder;
+	about?: string;
+};
+
+export type ArticleTicket = {
+	ticketId: string;
+	assignee: ArticleAuthor;
+};
+
+export type ArticleAuthor = {
+	name: string;
+	email?: string;
+};
+
+export type Unravel<T> = { [K in keyof T]: T[K] };
+
+export type RenameProperty<
+	T extends Record<string, unknown>,
+	O extends keyof T,
+	N extends string,
+> = Omit<T, O> & { [K in N]: T[O] };
+
+export type RenameProperties<
+	T extends Record<string, unknown>,
+	N extends [keyof T, string][],
+> = Omit<T, N[number][0]> & { [K in N[number][1]]: T[N[number][0]] };
+
+export type ReplacePropertyType<
+	T extends Record<string, unknown>,
+	K extends keyof T,
+	N,
+> = Omit<T, K> & { [P in K]: N };
+
+export type ReplacePropertyTypes<
+	T extends Record<string, unknown>,
+	N extends [keyof T, unknown][],
+> = Omit<T, N[number][0]> & {
+	[P in N[number][0]]: N[number][1];
+};
+
+export type Article = {
+	uri: string;
+	title: string;
+	author: ArticleAuthor;
+	body: string;
+	dateCreated: Date;
+	dateUpdated?: Date;
+	snippet: string;
+	articleImage: RenameProperties<
+		Required<Pick<Image, "source" | "about">> &
+			Partial<Pick<Image, "placeholder"> & {}>,
+		[["source", "url"], ["about", "caption"]]
+	>;
+	isArticleFeatured: boolean;
+};
+
+export type NewArticle = {
+	title: string;
+	body: string;
+	snippet?: string;
+	articleImage: Required<Pick<Image, "source" | "about">>;
+	isArticleFeatured: boolean;
+	authorName?: string;
+};
+
+export type GalleryImage = {
+	image: Image;
+};
+
+export type Notification<T> = {
+	type: T;
+};
+
+export type MessageNotification<T> = Notification<T> & { message: string };
+
+export type Language = typeof routing.defaultLocale;
+
+export type Resource = {
+	label: string;
+	link: string;
+	graphic: string;
+};
+
+export type User = {
+	name: string;
+	email: string;
+};
+
+export type Translator = Awaited<ReturnType<typeof getTranslations<never>>>;
+
+export type Role = "admin" | "staff" | "user" | "quotes" | "writer" | "editor";
+
+export type Path = `/${string}`;
+
+export type ShareData = {
+	title: string;
+	url: string;
+	text?: string;
+};
+
+export type Translation = {
+	english: string;
+	russian?: string | null;
+};
+export type CompleteTranslation = {
+	[P in keyof Translation]-?: NonNullable<Translation[P]>;
+};
+
+export type Options<T extends Record<string, unknown>> = {
+	options?: Partial<T>;
+};
+export type ArticleAuthorWithTranslations = ReplacePropertyType<
+	ArticleAuthor,
+	"name",
+	Translation
+>;
+export type ArticleWithTranslations = {
+	[K in keyof Article]: K extends "title" | "body" | "snippet"
+		? Translation
+		: K extends "author"
+			? ArticleAuthorWithTranslations
+			: K extends "articleImage"
+				? {
+						[A in keyof Article[K]]: A extends "caption"
+							? Translation
+							: Article[K][A];
+					}
+				: Article[K];
+};

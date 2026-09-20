@@ -1,5 +1,5 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
-import { Notification } from "../types/general";
+import { Notification } from "../utilities/types";
 
 export type ImageProcessorNotification =
 	| (Notification<"processing" | "processing_failed"> & { message: string })
@@ -13,7 +13,7 @@ export type ImageProcessorModelView = {
 
 export type ImageProcessorModelInteraction = InputModelInteraction<
 	"PROCESS",
-	{ file: File; successCallback?: (processedImage: File) => Promise<void> }
+	{ file: File; successCallback?: (processedImage: File) => void }
 >;
 
 export type ImageProcessorModel = InteractiveModel<

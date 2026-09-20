@@ -1,73 +1,67 @@
 import z from "zod";
-import { Translator } from "../types/general";
+import { Translator } from "../utilities/types";
 import { getDateString } from "../utilities/date-time";
 import { emptyStringAsUndefined } from "../utilities/miscellaneous";
-import { useLocalizedSchema } from "./general";
+import {
+	getOptionalStringSchema,
+	getTranslationSchema,
+	useLocalizedSchema,
+} from "./utilities";
+
+export type NewQuote = z.infer<ReturnType<typeof getQuoteSchema>>;
 
 export function getQuoteSchema(t?: Translator) {
 	const maxQuoteEn = 600;
 	const maxQuoteRu = maxQuoteEn;
 	const quoteSchema = z.object({
-		authorEn: z
-			.string()
-			.trim()
-			.nonempty({
-				error:
-					t &&
-					t("validation.nonEmpty", { field: t("newQuote.author") }),
-			}),
-		quoteEn: z
-			.string()
-			.trim()
-			.nonempty({
-				error:
-					t &&
-					t("validation.nonEmpty", { field: t("newQuote.quote") }),
-			})
-			.max(maxQuoteEn, {
-				error:
-					t &&
-					t("validation.maxCharacters", {
-						field: t("newQuote.quote"),
-						max: maxQuoteEn,
-					}),
-			}),
-		sourceEn: z.preprocess(
-			emptyStringAsUndefined,
-			z.string().trim().optional(),
+		author: getTranslationSchema(
+			t && { t, fieldName: t("newQuote.author") },
 		),
-		authorRu: z.preprocess(
-			emptyStringAsUndefined,
-			z.string().trim().optional(),
-		),
-		quoteRu: z.preprocess(
-			emptyStringAsUndefined,
-			z
-				.string()
-				.trim()
-				.max(maxQuoteRu, {
-					error:
+		quote: getTranslationSchema({
+			englishValidationOptions: {
+				trim: true,
+				nonEmpty: {
+					value: true,
+					invalidMessage:
+						t &&
+						t("validation.nonEmpty", {
+							field: t("newQuote.quote"),
+						}),
+				},
+				max: {
+					value: maxQuoteEn,
+					invalidMessage:
+						t &&
+						t("validation.maxCharacters", {
+							field: t("newQuote.quote"),
+							max: maxQuoteEn,
+						}),
+				},
+			},
+			russianValidationOptions: {
+				trim: true,
+				max: {
+					value: maxQuoteRu,
+					invalidMessage:
 						t &&
 						t("validation.maxCharacters", {
 							field: t("newQuote.quote"),
 							max: maxQuoteRu,
 						}),
-				})
-				.optional(),
-		),
-		sourceRu: z.preprocess(
-			emptyStringAsUndefined,
-			z.string().trim().optional(),
-		),
-		scheduledDate: z.preprocess(
-			emptyStringAsUndefined,
+				},
+			},
+		}),
+		source: getTranslationSchema().extend({
+			english: getOptionalStringSchema(),
+		}),
+		scheduledDate: getOptionalStringSchema(
 			z.iso
 				.date()
-				.pipe(z.coerce.date())
 				.refine(
-					date => date >= new Date(getDateString(new Date(), true)),
-				)
-				.optional(),
+					date =>
+						new Date(date).getTime() >=
+						new Date(getDateString(new Date())).getTime(),
+				),
 		),
 	});
 	return quoteSchema;

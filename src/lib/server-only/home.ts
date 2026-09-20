@@ -1,23 +1,21 @@
 import { ImagePlaceholder, getPlaceholder } from "@grod56/placeholder";
 import { arrayToShuffled } from "array-shuffle";
-import { getTranslations } from "next-intl/server";
 import { cacheLife, cacheTag } from "next/cache";
 import "server-only";
 import { LatestArticles } from "../server-actions/home";
 import { dailyReadings } from "../third-party/holytrinityorthodox";
 import database from "../third-party/prisma";
+import { getDateString } from "../utilities/date-time";
+import { isRemotePath } from "../utilities/miscellaneous";
+import { BASE_URL } from "../utilities/server-constants";
 import {
 	ArticleAuthor,
 	DailyQuote,
 	GalleryImage,
 	Language,
-	ScheduleItem,
-} from "../types/general";
-import { getDateString } from "../utilities/date-time";
-import { getMd5Hash, isRemotePath } from "../utilities/miscellaneous";
-import { BASE_URL } from "../utilities/server-constants";
-import { getGalleryImages } from "./gallery";
+} from "../utilities/types";
 import { _FULL_ARTICLE_INCLUDES } from "./article";
+import { getGalleryImages } from "./gallery";
 
 export const getDailyReadings = async (
 	currentDate: Date,
@@ -101,145 +99,6 @@ export async function getDailyQuote(currentDate: Date, language: Language) {
 	) satisfies DailyQuote;
 }
 
-export async function getScheduleItems(
-	count: number,
-	currentDate: Date,
-	language: Language,
-) {
-	"use cache: remote";
-	cacheTag("latest-schedule-items");
-	cacheLife("days");
-
-	const localDate = new Date(getDateString(currentDate, true));
-	const data = await database.scheduleItem.findMany({
-		where: {
-			date: { gte: localDate },
-			AND: { removedScheduleItem: { is: null } },
-		},
-		orderBy: {
-			date: "asc",
-		},
-		take: count,
-		include: {
-			title: true,
-			venue: true,
-			scheduleItemTimes: {
-				include: { designation: true },
-				orderBy: { time: "asc" },
-			},
-		},
-	});
-	const scheduleItems = data.map(
-		(record): ScheduleItem => ({
-			date: record.date,
-			title:
-				language === "ru"
-					? (record.title.russian ?? record.title.english)
-					: record.title.english,
-			location:
-				language === "ru"
-					? (record.venue.russian ?? record.venue.english)
-					: record.venue.english,
-			times: record.scheduleItemTimes.map(time => ({
-				time: time.time,
-				designation:
-					language === "ru"
-						? (time.designation.russian ?? time.designation.english)
-						: time.designation.english,
-			})),
-		}),
-	);
-	let nextScheduleItemDate = new Date(localDate);
-	while (scheduleItems.length < count) {
-		const nextScheduleItem = await _getNextDefaultScheduleItem(
-			nextScheduleItemDate,
-		).then(scheduleItem => ({
-			...scheduleItem,
-			times: scheduleItem.times.map(time => ({
-				...time,
-				time: new Date(
-					Date.UTC(
-						time.time.getFullYear(),
-						time.time.getMonth() + 1,
-						time.time.getDate(),
-						time.time.getHours() - 2,
-						time.time.getMinutes(),
-					),
-				),
-			})),
-		}));
-		// TODO: Revisit
-		const isPresent = await database.scheduleItem.findFirst({
-			where: {
-				date: nextScheduleItem.date,
-				venue: {
-					englishHash: getMd5Hash(nextScheduleItem.location),
-				},
-			},
-		});
-		if (!isPresent) {
-			const { date, location, title, times, titleRu } = nextScheduleItem;
-
-			await database.scheduleItem.create({
-				data: {
-					date,
-					title: {
-						connectOrCreate: {
-							create: {
-								english: title,
-								englishHash: getMd5Hash(title),
-								russian: titleRu,
-							},
-							where: {
-								englishHash: getMd5Hash(title),
-							},
-						},
-					},
-					venue: {
-						connectOrCreate: {
-							create: {
-								english: location,
-								englishHash: getMd5Hash(location),
-							},
-							where: {
-								englishHash: getMd5Hash(location),
-							},
-						},
-					},
-					scheduleItemTimes: {
-						create: times.map(time => ({
-							time: time.time,
-							designation: {
-								connectOrCreate: {
-									create: {
-										english: time.designation,
-										russian: time.designationRu,
-										englishHash: getMd5Hash(
-											time.designation,
-										),
-									},
-									where: {
-										englishHash: getMd5Hash(
-											time.designation,
-										),
-									},
-								},
-							},
-						})),
-					},
-				},
-			});
-			scheduleItems.push(nextScheduleItem);
-		}
-		nextScheduleItemDate = new Date(
-			new Date(nextScheduleItem.date).setDate(
-				nextScheduleItem.date.getDate() + 1,
-			),
-		);
-	}
-	return scheduleItems;
-}
-
 export async function getLatestArticles(
 	otherArticlesCount: number,
 	language: Language,
@@ -247,10 +106,11 @@ export async function getLatestArticles(
 	"use cache: remote";
 	cacheTag("latest-articles");
 
-	const featuredArticle = await database.featuredArticle.findFirstOrThrow({
-		include: { article: { include: _FULL_ARTICLE_INCLUDES } },
-	});
-	const otherArticles = await database.article.findMany({
+	const featuredArticleRecord =
+		await database.featuredArticle.findFirstOrThrow({
+			include: { article: { include: _FULL_ARTICLE_INCLUDES } },
+		});
+	const otherArticleRecords = await database.article.findMany({
 		where: {
 			featuredArticle: {
 				is: null,
@@ -262,8 +122,11 @@ export async function getLatestArticles(
 		},
 		take: otherArticlesCount,
 	});
-	const allArticles = [featuredArticle.article, ...otherArticles];
-	const unplaceholderedArticles = allArticles.filter(
+	const allArticleRecords = [
+		featuredArticleRecord.article,
+		...otherArticleRecords,
+	];
+	const unplaceholderedArticles = allArticleRecords.filter(
 		article => article.image.placeholder === null,
 	);
 	const newPlaceholders = new Map<number, ImagePlaceholder>();
@@ -281,44 +144,45 @@ export async function getLatestArticles(
 		}
 	}
 
-	const article = featuredArticle.article;
+	const featuredArticle = featuredArticleRecord.article;
 	const title =
-		language === "ru" && article.title.russian
-			? article.title.russian
-			: article.title.english;
+		language === "ru" && featuredArticle.title.russian
+			? featuredArticle.title.russian
+			: featuredArticle.title.english;
 	const author = {
 		name:
-			language === "ru" && article.author.name.russian != null
-				? article.author.name.russian
-				: article.author.name.english,
-		email: article.author.email ?? undefined,
+			language === "ru" && featuredArticle.author.name.russian != null
+				? featuredArticle.author.name.russian
+				: featuredArticle.author.name.english,
+		email: featuredArticle.author.email ?? undefined,
 	} satisfies ArticleAuthor;
 	const snippet =
-		language === "ru" && article.snippet.russian
-			? article.snippet.russian
-			: article.snippet.english;
+		language === "ru" && featuredArticle.snippet.russian
+			? featuredArticle.snippet.russian
+			: featuredArticle.snippet.english;
 	return {
 		featuredArticle: {
-			...featuredArticle.article,
+			...featuredArticleRecord.article,
 			title,
 			author,
 			snippet,
-			uri: featuredArticle.article.link,
+			uri: featuredArticleRecord.article.link,
 			articleImage: {
-				source: featuredArticle.article.image.link,
-				about:
+				url: featuredArticleRecord.article.image.link,
+				caption:
 					language === "ru"
-						? (featuredArticle.article.image.caption.russian ??
-							featuredArticle.article.image.caption.english)
-						: featuredArticle.article.image.caption.english,
+						? (featuredArticleRecord.article.image.caption
+								.russian ??
+							featuredArticleRecord.article.image.caption.english)
+						: featuredArticleRecord.article.image.caption.english,
 				placeholder:
-					(featuredArticle.article.image.placeholder
+					(featuredArticleRecord.article.image.placeholder
 						?.placeholder as ImagePlaceholder) ??
-					newPlaceholders.get(featuredArticle.article.id),
+					newPlaceholders.get(featuredArticleRecord.article.id),
 			},
 			isArticleFeatured: true,
 		},
-		otherNewsArticles: otherArticles.map(article => {
+		otherNewsArticles: otherArticleRecords.map(article => {
 			const title =
 				language === "ru" && article.title.russian
 					? article.title.russian
@@ -341,8 +205,8 @@ export async function getLatestArticles(
 				snippet,
 				uri: article.link,
 				articleImage: {
-					source: article.image.link,
-					about:
+					url: article.image.link,
+					caption:
 						language === "ru"
 							? (article.image.caption.russian ??
 								article.image.caption.english)
@@ -443,183 +307,4 @@ export async function getDailyGalleryImages(count: number, currentDate: Date) {
 		});
 	}
 	return placeholderedGalleryImages;
-}
-
-// TODO: To be refactored to something less ... static
-async function _getNextDefaultScheduleItem(date: Date): Promise<
-	Omit<ScheduleItem, "times"> & {
-		times: { time: Date; designation: string; designationRu: string }[];
-	} & { titleRu: string }
-> {
-	let scheduleItem;
-	const tEn = await getTranslations({
-		locale: "en",
-		namespace: "scheduleItem",
-	});
-	const tRu = await getTranslations({
-		locale: "ru",
-		namespace: "scheduleItem",
-	});
-	const scheduleItemDate = new Date(date);
-	while (scheduleItemDate.getDay() > 0 && scheduleItemDate.getDay() < 6) {
-		scheduleItemDate.setDate(scheduleItemDate.getDate() + 1);
-	}
-	if (scheduleItemDate.getDay() === 6) {
-		const nextSundayDate = new Date(
-			new Date(scheduleItemDate).setDate(scheduleItemDate.getDate() + 1),
-		);
-		const previousSundayDate = new Date(
-			new Date(scheduleItemDate).setDate(scheduleItemDate.getDate() - 6),
-		);
-		if (nextSundayDate.getMonth() != previousSundayDate.getMonth()) {
-			scheduleItem = {
-				date: scheduleItemDate,
-				location: tEn("secondaryLocation"),
-				title: tEn("liturgyService"),
-				titleRu: tRu("liturgyService"),
-				times: [
-					{
-						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(
-								9,
-								0,
-								0,
-								0,
-							),
-						),
-						designation: tEn("orthros"),
-						designationRu: tRu("orthros"),
-					},
-					{
-						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(
-								9,
-								30,
-								0,
-								0,
-							),
-						),
-						designation: tEn("confessions"),
-						designationRu: tRu("confessions"),
-					},
-					{
-						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(
-								10,
-								30,
-								0,
-								0,
-							),
-						),
-						designation: tEn("liturgy"),
-						designationRu: tRu("liturgy"),
-					},
-				],
-			};
-			return scheduleItem;
-		}
-		scheduleItem = {
-			date: nextSundayDate,
-			location: tEn("secondaryLocation"),
-			title: tEn("typikaService"),
-			titleRu: tRu("typikaService"),
-			times: [
-				{
-					time: new Date(
-						new Date(nextSundayDate.toDateString()).setHours(
-							9,
-							0,
-							0,
-							0,
-						), // TODO: Fix these
-					),
-					designation: tEn("orthros"),
-					designationRu: tRu("orthros"),
-				},
-				{
-					time: new Date(
-						new Date(nextSundayDate.toDateString()).setHours(
-							9,
-							30,
-							0,
-							0,
-						),
-					),
-					designation: tEn("typika"),
-					designationRu: tRu("typika"),
-				},
-				{
-					time: new Date(
-						new Date(nextSundayDate.toDateString()).setHours(
-							10,
-							30,
-							0,
-							0,
-						),
-					),
-					designation: tEn("catechism"),
-					designationRu: tRu("catechism"),
-				},
-			],
-		};
-	} else {
-		const previousSundayDate = new Date(
-			new Date(scheduleItemDate).setDate(scheduleItemDate.getDate() - 7),
-		);
-		if (scheduleItemDate.getMonth() != previousSundayDate.getMonth()) {
-			scheduleItem = {
-				date: scheduleItemDate,
-				location: tEn("mainLocation"),
-				title: tEn("liturgyService"),
-				titleRu: tRu("liturgyService"),
-				times: [
-					{
-						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(
-								12,
-								0,
-								0,
-								0,
-							),
-						),
-						designation: tEn("orthros"),
-						designationRu: tRu("orthros"),
-					},
-					{
-						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(
-								12,
-								30,
-								0,
-								0,
-							),
-						),
-						designation: tEn("confessions"),
-						designationRu: tRu("confessions"),
-					},
-					{
-						time: new Date(
-							new Date(scheduleItemDate.toDateString()).setHours(
-								13,
-								0,
-								0,
-								0,
-							),
-						),
-						designation: tEn("liturgy"),
-						designationRu: tRu("liturgy"),
-					},
-				],
-			};
-			return scheduleItem;
-		}
-		scheduleItem = await _getNextDefaultScheduleItem(
-			new Date(
-				new Date(scheduleItemDate).setDate(
-					scheduleItemDate.getDate() - 1,
-				),
-			),
-		); // HACK
-	}
-	return scheduleItem;
 }

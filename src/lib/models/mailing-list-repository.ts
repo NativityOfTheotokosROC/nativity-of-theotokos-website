@@ -3,7 +3,7 @@ import {
 	InputModelInteraction,
 	InteractiveModel,
 } from "@mvc-react/mvc";
-import { Notification } from "../types/general";
+import { Notification } from "../utilities/types";
 
 export type MailingListStatus =
 	| (Notification<"subscribed"> & { text: string })

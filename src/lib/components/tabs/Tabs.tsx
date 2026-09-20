@@ -22,12 +22,12 @@ const Tabs = function ({
 			}}
 		>
 			<TabList
-				className={`flex items-center ${(tabsPosition === "center" && "justify-center") || (tabsPosition === "start" && "justify-start") || (tabsPosition === "end" && "justify-end")} gap-1`}
+				className={`flex items-end ${(tabsPosition === "center" && "justify-center") || (tabsPosition === "start" && "justify-start") || (tabsPosition === "end" && "justify-end")} gap-1`}
 			>
 				{tabs.map((tab, index) => (
 					<Tab
 						key={index}
-						className="flex items-center border-b-5 border-gray-300 p-4 py-2 text-sm uppercase focus:outline-none data-hover:border-gray-600 data-selected:border-gray-900"
+						className="flex items-center border-b-5 border-gray-300 p-4 py-2 text-sm wrap-break-word hyphens-auto uppercase focus:outline-none data-hover:border-gray-600 data-selected:border-gray-900"
 						as={"button"}
 					>
 						{tab.modelView.name}

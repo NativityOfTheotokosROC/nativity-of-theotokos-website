@@ -7,8 +7,8 @@ import {
 export type ConfirmationDialogModelView = {
 	isOpen: boolean;
 	message: string;
-	proceedCallback: () => Promise<void>;
-	cancelCallback?: () => Promise<void>;
+	proceedCallback: () => void;
+	cancelCallback?: () => void;
 	options?: Partial<{
 		title: string;
 		useTitleHeading?: boolean;
@@ -23,8 +23,9 @@ export type ConfirmationDialogModelInteraction =
 			"OPEN",
 			{
 				message: string;
-				proceedCallback: () => Promise<void>;
-				cancelCallback?: () => Promise<void>;
+				// TODO: Sus ...
+				proceedCallback: () => void;
+				cancelCallback?: () => void;
 			}
 	  >;
 

@@ -1,8 +1,20 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { ScheduleItem } from "../types/general";
+import {
+	InstantaneousScheduleItemWithOptionalId,
+	RecurringScheduleItemInstanceWithOptionalId,
+} from "../utilities/schedule";
+import { ScheduleItemModelView } from "./schedule-item";
 
-export type SchedulePreviewWidgetModelView = {
-	scheduleItems: ScheduleItem[];
+export type SchedulePreviewWidgetModelView<
+	T =
+		| InstantaneousScheduleItemWithOptionalId
+		| RecurringScheduleItemInstanceWithOptionalId,
+> = {
+	schedule: T[];
+	highlightedScheduleItem?: T;
+	maxDisplayedItems?: number;
+	displayRemoved?: boolean;
+	scheduleItemOptions?: ScheduleItemModelView["options"];
 };
 
 export type SchedulePreviewWidgetModel =

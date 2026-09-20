@@ -3,7 +3,7 @@
 import { auth } from "@/auth";
 import { headers } from "next/headers";
 import { forbidden } from "next/navigation";
-import { Role } from "../types/general";
+import { Role } from "../utilities/types";
 import { getUserInformation } from "./user";
 
 export async function protect(options?: Partial<{ roles: Role[] }>) {

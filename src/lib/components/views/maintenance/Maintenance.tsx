@@ -1,7 +1,7 @@
 "use client";
 
 import MaintenanceGraphic from "@/public/assets/ornament_36.svg";
-import { Language } from "@/src/lib/types/general";
+import { Language } from "@/src/lib/utilities/types";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";

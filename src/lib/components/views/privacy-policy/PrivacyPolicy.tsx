@@ -1,5 +1,5 @@
 import PageView from "@/src/lib/components/page-view/PageView";
-import { Language } from "@/src/lib/types/general";
+import { Language } from "@/src/lib/utilities/types";
 import { MAILING_ADDRESS } from "@/src/lib/utilities/constants";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";

@@ -1,13 +1,12 @@
 "use client";
 
-import { georgia } from "@/src/lib/third-party/fonts";
-import { ModeledVoidComponent } from "@mvc-react/components";
+import ErrorGraphic from "@/public/assets/graphic-3.svg";
 import { ErrorPageModel } from "@/src/lib/models/error-page";
+import { ModeledVoidComponent } from "@mvc-react/components";
+import { InitializedModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import ErrorGraphic from "@/public/assets/graphic-3.svg";
-import { InitializedModel } from "@mvc-react/mvc";
-import PageView from "../../page-view/PageView";
+import InformationView from "../../information-view/InformationView";
 
 const Error = function ({ model }) {
 	const { modelView, interact } = model;
@@ -15,11 +14,15 @@ const Error = function ({ model }) {
 	const t = useTranslations("error");
 
 	return (
-		<PageView model={{ modelView: { topBarColor: "#460809" } }}>
-			<ErrorGraphic className="h-54 w-64 md:h-48" opacity={0.9} />
-			<span className={`text-4xl font-semibold ${georgia.className}`}>
-				{t("title")}
-			</span>
+		<InformationView
+			model={{
+				modelView: {
+					topBarColor: "#460809",
+					mainMessage: t("title"),
+					Graphic: ErrorGraphic,
+				},
+			}}
+		>
 			<span className="text-lg [&_a]:underline [&_a:hover]:text-[#ffdc4f]">
 				{`${t("description")}, `}
 				<Link href="mailto:info@nativityoftheotokos.com">{`${t("contactUs")}.`}</Link>
@@ -33,7 +36,7 @@ const Error = function ({ model }) {
 			>
 				{t("tryAgain")}
 			</button>
-		</PageView>
+		</InformationView>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ErrorPageModel>>;
 

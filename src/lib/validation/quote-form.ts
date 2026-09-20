@@ -1,6 +1,6 @@
 import z from "zod";
-import { Translator } from "../types/general";
-import { useLocalizedSchema } from "./general";
+import { Translator } from "../utilities/types";
+import { useLocalizedSchema } from "./utilities";
 import { getQuoteSchema } from "./quote";
 
 export function getQuoteFormSchema(t?: Translator) {

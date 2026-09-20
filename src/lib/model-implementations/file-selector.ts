@@ -3,15 +3,13 @@ import {
 	ViewInteractionInterface,
 } from "@mvc-react/stateful";
 import {
-	FileSelectorButtonModel,
-	FileSelectorButtonModelInteraction,
-	FileSelectorButtonModelView,
+	FileSelectorModel,
+	FileSelectorModelInteraction,
+	FileSelectorModelView,
 	FileType,
-} from "../models/file-selector-button";
+} from "../models/file-selector";
 
-function fileSelectorButtonVIInterface(
-	selectCallback?: (file: File) => Promise<void>,
-) {
+function fileSelectorVIInterface(selectCallback?: (file: File) => void) {
 	return {
 		async produceModelView(interaction, currentModelView) {
 			switch (interaction.type) {
@@ -27,19 +25,19 @@ function fileSelectorButtonVIInterface(
 			}
 		},
 	} satisfies ViewInteractionInterface<
-		FileSelectorButtonModelView,
-		FileSelectorButtonModelInteraction
+		FileSelectorModelView,
+		FileSelectorModelInteraction
 	>;
 }
 
-export function useFileSelectorButton(
+export function useFileSelector(
 	options?: Partial<{
 		type: FileType;
-		selectCallback: (file: File) => Promise<void>;
+		selectCallback: (file: File) => void;
 	}>,
 ) {
 	const model = useInitializedStatefulInteractiveModel(
-		fileSelectorButtonVIInterface(options?.selectCallback),
+		fileSelectorVIInterface(options?.selectCallback),
 		{
 			file: null,
 			type: options?.type,

@@ -1,5 +1,5 @@
 import { InteractiveModel, ModelInteraction } from "@mvc-react/mvc";
-import { Navlink } from "../types/general";
+import { Navlink } from "../utilities/types";
 
 export type NavigationDrawerType = "sidebar" | "accordion";
 

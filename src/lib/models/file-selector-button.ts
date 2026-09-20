@@ -1,18 +1,11 @@
-import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
-
-export type FileType = "image" | "audio" | "video";
+import { InitializedModel, Model } from "@mvc-react/mvc";
+import { ReactNode } from "react";
+import { FileSelectorModel } from "./file-selector";
 
 export type FileSelectorButtonModelView = {
-	file: File | null;
-	type?: FileType;
+	fileSelector: InitializedModel<FileSelectorModel>;
+	contents: ReactNode;
+	contentsWhenFile?: ReactNode;
 };
 
-export type FileSelectorButtonModelInteraction = InputModelInteraction<
-	"SELECT_FILE",
-	{ file: File }
->;
-
-export type FileSelectorButtonModel = InteractiveModel<
-	FileSelectorButtonModelView,
-	FileSelectorButtonModelInteraction
->;
+export type FileSelectorButtonModel = Model<FileSelectorButtonModelView>;

@@ -12,7 +12,7 @@ import {
 	NotifierModelView,
 } from "../models/notifier";
 import { ToastNotifierModel } from "./notifier";
-import { ArticleAuthor } from "../types/general";
+import { ArticleAuthor } from "../utilities/types";
 import { useTranslations } from "next-intl";
 import { InitializedModel } from "@mvc-react/mvc";
 import { useState } from "react";
@@ -54,7 +54,7 @@ export function assignArticleNotifierVIInterface(
 
 export function useAssignArticle(
 	options?: Partial<{
-		suggestions: Required<ArticleAuthor>[];
+		suggestions: AssignArticleModelView["suggestions"];
 		toastNotifier: ToastNotifierModel;
 	}>,
 ) {
@@ -90,7 +90,13 @@ export function useAssignArticle(
 						)
 							setSuggestions([
 								...newSuggestions,
-								{ email, name },
+								{
+									email,
+									name: {
+										...name,
+										russian: name.russian ?? null,
+									},
+								},
 							]);
 						interaction.input.successCallback?.();
 						await notifier.interact({

@@ -1,5 +1,5 @@
 import { InteractiveModel, ModelInteraction } from "@mvc-react/mvc";
-import { Language } from "../types/general";
+import { Language } from "../utilities/types";
 
 export type LanguageToggleModelView = {
 	alternateLanguage: Language;

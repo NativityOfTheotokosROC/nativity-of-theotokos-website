@@ -2,7 +2,7 @@ import { Link } from "@/src/lib/components/page-loading-bar/PageLoadingBar";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
-import { Language } from "../../../types/general";
+import { Language } from "../../../utilities/types";
 import PageView from "@/src/lib/components/page-view/PageView";
 
 const TermsOfService = async function ({ model }) {

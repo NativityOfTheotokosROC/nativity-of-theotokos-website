@@ -1,17 +1,12 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
+import { Notification, Options } from "../utilities/types";
 import { AutoCompleteInfo } from "../utilities/quote-form";
-import { Notification } from "../types/general";
+import { NewQuote } from "../validation/quote";
 
 export type Quote = {
 	author: string;
 	quote: string;
 	source?: string;
-};
-
-export type NewQuote = {
-	englishQuote: Quote;
-	russianQuote?: Partial<Quote>;
-	scheduledDate?: string;
 };
 
 export type NewQuoteNotification =
@@ -26,7 +21,7 @@ export type NewQuoteModelView = {
 
 export type NewQuoteModelInteraction = InputModelInteraction<
 	"ADD_QUOTE",
-	{ newQuote: NewQuote; options?: { successCallback?: () => void } }
+	{ newQuote: NewQuote } & Options<{ successCallback: () => void }>
 >;
 
 export type NewQuoteModel = InteractiveModel<

@@ -38,36 +38,62 @@ model DailyQuote {
   quoteId Int
 }
 
-model ScheduleItem {
-  id    Int         @id @default(autoincrement())
-  date  DateTime    @db.Date
-  title Translation @relation("ScheduleItemTitleTranslation", fields: [titleTranslationId], references: [id])
-  venue Translation @relation("ScheduleItemVenueTranslation", fields: [venueTranslationId], references: [id])
+model InstantaneousScheduleItem {
+  id                             Int                               @id @default(autoincrement())
+  title                          Translation                       @relation("ScheduleItemTitleTranslation", fields: [titleTranslationId], references: [id])
+  venue                          Translation                       @relation("ScheduleItemVenueTranslation", fields: [venueTranslationId], references: [id], onUpdate: Cascade)
+  date                           DateTime                          @db.Date
+  removedScheduleItem            RemovedInstantaneousScheduleItem?
+  instantaneousScheduleItemTimes InstantaneousScheduleItemTime[]
+  titleTranslationId             Int
+  venueTranslationId             Int
 
-  scheduleItemTimes   ScheduleItemTime[]
-  removedScheduleItem RemovedScheduleItem?
-
-  titleTranslationId Int
-  venueTranslationId Int
-
-  @@unique([date, venueTranslationId])
+  @@unique([venueTranslationId, date])
 }
 
-model ScheduleItemTime {
-  id             Int          @id @default(autoincrement())
-  time           DateTime     @db.Timestamptz
-  designation    Translation  @relation(fields: [designationTranslationId], references: [id])
-  scheduleItem   ScheduleItem @relation(fields: [scheduleItemId], references: [id], onDelete: Cascade)
-  scheduleItemId Int
+model RecurringScheduleItem {
+  id                            Int                            @id @default(autoincrement())
+  title                         Translation                    @relation("ScheduleItemTitleTranslation", fields: [titleTranslationId], references: [id])
+  venue                         Translation                    @relation("ScheduleItemVenueTranslation", fields: [venueTranslationId], references: [id], onUpdate: Cascade)
+  pattern                       String
+  disabledRecurringScheduleItem DisabledRecurringScheduleItem?
+  recurringScheduleItemTimes    RecurringScheduleItemTime[]
+  titleTranslationId            Int
+  venueTranslationId            Int
 
+  @@unique([venueTranslationId, pattern])
+}
+
+model InstantaneousScheduleItemTime {
+  id                          Int                       @id @default(autoincrement())
+  time                        DateTime                  @db.Time
+  designation                 Translation               @relation(fields: [designationTranslationId], references: [id], onUpdate: Cascade)
+  instantaneousScheduledItem  InstantaneousScheduleItem @relation(fields: [instantaneousScheduleItemId], references: [id], onDelete: Cascade)
+  designationTranslationId    Int
+  instantaneousScheduleItemId Int
+
+  @@unique([instantaneousScheduleItemId, designationTranslationId, time])
+}
+
+model RecurringScheduleItemTime {
+  id                       Int                   @id @default(autoincrement())
+  time                     DateTime              @db.Time
+  designation              Translation           @relation(fields: [designationTranslationId], references: [id], onUpdate: Cascade)
+  recurringScheduledItem   RecurringScheduleItem @relation(fields: [recurringScheduleItemId], references: [id], onDelete: Cascade)
   designationTranslationId Int
+  recurringScheduleItemId  Int
 
-  @@unique([time, scheduleItemId])
+  @@unique([recurringScheduleItemId, designationTranslationId, time])
 }
 
-model RemovedScheduleItem {
-  scheduleItemId Int          @id
-  scheduleItem   ScheduleItem @relation(fields: [scheduleItemId], references: [id], onDelete: Cascade)
+model RemovedInstantaneousScheduleItem {
+  scheduleItem                InstantaneousScheduleItem @relation(fields: [instantaneousScheduleItemId], references: [id], onDelete: Cascade)
+  instantaneousScheduleItemId Int                       @id
+}
+
+model DisabledRecurringScheduleItem {
+  scheduleItem            RecurringScheduleItem @relation(fields: [recurringScheduleItemId], references: [id], onDelete: Cascade)
+  recurringScheduleItemId Int                   @id
 }
 
 model Article {
@@ -179,17 +205,20 @@ model Translation {
   russian     String?
   englishHash String  @unique
 
-  articleImageCaptions         ArticleImage[]
-  articleAuthors               ArticleAuthor[]
-  quoteAuthors                 QuoteAuthor[]
-  quoteTranslations            Quote[]            @relation("QuoteTranslation")
-  quoteSourceTranslations      Quote[]            @relation("QuoteSourceTranslation")
-  scheduleItemTitles           ScheduleItem[]     @relation("ScheduleItemTitleTranslation")
-  scheduleItemVenues           ScheduleItem[]     @relation("ScheduleItemVenueTranslation")
-  scheduleItemTimeDesignations ScheduleItemTime[]
-  articleTitleTranslations     Article[]          @relation("ArticleTitleTranslation")
-  articleBodyTranslations      Article[]          @relation("ArticleBodyTranslation")
-  articleSnippetTranslations   Article[]          @relation("ArticleSnippetTranslation")
+  articleImageCaptions                     ArticleImage[]
+  articleAuthors                           ArticleAuthor[]
+  quoteAuthors                             QuoteAuthor[]
+  quoteTranslations                        Quote[]                         @relation("QuoteTranslation")
+  quoteSourceTranslations                  Quote[]                         @relation("QuoteSourceTranslation")
+  articleTitleTranslations                 Article[]                       @relation("ArticleTitleTranslation")
+  articleBodyTranslations                  Article[]                       @relation("ArticleBodyTranslation")
+  articleSnippetTranslations               Article[]                       @relation("ArticleSnippetTranslation")
+  instantaneousTimeDesignationTranslations InstantaneousScheduleItemTime[]
+  recurringTimeDesignationTranslations     RecurringScheduleItemTime[]
+  instantaneousScheduleItemTitles          InstantaneousScheduleItem[]     @relation("ScheduleItemTitleTranslation")
+  instantaneousScheduleItemsVenues         InstantaneousScheduleItem[]     @relation("ScheduleItemVenueTranslation")
+  recurringScheduleItemTitles              RecurringScheduleItem[]         @relation("ScheduleItemTitleTranslation")
+  recurringScheduleItemVenues              RecurringScheduleItem[]         @relation("ScheduleItemVenueTranslation")
 }
 
 model Commemoration {

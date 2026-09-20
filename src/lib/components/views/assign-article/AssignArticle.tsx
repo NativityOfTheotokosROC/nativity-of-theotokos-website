@@ -1,16 +1,17 @@
+import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complete-box";
 import { AssignArticleModel } from "@/src/lib/models/assign-article";
+import { useArticleAuthorSchema } from "@/src/lib/validation/article";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import PageView from "../../page-view/PageView";
-import { Controller, useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useAssignArticleFormSchema } from "@/src/lib/validation/assign-article-form";
-import Button from "../../button/Button";
-import Spinner from "../../spinner/Spinner";
-import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complete-box";
+import { Controller, useForm } from "react-hook-form";
 import AutoCompleteBox from "../../auto-complete-box/AutoCompleteBox";
-import { useEffect } from "react";
+import Button from "../../button/Button";
+import PageView from "../../page-view/PageView";
+import Spinner from "../../spinner/Spinner";
+import { autoCompleteFields } from "@/src/lib/utilities/auto-complete-box";
+import { BLANK_TRANSLATION } from "@/src/lib/utilities/constants";
 
 const AssignArticle = function ({ model }) {
 	const { modelView, interact } = model;
@@ -23,38 +24,43 @@ const AssignArticle = function ({ model }) {
 		reset,
 		formState: { errors, isSubmitting },
 	} = useForm({
-		defaultValues: { name: "", email: "" },
-		resolver: zodResolver(useAssignArticleFormSchema()),
+		defaultValues: { name: BLANK_TRANSLATION, email: "" },
+		resolver: zodResolver(useArticleAuthorSchema()),
 	});
-	// TODO: It's been a run; we start from here next time
-	const authorNamesAutoCompleteBox = useAutoCompleteBox({
-		id: "author-name",
-		isOpen: false,
-		items: suggestions?.map(author => author.name) ?? [],
-		query: "",
-		selectCallback(value, index) {
-			// Don't know why setValues is not working here
-			setValue("name", value);
-			setValue("email", suggestions![index].email);
+	const autoCompleteSelectCallback = (
+		author: NonNullable<typeof suggestions>[number],
+	) => {
+		// Don't know why setValues is not working here
+		setValue("name", author.name);
+		setValue("email", author.email);
+	};
+	const englishAuthorNameAutoCompleteBox = useAutoCompleteBox(
+		{
+			id: "author-name",
+			items: suggestions ?? [],
+			transformer: author => author.name.english,
 		},
-	});
-	const authorEmailsAutoCompleteBox = useAutoCompleteBox({
-		id: "author-email",
-		isOpen: false,
-		items: suggestions?.map(author => author.email) ?? [],
-		query: "",
-		selectCallback(value, index) {
-			setValue("email", value);
-			setValue("name", suggestions![index].name);
+		autoCompleteSelectCallback,
+	);
+	const authorEmailAutoCompleteBox = useAutoCompleteBox(
+		{
+			id: "author-email",
+			items: suggestions ?? [],
+			transformer: author => author.email,
 		},
-	});
+		autoCompleteSelectCallback,
+	);
+	const englishAuthorNameFields = autoCompleteFields(
+		englishAuthorNameAutoCompleteBox,
+	);
+	const authorEmailFields = autoCompleteFields(authorEmailAutoCompleteBox);
 
 	return (
 		<>
 			{suggestions && (
 				<>
-					<AutoCompleteBox model={authorNamesAutoCompleteBox} />
-					<AutoCompleteBox model={authorEmailsAutoCompleteBox} />
+					<AutoCompleteBox model={englishAuthorNameAutoCompleteBox} />
+					<AutoCompleteBox model={authorEmailAutoCompleteBox} />
 				</>
 			)}
 			<PageView model={newReadonlyModel({ title: t("metaTitle") })}>
@@ -63,8 +69,8 @@ const AssignArticle = function ({ model }) {
 						await interact({
 							type: "ASSIGN_ARTICLE",
 							input: {
-								author: { name: form.name, email: form.email },
-								async successCallback() {
+								author: form,
+								successCallback() {
 									reset();
 								},
 							},
@@ -73,7 +79,7 @@ const AssignArticle = function ({ model }) {
 				>
 					<div className="flex flex-col gap-3 md:max-w-1/2 lg:max-w-1/3">
 						<Controller
-							name="name"
+							name="name.english"
 							control={control}
 							render={({
 								field: { onChange, onBlur, name, value },
@@ -81,43 +87,24 @@ const AssignArticle = function ({ model }) {
 								<input
 									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.name ? "border-red-800" : "border-gray-400"}`}
 									placeholder={t("authorNameField")}
-									autoComplete="off"
 									autoCapitalize="words"
 									name={name}
 									value={value}
-									data-tooltip-id={
-										authorNamesAutoCompleteBox.modelView.id
+									autoComplete={
+										englishAuthorNameFields.autoComplete
 									}
-									onChange={async e => {
+									data-tooltip-id={
+										englishAuthorNameFields.dataTooltipId
+									}
+									onChange={e => {
 										onChange(e);
-										await authorNamesAutoCompleteBox.interact(
-											{
-												type: "TOGGLE",
-												input: {
-													value: !(
-														e.target.value.trim() ===
-														""
-													),
-												},
-											},
-										);
-										await authorNamesAutoCompleteBox.interact(
-											{
-												type: "FILTER",
-												input: {
-													query: e.target.value,
-												},
-											},
+										englishAuthorNameFields.onChange(
+											e.target.value,
 										);
 									}}
 									onBlur={() => {
 										onBlur();
-										authorNamesAutoCompleteBox.interact({
-											type: "TOGGLE",
-											input: {
-												value: false,
-											},
-										});
+										englishAuthorNameFields.onBlur();
 									}}
 								/>
 							)}
@@ -136,43 +123,24 @@ const AssignArticle = function ({ model }) {
 								<input
 									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.email ? "border-red-800" : "border-gray-400"}`}
 									placeholder={t("emailField")}
-									autoComplete="off"
 									type="email"
 									name={name}
 									value={value}
-									data-tooltip-id={
-										authorEmailsAutoCompleteBox.modelView.id
+									autoComplete={
+										authorEmailFields.autoComplete
 									}
-									onChange={async e => {
+									data-tooltip-id={
+										authorEmailFields.dataTooltipId
+									}
+									onChange={e => {
 										onChange(e);
-										await authorEmailsAutoCompleteBox.interact(
-											{
-												type: "TOGGLE",
-												input: {
-													value: !(
-														e.target.value.trim() ===
-														""
-													),
-												},
-											},
-										);
-										await authorEmailsAutoCompleteBox.interact(
-											{
-												type: "FILTER",
-												input: {
-													query: e.target.value,
-												},
-											},
+										authorEmailFields.onChange(
+											e.target.value,
 										);
 									}}
 									onBlur={() => {
 										onBlur();
-										authorEmailsAutoCompleteBox.interact({
-											type: "TOGGLE",
-											input: {
-												value: false,
-											},
-										});
+										authorEmailFields.onBlur();
 									}}
 								/>
 							)}
