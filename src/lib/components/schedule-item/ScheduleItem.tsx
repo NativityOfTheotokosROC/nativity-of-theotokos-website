@@ -154,7 +154,7 @@ const ScheduleItem = function ({ model }) {
 								instantaneousScheduleItemHasId(
 									scheduleItem,
 								))) && (
-							<div className="contents pointer-fine:invisible pointer-fine:group-hover/edit-bar:visible">
+							<div className="">
 								<EditScheduleItemPanel
 									model={newReadonlyModel({
 										event:

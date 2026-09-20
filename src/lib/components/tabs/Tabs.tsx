@@ -22,7 +22,7 @@ const Tabs = function ({
 			}}
 		>
 			<TabList
-				className={`flex items-center ${(tabsPosition === "center" && "justify-center") || (tabsPosition === "start" && "justify-start") || (tabsPosition === "end" && "justify-end")} gap-1`}
+				className={`flex items-end ${(tabsPosition === "center" && "justify-center") || (tabsPosition === "start" && "justify-start") || (tabsPosition === "end" && "justify-end")} gap-1`}
 			>
 				{tabs.map((tab, index) => (
 					<Tab

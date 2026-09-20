@@ -31,7 +31,7 @@ const RecurringScheduleItem = function ({ model }) {
 	return (
 		<div
 			className={twMerge(
-				"schedule-item recurring-schedule-item group/edit-bar flex min-h-fit flex-col gap-1 overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3] px-5.5 py-4",
+				"schedule-item recurring-schedule-item flex min-h-fit flex-col gap-1 overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3] px-5.5 py-4",
 				isDisabled && "grayscale",
 			)}
 		>
@@ -54,7 +54,7 @@ const RecurringScheduleItem = function ({ model }) {
 				</div>
 			))}
 			{options?.modifyCallbacks && (
-				<div className="contents pointer-fine:invisible pointer-fine:group-hover/edit-bar:visible">
+				<div className="self-end">
 					<EditScheduleItemPanel
 						model={newReadonlyModel({
 							event: { type: "recurring", scheduleItem },

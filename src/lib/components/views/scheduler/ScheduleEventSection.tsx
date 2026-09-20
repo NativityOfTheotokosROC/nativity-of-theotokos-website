@@ -164,7 +164,14 @@ const ScheduleEventSection = function ({ model }) {
 	useEffect(() => {
 		const { scheduleItem } = scheduleEvent;
 		if (scheduleItem) {
-			reset(scheduleItem);
+			reset(
+				"date" in scheduleItem
+					? {
+							...scheduleItem,
+							date: getDateString(scheduleItem.date, true),
+						}
+					: scheduleItem,
+			);
 		} else {
 			reset();
 		}

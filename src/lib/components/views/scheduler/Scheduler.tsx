@@ -49,7 +49,8 @@ const Scheduler = function ({ model }) {
 	);
 	const confirmationDialog = useConfirmationDialog();
 	const modifyCallbacks = {
-		editCallback(event) {
+		async editCallback(event) {
+			await tabs.interact({ type: "SWITCH_TAB", input: { id: 0 } });
 			switch (event.type) {
 				case "specific": {
 					const scheduleItem = instantaneousScheduleItems.find(
