@@ -178,11 +178,9 @@ const ScheduleEventSection = function ({ model }) {
 	}, [reset, scheduleEvent]);
 
 	useEffect(() => {
-		if (lastForm === currentForm) return;
 		if (isValid && isDirty && options?.isNewEventValidCallback) {
-			let newEvent;
 			if (scheduleEvent.type === "recurring") {
-				newEvent = {
+				const newEvent = {
 					type: "recurring",
 					scheduleItem:
 						recurringScheduleItemSchema.safeParse(currentForm).data,
@@ -196,7 +194,7 @@ const ScheduleEventSection = function ({ model }) {
 						: undefined,
 				);
 			} else {
-				newEvent = {
+				const newEvent = {
 					type: "specific",
 					scheduleItem:
 						instantaneousScheduleItemSchema.safeParse(currentForm)
@@ -219,7 +217,6 @@ const ScheduleEventSection = function ({ model }) {
 		instantaneousScheduleItemSchema,
 		isDirty,
 		isValid,
-		lastForm,
 		options,
 		recurringScheduleItemSchema,
 		scheduleEvent.type,

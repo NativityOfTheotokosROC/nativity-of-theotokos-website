@@ -30,10 +30,7 @@ const ScheduleItem = function ({ model }) {
 	const nativeTimes = times
 		.map(({ designation, time }) => ({
 			designation,
-			time: toZonedTime(
-				`${getDateString(date)}T${time}`,
-				getNativeTimeZone(),
-			),
+			time: new Date(`${getDateString(nativeDate)}T${time}`),
 		}))
 		.slice(0, maxDisplayedTimes ?? 3);
 	const isPending =
@@ -92,7 +89,7 @@ const ScheduleItem = function ({ model }) {
 								instantaneousScheduleItemHasId(
 									scheduleItem,
 								))) && (
-							<div className="self-end">
+							<div className="mt-auto">
 								<EditScheduleItemPanel
 									model={newReadonlyModel({
 										event:
@@ -118,7 +115,7 @@ const ScheduleItem = function ({ model }) {
 			<div
 				className={twMerge(
 					"schedule-item flex h-fit items-center overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3]",
-					scheduleItem.isRemoved && "grayscale",
+					scheduleItem.isRemoved && "opacity-65 grayscale",
 					isPending && "border-dashed",
 					options?.className,
 				)}
@@ -154,23 +151,21 @@ const ScheduleItem = function ({ model }) {
 								instantaneousScheduleItemHasId(
 									scheduleItem,
 								))) && (
-							<div className="">
-								<EditScheduleItemPanel
-									model={newReadonlyModel({
-										event:
-											"recurringItemId" in scheduleItem
-												? {
-														type: "recurringInstance",
-														scheduleItem,
-													}
-												: {
-														type: "specific",
-														scheduleItem,
-													},
-										callbacks: options.modifyCallbacks,
-									})}
-								/>
-							</div>
+							<EditScheduleItemPanel
+								model={newReadonlyModel({
+									event:
+										"recurringItemId" in scheduleItem
+											? {
+													type: "recurringInstance",
+													scheduleItem,
+												}
+											: {
+													type: "specific",
+													scheduleItem,
+												},
+									callbacks: options.modifyCallbacks,
+								})}
+							/>
 						)}
 				</div>
 			</div>

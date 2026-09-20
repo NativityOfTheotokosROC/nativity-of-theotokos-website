@@ -14,7 +14,7 @@ export async function getScheduleItems(referenceDate: Date | string) {
 	const parsedReferenceDate = new Date(
 		typeof referenceDate === "string"
 			? z.iso.date().parse(referenceDate)
-			: getDateString(referenceDate, true),
+			: getDateString(referenceDate),
 	);
 
 	const [instantaneousScheduleItemRecords, recurringScheduleItemRecords] =
@@ -77,7 +77,7 @@ export async function getScheduleItems(referenceDate: Date | string) {
 				times: instantaneousScheduleItemTimes.map(
 					({ designation, time }) => ({
 						designation,
-						time: getTimeString(time, true),
+						time: getTimeString(time),
 					}),
 				),
 			}),
@@ -99,7 +99,7 @@ export async function getScheduleItems(referenceDate: Date | string) {
 				times: recurringScheduleItemTimes.map(
 					({ designation, time }) => ({
 						designation,
-						time: getTimeString(time, true),
+						time: getTimeString(time),
 					}),
 				),
 			}),

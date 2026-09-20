@@ -32,7 +32,7 @@ const RecurringScheduleItem = function ({ model }) {
 		<div
 			className={twMerge(
 				"schedule-item recurring-schedule-item flex min-h-fit flex-col gap-1 overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3] px-5.5 py-4",
-				isDisabled && "grayscale",
+				isDisabled && "opacity-65 grayscale",
 			)}
 		>
 			<span className="text-xl">{title}</span>
@@ -54,7 +54,7 @@ const RecurringScheduleItem = function ({ model }) {
 				</div>
 			))}
 			{options?.modifyCallbacks && (
-				<div className="self-end">
+				<div className="mt-auto">
 					<EditScheduleItemPanel
 						model={newReadonlyModel({
 							event: { type: "recurring", scheduleItem },

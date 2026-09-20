@@ -309,7 +309,7 @@ export async function scheduleRecurringItem(
 	const scheduleItemSchema = getRecurringScheduleItemSchema(t);
 	const { title, venue, recurringPattern, times, isDisabled } =
 		scheduleItemSchema.parse(newScheduleItem);
-	const date = getDateString(new Date());
+	const tokenDate = getDateString(new Date());
 	const result = await database.$transaction(async transaction => {
 		const scheduleItem = await transaction.recurringScheduleItem.create({
 			data: {
@@ -363,7 +363,7 @@ export async function scheduleRecurringItem(
 							},
 						},
 					},
-					time: new Date(`${date}T${time}`),
+					time: new Date(`${tokenDate}T${time}`),
 				},
 			});
 		}
@@ -484,7 +484,7 @@ export async function updateRecurringItem(
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const { title, venue, recurringPattern, times, isDisabled } =
 		getRecurringScheduleItemSchema(t).parse(newScheduleItem);
-	const date = getDateString(new Date());
+	const tokenDate = getDateString(new Date());
 
 	await database.$transaction(async transaction => {
 		await transaction.recurringScheduleItem.update({
@@ -539,7 +539,7 @@ export async function updateRecurringItem(
 									});
 								return {
 									designationTranslationId_time: {
-										time: new Date(`${date}T${time}`),
+										time: new Date(`${tokenDate}T${time}`),
 										designationTranslationId:
 											designationTranslation.id,
 									},

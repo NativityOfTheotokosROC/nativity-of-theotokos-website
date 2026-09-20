@@ -195,7 +195,6 @@ export function parseNewScheduleItem(
 		};
 	return {
 		...scheduleItem,
-		times: scheduleItem.times,
 		date: new Date(scheduleItem.date),
 		isRemoved: scheduleItem.isRemoved ?? false,
 	};
