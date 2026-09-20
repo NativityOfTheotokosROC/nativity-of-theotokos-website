@@ -57,6 +57,7 @@ const ScheduleEventSection = function ({ model }) {
 			title: BLANK_TRANSLATION,
 			venue: BLANK_TRANSLATION,
 			date: getDateString(addDays(new Date(), 1), true),
+			recurringPattern: "",
 			times: [{ designation: BLANK_TRANSLATION, time: "09:00" }],
 		},
 		mode: "onChange",
@@ -413,9 +414,9 @@ const ScheduleEventSection = function ({ model }) {
 										field: { value, onChange },
 										fieldState: { error },
 									}) => {
-										const days = transformPatternToDays(
-														value,
-													) ?? new Set<Day>()
+										const days =
+											transformPatternToDays(value) ??
+											new Set<Day>();
 										const dayTranslationMap = new Map(
 											ALL_DAYS_ARRAY.map(DAY => {
 												let translation;
@@ -479,7 +480,9 @@ const ScheduleEventSection = function ({ model }) {
 																			{
 																				labelPosition:
 																					"top",
-																					checkboxClassName: error && "border-red-800"
+																				checkboxClassName:
+																					error &&
+																					"border-red-800",
 																			},
 																		checkedChangeCallback(
 																			checked,
@@ -507,7 +510,8 @@ const ScheduleEventSection = function ({ model }) {
 																						: undefined,
 																				);
 																			onChange(
-																				newPattern ?? "",
+																				newPattern ??
+																					"",
 																			);
 																		},
 																	},
