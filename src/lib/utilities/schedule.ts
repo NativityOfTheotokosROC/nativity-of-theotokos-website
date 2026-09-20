@@ -129,7 +129,7 @@ export function generateSchedule<T extends Text = string>(
 		| RecurringScheduleItemInstanceWithOptionalId<T>
 	>([
 		...recurringScheduleItems
-			.filter(scheduleItem => scheduleItem.isDisabled)
+			.filter(scheduleItem => !scheduleItem.isDisabled)
 			.flatMap(activeItem =>
 				getNextRecurringScheduleItemInstances(
 					activeItem,

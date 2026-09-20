@@ -1,29 +1,26 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { RecurringScheduleItemModel } from "../../models/recurring-schedule-item";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import { twMerge } from "tailwind-merge";
-import { toZonedTime } from "date-fns-tz";
-import {
-	getNativeTimeZone,
-	pickTimeTranslation,
-} from "../../utilities/date-time";
-import { useLocale, useTranslations } from "next-intl";
-import EditScheduleItemPanel from "./EditScheduleItemPanel";
 import cronstrue from "cronstrue";
 import "cronstrue/locales/en";
 import "cronstrue/locales/ru";
+import { useLocale, useTranslations } from "next-intl";
+import { twMerge } from "tailwind-merge";
+import { RecurringScheduleItemModel } from "../../models/recurring-schedule-item";
+import { getDateString, pickTimeTranslation } from "../../utilities/date-time";
+import EditScheduleItemPanel from "./EditScheduleItemPanel";
 
 const RecurringScheduleItem = function ({ model }) {
 	const { scheduleItem, options, maxDisplayedTimes = 3 } = model.modelView;
 	const { title, venue, times, recurringPattern, isDisabled } = scheduleItem;
 	const locale = useLocale();
 	const t = useTranslations("recurringScheduleItem");
+	const tokenDate = new Date();
 	const nativeTimes = times
-		.map(time => ({
-			...time,
-			time: toZonedTime(time.time, getNativeTimeZone()),
+		.map(({ time, designation }) => ({
+			designation,
+			time: new Date(`${getDateString(tokenDate)}T${time}`),
 		}))
-		.slice(0, maxDisplayedTimes ?? 3);
+		.slice(0, maxDisplayedTimes);
 	const description = t("description", {
 		parsedCronString: cronstrue.toString(recurringPattern, { locale }),
 	});
@@ -33,6 +30,7 @@ const RecurringScheduleItem = function ({ model }) {
 			className={twMerge(
 				"schedule-item recurring-schedule-item flex min-h-fit flex-col gap-1 overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3] px-5.5 py-4",
 				isDisabled && "opacity-65 grayscale",
+				options?.className,
 			)}
 		>
 			<span className="text-xl">{title}</span>
