@@ -416,39 +416,39 @@ export async function updateInstantaneousItem(
 				},
 				date: new Date(date),
 				instantaneousScheduleItemTimes: {
-					set: await Promise.all(
-						times.map(
-							async ({
-								time,
-								designation: { english, russian },
-							}) => {
-								const designationTranslation =
-									await transaction.translation.upsert({
-										create: {
-											english,
-											russian,
-											englishHash: getMd5Hash(english),
-										},
-										update: {
-											russian,
-										},
-										where: {
-											englishHash: getMd5Hash(english),
-										},
-									});
-								return {
-									instantaneousScheduleItemId_designationTranslationId_time:
-										{
-											instantaneousScheduleItemId:
-												scheduleItemId,
-											time: new Date(`${date}T${time}`),
-											designationTranslationId:
-												designationTranslation.id,
-										},
-								};
-							},
+					deleteMany: {},
+					createMany: {
+						data: await Promise.all(
+							times.map(
+								async ({
+									time,
+									designation: { english, russian },
+								}) => {
+									const designationTranslation =
+										await transaction.translation.upsert({
+											create: {
+												english,
+												russian,
+												englishHash:
+													getMd5Hash(english),
+											},
+											update: {
+												russian,
+											},
+											where: {
+												englishHash:
+													getMd5Hash(english),
+											},
+										});
+									return {
+										time: new Date(`${date}T${time}`),
+										designationTranslationId:
+											designationTranslation.id,
+									};
+								},
+							),
 						),
-					),
+					},
 				},
 				removedScheduleItem:
 					isRemoved !== undefined
@@ -520,41 +520,39 @@ export async function updateRecurringItem(
 				},
 				pattern: recurringPattern,
 				recurringScheduleItemTimes: {
-					set: await Promise.all(
-						times.map(
-							async ({
-								time,
-								designation: { english, russian },
-							}) => {
-								const designationTranslation =
-									await transaction.translation.upsert({
-										create: {
-											english,
-											russian,
-											englishHash: getMd5Hash(english),
-										},
-										update: {
-											russian,
-										},
-										where: {
-											englishHash: getMd5Hash(english),
-										},
-									});
-								return {
-									recurringScheduleItemId_designationTranslationId_time:
-										{
-											recurringScheduleItemId:
-												scheduleItemId,
-											time: new Date(
-												`${tokenDate}T${time}`,
-											),
-											designationTranslationId:
-												designationTranslation.id,
-										},
-								};
-							},
+					deleteMany: {},
+					createMany: {
+						data: await Promise.all(
+							times.map(
+								async ({
+									time,
+									designation: { english, russian },
+								}) => {
+									const designationTranslation =
+										await transaction.translation.upsert({
+											create: {
+												english,
+												russian,
+												englishHash:
+													getMd5Hash(english),
+											},
+											update: {
+												russian,
+											},
+											where: {
+												englishHash:
+													getMd5Hash(english),
+											},
+										});
+									return {
+										time: new Date(`${tokenDate}T${time}`),
+										designationTranslationId:
+											designationTranslation.id,
+									};
+								},
+							),
 						),
-					),
+					},
 				},
 				disabledRecurringScheduleItem:
 					isDisabled !== undefined
