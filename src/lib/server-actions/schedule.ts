@@ -437,11 +437,14 @@ export async function updateInstantaneousItem(
 										},
 									});
 								return {
-									designationTranslationId_time: {
-										time: new Date(`${date}T${time}`),
-										designationTranslationId:
-											designationTranslation.id,
-									},
+									instantaneousScheduleItemId_designationTranslationId_time:
+										{
+											instantaneousScheduleItemId:
+												scheduleItemId,
+											time: new Date(`${date}T${time}`),
+											designationTranslationId:
+												designationTranslation.id,
+										},
 								};
 							},
 						),
@@ -538,11 +541,16 @@ export async function updateRecurringItem(
 										},
 									});
 								return {
-									designationTranslationId_time: {
-										time: new Date(`${tokenDate}T${time}`),
-										designationTranslationId:
-											designationTranslation.id,
-									},
+									recurringScheduleItemId_designationTranslationId_time:
+										{
+											recurringScheduleItemId:
+												scheduleItemId,
+											time: new Date(
+												`${tokenDate}T${time}`,
+											),
+											designationTranslationId:
+												designationTranslation.id,
+										},
 								};
 							},
 						),

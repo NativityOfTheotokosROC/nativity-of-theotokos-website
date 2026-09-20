@@ -41,7 +41,7 @@ model DailyQuote {
 model InstantaneousScheduleItem {
   id                             Int                               @id @default(autoincrement())
   title                          Translation                       @relation("ScheduleItemTitleTranslation", fields: [titleTranslationId], references: [id])
-  venue                          Translation                       @relation("ScheduleItemVenueTranslation", fields: [venueTranslationId], references: [id])
+  venue                          Translation                       @relation("ScheduleItemVenueTranslation", fields: [venueTranslationId], references: [id], onUpdate: Cascade)
   date                           DateTime                          @db.Date
   removedScheduleItem            RemovedInstantaneousScheduleItem?
   instantaneousScheduleItemTimes InstantaneousScheduleItemTime[]
@@ -54,7 +54,7 @@ model InstantaneousScheduleItem {
 model RecurringScheduleItem {
   id                            Int                            @id @default(autoincrement())
   title                         Translation                    @relation("ScheduleItemTitleTranslation", fields: [titleTranslationId], references: [id])
-  venue                         Translation                    @relation("ScheduleItemVenueTranslation", fields: [venueTranslationId], references: [id])
+  venue                         Translation                    @relation("ScheduleItemVenueTranslation", fields: [venueTranslationId], references: [id], onUpdate: Cascade)
   pattern                       String
   disabledRecurringScheduleItem DisabledRecurringScheduleItem?
   recurringScheduleItemTimes    RecurringScheduleItemTime[]
@@ -67,23 +67,23 @@ model RecurringScheduleItem {
 model InstantaneousScheduleItemTime {
   id                          Int                       @id @default(autoincrement())
   time                        DateTime                  @db.Time
-  designation                 Translation               @relation(fields: [designationTranslationId], references: [id])
+  designation                 Translation               @relation(fields: [designationTranslationId], references: [id], onUpdate: Cascade)
   instantaneousScheduledItem  InstantaneousScheduleItem @relation(fields: [instantaneousScheduleItemId], references: [id], onDelete: Cascade)
   designationTranslationId    Int
   instantaneousScheduleItemId Int
 
-  @@unique([designationTranslationId, time])
+  @@unique([instantaneousScheduleItemId, designationTranslationId, time])
 }
 
 model RecurringScheduleItemTime {
   id                       Int                   @id @default(autoincrement())
   time                     DateTime              @db.Time
-  designation              Translation           @relation(fields: [designationTranslationId], references: [id])
-  recurringScheduledItem   RecurringScheduleItem @relation(fields: [recurringScheduleItemId], references: [id])
+  designation              Translation           @relation(fields: [designationTranslationId], references: [id], onUpdate: Cascade)
+  recurringScheduledItem   RecurringScheduleItem @relation(fields: [recurringScheduleItemId], references: [id], onDelete: Cascade)
   designationTranslationId Int
   recurringScheduleItemId  Int
 
-  @@unique([designationTranslationId, time])
+  @@unique([recurringScheduleItemId, designationTranslationId, time])
 }
 
 model RemovedInstantaneousScheduleItem {
