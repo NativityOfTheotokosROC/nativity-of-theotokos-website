@@ -178,7 +178,9 @@ const ScheduleEventSection = function ({ model }) {
 	}, [reset, scheduleEvent]);
 
 	useEffect(() => {
+		console.log(currentForm);
 		if (isValid && isDirty && options?.isNewEventValidCallback) {
+			console.log("Effect run?!");
 			if (scheduleEvent.type === "recurring") {
 				const newEvent = {
 					type: "recurring",
@@ -220,7 +222,6 @@ const ScheduleEventSection = function ({ model }) {
 		options,
 		recurringScheduleItemSchema,
 		scheduleEvent.type,
-		watch,
 	]);
 
 	useCloseWarning(() => isDirty);
