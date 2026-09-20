@@ -3,7 +3,10 @@ import { RecurringScheduleItemModel } from "../../models/recurring-schedule-item
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { twMerge } from "tailwind-merge";
 import { toZonedTime } from "date-fns-tz";
-import { getNativeTimeZone } from "../../utilities/date-time";
+import {
+	getNativeTimeZone,
+	pickTimeTranslation,
+} from "../../utilities/date-time";
 import { useLocale, useTranslations } from "next-intl";
 import EditScheduleItemPanel from "./EditScheduleItemPanel";
 import cronstrue from "cronstrue";
@@ -15,7 +18,6 @@ const RecurringScheduleItem = function ({ model }) {
 	const { title, venue, times, recurringPattern, isDisabled } = scheduleItem;
 	const locale = useLocale();
 	const t = useTranslations("recurringScheduleItem");
-	const dateLocale = locale === "ru" ? "ru-RU" : "en-uk";
 	const nativeTimes = times
 		.map(time => ({
 			...time,
@@ -36,21 +38,19 @@ const RecurringScheduleItem = function ({ model }) {
 			<span className="text-xl">{title}</span>
 			<span>{venue}</span>
 			<span>{description}</span>
-			{nativeTimes.map((time, index) => (
+			{nativeTimes.map(({ time, designation }, index) => (
 				<div
 					key={index}
 					className="inline-flex max-w-full flex-wrap gap-1 text-sm"
 				>
 					<span className="w-17">
-						{time.time
-							.toLocaleTimeString(dateLocale, {
-								hour: "numeric",
-								minute: "2-digit",
-								hour12: true,
-							})
-							.toUpperCase()}
+						{pickTimeTranslation(time, locale, {
+							hour: true,
+							minute: true,
+							twelveHour: true,
+						})}
 					</span>
-					<span className="underline">{time.designation}</span>
+					<span className="underline">{designation}</span>
 				</div>
 			))}
 			{options?.modifyCallbacks && (

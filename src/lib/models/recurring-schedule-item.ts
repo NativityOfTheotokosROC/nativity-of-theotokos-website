@@ -7,6 +7,7 @@ export type RecurringScheduleItemModelView = {
 	maxDisplayedTimes?: number;
 } & Options<{
 	modifyCallbacks: NonNullable<EditScheduleItemPanelModelView["callbacks"]>;
+	className: string;
 }>;
 
 export type RecurringScheduleItemModel = Model<RecurringScheduleItemModelView>;

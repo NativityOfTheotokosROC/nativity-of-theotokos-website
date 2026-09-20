@@ -9,13 +9,13 @@ const EditScheduleItemPanel = function ({ model }) {
 	const { scheduleItem } = event;
 
 	return (
-		<div className="flex gap-2 text-xs">
+		<div className="flex gap-3 text-xs">
 			{/* TODO: Add titles for accessibility*/}
 			<button
 				className="no-outline flex items-center"
 				onClick={() => callbacks.editCallback(event)}
 			>
-				<Edit2Icon className="size-4" strokeWidth={1} />
+				<Edit2Icon className="size-5" strokeWidth={1} />
 			</button>
 			<button
 				className="no-outline flex items-center"
@@ -24,9 +24,9 @@ const EditScheduleItemPanel = function ({ model }) {
 				{("isRemoved" in scheduleItem && scheduleItem.isRemoved) ||
 				("recurringPattern" in scheduleItem &&
 					scheduleItem.isDisabled) ? (
-					<CheckIcon className="size-4" strokeWidth={1} />
+					<CheckIcon className="size-5" strokeWidth={1} />
 				) : (
-					<BanIcon className="size-4" strokeWidth={1} />
+					<BanIcon className="size-5" strokeWidth={1} />
 				)}
 			</button>
 			{event.type !== "recurringInstance" &&
@@ -38,7 +38,7 @@ const EditScheduleItemPanel = function ({ model }) {
 							callbacks.deleteCallback(event as ScheduleEvent)
 						}
 					>
-						<Trash2Icon className="size-4" strokeWidth={1} />
+						<Trash2Icon className="size-5" strokeWidth={1} />
 					</button>
 				)}
 		</div>

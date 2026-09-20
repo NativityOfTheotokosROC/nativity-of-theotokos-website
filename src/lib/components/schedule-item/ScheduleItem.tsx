@@ -36,7 +36,6 @@ const ScheduleItem = function ({ model }) {
 			),
 		}))
 		.slice(0, maxDisplayedTimes ?? 3);
-	const isItemRemoved = "isRemoved" in scheduleItem && scheduleItem.isRemoved;
 	const isPending =
 		("id" in scheduleItem && !scheduleItem.id) ||
 		("recurringItemId" in scheduleItem && !scheduleItem.recurringItemId);
@@ -45,8 +44,8 @@ const ScheduleItem = function ({ model }) {
 		return (
 			<div
 				className={twMerge(
-					"schedule-item group/edit-bar flex h-fit overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3]",
-					isItemRemoved && "grayscale",
+					"schedule-item flex h-fit overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3]",
+					scheduleItem.isRemoved && "grayscale",
 					isPending && "border-dashed",
 					options?.className,
 				)}
@@ -93,7 +92,7 @@ const ScheduleItem = function ({ model }) {
 								instantaneousScheduleItemHasId(
 									scheduleItem,
 								))) && (
-							<div className="contents pointer-fine:invisible pointer-fine:group-hover/edit-bar:visible">
+							<div className="self-end">
 								<EditScheduleItemPanel
 									model={newReadonlyModel({
 										event:
@@ -119,7 +118,7 @@ const ScheduleItem = function ({ model }) {
 			<div
 				className={twMerge(
 					"schedule-item flex h-fit items-center overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3]",
-					isItemRemoved && "grayscale",
+					scheduleItem.isRemoved && "grayscale",
 					isPending && "border-dashed",
 					options?.className,
 				)}

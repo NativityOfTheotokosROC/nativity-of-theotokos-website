@@ -85,7 +85,7 @@ const ViewScheduleSection = function ({ model }) {
 							displayRemoved: true,
 							maxDisplayedItems: maxItems,
 							highlightedScheduleItem:
-								"date" in newEvent.scheduleItem
+								newEvent.type === "specific"
 									? pickScheduleItemTranslation(
 											parseNewScheduleItem(
 												newEvent.scheduleItem,
@@ -114,6 +114,7 @@ const ViewScheduleSection = function ({ model }) {
 							scheduleItemOptions: {
 								className: "bg-white",
 								modifyCallbacks,
+								language,
 							},
 						})}
 					/>

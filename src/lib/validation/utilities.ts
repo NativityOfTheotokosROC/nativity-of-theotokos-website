@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import z from "zod";
 import { emptyStringAsUndefined } from "../utilities/miscellaneous";
 import { Translator } from "../utilities/types";
+import { useMemo } from "react";
 
 export type ValidationOption<T> = { value: T; invalidMessage?: string };
 export type StringValidationOptions = Partial<{
@@ -83,5 +84,5 @@ export function useLocalizedSchema<S extends ReturnType<typeof z.object>>(
 	schemaFunction: (t: Translator) => S,
 ) {
 	const t = useTranslations();
-	return schemaFunction(t);
+	return useMemo(() => schemaFunction(t), [schemaFunction, t]);
 }

@@ -33,7 +33,10 @@ const ScheduleSummarySection = function ({ model }) {
 								model={newReadonlyModel({
 									scheduleItem,
 									variant: "detailed",
-									options: { modifyCallbacks },
+									options: {
+										modifyCallbacks,
+										className: "bg-white",
+									},
 								})}
 							/>
 						))}
@@ -49,7 +52,10 @@ const ScheduleSummarySection = function ({ model }) {
 								key={scheduleItem.id}
 								model={newReadonlyModel({
 									scheduleItem,
-									options: { modifyCallbacks },
+									options: {
+										modifyCallbacks,
+										className: "bg-white",
+									},
 								})}
 							/>
 						))}

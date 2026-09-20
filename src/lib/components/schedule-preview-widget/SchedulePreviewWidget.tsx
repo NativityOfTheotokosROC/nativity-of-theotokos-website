@@ -2,6 +2,7 @@ import ScheduleItem from "@/src/lib/components/schedule-item/ScheduleItem";
 import { SchedulePreviewWidgetModel } from "@/src/lib/models/schedule-preview-widget";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
+import { getDateString } from "../../utilities/date-time";
 
 const SchedulePreviewWidget = function ({ model }) {
 	const {
@@ -11,13 +12,28 @@ const SchedulePreviewWidget = function ({ model }) {
 		highlightedScheduleItem,
 		scheduleItemOptions,
 	} = model.modelView;
+	const scheduleMap = new Map(
+		schedule.map(
+			scheduleItem =>
+				[
+					`${getDateString(scheduleItem.date)}_${scheduleItem.venue}`,
+					scheduleItem,
+				] as const,
+		),
+	);
+	const highlightedScheduleItemKey = highlightedScheduleItem
+		? (`${getDateString(
+				highlightedScheduleItem.date,
+			)}_${highlightedScheduleItem.venue}` as const)
+		: undefined;
+	if (highlightedScheduleItemKey)
+		scheduleMap.delete(highlightedScheduleItemKey);
 	const orderedSchedule = [
 		...(displayRemoved
-			? schedule
-			: schedule.filter(
-					scheduleItem =>
-						"isRemoved" in scheduleItem && !scheduleItem.isRemoved,
-				)),
+			? scheduleMap.values()
+			: scheduleMap
+					.values()
+					.filter(scheduleItem => !scheduleItem.isRemoved)),
 	].sort((a, b) => a.date.getTime() - b.date.getTime());
 
 	if (schedule.length < 1) return <></>;
@@ -35,11 +51,7 @@ const SchedulePreviewWidget = function ({ model }) {
 			<div className="flex flex-col gap-3 lg:w-3/4">
 				{orderedSchedule
 					.slice(
-						highlightedScheduleItem &&
-							JSON.stringify(highlightedScheduleItem) !==
-								JSON.stringify(orderedSchedule[0])
-							? 0
-							: 1,
+						highlightedScheduleItem ? 0 : 1,
 						maxDisplayedItems && maxDisplayedItems - 1,
 					)
 					.map((scheduleItem, index) => (

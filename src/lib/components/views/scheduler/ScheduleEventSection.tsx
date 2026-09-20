@@ -44,7 +44,6 @@ const ScheduleEventSection = function ({ model }) {
 		reset,
 		register,
 		handleSubmit,
-		trigger,
 		control,
 		formState: { isSubmitting, isValid, errors, isDirty },
 	} = useForm({
@@ -155,27 +154,11 @@ const ScheduleEventSection = function ({ model }) {
 		scheduleEvent.scheduleItem && "id" in scheduleEvent.scheduleItem
 			? scheduleEvent.scheduleItem.id
 			: undefined;
-	const [lastForm, setLastForm] = useState(JSON.stringify(watch()));
+	const currentForm = JSON.stringify(watch());
+	const [lastForm, setLastForm] = useState(currentForm);
 
-	if (lastForm !== JSON.stringify(watch())) {
-		setLastForm(JSON.stringify(watch()));
-		if (isValid && isDirty && options?.isNewEventValidCallback) {
-			options.isNewEventValidCallback!(
-				scheduleEvent.type === "recurring"
-					? {
-							type: "recurring",
-							scheduleItem:
-								recurringScheduleItemSchema.parse(watch()),
-						}
-					: {
-							type: "specific",
-							scheduleItem:
-								instantaneousScheduleItemSchema.parse(watch()),
-						},
-			);
-		} else {
-			options?.isNewEventValidCallback?.(undefined);
-		}
+	if (lastForm !== currentForm) {
+		setLastForm(currentForm);
 	}
 
 	useEffect(() => {
@@ -185,7 +168,56 @@ const ScheduleEventSection = function ({ model }) {
 		} else {
 			reset();
 		}
-	}, [reset, trigger, scheduleEvent]);
+	}, [reset, scheduleEvent]);
+
+	useEffect(() => {
+		if (lastForm === currentForm) return;
+		if (isValid && isDirty && options?.isNewEventValidCallback) {
+			let newEvent;
+			if (scheduleEvent.type === "recurring") {
+				newEvent = {
+					type: "recurring",
+					scheduleItem:
+						recurringScheduleItemSchema.safeParse(currentForm).data,
+				} as const;
+				options.isNewEventValidCallback!(
+					newEvent.scheduleItem
+						? {
+								...newEvent,
+								scheduleItem: newEvent.scheduleItem,
+							}
+						: undefined,
+				);
+			} else {
+				newEvent = {
+					type: "specific",
+					scheduleItem:
+						instantaneousScheduleItemSchema.safeParse(currentForm)
+							.data,
+				} as const;
+				options.isNewEventValidCallback!(
+					newEvent.scheduleItem
+						? {
+								...newEvent,
+								scheduleItem: newEvent.scheduleItem,
+							}
+						: undefined,
+				);
+			}
+		} else {
+			options?.isNewEventValidCallback?.(undefined);
+		}
+	}, [
+		currentForm,
+		instantaneousScheduleItemSchema,
+		isDirty,
+		isValid,
+		lastForm,
+		options,
+		recurringScheduleItemSchema,
+		scheduleEvent.type,
+		watch,
+	]);
 
 	useCloseWarning(() => isDirty);
 
