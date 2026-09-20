@@ -57,7 +57,7 @@ const Scheduler = function ({ model }) {
 						scheduleItem =>
 							scheduleItem.id === event.scheduleItem.id,
 					)!;
-					return interact({
+					await interact({
 						type: "UPDATE_EVENT_TO_EDIT",
 						input: {
 							event: {
@@ -72,7 +72,7 @@ const Scheduler = function ({ model }) {
 						scheduleItem =>
 							scheduleItem.id === event.scheduleItem.id,
 					)!;
-					return interact({
+					await interact({
 						type: "UPDATE_EVENT_TO_EDIT",
 						input: {
 							event: {
@@ -81,6 +81,7 @@ const Scheduler = function ({ model }) {
 							},
 						},
 					});
+					break;
 				}
 				case "recurringInstance": {
 					const scheduleItem = recurringScheduleItems.find(
@@ -88,7 +89,7 @@ const Scheduler = function ({ model }) {
 							scheduleItem.id ===
 							event.scheduleItem.recurringItemId,
 					)!;
-					return interact({
+					await interact({
 						type: "UPDATE_EVENT_TO_EDIT",
 						input: {
 							event: {
@@ -102,6 +103,7 @@ const Scheduler = function ({ model }) {
 							},
 						},
 					});
+					break;
 				}
 				default: {
 					event satisfies never;

@@ -29,7 +29,7 @@ export default async function Page() {
 		<ProtectedComponent model={newReadonlyModel({ roles: ["admin"] })}>
 			<SchedulerClient
 				model={newReadonlyModel({
-					eventToEdit: { type: "specific" },
+					eventToEdit: { type: "recurring" },
 					scheduleItems,
 					autoCompleteInfo,
 				})}
