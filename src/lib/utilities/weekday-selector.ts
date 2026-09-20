@@ -20,7 +20,7 @@ function isDaysPatternValid(pattern: string) {
 
 export function transformDaysToPattern(days: Set<Day>, cronPattern?: string) {
 	const pattern = cronPattern ?? "0 0 * * *";
-	if (!isCronPatternValid(pattern)) return null;
+	if (!isCronPatternValid(pattern) || days.size === 0) return null;
 	const patternArray = pattern.split(" ");
 	const cronDays = [...days].map(day => {
 		switch (day) {

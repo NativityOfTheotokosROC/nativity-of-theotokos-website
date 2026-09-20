@@ -411,14 +411,11 @@ const ScheduleEventSection = function ({ model }) {
 									name="recurringPattern"
 									render={({
 										field: { value, onChange },
-										fieldState: {},
+										fieldState: { error },
 									}) => {
-										const days =
-											typeof value === "string"
-												? (transformPatternToDays(
+										const days = transformPatternToDays(
 														value,
-													) ?? new Set<Day>())
-												: new Set<Day>();
+													) ?? new Set<Day>()
 										const dayTranslationMap = new Map(
 											ALL_DAYS_ARRAY.map(DAY => {
 												let translation;
@@ -482,6 +479,7 @@ const ScheduleEventSection = function ({ model }) {
 																			{
 																				labelPosition:
 																					"top",
+																					checkboxClassName: error && "border-red-800"
 																			},
 																		checkedChangeCallback(
 																			checked,
@@ -509,7 +507,7 @@ const ScheduleEventSection = function ({ model }) {
 																						: undefined,
 																				);
 																			onChange(
-																				newPattern,
+																				newPattern ?? "",
 																			);
 																		},
 																	},
