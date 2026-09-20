@@ -386,32 +386,42 @@ export async function updateInstantaneousItem(
 	const { title, venue, date, times, isRemoved } =
 		getInstantaneousScheduleItemSchema(t).parse(newScheduleItem);
 	await database.$transaction(async transaction => {
+		const titleRecord = await transaction.translation.upsert({
+			create: {
+				english: title.english,
+				russian: title.russian,
+				englishHash: getMd5Hash(title.english),
+			},
+			update: {
+				russian: title.russian,
+			},
+			where: {
+				englishHash: getMd5Hash(title.english),
+			},
+		});
+		const venueRecord = await transaction.translation.upsert({
+			create: {
+				english: venue.english,
+				russian: venue.russian,
+				englishHash: getMd5Hash(venue.english),
+			},
+			update: {
+				russian: venue.russian,
+			},
+			where: {
+				englishHash: getMd5Hash(venue.english),
+			},
+		});
 		await transaction.instantaneousScheduleItem.update({
 			data: {
 				title: {
-					upsert: {
-						create: {
-							english: title.english,
-							russian: title.russian,
-							englishHash: getMd5Hash(title.english),
-						},
-						update: {
-							english: title.english,
-							russian: title.russian,
-						},
+					connect: {
+						id: titleRecord.id,
 					},
 				},
 				venue: {
-					upsert: {
-						create: {
-							english: venue.english,
-							russian: venue.russian,
-							englishHash: getMd5Hash(venue.english),
-						},
-						update: {
-							english: venue.english,
-							russian: venue.russian,
-						},
+					connect: {
+						id: venueRecord.id,
 					},
 				},
 				date: new Date(date),
@@ -490,32 +500,42 @@ export async function updateRecurringItem(
 	const tokenDate = getDateString(new Date());
 
 	await database.$transaction(async transaction => {
+		const titleRecord = await transaction.translation.upsert({
+			create: {
+				english: title.english,
+				russian: title.russian,
+				englishHash: getMd5Hash(title.english),
+			},
+			update: {
+				russian: title.russian,
+			},
+			where: {
+				englishHash: getMd5Hash(title.english),
+			},
+		});
+		const venueRecord = await transaction.translation.upsert({
+			create: {
+				english: venue.english,
+				russian: venue.russian,
+				englishHash: getMd5Hash(venue.english),
+			},
+			update: {
+				russian: venue.russian,
+			},
+			where: {
+				englishHash: getMd5Hash(venue.english),
+			},
+		});
 		await transaction.recurringScheduleItem.update({
 			data: {
 				title: {
-					upsert: {
-						create: {
-							english: title.english,
-							russian: title.russian,
-							englishHash: getMd5Hash(title.english),
-						},
-						update: {
-							english: title.english,
-							russian: title.russian,
-						},
+					connect: {
+						id: titleRecord.id,
 					},
 				},
 				venue: {
-					upsert: {
-						create: {
-							english: venue.english,
-							russian: venue.russian,
-							englishHash: getMd5Hash(venue.english),
-						},
-						update: {
-							english: venue.english,
-							russian: venue.russian,
-						},
+					connect: {
+						id: venueRecord.id,
 					},
 				},
 				pattern: recurringPattern,
