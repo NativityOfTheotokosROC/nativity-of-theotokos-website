@@ -183,7 +183,7 @@ const ScheduleEventSection = function ({ model }) {
 				const newEvent = {
 					type: "recurring",
 					scheduleItem:
-						recurringScheduleItemSchema.safeParse(currentForm).data,
+						recurringScheduleItemSchema.safeParse(getValues()).data,
 				} as const;
 				options.isNewEventValidCallback!(
 					newEvent.scheduleItem
@@ -194,12 +194,11 @@ const ScheduleEventSection = function ({ model }) {
 						: undefined,
 				);
 			} else {
-				const parsedForm =
-					instantaneousScheduleItemSchema.safeParse(currentForm);
-				console.log(parsedForm);
 				const newEvent = {
 					type: "specific",
-					scheduleItem: parsedForm.data,
+					scheduleItem:
+						instantaneousScheduleItemSchema.safeParse(getValues())
+							.data,
 				} as const;
 				options.isNewEventValidCallback!(
 					newEvent.scheduleItem
@@ -215,6 +214,7 @@ const ScheduleEventSection = function ({ model }) {
 		}
 	}, [
 		currentForm,
+		getValues,
 		instantaneousScheduleItemSchema,
 		isDirty,
 		isValid,
