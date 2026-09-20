@@ -51,8 +51,9 @@ export function validateRecurringPattern(
 				? { timezone: getNativeTimeZone() }
 				: undefined,
 		);
+		// TODO: This needs work
 		if (
-			!cron.getPattern()?.startsWith("0 0 0") ||
+			!cron.getPattern()?.startsWith("0 0") ||
 			cron.getPattern()?.endsWith("* * *")
 		)
 			return null;
