@@ -45,7 +45,7 @@ export function getScheduleItemSchema(t?: Translator) {
 					scheduleItemTimes.forEach(scheduleItemTime =>
 						timesSet.add(scheduleItemTime.time),
 					);
-					return timesSet.size !== scheduleItemTimes.length;
+					return timesSet.size === scheduleItemTimes.length;
 				},
 				{ error: t && t("scheduleItem.timeConflict") },
 			),

@@ -116,7 +116,7 @@ const ScheduleEventSection = function ({ model }) {
 		},
 		designation => {
 			const index = Number(
-				russianDesignationsAutoCompleteBox.modelView.id.split(".")[1],
+				englishDesignationsAutoCompleteBox.modelView.id.split(".")[1],
 			);
 			setValue(`times.${index}.designation`, designation);
 		},
@@ -134,7 +134,7 @@ const ScheduleEventSection = function ({ model }) {
 		},
 		designation => {
 			const index = Number(
-				englishDesignationsAutoCompleteBox.modelView.id.split(".")[1],
+				russianDesignationsAutoCompleteBox.modelView.id.split(".")[1],
 			);
 			setValue(`times.${index}.designation`, designation);
 		},
