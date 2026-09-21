@@ -13,6 +13,8 @@ import {
 	transformPatternToDays,
 } from "@/src/lib/utilities/weekday-selector";
 import {
+	NewInstantaneousScheduleItem,
+	NewRecurringScheduleItem,
 	useInstantaneousScheduleItemSchema,
 	useRecurringScheduleItemSchema,
 } from "@/src/lib/validation/schedule-item";
@@ -53,13 +55,7 @@ const ScheduleEventSection = function ({ model }) {
 				: recurringScheduleItemSchema,
 		),
 		shouldUnregister: true,
-		defaultValues: {
-			title: BLANK_TRANSLATION,
-			venue: BLANK_TRANSLATION,
-			date: getDateString(addDays(new Date(), 1), true),
-			recurringPattern: "",
-			times: [{ designation: BLANK_TRANSLATION, time: "09:00" }],
-		},
+		defaultValues: defaultForm(),
 		mode: "onChange",
 	});
 	const englishTitleAutoCompleteBox = useAutoCompleteBox(
@@ -158,9 +154,7 @@ const ScheduleEventSection = function ({ model }) {
 	const currentForm = JSON.stringify(watch());
 	const [lastForm, setLastForm] = useState(currentForm);
 
-	if (lastForm !== currentForm) {
-		setLastForm(currentForm);
-	}
+	if (lastForm !== currentForm) setLastForm(currentForm);
 
 	useEffect(() => {
 		const { scheduleItem } = scheduleEvent;
@@ -174,7 +168,7 @@ const ScheduleEventSection = function ({ model }) {
 					: scheduleItem,
 			);
 		} else {
-			reset();
+			reset(defaultForm());
 		}
 	}, [reset, scheduleEvent]);
 
@@ -709,3 +703,15 @@ const ScheduleEventSection = function ({ model }) {
 } satisfies ModeledVoidComponent<InitializedModel<ScheduleEventModel>>;
 
 export default ScheduleEventSection;
+
+function defaultForm():
+	| NewInstantaneousScheduleItem
+	| NewRecurringScheduleItem {
+	return {
+		title: BLANK_TRANSLATION,
+		venue: BLANK_TRANSLATION,
+		date: getDateString(addDays(new Date(), 1), true),
+		recurringPattern: "",
+		times: [{ designation: BLANK_TRANSLATION, time: "09:00" }],
+	};
+}

@@ -336,7 +336,11 @@
 		"scheduleSummaryTab": "Обзор расписания",
 		"altScheduleSummaryTab": "Детали расписания",
 		"confirmDeleteSpecific": "Вы уверены, что хотите удалить событие «{title}», запланированное на {date}?",
-		"confirmDeleteRecurring": "Вы уверены, что хотите удалить повторяющееся событие «{title}»?"
+		"confirmDeleteRecurring": "Вы уверены, что хотите удалить повторяющееся событие «{title}»?",
+		"confirmEnableSpecific": "Вы уверены, что хотите включить событие «{title}», запланированное на {date}?",
+		"confirmEnableRecurring": "Вы уверены, что хотите включить повторяющееся событие «{title}»?",
+		"confirmDisableSpecific": "Вы уверены, что хотите отключить событие «{title}», запланированное на {date}?",
+		"confirmDisableRecurring": "Вы уверены, что хотите отключить повторяющееся событие «{title}»?"
 	},
 	"recurringScheduleItem": {
 		"description": "Событие повторяется {parsedCronString}"
