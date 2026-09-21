@@ -15,11 +15,12 @@ const RecurringScheduleItem = function ({ model }) {
 	const locale = useLocale();
 	const t = useTranslations("recurringScheduleItem");
 	const tokenDate = new Date();
-	const nativeTimes = times
+	const sortedTimes = times
 		.map(({ time, designation }) => ({
 			designation,
 			time: new Date(`${getDateString(tokenDate)}T${time}`),
 		}))
+		.sort((a, b) => a.time.getTime() - b.time.getTime())
 		.slice(0, maxDisplayedTimes);
 	const description = t("description", {
 		parsedCronString: cronstrue.toString(recurringPattern, { locale }),
@@ -36,7 +37,7 @@ const RecurringScheduleItem = function ({ model }) {
 			<span className="text-xl">{title}</span>
 			<span>{venue}</span>
 			<span>{description}</span>
-			{nativeTimes.map(({ time, designation }, index) => (
+			{sortedTimes.map(({ time, designation }, index) => (
 				<div
 					key={index}
 					className="inline-flex max-w-full flex-wrap gap-1 text-sm"

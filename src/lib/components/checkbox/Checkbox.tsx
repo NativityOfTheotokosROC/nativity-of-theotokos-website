@@ -10,7 +10,7 @@ import { Check } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 
 const Checkbox = function ({ model }) {
-	const { isChecked, checkedChangeCallback, label, options } =
+	const { isChecked, checkedChangeCallback, label, disabled, options } =
 		model.modelView;
 	const labelPosition = options?.labelPosition ?? "right";
 
@@ -34,9 +34,11 @@ const Checkbox = function ({ model }) {
 				className={twMerge(
 					`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white data-checked:bg-gray-900`,
 					options?.checkboxClassName,
+					disabled && "opacity-65 grayscale",
 				)}
 				onChange={checkedChangeCallback}
 				checked={isChecked}
+				disabled={disabled}
 			>
 				<Check
 					className={twMerge(

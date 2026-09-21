@@ -309,7 +309,7 @@ export function schedulerVIInterface(notification?: {
 							case "recurring": {
 								await toggleRecurringItem(
 									event.scheduleItem.id,
-									(event.scheduleItem.isDisabled ?? true) ===
+									(event.scheduleItem.isDisabled ?? false) ===
 										true
 										? false
 										: true,
