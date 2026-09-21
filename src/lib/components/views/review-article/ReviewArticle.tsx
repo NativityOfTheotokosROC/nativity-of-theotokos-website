@@ -142,6 +142,7 @@ const ReviewArticle = function ({ model }) {
 			</InformationView>
 		);
 	register("image.url");
+	register("isArticleFeatured");
 
 	return (
 		<>
