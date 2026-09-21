@@ -30,7 +30,7 @@ const RecurringScheduleItem = function ({ model }) {
 		<div
 			className={twMerge(
 				"schedule-item recurring-schedule-item flex min-h-fit flex-col gap-1 overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3] px-5.5 py-4",
-				isDisabled && "opacity-65 grayscale",
+				isDisabled && "opacity-70 grayscale",
 				options?.className,
 			)}
 		>

@@ -34,7 +34,7 @@ const Checkbox = function ({ model }) {
 				className={twMerge(
 					`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white data-checked:bg-gray-900`,
 					options?.checkboxClassName,
-					disabled && "opacity-65 grayscale",
+					disabled && "opacity-70 grayscale",
 				)}
 				onChange={checkedChangeCallback}
 				checked={isChecked}

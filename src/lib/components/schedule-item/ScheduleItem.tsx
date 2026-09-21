@@ -43,7 +43,7 @@ const ScheduleItem = function ({ model }) {
 			<div
 				className={twMerge(
 					"schedule-item flex h-fit overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3]",
-					scheduleItem.isRemoved && "opacity-65 grayscale",
+					scheduleItem.isRemoved && "opacity-70 grayscale",
 					isPending && "border-dashed",
 					options?.className,
 				)}
@@ -116,7 +116,7 @@ const ScheduleItem = function ({ model }) {
 			<div
 				className={twMerge(
 					"schedule-item flex h-fit items-center overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3]",
-					scheduleItem.isRemoved && "opacity-65 grayscale",
+					scheduleItem.isRemoved && "opacity-70 grayscale",
 					isPending && "border-dashed",
 					options?.className,
 				)}

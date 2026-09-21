@@ -710,7 +710,7 @@ export async function toggleRecurringItem(
 	await database.recurringScheduleItem.update({
 		data: {
 			disabledRecurringScheduleItem: isEnabled
-				? { connect: { recurringScheduleItemId: scheduleItemId } }
+				? { create: {} }
 				: { delete: true },
 		},
 		where: { id: scheduleItemId },
