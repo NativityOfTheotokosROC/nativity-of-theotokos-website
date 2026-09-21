@@ -460,7 +460,8 @@ export function schedulerVIInterface(notification?: {
 									instantaneous:
 										instantaneousScheduleItems.filter(
 											scheduleItem =>
-												scheduleItem.id !== id,
+												scheduleItem.id !==
+												event.scheduleItem.id,
 										),
 								},
 							};
@@ -506,7 +507,9 @@ export function schedulerVIInterface(notification?: {
 								scheduleItems: {
 									...currentModelView.scheduleItems,
 									recurring: recurringScheduleItems.filter(
-										scheduleItem => scheduleItem.id !== id,
+										scheduleItem =>
+											scheduleItem.id !==
+											event.scheduleItem.id,
 									),
 								},
 							};
