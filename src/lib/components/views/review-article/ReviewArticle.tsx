@@ -56,7 +56,7 @@ const ReviewArticle = function ({ model }) {
 				caption:
 					currentArticle?.articleImage.caption ?? BLANK_TRANSLATION,
 			},
-			isArticleFeatured: false,
+			isArticleFeatured: currentArticle?.isArticleFeatured ?? false,
 		},
 		shouldUnregister: true,
 	});
@@ -142,6 +142,7 @@ const ReviewArticle = function ({ model }) {
 			</InformationView>
 		);
 	register("image.url");
+	register("isArticleFeatured");
 
 	return (
 		<>
