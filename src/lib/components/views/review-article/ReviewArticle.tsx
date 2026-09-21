@@ -56,7 +56,7 @@ const ReviewArticle = function ({ model }) {
 				caption:
 					currentArticle?.articleImage.caption ?? BLANK_TRANSLATION,
 			},
-			isArticleFeatured: false,
+			isArticleFeatured: currentArticle?.isArticleFeatured ?? false,
 		},
 		shouldUnregister: true,
 	});
