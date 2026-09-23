@@ -247,7 +247,7 @@ export const UserNavigationWidgetCore = function ({ model }) {
 								<MenuItems
 									anchor="bottom end"
 									transition
-									className="z-21 mr-1 flex w-40 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-800 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:px-6 *:py-4 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#ffdc4f] focus:outline-none *:active:bg-gray-950 *:active:text-[#ffdc4f] data-closed:scale-92 data-closed:opacity-0"
+									className="z-21 mr-1 flex w-45 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-800 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:px-6 *:py-4 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#ffdc4f] focus:outline-none *:active:bg-gray-950 *:active:text-[#ffdc4f] data-closed:scale-92 data-closed:opacity-0"
 								>
 									{[
 										...userDetails.userActions.map(
