@@ -212,8 +212,6 @@ export type User = {
 
 export type Translator = Awaited<ReturnType<typeof getTranslations<never>>>;
 
-export type Role = "admin" | "staff" | "user" | "quotes" | "writer" | "editor";
-
 export type Path = `/${string}`;
 
 export type ShareData = {

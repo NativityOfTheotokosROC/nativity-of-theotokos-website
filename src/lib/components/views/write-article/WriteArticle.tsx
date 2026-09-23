@@ -45,7 +45,7 @@ const WriteArticle = function ({ model }) {
 		register,
 		handleSubmit,
 		reset,
-		formState: { isSubmitting, errors },
+		formState: { isSubmitting, isDirty, errors },
 		getValues,
 	} = useForm({
 		mode: "onChange",
@@ -58,19 +58,7 @@ const WriteArticle = function ({ model }) {
 	});
 	const previewAuthor = currentArticle?.author.name ??
 		author ?? { english: t("unknownAuthor"), russian: t("unknownAuthor") };
-	const hasDraftChanged = lastSavedDraft
-		? !(
-				getValues("title.english") === lastSavedDraft.title.english &&
-				getValues("body.english") === lastSavedDraft.body.english &&
-				getValues("title.russian") === lastSavedDraft.title.russian &&
-				getValues("body.russian") === lastSavedDraft.body.russian
-			)
-		: !(
-				getValues("title.english") === defaultTitle.english &&
-				getValues("body.english") === defaultBody.english &&
-				getValues("title.russian") === defaultTitle.russian &&
-				getValues("body.russian") === defaultBody.russian
-			);
+
 	const articlePreviewModal = useArticlePreviewModal(
 		handleSubmit(async form => {
 			articlePreviewModal.interact({ type: "CLOSE" });
@@ -96,7 +84,7 @@ const WriteArticle = function ({ model }) {
 			!(
 				notification?.type === "submit_success" ||
 				notification?.type === "discard_draft_success"
-			) && hasDraftChanged,
+			) && isDirty,
 	);
 
 	if (notification?.type === "submit_success")
@@ -165,25 +153,30 @@ const WriteArticle = function ({ model }) {
 						<Controller
 							control={control}
 							name={"body.english"}
-							render={({ field: { onChange } }) => (
-								<Editor
-									model={newReadonlyModel({
-										initialContent:
-											lastSavedDraft?.body.english ??
-											defaultBody.english,
-										className: errors.body?.english
-											? "border-red-800"
-											: "border-gray-400",
-										changeCallback: onChange,
-									})}
-								/>
+							render={({
+								field: { onChange },
+								fieldState: { error },
+							}) => (
+								<>
+									<Editor
+										model={newReadonlyModel({
+											initialContent:
+												lastSavedDraft?.body.english ??
+												defaultBody.english,
+											className: errors.body?.english
+												? "border-red-800"
+												: "border-gray-400",
+											changeCallback: onChange,
+										})}
+									/>
+									{error && (
+										<span className="text-sm text-red-800">
+											{error.message}
+										</span>
+									)}
+								</>
 							)}
 						/>
-						{errors.body?.english && (
-							<span className="text-sm text-red-800">
-								{errors.body.english.message}
-							</span>
-						)}
 						{errors.form && (
 							<span className="text-sm text-red-800">
 								{errors.form.message}
@@ -238,7 +231,7 @@ const WriteArticle = function ({ model }) {
 							<Button
 								model={newReadonlyModel({
 									disabled:
-										!hasDraftChanged ||
+										!isDirty ||
 										notification?.type === "saving_draft" ||
 										notification?.type ===
 											"discarding_draft" ||

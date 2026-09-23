@@ -405,9 +405,9 @@ export async function submitArticle(
 ) {
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const articleSubmissionSchema = getArticleSubmissionSchema(t);
-	const { title, body } = articleSubmissionSchema.parse(submission);
+	const validatedSubmission = articleSubmissionSchema.parse(submission);
 	// Auth will be done in here, don't worry
-	const { id } = await saveDraft(ticketId, submission, locale);
+	const { id } = await saveDraft(ticketId, validatedSubmission, locale);
 	await database.pendingArticleSubmission.upsert({
 		create: {
 			articleDraftId: id,
@@ -928,7 +928,6 @@ export async function publishExistingArticle({
 					{
 						title: existingArticle.title,
 						author: { name: existingArticle.author.name },
-						snippet: existingArticle.snippet,
 						body: existingArticle.body,
 						articleImage: {
 							url: existingArticle.image.link,

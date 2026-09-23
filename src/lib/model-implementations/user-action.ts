@@ -34,6 +34,14 @@ export function useUserActions() {
 					},
 				});
 			}
+			case "SCHEDULER": {
+				return newReadonlyModel({
+					name: "SCHEDULER",
+					action: () => {
+						router.push("/scheduler");
+					},
+				});
+			}
 			case "WRITE_ARTICLE": {
 				return newReadonlyModel({
 					name: "WRITE_ARTICLE",

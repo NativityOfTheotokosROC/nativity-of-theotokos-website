@@ -23,11 +23,15 @@ import { UninitializedModelError } from "../utilities/errors";
 import { parseNewScheduleItemWithId } from "../utilities/schedule";
 import { Translator } from "../utilities/types";
 import { ToastNotifierModel } from "./notifier";
+import { useRouter } from "@/src/i18n/navigation";
 
-export function schedulerVIInterface(notification?: {
-	notifier: ToastNotifierModel;
-	t: Translator;
-}) {
+export function schedulerVIInterface(
+	router: ReturnType<typeof useRouter>,
+	notification?: {
+		notifier: ToastNotifierModel;
+		t: Translator;
+	},
+) {
 	return {
 		async produceModelView(interaction, currentModelView) {
 			switch (interaction.type) {
@@ -130,6 +134,7 @@ export function schedulerVIInterface(notification?: {
 									throw error;
 								}
 							}
+							router.refresh();
 							return {
 								...currentModelView,
 								scheduleItems: {
@@ -234,6 +239,7 @@ export function schedulerVIInterface(notification?: {
 									throw error;
 								}
 							}
+							router.refresh();
 							return {
 								...currentModelView,
 								scheduleItems: {
@@ -296,7 +302,7 @@ export function schedulerVIInterface(notification?: {
 											event.scheduleItem.id,
 									),
 								];
-
+								router.refresh();
 								return {
 									...currentModelView,
 									scheduleItems: {
@@ -343,6 +349,7 @@ export function schedulerVIInterface(notification?: {
 											event.scheduleItem.id,
 									),
 								];
+								router.refresh();
 								return {
 									...currentModelView,
 									scheduleItems: {
@@ -384,6 +391,7 @@ export function schedulerVIInterface(notification?: {
 										.instantaneous,
 									newScheduleItem,
 								];
+								router.refresh();
 								return {
 									...currentModelView,
 									scheduleItems: {
@@ -453,6 +461,7 @@ export function schedulerVIInterface(notification?: {
 							const {
 								instantaneous: instantaneousScheduleItems,
 							} = currentModelView.scheduleItems;
+							router.refresh();
 							return {
 								...currentModelView,
 								scheduleItems: {
@@ -502,6 +511,7 @@ export function schedulerVIInterface(notification?: {
 							});
 							const { recurring: recurringScheduleItems } =
 								currentModelView.scheduleItems;
+							router.refresh();
 							return {
 								...currentModelView,
 								scheduleItems: {
@@ -529,8 +539,9 @@ export function useScheduler(
 	notifier?: ToastNotifierModel,
 ) {
 	const t = useTranslations();
+	const router = useRouter();
 	const model = useInitializedStatefulInteractiveModel(
-		schedulerVIInterface(notifier ? { notifier, t } : undefined),
+		schedulerVIInterface(router, notifier ? { notifier, t } : undefined),
 		initialModelView,
 	);
 	return model;

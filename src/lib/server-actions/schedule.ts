@@ -211,7 +211,7 @@ export async function scheduleInstantaneousItem(
 	newScheduleItem: NewInstantaneousScheduleItem,
 	locale?: Language,
 ) {
-	await protect({ roles: ["admin"] });
+	await protect({ roles: ["scheduler"] });
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const scheduleItemSchema = getInstantaneousScheduleItemSchema(t);
 	const { title, venue, date, times, isRemoved } =
@@ -304,7 +304,7 @@ export async function scheduleRecurringItem(
 	newScheduleItem: NewRecurringScheduleItem,
 	locale?: Language,
 ) {
-	await protect({ roles: ["admin"] });
+	await protect({ roles: ["scheduler"] });
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const scheduleItemSchema = getRecurringScheduleItemSchema(t);
 	const { title, venue, recurringPattern, times, isDisabled } =
@@ -381,7 +381,7 @@ export async function updateInstantaneousItem(
 	newScheduleItem: NewInstantaneousScheduleItem,
 	locale?: Language,
 ) {
-	await protect({ roles: ["admin"] });
+	await protect({ roles: ["scheduler"] });
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const { title, venue, date, times, isRemoved } =
 		getInstantaneousScheduleItemSchema(t).parse(newScheduleItem);
@@ -493,7 +493,7 @@ export async function updateRecurringItem(
 	newScheduleItem: NewRecurringScheduleItem,
 	locale?: Language,
 ) {
-	await protect({ roles: ["admin"] });
+	await protect({ roles: ["scheduler"] });
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const { title, venue, recurringPattern, times, isDisabled } =
 		getRecurringScheduleItemSchema(t).parse(newScheduleItem);
@@ -604,7 +604,7 @@ export async function updateRecurringItem(
 export async function removeInstantaneousItem(
 	identifier: number | { venue: string; date: string },
 ) {
-	await protect({ roles: ["admin"] });
+	await protect({ roles: ["scheduler"] });
 	await database.removedInstantaneousScheduleItem.create({
 		data: {
 			scheduleItem: {
@@ -638,7 +638,7 @@ export async function removeInstantaneousItem(
 }
 
 export async function restoreInstantaneousItem(scheduleItemId: number) {
-	await protect({ roles: ["admin"] });
+	await protect({ roles: ["scheduler"] });
 	await database.removedInstantaneousScheduleItem.delete({
 		where: {
 			instantaneousScheduleItemId: scheduleItemId,
@@ -652,7 +652,7 @@ export async function removeNextRecurringItem(
 	instance?: number,
 	referenceDate?: Date | string,
 ) {
-	await protect({ roles: ["admin"] });
+	await protect({ roles: ["scheduler"] });
 	const recurringScheduleItem =
 		await database.recurringScheduleItem.findUniqueOrThrow({
 			include: {
@@ -706,7 +706,7 @@ export async function toggleRecurringItem(
 	scheduleItemId: number,
 	isEnabled: boolean,
 ) {
-	await protect({ roles: ["admin"] });
+	await protect({ roles: ["scheduler"] });
 	await database.recurringScheduleItem.update({
 		data: {
 			disabledRecurringScheduleItem: isEnabled
@@ -719,7 +719,7 @@ export async function toggleRecurringItem(
 }
 
 export async function deleteInstantaneousScheduleItem(scheduleItemId: number) {
-	await protect({ roles: ["admin"] });
+	await protect({ roles: ["scheduler"] });
 	await database.instantaneousScheduleItem.delete({
 		where: { id: scheduleItemId },
 	});
@@ -727,7 +727,7 @@ export async function deleteInstantaneousScheduleItem(scheduleItemId: number) {
 }
 
 export async function deleteRecurringScheduleItem(scheduleItemId: number) {
-	await protect({ roles: ["admin"] });
+	await protect({ roles: ["scheduler"] });
 	await database.recurringScheduleItem.delete({
 		where: { id: scheduleItemId },
 	});

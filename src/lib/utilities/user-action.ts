@@ -1,25 +1,20 @@
-import { ActionName } from "../models/user-action";
-import { Role } from "./types";
+import { Role } from "./user";
 
-function getAllActionNames() {
-	const actionNames = [
-		"NOTIFICATIONS",
-		"NEW_QUOTE",
-		"WRITE_ARTICLE",
-		"REVIEW_ARTICLE",
-		"ASSIGN_ARTICLE",
-		"SIGN_OUT",
-	] as const satisfies ActionName[];
-	type MissingActionName = Exclude<ActionName, (typeof actionNames)[number]>;
-	type UniversalActionNames = MissingActionName extends never
-		? typeof actionNames
-		: never;
-	return new Set(actionNames satisfies UniversalActionNames);
-}
+export const ALL_ACTION_NAMES = [
+	"NOTIFICATIONS",
+	"NEW_QUOTE",
+	"SCHEDULER",
+	"WRITE_ARTICLE",
+	"REVIEW_ARTICLE",
+	"ASSIGN_ARTICLE",
+	"SIGN_OUT",
+] as const;
+
+export type ActionName = (typeof ALL_ACTION_NAMES)[number];
 
 export function getUserActionNames(roles: Role[]) {
-	const allUserActions = getAllActionNames();
-	let specificActions = new Set<ActionName>();
+	const allUserActions = ALL_ACTION_NAMES;
+	const specificActions = new Set<ActionName>();
 	for (const role of roles) {
 		switch (role) {
 			case "admin": {
@@ -28,22 +23,20 @@ export function getUserActionNames(roles: Role[]) {
 			case "staff": {
 				break;
 			}
+			case "scheduler": {
+				specificActions.add("SCHEDULER");
+				break;
+			}
 			case "writer": {
-				specificActions = new Set([
-					...specificActions,
-					"WRITE_ARTICLE",
-				]);
+				specificActions.add("WRITE_ARTICLE");
 				break;
 			}
 			case "editor": {
-				specificActions = new Set([
-					...specificActions,
-					"REVIEW_ARTICLE",
-				]);
+				specificActions.add("REVIEW_ARTICLE");
 				break;
 			}
 			case "quotes": {
-				specificActions = new Set([...specificActions, "NEW_QUOTE"]);
+				specificActions.add("NEW_QUOTE");
 				break;
 			}
 			case "user": {

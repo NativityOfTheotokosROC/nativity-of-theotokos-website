@@ -13,7 +13,7 @@ import {
 import { Article as JSONLdArticle, WithContext } from "schema-dts";
 import { cacheTag } from "next/cache";
 
-const CACHE_TAG = "article";
+// const CACHE_TAG = "article";
 
 export async function generateStaticParams() {
 	const [articlesEn, articlesRu] = await Promise.all([
@@ -51,7 +51,7 @@ export async function generateMetadata({
 	const computedLocale = hasLocale(routing.locales, locale) ? locale : "en";
 	const { title, author, snippet, uri, articleImage } =
 		await getArticleMetadata(article, computedLocale);
-	cacheTag(CACHE_TAG, `article_${uri}`);
+	cacheTag(`article_${uri}`);
 
 	return {
 		title,
@@ -83,12 +83,12 @@ export async function generateMetadata({
 export default async function Page({
 	params,
 }: PageProps<"/[locale]/news/[article]">) {
-	// "use cache";
+	"use cache";
 
 	const { article: articleId, locale } = await params;
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
-
 	const article = await getArticle(articleId, language);
+	cacheTag(`article_${article.uri}`);
 	const baseUrl = `${BASE_URL}${language == "ru" ? "/ru" : ""}`;
 	const permalink = `${baseUrl}/news/${article.uri.toString()}`;
 	const jsonLd = articleJsonLd(article);

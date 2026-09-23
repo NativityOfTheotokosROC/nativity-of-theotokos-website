@@ -13,13 +13,14 @@ import {
 	ReviewArticleModelView,
 	ReviewArticleNotification,
 } from "../models/review-article";
-import { ArticleDraft, NewArticleDraft } from "../models/write-article";
+import { ToastNotification } from "../models/toast";
+import { ArticleDraft } from "../models/write-article";
 import {
 	publishExistingArticle,
 	publishNewArticle,
 } from "../server-actions/article";
-import { Article, Translation } from "../utilities/types";
-import { ToastNotification } from "../models/toast";
+import { Translation } from "../utilities/types";
+import { useRouter } from "@/src/i18n/navigation";
 
 export function reviewArticleNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
@@ -70,6 +71,7 @@ export function useReviewArticle(
 	);
 	const notification = notifier.modelView?.notification ?? null;
 	const locale = useLocale();
+	const router = useRouter();
 	return {
 		modelView: {
 			draftAssigneeName,
@@ -119,6 +121,7 @@ export function useReviewArticle(
 								},
 							},
 						});
+						router.refresh();
 					} catch (error) {
 						await notifier.interact({
 							type: "NOTIFY",

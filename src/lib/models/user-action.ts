@@ -1,16 +1,9 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
-
-export type ActionName =
-	| "NOTIFICATIONS"
-	| "NEW_QUOTE"
-	| "WRITE_ARTICLE"
-	| "REVIEW_ARTICLE"
-	| "ASSIGN_ARTICLE"
-	| "SIGN_OUT";
+import { ActionName } from "../utilities/user-action";
 
 export type UserActionModelView = {
 	name: ActionName;
-	action: () => Awaited<void>;
+	action: () => void;
 };
 
 export type UserActionModel = ReadonlyModel<UserActionModelView>;

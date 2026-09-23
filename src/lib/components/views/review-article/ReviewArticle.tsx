@@ -43,7 +43,7 @@ const ReviewArticle = function ({ model }) {
 		register,
 		handleSubmit,
 		setValue,
-		formState: { errors, isSubmitting },
+		formState: { errors, isSubmitting, isDirty },
 	} = useForm({
 		resolver: zodResolver(useArticleSchema()),
 		defaultValues: {
@@ -127,7 +127,9 @@ const ReviewArticle = function ({ model }) {
 			? imageProcessor.modelView.notification.message
 			: (fileUploader.modelView.notification?.message ?? null);
 
-	useCloseWarning(() => !(notification?.type === "submit_success"));
+	useCloseWarning(
+		() => !(notification?.type === "submit_success") && isDirty,
+	);
 
 	if (notification?.type === "submit_success")
 		return (

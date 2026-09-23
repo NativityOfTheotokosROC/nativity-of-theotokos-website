@@ -1,7 +1,18 @@
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { createContext } from "react";
 import { getUserInformation } from "../server-actions/user";
-import { Role } from "./types";
+
+export const ALL_USER_ROLES = [
+	"admin",
+	"staff",
+	"user",
+	"quotes",
+	"writer",
+	"editor",
+	"scheduler",
+] as const;
+
+export type Role = (typeof ALL_USER_ROLES)[number];
 
 export type UserInformation = {
 	name: string;

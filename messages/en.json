@@ -52,7 +52,8 @@
 		"signOut": "Sign Out",
 		"writeArticle": "Write Article",
 		"reviewArticle": "Review Article",
-		"assignArticle": "Assign Article"
+		"assignArticle": "Assign Article",
+		"scheduler": "Scheduler"
 	},
 	"footer": {
 		"heading": "Nativity of the Theotokos Church",
