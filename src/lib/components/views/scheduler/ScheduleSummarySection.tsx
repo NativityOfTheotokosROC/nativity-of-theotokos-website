@@ -23,16 +23,15 @@ const ScheduleSummarySection = function ({ model }) {
 
 	return (
 		<div className="flex flex-col gap-4">
-			{hasInstantaneousItems && (
+			{hasRecurringItems && (
 				<div className="flex flex-col gap-3">
-					<span className="text-xl">{t("specificEvents")}</span>
+					<span className="text-xl">{t("recurringEvents")}</span>
 					<div className="flex max-h-100 w-full flex-col gap-2 overflow-y-auto pr-2">
-						{orderedInstantaneousItems.map(scheduleItem => (
-							<ScheduleItem
+						{orderedRecurringItems.map(scheduleItem => (
+							<RecurringScheduleItem
 								key={scheduleItem.id}
 								model={newReadonlyModel({
 									scheduleItem,
-									variant: "detailed",
 									options: {
 										modifyCallbacks,
 										className: "bg-white",
@@ -43,15 +42,16 @@ const ScheduleSummarySection = function ({ model }) {
 					</div>
 				</div>
 			)}
-			{hasRecurringItems && (
+			{hasInstantaneousItems && (
 				<div className="flex flex-col gap-3">
-					<span className="text-xl">{t("recurringEvents")}</span>
+					<span className="text-xl">{t("specificEvents")}</span>
 					<div className="flex max-h-100 w-full flex-col gap-2 overflow-y-auto pr-2">
-						{orderedRecurringItems.map(scheduleItem => (
-							<RecurringScheduleItem
+						{orderedInstantaneousItems.map(scheduleItem => (
+							<ScheduleItem
 								key={scheduleItem.id}
 								model={newReadonlyModel({
 									scheduleItem,
+									variant: "detailed",
 									options: {
 										modifyCallbacks,
 										className: "bg-white",
