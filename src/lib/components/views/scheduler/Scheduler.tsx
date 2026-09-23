@@ -66,6 +66,7 @@ const Scheduler = function ({ model }) {
 							},
 						},
 					});
+					break;
 				}
 				case "recurring": {
 					const scheduleItem = recurringScheduleItems.find(
