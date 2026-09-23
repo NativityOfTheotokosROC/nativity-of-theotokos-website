@@ -30,7 +30,9 @@ export async function getUserInformation(): Promise<UserInformation> {
 	const roles = roleRecords
 		.map(record => record.role as ModifiedRole)
 		.filter(role =>
-			(["admin", "quotes", "staff", "user"] as const).includes(role),
+			(
+				["admin", "quotes", "staff", "user", "scheduler"] as const
+			).includes(role),
 		);
 	let finalRoles: Role[] = roles;
 	if (isWriter) finalRoles = [...finalRoles, "writer"];
