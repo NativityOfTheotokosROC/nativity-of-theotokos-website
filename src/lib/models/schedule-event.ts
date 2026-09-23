@@ -18,11 +18,19 @@ export type NewScheduleEvent = {
 	};
 }[ScheduleEvent["type"]];
 
+export type SpecificScheduleEventWithOptionalId = MakeOptional<
+	Extract<ScheduleEventWithOptionalId, Record<"type", "specific">>,
+	"scheduleItem"
+>;
+export type RecurringScheduleEventWithOptionalId = MakeOptional<
+	Extract<ScheduleEventWithOptionalId, Record<"type", "recurring">>,
+	"scheduleItem"
+>;
+
 export type ScheduleEventModelView = {
-	scheduleEvent: MakeOptional<
-		ScheduleEventWithOptionalId<Translation>,
-		"scheduleItem"
-	>;
+	scheduleEvent:
+		| SpecificScheduleEventWithOptionalId
+		| RecurringScheduleEventWithOptionalId;
 	autoCompleteInfo?: Partial<{
 		titleTranslations: Translation[];
 		venueTranslations: Translation[];

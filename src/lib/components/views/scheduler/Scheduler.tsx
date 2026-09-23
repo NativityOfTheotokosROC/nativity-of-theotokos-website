@@ -57,7 +57,7 @@ const Scheduler = function ({ model }) {
 						scheduleItem =>
 							scheduleItem.id === event.scheduleItem.id,
 					)!;
-					return interact({
+					await interact({
 						type: "UPDATE_EVENT_TO_EDIT",
 						input: {
 							event: {
@@ -66,13 +66,14 @@ const Scheduler = function ({ model }) {
 							},
 						},
 					});
+					break;
 				}
 				case "recurring": {
 					const scheduleItem = recurringScheduleItems.find(
 						scheduleItem =>
 							scheduleItem.id === event.scheduleItem.id,
 					)!;
-					return interact({
+					await interact({
 						type: "UPDATE_EVENT_TO_EDIT",
 						input: {
 							event: {
@@ -81,6 +82,7 @@ const Scheduler = function ({ model }) {
 							},
 						},
 					});
+					break;
 				}
 				case "recurringInstance": {
 					const scheduleItem = recurringScheduleItems.find(
@@ -88,7 +90,7 @@ const Scheduler = function ({ model }) {
 							scheduleItem.id ===
 							event.scheduleItem.recurringItemId,
 					)!;
-					return interact({
+					await interact({
 						type: "UPDATE_EVENT_TO_EDIT",
 						input: {
 							event: {
@@ -102,6 +104,7 @@ const Scheduler = function ({ model }) {
 							},
 						},
 					});
+					break;
 				}
 				default: {
 					event satisfies never;
@@ -141,7 +144,79 @@ const Scheduler = function ({ model }) {
 			}
 		},
 		toggleCallback(event) {
-			interact({ type: "TOGGLE_EVENT", input: { event } });
+			const proceedCallback = () =>
+				interact({ type: "TOGGLE_EVENT", input: { event } });
+			switch (event.type) {
+				case "specific": {
+					const { title, date } = instantaneousScheduleItems.find(
+						scheduleItem =>
+							event.scheduleItem.id === scheduleItem.id,
+					)!;
+					confirmationDialog.interact({
+						type: "OPEN",
+						input: {
+							message: t(
+								event.scheduleItem.isRemoved
+									? "confirmEnableSpecific"
+									: "confirmDisableSpecific",
+								{
+									title: pickTranslation(title, locale),
+									date: pickDateTranslation(date, locale),
+								},
+							),
+							proceedCallback,
+						},
+					});
+					break;
+				}
+				case "recurring": {
+					const { title } = recurringScheduleItems.find(
+						scheduleItem =>
+							event.scheduleItem.id === scheduleItem.id,
+					)!;
+					confirmationDialog.interact({
+						type: "OPEN",
+						input: {
+							message: t(
+								event.scheduleItem.isDisabled
+									? "confirmEnableRecurring"
+									: "confirmDisableRecurring",
+								{
+									title: pickTranslation(title, locale),
+								},
+							),
+							proceedCallback,
+						},
+					});
+					break;
+				}
+				case "recurringInstance": {
+					const { title } = recurringScheduleItems.find(
+						scheduleItem =>
+							event.scheduleItem.recurringItemId ===
+							scheduleItem.id,
+					)!;
+					confirmationDialog.interact({
+						type: "OPEN",
+						input: {
+							message: t(
+								event.scheduleItem.isRemoved
+									? "confirmEnableSpecific"
+									: "confirmDisableSpecific",
+								{
+									title: pickTranslation(title, locale),
+									date: pickDateTranslation(
+										event.scheduleItem.date,
+										locale,
+									),
+								},
+							),
+							proceedCallback,
+						},
+					});
+					break;
+				}
+			}
 		},
 	} satisfies EditScheduleItemPanelModelView["callbacks"];
 

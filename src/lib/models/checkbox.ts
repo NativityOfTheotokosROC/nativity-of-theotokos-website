@@ -3,6 +3,7 @@ import { Options } from "../utilities/types";
 
 export type CheckboxModelView = {
 	isChecked: boolean;
+	disabled?: boolean;
 	label: string;
 	checkedChangeCallback?: (value: boolean) => void;
 } & Options<{

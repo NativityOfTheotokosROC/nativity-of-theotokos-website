@@ -1,5 +1,6 @@
 import { routing } from "@/src/i18n/routing";
 import { ImagePlaceholder } from "@grod56/placeholder";
+import { Model, ModelView } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
 
 export type Navlink = {
@@ -82,6 +83,19 @@ export type RecurringScheduleItemInstance<T extends Text = string> =
 		date: Date;
 	};
 
+export type ReplaceModelViewPropertyType<
+	M extends Model<V>,
+	P extends keyof V,
+	T,
+	V extends ModelView = ModelView,
+> = {
+	[A in keyof M]: A extends "modelView"
+		?
+				| ReplacePropertyType<NonNullable<M[A]>, P, T>
+				| Exclude<M[A], NonNullable<M[A]>>
+		: M[A];
+};
+
 type ToggleOptional<
 	T extends Record<string, unknown>,
 	P extends keyof T,
@@ -139,7 +153,7 @@ export type ReplacePropertyType<
 	T extends Record<string, unknown>,
 	K extends keyof T,
 	N,
-> = Omit<T, K> & { [P in K]: N };
+> = { [P in keyof T]: P extends K ? N : T[P] } & {};
 
 export type ReplacePropertyTypes<
 	T extends Record<string, unknown>,

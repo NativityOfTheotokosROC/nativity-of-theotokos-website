@@ -142,7 +142,6 @@ const ReviewArticle = function ({ model }) {
 			</InformationView>
 		);
 	register("image.url");
-	register("isArticleFeatured");
 
 	return (
 		<>
@@ -291,21 +290,21 @@ const ReviewArticle = function ({ model }) {
 								{errors.snippet?.english?.message}
 							</span>
 						)}
-						{!currentArticle?.isArticleFeatured && (
-							<Controller
-								control={control}
-								name={"isArticleFeatured"}
-								render={({ field: { onChange, value } }) => (
-									<Checkbox
-										model={newReadonlyModel({
-											isChecked: value,
-											label: t("featureTheArticle"),
-											checkedChangeCallback: onChange,
-										})}
-									/>
-								)}
-							/>
-						)}
+						<Controller
+							control={control}
+							name={"isArticleFeatured"}
+							render={({ field: { onChange, value } }) => (
+								<Checkbox
+									model={newReadonlyModel({
+										isChecked: value,
+										disabled:
+											currentArticle?.isArticleFeatured,
+										label: t("featureTheArticle"),
+										checkedChangeCallback: onChange,
+									})}
+								/>
+							)}
+						/>
 						{errors.form && (
 							<span className="text-sm text-red-800">
 								{errors.form.message}

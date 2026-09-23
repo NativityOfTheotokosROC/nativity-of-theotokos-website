@@ -9,7 +9,11 @@ import {
 	Text,
 	Translation,
 } from "../utilities/types";
-import { NewScheduleEvent } from "./schedule-event";
+import {
+	NewScheduleEvent,
+	RecurringScheduleEventWithOptionalId,
+	SpecificScheduleEventWithOptionalId,
+} from "./schedule-event";
 
 export type ScheduleEventWithOptionalId<T extends Text = Translation> = {
 	[U in ScheduleEvent["type"]]: ReplacePropertyType<
@@ -21,10 +25,9 @@ export type ScheduleEventWithOptionalId<T extends Text = Translation> = {
 		>
 	>;
 }[ScheduleEvent["type"]];
-type EventToEdit = MakeOptional<
-	ScheduleEventWithOptionalId<Translation>,
-	"scheduleItem"
->;
+type EventToEdit =
+	| SpecificScheduleEventWithOptionalId
+	| RecurringScheduleEventWithOptionalId;
 
 export type SchedulerModelView = {
 	scheduleItems: {

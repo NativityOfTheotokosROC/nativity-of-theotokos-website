@@ -337,7 +337,11 @@
 		"scheduleSummaryTab": "Schedule Summary",
 		"altScheduleSummaryTab": "Schedule Details",
 		"confirmDeleteSpecific": "Are you sure you want to delete the event ''{title}'' scheduled for {date}?",
-		"confirmDeleteRecurring": "Are you sure you want to delete the recurring event ''{title}''?"
+		"confirmDeleteRecurring": "Are you sure you want to delete the recurring event ''{title}''?",
+		"confirmEnableSpecific": "Are you sure you want to enable the event ''{title}'' scheduled for {date}?",
+		"confirmEnableRecurring": "Are you sure you want to enable the recurring event ''{title}''?",
+		"confirmDisableSpecific": "Are you sure you want to disable the event ''{title}'' scheduled for {date}?",
+		"confirmDisableRecurring": "Are you sure you want to disable the recurring event ''{title}''?"
 	},
 	"recurringScheduleItem": {
 		"description": "Event recurs {parsedCronString}"

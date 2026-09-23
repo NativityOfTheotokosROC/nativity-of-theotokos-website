@@ -309,7 +309,10 @@ export function schedulerVIInterface(notification?: {
 							case "recurring": {
 								await toggleRecurringItem(
 									event.scheduleItem.id,
-									!event.scheduleItem.isDisabled,
+									(event.scheduleItem.isDisabled ?? false) ===
+										true
+										? false
+										: true,
 								);
 								await notification?.notifier.interact({
 									type: "NOTIFY",
@@ -457,7 +460,8 @@ export function schedulerVIInterface(notification?: {
 									instantaneous:
 										instantaneousScheduleItems.filter(
 											scheduleItem =>
-												scheduleItem.id !== id,
+												scheduleItem.id !==
+												event.scheduleItem.id,
 										),
 								},
 							};
@@ -503,7 +507,9 @@ export function schedulerVIInterface(notification?: {
 								scheduleItems: {
 									...currentModelView.scheduleItems,
 									recurring: recurringScheduleItems.filter(
-										scheduleItem => scheduleItem.id !== id,
+										scheduleItem =>
+											scheduleItem.id !==
+											event.scheduleItem.id,
 									),
 								},
 							};

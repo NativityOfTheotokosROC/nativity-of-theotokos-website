@@ -27,11 +27,12 @@ const ScheduleItem = function ({ model }) {
 	const locale = useLocale();
 	const language = options?.language ?? locale;
 	const nativeDate = toZonedTime(date, getNativeTimeZone());
-	const nativeTimes = times
+	const sortedTimes = times
 		.map(({ designation, time }) => ({
 			designation,
 			time: new Date(`${getDateString(nativeDate)}T${time}`),
 		}))
+		.sort((a, b) => a.time.getTime() - b.time.getTime())
 		.slice(0, maxDisplayedTimes ?? 3);
 	const isPending =
 		("id" in scheduleItem && !scheduleItem.id) ||
@@ -42,7 +43,7 @@ const ScheduleItem = function ({ model }) {
 			<div
 				className={twMerge(
 					"schedule-item flex h-fit overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3]",
-					scheduleItem.isRemoved && "grayscale",
+					scheduleItem.isRemoved && "opacity-70 grayscale",
 					isPending && "border-dashed",
 					options?.className,
 				)}
@@ -66,7 +67,7 @@ const ScheduleItem = function ({ model }) {
 				<div className="flex flex-col gap-1 px-5.5 py-4">
 					<span className="text-xl">{title}</span>
 					<span>{venue}</span>
-					{nativeTimes.map(({ time, designation }, index) => (
+					{sortedTimes.map(({ time, designation }, index) => (
 						<div
 							key={index}
 							className="inline-flex max-w-full flex-wrap gap-1 text-sm"
@@ -115,7 +116,7 @@ const ScheduleItem = function ({ model }) {
 			<div
 				className={twMerge(
 					"schedule-item flex h-fit items-center overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3]",
-					scheduleItem.isRemoved && "opacity-65 grayscale",
+					scheduleItem.isRemoved && "opacity-70 grayscale",
 					isPending && "border-dashed",
 					options?.className,
 				)}
@@ -137,7 +138,7 @@ const ScheduleItem = function ({ model }) {
 					<span className="text-lg">{title}</span>
 					<span className="text-sm">{venue}</span>
 					<span className="text-sm">
-						{pickTimeTranslation(nativeTimes[0].time, locale, {
+						{pickTimeTranslation(sortedTimes[0].time, locale, {
 							hour: true,
 							minute: true,
 							twelveHour: true,

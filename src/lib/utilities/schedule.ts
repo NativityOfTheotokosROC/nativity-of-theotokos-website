@@ -51,8 +51,9 @@ export function validateRecurringPattern(
 				? { timezone: getNativeTimeZone() }
 				: undefined,
 		);
+		// TODO: This needs work
 		if (
-			!cron.getPattern()?.startsWith("0 0 0") ||
+			!cron.getPattern()?.startsWith("0 0") ||
 			cron.getPattern()?.endsWith("* * *")
 		)
 			return null;
@@ -128,7 +129,7 @@ export function generateSchedule<T extends Text = string>(
 		| RecurringScheduleItemInstanceWithOptionalId<T>
 	>([
 		...recurringScheduleItems
-			.filter(scheduleItem => scheduleItem.isDisabled)
+			.filter(scheduleItem => !scheduleItem.isDisabled)
 			.flatMap(activeItem =>
 				getNextRecurringScheduleItemInstances(
 					activeItem,
@@ -139,27 +140,27 @@ export function generateSchedule<T extends Text = string>(
 			.map(
 				scheduleItem =>
 					[
-						`${getDateString(scheduleItem.date)}_${JSON.stringify(scheduleItem.venue)}`,
+						`${getDateString(scheduleItem.date)}_${typeof scheduleItem.venue === "string" ? scheduleItem.venue : scheduleItem.venue.english}`,
 						scheduleItem,
 					] as const,
 			),
 		...instantaneousScheduleItems
 			.filter(
 				scheduleItem =>
-					!scheduleItem.isRemoved &&
 					scheduleItem.date.getTime() >=
-						resolvedReferenceDate.getTime(),
+					resolvedReferenceDate.getTime(),
 			)
 			.map(
 				scheduleItem =>
 					[
-						`${getDateString(scheduleItem.date)}_${JSON.stringify(scheduleItem.venue)}`,
+						`${getDateString(scheduleItem.date)}_${typeof scheduleItem.venue === "string" ? scheduleItem.venue : scheduleItem.venue.english}`,
 						scheduleItem,
 					] as const,
 			),
 	]);
 	return scheduleItemsMap
 		.values()
+		.filter(scheduleItem => !scheduleItem.isRemoved)
 		.toArray()
 		.toSorted((a, b) => a.date.getTime() - b.date.getTime())
 		.slice(0, maxItems);

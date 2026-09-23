@@ -3,6 +3,7 @@ import { Translator } from "../utilities/types";
 import { getTranslationSchema, useLocalizedSchema } from "./utilities";
 import { validateRecurringPattern } from "../utilities/schedule";
 
+export type NewScheduleItem = z.infer<ReturnType<typeof getScheduleItemSchema>>
 export type NewInstantaneousScheduleItem = z.infer<
 	ReturnType<typeof getInstantaneousScheduleItemSchema>
 >;
