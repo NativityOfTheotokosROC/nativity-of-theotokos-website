@@ -125,10 +125,12 @@ const ScheduleItem = function ({ model }) {
 					className={`flex w-full max-w-[5em] grow flex-col items-center gap-1 self-stretch bg-gray-900 p-4 text-center text-white ${georgia.className}`}
 				>
 					<span className="text-xl">
-						{pickDateTranslation(nativeDate, locale, { day: true })}
+						{pickDateTranslation(nativeDate, language, {
+							day: true,
+						})}
 					</span>
 					<span className="text-xs uppercase">
-						{pickDateTranslation(nativeDate, locale, {
+						{pickDateTranslation(nativeDate, language, {
 							month: true,
 							year: true,
 						})}
@@ -138,7 +140,7 @@ const ScheduleItem = function ({ model }) {
 					<span className="text-lg">{title}</span>
 					<span className="text-sm">{venue}</span>
 					<span className="text-sm">
-						{pickTimeTranslation(sortedTimes[0].time, locale, {
+						{pickTimeTranslation(sortedTimes[0].time, language, {
 							hour: true,
 							minute: true,
 							twelveHour: true,

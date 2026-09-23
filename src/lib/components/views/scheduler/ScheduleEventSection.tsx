@@ -44,17 +44,24 @@ import Checkbox from "../../checkbox/Checkbox";
 const ScheduleEventSection = function ({ model }) {
 	const { modelView } = model;
 	const { scheduleEvent } = modelView;
-	if (scheduleEvent.type === "specific") {
-		return (
-			<SpecificScheduleEventForm
-				model={{ ...model, modelView: { ...modelView, scheduleEvent } }}
-			/>
-		);
-	}
 	return (
-		<RecurringScheduleEventForm
-			model={{ ...model, modelView: { ...modelView, scheduleEvent } }}
-		/>
+		<div className="pt-3">
+			{scheduleEvent.type === "specific" ? (
+				<SpecificScheduleEventForm
+					model={{
+						...model,
+						modelView: { ...modelView, scheduleEvent },
+					}}
+				/>
+			) : (
+				<RecurringScheduleEventForm
+					model={{
+						...model,
+						modelView: { ...modelView, scheduleEvent },
+					}}
+				/>
+			)}
+		</div>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ScheduleEventModel>>;
 

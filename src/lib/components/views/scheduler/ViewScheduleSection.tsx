@@ -52,7 +52,7 @@ const ViewScheduleSection = function ({ model }) {
 	const tMisc = useTranslations("miscellaneous");
 
 	return (
-		<div className="flex flex-col gap-4">
+		<div className="flex flex-col gap-6 pt-3">
 			<Button
 				model={newReadonlyModel({
 					action() {
@@ -78,7 +78,7 @@ const ViewScheduleSection = function ({ model }) {
 			</Button>
 			{newEvent && (
 				<div className="flex flex-col gap-3">
-					<span className="text-xl">{t("newScheduleSection")}</span>
+					<span className="uppercase">{t("newScheduleSection")}</span>
 					<SchedulePreviewWidget
 						model={newReadonlyModel({
 							schedule: newSchedule,
@@ -103,7 +103,7 @@ const ViewScheduleSection = function ({ model }) {
 			)}
 			{currentSchedule.length > 0 && (
 				<div className="flex flex-col gap-3">
-					<span className="text-xl">
+					<span className="uppercase">
 						{t("currentScheduleSection")}
 					</span>
 					<SchedulePreviewWidget
