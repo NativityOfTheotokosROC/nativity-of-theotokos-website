@@ -1,16 +1,13 @@
 import Button from "@/src/lib/components/button/Button";
 import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complete-box";
-import { AutoCompleteBoxModel } from "@/src/lib/models/auto-complete-box";
 import {
 	RecurringScheduleEventWithOptionalId,
 	ScheduleEventModel,
-	ScheduleEventModelView,
 	SpecificScheduleEventWithOptionalId,
 } from "@/src/lib/models/schedule-event";
 import { autoCompleteFields } from "@/src/lib/utilities/auto-complete-box";
 import { BLANK_TRANSLATION } from "@/src/lib/utilities/constants";
 import { getDateString } from "@/src/lib/utilities/date-time";
-import { useCloseWarning } from "@/src/lib/utilities/hooks";
 import {
 	CompleteTranslation,
 	ReplaceModelViewPropertyType,
@@ -22,24 +19,16 @@ import {
 	transformDaysToPattern,
 	transformPatternToDays,
 } from "@/src/lib/utilities/weekday-selector";
-import {
-	NewInstantaneousScheduleItem,
-	NewRecurringScheduleItem,
-	NewScheduleItem,
-	useInstantaneousScheduleItemSchema,
-	useRecurringScheduleItemSchema,
-} from "@/src/lib/validation/schedule-item";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { NewScheduleItem } from "@/src/lib/validation/schedule-item";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import { addDays } from "date-fns";
 import { Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, FormProvider, useFormContext } from "react-hook-form";
 import AutoCompleteBox from "../../auto-complete-box/AutoCompleteBox";
 import ButtonBar from "../../button-bar/ButtonBar";
 import Checkbox from "../../checkbox/Checkbox";
+import { useScheduleEventForm } from "@/src/lib/utilities/scheduler";
 
 const ScheduleEventSection = function ({ model }) {
 	const { modelView } = model;
@@ -73,81 +62,46 @@ const RecurringScheduleEventForm = function ({ model }) {
 		interact,
 		modelView: { scheduleEvent, autoCompleteInfo, options },
 	} = model;
-	const {
-		modelView: {
-			form,
-			englishTitleAutoCompleteBox,
-			russianTitleAutoCompleteBox,
-			englishVenueAutoCompleteBox,
-			russianVenueAutoCompleteBox,
-			englishDesignationsAutoCompleteBox,
-			russianDesignationsAutoCompleteBox,
-		},
-	} = useScheduleEventSectionForm(
+	const form = useScheduleEventForm({
 		scheduleEvent,
-		options?.isNewEventValidCallback,
-		autoCompleteInfo,
-	);
+		isNewEventValidCallback: options?.isNewEventValidCallback,
+	});
 	const {
-		getValues,
-		setValue,
-		watch,
 		handleSubmit,
 		control,
 		formState: { isSubmitting, isValid },
 	} = form;
-	const times = watch("times").map(
-		({ time, designation: { english, russian } }) => ({
-			time,
-			designation: {
-				english,
-				russian: typeof russian === "string" ? russian : null,
-			},
-		}),
-	);
 
 	return (
-		<>
-			<AutoCompleteBox model={englishTitleAutoCompleteBox} />
-			<AutoCompleteBox model={russianTitleAutoCompleteBox} />
-			<AutoCompleteBox model={englishVenueAutoCompleteBox} />
-			<AutoCompleteBox model={russianVenueAutoCompleteBox} />
-			<AutoCompleteBox model={englishDesignationsAutoCompleteBox} />
-			<AutoCompleteBox model={russianDesignationsAutoCompleteBox} />
-			<form
-				onSubmit={handleSubmit(async form => {
-					const existingItemId = scheduleEvent.scheduleItem?.id;
-					await interact({
-						type: "SCHEDULE_EVENT",
-						input:
-							"recurringPattern" in form
-								? {
-										existingId: existingItemId,
-										newEvent: {
-											type: "recurring",
-											scheduleItem: form,
-										},
-									}
-								: {
-										existingId: existingItemId,
-										newEvent: {
-											type: "specific",
-											scheduleItem: form,
-										},
+		<form
+			onSubmit={handleSubmit(async form => {
+				const existingItemId = scheduleEvent.scheduleItem?.id;
+				await interact({
+					type: "SCHEDULE_EVENT",
+					input:
+						"recurringPattern" in form
+							? {
+									existingId: existingItemId,
+									newEvent: {
+										type: "recurring",
+										scheduleItem: form,
 									},
-					});
-				})}
-			>
-				<div className="flex flex-col gap-4">
-					<span className="uppercase">{t("eventSection")}</span>
+								}
+							: {
+									existingId: existingItemId,
+									newEvent: {
+										type: "specific",
+										scheduleItem: form,
+									},
+								},
+				});
+			})}
+		>
+			<div className="flex flex-col gap-4">
+				<span className="uppercase">{t("eventSection")}</span>
+				<FormProvider {...form}>
 					<EventMetadataFormControl
-						control={control}
-						autoCompleteBoxes={{
-							englishTitleAutoCompleteBox,
-							englishVenueAutoCompleteBox,
-							russianTitleAutoCompleteBox,
-							russianVenueAutoCompleteBox,
-						}}
+						autoCompleteInfo={autoCompleteInfo}
 					/>
 					<Controller
 						control={control}
@@ -240,55 +194,41 @@ const RecurringScheduleEventForm = function ({ model }) {
 					/>
 					<span className="uppercase">{t("timesSection")}</span>
 					<EventTimesFormControl
-						control={control}
-						times={times}
-						addTimeCallback={time => {
-							setValue("times", [...getValues("times"), time]);
-						}}
-						removeTimeCallback={index => {
-							setValue(
-								"times",
-								getValues("times").toSpliced(index, 1),
-							);
-						}}
-						autoCompleteBoxes={{
-							englishDesignationsAutoCompleteBox,
-							russianDesignationsAutoCompleteBox,
-						}}
+						autoCompleteInfo={autoCompleteInfo}
 					/>
-					<ButtonBar
-						model={newReadonlyModel({
-							arrangement: "start",
-							orientation: "horizontal",
-						})}
-					>
-						{options?.previewCallback && (
-							<Button
-								model={newReadonlyModel({
-									disabled: !isValid,
-									action: () => {
-										options.previewCallback!();
-									},
-								})}
-							>
-								{t("previewButton")}
-							</Button>
-						)}
+				</FormProvider>
+				<ButtonBar
+					model={newReadonlyModel({
+						arrangement: "start",
+						orientation: "horizontal",
+					})}
+				>
+					{options?.previewCallback && (
 						<Button
 							model={newReadonlyModel({
-								disabled: isSubmitting,
-								type: "submit",
+								disabled: !isValid,
+								action: () => {
+									options.previewCallback!();
+								},
 							})}
 						>
-							{scheduleEvent.scheduleItem &&
-							"id" in scheduleEvent.scheduleItem
-								? t("modifyButton")
-								: t("scheduleButton")}
+							{t("previewButton")}
 						</Button>
-					</ButtonBar>
-				</div>
-			</form>
-		</>
+					)}
+					<Button
+						model={newReadonlyModel({
+							disabled: isSubmitting,
+							type: "submit",
+						})}
+					>
+						{scheduleEvent.scheduleItem &&
+						"id" in scheduleEvent.scheduleItem
+							? t("modifyButton")
+							: t("scheduleButton")}
+					</Button>
+				</ButtonBar>
+			</div>
+		</form>
 	);
 } satisfies ModeledVoidComponent<
 	InitializedModel<
@@ -306,83 +246,47 @@ const SpecificScheduleEventForm = function ({ model }) {
 		interact,
 		modelView: { scheduleEvent, autoCompleteInfo, options },
 	} = model;
-	const {
-		modelView: {
-			form,
-			englishTitleAutoCompleteBox,
-			russianTitleAutoCompleteBox,
-			englishVenueAutoCompleteBox,
-			russianVenueAutoCompleteBox,
-			englishDesignationsAutoCompleteBox,
-			russianDesignationsAutoCompleteBox,
-		},
-	} = useScheduleEventSectionForm(
+	const form = useScheduleEventForm({
 		scheduleEvent,
-		options?.isNewEventValidCallback,
-		autoCompleteInfo,
-	);
+		isNewEventValidCallback: options?.isNewEventValidCallback,
+	});
 	const {
-		getValues,
-		setValue,
-		watch,
 		register,
 		handleSubmit,
-		control,
 		formState: { isSubmitting, isValid, errors },
 	} = form;
 	const currentDate = getDateString(new Date(), true);
-	const times = watch("times").map(
-		({ time, designation: { english, russian } }) => ({
-			time,
-			designation: {
-				english,
-				russian: typeof russian === "string" ? russian : null,
-			},
-		}),
-	);
 
 	return (
-		<>
-			<AutoCompleteBox model={englishTitleAutoCompleteBox} />
-			<AutoCompleteBox model={russianTitleAutoCompleteBox} />
-			<AutoCompleteBox model={englishVenueAutoCompleteBox} />
-			<AutoCompleteBox model={russianVenueAutoCompleteBox} />
-			<AutoCompleteBox model={englishDesignationsAutoCompleteBox} />
-			<AutoCompleteBox model={russianDesignationsAutoCompleteBox} />
-			<form
-				onSubmit={handleSubmit(async form => {
-					const existingItemId = scheduleEvent.scheduleItem?.id;
-					await interact({
-						type: "SCHEDULE_EVENT",
-						input:
-							"recurringPattern" in form
-								? {
-										existingId: existingItemId,
-										newEvent: {
-											type: "recurring",
-											scheduleItem: form,
-										},
-									}
-								: {
-										existingId: existingItemId,
-										newEvent: {
-											type: "specific",
-											scheduleItem: form,
-										},
+		<form
+			onSubmit={handleSubmit(async form => {
+				const existingItemId = scheduleEvent.scheduleItem?.id;
+				await interact({
+					type: "SCHEDULE_EVENT",
+					input:
+						"recurringPattern" in form
+							? {
+									existingId: existingItemId,
+									newEvent: {
+										type: "recurring",
+										scheduleItem: form,
 									},
-					});
-				})}
-			>
-				<div className="flex flex-col gap-4">
-					<span className="uppercase">{t("eventSection")}</span>
+								}
+							: {
+									existingId: existingItemId,
+									newEvent: {
+										type: "specific",
+										scheduleItem: form,
+									},
+								},
+				});
+			})}
+		>
+			<div className="flex flex-col gap-4">
+				<span className="uppercase">{t("eventSection")}</span>
+				<FormProvider {...form}>
 					<EventMetadataFormControl
-						control={control}
-						autoCompleteBoxes={{
-							englishTitleAutoCompleteBox,
-							englishVenueAutoCompleteBox,
-							russianTitleAutoCompleteBox,
-							russianVenueAutoCompleteBox,
-						}}
+						autoCompleteInfo={autoCompleteInfo}
 					/>
 					<>
 						<input
@@ -400,55 +304,41 @@ const SpecificScheduleEventForm = function ({ model }) {
 					</>
 					<span className="uppercase">{t("timesSection")}</span>
 					<EventTimesFormControl
-						control={control}
-						times={times}
-						addTimeCallback={time => {
-							setValue("times", [...getValues("times"), time]);
-						}}
-						removeTimeCallback={index => {
-							setValue(
-								"times",
-								getValues("times").toSpliced(index, 1),
-							);
-						}}
-						autoCompleteBoxes={{
-							englishDesignationsAutoCompleteBox,
-							russianDesignationsAutoCompleteBox,
-						}}
+						autoCompleteInfo={autoCompleteInfo}
 					/>
-					<ButtonBar
-						model={newReadonlyModel({
-							arrangement: "start",
-							orientation: "horizontal",
-						})}
-					>
-						{options?.previewCallback && (
-							<Button
-								model={newReadonlyModel({
-									disabled: !isValid,
-									action: () => {
-										options.previewCallback!();
-									},
-								})}
-							>
-								{t("previewButton")}
-							</Button>
-						)}
+				</FormProvider>
+				<ButtonBar
+					model={newReadonlyModel({
+						arrangement: "start",
+						orientation: "horizontal",
+					})}
+				>
+					{options?.previewCallback && (
 						<Button
 							model={newReadonlyModel({
-								disabled: isSubmitting,
-								type: "submit",
+								disabled: !isValid,
+								action: () => {
+									options.previewCallback!();
+								},
 							})}
 						>
-							{scheduleEvent.scheduleItem &&
-							"id" in scheduleEvent.scheduleItem
-								? t("modifyButton")
-								: t("scheduleButton")}
+							{t("previewButton")}
 						</Button>
-					</ButtonBar>
-				</div>
-			</form>
-		</>
+					)}
+					<Button
+						model={newReadonlyModel({
+							disabled: isSubmitting,
+							type: "submit",
+						})}
+					>
+						{scheduleEvent.scheduleItem &&
+						"id" in scheduleEvent.scheduleItem
+							? t("modifyButton")
+							: t("scheduleButton")}
+					</Button>
+				</ButtonBar>
+			</div>
+		</form>
 	);
 } satisfies ModeledVoidComponent<
 	InitializedModel<
@@ -460,376 +350,16 @@ const SpecificScheduleEventForm = function ({ model }) {
 	>
 >;
 function EventMetadataFormControl({
-	control,
-	autoCompleteBoxes,
+	autoCompleteInfo,
 }: {
-	control: ReturnType<
-		typeof useScheduleEventSectionForm
-	>["modelView"]["form"]["control"];
-	autoCompleteBoxes?: {
-		englishTitleAutoCompleteBox: InitializedModel<
-			AutoCompleteBoxModel<Translation, `title.english`>
-		>;
-		russianTitleAutoCompleteBox: InitializedModel<
-			AutoCompleteBoxModel<CompleteTranslation, `title.russian`>
-		>;
-		englishVenueAutoCompleteBox: InitializedModel<
-			AutoCompleteBoxModel<Translation, `venue.english`>
-		>;
-		russianVenueAutoCompleteBox: InitializedModel<
-			AutoCompleteBoxModel<CompleteTranslation, `venue.russian`>
-		>;
-	};
+	autoCompleteInfo?: Partial<{
+		titleTranslations: Translation[];
+		venueTranslations: Translation[];
+	}>;
 }) {
+	const { control, setValue } =
+		useFormContext<Omit<NewScheduleItem, "times">>();
 	const t = useTranslations("scheduler");
-	const [
-		englishTitleFields,
-		russianTitleFields,
-		englishVenuesFields,
-		russianVenueFields,
-	] = autoCompleteBoxes
-		? [
-				autoCompleteFields(
-					autoCompleteBoxes.englishTitleAutoCompleteBox,
-				),
-				autoCompleteFields(
-					autoCompleteBoxes.russianTitleAutoCompleteBox,
-				),
-				autoCompleteFields(
-					autoCompleteBoxes.englishVenueAutoCompleteBox,
-				),
-				autoCompleteFields(
-					autoCompleteBoxes.russianVenueAutoCompleteBox,
-				),
-			]
-		: new Array<undefined>(4).fill(undefined);
-
-	return (
-		<div className="flex flex-col gap-3">
-			<Controller
-				control={control}
-				name="title.english"
-				render={({
-					field: { onChange, onBlur, name, value },
-					fieldState: { error },
-				}) => (
-					<>
-						<input
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
-							placeholder={t("titleFieldEn")}
-							autoCapitalize="words"
-							name={name}
-							value={value}
-							autoComplete={englishTitleFields?.autoComplete}
-							data-tooltip-id={englishTitleFields?.dataTooltipId}
-							onChange={e => {
-								onChange(e);
-								englishTitleFields?.onChange(e.target.value);
-							}}
-							onBlur={() => {
-								onBlur();
-								englishTitleFields?.onBlur();
-							}}
-						/>
-						{error && (
-							<span className="text-sm text-red-800">
-								{error.message}
-							</span>
-						)}
-					</>
-				)}
-			/>
-			<Controller
-				control={control}
-				name="title.russian"
-				render={({
-					field: { onChange, onBlur, name, value },
-					fieldState: { error },
-				}) => (
-					<>
-						<input
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
-							placeholder={t("titleFieldRu")}
-							autoCapitalize="words"
-							name={name}
-							value={typeof value === "string" ? value : ""}
-							autoComplete={russianTitleFields?.autoComplete}
-							data-tooltip-id={russianTitleFields?.dataTooltipId}
-							onChange={e => {
-								onChange(e);
-								russianTitleFields?.onChange(e.target.value);
-							}}
-							onBlur={() => {
-								onBlur();
-								russianTitleFields?.onBlur();
-							}}
-						/>
-						{error && (
-							<span className="text-sm text-red-800">
-								{error.message}
-							</span>
-						)}
-					</>
-				)}
-			/>
-			<Controller
-				control={control}
-				name="venue.english"
-				render={({
-					field: { onChange, onBlur, name, value },
-					fieldState: { error },
-				}) => (
-					<>
-						<input
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
-							placeholder={t("venueFieldEn")}
-							autoCapitalize="words"
-							name={name}
-							value={value}
-							autoComplete={englishVenuesFields?.autoComplete}
-							data-tooltip-id={englishVenuesFields?.dataTooltipId}
-							onChange={e => {
-								onChange(e);
-								englishVenuesFields?.onChange(e.target.value);
-							}}
-							onBlur={() => {
-								onBlur();
-								englishVenuesFields?.onBlur();
-							}}
-						/>
-						{error && (
-							<span className="text-sm text-red-800">
-								{error.message}
-							</span>
-						)}
-					</>
-				)}
-			/>
-			<Controller
-				control={control}
-				name="venue.russian"
-				render={({
-					field: { onChange, onBlur, name, value },
-					fieldState: { error },
-				}) => (
-					<>
-						<input
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
-							placeholder={t("venueFieldRu")}
-							autoCapitalize="words"
-							name={name}
-							value={typeof value === "string" ? value : ""}
-							autoComplete={russianVenueFields?.autoComplete}
-							data-tooltip-id={russianVenueFields?.dataTooltipId}
-							onChange={e => {
-								onChange(e);
-								russianVenueFields?.onChange(e.target.value);
-							}}
-							onBlur={() => {
-								onBlur();
-								russianVenueFields?.onBlur();
-							}}
-						/>
-						{error && (
-							<span className="text-sm text-red-800">
-								{error.message}
-							</span>
-						)}
-					</>
-				)}
-			/>
-		</div>
-	);
-}
-function EventTimesFormControl({
-	control,
-	times,
-	addTimeCallback,
-	removeTimeCallback,
-	autoCompleteBoxes,
-}: {
-	control: ReturnType<
-		typeof useScheduleEventSectionForm
-	>["modelView"]["form"]["control"];
-	times: NewScheduleItem["times"];
-	addTimeCallback: (time: NewScheduleItem["times"][number]) => void;
-	removeTimeCallback: (index: number) => void;
-	autoCompleteBoxes?: {
-		englishDesignationsAutoCompleteBox: InitializedModel<
-			AutoCompleteBoxModel<
-				Translation,
-				`times.${number}.designation.english`
-			>
-		>;
-		russianDesignationsAutoCompleteBox: InitializedModel<
-			AutoCompleteBoxModel<
-				CompleteTranslation,
-				`times.${number}.designation.russian`
-			>
-		>;
-	};
-}) {
-	const t = useTranslations("scheduler");
-	const englishDesignationsFields = autoCompleteBoxes
-		? autoCompleteFields(
-				autoCompleteBoxes.englishDesignationsAutoCompleteBox,
-			)
-		: undefined;
-	const russianDesignationsFields = autoCompleteBoxes
-		? autoCompleteFields(
-				autoCompleteBoxes.russianDesignationsAutoCompleteBox,
-			)
-		: undefined;
-
-	return (
-		<div className="flex flex-col gap-3">
-			<Button
-				model={newReadonlyModel({
-					title: t("addTime"),
-					variant: "alternative",
-					action() {
-						addTimeCallback({
-							designation: BLANK_TRANSLATION,
-							time: "09:00",
-						});
-					},
-				})}
-			>
-				{t("addTime")}
-			</Button>
-			<div className="flex flex-col gap-2">
-				{times.map((_, index) => (
-					<div
-						key={index}
-						className="flex flex-col gap-1 md:flex-row"
-					>
-						<Controller
-							control={control}
-							name={`times.${index}.designation`}
-							render={({
-								field: { name, onChange, onBlur, value },
-								fieldState: { error },
-							}) => (
-								<>
-									<input
-										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
-										placeholder={t("designationFieldEn")}
-										autoCapitalize="words"
-										name={`${name}.english`}
-										value={value.english}
-										autoComplete={"off"}
-										data-tooltip-id={`${name}.english`}
-										onChange={e => {
-											onChange({
-												...value,
-												english: e.target.value,
-											});
-											englishDesignationsFields?.onChange(
-												e.target.value,
-												`${name}.english`,
-											);
-										}}
-										onBlur={() => {
-											onBlur();
-											englishDesignationsFields?.onBlur();
-										}}
-									/>
-									<input
-										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
-										placeholder={t("designationFieldRu")}
-										autoCapitalize="words"
-										name={`${name}.russian`}
-										value={
-											typeof value.russian === "string"
-												? value.russian
-												: ""
-										}
-										autoComplete={"off"}
-										data-tooltip-id={`${name}.russian`}
-										onChange={e => {
-											onChange({
-												...value,
-												russian: e.target.value,
-											});
-											russianDesignationsFields?.onChange(
-												e.target.value,
-												`${name}.russian`,
-											);
-										}}
-										onBlur={() => {
-											onBlur();
-											russianDesignationsFields?.onBlur();
-										}}
-									/>
-								</>
-							)}
-						/>
-						<Controller
-							control={control}
-							name={`times.${index}.time`}
-							render={({
-								field: { name, onChange, onBlur, value },
-								fieldState: { error },
-							}) => (
-								<>
-									<input
-										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
-										type="time"
-										placeholder={t("timeField")}
-										name={name}
-										value={value}
-										onChange={onChange}
-										onBlur={onBlur}
-										formNoValidate
-									/>
-								</>
-							)}
-						/>
-						<Button
-							model={newReadonlyModel({
-								title: t("deleteTime"),
-								variant: "alternative",
-								className:
-									"flex justify-center items-center w-fit",
-								action: () => removeTimeCallback(index),
-							})}
-						>
-							<Trash2Icon strokeWidth={1.5} />
-						</Button>
-					</div>
-				))}
-			</div>
-		</div>
-	);
-}
-
-function useScheduleEventSectionForm(
-	scheduleEvent: ScheduleEventModelView["scheduleEvent"],
-	isNewEventValidCallback: NonNullable<
-		ScheduleEventModelView["options"]
-	>["isNewEventValidCallback"],
-	autoCompleteInfo?: ScheduleEventModelView["autoCompleteInfo"],
-) {
-	const instantaneousScheduleItemSchema =
-		useInstantaneousScheduleItemSchema();
-	const recurringScheduleItemSchema = useRecurringScheduleItemSchema();
-	const form = useForm({
-		resolver: zodResolver(
-			scheduleEvent.type === "specific"
-				? instantaneousScheduleItemSchema
-				: recurringScheduleItemSchema,
-		),
-		shouldUnregister: true,
-		defaultValues: defaultForm(),
-		mode: "onChange",
-	});
-	const {
-		getValues,
-		setValue,
-		reset,
-		formState: { isValid, isDirty },
-	} = form;
-
 	const englishTitleAutoCompleteBox = useAutoCompleteBox(
 		{
 			id: "title.english",
@@ -874,6 +404,181 @@ function useScheduleEventSectionForm(
 			setValue("venue", venue);
 		},
 	);
+	const englishTitleFields = autoCompleteFields(englishTitleAutoCompleteBox);
+	const russianTitleFields = autoCompleteFields(russianTitleAutoCompleteBox);
+	const englishVenueFields = autoCompleteFields(englishVenueAutoCompleteBox);
+	const russianVenueFields = autoCompleteFields(russianVenueAutoCompleteBox);
+
+	return (
+		<>
+			<AutoCompleteBox model={englishTitleAutoCompleteBox} />
+			<AutoCompleteBox model={russianTitleAutoCompleteBox} />
+			<AutoCompleteBox model={englishVenueAutoCompleteBox} />
+			<AutoCompleteBox model={russianVenueAutoCompleteBox} />
+			<div className="flex flex-col gap-3">
+				<Controller
+					control={control}
+					name="title.english"
+					render={({
+						field: { onChange, onBlur, name, value },
+						fieldState: { error },
+					}) => (
+						<>
+							<input
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+								placeholder={t("titleFieldEn")}
+								autoCapitalize="words"
+								name={name}
+								value={value}
+								autoComplete={englishTitleFields?.autoComplete}
+								data-tooltip-id={
+									englishTitleFields?.dataTooltipId
+								}
+								onChange={e => {
+									onChange(e);
+									englishTitleFields?.onChange(
+										e.target.value,
+									);
+								}}
+								onBlur={() => {
+									onBlur();
+									englishTitleFields?.onBlur();
+								}}
+							/>
+							{error && (
+								<span className="text-sm text-red-800">
+									{error.message}
+								</span>
+							)}
+						</>
+					)}
+				/>
+				<Controller
+					control={control}
+					name="title.russian"
+					render={({
+						field: { onChange, onBlur, name, value },
+						fieldState: { error },
+					}) => (
+						<>
+							<input
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+								placeholder={t("titleFieldRu")}
+								autoCapitalize="words"
+								name={name}
+								value={typeof value === "string" ? value : ""}
+								autoComplete={russianTitleFields?.autoComplete}
+								data-tooltip-id={
+									russianTitleFields?.dataTooltipId
+								}
+								onChange={e => {
+									onChange(e);
+									russianTitleFields?.onChange(
+										e.target.value,
+									);
+								}}
+								onBlur={() => {
+									onBlur();
+									russianTitleFields?.onBlur();
+								}}
+							/>
+							{error && (
+								<span className="text-sm text-red-800">
+									{error.message}
+								</span>
+							)}
+						</>
+					)}
+				/>
+				<Controller
+					control={control}
+					name="venue.english"
+					render={({
+						field: { onChange, onBlur, name, value },
+						fieldState: { error },
+					}) => (
+						<>
+							<input
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+								placeholder={t("venueFieldEn")}
+								autoCapitalize="words"
+								name={name}
+								value={value}
+								autoComplete={englishVenueFields?.autoComplete}
+								data-tooltip-id={
+									englishVenueFields?.dataTooltipId
+								}
+								onChange={e => {
+									onChange(e);
+									englishVenueFields?.onChange(
+										e.target.value,
+									);
+								}}
+								onBlur={() => {
+									onBlur();
+									englishVenueFields?.onBlur();
+								}}
+							/>
+							{error && (
+								<span className="text-sm text-red-800">
+									{error.message}
+								</span>
+							)}
+						</>
+					)}
+				/>
+				<Controller
+					control={control}
+					name="venue.russian"
+					render={({
+						field: { onChange, onBlur, name, value },
+						fieldState: { error },
+					}) => (
+						<>
+							<input
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+								placeholder={t("venueFieldRu")}
+								autoCapitalize="words"
+								name={name}
+								value={typeof value === "string" ? value : ""}
+								autoComplete={russianVenueFields?.autoComplete}
+								data-tooltip-id={
+									russianVenueFields?.dataTooltipId
+								}
+								onChange={e => {
+									onChange(e);
+									russianVenueFields?.onChange(
+										e.target.value,
+									);
+								}}
+								onBlur={() => {
+									onBlur();
+									russianVenueFields?.onBlur();
+								}}
+							/>
+							{error && (
+								<span className="text-sm text-red-800">
+									{error.message}
+								</span>
+							)}
+						</>
+					)}
+				/>
+			</div>
+		</>
+	);
+}
+function EventTimesFormControl({
+	autoCompleteInfo,
+}: {
+	autoCompleteInfo?: Partial<{
+		designationTranslations: Translation[];
+	}>;
+}) {
+	const t = useTranslations("scheduler");
+	const { control, getValues, setValue, watch } =
+		useFormContext<Pick<NewScheduleItem, "times">>();
+
 	const englishDesignationsAutoCompleteBox = useAutoCompleteBox<
 		Translation,
 		`times.${number}.designation.english`
@@ -910,111 +615,151 @@ function useScheduleEventSectionForm(
 			setValue(`times.${index}.designation`, designation);
 		},
 	);
-	const englishTitleFields = autoCompleteFields(englishTitleAutoCompleteBox);
-	const russianTitleFields = autoCompleteFields(russianTitleAutoCompleteBox);
-	const englishVenueFields = autoCompleteFields(englishVenueAutoCompleteBox);
-	const russianVenueFields = autoCompleteFields(russianVenueAutoCompleteBox);
+
 	const englishDesignationFields = autoCompleteFields(
 		englishDesignationsAutoCompleteBox,
 	);
 	const russianDesignationFields = autoCompleteFields(
 		russianDesignationsAutoCompleteBox,
 	);
-	const currentForm = JSON.stringify(getValues());
-	const [lastForm, setLastForm] = useState(currentForm);
 
-	if (lastForm !== currentForm) setLastForm(currentForm);
-
-	useEffect(() => {
-		const { scheduleItem } = scheduleEvent;
-		if (scheduleItem) {
-			reset(
-				"date" in scheduleItem
-					? {
-							...scheduleItem,
-							date: getDateString(scheduleItem.date, true),
-						}
-					: scheduleItem,
-			);
-		} else {
-			reset(defaultForm());
-		}
-	}, [reset, scheduleEvent]);
-
-	useEffect(() => {
-		if (isValid && isDirty && isNewEventValidCallback) {
-			if (scheduleEvent.type === "recurring") {
-				const newEvent = {
-					type: "recurring",
-					scheduleItem:
-						recurringScheduleItemSchema.safeParse(getValues()).data,
-				} as const;
-				isNewEventValidCallback!(
-					newEvent.scheduleItem
-						? {
-								...newEvent,
-								scheduleItem: newEvent.scheduleItem,
-							}
-						: undefined,
-				);
-			} else {
-				const newEvent = {
-					type: "specific",
-					scheduleItem:
-						instantaneousScheduleItemSchema.safeParse(getValues())
-							.data,
-				} as const;
-				isNewEventValidCallback(
-					newEvent.scheduleItem
-						? {
-								...newEvent,
-								scheduleItem: newEvent.scheduleItem,
-							}
-						: undefined,
-				);
-			}
-		} else {
-			isNewEventValidCallback?.(undefined);
-		}
-	}, [
-		currentForm,
-		getValues,
-		instantaneousScheduleItemSchema,
-		isDirty,
-		isValid,
-		recurringScheduleItemSchema,
-		scheduleEvent.type,
-		isNewEventValidCallback,
-	]);
-
-	useCloseWarning(() => isDirty);
-
-	const model = newReadonlyModel({
-		form,
-		englishTitleAutoCompleteBox,
-		englishVenueAutoCompleteBox,
-		englishDesignationsAutoCompleteBox,
-		russianTitleAutoCompleteBox,
-		russianVenueAutoCompleteBox,
-		russianDesignationsAutoCompleteBox,
-		englishTitleFields,
-		englishVenueFields,
-		englishDesignationFields,
-		russianTitleFields,
-		russianVenueFields,
-		russianDesignationFields,
-	});
-	return model;
-}
-
-function defaultForm():
-	| NewInstantaneousScheduleItem
-	| NewRecurringScheduleItem {
-	return {
-		title: BLANK_TRANSLATION,
-		venue: BLANK_TRANSLATION,
-		date: getDateString(addDays(new Date(), 1), true),
-		recurringPattern: "",
-		times: [{ designation: BLANK_TRANSLATION, time: "09:00" }],
-	};
+	return (
+		<>
+			<AutoCompleteBox model={englishDesignationsAutoCompleteBox} />
+			<AutoCompleteBox model={russianDesignationsAutoCompleteBox} />
+			<div className="flex flex-col gap-3">
+				<Button
+					model={newReadonlyModel({
+						title: t("addTime"),
+						variant: "alternative",
+						action() {
+							setValue("times", [
+								...getValues("times"),
+								{
+									designation: BLANK_TRANSLATION,
+									time: "09:00",
+								},
+							]);
+						},
+					})}
+				>
+					{t("addTime")}
+				</Button>
+				<div className="flex flex-col gap-2">
+					{watch("times").map((_, index) => (
+						<div
+							key={index}
+							className="flex flex-col gap-1 md:flex-row"
+						>
+							<Controller
+								control={control}
+								name={`times.${index}.designation`}
+								render={({
+									field: { name, onChange, onBlur, value },
+									fieldState: { error },
+								}) => (
+									<>
+										<input
+											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+											placeholder={t(
+												"designationFieldEn",
+											)}
+											autoCapitalize="words"
+											name={`${name}.english`}
+											value={value.english}
+											autoComplete={"off"}
+											data-tooltip-id={`${name}.english`}
+											onChange={e => {
+												onChange({
+													...value,
+													english: e.target.value,
+												});
+												englishDesignationFields?.onChange(
+													e.target.value,
+													`${name}.english`,
+												);
+											}}
+											onBlur={() => {
+												onBlur();
+												englishDesignationFields?.onBlur();
+											}}
+										/>
+										<input
+											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+											placeholder={t(
+												"designationFieldRu",
+											)}
+											autoCapitalize="words"
+											name={`${name}.russian`}
+											value={
+												typeof value.russian ===
+												"string"
+													? value.russian
+													: ""
+											}
+											autoComplete={"off"}
+											data-tooltip-id={`${name}.russian`}
+											onChange={e => {
+												onChange({
+													...value,
+													russian: e.target.value,
+												});
+												russianDesignationFields?.onChange(
+													e.target.value,
+													`${name}.russian`,
+												);
+											}}
+											onBlur={() => {
+												onBlur();
+												russianDesignationFields?.onBlur();
+											}}
+										/>
+									</>
+								)}
+							/>
+							<Controller
+								control={control}
+								name={`times.${index}.time`}
+								render={({
+									field: { name, onChange, onBlur, value },
+									fieldState: { error },
+								}) => (
+									<>
+										<input
+											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+											type="time"
+											placeholder={t("timeField")}
+											name={name}
+											value={value}
+											onChange={onChange}
+											onBlur={onBlur}
+											formNoValidate
+										/>
+									</>
+								)}
+							/>
+							<Button
+								model={newReadonlyModel({
+									title: t("deleteTime"),
+									variant: "alternative",
+									className:
+										"flex justify-center items-center w-fit",
+									action: () =>
+										setValue(
+											"times",
+											getValues("times").toSpliced(
+												index,
+												1,
+											),
+										),
+								})}
+							>
+								<Trash2Icon strokeWidth={1.5} />
+							</Button>
+						</div>
+					))}
+				</div>
+			</div>
+		</>
+	);
 }

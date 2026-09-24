@@ -20,7 +20,7 @@ import ConfirmationDialog from "../../confirmation-dialog/ConfirmationDialog";
 import { useConfirmationDialog } from "@/src/lib/model-implementations/confirmation-dialog";
 import { pickTranslation } from "@/src/lib/utilities/miscellaneous";
 import { pickDateTranslation } from "@/src/lib/utilities/date-time";
-import { scrollToSelected } from "@/src/lib/client-only/miscellaneous";
+import { scrollToElement } from "@/src/lib/client-only/miscellaneous";
 
 const Scheduler = function ({ model }) {
 	const { modelView, interact } = model;
@@ -52,7 +52,7 @@ const Scheduler = function ({ model }) {
 	const modifyCallbacks = {
 		async editCallback(event) {
 			await tabs.interact({ type: "SWITCH_TAB", input: { id: 0 } });
-			scrollToSelected(".schedule-event");
+			scrollToElement(".schedule-event");
 			switch (event.type) {
 				case "specific": {
 					const scheduleItem = instantaneousScheduleItems.find(
@@ -240,7 +240,7 @@ const Scheduler = function ({ model }) {
 									type: "SWITCH_TAB",
 									input: { id: 0 },
 								});
-								scrollToSelected(".schedule-event");
+								scrollToElement(".schedule-event");
 								await interact({
 									type: "UPDATE_EVENT_TO_EDIT",
 									input: {
@@ -266,7 +266,7 @@ const Scheduler = function ({ model }) {
 									type: "SWITCH_TAB",
 									input: { id: 0 },
 								});
-								scrollToSelected(".schedule-event");
+								scrollToElement(".schedule-event");
 								await interact({
 									type: "UPDATE_EVENT_TO_EDIT",
 									input: {
@@ -300,7 +300,7 @@ const Scheduler = function ({ model }) {
 											type: "SWITCH_TAB",
 											input: { id: 1 },
 										});
-										scrollToSelected(".view-schedule");
+										scrollToElement(".view-schedule");
 									},
 								},
 							},

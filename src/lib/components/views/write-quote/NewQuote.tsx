@@ -14,7 +14,7 @@ import { NewQuoteModel } from "@/src/lib/models/new-quote";
 import { CompleteTranslation } from "@/src/lib/utilities/types";
 import { autoCompleteFields } from "@/src/lib/utilities/auto-complete-box";
 import { getDateString } from "@/src/lib/utilities/date-time";
-import { useCloseWarning } from "@/src/lib/utilities/hooks";
+import { useCloseWarning } from "@/src/lib/client-only/miscellaneous";
 import { getDefaultValues } from "@/src/lib/utilities/quote-form";
 import { useQuoteFormSchema } from "@/src/lib/validation/quote-form";
 import { zodResolver } from "@hookform/resolvers/zod";

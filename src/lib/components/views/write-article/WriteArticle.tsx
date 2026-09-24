@@ -9,7 +9,7 @@ import Spinner from "@/src/lib/components/spinner/Spinner";
 import { useArticlePreviewModal } from "@/src/lib/model-implementations/article-preview-modal";
 import { useConfirmationDialog } from "@/src/lib/model-implementations/confirmation-dialog";
 import { WriteArticleModel } from "@/src/lib/models/write-article";
-import { useCloseWarning } from "@/src/lib/utilities/hooks";
+import { useCloseWarning } from "@/src/lib/client-only/miscellaneous";
 import { CompleteTranslation } from "@/src/lib/utilities/types";
 import { useArticleSubmissionSchema } from "@/src/lib/validation/article";
 import { zodResolver } from "@hookform/resolvers/zod";

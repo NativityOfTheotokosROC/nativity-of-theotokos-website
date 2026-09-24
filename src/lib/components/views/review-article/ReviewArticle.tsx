@@ -25,7 +25,7 @@ import { useFileUploader } from "@/src/lib/model-implementations/file-uploader";
 import { getPresignedUrl } from "@/src/lib/server-actions/file-transfer";
 import { generateUniqueName } from "@/src/lib/utilities/miscellaneous";
 import FileSelectorButton from "../../file-selector-button/FileSelectorButton";
-import { useCloseWarning } from "@/src/lib/utilities/hooks";
+import { useCloseWarning } from "@/src/lib/client-only/miscellaneous";
 import GoHomeButton from "../../button/GoHomeButton";
 import SuccessGraphic from "@/public/assets/ornament_32.svg";
 import { Check, X } from "lucide-react";

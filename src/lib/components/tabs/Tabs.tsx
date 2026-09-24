@@ -17,9 +17,9 @@ const Tabs = function ({
 		<TabGroup
 			className="flex flex-col gap-6"
 			selectedIndex={selectedTab}
-			onChange={index => {
-				interact({ type: "SWITCH_TAB", input: { id: index } });
-			}}
+			onChange={index =>
+				interact({ type: "SWITCH_TAB", input: { id: index } })
+			}
 		>
 			<TabList
 				className={`flex items-end ${(tabsPosition === "center" && "justify-center") || (tabsPosition === "start" && "justify-start") || (tabsPosition === "end" && "justify-end")} gap-1`}
