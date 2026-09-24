@@ -236,6 +236,11 @@ const Scheduler = function ({ model }) {
 						model={newReadonlyModel({
 							className: "flex justify-start w-full md:w-auto",
 							async action() {
+								await tabs.interact({
+									type: "SWITCH_TAB",
+									input: { id: 0 },
+								});
+								scrollToSelected(".schedule-event");
 								await interact({
 									type: "UPDATE_EVENT_TO_EDIT",
 									input: {
@@ -245,7 +250,6 @@ const Scheduler = function ({ model }) {
 										},
 									},
 								});
-								scrollToSelected(".schedule-event");
 							},
 						})}
 					>
@@ -258,6 +262,11 @@ const Scheduler = function ({ model }) {
 						model={newReadonlyModel({
 							className: "flex justify-start w-full md:w-auto",
 							async action() {
+								await tabs.interact({
+									type: "SWITCH_TAB",
+									input: { id: 0 },
+								});
+								scrollToSelected(".schedule-event");
 								await interact({
 									type: "UPDATE_EVENT_TO_EDIT",
 									input: {
@@ -267,7 +276,6 @@ const Scheduler = function ({ model }) {
 										},
 									},
 								});
-								scrollToSelected(".schedule-event");
 							},
 						})}
 					>
