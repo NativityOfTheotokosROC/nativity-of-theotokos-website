@@ -1,6 +1,5 @@
 import { createHash } from "crypto";
 import { Language, ShareData, Translation } from "./types";
-
 import {
 	names,
 	colors,
@@ -9,12 +8,8 @@ import {
 	uniqueNamesGenerator,
 } from "unique-names-generator";
 
-export function julianDate(date: Date) {
-	return new Date(new Date().setDate(date.getDate() - 13));
-}
-
 export function removeMarkup(markedUpText: string): string {
-	const regex: RegExp = /(<([^>]+)>)/gi;
+	const regex = /(<([^>]+)>)/gi;
 	return markedUpText
 		.replace(/<\/\w+>/gi, " ")
 		.replace(/\s{2,}/gi, " ")
@@ -30,7 +25,7 @@ export function generateUniqueName() {
 	});
 }
 
-export function formatPhoneNumber(phoneNumber: `+${number}`) {
+export function formatPhoneNumber(phoneNumber: `+263${number}`) {
 	let formattedNumber = phoneNumber[0];
 	for (let i = 1; i <= phoneNumber.length; i += 3) {
 		formattedNumber += `${phoneNumber.slice(i, i + 3)} `;
@@ -67,6 +62,7 @@ export function getEncodedShareData(shareData: ShareData) {
 export function snippetify(text: string, capOff: number = 300) {
 	return `${text.substring(0, capOff - 3)}...`;
 }
+
 export function pickTranslation(translation: Translation, target: Language) {
 	return target === "ru"
 		? (translation.russian ?? translation.english)

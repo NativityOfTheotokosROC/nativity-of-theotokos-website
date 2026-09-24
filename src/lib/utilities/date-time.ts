@@ -1,5 +1,6 @@
 import { format, formatInTimeZone, toZonedTime } from "date-fns-tz";
 import { Language } from "./types";
+import { subDays } from "date-fns";
 
 export const DATE_FORMAT = "yyyy-MM-dd" as const;
 export const TIME_FORMAT = "HH:mm";
@@ -82,4 +83,7 @@ export function pickDateTranslation(
 					year: picks?.year ? "2-digit" : undefined,
 				},
 	);
+}
+export function julianDate(date: Date) {
+	return subDays(date, 13);
 }

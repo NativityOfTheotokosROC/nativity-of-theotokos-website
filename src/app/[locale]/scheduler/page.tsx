@@ -26,7 +26,7 @@ export default async function Page() {
 		getAutoCompleteInfo(),
 	]);
 	return (
-		<ProtectedComponent model={newReadonlyModel({ roles: ["admin"] })}>
+		<ProtectedComponent model={newReadonlyModel({ roles: ["scheduler"] })}>
 			<SchedulerClient
 				model={newReadonlyModel({
 					eventToEdit: { type: "specific" },

@@ -13,7 +13,7 @@ export type Clergy = {
 
 export type Contact = {
 	name: string;
-	phone: `+${number}`;
+	phone: `+263${number}`;
 };
 
 export type BottomLink = {
