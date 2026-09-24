@@ -14,10 +14,10 @@ export function julianDate(date: Date) {
 }
 
 export function removeMarkup(markedUpText: string): string {
-	const regex: RegExp = /(<([^>]+)>)/gi;
+	const regex: RegExp = /(<([^>]+)>)/gm;
 	return markedUpText
-		.replace(/<.+\/>/gi, " ")
-		.replace(/\s{2,}/gi, " ")
+		.replace(/<\/.+>/gm, " ")
+		.replace(/\s{2,}/gm, " ")
 		.replace(regex, "");
 }
 

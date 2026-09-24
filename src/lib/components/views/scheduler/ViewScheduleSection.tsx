@@ -52,7 +52,7 @@ const ViewScheduleSection = function ({ model }) {
 	const tMisc = useTranslations("miscellaneous");
 
 	return (
-		<div className="view-schedule flex flex-col gap-6 pt-3">
+		<div className="view-schedule flex scroll-pt-[9em] flex-col gap-6 pt-3">
 			<Button
 				model={newReadonlyModel({
 					action() {
