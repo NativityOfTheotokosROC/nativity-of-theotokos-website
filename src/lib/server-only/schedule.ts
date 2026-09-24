@@ -1,16 +1,14 @@
 import "server-only";
 import z from "zod";
-import { protect } from "../server-actions/auth";
 import database from "../third-party/prisma";
+import { getDateString, getTimeString } from "../utilities/date-time";
 import {
 	InstantaneousScheduleItem,
-	Translation,
 	RecurringScheduleItem,
+	Translation,
 } from "../utilities/types";
-import { getDateString, getTimeString } from "../utilities/date-time";
 
 export async function getScheduleItems(referenceDate: Date | string) {
-	await protect({ roles: ["admin"] });
 	const parsedReferenceDate = new Date(
 		typeof referenceDate === "string"
 			? z.iso.date().parse(referenceDate)
