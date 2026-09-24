@@ -45,7 +45,7 @@ const ScheduleEventSection = function ({ model }) {
 	const { modelView } = model;
 	const { scheduleEvent } = modelView;
 	return (
-		<div className="schedule-event scroll-mt-[3.5em] pt-3">
+		<div className="schedule-event scroll-mt-[2.5em] pt-3">
 			{scheduleEvent.type === "specific" ? (
 				<SpecificScheduleEventForm
 					model={{
