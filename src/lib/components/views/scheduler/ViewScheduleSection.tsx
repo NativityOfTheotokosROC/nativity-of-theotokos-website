@@ -59,7 +59,7 @@ const ViewScheduleSection = function ({ model }) {
 						interact({ type: "SWITCH_LANGUAGE" });
 					},
 					className:
-						"bg-gray-800 hover:bg-gray-900 active:bg-gray-950",
+						"bg-gray-800 hover:bg-gray-900 active:bg-gray-950 w-full",
 				})}
 			>
 				<span className="flex items-center gap-2">
@@ -77,7 +77,7 @@ const ViewScheduleSection = function ({ model }) {
 				</span>
 			</Button>
 			{newEvent && (
-				<div className="flex flex-col gap-3">
+				<div className="new-event-section flex flex-col gap-3">
 					<span className="uppercase">{t("newScheduleSection")}</span>
 					<SchedulePreviewWidget
 						model={newReadonlyModel({

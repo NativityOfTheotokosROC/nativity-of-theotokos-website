@@ -226,15 +226,14 @@ const Scheduler = function ({ model }) {
 			<PageView model={newReadonlyModel({ title: t("title") })}>
 				<ButtonBar
 					model={newReadonlyModel({
-						orientation: "vertical",
+						orientation: "flexible",
 						arrangement: "start",
 						className: "md:flex-row",
 					})}
 				>
 					<Button
 						model={newReadonlyModel({
-							variant: "alternative",
-							className: "flex w-full md:min-w-fit",
+							className: "flex w-full md:w-fit",
 							action() {
 								interact({
 									type: "UPDATE_EVENT_TO_EDIT",
@@ -255,7 +254,6 @@ const Scheduler = function ({ model }) {
 					</Button>
 					<Button
 						model={newReadonlyModel({
-							variant: "alternative",
 							className: "flex w-full md:min-w-fit",
 							action() {
 								interact({
@@ -290,6 +288,13 @@ const Scheduler = function ({ model }) {
 										tabs.interact({
 											type: "SWITCH_TAB",
 											input: { id: 1 },
+										});
+										const newEventSection =
+											document.querySelector(
+												".new-event-section",
+											);
+										newEventSection?.scrollIntoView({
+											behavior: "smooth",
 										});
 									},
 								},
