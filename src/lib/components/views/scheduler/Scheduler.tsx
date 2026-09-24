@@ -51,6 +51,11 @@ const Scheduler = function ({ model }) {
 	const modifyCallbacks = {
 		async editCallback(event) {
 			await tabs.interact({ type: "SWITCH_TAB", input: { id: 0 } });
+			const scheduleEventSection =
+				document.querySelector(".schedule-event");
+			scheduleEventSection?.scrollIntoView({
+				behavior: "smooth",
+			});
 			switch (event.type) {
 				case "specific": {
 					const scheduleItem = instantaneousScheduleItems.find(
@@ -232,9 +237,9 @@ const Scheduler = function ({ model }) {
 				>
 					<Button
 						model={newReadonlyModel({
-							className: "flex w-full md:w-auto",
-							action() {
-								interact({
+							className: "flex justify-start w-full md:w-auto",
+							async action() {
+								await interact({
 									type: "UPDATE_EVENT_TO_EDIT",
 									input: {
 										event: {
@@ -242,6 +247,11 @@ const Scheduler = function ({ model }) {
 											scheduleItem: undefined,
 										},
 									},
+								});
+								const scheduleEventSection =
+									document.querySelector(".schedule-event");
+								scheduleEventSection?.scrollIntoView({
+									behavior: "smooth",
 								});
 							},
 						})}
@@ -253,9 +263,9 @@ const Scheduler = function ({ model }) {
 					</Button>
 					<Button
 						model={newReadonlyModel({
-							className: "flex w-full md:w-auto",
-							action() {
-								interact({
+							className: "flex justify-start w-full md:w-auto",
+							async action() {
+								await interact({
 									type: "UPDATE_EVENT_TO_EDIT",
 									input: {
 										event: {
@@ -263,6 +273,11 @@ const Scheduler = function ({ model }) {
 											scheduleItem: undefined,
 										},
 									},
+								});
+								const scheduleEventSection =
+									document.querySelector(".schedule-event");
+								scheduleEventSection?.scrollIntoView({
+									behavior: "smooth",
 								});
 							},
 						})}
@@ -290,7 +305,7 @@ const Scheduler = function ({ model }) {
 										});
 										const newEventSection =
 											document.querySelector(
-												".new-event-section",
+												".view-schedule",
 											);
 										newEventSection?.scrollIntoView({
 											behavior: "smooth",
