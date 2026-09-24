@@ -64,8 +64,6 @@ export function useImageProcessor(
 	const t = useTranslations("imageProcessor");
 	const [processedImage, setProcessedImage] =
 		useState<ImageProcessorModelView["processedImage"]>(null);
-	const [processedImageBlobUrl, setProcessedImageBlobUrl] =
-		useState<ImageProcessorModelView["processedImageBlobUrl"]>(null);
 	const notifier = useNewStatefulInteractiveModel(
 		imageProcessorNotifierVIInterface(options?.toastNotifier),
 	);
@@ -74,7 +72,6 @@ export function useImageProcessor(
 		modelView: {
 			notification: notifier.modelView?.notification ?? null,
 			processedImage,
-			processedImageBlobUrl,
 		},
 		async interact(interaction) {
 			switch (interaction.type) {
@@ -146,15 +143,16 @@ export function useImageProcessor(
 					}
 
 					try {
-						const processedImage = await compressImage(file, {
-							useWebWorker: true,
-							maxSizeMB: maxTargetOutputSizeMB,
-							maxWidthOrHeight: maxWidthHeight,
+						const { compressedImage, extension } =
+							await compressImage(file, {
+								useWebWorker: true,
+								maxSizeMB: maxTargetOutputSizeMB,
+								maxWidthOrHeight: maxWidthHeight,
+							});
+						setProcessedImage({
+							file: compressedImage,
+							blobURL: URL.createObjectURL(compressedImage),
 						});
-						setProcessedImage(processedImage);
-						setProcessedImageBlobUrl(
-							URL.createObjectURL(processedImage),
-						);
 						await Promise.all([
 							notifier.interact({
 								type: "NOTIFY",
@@ -164,7 +162,10 @@ export function useImageProcessor(
 									},
 								},
 							}),
-							interaction.input.successCallback?.(processedImage),
+							interaction.input.successCallback?.(
+								compressedImage,
+								extension,
+							),
 						]);
 					} catch (error) {
 						await notifier.interact({

@@ -86,9 +86,9 @@ const ReviewArticle = function ({ model }) {
 					type: "PROCESS",
 					input: {
 						file,
-						async successCallback(processedImage) {
+						async successCallback(processedImage, extension) {
 							const presignedUrl = await getPresignedUrl(
-								generateUniqueName(),
+								`${generateUniqueName()}.${extension}`,
 								"news",
 								processedImage.type,
 							);
@@ -215,8 +215,8 @@ const ReviewArticle = function ({ model }) {
 							<Image
 								className="h-full w-full grow object-cover object-center"
 								src={
-									imageProcessor.modelView
-										.processedImageBlobUrl ??
+									imageProcessor.modelView.processedImage
+										?.blobURL ??
 									currentArticle?.articleImage.url ??
 									DEFAULT_ARTICLE_PREVIEW_IMAGE
 								}

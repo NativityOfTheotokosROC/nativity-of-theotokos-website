@@ -6,14 +6,19 @@ export type ImageProcessorNotification =
 	| Notification<"processing_success">;
 
 export type ImageProcessorModelView = {
-	processedImage: File | null;
-	processedImageBlobUrl: string | null;
+	processedImage: {
+		file: File;
+		blobURL: string;
+	} | null;
 	notification: ImageProcessorNotification | null;
 };
 
 export type ImageProcessorModelInteraction = InputModelInteraction<
 	"PROCESS",
-	{ file: File; successCallback?: (processedImage: File) => void }
+	{
+		file: File;
+		successCallback?: (processedImage: File, extension: string) => void;
+	}
 >;
 
 export type ImageProcessorModel = InteractiveModel<

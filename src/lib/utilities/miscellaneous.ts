@@ -15,7 +15,10 @@ export function julianDate(date: Date) {
 
 export function removeMarkup(markedUpText: string): string {
 	const regex: RegExp = /(<([^>]+)>)/gi;
-	return markedUpText.replace(regex, "");
+	return markedUpText
+		.replace(/<.+\/>/gi, " ")
+		.replace(/\s{2,}/gi, " ")
+		.replace(regex, "");
 }
 
 export function generateUniqueName() {

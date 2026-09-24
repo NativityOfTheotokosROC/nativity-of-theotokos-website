@@ -228,12 +228,11 @@ const Scheduler = function ({ model }) {
 					model={newReadonlyModel({
 						orientation: "flexible",
 						arrangement: "start",
-						className: "md:flex-row",
 					})}
 				>
 					<Button
 						model={newReadonlyModel({
-							className: "flex w-full md:w-fit",
+							className: "flex w-full md:w-auto",
 							action() {
 								interact({
 									type: "UPDATE_EVENT_TO_EDIT",
@@ -254,7 +253,7 @@ const Scheduler = function ({ model }) {
 					</Button>
 					<Button
 						model={newReadonlyModel({
-							className: "flex w-full md:min-w-fit",
+							className: "flex w-full md:w-auto",
 							action() {
 								interact({
 									type: "UPDATE_EVENT_TO_EDIT",
@@ -284,8 +283,8 @@ const Scheduler = function ({ model }) {
 									isNewEventValidCallback(newScheduleEvent) {
 										setReadyEvent(newScheduleEvent);
 									},
-									previewCallback() {
-										tabs.interact({
+									async previewCallback() {
+										await tabs.interact({
 											type: "SWITCH_TAB",
 											input: { id: 1 },
 										});
