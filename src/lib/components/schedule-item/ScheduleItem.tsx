@@ -1,7 +1,7 @@
 "use client";
 
 import NormalEventOrnament from "@/public/assets/ornament_12.svg";
-import FeastEventOrnament from "@/public/assets/icon-2.svg";
+import FeastEventOrnament from "@/public/assets/icon-4.svg";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { toZonedTime } from "date-fns-tz";
@@ -53,9 +53,9 @@ const ScheduleItem = function ({ model }) {
 					className={twMerge(
 						`flex max-w-25 min-w-24 grow flex-col items-center gap-2 self-stretch bg-gray-900 p-4 px-5 text-center text-white ${georgia.className}`,
 						eventType === "feast"
-							? "bg-purple-900"
+							? "bg-purple-950"
 							: eventType === "special"
-								? "bg-green-900"
+								? "bg-green-950"
 								: undefined,
 					)}
 				>
@@ -140,9 +140,9 @@ const ScheduleItem = function ({ model }) {
 					className={twMerge(
 						`flex w-full max-w-[5em] grow flex-col items-center gap-1 self-stretch bg-gray-900 p-4 text-center text-white ${georgia.className}`,
 						eventType === "feast"
-							? "bg-purple-900"
+							? "bg-purple-950"
 							: eventType === "special"
-								? "bg-green-900"
+								? "bg-green-950"
 								: undefined,
 					)}
 				>

@@ -575,9 +575,9 @@ function EventMetadataFormControl({
 					name={"eventType"}
 					render={({ field: { onChange, value } }) => {
 						const itemsMap = new Map<typeof value, string>([
+							["normal", t("normalEvent")],
 							["special", t("specialEvent")],
 							["feast", t("feastEvent")],
-							["normal", t("normalEvent")],
 						]);
 						const text = itemsMap.get(value)!;
 						return (
@@ -590,6 +590,9 @@ function EventMetadataFormControl({
 										.toArray(),
 									selectedChangedCallback(selected) {
 										onChange(selected.id);
+									},
+									options: {
+										orientation: "vertical",
 									},
 								})}
 							/>
