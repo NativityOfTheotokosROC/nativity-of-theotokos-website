@@ -36,9 +36,11 @@ const ScheduleItem = function ({ model }) {
 		.sort((a, b) => a.time.getTime() - b.time.getTime())
 		.slice(0, maxDisplayedTimes ?? 3);
 	const isPending =
-		("id" in scheduleItem && scheduleItem.id === undefined) ||
-		("recurringItemId" in scheduleItem &&
-			scheduleItem.recurringItemId === undefined);
+		"recurringItemId" in scheduleItem
+			? scheduleItem.recurringItemId === undefined
+			: "id" in scheduleItem
+				? scheduleItem.id === undefined
+				: true;
 
 	if (variant === "detailed")
 		return (
@@ -72,7 +74,7 @@ const ScheduleItem = function ({ model }) {
 						})}
 					</span>
 					{eventType === "feast" ? (
-						<FeastEventOrnament className="h-10 w-10" fill="#fff" />
+						<FeastEventOrnament className="h-12 w-12" fill="#fff" />
 					) : (
 						<NormalEventOrnament
 							className="h-10 w-10"

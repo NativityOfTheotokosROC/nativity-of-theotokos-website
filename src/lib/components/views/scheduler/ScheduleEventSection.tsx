@@ -728,19 +728,19 @@ function EventTimesFormControl({
 											value={value.english}
 											autoComplete={"off"}
 											data-tooltip-id={`${name}.english`}
-											onChange={e => {
+											onChange={async e => {
 												onChange({
 													...value,
 													english: e.target.value,
 												});
-												englishDesignationFields?.onChange(
+												await englishDesignationFields?.onChange(
 													e.target.value,
 													`${name}.english`,
 												);
 											}}
-											onBlur={() => {
+											onBlur={async () => {
 												onBlur();
-												englishDesignationFields?.onBlur();
+												await englishDesignationFields?.onBlur();
 											}}
 										/>
 										<input
@@ -758,19 +758,19 @@ function EventTimesFormControl({
 											}
 											autoComplete={"off"}
 											data-tooltip-id={`${name}.russian`}
-											onChange={e => {
+											onChange={async e => {
 												onChange({
 													...value,
 													russian: e.target.value,
 												});
-												russianDesignationFields?.onChange(
+												await russianDesignationFields?.onChange(
 													e.target.value,
 													`${name}.russian`,
 												);
 											}}
-											onBlur={() => {
+											onBlur={async () => {
 												onBlur();
-												russianDesignationFields?.onBlur();
+												await russianDesignationFields?.onBlur();
 											}}
 										/>
 									</>
