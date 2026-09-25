@@ -53,7 +53,7 @@ const ScheduleItem = function ({ model }) {
 					className={twMerge(
 						`flex max-w-25 min-w-24 grow flex-col items-center gap-2 self-stretch bg-gray-900 p-4 px-5 text-center text-white ${georgia.className}`,
 						eventType === "feast"
-							? "bg-purple-950"
+							? "bg-violet-950"
 							: eventType === "special"
 								? "bg-green-950"
 								: undefined,
@@ -140,7 +140,7 @@ const ScheduleItem = function ({ model }) {
 					className={twMerge(
 						`flex w-full max-w-[5em] grow flex-col items-center gap-1 self-stretch bg-gray-900 p-4 text-center text-white ${georgia.className}`,
 						eventType === "feast"
-							? "bg-purple-950"
+							? "bg-violet-950"
 							: eventType === "special"
 								? "bg-green-950"
 								: undefined,
