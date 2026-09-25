@@ -21,7 +21,6 @@ export default function AutoCompleteBox<I, K extends string>({
 		});
 	const computedOpen = (isOpen && filteredItems.length > 0) ?? false;
 	const [isClickable, setClickable] = useState(computedOpen); //TODO: Not ideal
-	// DONE: Modify so transition out of vis maintains previous list of items for better UX
 	const [lastVisibleItems, setLastVisibleItems] = useState(filteredItems);
 	const displayedItems = computedOpen ? filteredItems : lastVisibleItems;
 	if (
@@ -46,12 +45,12 @@ export default function AutoCompleteBox<I, K extends string>({
 						<button
 							type="button"
 							key={`${arrayIndex}`}
-							onClick={async () => {
-								await interact({
+							onClick={() =>
+								interact({
 									type: "SELECT",
 									input: { index: arrayIndex },
-								});
-							}}
+								})
+							}
 							className="bg-transparent p-3 text-left hover:text-[#ffdc4f] active:text-[#ffdc4f]"
 						>
 							{transformer(item)}

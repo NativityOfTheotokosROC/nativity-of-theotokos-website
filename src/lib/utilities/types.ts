@@ -45,6 +45,7 @@ export type ScheduleItem<T extends Text = string> = {
 		time: string;
 		designation: T;
 	}[];
+	eventType: "normal" | "feast" | "special";
 };
 
 export type ScheduleItemWithTranslations = ScheduleItem<Translation>;

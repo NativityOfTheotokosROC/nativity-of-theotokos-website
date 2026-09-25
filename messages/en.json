@@ -342,7 +342,10 @@
 		"confirmEnableSpecific": "Are you sure you want to enable the event ''{title}'' scheduled for {date}?",
 		"confirmEnableRecurring": "Are you sure you want to enable the recurring event ''{title}''?",
 		"confirmDisableSpecific": "Are you sure you want to disable the event ''{title}'' scheduled for {date}?",
-		"confirmDisableRecurring": "Are you sure you want to disable the recurring event ''{title}''?"
+		"confirmDisableRecurring": "Are you sure you want to disable the recurring event ''{title}''?",
+		"normalEvent": "Normal Event",
+		"specialEvent": "Special Occasion",
+		"feastEvent": "Feast"
 	},
 	"recurringScheduleItem": {
 		"description": "Event recurs {parsedCronString}"

@@ -152,7 +152,7 @@ export function getArticleSchema(t?: Translator) {
 	});
 }
 
-export function useArticleAuthorSchema(t?: Translator) {
+export function useArticleAuthorSchema() {
 	return useLocalizedSchema(getArticleAuthorSchema);
 }
 

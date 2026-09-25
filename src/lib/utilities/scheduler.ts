@@ -12,7 +12,7 @@ import {
 	NewRecurringScheduleItem,
 	useInstantaneousScheduleItemSchema,
 	useRecurringScheduleItemSchema,
-} from "../validation/schedule-item";
+} from "../validation/schedule";
 import { getDateString } from "./date-time";
 import { addDays } from "date-fns";
 import { BLANK_TRANSLATION } from "./constants";
@@ -125,5 +125,6 @@ export function defaultForm():
 		date: getDateString(addDays(new Date(), 1), true),
 		recurringPattern: "",
 		times: [{ designation: BLANK_TRANSLATION, time: "09:00" }],
+		eventType: "normal",
 	};
 }

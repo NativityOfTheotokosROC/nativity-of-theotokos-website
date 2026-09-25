@@ -32,7 +32,7 @@ const Checkbox = function ({ model }) {
 		>
 			<HeadlessUICheckbox
 				className={twMerge(
-					`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white data-checked:bg-gray-900`,
+					`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white data-checked:bg-gray-800`,
 					options?.checkboxClassName,
 					disabled && "opacity-70 grayscale",
 				)}
@@ -42,7 +42,7 @@ const Checkbox = function ({ model }) {
 			>
 				<Check
 					className={twMerge(
-						"hidden size-4 stroke-white group-data-checked:block",
+						"invisible size-4 stroke-white transition group-data-checked:visible",
 						options?.checkClassName,
 					)}
 				/>

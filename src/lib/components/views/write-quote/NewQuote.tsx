@@ -1,5 +1,6 @@
 "use client";
 
+import { useCloseWarning } from "@/src/lib/client-only/miscellaneous";
 import AutoCompleteBox from "@/src/lib/components/auto-complete-box/AutoCompleteBox";
 import Button from "@/src/lib/components/button/Button";
 import Checkbox from "@/src/lib/components/checkbox/Checkbox";
@@ -11,17 +12,18 @@ import { useAutoCompleteBox } from "@/src/lib/model-implementations/auto-complet
 import { useQuotePreviewModal } from "@/src/lib/model-implementations/quote-preview-model";
 import { useTabs } from "@/src/lib/model-implementations/tabs";
 import { NewQuoteModel } from "@/src/lib/models/new-quote";
-import { CompleteTranslation } from "@/src/lib/utilities/types";
 import { autoCompleteFields } from "@/src/lib/utilities/auto-complete-box";
 import { getDateString } from "@/src/lib/utilities/date-time";
-import { useCloseWarning } from "@/src/lib/client-only/miscellaneous";
 import { getDefaultValues } from "@/src/lib/utilities/quote-form";
-import { useQuoteFormSchema } from "@/src/lib/validation/quote-form";
+import { CompleteTranslation, Translator } from "@/src/lib/utilities/types";
+import { getQuoteSchema } from "@/src/lib/validation/quote";
+import { useLocalizedSchema } from "@/src/lib/validation/utilities";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
+import z from "zod";
 
 const NewQuote = function ({ model }) {
 	const { modelView, interact } = model;
@@ -38,7 +40,7 @@ const NewQuote = function ({ model }) {
 		formState: { isSubmitting, errors, isValid, isDirty },
 	} = useForm({
 		mode: "onChange",
-		resolver: zodResolver(useQuoteFormSchema()),
+		resolver: zodResolver(useLocalizedSchema(getQuoteFormSchema)),
 		shouldUnregister: true,
 		defaultValues,
 	});
@@ -480,3 +482,10 @@ const NewQuote = function ({ model }) {
 } satisfies ModeledVoidComponent<InitializedModel<NewQuoteModel>>;
 
 export default NewQuote;
+
+function getQuoteFormSchema(t?: Translator) {
+	const quoteSchema = getQuoteSchema(t);
+	return quoteSchema.extend({
+		isQuoteScheduled: z.boolean(),
+	});
+}

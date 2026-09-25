@@ -19,7 +19,7 @@ import {
 	transformDaysToPattern,
 	transformPatternToDays,
 } from "@/src/lib/utilities/weekday-selector";
-import { NewScheduleItem } from "@/src/lib/validation/schedule-item";
+import { NewScheduleItem } from "@/src/lib/validation/schedule";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { Trash2Icon } from "lucide-react";
@@ -29,6 +29,7 @@ import AutoCompleteBox from "../../auto-complete-box/AutoCompleteBox";
 import ButtonBar from "../../button-bar/ButtonBar";
 import Checkbox from "../../checkbox/Checkbox";
 import { useScheduleEventForm } from "@/src/lib/utilities/scheduler";
+import RadioGroup from "../../radio-group/RadioGroup";
 
 const ScheduleEventSection = function ({ model }) {
 	const { modelView } = model;
@@ -349,6 +350,7 @@ const SpecificScheduleEventForm = function ({ model }) {
 		>
 	>
 >;
+
 function EventMetadataFormControl({
 	autoCompleteInfo,
 }: {
@@ -411,10 +413,14 @@ function EventMetadataFormControl({
 
 	return (
 		<>
-			<AutoCompleteBox model={englishTitleAutoCompleteBox} />
-			<AutoCompleteBox model={russianTitleAutoCompleteBox} />
-			<AutoCompleteBox model={englishVenueAutoCompleteBox} />
-			<AutoCompleteBox model={russianVenueAutoCompleteBox} />
+			{autoCompleteInfo && (
+				<>
+					<AutoCompleteBox model={englishTitleAutoCompleteBox} />
+					<AutoCompleteBox model={russianTitleAutoCompleteBox} />
+					<AutoCompleteBox model={englishVenueAutoCompleteBox} />
+					<AutoCompleteBox model={russianVenueAutoCompleteBox} />
+				</>
+			)}
 			<div className="flex flex-col gap-3">
 				<Controller
 					control={control}
@@ -564,10 +570,37 @@ function EventMetadataFormControl({
 						</>
 					)}
 				/>
+				<Controller
+					control={control}
+					name={"eventType"}
+					render={({ field: { onChange, value } }) => {
+						const itemsMap = new Map<typeof value, string>([
+							["special", t("specialEvent")],
+							["feast", t("feastEvent")],
+							["normal", t("normalEvent")],
+						]);
+						const text = itemsMap.get(value)!;
+						return (
+							<RadioGroup
+								model={newReadonlyModel({
+									selected: { id: value, text },
+									items: itemsMap
+										.entries()
+										.map(([id, text]) => ({ id, text }))
+										.toArray(),
+									selectedChangedCallback(selected) {
+										onChange(selected.id);
+									},
+								})}
+							/>
+						);
+					}}
+				/>
 			</div>
 		</>
 	);
 }
+
 function EventTimesFormControl({
 	autoCompleteInfo,
 }: {
@@ -625,8 +658,16 @@ function EventTimesFormControl({
 
 	return (
 		<>
-			<AutoCompleteBox model={englishDesignationsAutoCompleteBox} />
-			<AutoCompleteBox model={russianDesignationsAutoCompleteBox} />
+			{autoCompleteInfo && (
+				<>
+					<AutoCompleteBox
+						model={englishDesignationsAutoCompleteBox}
+					/>
+					<AutoCompleteBox
+						model={russianDesignationsAutoCompleteBox}
+					/>
+				</>
+			)}
 			<div className="flex flex-col gap-3">
 				<Button
 					model={newReadonlyModel({

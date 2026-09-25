@@ -341,7 +341,10 @@
 		"confirmEnableSpecific": "Вы уверены, что хотите включить событие «{title}», запланированное на {date}?",
 		"confirmEnableRecurring": "Вы уверены, что хотите включить повторяющееся событие «{title}»?",
 		"confirmDisableSpecific": "Вы уверены, что хотите отключить событие «{title}», запланированное на {date}?",
-		"confirmDisableRecurring": "Вы уверены, что хотите отключить повторяющееся событие «{title}»?"
+		"confirmDisableRecurring": "Вы уверены, что хотите отключить повторяющееся событие «{title}»?",
+		"normalEvent": "Обычное событие",
+		"specialEvent": "Особое событие",
+		"feastEvent": "Праздник"
 	},
 	"recurringScheduleItem": {
 		"description": "Событие повторяется {parsedCronString}"

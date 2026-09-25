@@ -14,7 +14,7 @@ import { pickTranslation } from "./miscellaneous";
 import {
 	NewInstantaneousScheduleItem,
 	NewRecurringScheduleItem,
-} from "../validation/schedule-item";
+} from "../validation/schedule";
 
 export type BaseScheduleEvent<
 	T extends string,
@@ -90,6 +90,7 @@ export function getNextRecurringScheduleItemInstances<T extends Text = string>(
 		venue,
 		times,
 		isDisabled,
+		eventType,
 	}: RecurringScheduleItemWithOptionalId<T>,
 	instances: number,
 	referenceDate?: Date,
@@ -107,6 +108,7 @@ export function getNextRecurringScheduleItemInstances<T extends Text = string>(
 				date,
 				times,
 				isRemoved: isDisabled,
+				eventType,
 			}) satisfies MakeOptional<
 				RecurringScheduleItemInstance<T>,
 				"recurringItemId"

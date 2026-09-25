@@ -45,8 +45,10 @@ model InstantaneousScheduleItem {
   date                           DateTime                          @db.Date
   removedScheduleItem            RemovedInstantaneousScheduleItem?
   instantaneousScheduleItemTimes InstantaneousScheduleItemTime[]
+  eventType                      EventType                         @relation(fields: [eventTypeName], references: [name])
   titleTranslationId             Int
   venueTranslationId             Int
+  eventTypeName                  String                            @default("normal")
 
   @@unique([venueTranslationId, date])
 }
@@ -58,10 +60,19 @@ model RecurringScheduleItem {
   pattern                       String
   disabledRecurringScheduleItem DisabledRecurringScheduleItem?
   recurringScheduleItemTimes    RecurringScheduleItemTime[]
+  eventType                     EventType                      @relation(fields: [eventTypeName], references: [name])
   titleTranslationId            Int
   venueTranslationId            Int
+  eventTypeName                 String                         @default("normal")
 
   @@unique([venueTranslationId, pattern])
+}
+
+model EventType {
+  id                         Int                         @id @default(autoincrement())
+  name                       String                      @unique
+  recurringScheduleItems     RecurringScheduleItem[]
+  instantaneousScheduleItems InstantaneousScheduleItem[]
 }
 
 model InstantaneousScheduleItemTime {

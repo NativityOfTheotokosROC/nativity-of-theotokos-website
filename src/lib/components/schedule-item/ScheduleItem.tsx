@@ -1,6 +1,7 @@
 "use client";
 
-import FeaturedItemOrnament from "@/public/assets/ornament_12.svg";
+import NormalEventOrnament from "@/public/assets/ornament_12.svg";
+import FeastEventOrnament from "@/public/assets/icon-2.svg";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { toZonedTime } from "date-fns-tz";
@@ -23,7 +24,7 @@ import EditScheduleItemPanel from "./EditScheduleItemPanel";
 const ScheduleItem = function ({ model }) {
 	const { scheduleItem, variant, maxDisplayedTimes, options } =
 		model.modelView;
-	const { title, venue, date, times } = scheduleItem;
+	const { title, venue, date, times, eventType } = scheduleItem;
 	const locale = useLocale();
 	const language = options?.language ?? locale;
 	const nativeDate = toZonedTime(date, getNativeTimeZone());
@@ -44,12 +45,19 @@ const ScheduleItem = function ({ model }) {
 				className={twMerge(
 					"schedule-item flex h-fit overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3]",
 					scheduleItem.isRemoved && "opacity-70 grayscale",
-					isPending && "border-dashed",
+					isPending && "border-4 border-dashed",
 					options?.className,
 				)}
 			>
 				<div
-					className={`flex max-w-25 min-w-24 grow flex-col items-center gap-2 self-stretch bg-gray-900 p-4 px-5 text-center text-white ${georgia.className}`}
+					className={twMerge(
+						`flex max-w-25 min-w-24 grow flex-col items-center gap-2 self-stretch bg-gray-900 p-4 px-5 text-center text-white ${georgia.className}`,
+						eventType === "feast"
+							? "bg-purple-900"
+							: eventType === "special"
+								? "bg-green-900"
+								: undefined,
+					)}
 				>
 					<span className="text-4xl">
 						{pickDateTranslation(nativeDate, language, {
@@ -62,7 +70,14 @@ const ScheduleItem = function ({ model }) {
 							year: true,
 						})}
 					</span>
-					<FeaturedItemOrnament className="h-10 w-10" fill="#fff" />
+					{eventType === "feast" ? (
+						<FeastEventOrnament className="h-10 w-10" fill="#fff" />
+					) : (
+						<NormalEventOrnament
+							className="h-10 w-10"
+							fill="#fff"
+						/>
+					)}
 				</div>
 				<div className="flex flex-col gap-1 px-5.5 py-4">
 					<span className="text-xl">{title}</span>
@@ -117,12 +132,19 @@ const ScheduleItem = function ({ model }) {
 				className={twMerge(
 					"schedule-item flex h-fit items-center overflow-clip rounded-lg border border-gray-900/20 bg-[#FEF8F3]",
 					scheduleItem.isRemoved && "opacity-70 grayscale",
-					isPending && "border-dashed",
+					isPending && "border-4 border-dashed",
 					options?.className,
 				)}
 			>
 				<div
-					className={`flex w-full max-w-[5em] grow flex-col items-center gap-1 self-stretch bg-gray-900 p-4 text-center text-white ${georgia.className}`}
+					className={twMerge(
+						`flex w-full max-w-[5em] grow flex-col items-center gap-1 self-stretch bg-gray-900 p-4 text-center text-white ${georgia.className}`,
+						eventType === "feast"
+							? "bg-purple-900"
+							: eventType === "special"
+								? "bg-green-900"
+								: undefined,
+					)}
 				>
 					<span className="text-xl">
 						{pickDateTranslation(nativeDate, language, {

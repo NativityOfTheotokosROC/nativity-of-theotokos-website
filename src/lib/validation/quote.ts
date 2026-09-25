@@ -1,7 +1,6 @@
 import z from "zod";
-import { Translator } from "../utilities/types";
 import { getDateString } from "../utilities/date-time";
-import { emptyStringAsUndefined } from "../utilities/miscellaneous";
+import { Translator } from "../utilities/types";
 import {
 	getOptionalStringSchema,
 	getTranslationSchema,

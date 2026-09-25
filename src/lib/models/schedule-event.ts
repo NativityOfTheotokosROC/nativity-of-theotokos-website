@@ -4,7 +4,7 @@ import { MakeOptional, Options, Translation } from "../utilities/types";
 import {
 	NewInstantaneousScheduleItem,
 	NewRecurringScheduleItem,
-} from "../validation/schedule-item";
+} from "../validation/schedule";
 import { ScheduleEventWithOptionalId } from "./scheduler";
 
 export type NewScheduleEvent = {

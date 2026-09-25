@@ -14,13 +14,14 @@ import {
 	InstantaneousScheduleItem,
 	Language,
 	RecurringScheduleItemInstance,
+	ScheduleItem,
 } from "../utilities/types";
 import {
 	getInstantaneousScheduleItemSchema,
 	getRecurringScheduleItemSchema,
 	NewInstantaneousScheduleItem,
 	NewRecurringScheduleItem,
-} from "../validation/schedule-item";
+} from "../validation/schedule";
 import { protect } from "./auth";
 
 export async function getSchedule(
@@ -109,6 +110,7 @@ export async function getSchedule(
 				title,
 				venue,
 				date,
+				eventTypeName,
 				instantaneousScheduleItemTimes,
 				removedScheduleItem,
 			}) => ({
@@ -132,6 +134,7 @@ export async function getSchedule(
 					}),
 				),
 				isRemoved: removedScheduleItem !== null,
+				eventType: eventTypeName as ScheduleItem["eventType"],
 			}),
 		);
 	const recurringScheduleItemInstanceExclusions = includeInactive
@@ -159,6 +162,7 @@ export async function getSchedule(
 			title,
 			venue,
 			pattern,
+			eventTypeName,
 			recurringScheduleItemTimes,
 			disabledRecurringScheduleItem,
 		}) => {
@@ -195,6 +199,7 @@ export async function getSchedule(
 							}),
 						),
 						isRemoved: disabledRecurringScheduleItem !== null,
+						eventType: eventTypeName as ScheduleItem["eventType"],
 					});
 			});
 		},
@@ -214,7 +219,7 @@ export async function scheduleInstantaneousItem(
 	await protect({ roles: ["scheduler"] });
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const scheduleItemSchema = getInstantaneousScheduleItemSchema(t);
-	const { title, venue, date, times, isRemoved } =
+	const { title, venue, date, times, isRemoved, eventType } =
 		scheduleItemSchema.parse(newScheduleItem);
 	const result = await database.$transaction(async transaction => {
 		const existingRecord = await transaction.translation.findUnique({
@@ -264,6 +269,9 @@ export async function scheduleInstantaneousItem(
 					},
 					date: new Date(date),
 					removedScheduleItem: isRemoved ? { create: {} } : undefined,
+					eventType: eventType
+						? { connect: { name: eventType } }
+						: undefined,
 				},
 			},
 		);
@@ -295,7 +303,7 @@ export async function scheduleInstantaneousItem(
 	});
 	revalidateTag("schedule", "max");
 	return parseNewScheduleItemWithId(
-		{ title, venue, times, date, isRemoved },
+		{ title, venue, times, date, isRemoved, eventType },
 		result.id,
 	);
 }
@@ -307,7 +315,7 @@ export async function scheduleRecurringItem(
 	await protect({ roles: ["scheduler"] });
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const scheduleItemSchema = getRecurringScheduleItemSchema(t);
-	const { title, venue, recurringPattern, times, isDisabled } =
+	const { title, venue, recurringPattern, times, isDisabled, eventType } =
 		scheduleItemSchema.parse(newScheduleItem);
 	const tokenDate = getDateString(new Date());
 	const result = await database.$transaction(async transaction => {
@@ -341,6 +349,9 @@ export async function scheduleRecurringItem(
 				disabledRecurringScheduleItem: isDisabled
 					? { create: {} }
 					: undefined,
+				eventType: eventType
+					? { connect: { name: eventType } }
+					: undefined,
 			},
 		});
 		for (const { designation, time } of times) {
@@ -371,7 +382,7 @@ export async function scheduleRecurringItem(
 	});
 	revalidateTag("schedule", "max");
 	return parseNewScheduleItemWithId(
-		{ title, venue, times, recurringPattern, isDisabled },
+		{ title, venue, times, recurringPattern, isDisabled, eventType },
 		result.id,
 	);
 }
@@ -383,7 +394,7 @@ export async function updateInstantaneousItem(
 ) {
 	await protect({ roles: ["scheduler"] });
 	const t = await getTranslations({ locale: locale ?? "en" });
-	const { title, venue, date, times, isRemoved } =
+	const { title, venue, date, times, isRemoved, eventType } =
 		getInstantaneousScheduleItemSchema(t).parse(newScheduleItem);
 	await database.$transaction(async transaction => {
 		const titleRecord = await transaction.translation.upsert({
@@ -425,6 +436,9 @@ export async function updateInstantaneousItem(
 					},
 				},
 				date: new Date(date),
+				eventType: eventType
+					? { connect: { name: eventType } }
+					: undefined,
 				instantaneousScheduleItemTimes: {
 					deleteMany: {},
 					createMany: {
@@ -495,7 +509,7 @@ export async function updateRecurringItem(
 ) {
 	await protect({ roles: ["scheduler"] });
 	const t = await getTranslations({ locale: locale ?? "en" });
-	const { title, venue, recurringPattern, times, isDisabled } =
+	const { title, venue, recurringPattern, times, isDisabled, eventType } =
 		getRecurringScheduleItemSchema(t).parse(newScheduleItem);
 	const tokenDate = getDateString(new Date());
 
@@ -539,6 +553,9 @@ export async function updateRecurringItem(
 					},
 				},
 				pattern: recurringPattern,
+				eventType: eventType
+					? { connect: { name: eventType } }
+					: undefined,
 				recurringScheduleItemTimes: {
 					deleteMany: {},
 					createMany: {
