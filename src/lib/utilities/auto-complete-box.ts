@@ -26,7 +26,7 @@ export function autoCompleteFields<I, K extends string>(
 			});
 		},
 		async onBlur() {
-			await autoCompleteBox.interact({
+			autoCompleteBox.interact({
 				type: "CLOSE",
 			});
 		},
