@@ -9,7 +9,7 @@ import { getMd5Hash } from "../utilities/miscellaneous";
 import { getQuoteSchema, NewQuote } from "../validation/quote";
 import { protect } from "./auth";
 import { Translation } from "../utilities/types";
-import { AutoCompleteInfo } from "../utilities/quote-form";
+import { AutoCompleteInfo } from "../models/new-quote";
 
 export async function getAutoCompleteInfo() {
 	await protect({ roles: ["quotes"] });

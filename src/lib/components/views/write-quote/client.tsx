@@ -4,8 +4,8 @@ import { useNewQuote } from "@/src/lib/model-implementations/new-quote";
 import NewQuote from "./NewQuote";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { AutoCompleteInfo } from "@/src/lib/utilities/quote-form";
 import { useToastNotifier } from "@/src/lib/model-implementations/notifier";
+import { AutoCompleteInfo } from "@/src/lib/models/new-quote";
 
 const NewQuoteClient = function ({ model }) {
 	const { autoCompleteInfo } = model.modelView;
