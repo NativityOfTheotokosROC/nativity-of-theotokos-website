@@ -44,6 +44,7 @@ export default function AutoCompleteBox<I, K extends string>({
 				<div className="auto-complete-items flex max-h-[9em] w-[17em] max-w-[17em] flex-col overflow-y-auto pr-3 text-sm">
 					{displayedItems.map(({ item, arrayIndex }) => (
 						<button
+							type="button"
 							key={`${arrayIndex}`}
 							onClick={async () => {
 								await interact({
