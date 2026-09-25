@@ -1,7 +1,11 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
-import { Notification, Options } from "../utilities/types";
-import { AutoCompleteInfo } from "../utilities/quote-form";
+import { Notification, Options, Translation } from "../utilities/types";
 import { NewQuote } from "../validation/quote";
+
+export type AutoCompleteInfo = {
+	existingAuthors: Translation[];
+	existingSources: Translation[];
+};
 
 export type Quote = {
 	author: string;

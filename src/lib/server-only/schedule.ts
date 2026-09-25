@@ -5,6 +5,7 @@ import { getDateString, getTimeString } from "../utilities/date-time";
 import {
 	InstantaneousScheduleItem,
 	RecurringScheduleItem,
+	ScheduleItem,
 	Translation,
 } from "../utilities/types";
 
@@ -66,6 +67,7 @@ export async function getScheduleItems(referenceDate: Date | string) {
 				id,
 				instantaneousScheduleItemTimes,
 				removedScheduleItem,
+				eventTypeName,
 			}) => ({
 				id,
 				title,
@@ -78,6 +80,7 @@ export async function getScheduleItems(referenceDate: Date | string) {
 						time: getTimeString(time),
 					}),
 				),
+				eventType: eventTypeName as ScheduleItem["eventType"],
 			}),
 		),
 		recurring: recurringScheduleItemRecords.map(
@@ -88,12 +91,14 @@ export async function getScheduleItems(referenceDate: Date | string) {
 				pattern,
 				recurringScheduleItemTimes,
 				disabledRecurringScheduleItem,
+				eventTypeName,
 			}) => ({
 				id,
 				title,
 				venue,
 				recurringPattern: pattern,
 				isDisabled: disabledRecurringScheduleItem !== null,
+				eventType: eventTypeName as ScheduleItem["eventType"],
 				times: recurringScheduleItemTimes.map(
 					({ designation, time }) => ({
 						designation,

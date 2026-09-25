@@ -5,7 +5,11 @@ import {
 } from "@mvc-react/stateful";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { NewQuoteModel, NewQuoteNotification } from "../models/new-quote";
+import {
+	AutoCompleteInfo,
+	NewQuoteModel,
+	NewQuoteNotification,
+} from "../models/new-quote";
 import {
 	NotifierModel,
 	NotifierModelInteraction,
@@ -13,7 +17,6 @@ import {
 } from "../models/notifier";
 import { ToastNotification } from "../models/toast";
 import { addNewQuote } from "../server-actions/quote";
-import { AutoCompleteInfo } from "../utilities/quote-form";
 
 function newQuoteNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,

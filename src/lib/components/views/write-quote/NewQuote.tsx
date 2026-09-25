@@ -14,13 +14,13 @@ import { useTabs } from "@/src/lib/model-implementations/tabs";
 import { NewQuoteModel } from "@/src/lib/models/new-quote";
 import { autoCompleteFields } from "@/src/lib/utilities/auto-complete-box";
 import { getDateString } from "@/src/lib/utilities/date-time";
-import { getDefaultValues } from "@/src/lib/utilities/quote-form";
 import { CompleteTranslation, Translator } from "@/src/lib/utilities/types";
 import { getQuoteSchema } from "@/src/lib/validation/quote";
 import { useLocalizedSchema } from "@/src/lib/validation/utilities";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
+import { addDays } from "date-fns";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
@@ -488,4 +488,14 @@ function getQuoteFormSchema(t?: Translator) {
 	return quoteSchema.extend({
 		isQuoteScheduled: z.boolean(),
 	});
+}
+
+function getDefaultValues() {
+	return {
+		author: { english: "", russian: "" },
+		quote: { english: "", russian: "" },
+		source: { english: "", russian: "" },
+		isQuoteScheduled: false,
+		scheduledDate: getDateString(addDays(new Date(), 1), true),
+	} satisfies Required<z.infer<ReturnType<typeof getQuoteFormSchema>>>;
 }
