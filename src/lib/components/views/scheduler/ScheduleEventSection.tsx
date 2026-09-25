@@ -440,9 +440,7 @@ function EventMetadataFormControl({
 								name={name}
 								value={value}
 								autoComplete={englishTitleFields?.autoComplete}
-								data-tooltip-id={
-									englishTitleFields?.dataTooltipId
-								}
+								id={englishTitleFields?.dataTooltipId}
 								onChange={e => {
 									onChange(e);
 									englishTitleFields?.onChange(
@@ -477,9 +475,7 @@ function EventMetadataFormControl({
 								name={name}
 								value={typeof value === "string" ? value : ""}
 								autoComplete={russianTitleFields?.autoComplete}
-								data-tooltip-id={
-									russianTitleFields?.dataTooltipId
-								}
+								id={russianTitleFields?.dataTooltipId}
 								onChange={e => {
 									onChange(e);
 									russianTitleFields?.onChange(
@@ -514,9 +510,7 @@ function EventMetadataFormControl({
 								name={name}
 								value={value}
 								autoComplete={englishVenueFields?.autoComplete}
-								data-tooltip-id={
-									englishVenueFields?.dataTooltipId
-								}
+								id={englishVenueFields?.dataTooltipId}
 								onChange={e => {
 									onChange(e);
 									englishVenueFields?.onChange(
@@ -551,9 +545,7 @@ function EventMetadataFormControl({
 								name={name}
 								value={typeof value === "string" ? value : ""}
 								autoComplete={russianVenueFields?.autoComplete}
-								data-tooltip-id={
-									russianVenueFields?.dataTooltipId
-								}
+								id={russianVenueFields?.dataTooltipId}
 								onChange={e => {
 									onChange(e);
 									russianVenueFields?.onChange(
@@ -727,7 +719,7 @@ function EventTimesFormControl({
 											name={`${name}.english`}
 											value={value.english}
 											autoComplete={"off"}
-											data-tooltip-id={`${name}.english`}
+											id={`${name}.english`}
 											onChange={async e => {
 												onChange({
 													...value,
@@ -757,7 +749,7 @@ function EventTimesFormControl({
 													: ""
 											}
 											autoComplete={"off"}
-											data-tooltip-id={`${name}.russian`}
+											id={`${name}.russian`}
 											onChange={async e => {
 												onChange({
 													...value,

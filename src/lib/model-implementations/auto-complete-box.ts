@@ -26,7 +26,6 @@ export function autoCompleteBoxVIInterface<I, K extends string>(
 					};
 				}
 				case "CLOSE": {
-					console.log("Close called?");
 					return {
 						...currentModelView,
 						isOpen: false,
@@ -36,7 +35,6 @@ export function autoCompleteBoxVIInterface<I, K extends string>(
 					const { query } = interaction.input;
 					const queryBlank = query.trim() === "";
 					const close = options?.closeWhenBlank && queryBlank;
-					console.log(`Filter close: ${close}`);
 					return close
 						? {
 								...currentModelView,

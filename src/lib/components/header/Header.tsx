@@ -82,7 +82,7 @@ const Header = function ({ model }) {
 							onClick={() => {
 								navigationDrawer.interact({ type: "TOGGLE" });
 							}}
-							data-tooltip-id={"login-tooltip"}
+							id={"login-tooltip"}
 						>
 							<MenuIcon className="size-8" strokeWidth={1.75} />
 						</button>

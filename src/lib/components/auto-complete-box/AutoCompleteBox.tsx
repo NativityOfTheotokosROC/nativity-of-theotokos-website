@@ -32,8 +32,8 @@ export default function AutoCompleteBox<I, K extends string>({
 
 	return (
 		<Tooltip
-			id={id}
-			className="auto-complete-box"
+			anchorSelect={computedOpen ? `#${id}` : undefined}
+			className="auto-complete-box bg-gray-950"
 			isOpen={computedOpen}
 			clickable={isClickable}
 			afterHide={() => setClickable(false)}

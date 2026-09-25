@@ -190,7 +190,7 @@ const NewQuote = function ({ model }) {
 											autoComplete={
 												englishAuthorFields.autoComplete
 											}
-											data-tooltip-id={
+											id={
 												englishAuthorFields.dataTooltipId
 											}
 											onChange={e => {
@@ -234,7 +234,7 @@ const NewQuote = function ({ model }) {
 											autoComplete={
 												englishSourceFields.autoComplete
 											}
-											data-tooltip-id={
+											id={
 												englishSourceFields.dataTooltipId
 											}
 											onChange={e => {
@@ -293,7 +293,7 @@ const NewQuote = function ({ model }) {
 											autoComplete={
 												russianAuthorFields.autoComplete
 											}
-											data-tooltip-id={
+											id={
 												russianAuthorFields.dataTooltipId
 											}
 											onChange={e => {
@@ -337,7 +337,7 @@ const NewQuote = function ({ model }) {
 											autoComplete={
 												russianSourceFields.autoComplete
 											}
-											data-tooltip-id={
+											id={
 												russianSourceFields.dataTooltipId
 											}
 											onChange={e => {
