@@ -31,7 +31,7 @@ const RadioGroup = function ({ model }) {
 				<Field key={item.id} className={"flex items-center gap-3"}>
 					<Radio
 						value={item}
-						className="group flex size-6 items-center justify-center rounded-full border border-gray-400 bg-white"
+						className="group flex size-6 max-h-6 max-w-6 items-center justify-center rounded-full border border-gray-400 bg-white"
 					>
 						<div className="invisible size-4 rounded-full bg-gray-800 transition group-data-checked:visible" />
 					</Radio>

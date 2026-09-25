@@ -36,8 +36,9 @@ const ScheduleItem = function ({ model }) {
 		.sort((a, b) => a.time.getTime() - b.time.getTime())
 		.slice(0, maxDisplayedTimes ?? 3);
 	const isPending =
-		("id" in scheduleItem && !scheduleItem.id) ||
-		("recurringItemId" in scheduleItem && !scheduleItem.recurringItemId);
+		("id" in scheduleItem && scheduleItem.id === undefined) ||
+		("recurringItemId" in scheduleItem &&
+			scheduleItem.recurringItemId === undefined);
 
 	if (variant === "detailed")
 		return (

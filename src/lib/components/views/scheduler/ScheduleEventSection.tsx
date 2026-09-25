@@ -30,6 +30,7 @@ import ButtonBar from "../../button-bar/ButtonBar";
 import Checkbox from "../../checkbox/Checkbox";
 import { useScheduleEventForm } from "@/src/lib/utilities/scheduler";
 import RadioGroup from "../../radio-group/RadioGroup";
+import { useMemo } from "react";
 
 const ScheduleEventSection = function ({ model }) {
 	const { modelView } = model;
@@ -193,6 +194,7 @@ const RecurringScheduleEventForm = function ({ model }) {
 							);
 						}}
 					/>
+					<EventTypeFormControl />
 					<span className="uppercase">{t("timesSection")}</span>
 					<EventTimesFormControl
 						autoCompleteInfo={autoCompleteInfo}
@@ -303,6 +305,7 @@ const SpecificScheduleEventForm = function ({ model }) {
 							</span>
 						)}
 					</>
+					<EventTypeFormControl />
 					<span className="uppercase">{t("timesSection")}</span>
 					<EventTimesFormControl
 						autoCompleteInfo={autoCompleteInfo}
@@ -570,37 +573,49 @@ function EventMetadataFormControl({
 						</>
 					)}
 				/>
-				<Controller
-					control={control}
-					name={"eventType"}
-					render={({ field: { onChange, value } }) => {
-						const itemsMap = new Map<typeof value, string>([
-							["normal", t("normalEvent")],
-							["special", t("specialEvent")],
-							["feast", t("feastEvent")],
-						]);
-						const text = itemsMap.get(value)!;
-						return (
-							<RadioGroup
-								model={newReadonlyModel({
-									selected: { id: value, text },
-									items: itemsMap
-										.entries()
-										.map(([id, text]) => ({ id, text }))
-										.toArray(),
-									selectedChangedCallback(selected) {
-										onChange(selected.id);
-									},
-									options: {
-										orientation: "vertical",
-									},
-								})}
-							/>
-						);
-					}}
-				/>
 			</div>
 		</>
+	);
+}
+
+function EventTypeFormControl() {
+	const t = useTranslations("scheduler");
+	const { control } = useFormContext<Pick<NewScheduleItem, "eventType">>();
+	const itemsMap = useMemo(
+		() =>
+			new Map<NewScheduleItem["eventType"], string>([
+				["normal", t("normalEvent")],
+				["special", t("specialEvent")],
+				["feast", t("feastEvent")],
+			]),
+		[t],
+	);
+
+	return (
+		<Controller
+			control={control}
+			name={"eventType"}
+			render={({ field: { onChange, value } }) => {
+				const text = itemsMap.get(value)!;
+				return (
+					<RadioGroup
+						model={newReadonlyModel({
+							selected: { id: value, text },
+							items: itemsMap
+								.entries()
+								.map(([id, text]) => ({ id, text }))
+								.toArray(),
+							selectedChangedCallback(selected) {
+								onChange(selected.id);
+							},
+							options: {
+								orientation: "vertical",
+							},
+						})}
+					/>
+				);
+			}}
+		/>
 	);
 }
 
