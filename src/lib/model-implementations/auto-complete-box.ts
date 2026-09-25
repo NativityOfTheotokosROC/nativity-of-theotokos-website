@@ -19,7 +19,7 @@ export function autoCompleteBoxVIInterface<I, K extends string>(
 			switch (interaction.type) {
 				case "OPEN": {
 					const { items } = currentModelView;
-					console.log(`Open: ${currentModelView}`);
+					console.log(`Open: ${JSON.stringify(currentModelView)}`);
 					return {
 						...currentModelView,
 						id: interaction.input.newId ?? currentModelView.id,
@@ -36,7 +36,7 @@ export function autoCompleteBoxVIInterface<I, K extends string>(
 					const { query } = interaction.input;
 					const queryBlank = query.trim() === "";
 					const close = options?.closeWhenBlank && queryBlank;
-					console.log(`Filter: ${currentModelView}`);
+					console.log(`Filter: ${JSON.stringify(currentModelView)}`);
 					return close
 						? {
 								...currentModelView,
