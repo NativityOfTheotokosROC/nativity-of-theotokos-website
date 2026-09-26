@@ -440,7 +440,7 @@ function EventMetadataFormControl({
 								name={name}
 								value={value}
 								autoComplete={englishTitleFields?.autoComplete}
-								id={englishTitleFields?.dataTooltipId}
+								data-tooltip-id={englishTitleFields?.dataTooltipId}
 								onChange={e => {
 									onChange(e);
 									englishTitleFields?.onChange(
@@ -475,7 +475,7 @@ function EventMetadataFormControl({
 								name={name}
 								value={typeof value === "string" ? value : ""}
 								autoComplete={russianTitleFields?.autoComplete}
-								id={russianTitleFields?.dataTooltipId}
+								data-tooltip-id={russianTitleFields?.dataTooltipId}
 								onChange={e => {
 									onChange(e);
 									russianTitleFields?.onChange(
@@ -510,7 +510,7 @@ function EventMetadataFormControl({
 								name={name}
 								value={value}
 								autoComplete={englishVenueFields?.autoComplete}
-								id={englishVenueFields?.dataTooltipId}
+								data-tooltip-id={englishVenueFields?.dataTooltipId}
 								onChange={e => {
 									onChange(e);
 									englishVenueFields?.onChange(
@@ -545,7 +545,7 @@ function EventMetadataFormControl({
 								name={name}
 								value={typeof value === "string" ? value : ""}
 								autoComplete={russianVenueFields?.autoComplete}
-								id={russianVenueFields?.dataTooltipId}
+								data-tooltip-id={russianVenueFields?.dataTooltipId}
 								onChange={e => {
 									onChange(e);
 									russianVenueFields?.onChange(
@@ -719,7 +719,7 @@ function EventTimesFormControl({
 											name={`${name}.english`}
 											value={value.english}
 											autoComplete={"off"}
-											id={`${name}.english`}
+											data-tooltip-id={`${name}.english`}
 											onChange={async e => {
 												onChange({
 													...value,
@@ -749,7 +749,7 @@ function EventTimesFormControl({
 													: ""
 											}
 											autoComplete={"off"}
-											id={`${name}.russian`}
+											data-tooltip-id={`${name}.russian`}
 											onChange={async e => {
 												onChange({
 													...value,

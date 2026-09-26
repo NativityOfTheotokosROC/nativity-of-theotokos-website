@@ -93,7 +93,7 @@ const AssignArticle = function ({ model }) {
 									autoComplete={
 										englishAuthorNameFields.autoComplete
 									}
-									id={englishAuthorNameFields.dataTooltipId}
+									data-tooltip-id={englishAuthorNameFields.dataTooltipId}
 									onChange={e => {
 										onChange(e);
 										englishAuthorNameFields.onChange(
@@ -127,7 +127,7 @@ const AssignArticle = function ({ model }) {
 									autoComplete={
 										authorEmailFields.autoComplete
 									}
-									id={authorEmailFields.dataTooltipId}
+									data-tooltip-id={authorEmailFields.dataTooltipId}
 									onChange={e => {
 										onChange(e);
 										authorEmailFields.onChange(
