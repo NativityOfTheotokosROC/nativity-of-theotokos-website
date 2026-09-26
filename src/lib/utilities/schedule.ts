@@ -75,11 +75,13 @@ export function getNextRecurringScheduleItemDate(
 export function getNextRecurringScheduleItemDates(
 	pattern: string,
 	instances: number,
-	referenceDate?: Date | string,
+	referenceDate: Date | string = new Date(),
+	includeReference: boolean = true
 ) {
 	const cron = validateRecurringPattern(pattern, { useLocalTimezone: true });
 	if (!cron) throw new Error("Invalid recurring pattern");
-	return cron.nextRuns(instances, referenceDate);
+	const parsedReferenceDate = typeof referenceDate === "string" ? new Date(referenceDate) : referenceDate;
+	return includeReference ? [parsedReferenceDate, ...cron.nextRuns(instances, parsedReferenceDate)] : cron.nextRuns(instances, parsedReferenceDate);
 }
 
 export function getNextRecurringScheduleItemInstances<T extends Text = string>(
