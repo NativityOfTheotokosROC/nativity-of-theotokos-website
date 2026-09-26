@@ -34,7 +34,7 @@ export default function AutoCompleteBox<I, K extends string>({
 	return (
 		<Tooltip
 			className="auto-complete-box bg-gray-950"
-			id
+			id={id}
 			key={id}
 			isOpen={computedOpen}
 			clickable={isClickable}
