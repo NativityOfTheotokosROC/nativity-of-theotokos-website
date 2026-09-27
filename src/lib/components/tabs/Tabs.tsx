@@ -16,7 +16,7 @@ const Tabs = function ({
 
 	return (
 		<TabGroup
-			className="flex flex-col gap-6"
+			className="flex flex-col gap-6 w-full"
 			selectedIndex={selectedTab}
 			onChange={index =>
 				interact({ type: "SWITCH_TAB", input: { id: index } })
