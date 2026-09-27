@@ -24,7 +24,7 @@ const Tabs = function ({
 		>
 			<TabList
 				className={twMerge(
-					`flex items-end gap-1`,
+					`flex items-end gap-1 max-w-full`,
 					tabsPosition === "center"
 						? "justify-center"
 						: tabsPosition === "start"
