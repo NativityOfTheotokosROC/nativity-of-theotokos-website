@@ -154,10 +154,7 @@ export async function getSchedule(
 	const recurringScheduleItemInstanceExclusions = new Set([
 		...removedInstantaneousScheduleItemRecords.map(
 			({ scheduleItem: { date, venue } }) =>
-				JSON.stringify({
-					date: getDateString(date),
-					venue: pickTranslation(venue, locale),
-				}),
+				`${getDateString(date)}_${pickTranslation(venue, locale)}`,
 		),
 	]);
 	const schedule = generateSchedule(
@@ -170,10 +167,7 @@ export async function getSchedule(
 		? schedule.filter(scheduleItem =>
 				"recurringItemId" in scheduleItem
 					? !recurringScheduleItemInstanceExclusions.has(
-							JSON.stringify({
-								date: getDateString(scheduleItem.date),
-								venue: scheduleItem.venue,
-							}),
+							`${getDateString(scheduleItem.date)}_${scheduleItem.venue}`,
 						)
 					: true,
 			)
