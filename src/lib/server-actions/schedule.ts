@@ -105,51 +105,42 @@ export async function getSchedule(
 			},
 		}),
 	]);
-	const instantaneousScheduleItems: Array<InstantaneousScheduleItem> =
-		instantaneousScheduleItemRecords.map(
+	const instantaneousScheduleItems = instantaneousScheduleItemRecords.map(
+		({
+			id,
+			title,
+			venue,
+			date,
+			eventTypeName,
+			instantaneousScheduleItemTimes,
+			removedScheduleItem,
+		}) =>
 			({
 				id,
-				title,
-				venue,
-				date,
-				eventTypeName,
-				instantaneousScheduleItemTimes,
-				removedScheduleItem,
-			}) => ({
-				id,
-				title:
-					locale === "ru"
-						? (title.russian ?? title.english)
-						: title.english,
-				venue:
-					locale === "ru"
-						? (venue.russian ?? venue.english)
-						: venue.english,
+				title: pickTranslation(title, locale),
+				venue: pickTranslation(venue, locale),
 				date,
 				times: instantaneousScheduleItemTimes.map(
 					({ designation, time }) => ({
 						time: getTimeString(time),
-						designation:
-							locale === "ru"
-								? (designation.russian ?? designation.english)
-								: designation.english,
+						designation: pickTranslation(designation, locale),
 					}),
 				),
 				isRemoved: removedScheduleItem !== null,
 				eventType: eventTypeName as ScheduleItem["eventType"],
-			}),
-		);
-	const recurringScheduleItems =
-		recurringScheduleItemRecords.map<RecurringScheduleItem>(
+			}) satisfies InstantaneousScheduleItem,
+	);
+	const recurringScheduleItems = recurringScheduleItemRecords.map(
+		({
+			id,
+			title,
+			venue,
+			pattern,
+			eventTypeName,
+			recurringScheduleItemTimes,
+			disabledRecurringScheduleItem,
+		}) =>
 			({
-				id,
-				title,
-				venue,
-				pattern,
-				eventTypeName,
-				recurringScheduleItemTimes,
-				disabledRecurringScheduleItem,
-			}) => ({
 				id,
 				title: pickTranslation(title, locale),
 				venue: pickTranslation(venue, locale),
@@ -162,8 +153,8 @@ export async function getSchedule(
 				),
 				isDisabled: disabledRecurringScheduleItem !== null,
 				eventType: eventTypeName as ScheduleItem["eventType"],
-			}),
-		);
+			}) satisfies RecurringScheduleItem,
+	);
 	const recurringScheduleItemInstanceExclusions = new Set([
 		...removedInstantaneousScheduleItemRecords.map(
 			({ scheduleItem: { date, venue } }) =>
@@ -178,14 +169,14 @@ export async function getSchedule(
 	);
 	return recurringScheduleItemInstanceExclusions.size > 0
 		? schedule.filter(scheduleItem =>
-				"id" in scheduleItem
-					? true
-					: !recurringScheduleItemInstanceExclusions.has(
+				"recurringItemId" in scheduleItem
+					? !recurringScheduleItemInstanceExclusions.has(
 							JSON.stringify({
 								date: scheduleItem.date,
 								venue: scheduleItem.venue,
 							}),
-						),
+						)
+					: true,
 			)
 		: schedule;
 }

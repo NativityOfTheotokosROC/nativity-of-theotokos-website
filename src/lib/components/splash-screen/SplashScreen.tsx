@@ -5,22 +5,27 @@ import { SplashScreenModel } from "../../models/splash-screen";
 import { motion, AnimatePresence } from "motion/react";
 import "./splash-screen.css";
 import LogoIcon from "@/public/assets/logo-icon.svg";
-import { useLayoutEffect, ViewTransition } from "react";
+import { useEffect, useLayoutEffect, ViewTransition } from "react";
+import { scrollToElement } from "../../client-only/miscellaneous";
 
 const SplashScreen = function ({ model }) {
-	const { isShown, isFullscreen, exitedCallback } = model.modelView;
-	const fullscreen = isFullscreen ?? true;
+	const { isShown, exitedCallback } = model.modelView;
 
 	useLayoutEffect(() => {
 		// HACK: Revisit
 		const scrollEventCallback = () => {
-			if (isShown && fullscreen) window.scrollTo(0, 0);
+			if (isShown) window.scrollTo(0, 0);
 		};
 		window.addEventListener("scroll", scrollEventCallback);
 		return () => {
 			window.removeEventListener("scroll", scrollEventCallback);
 		};
-	}, [isShown, fullscreen]);
+	}, [isShown]);
+
+	useEffect(() => {
+		const hashId = window.location.hash;
+		if (hashId && !isShown) scrollToElement(hashId);
+	}, [isShown]);
 
 	return (
 		<AnimatePresence initial={false} onExitComplete={exitedCallback}>
@@ -30,8 +35,8 @@ const SplashScreen = function ({ model }) {
 					initial={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
 					transition={{ duration: 0.4, ease: "easeIn" }}
-					className={`splash flex h-full w-full flex-col overflow-hidden ${fullscreen && "absolute top-0 z-30 min-h-[110vh]"}`}
-					data-fullscreen={fullscreen}
+					className={`splash absolute top-0 z-30 flex h-full min-h-[110vh] w-full flex-col overflow-hidden`}
+					data-fullscreen
 				>
 					<div className="sticky top-0 flex h-full max-h-dvh grow flex-col items-center justify-center p-9">
 						<motion.div
