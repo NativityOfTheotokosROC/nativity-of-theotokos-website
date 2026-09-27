@@ -20,16 +20,15 @@ export default function AutoCompleteBox<I, K extends string>({
 			return queryParts.every(part => lowercasedItem.includes(part));
 		});
 	const computedOpen = (isOpen && filteredItems.length > 0) ?? false;
-	const [isClickable, setClickable] = useState(computedOpen); //TODO: Not ideal
+	const [isClickable, setClickable] = useState(computedOpen);
 	const [lastVisibleItems, setLastVisibleItems] = useState(filteredItems);
 	const displayedItems = computedOpen ? filteredItems : lastVisibleItems;
-	
+
 	if (
 		computedOpen &&
 		JSON.stringify(filteredItems) !== JSON.stringify(lastVisibleItems)
-	) {
+	)
 		setLastVisibleItems(filteredItems);
-	}
 
 	return (
 		<Tooltip

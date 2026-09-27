@@ -1,15 +1,15 @@
 import { Model } from "@mvc-react/mvc";
 import { LatestArticles } from "../server-actions/home";
 import {
-	InstantaneousScheduleItem,
-	RecurringScheduleItemInstance,
-} from "../utilities/types";
+	InstantaneousScheduleItemWithOptionalId,
+	RecurringScheduleItemInstanceWithOptionalId,
+} from "../utilities/schedule";
 
 export type BulletinSectionModelView = {
 	newsArticles: LatestArticles;
 	schedulePreview: (
-		| InstantaneousScheduleItem
-		| RecurringScheduleItemInstance
+		| InstantaneousScheduleItemWithOptionalId
+		| RecurringScheduleItemInstanceWithOptionalId
 	)[];
 };
 

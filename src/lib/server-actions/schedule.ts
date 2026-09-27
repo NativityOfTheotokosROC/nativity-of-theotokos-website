@@ -5,15 +5,16 @@ import { cacheLife, cacheTag, revalidateTag } from "next/cache";
 import z from "zod";
 import database from "../third-party/prisma";
 import { getDateString, getTimeString } from "../utilities/date-time";
-import { getMd5Hash } from "../utilities/miscellaneous";
+import { getMd5Hash, pickTranslation } from "../utilities/miscellaneous";
 import {
+	generateSchedule,
 	getNextRecurringScheduleItemDates,
 	parseNewScheduleItemWithId,
 } from "../utilities/schedule";
 import {
 	InstantaneousScheduleItem,
 	Language,
-	RecurringScheduleItemInstance,
+	RecurringScheduleItem,
 	ScheduleItem,
 } from "../utilities/types";
 import {
@@ -28,7 +29,6 @@ export async function getSchedule(
 	referenceDate: Date | string,
 	limit: number = 10,
 	locale: Language = "en",
-	includeInactive: boolean = false,
 ) {
 	"use cache: remote";
 	cacheTag("schedule");
@@ -63,7 +63,7 @@ export async function getSchedule(
 				date: {
 					gte: parsedReferenceDate,
 				},
-				removedScheduleItem: includeInactive ? undefined : null,
+				removedScheduleItem: null,
 			},
 			orderBy: {
 				date: "asc",
@@ -85,14 +85,16 @@ export async function getSchedule(
 				disabledRecurringScheduleItem: true,
 			},
 			where: {
-				disabledRecurringScheduleItem: includeInactive
-					? undefined
-					: null,
+				disabledRecurringScheduleItem: null,
 			},
 		}),
 		database.removedInstantaneousScheduleItem.findMany({
 			include: {
-				scheduleItem: true,
+				scheduleItem: {
+					include: {
+						venue: true,
+					},
+				},
 			},
 			where: {
 				scheduleItem: {
@@ -137,79 +139,55 @@ export async function getSchedule(
 				eventType: eventTypeName as ScheduleItem["eventType"],
 			}),
 		);
-	const recurringScheduleItemInstanceExclusions = includeInactive
-		? new Set([
-				...instantaneousScheduleItemRecords.map(
-					({ venueTranslationId, date }) =>
-						JSON.stringify({ date, venueTranslationId }),
-				),
-			])
-		: new Set([
-				...instantaneousScheduleItemRecords.map(
-					({ venueTranslationId, date }) =>
-						JSON.stringify({ date, venueTranslationId }),
-				),
-				...removedInstantaneousScheduleItemRecords.map(
-					({ scheduleItem: { date, venueTranslationId } }) =>
-						JSON.stringify({ date, venueTranslationId }),
-				),
-			]);
-	const recurringScheduleItemInstances =
-		new Array<RecurringScheduleItemInstance>();
-	recurringScheduleItemRecords.forEach(
-		({
-			id,
-			title,
-			venue,
-			pattern,
-			eventTypeName,
-			recurringScheduleItemTimes,
-			disabledRecurringScheduleItem,
-		}) => {
-			const nextDates = getNextRecurringScheduleItemDates(
+	const recurringScheduleItems =
+		recurringScheduleItemRecords.map<RecurringScheduleItem>(
+			({
+				id,
+				title,
+				venue,
 				pattern,
-				limit,
-				parsedReferenceDate,
-			);
-			nextDates.forEach(date => {
-				if (
-					!recurringScheduleItemInstanceExclusions.has(
-						JSON.stringify({ date, venueTranslationId: venue.id }),
-					)
-				)
-					recurringScheduleItemInstances.push({
-						recurringItemId: id,
-						title:
-							locale === "ru"
-								? (title.russian ?? title.english)
-								: title.english,
-						venue:
-							locale === "ru"
-								? (venue.russian ?? venue.english)
-								: venue.english,
-						date,
-						times: recurringScheduleItemTimes.map(
-							({ time, designation }) => ({
-								designation:
-									locale === "ru"
-										? (designation.russian ??
-											designation.english)
-										: designation.english,
-								time: getTimeString(time),
+				eventTypeName,
+				recurringScheduleItemTimes,
+				disabledRecurringScheduleItem,
+			}) => ({
+				id,
+				title: pickTranslation(title, locale),
+				venue: pickTranslation(venue, locale),
+				recurringPattern: pattern,
+				times: recurringScheduleItemTimes.map(
+					({ time, designation }) => ({
+						designation: pickTranslation(designation, locale),
+						time: getTimeString(time),
+					}),
+				),
+				isDisabled: disabledRecurringScheduleItem !== null,
+				eventType: eventTypeName as ScheduleItem["eventType"],
+			}),
+		);
+	const recurringScheduleItemInstanceExclusions = new Set([
+		...removedInstantaneousScheduleItemRecords.map(
+			({ scheduleItem: { date, venue } }) =>
+				JSON.stringify({ date, venue: pickTranslation(venue, locale) }),
+		),
+	]);
+	const schedule = generateSchedule(
+		instantaneousScheduleItems,
+		recurringScheduleItems,
+		limit + recurringScheduleItemInstanceExclusions.size,
+		parsedReferenceDate,
+	);
+	return recurringScheduleItemInstanceExclusions.size > 0
+		? schedule.filter(scheduleItem =>
+				"id" in scheduleItem
+					? true
+					: !recurringScheduleItemInstanceExclusions.has(
+							JSON.stringify({
+								date: scheduleItem.date,
+								venue: scheduleItem.venue,
 							}),
 						),
-						isRemoved: disabledRecurringScheduleItem !== null,
-						eventType: eventTypeName as ScheduleItem["eventType"],
-					});
-			});
-		},
-	);
-	const scheduleItems: Array<
-		InstantaneousScheduleItem | RecurringScheduleItemInstance
-	> = [...instantaneousScheduleItems, ...recurringScheduleItemInstances]
-		.toSorted((a, b) => a.date.getTime() - b.date.getTime())
-		.slice(0, limit);
-	return scheduleItems;
+			)
+		: schedule;
 }
 
 export async function scheduleInstantaneousItem(

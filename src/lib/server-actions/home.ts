@@ -15,11 +15,13 @@ import {
 	DailyQuote,
 	DailyReadings,
 	GalleryImage,
-	InstantaneousScheduleItem,
 	Language,
-	RecurringScheduleItemInstance,
 } from "../utilities/types";
 import { getSchedule } from "./schedule";
+import {
+	InstantaneousScheduleItemWithOptionalId,
+	RecurringScheduleItemInstanceWithOptionalId,
+} from "../utilities/schedule";
 
 export type LatestArticles = {
 	featuredArticle: ArticlePreview;
@@ -30,8 +32,8 @@ export type HomeSnapshot = {
 	dailyReadings: DailyReadings;
 	dailyQuote: DailyQuote;
 	scheduleItems: (
-		| InstantaneousScheduleItem
-		| RecurringScheduleItemInstance
+		| InstantaneousScheduleItemWithOptionalId
+		| RecurringScheduleItemInstanceWithOptionalId
 	)[];
 	articles: LatestArticles;
 	dailyGalleryImages: GalleryImage[];

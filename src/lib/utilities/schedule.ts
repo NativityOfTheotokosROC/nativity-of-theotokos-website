@@ -15,6 +15,7 @@ import {
 	NewInstantaneousScheduleItem,
 	NewRecurringScheduleItem,
 } from "../validation/schedule";
+import { subDays } from "date-fns";
 
 export type BaseScheduleEvent<
 	T extends string,
@@ -76,12 +77,20 @@ export function getNextRecurringScheduleItemDates(
 	pattern: string,
 	instances: number,
 	referenceDate: Date | string = new Date(),
-	includeReference: boolean = true
+	includeReference: boolean = true,
 ) {
 	const cron = validateRecurringPattern(pattern, { useLocalTimezone: true });
 	if (!cron) throw new Error("Invalid recurring pattern");
-	const parsedReferenceDate = typeof referenceDate === "string" ? new Date(referenceDate) : referenceDate;
-	return includeReference ? [parsedReferenceDate, ...cron.nextRuns(instances, parsedReferenceDate)] : cron.nextRuns(instances, parsedReferenceDate);
+	const parsedReferenceDate =
+		typeof referenceDate === "string"
+			? new Date(referenceDate)
+			: referenceDate;
+	return cron.nextRuns(
+		instances,
+		includeReference
+			? subDays(parsedReferenceDate, 1)
+			: parsedReferenceDate,
+	);
 }
 
 export function getNextRecurringScheduleItemInstances<T extends Text = string>(
