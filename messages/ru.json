@@ -344,7 +344,9 @@
 		"confirmDisableRecurring": "Вы уверены, что хотите отключить повторяющееся событие «{title}»?",
 		"normalEvent": "Обычное событие",
 		"specialEvent": "Особое событие",
-		"feastEvent": "Праздник"
+		"feastEvent": "Праздник",
+		"englishPreview": "Английский",
+		"russianPreview": "Русский"
 	},
 	"recurringScheduleItem": {
 		"description": "Событие повторяется {parsedCronString}"

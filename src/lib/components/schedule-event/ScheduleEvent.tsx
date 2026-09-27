@@ -132,14 +132,12 @@ const RecurringScheduleEventForm = function ({ model }) {
 				});
 			})}
 		>
-			<div className="flex flex-col gap-4">
+			<div className="flex flex-col gap-4 md:w-3/4 lg:w-6/10">
 				<span className="uppercase">{t("eventSection")}</span>
 				<FormProvider {...form}>
-					<div className="md:w-3/4 lg:w-6/10">
-						<EventMetadataFormControl
-							autoCompleteInfo={autoCompleteInfo}
-						/>
-					</div>
+					<EventMetadataFormControl
+						autoCompleteInfo={autoCompleteInfo}
+					/>
 					<Controller
 						control={control}
 						name="recurringPattern"
@@ -291,14 +289,12 @@ const SpecificScheduleEventForm = function ({ model }) {
 				});
 			})}
 		>
-			<div className="flex flex-col gap-4">
+			<div className="flex flex-col gap-4 md:w-3/4 lg:w-6/10">
 				<span className="uppercase">{t("eventSection")}</span>
 				<FormProvider {...form}>
-					<div className="md:w-3/4 lg:w-6/10">
-						<EventMetadataFormControl
-							autoCompleteInfo={autoCompleteInfo}
-						/>
-					</div>
+					<EventMetadataFormControl
+						autoCompleteInfo={autoCompleteInfo}
+					/>
 					<>
 						<input
 							{...register("date")}

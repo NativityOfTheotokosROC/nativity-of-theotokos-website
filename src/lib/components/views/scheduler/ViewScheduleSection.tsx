@@ -49,7 +49,6 @@ const ViewScheduleSection = function ({ model }) {
 			)
 		: currentSchedule;
 	const t = useTranslations("scheduler");
-	const tMisc = useTranslations("miscellaneous");
 
 	return (
 		<div className="view-schedule flex scroll-mt-[7em] flex-col gap-6 pt-3">
@@ -59,24 +58,24 @@ const ViewScheduleSection = function ({ model }) {
 						interact({ type: "SWITCH_LANGUAGE" });
 					},
 					className:
-						"bg-gray-800 hover:bg-gray-900 active:bg-gray-950 w-full md:w-md",
+						"bg-gray-800 hover:bg-gray-900 active:bg-gray-950 w-full",
 				})}
 			>
 				<span className="flex items-center gap-2">
 					{language === "en" ? (
 						<>
 							<RussianGraphic className="size-5" />
-							<span>{tMisc("russian")}</span>
+							<span>{t("russianPreview")}</span>
 						</>
 					) : (
 						<>
 							<EnglishGraphic className="size-5" />
-							<span>{tMisc("english")}</span>
+							<span>{t("englishPreview")}</span>
 						</>
 					)}
 				</span>
 			</Button>
-			<div className="flex flex-col gap-x-12 gap-y-6 md:flex-row">
+			<div className="flex flex-col gap-x-12 gap-y-6 md:flex-row-reverse">
 				{newEvent && (
 					<div className="new-event-section flex flex-col gap-3">
 						<span className="uppercase">

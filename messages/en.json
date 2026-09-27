@@ -345,7 +345,9 @@
 		"confirmDisableRecurring": "Are you sure you want to disable the recurring event ''{title}''?",
 		"normalEvent": "Normal Event",
 		"specialEvent": "Special Occasion",
-		"feastEvent": "Feast"
+		"feastEvent": "Feast",
+		"englishPreview": "Preview in English",
+		"russianPreview": "Preview in Russian"
 	},
 	"recurringScheduleItem": {
 		"description": "Event recurs {parsedCronString}"
