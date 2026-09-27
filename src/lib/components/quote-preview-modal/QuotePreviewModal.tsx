@@ -18,13 +18,13 @@ const QuotePreviewModal = function ({ model }) {
 	const quoteRu = modelView?.russianQuote?.quote ?? quoteEn;
 	const sourceRu = modelView?.russianQuote?.source ?? sourceEn;
 
-	const tabs = useTabs(
-		[
+	const tabs = useTabs({
+		tabs: [
 			newReadonlyModel({ name: t("english") }),
 			newReadonlyModel({ name: t("russian") }),
 		],
-		"center",
-	);
+		tabsPosition: "center",
+	});
 
 	return (
 		<Modal

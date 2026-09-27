@@ -59,7 +59,7 @@ const ViewScheduleSection = function ({ model }) {
 						interact({ type: "SWITCH_LANGUAGE" });
 					},
 					className:
-						"bg-gray-800 hover:bg-gray-900 active:bg-gray-950 w-full",
+						"bg-gray-800 hover:bg-gray-900 active:bg-gray-950 w-full md:w-md",
 				})}
 			>
 				<span className="flex items-center gap-2">
@@ -76,50 +76,54 @@ const ViewScheduleSection = function ({ model }) {
 					)}
 				</span>
 			</Button>
-			{newEvent && (
-				<div className="new-event-section flex flex-col gap-3">
-					<span className="uppercase">{t("newScheduleSection")}</span>
-					<SchedulePreviewWidget
-						model={newReadonlyModel({
-							schedule: newSchedule,
-							displayRemoved: true,
-							maxDisplayedItems: maxItems,
-							highlightedScheduleItem:
-								newEvent.type === "specific"
-									? pickScheduleItemTranslation(
-											parseNewScheduleItem(
-												newEvent.scheduleItem,
-											),
-											language,
-										)
-									: undefined,
-							scheduleItemOptions: {
-								className: "bg-white",
-								language,
-							},
-						})}
-					/>
-				</div>
-			)}
-			{currentSchedule.length > 0 && (
-				<div className="flex flex-col gap-3">
-					<span className="uppercase">
-						{t("currentScheduleSection")}
-					</span>
-					<SchedulePreviewWidget
-						model={newReadonlyModel({
-							schedule: currentSchedule,
-							displayRemoved: true,
-							maxDisplayedItems: maxItems,
-							scheduleItemOptions: {
-								className: "bg-white",
-								modifyCallbacks,
-								language,
-							},
-						})}
-					/>
-				</div>
-			)}
+			<div className="flex flex-col gap-x-12 gap-y-6 md:flex-row">
+				{newEvent && (
+					<div className="new-event-section flex flex-col gap-3">
+						<span className="uppercase">
+							{t("newScheduleSection")}
+						</span>
+						<SchedulePreviewWidget
+							model={newReadonlyModel({
+								schedule: newSchedule,
+								displayRemoved: true,
+								maxDisplayedItems: maxItems,
+								highlightedScheduleItem:
+									newEvent.type === "specific"
+										? pickScheduleItemTranslation(
+												parseNewScheduleItem(
+													newEvent.scheduleItem,
+												),
+												language,
+											)
+										: undefined,
+								scheduleItemOptions: {
+									className: "bg-white",
+									language,
+								},
+							})}
+						/>
+					</div>
+				)}
+				{currentSchedule.length > 0 && (
+					<div className="flex flex-col gap-3">
+						<span className="uppercase">
+							{t("currentScheduleSection")}
+						</span>
+						<SchedulePreviewWidget
+							model={newReadonlyModel({
+								schedule: currentSchedule,
+								displayRemoved: true,
+								maxDisplayedItems: maxItems,
+								scheduleItemOptions: {
+									className: "bg-white",
+									modifyCallbacks,
+									language,
+								},
+							})}
+						/>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ViewScheduleSectionModel>>;

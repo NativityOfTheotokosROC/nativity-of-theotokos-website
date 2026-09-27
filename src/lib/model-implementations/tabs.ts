@@ -3,6 +3,7 @@ import {
 	ViewInteractionInterface,
 } from "@mvc-react/stateful";
 import {
+	TabsLayout,
 	TabsModelInteraction,
 	TabsModelView,
 	TabsPosition,
@@ -29,15 +30,22 @@ export function tabsVIInterface() {
 	} satisfies ViewInteractionInterface<TabsModelView, TabsModelInteraction>;
 }
 
-export function useTabs(
-	tabs: TabModel[],
-	tabsPosition?: TabsPosition,
-	selectedTab: number = 0,
-) {
+export function useTabs({
+	tabs,
+	tabsPosition,
+	tabsLayout,
+	selectedTab = 0,
+}: {
+	tabs: TabModel[];
+	tabsPosition?: TabsPosition;
+	tabsLayout?: TabsLayout;
+	selectedTab?: number;
+}) {
 	const model = useInitializedStatefulInteractiveModel(tabsVIInterface(), {
 		tabs,
 		selectedTab,
 		tabsPosition,
+		tabsLayout,
 	});
 	return model;
 }

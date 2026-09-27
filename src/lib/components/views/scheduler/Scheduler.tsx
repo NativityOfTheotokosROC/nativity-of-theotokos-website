@@ -13,7 +13,7 @@ import ButtonBar from "../../button-bar/ButtonBar";
 import Button from "../../button/Button";
 import PageView from "../../page-view/PageView";
 import Tabs from "../../tabs/Tabs";
-import ScheduleEventSection from "./ScheduleEventSection";
+import ScheduleEvent from "../../schedule-event/ScheduleEvent";
 import ScheduleSummarySection from "./ScheduleSummarySection";
 import ViewScheduleSection from "./ViewScheduleSection";
 import ConfirmationDialog from "../../confirmation-dialog/ConfirmationDialog";
@@ -39,15 +39,16 @@ const Scheduler = function ({ model }) {
 	const [readyEvent, setReadyEvent] = useState<
 		NewScheduleEvent | undefined
 	>();
-	const tabs = useTabs(
-		[
+	const tabs = useTabs({
+		tabs: [
 			{ modelView: { name: t("scheduleEventTab") } },
 			{ modelView: { name: t("viewScheduleTab") } },
 			{ modelView: { name: t("altScheduleSummaryTab") } },
 		],
-		"start",
-		1,
-	);
+		tabsPosition: "start",
+		tabsLayout: "fill",
+		selectedTab: 1,
+	});
 	const confirmationDialog = useConfirmationDialog();
 	const modifyCallbacks = {
 		async editCallback(event) {
@@ -286,7 +287,7 @@ const Scheduler = function ({ model }) {
 					</Button>
 				</ButtonBar>
 				<Tabs model={tabs}>
-					<ScheduleEventSection
+					<ScheduleEvent
 						model={{
 							modelView: {
 								scheduleEvent: eventToEdit,

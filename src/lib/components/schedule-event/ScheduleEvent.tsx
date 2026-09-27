@@ -25,14 +25,14 @@ import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Controller, FormProvider, useFormContext } from "react-hook-form";
-import AutoCompleteBox from "../../auto-complete-box/AutoCompleteBox";
-import ButtonBar from "../../button-bar/ButtonBar";
-import Checkbox from "../../checkbox/Checkbox";
+import AutoCompleteBox from "../auto-complete-box/AutoCompleteBox";
+import ButtonBar from "../button-bar/ButtonBar";
+import Checkbox from "../checkbox/Checkbox";
 import { useScheduleEventForm } from "@/src/lib/utilities/scheduler";
-import RadioGroup from "../../radio-group/RadioGroup";
+import RadioGroup from "../radio-group/RadioGroup";
 import { useMemo } from "react";
 
-const ScheduleEventSection = function ({ model }) {
+const ScheduleEvent = function ({ model }) {
 	const { modelView } = model;
 	const { scheduleEvent } = modelView;
 	return (
@@ -56,14 +56,14 @@ const ScheduleEventSection = function ({ model }) {
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ScheduleEventModel>>;
 
-export default ScheduleEventSection;
+export default ScheduleEvent;
 
 const RecurringScheduleEventForm = function ({ model }) {
-	const t = useTranslations("scheduler");
 	const {
 		interact,
 		modelView: { scheduleEvent, autoCompleteInfo, options },
 	} = model;
+	const t = useTranslations("scheduler");
 	const form = useScheduleEventForm({
 		scheduleEvent,
 		isNewEventValidCallback: options?.isNewEventValidCallback,
@@ -73,6 +73,39 @@ const RecurringScheduleEventForm = function ({ model }) {
 		control,
 		formState: { isSubmitting, isValid },
 	} = form;
+	const dayTranslationMap = useMemo(
+		() =>
+			new Map(
+				ALL_DAYS_ARRAY.map(DAY => {
+					let translation;
+					switch (DAY) {
+						case "Sun":
+							translation = t("sundayAbbrev");
+							break;
+						case "Mon":
+							translation = t("mondayAbbrev");
+							break;
+						case "Tue":
+							translation = t("tuesdayAbbrev");
+							break;
+						case "Wed":
+							translation = t("wednesdayAbbrev");
+							break;
+						case "Thur":
+							translation = t("thursdayAbbrev");
+							break;
+						case "Fri":
+							translation = t("fridayAbbrev");
+							break;
+						case "Sat":
+							translation = t("saturdayAbbrev");
+							break;
+					}
+					return [DAY, translation] as const;
+				}),
+			),
+		[t],
+	);
 
 	return (
 		<form
@@ -102,9 +135,11 @@ const RecurringScheduleEventForm = function ({ model }) {
 			<div className="flex flex-col gap-4">
 				<span className="uppercase">{t("eventSection")}</span>
 				<FormProvider {...form}>
-					<EventMetadataFormControl
-						autoCompleteInfo={autoCompleteInfo}
-					/>
+					<div className="md:w-3/4 lg:w-6/10">
+						<EventMetadataFormControl
+							autoCompleteInfo={autoCompleteInfo}
+						/>
+					</div>
 					<Controller
 						control={control}
 						name="recurringPattern"
@@ -114,35 +149,6 @@ const RecurringScheduleEventForm = function ({ model }) {
 						}) => {
 							const days =
 								transformPatternToDays(value) ?? new Set<Day>();
-							const dayTranslationMap = new Map(
-								ALL_DAYS_ARRAY.map(DAY => {
-									let translation;
-									switch (DAY) {
-										case "Sun":
-											translation = t("sundayAbbrev");
-											break;
-										case "Mon":
-											translation = t("mondayAbbrev");
-											break;
-										case "Tue":
-											translation = t("tuesdayAbbrev");
-											break;
-										case "Wed":
-											translation = t("wednesdayAbbrev");
-											break;
-										case "Thur":
-											translation = t("thursdayAbbrev");
-											break;
-										case "Fri":
-											translation = t("fridayAbbrev");
-											break;
-										case "Sat":
-											translation = t("saturdayAbbrev");
-											break;
-									}
-									return [DAY, translation] as const;
-								}),
-							);
 							return (
 								<div className="flex gap-1">
 									{dayTranslationMap
@@ -288,9 +294,11 @@ const SpecificScheduleEventForm = function ({ model }) {
 			<div className="flex flex-col gap-4">
 				<span className="uppercase">{t("eventSection")}</span>
 				<FormProvider {...form}>
-					<EventMetadataFormControl
-						autoCompleteInfo={autoCompleteInfo}
-					/>
+					<div className="md:w-3/4 lg:w-6/10">
+						<EventMetadataFormControl
+							autoCompleteInfo={autoCompleteInfo}
+						/>
+					</div>
 					<>
 						<input
 							{...register("date")}
@@ -439,17 +447,17 @@ function EventMetadataFormControl({
 								autoCapitalize="words"
 								name={name}
 								value={value}
-								autoComplete={englishTitleFields?.autoComplete}
-								data-tooltip-id={englishTitleFields?.dataTooltipId}
+								autoComplete={englishTitleFields.autoComplete}
+								data-tooltip-id={
+									englishTitleFields.dataTooltipId
+								}
 								onChange={e => {
 									onChange(e);
-									englishTitleFields?.onChange(
-										e.target.value,
-									);
+									englishTitleFields.onChange(e.target.value);
 								}}
 								onBlur={() => {
 									onBlur();
-									englishTitleFields?.onBlur();
+									englishTitleFields.onBlur();
 								}}
 							/>
 							{error && (
@@ -474,17 +482,17 @@ function EventMetadataFormControl({
 								autoCapitalize="words"
 								name={name}
 								value={typeof value === "string" ? value : ""}
-								autoComplete={russianTitleFields?.autoComplete}
-								data-tooltip-id={russianTitleFields?.dataTooltipId}
+								autoComplete={russianTitleFields.autoComplete}
+								data-tooltip-id={
+									russianTitleFields.dataTooltipId
+								}
 								onChange={e => {
 									onChange(e);
-									russianTitleFields?.onChange(
-										e.target.value,
-									);
+									russianTitleFields.onChange(e.target.value);
 								}}
 								onBlur={() => {
 									onBlur();
-									russianTitleFields?.onBlur();
+									russianTitleFields.onBlur();
 								}}
 							/>
 							{error && (
@@ -509,17 +517,17 @@ function EventMetadataFormControl({
 								autoCapitalize="words"
 								name={name}
 								value={value}
-								autoComplete={englishVenueFields?.autoComplete}
-								data-tooltip-id={englishVenueFields?.dataTooltipId}
+								autoComplete={englishVenueFields.autoComplete}
+								data-tooltip-id={
+									englishVenueFields.dataTooltipId
+								}
 								onChange={e => {
 									onChange(e);
-									englishVenueFields?.onChange(
-										e.target.value,
-									);
+									englishVenueFields.onChange(e.target.value);
 								}}
 								onBlur={() => {
 									onBlur();
-									englishVenueFields?.onBlur();
+									englishVenueFields.onBlur();
 								}}
 							/>
 							{error && (
@@ -544,17 +552,17 @@ function EventMetadataFormControl({
 								autoCapitalize="words"
 								name={name}
 								value={typeof value === "string" ? value : ""}
-								autoComplete={russianVenueFields?.autoComplete}
-								data-tooltip-id={russianVenueFields?.dataTooltipId}
+								autoComplete={russianVenueFields.autoComplete}
+								data-tooltip-id={
+									russianVenueFields.dataTooltipId
+								}
 								onChange={e => {
 									onChange(e);
-									russianVenueFields?.onChange(
-										e.target.value,
-									);
+									russianVenueFields.onChange(e.target.value);
 								}}
 								onBlur={() => {
 									onBlur();
-									russianVenueFields?.onBlur();
+									russianVenueFields.onBlur();
 								}}
 							/>
 							{error && (
@@ -720,19 +728,19 @@ function EventTimesFormControl({
 											value={value.english}
 											autoComplete={"off"}
 											data-tooltip-id={`${name}.english`}
-											onChange={async e => {
+											onChange={e => {
 												onChange({
 													...value,
 													english: e.target.value,
 												});
-												await englishDesignationFields?.onChange(
+												englishDesignationFields.onChange(
 													e.target.value,
 													`${name}.english`,
 												);
 											}}
-											onBlur={async () => {
+											onBlur={() => {
 												onBlur();
-												await englishDesignationFields?.onBlur();
+												englishDesignationFields.onBlur();
 											}}
 										/>
 										<input
@@ -750,19 +758,19 @@ function EventTimesFormControl({
 											}
 											autoComplete={"off"}
 											data-tooltip-id={`${name}.russian`}
-											onChange={async e => {
+											onChange={e => {
 												onChange({
 													...value,
 													russian: e.target.value,
 												});
-												await russianDesignationFields?.onChange(
+												russianDesignationFields.onChange(
 													e.target.value,
 													`${name}.russian`,
 												);
 											}}
-											onBlur={async () => {
+											onBlur={() => {
 												onBlur();
-												await russianDesignationFields?.onBlur();
+												russianDesignationFields.onBlur();
 											}}
 										/>
 									</>

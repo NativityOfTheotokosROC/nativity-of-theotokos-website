@@ -45,10 +45,12 @@ const NewQuote = function ({ model }) {
 		defaultValues,
 	});
 
-	const tabs = useTabs([
-		newReadonlyModel({ name: t("english") }),
-		newReadonlyModel({ name: t("russian") }),
-	]);
+	const tabs = useTabs({
+		tabs: [
+			newReadonlyModel({ name: t("english") }),
+			newReadonlyModel({ name: t("russian") }),
+		],
+	});
 	const quotePreviewModal = useQuotePreviewModal();
 	const englishAuthorAutoCompleteBox = useAutoCompleteBox(
 		{

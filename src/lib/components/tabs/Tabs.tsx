@@ -2,6 +2,7 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { InitializedModel } from "@mvc-react/mvc";
 import { TabsModel } from "../../models/tabs";
 import { ReactNode } from "react";
+import { twMerge } from "tailwind-merge";
 
 const Tabs = function ({
 	model,
@@ -11,7 +12,7 @@ const Tabs = function ({
 	children: ReactNode[];
 }) {
 	const { modelView, interact } = model;
-	const { tabs, selectedTab, tabsPosition } = modelView;
+	const { tabs, selectedTab, tabsPosition, tabsLayout } = modelView;
 
 	return (
 		<TabGroup
@@ -22,12 +23,22 @@ const Tabs = function ({
 			}
 		>
 			<TabList
-				className={`flex items-end ${(tabsPosition === "center" && "justify-center") || (tabsPosition === "start" && "justify-start") || (tabsPosition === "end" && "justify-end")} gap-1`}
+				className={twMerge(
+					`flex items-end gap-1`,
+					tabsPosition === "center"
+						? "justify-center"
+						: tabsPosition === "start"
+							? "justify-start"
+							: tabsPosition === "end"
+								? "justify-end"
+								: undefined,
+					tabsLayout === "fill" ? "w-full" : undefined,
+				)}
 			>
 				{tabs.map((tab, index) => (
 					<Tab
 						key={index}
-						className="flex items-center border-b-5 border-gray-300 p-4 py-2 text-sm wrap-break-word hyphens-auto uppercase focus:outline-none data-hover:border-gray-600 data-selected:border-gray-900"
+						className="flex grow items-center border-b-5 border-gray-300 p-4 py-2 text-sm wrap-break-word hyphens-auto uppercase focus:outline-none data-hover:border-gray-600 data-selected:border-gray-900"
 						as={"button"}
 					>
 						{tab.modelView.name}

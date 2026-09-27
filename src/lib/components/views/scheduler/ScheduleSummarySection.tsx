@@ -22,7 +22,7 @@ const ScheduleSummarySection = function ({ model }) {
 	);
 
 	return (
-		<div className="flex flex-col gap-6 pt-3">
+		<div className="flex flex-col gap-6 gap-x-12 gap-y-6 pt-3 md:flex-row">
 			{hasRecurringItems && (
 				<div className="flex flex-col gap-3">
 					<span className="uppercase">{t("recurringEvents")}</span>
