@@ -9,6 +9,7 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { connection } from "next/server";
+import { getDateString } from "@/src/lib/utilities/date-time";
 
 export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 	const { locale: rawLocale } = await params;
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 export default async function Page() {
 	await connection();
 	const [scheduleItems, autoCompleteInfo] = await Promise.all([
-		getScheduleItems(new Date()),
+		getScheduleItems(getDateString(new Date(), true)),
 		getAutoCompleteInfo(),
 	]);
 	return (
