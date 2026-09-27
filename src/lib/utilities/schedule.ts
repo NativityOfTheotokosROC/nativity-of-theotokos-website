@@ -105,11 +105,13 @@ export function getNextRecurringScheduleItemInstances<T extends Text = string>(
 	}: RecurringScheduleItemWithOptionalId<T>,
 	instances: number,
 	referenceDate?: Date,
+	includeReference: boolean = true,
 ) {
 	return getNextRecurringScheduleItemDates(
 		recurringPattern,
 		instances,
 		referenceDate,
+		includeReference,
 	).map(
 		date =>
 			({
@@ -146,7 +148,7 @@ export function generateSchedule<T extends Text = string>(
 			.flatMap(activeItem =>
 				getNextRecurringScheduleItemInstances(
 					activeItem,
-					maxItems,
+					maxItems + instantaneousScheduleItems.length,
 					resolvedReferenceDate,
 				),
 			)

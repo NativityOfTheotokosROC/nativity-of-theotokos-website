@@ -57,7 +57,6 @@ export async function getSchedule(
 						time: "asc",
 					},
 				},
-				removedScheduleItem: true,
 			},
 			where: {
 				date: {
@@ -82,7 +81,6 @@ export async function getSchedule(
 						time: "asc",
 					},
 				},
-				disabledRecurringScheduleItem: true,
 			},
 			where: {
 				disabledRecurringScheduleItem: null,
@@ -113,7 +111,6 @@ export async function getSchedule(
 			date,
 			eventTypeName,
 			instantaneousScheduleItemTimes,
-			removedScheduleItem,
 		}) =>
 			({
 				id,
@@ -126,7 +123,7 @@ export async function getSchedule(
 						designation: pickTranslation(designation, locale),
 					}),
 				),
-				isRemoved: removedScheduleItem !== null,
+				isRemoved: false,
 				eventType: eventTypeName as ScheduleItem["eventType"],
 			}) satisfies InstantaneousScheduleItem,
 	);
@@ -138,7 +135,6 @@ export async function getSchedule(
 			pattern,
 			eventTypeName,
 			recurringScheduleItemTimes,
-			disabledRecurringScheduleItem,
 		}) =>
 			({
 				id,
@@ -151,14 +147,17 @@ export async function getSchedule(
 						time: getTimeString(time),
 					}),
 				),
-				isDisabled: disabledRecurringScheduleItem !== null,
+				isDisabled: false,
 				eventType: eventTypeName as ScheduleItem["eventType"],
 			}) satisfies RecurringScheduleItem,
 	);
 	const recurringScheduleItemInstanceExclusions = new Set([
 		...removedInstantaneousScheduleItemRecords.map(
 			({ scheduleItem: { date, venue } }) =>
-				JSON.stringify({ date, venue: pickTranslation(venue, locale) }),
+				JSON.stringify({
+					date: getDateString(date),
+					venue: pickTranslation(venue, locale),
+				}),
 		),
 	]);
 	const schedule = generateSchedule(
@@ -172,7 +171,7 @@ export async function getSchedule(
 				"recurringItemId" in scheduleItem
 					? !recurringScheduleItemInstanceExclusions.has(
 							JSON.stringify({
-								date: scheduleItem.date,
+								date: getDateString(scheduleItem.date),
 								venue: scheduleItem.venue,
 							}),
 						)

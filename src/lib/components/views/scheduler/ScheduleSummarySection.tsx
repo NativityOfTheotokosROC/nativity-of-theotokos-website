@@ -16,9 +16,9 @@ const ScheduleSummarySection = function ({ model }) {
 	const hasRecurringItems = recurringScheduleItems.length > 0;
 	const orderedInstantaneousItems = instantaneousScheduleItems
 		.toSorted((a, b) => a.date.getTime() - b.date.getTime())
-		.toSorted((a, b) => Number(b.isRemoved) - Number(a.isRemoved));
+		.toSorted((a, b) => Number(a.isRemoved) - Number(b.isRemoved));
 	const orderedRecurringItems = recurringScheduleItems.toSorted(
-		(a, b) => Number(b.isDisabled) - Number(a.isDisabled),
+		(a, b) => Number(a.isDisabled) - Number(b.isDisabled),
 	);
 
 	return (
