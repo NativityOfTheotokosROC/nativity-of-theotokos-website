@@ -22,9 +22,11 @@ const ScheduleSummarySection = function ({ model }) {
 	);
 
 	return (
-		<div className="flex flex-col gap-6 gap-x-12 gap-y-6 pt-3 md:flex-row">
+		<div
+			className={`flex flex-col gap-6 gap-x-12 gap-y-6 pt-3 md:flex-row`}
+		>
 			{hasInstantaneousItems && (
-				<div className="flex flex-col gap-3">
+				<div className="flex flex-1 flex-col gap-3">
 					<span className="uppercase">{t("specificEvents")}</span>
 					<div className="flex max-h-100 w-full flex-col gap-2 overflow-y-auto pr-2">
 						{orderedInstantaneousItems.map(scheduleItem => (
@@ -44,7 +46,7 @@ const ScheduleSummarySection = function ({ model }) {
 				</div>
 			)}
 			{hasRecurringItems && (
-				<div className="flex flex-col gap-3">
+				<div className="flex flex-1 flex-col gap-3">
 					<span className="uppercase">{t("recurringEvents")}</span>
 					<div className="flex max-h-100 w-full flex-col gap-2 overflow-y-auto pr-2">
 						{orderedRecurringItems.map(scheduleItem => (

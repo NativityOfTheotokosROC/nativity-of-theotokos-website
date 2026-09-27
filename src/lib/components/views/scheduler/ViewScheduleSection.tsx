@@ -75,9 +75,11 @@ const ViewScheduleSection = function ({ model }) {
 					)}
 				</span>
 			</Button>
-			<div className="flex flex-col gap-x-12 gap-y-6 md:flex-row-reverse">
+			<div
+				className={`flex flex-col gap-x-12 gap-y-6 ${newEvent ? "md:flex-row-reverse" : "md:flex-row"}`}
+			>
 				{newEvent && (
-					<div className="new-event-section flex flex-col gap-3">
+					<div className="new-event-section flex flex-1 flex-col gap-3">
 						<span className="uppercase">
 							{t("newScheduleSection")}
 						</span>
@@ -104,7 +106,7 @@ const ViewScheduleSection = function ({ model }) {
 					</div>
 				)}
 				{currentSchedule.length > 0 && (
-					<div className="flex flex-col gap-3">
+					<div className="flex flex-1 flex-col gap-3">
 						<span className="uppercase">
 							{t("currentScheduleSection")}
 						</span>
