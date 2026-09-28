@@ -9,7 +9,7 @@ const PageView = function ({ model, children }) {
 	return (
 		<main
 			style={{ borderColor: modelView?.topBarColor }}
-			className={`border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black`}
+			className={`overflow-x-hidden border-t-15 border-t-[#976029] bg-[#FEF8F3] text-black`}
 		>
 			<div
 				className={twMerge(
