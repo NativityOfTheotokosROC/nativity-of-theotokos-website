@@ -82,7 +82,7 @@ const ScheduleItem = function ({ model }) {
 						/>
 					)}
 				</div>
-				<div className="flex flex-col gap-1 px-5.5 py-4">
+				<div className="flex w-full flex-col gap-1 px-5.5 py-4">
 					<span className="text-xl">{title}</span>
 					<span>{venue}</span>
 					{sortedTimes.map(({ time, designation }, index) => (
@@ -161,7 +161,7 @@ const ScheduleItem = function ({ model }) {
 						})}
 					</span>
 				</div>
-				<div className="flex flex-col gap-1 px-4 py-2">
+				<div className="flex w-full flex-col gap-1 px-4 py-2">
 					<span className="text-lg">{title}</span>
 					<span className="text-sm">{venue}</span>
 					<span className="text-sm">
