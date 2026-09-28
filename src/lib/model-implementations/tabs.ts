@@ -7,6 +7,7 @@ import {
 	TabsModelInteraction,
 	TabsModelView,
 	TabsPosition,
+	TabsToUnmount,
 } from "../models/tabs";
 import { TabModel } from "../models/tab";
 
@@ -36,12 +37,14 @@ export function useTabs({
 	tabsLayout,
 	selectedTab = 0,
 	animations = true,
+	tabsToUnmount,
 }: {
 	tabs: TabModel[];
 	tabsPosition?: TabsPosition;
 	tabsLayout?: TabsLayout;
 	selectedTab?: number;
 	animations?: boolean;
+	tabsToUnmount?: TabsToUnmount;
 }) {
 	const model = useInitializedStatefulInteractiveModel(tabsVIInterface(), {
 		tabs,
@@ -49,6 +52,7 @@ export function useTabs({
 		tabsPosition,
 		tabsLayout,
 		animations,
+		tabsToUnmount,
 	});
 	return model;
 }

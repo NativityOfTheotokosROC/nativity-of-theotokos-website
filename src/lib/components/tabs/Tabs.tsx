@@ -34,6 +34,10 @@ const Tabs = function ({
 	} else if (previousTab !== undefined && previousTab > selectedTab) {
 		slideAnimation = "slide-right";
 	}
+	const willUnmount =
+		(tabsToUnmount === "all" || tabsToUnmount?.includes(selectedTab)) ??
+		false;
+	console.log(willUnmount);
 
 	return (
 		<TabGroup
