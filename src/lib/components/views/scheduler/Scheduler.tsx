@@ -256,8 +256,11 @@ const Scheduler = function ({ model }) {
 							},
 						})}
 					>
-						<span className="inline-flex items-center gap-1">
-							<Calendar1Icon className="size-5" strokeWidth={1} />
+						<span className="inline-flex items-center gap-3">
+							<Calendar1Icon
+								className="size-5"
+								strokeWidth={1.5}
+							/>
 							{t("scheduleSpecific")}
 						</span>
 					</Button>
@@ -283,8 +286,11 @@ const Scheduler = function ({ model }) {
 							},
 						})}
 					>
-						<span className="inline-flex items-center gap-1">
-							<RotateCcwIcon className="size-5" strokeWidth={1} />
+						<span className="inline-flex items-center gap-3">
+							<RotateCcwIcon
+								className="size-5"
+								strokeWidth={1.5}
+							/>
 							{t("scheduleRecurring")}
 						</span>
 					</Button>
