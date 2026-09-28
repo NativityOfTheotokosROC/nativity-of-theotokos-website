@@ -237,7 +237,7 @@ const Scheduler = function ({ model }) {
 					<Button
 						model={newReadonlyModel({
 							className:
-								"flex justify-start w-full md:w-fit max-w-full flex-1",
+								"flex justify-start min-w-fit w-full md:w-fit max-w-full flex-1",
 							async action() {
 								await tabs.interact({
 									type: "SWITCH_TAB",
@@ -264,7 +264,7 @@ const Scheduler = function ({ model }) {
 					<Button
 						model={newReadonlyModel({
 							className:
-								"flex justify-start w-full md:w-fit max-w-full flex-1",
+								"flex min-w-fit justify-start w-full md:w-fit max-w-full flex-1",
 							async action() {
 								await tabs.interact({
 									type: "SWITCH_TAB",

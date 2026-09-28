@@ -64,6 +64,7 @@ const Tabs = function ({
 							leave="transition-opacity duration-300"
 							leaveFrom="opacity-100"
 							leaveTo="opacity-0"
+							as="div"
 						>
 							{child}
 						</Transition>
