@@ -797,6 +797,7 @@ function EventTimesFormControl({
 								model={newReadonlyModel({
 									title: t("deleteTime"),
 									variant: "alternative",
+									disabled: index === 0,
 									className:
 										"flex justify-center items-center w-fit",
 									action: () =>

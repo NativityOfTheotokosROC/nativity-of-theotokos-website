@@ -1,12 +1,12 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import cronstrue from "cronstrue";
 import "cronstrue/locales/en";
 import "cronstrue/locales/ru";
 import { useLocale, useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import { RecurringScheduleItemModel } from "../../models/recurring-schedule-item";
 import { getDateString, pickTimeTranslation } from "../../utilities/date-time";
+import { parseCronPattern } from "../../utilities/miscellaneous";
 import EditScheduleItemPanel from "./EditScheduleItemPanel";
 
 const RecurringScheduleItem = function ({ model }) {
@@ -23,7 +23,7 @@ const RecurringScheduleItem = function ({ model }) {
 		.sort((a, b) => a.time.getTime() - b.time.getTime())
 		.slice(0, maxDisplayedTimes);
 	const description = t("description", {
-		parsedCronString: cronstrue.toString(recurringPattern, { locale }),
+		parsedCronString: parseCronPattern(recurringPattern, locale),
 	});
 
 	return (

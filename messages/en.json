@@ -337,17 +337,23 @@
 		"modifyFailure": "Could not modify the event: Error: {message}",
 		"scheduleSummaryTab": "Schedule Summary",
 		"altScheduleSummaryTab": "Schedule Details",
-		"confirmDeleteSpecific": "Are you sure you want to delete the event ''{title}'' scheduled for {date}?",
-		"confirmDeleteRecurring": "Are you sure you want to delete the recurring event ''{title}''?",
-		"confirmEnableSpecific": "Are you sure you want to enable the event ''{title}'' scheduled for {date}?",
-		"confirmEnableRecurring": "Are you sure you want to enable the recurring event ''{title}''?",
-		"confirmDisableSpecific": "Are you sure you want to disable the event ''{title}'' scheduled for {date}?",
-		"confirmDisableRecurring": "Are you sure you want to disable the recurring event ''{title}''?",
+		"confirmDeleteSpecific": "Are you sure you want to delete the event ''{title}'' scheduled for {date} at {venue}?",
+		"confirmDeleteRecurring": "Are you sure you want to delete the event ''{title}'' which recurs {parsedCron} at {venue}?",
+		"confirmEnableSpecific": "Are you sure you want to enable the event ''{title}'' scheduled for {date} at {venue}?",
+		"confirmEnableRecurring": "Are you sure you want to enable the event ''{title}'' which recurs {parsedCron} at {venue}?",
+		"confirmDisableSpecific": "Are you sure you want to disable the event ''{title}'' scheduled for {date} at {venue}?",
+		"confirmDisableRecurring": "Are you sure you want to disable the event ''{title}'' which recurs {parsedCron} at {venue}?",
 		"normalEvent": "Normal Event",
 		"specialEvent": "Special Occasion",
 		"feastEvent": "Feast",
 		"englishPreview": "Preview in English",
 		"russianPreview": "Preview in Russian"
+	},
+	"editPanel": {
+		"edit": "Modify",
+		"disable": "Disable",
+		"enable": "Enable",
+		"delete": "Delete"
 	},
 	"recurringScheduleItem": {
 		"description": "Event recurs {parsedCronString}"

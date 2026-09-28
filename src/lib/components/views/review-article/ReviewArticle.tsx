@@ -165,133 +165,138 @@ const ReviewArticle = function ({ model }) {
 						}),
 					)}
 				>
-					<div className="flex flex-col gap-3">
-						<input
-							{...register("title.english")}
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title?.english ? "border-red-800" : "border-gray-400"}`}
-							placeholder={t("titleField")}
-							autoComplete="off"
-							autoCapitalize="words"
-						/>
-						{errors.title?.english && (
-							<span className="text-sm text-red-800">
-								{errors.title.english.message}
-							</span>
-						)}
-						<input
-							{...register("authorName.english")}
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorName?.english ? "border-red-800" : "border-gray-400"}`}
-							placeholder={t("authorNameField")}
-							autoComplete="name"
-							autoCapitalize="words"
-							disabled={!currentArticle}
-						/>
-						{errors.authorName?.english && (
-							<span className="text-sm text-red-800">
-								{errors.authorName.english.message}
-							</span>
-						)}
-						<Controller
-							control={control}
-							name={"body.english"}
-							render={({ field: { onChange } }) => (
-								<Editor
+					<div className="flex flex-col gap-6 gap-x-12 lg:flex-row">
+						<div className="flex flex-1 flex-col gap-3">
+							<input
+								{...register("title.english")}
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title?.english ? "border-red-800" : "border-gray-400"}`}
+								placeholder={t("titleField")}
+								autoComplete="off"
+								autoCapitalize="words"
+							/>
+							{errors.title?.english && (
+								<span className="text-sm text-red-800">
+									{errors.title.english.message}
+								</span>
+							)}
+							<input
+								{...register("authorName.english")}
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorName?.english ? "border-red-800" : "border-gray-400"}`}
+								placeholder={t("authorNameField")}
+								autoComplete="name"
+								autoCapitalize="words"
+								disabled={!currentArticle}
+							/>
+							{errors.authorName?.english && (
+								<span className="text-sm text-red-800">
+									{errors.authorName.english.message}
+								</span>
+							)}
+							<Controller
+								control={control}
+								name={"body.english"}
+								render={({ field: { onChange } }) => (
+									<Editor
+										model={newReadonlyModel({
+											initialContent: draft.body.english,
+											className: errors.body?.english
+												? "border-red-800"
+												: "border-gray-400",
+											changeCallback: onChange,
+										})}
+									/>
+								)}
+							/>
+							{errors.body?.english && (
+								<span className="text-sm text-red-800">
+									{errors.body.message}
+								</span>
+							)}
+						</div>
+						<div className="flex flex-1 flex-col gap-3 md:max-w-[33em]">
+							<div className="flex h-[15em] w-full items-stretch justify-stretch overflow-clip rounded-lg md:h-fit md:max-h-[25em]">
+								<Image
+									className="h-full w-full grow object-cover object-center"
+									src={
+										imageProcessor.modelView.processedImage
+											?.blobURL ??
+										currentArticle?.articleImage.url ??
+										DEFAULT_ARTICLE_PREVIEW_IMAGE
+									}
+									placeholder="blur"
+									blurDataURL={
+										currentArticle?.articleImage
+											.placeholder ??
+										DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER
+									}
+									alt={t("imageAlt")}
+									unoptimized={true}
+								/>
+							</div>
+							{errors.image?.url && (
+								<span className="text-sm text-red-800">
+									{errors.image.url.message}
+								</span>
+							)}
+							<div className="flex items-center gap-6">
+								<FileSelectorButton
 									model={newReadonlyModel({
-										initialContent: draft.body.english,
-										className: errors.body?.english
-											? "border-red-800"
-											: "border-gray-400",
-										changeCallback: onChange,
+										fileSelector: imageSelector,
+										contents: currentArticle?.articleImage
+											? t("changeImage")
+											: t("selectImage"),
+										contentsWhenFile: t("changeImage"),
 									})}
 								/>
+								{imageStatus && (
+									<div className="flex items-center gap-3">
+										{imageStatus === "processing" && (
+											<Spinner
+												model={newReadonlyModel({
+													size: 20,
+													color: "black",
+												})}
+											/>
+										)}
+										{imageStatus === "success" && (
+											<Check className="size-8 stroke-black" />
+										)}
+										{imageStatus === "error" && (
+											<X className="size-8 stroke-red-800 text-red-800" />
+										)}
+										{imageStatusMessage && (
+											<span
+												className={`text-sm ${imageStatus === "error" ? "text-red-800" : "text-black"}`}
+											>
+												{imageStatusMessage}
+											</span>
+										)}
+									</div>
+								)}
+							</div>
+							<input
+								{...register("image.caption.english")}
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.image?.caption?.english ? "border-red-800" : "border-gray-400"}`}
+								placeholder={t("imageCaptionField")}
+								autoComplete="off"
+							/>
+							{errors.image?.caption?.english && (
+								<span className="text-sm text-red-800">
+									{errors.image.caption?.english.message}
+								</span>
 							)}
-						/>
-						{errors.body?.english && (
-							<span className="text-sm text-red-800">
-								{errors.body.message}
-							</span>
-						)}
-						<div className="flex h-[15em] w-full items-stretch justify-stretch overflow-clip rounded-lg md:h-fit md:max-h-[25em] md:max-w-[33em]">
-							<Image
-								className="h-full w-full grow object-cover object-center"
-								src={
-									imageProcessor.modelView.processedImage
-										?.blobURL ??
-									currentArticle?.articleImage.url ??
-									DEFAULT_ARTICLE_PREVIEW_IMAGE
-								}
-								placeholder="blur"
-								blurDataURL={
-									currentArticle?.articleImage.placeholder ??
-									DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER
-								}
-								alt={t("imageAlt")}
-								unoptimized={true}
+							<input
+								{...register("snippet.english")}
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.snippet?.english ? "border-red-800" : "border-gray-400"}`}
+								placeholder={`${t("snippetField")} (${tMisc("optional")})`}
+								autoComplete="off"
 							/>
-						</div>
-						{errors.image?.url && (
-							<span className="text-sm text-red-800">
-								{errors.image.url.message}
-							</span>
-						)}
-						<div className="flex items-center gap-6">
-							<FileSelectorButton
-								model={newReadonlyModel({
-									fileSelector: imageSelector,
-									contents: currentArticle?.articleImage
-										? t("changeImage")
-										: t("selectImage"),
-									contentsWhenFile: t("changeImage"),
-								})}
-							/>
-							{imageStatus && (
-								<div className="flex items-center gap-3">
-									{imageStatus === "processing" && (
-										<Spinner
-											model={newReadonlyModel({
-												size: 20,
-												color: "black",
-											})}
-										/>
-									)}
-									{imageStatus === "success" && (
-										<Check className="size-8 stroke-black" />
-									)}
-									{imageStatus === "error" && (
-										<X className="size-8 stroke-red-800 text-red-800" />
-									)}
-									{imageStatusMessage && (
-										<span
-											className={`text-sm ${imageStatus === "error" ? "text-red-800" : "text-black"}`}
-										>
-											{imageStatusMessage}
-										</span>
-									)}
-								</div>
+							{errors.snippet?.english && (
+								<span className="text-sm text-red-800">
+									{errors.snippet?.english?.message}
+								</span>
 							)}
 						</div>
-						<input
-							{...register("image.caption.english")}
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.image?.caption?.english ? "border-red-800" : "border-gray-400"}`}
-							placeholder={t("imageCaptionField")}
-							autoComplete="off"
-						/>
-						{errors.image?.caption?.english && (
-							<span className="text-sm text-red-800">
-								{errors.image.caption?.english.message}
-							</span>
-						)}
-						<input
-							{...register("snippet.english")}
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.snippet?.english ? "border-red-800" : "border-gray-400"}`}
-							placeholder={`${t("snippetField")} (${tMisc("optional")})`}
-							autoComplete="off"
-						/>
-						{errors.snippet?.english && (
-							<span className="text-sm text-red-800">
-								{errors.snippet?.english?.message}
-							</span>
-						)}
 						<Controller
 							control={control}
 							name={"isArticleFeatured"}

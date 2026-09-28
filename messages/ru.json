@@ -336,17 +336,23 @@
 		"modifyFailure": "Не удалось изменить событие. Ошибка: {message}",
 		"scheduleSummaryTab": "Обзор расписания",
 		"altScheduleSummaryTab": "Детали расписания",
-		"confirmDeleteSpecific": "Вы уверены, что хотите удалить событие «{title}», запланированное на {date}?",
-		"confirmDeleteRecurring": "Вы уверены, что хотите удалить повторяющееся событие «{title}»?",
-		"confirmEnableSpecific": "Вы уверены, что хотите включить событие «{title}», запланированное на {date}?",
-		"confirmEnableRecurring": "Вы уверены, что хотите включить повторяющееся событие «{title}»?",
-		"confirmDisableSpecific": "Вы уверены, что хотите отключить событие «{title}», запланированное на {date}?",
-		"confirmDisableRecurring": "Вы уверены, что хотите отключить повторяющееся событие «{title}»?",
+		"confirmDeleteSpecific": "Вы уверены, что хотите удалить событие «{title}», запланированное на {date} в {venue}?",
+		"confirmDeleteRecurring": "Вы уверены, что хотите удалить событие «{title}», которое повторяется {parsedCron} в {venue}?",
+		"confirmEnableSpecific": "Вы уверены, что хотите включить событие «{title}», запланированное на {date} в {venue}?",
+		"confirmEnableRecurring": "Вы уверены, что хотите включить событие «{title}», которое повторяется {parsedCron} в {venue}?",
+		"confirmDisableSpecific": "Вы уверены, что хотите отключить событие «{title}», запланированное на {date} в {venue}?",
+		"confirmDisableRecurring": "Вы уверены, что хотите отключить событие «{title}», которое повторяется {parsedCron} в {venue}?",
 		"normalEvent": "Обычное событие",
 		"specialEvent": "Особое событие",
 		"feastEvent": "Праздник",
 		"englishPreview": "Английский",
 		"russianPreview": "Русский"
+	},
+	"editPanel": {
+		"edit": "Изменить",
+		"disable": "Отключить",
+		"enable": "Включить",
+		"delete": "Удалить"
 	},
 	"recurringScheduleItem": {
 		"description": "Событие повторяется {parsedCronString}"

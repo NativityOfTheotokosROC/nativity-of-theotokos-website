@@ -7,6 +7,7 @@ import {
 	animals,
 	uniqueNamesGenerator,
 } from "unique-names-generator";
+import cronstrue from "cronstrue";
 
 export function removeMarkup(markedUpText: string): string {
 	const regex = /(<([^>]+)>)/gi;
@@ -67,4 +68,15 @@ export function pickTranslation(translation: Translation, target: Language) {
 	return target === "ru"
 		? (translation.russian ?? translation.english)
 		: translation.english;
+}
+
+export function parseCronPattern(
+	pattern: string,
+	locale: Language = "en",
+	capitalize: boolean = false,
+) {
+	const parsedCronString = cronstrue.toString(pattern, { locale });
+	return capitalize
+		? parsedCronString[0].toUpperCase() + parsedCronString.slice(1)
+		: parsedCronString[0].toLowerCase() + parsedCronString.slice(1);
 }

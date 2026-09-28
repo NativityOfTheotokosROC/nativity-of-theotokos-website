@@ -5,7 +5,10 @@ import { EditScheduleItemPanelModelView } from "@/src/lib/models/edit-schedule-i
 import { NewScheduleEvent } from "@/src/lib/models/schedule-event";
 import { SchedulerModel } from "@/src/lib/models/scheduler";
 import { pickDateTranslation } from "@/src/lib/utilities/date-time";
-import { pickTranslation } from "@/src/lib/utilities/miscellaneous";
+import {
+	parseCronPattern,
+	pickTranslation,
+} from "@/src/lib/utilities/miscellaneous";
 import { pickScheduleItemTranslation } from "@/src/lib/utilities/schedule";
 import { Language } from "@/src/lib/utilities/types";
 import { ModeledVoidComponent } from "@mvc-react/components";
@@ -45,7 +48,6 @@ const Scheduler = function ({ model }) {
 			{ modelView: { name: t("viewScheduleTab") } },
 			{ modelView: { name: t("altScheduleSummaryTab") } },
 		],
-		tabsPosition: "start",
 		tabsLayout: "fill",
 		selectedTab: 1,
 	});
@@ -118,7 +120,7 @@ const Scheduler = function ({ model }) {
 			const proceedCallback = () =>
 				interact({ type: "DELETE_EVENT", input: { event } });
 			if (event.type === "specific") {
-				const { title, date } = instantaneousScheduleItems.find(
+				const { title, date, venue } = instantaneousScheduleItems.find(
 					scheduleItem => event.scheduleItem.id === scheduleItem.id,
 				)!;
 				confirmationDialog.interact({
@@ -127,19 +129,28 @@ const Scheduler = function ({ model }) {
 						message: t("confirmDeleteSpecific", {
 							title: pickTranslation(title, locale),
 							date: pickDateTranslation(date, locale),
+							venue: pickTranslation(venue, locale),
 						}),
 						proceedCallback,
 					},
 				});
 			} else {
-				const { title } = instantaneousScheduleItems.find(
-					scheduleItem => event.scheduleItem.id === scheduleItem.id,
-				)!;
+				const { title, venue, recurringPattern } =
+					recurringScheduleItems.find(
+						scheduleItem =>
+							event.scheduleItem.id === scheduleItem.id,
+					)!;
+
 				confirmationDialog.interact({
 					type: "OPEN",
 					input: {
 						message: t("confirmDeleteRecurring", {
 							title: pickTranslation(title, locale),
+							venue: pickTranslation(venue, locale),
+							parsedCron: parseCronPattern(
+								recurringPattern,
+								locale,
+							),
 						}),
 						proceedCallback,
 					},
@@ -151,10 +162,11 @@ const Scheduler = function ({ model }) {
 				interact({ type: "TOGGLE_EVENT", input: { event } });
 			switch (event.type) {
 				case "specific": {
-					const { title, date } = instantaneousScheduleItems.find(
-						scheduleItem =>
-							event.scheduleItem.id === scheduleItem.id,
-					)!;
+					const { title, date, venue } =
+						instantaneousScheduleItems.find(
+							scheduleItem =>
+								event.scheduleItem.id === scheduleItem.id,
+						)!;
 					confirmationDialog.interact({
 						type: "OPEN",
 						input: {
@@ -165,6 +177,7 @@ const Scheduler = function ({ model }) {
 								{
 									title: pickTranslation(title, locale),
 									date: pickDateTranslation(date, locale),
+									venue: pickTranslation(venue, locale),
 								},
 							),
 							proceedCallback,
@@ -173,10 +186,11 @@ const Scheduler = function ({ model }) {
 					break;
 				}
 				case "recurring": {
-					const { title } = recurringScheduleItems.find(
-						scheduleItem =>
-							event.scheduleItem.id === scheduleItem.id,
-					)!;
+					const { title, venue, recurringPattern } =
+						recurringScheduleItems.find(
+							scheduleItem =>
+								event.scheduleItem.id === scheduleItem.id,
+						)!;
 					confirmationDialog.interact({
 						type: "OPEN",
 						input: {
@@ -186,6 +200,11 @@ const Scheduler = function ({ model }) {
 									: "confirmDisableRecurring",
 								{
 									title: pickTranslation(title, locale),
+									venue: pickTranslation(venue, locale),
+									parsedCron: parseCronPattern(
+										recurringPattern,
+										locale,
+									),
 								},
 							),
 							proceedCallback,
@@ -194,7 +213,7 @@ const Scheduler = function ({ model }) {
 					break;
 				}
 				case "recurringInstance": {
-					const { title } = recurringScheduleItems.find(
+					const { title, venue } = recurringScheduleItems.find(
 						scheduleItem =>
 							event.scheduleItem.recurringItemId ===
 							scheduleItem.id,
@@ -208,6 +227,7 @@ const Scheduler = function ({ model }) {
 									: "confirmDisableSpecific",
 								{
 									title: pickTranslation(title, locale),
+									venue: pickTranslation(venue, locale),
 									date: pickDateTranslation(
 										event.scheduleItem.date,
 										locale,
