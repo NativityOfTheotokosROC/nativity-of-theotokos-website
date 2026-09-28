@@ -8,7 +8,7 @@ import {
 } from "@headlessui/react";
 import { InitializedModel } from "@mvc-react/mvc";
 import { TabsModel } from "../../models/tabs";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 const Tabs = function ({
@@ -19,7 +19,21 @@ const Tabs = function ({
 	children: ReactNode[];
 }) {
 	const { modelView, interact } = model;
-	const { tabs, selectedTab, tabsPosition, tabsLayout } = modelView;
+	const {
+		tabs,
+		selectedTab,
+		tabsPosition,
+		tabsLayout,
+		tabsToUnmount,
+		animations,
+	} = modelView;
+	const [previousTab, setPreviousTab] = useState<number | undefined>();
+	let slideAnimation: "slide-right" | "slide-left" | null = null;
+	if (previousTab !== undefined && previousTab < selectedTab) {
+		slideAnimation = "slide-left";
+	} else if (previousTab !== undefined && previousTab > selectedTab) {
+		slideAnimation = "slide-right";
+	}
 
 	return (
 		<TabGroup
@@ -54,20 +68,33 @@ const Tabs = function ({
 			</TabList>
 			<TabPanels>
 				{children.map((child, index) => (
-					<TabPanel key={index} className="contents" unmount={false}>
-						<Transition
-							appear
-							show={selectedTab === index}
-							enter="transition-opacity duration-300"
-							enterFrom="opacity-0"
-							enterTo="opacity-100"
-							leave="transition-opacity duration-300"
-							leaveFrom="opacity-100"
-							leaveTo="opacity-0"
-							as="div"
-						>
-							{child}
-						</Transition>
+					<TabPanel
+						key={index}
+						className="contents"
+						unmount={
+							(tabsToUnmount === "all" ||
+								tabsToUnmount?.includes(index)) ??
+							false
+						}
+					>
+						{animations && previousTab !== selectedTab ? (
+							<Transition
+								appear
+								show={selectedTab === index}
+								enter="transition duration-300 ease-out"
+								enterFrom={`opacity-0 ${slideAnimation === "slide-left" ? "translate-x-1/4" : slideAnimation === "slide-right" ? "-translate-x-1/4" : ""}`}
+								enterTo={`opacity-100 translate-x-0`}
+								leave="transition duration-300 ease-out"
+								leaveFrom={`opacity-100 translate-x-0`}
+								leaveTo={`opacity-0 ${slideAnimation === "slide-left" ? "-translate-x-1/4" : slideAnimation === "slide-right" ? "translate-x-1/4" : ""}`}
+								afterEnter={() => setPreviousTab(selectedTab)}
+								as="div"
+							>
+								{child}
+							</Transition>
+						) : (
+							child
+						)}
 					</TabPanel>
 				))}
 			</TabPanels>

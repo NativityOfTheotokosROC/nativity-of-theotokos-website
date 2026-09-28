@@ -35,17 +35,20 @@ export function useTabs({
 	tabsPosition,
 	tabsLayout,
 	selectedTab = 0,
+	animations = true,
 }: {
 	tabs: TabModel[];
 	tabsPosition?: TabsPosition;
 	tabsLayout?: TabsLayout;
 	selectedTab?: number;
+	animations?: boolean;
 }) {
 	const model = useInitializedStatefulInteractiveModel(tabsVIInterface(), {
 		tabs,
 		selectedTab,
 		tabsPosition,
 		tabsLayout,
+		animations,
 	});
 	return model;
 }

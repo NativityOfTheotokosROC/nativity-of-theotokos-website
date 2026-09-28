@@ -244,7 +244,7 @@ const Scheduler = function ({ model }) {
 									input: { id: 0 },
 								});
 								scrollToElement(".schedule-event");
-								await interact({
+								interact({
 									type: "UPDATE_EVENT_TO_EDIT",
 									input: {
 										event: {
@@ -274,7 +274,7 @@ const Scheduler = function ({ model }) {
 									input: { id: 0 },
 								});
 								scrollToElement(".schedule-event");
-								await interact({
+								interact({
 									type: "UPDATE_EVENT_TO_EDIT",
 									input: {
 										event: {

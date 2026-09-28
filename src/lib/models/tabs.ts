@@ -3,12 +3,15 @@ import { TabModel } from "./tab";
 
 export type TabsPosition = "start" | "center" | "end";
 export type TabsLayout = "compact" | "fill";
+export type TabsToUnmount = "all" | number[];
 
 export type TabsModelView = {
 	tabs: TabModel[];
 	selectedTab: number;
 	tabsPosition?: TabsPosition;
 	tabsLayout?: TabsLayout;
+	animations?: boolean;
+	tabsToUnmount?: TabsToUnmount;
 };
 
 export type TabsModelInteraction = InputModelInteraction<
