@@ -179,21 +179,23 @@ const ScheduleItem = function ({ model }) {
 								instantaneousScheduleItemHasId(
 									scheduleItem,
 								))) && (
-							<EditScheduleItemPanel
-								model={newReadonlyModel({
-									event:
-										"recurringItemId" in scheduleItem
-											? {
-													type: "recurringInstance",
-													scheduleItem,
-												}
-											: {
-													type: "specific",
-													scheduleItem,
-												},
-									callbacks: options.modifyCallbacks,
-								})}
-							/>
+							<div className="mt-auto justify-items-end pt-[6px]">
+								<EditScheduleItemPanel
+									model={newReadonlyModel({
+										event:
+											"recurringItemId" in scheduleItem
+												? {
+														type: "recurringInstance",
+														scheduleItem,
+													}
+												: {
+														type: "specific",
+														scheduleItem,
+													},
+										callbacks: options.modifyCallbacks,
+									})}
+								/>
+							</div>
 						)}
 				</div>
 			</div>
