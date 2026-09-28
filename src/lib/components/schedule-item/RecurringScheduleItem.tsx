@@ -53,7 +53,7 @@ const RecurringScheduleItem = function ({ model }) {
 				</div>
 			))}
 			{options?.modifyCallbacks && (
-				<div className="mt-auto">
+				<div className="mt-auto justify-self-end pt-[6px]">
 					<EditScheduleItemPanel
 						model={newReadonlyModel({
 							event: { type: "recurring", scheduleItem },

@@ -37,7 +37,7 @@ const Tabs = function ({
 
 	return (
 		<TabGroup
-			className="flex w-full flex-col gap-6"
+			className="flex w-full flex-col gap-6 overflow-x-hidden"
 			selectedIndex={selectedTab}
 			onChange={index =>
 				interact({ type: "SWITCH_TAB", input: { id: index } })
@@ -59,7 +59,7 @@ const Tabs = function ({
 				{tabs.map((tab, index) => (
 					<Tab
 						key={index}
-						className="flex max-w-full flex-1 items-center justify-center border-b-5 border-gray-300 p-4 py-2 text-sm wrap-break-word hyphens-auto uppercase focus:outline-none data-hover:border-gray-600 data-selected:border-gray-900"
+						className={`flex max-w-full ${tabsLayout === "fill" ? "flex-1" : ""} items-center justify-center border-b-5 border-gray-300 p-4 py-2 text-sm wrap-break-word hyphens-auto uppercase focus:outline-none data-hover:border-gray-600 data-selected:border-gray-900`}
 						as={"button"}
 					>
 						{tab.modelView.name}
@@ -67,41 +67,37 @@ const Tabs = function ({
 				))}
 			</TabList>
 			<TabPanels>
-				{children.map((child, index) => {
-					const willUnmount =
-						(tabsToUnmount === "all" ||
-							tabsToUnmount?.includes(index)) ??
-						false;
-					return (
-						<TabPanel
-							key={index}
-							className="contents"
-							unmount={willUnmount}
-						>
-							{animations ? (
-								<Transition
-									appear
-									show={selectedTab === index}
-									enter="transition duration-300 ease-out"
-									enterFrom={`opacity-0 ${slideAnimation === "slide-left" ? "translate-x-1/4" : slideAnimation === "slide-right" ? "-translate-x-1/4" : ""}`}
-									enterTo="opacity-100 translate-x-0"
-									leave="transition duration-300 ease-out"
-									leaveFrom="opacity-100 translate-x-0"
-									leaveTo={`opacity-0 ${slideAnimation === "slide-left" ? "-translate-x-1/4" : slideAnimation === "slide-right" ? "translate-x-1/4" : ""}`}
-									afterEnter={() =>
-										setPreviousTab(selectedTab)
-									}
-									as="div"
-									unmount={false}
-								>
-									{child}
-								</Transition>
-							) : (
-								child
-							)}
-						</TabPanel>
-					);
-				})}
+				{children.map((child, index) => (
+					<TabPanel
+						key={index}
+						className="contents"
+						unmount={
+							(tabsToUnmount === "all" ||
+								tabsToUnmount?.includes(index)) ??
+							false
+						}
+					>
+						{animations ? (
+							<Transition
+								appear
+								show={selectedTab === index}
+								enter="transition duration-300 ease-out"
+								enterFrom={`opacity-0 ${slideAnimation === "slide-left" ? "translate-x-1/4" : slideAnimation === "slide-right" ? "-translate-x-1/4" : ""}`}
+								enterTo="opacity-100 translate-x-0"
+								leave="transition duration-300 ease-out"
+								leaveFrom="opacity-100 translate-x-0"
+								leaveTo={`opacity-0 ${slideAnimation === "slide-left" ? "-translate-x-1/4" : slideAnimation === "slide-right" ? "translate-x-1/4" : ""}`}
+								afterEnter={() => setPreviousTab(selectedTab)}
+								as="div"
+								unmount={false}
+							>
+								{child}
+							</Transition>
+						) : (
+							child
+						)}
+					</TabPanel>
+				))}
 			</TabPanels>
 		</TabGroup>
 	);

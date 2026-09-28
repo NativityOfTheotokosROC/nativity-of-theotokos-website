@@ -1,6 +1,11 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
-import { BanIcon, CheckIcon, Edit2Icon, Trash2Icon } from "lucide-react";
+import {
+	CircleCheckIcon,
+	CircleXIcon,
+	SquarePenIcon,
+	Trash2Icon,
+} from "lucide-react";
 import { EditScheduleItemPanelModel } from "../../models/edit-schedule-item-panel";
 import { ScheduleEvent } from "../../utilities/schedule";
 
@@ -15,7 +20,7 @@ const EditScheduleItemPanel = function ({ model }) {
 				className="no-outline flex items-center"
 				onClick={() => callbacks.editCallback(event)}
 			>
-				<Edit2Icon className="size-5" strokeWidth={1} />
+				<SquarePenIcon className="size-5" strokeWidth={1.5} />
 			</button>
 			<button
 				className="no-outline flex items-center"
@@ -24,9 +29,9 @@ const EditScheduleItemPanel = function ({ model }) {
 				{("isRemoved" in scheduleItem && scheduleItem.isRemoved) ||
 				("recurringPattern" in scheduleItem &&
 					scheduleItem.isDisabled) ? (
-					<CheckIcon className="size-5" strokeWidth={1} />
+					<CircleCheckIcon className="size-5" strokeWidth={1.5} />
 				) : (
-					<BanIcon className="size-5" strokeWidth={1} />
+					<CircleXIcon className="size-5" strokeWidth={1.5} />
 				)}
 			</button>
 			{event.type !== "recurringInstance" &&
@@ -38,7 +43,7 @@ const EditScheduleItemPanel = function ({ model }) {
 							callbacks.deleteCallback(event as ScheduleEvent)
 						}
 					>
-						<Trash2Icon className="size-5" strokeWidth={1} />
+						<Trash2Icon className="size-5" strokeWidth={1.5} />
 					</button>
 				)}
 		</div>

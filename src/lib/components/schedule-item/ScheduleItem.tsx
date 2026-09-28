@@ -108,7 +108,7 @@ const ScheduleItem = function ({ model }) {
 								instantaneousScheduleItemHasId(
 									scheduleItem,
 								))) && (
-							<div className="mt-auto">
+							<div className="mt-auto justify-self-end pt-[6px]">
 								<EditScheduleItemPanel
 									model={newReadonlyModel({
 										event:
