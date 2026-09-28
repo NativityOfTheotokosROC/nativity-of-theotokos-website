@@ -67,36 +67,41 @@ const Tabs = function ({
 				))}
 			</TabList>
 			<TabPanels>
-				{children.map((child, index) => (
-					<TabPanel
-						key={index}
-						className="contents"
-						unmount={
-							(tabsToUnmount === "all" ||
-								tabsToUnmount?.includes(index)) ??
-							false
-						}
-					>
-						{animations ? (
-							<Transition
-								appear
-								show={selectedTab === index}
-								enter="transition duration-300 ease-out"
-								enterFrom={`opacity-0 ${slideAnimation === "slide-left" ? "translate-x-1/4" : slideAnimation === "slide-right" ? "-translate-x-1/4" : ""}`}
-								enterTo={`opacity-100 translate-x-0`}
-								leave="transition duration-300 ease-out"
-								leaveFrom={`opacity-100 translate-x-0`}
-								leaveTo={`opacity-0 ${slideAnimation === "slide-left" ? "-translate-x-1/4" : slideAnimation === "slide-right" ? "translate-x-1/4" : ""}`}
-								afterEnter={() => setPreviousTab(selectedTab)}
-								as="div"
-							>
-								{child}
-							</Transition>
-						) : (
-							child
-						)}
-					</TabPanel>
-				))}
+				{children.map((child, index) => {
+					const willUnmount =
+						(tabsToUnmount === "all" ||
+							tabsToUnmount?.includes(index)) ??
+						false;
+					return (
+						<TabPanel
+							key={index}
+							className="contents"
+							unmount={willUnmount}
+						>
+							{animations ? (
+								<Transition
+									appear
+									show={selectedTab === index}
+									enter="transition duration-300 ease-out"
+									enterFrom={`opacity-0 ${slideAnimation === "slide-left" ? "translate-x-1/4" : slideAnimation === "slide-right" ? "-translate-x-1/4" : ""}`}
+									enterTo="opacity-100 translate-x-0"
+									leave="transition duration-300 ease-out"
+									leaveFrom="opacity-100 translate-x-0"
+									leaveTo={`opacity-0 ${slideAnimation === "slide-left" ? "-translate-x-1/4" : slideAnimation === "slide-right" ? "translate-x-1/4" : ""}`}
+									afterEnter={() =>
+										setPreviousTab(selectedTab)
+									}
+									as="div"
+									unmount={false}
+								>
+									{child}
+								</Transition>
+							) : (
+								child
+							)}
+						</TabPanel>
+					);
+				})}
 			</TabPanels>
 		</TabGroup>
 	);
