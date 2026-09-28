@@ -1,26 +1,26 @@
+import { scrollToElement } from "@/src/lib/client-only/miscellaneous";
+import { useConfirmationDialog } from "@/src/lib/model-implementations/confirmation-dialog";
 import { useTabs } from "@/src/lib/model-implementations/tabs";
 import { EditScheduleItemPanelModelView } from "@/src/lib/models/edit-schedule-item-panel";
 import { NewScheduleEvent } from "@/src/lib/models/schedule-event";
 import { SchedulerModel } from "@/src/lib/models/scheduler";
+import { pickDateTranslation } from "@/src/lib/utilities/date-time";
+import { pickTranslation } from "@/src/lib/utilities/miscellaneous";
 import { pickScheduleItemTranslation } from "@/src/lib/utilities/schedule";
 import { Language } from "@/src/lib/utilities/types";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import { ArrowRightIcon } from "lucide-react";
+import { Calendar1Icon, RotateCcwIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import ButtonBar from "../../button-bar/ButtonBar";
 import Button from "../../button/Button";
+import ConfirmationDialog from "../../confirmation-dialog/ConfirmationDialog";
 import PageView from "../../page-view/PageView";
-import Tabs from "../../tabs/Tabs";
 import ScheduleEvent from "../../schedule-event/ScheduleEvent";
+import Tabs from "../../tabs/Tabs";
 import ScheduleSummarySection from "./ScheduleSummarySection";
 import ViewScheduleSection from "./ViewScheduleSection";
-import ConfirmationDialog from "../../confirmation-dialog/ConfirmationDialog";
-import { useConfirmationDialog } from "@/src/lib/model-implementations/confirmation-dialog";
-import { pickTranslation } from "@/src/lib/utilities/miscellaneous";
-import { pickDateTranslation } from "@/src/lib/utilities/date-time";
-import { scrollToElement } from "@/src/lib/client-only/miscellaneous";
 
 const Scheduler = function ({ model }) {
 	const { modelView, interact } = model;
@@ -231,11 +231,13 @@ const Scheduler = function ({ model }) {
 					model={newReadonlyModel({
 						orientation: "flexible",
 						arrangement: "start",
+						className: "max-w-fit",
 					})}
 				>
 					<Button
 						model={newReadonlyModel({
-							className: "flex justify-start w-full md:w-auto",
+							className:
+								"flex justify-start w-full md:w-fit max-w-full flex-1",
 							async action() {
 								await tabs.interact({
 									type: "SWITCH_TAB",
@@ -254,14 +256,15 @@ const Scheduler = function ({ model }) {
 							},
 						})}
 					>
-						<span className="inline-flex gap-1">
-							<ArrowRightIcon strokeWidth={1} />
+						<span className="inline-flex items-center gap-1">
+							<Calendar1Icon className="size-5" strokeWidth={1} />
 							{t("scheduleSpecific")}
 						</span>
 					</Button>
 					<Button
 						model={newReadonlyModel({
-							className: "flex justify-start w-full md:w-auto",
+							className:
+								"flex justify-start w-full md:w-fit max-w-full flex-1",
 							async action() {
 								await tabs.interact({
 									type: "SWITCH_TAB",
@@ -280,8 +283,8 @@ const Scheduler = function ({ model }) {
 							},
 						})}
 					>
-						<span className="inline-flex gap-1">
-							<ArrowRightIcon strokeWidth={1} />
+						<span className="inline-flex items-center gap-1">
+							<RotateCcwIcon className="size-5" strokeWidth={1} />
 							{t("scheduleRecurring")}
 						</span>
 					</Button>

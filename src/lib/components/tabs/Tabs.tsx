@@ -1,4 +1,11 @@
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
+import {
+	Tab,
+	TabGroup,
+	TabList,
+	TabPanel,
+	TabPanels,
+	Transition,
+} from "@headlessui/react";
 import { InitializedModel } from "@mvc-react/mvc";
 import { TabsModel } from "../../models/tabs";
 import { ReactNode } from "react";
@@ -16,7 +23,7 @@ const Tabs = function ({
 
 	return (
 		<TabGroup
-			className="flex flex-col gap-6 w-full"
+			className="flex w-full flex-col gap-6"
 			selectedIndex={selectedTab}
 			onChange={index =>
 				interact({ type: "SWITCH_TAB", input: { id: index } })
@@ -24,7 +31,7 @@ const Tabs = function ({
 		>
 			<TabList
 				className={twMerge(
-					`flex items-end gap-1 max-w-full`,
+					`flex max-w-full items-end gap-1`,
 					tabsPosition === "center"
 						? "justify-center"
 						: tabsPosition === "start"
@@ -38,7 +45,7 @@ const Tabs = function ({
 				{tabs.map((tab, index) => (
 					<Tab
 						key={index}
-						className="flex flex-1 max-w-full items-center justify-center border-b-5 border-gray-300 p-4 py-2 text-sm wrap-break-word hyphens-auto uppercase focus:outline-none data-hover:border-gray-600 data-selected:border-gray-900"
+						className="flex max-w-full flex-1 items-center justify-center border-b-5 border-gray-300 p-4 py-2 text-sm wrap-break-word hyphens-auto uppercase focus:outline-none data-hover:border-gray-600 data-selected:border-gray-900"
 						as={"button"}
 					>
 						{tab.modelView.name}
@@ -48,7 +55,18 @@ const Tabs = function ({
 			<TabPanels>
 				{children.map((child, index) => (
 					<TabPanel key={index} className="contents" unmount={false}>
-						{child}
+						<Transition
+							appear
+							show={selectedTab === index}
+							enter="transition-opacity duration-300"
+							enterFrom="opacity-0"
+							enterTo="opacity-100"
+							leave="transition-opacity duration-300"
+							leaveFrom="opacity-100"
+							leaveTo="opacity-0"
+						>
+							{child}
+						</Transition>
 					</TabPanel>
 				))}
 			</TabPanels>
