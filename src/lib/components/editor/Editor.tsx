@@ -49,7 +49,7 @@ const Editor = function ({ model }) {
 				className,
 			)}
 		>
-			<div className="flex w-full flex-col gap-4 p-6 @md:p-8 @md:px-[8em] @lg:px-[13em]">
+			<div className="flex w-full flex-col gap-4 p-6 @3xl:p-8 @3xl:px-[8em] @5xl:px-[13em]">
 				{editorTools.modelView ? (
 					<>
 						<EditorTools
@@ -64,7 +64,7 @@ const Editor = function ({ model }) {
 					<></>
 				)}
 				<EditorContent
-					className="h-100 max-h-100 overflow-y-auto @md:pr-4 @md:text-lg/relaxed"
+					className="h-100 max-h-100 overflow-y-auto @xl:pr-4 @xl:text-lg/relaxed"
 					editor={editor}
 				/>
 			</div>
