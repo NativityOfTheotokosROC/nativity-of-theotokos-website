@@ -247,153 +247,158 @@ const Scheduler = function ({ model }) {
 		<>
 			<ConfirmationDialog model={confirmationDialog} />
 			<PageView model={newReadonlyModel({ title: t("title") })}>
-				<ButtonBar
-					model={newReadonlyModel({
-						orientation: "flexible",
-						arrangement: "start",
-						className: "max-w-fit",
-					})}
-				>
-					<Button
+				<div className="flex flex-col gap-12">
+					<ButtonBar
 						model={newReadonlyModel({
-							className:
-								"flex justify-start min-w-fit w-full md:w-fit max-w-full flex-1",
-							async action() {
-								await tabs.interact({
-									type: "SWITCH_TAB",
-									input: { id: 0 },
-								});
-								scrollToElement(".schedule-event");
-								interact({
-									type: "UPDATE_EVENT_TO_EDIT",
-									input: {
-										event: {
-											type: "specific",
-											scheduleItem: undefined,
-										},
-									},
-								});
-							},
+							orientation: "flexible",
+							arrangement: "start",
+							className: "max-w-fit",
 						})}
 					>
-						<span className="inline-flex items-center gap-3">
-							<Calendar1Icon
-								className="size-5"
-								strokeWidth={1.5}
-							/>
-							{t("scheduleSpecific")}
-						</span>
-					</Button>
-					<Button
-						model={newReadonlyModel({
-							className:
-								"flex min-w-fit justify-start w-full md:w-fit max-w-full flex-1",
-							async action() {
-								await tabs.interact({
-									type: "SWITCH_TAB",
-									input: { id: 0 },
-								});
-								scrollToElement(".schedule-event");
-								interact({
-									type: "UPDATE_EVENT_TO_EDIT",
-									input: {
-										event: {
-											type: "recurring",
-											scheduleItem: undefined,
+						<Button
+							model={newReadonlyModel({
+								className:
+									"flex justify-start min-w-fit w-full md:w-fit max-w-full flex-1",
+								async action() {
+									await tabs.interact({
+										type: "SWITCH_TAB",
+										input: { id: 0 },
+									});
+									scrollToElement(".schedule-event");
+									interact({
+										type: "UPDATE_EVENT_TO_EDIT",
+										input: {
+											event: {
+												type: "specific",
+												scheduleItem: undefined,
+											},
 										},
-									},
-								});
-							},
-						})}
-					>
-						<span className="inline-flex items-center gap-3">
-							<RotateCcwIcon
-								className="size-5"
-								strokeWidth={1.5}
-							/>
-							{t("scheduleRecurring")}
-						</span>
-					</Button>
-				</ButtonBar>
-				<Tabs model={tabs}>
-					<ScheduleEvent
-						model={{
-							modelView: {
-								scheduleEvent: eventToEdit,
-								autoCompleteInfo,
-								options: {
-									isNewEventValidCallback(newScheduleEvent) {
-										setReadyEvent(newScheduleEvent);
-									},
-									async previewCallback() {
-										await tabs.interact({
-											type: "SWITCH_TAB",
-											input: { id: 1 },
-										});
-										scrollToElement(".view-schedule");
-									},
+									});
 								},
-							},
-							async interact(interaction) {
-								switch (interaction.type) {
-									case "SCHEDULE_EVENT":
-										if (readyEvent)
-											await interact({
-												type: "SCHEDULE_EVENT",
-												input: {
-													id: eventToEdit.scheduleItem
-														?.id,
-													newEvent: readyEvent,
-												},
+							})}
+						>
+							<span className="inline-flex items-center gap-3">
+								<Calendar1Icon
+									className="size-5"
+									strokeWidth={1.5}
+								/>
+								{t("scheduleSpecific")}
+							</span>
+						</Button>
+						<Button
+							model={newReadonlyModel({
+								className:
+									"flex min-w-fit justify-start w-full md:w-fit max-w-full flex-1",
+								async action() {
+									await tabs.interact({
+										type: "SWITCH_TAB",
+										input: { id: 0 },
+									});
+									scrollToElement(".schedule-event");
+									interact({
+										type: "UPDATE_EVENT_TO_EDIT",
+										input: {
+											event: {
+												type: "recurring",
+												scheduleItem: undefined,
+											},
+										},
+									});
+								},
+							})}
+						>
+							<span className="inline-flex items-center gap-3">
+								<RotateCcwIcon
+									className="size-5"
+									strokeWidth={1.5}
+								/>
+								{t("scheduleRecurring")}
+							</span>
+						</Button>
+					</ButtonBar>
+					<Tabs model={tabs}>
+						<ScheduleEvent
+							model={{
+								modelView: {
+									scheduleEvent: eventToEdit,
+									autoCompleteInfo,
+									options: {
+										isNewEventValidCallback(
+											newScheduleEvent,
+										) {
+											setReadyEvent(newScheduleEvent);
+										},
+										async previewCallback() {
+											await tabs.interact({
+												type: "SWITCH_TAB",
+												input: { id: 1 },
 											});
-								}
-							},
-						}}
-					/>
-					<ViewScheduleSection
-						model={{
-							modelView: {
-								currentScheduleItems: {
-									instantaneousScheduleItems,
-									recurringScheduleItems,
+											scrollToElement(".view-schedule");
+										},
+									},
 								},
-								newEvent: readyEvent,
-								language: viewScheduleLanguage,
-								modifyCallbacks,
-							},
-							interact(interaction) {
-								switch (interaction.type) {
-									case "SWITCH_LANGUAGE": {
-										setViewScheduleLanguage(
-											viewScheduleLanguage === "ru"
-												? "en"
-												: "ru",
-										);
+								async interact(interaction) {
+									switch (interaction.type) {
+										case "SCHEDULE_EVENT":
+											if (readyEvent)
+												await interact({
+													type: "SCHEDULE_EVENT",
+													input: {
+														id: eventToEdit
+															.scheduleItem?.id,
+														newEvent: readyEvent,
+													},
+												});
 									}
-								}
-							},
-						}}
-					/>
-					<ScheduleSummarySection
-						model={newReadonlyModel({
-							instantaneousScheduleItems:
-								instantaneousScheduleItems.map(scheduleItem =>
-									pickScheduleItemTranslation(
-										scheduleItem,
-										locale,
+								},
+							}}
+						/>
+						<ViewScheduleSection
+							model={{
+								modelView: {
+									currentScheduleItems: {
+										instantaneousScheduleItems,
+										recurringScheduleItems,
+									},
+									newEvent: readyEvent,
+									language: viewScheduleLanguage,
+									modifyCallbacks,
+								},
+								interact(interaction) {
+									switch (interaction.type) {
+										case "SWITCH_LANGUAGE": {
+											setViewScheduleLanguage(
+												viewScheduleLanguage === "ru"
+													? "en"
+													: "ru",
+											);
+										}
+									}
+								},
+							}}
+						/>
+						<ScheduleSummarySection
+							model={newReadonlyModel({
+								instantaneousScheduleItems:
+									instantaneousScheduleItems.map(
+										scheduleItem =>
+											pickScheduleItemTranslation(
+												scheduleItem,
+												locale,
+											),
 									),
-								),
-							recurringScheduleItems: recurringScheduleItems.map(
-								scheduleItem =>
-									pickScheduleItemTranslation(
-										scheduleItem,
-										locale,
+								recurringScheduleItems:
+									recurringScheduleItems.map(scheduleItem =>
+										pickScheduleItemTranslation(
+											scheduleItem,
+											locale,
+										),
 									),
-							),
-							modifyCallbacks,
-						})}
-					/>
-				</Tabs>
+								modifyCallbacks,
+							})}
+						/>
+					</Tabs>
+				</div>
 			</PageView>
 		</>
 	);
