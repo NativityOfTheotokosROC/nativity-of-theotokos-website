@@ -45,27 +45,29 @@ const Editor = function ({ model }) {
 	return (
 		<div
 			className={twMerge(
-				"flex w-full flex-col gap-4 rounded-lg border border-gray-400 bg-white p-6 md:p-8 md:px-[8em] lg:px-[13em]",
+				"@container w-full rounded-lg border border-gray-400 bg-white",
 				className,
 			)}
 		>
-			{editorTools.modelView ? (
-				<>
-					<EditorTools
-						model={{
-							...editorTools,
-							modelView: editorTools.modelView,
-						}}
-					/>
-					<hr className="text-black/50" />
-				</>
-			) : (
-				<></>
-			)}
-			<EditorContent
-				className="h-100 max-h-100 overflow-y-auto md:pr-4 md:text-lg/relaxed"
-				editor={editor}
-			/>
+			<div className="flex w-full flex-col gap-4 p-6 @md:p-8 @md:px-[8em] @lg:px-[13em]">
+				{editorTools.modelView ? (
+					<>
+						<EditorTools
+							model={{
+								...editorTools,
+								modelView: editorTools.modelView,
+							}}
+						/>
+						<hr className="text-black/50" />
+					</>
+				) : (
+					<></>
+				)}
+				<EditorContent
+					className="h-100 max-h-100 overflow-y-auto @md:pr-4 @md:text-lg/relaxed"
+					editor={editor}
+				/>
+			</div>
 		</div>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<EditorModel>>;
