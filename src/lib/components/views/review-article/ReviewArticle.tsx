@@ -214,6 +214,17 @@ const ReviewArticle = function ({ model }) {
 										{errors.body.message}
 									</span>
 								)}
+								<input
+									{...register("snippet.english")}
+									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.snippet?.english ? "border-red-800" : "border-gray-400"}`}
+									placeholder={`${t("snippetField")} (${tMisc("optional")})`}
+									autoComplete="off"
+								/>
+								{errors.snippet?.english && (
+									<span className="text-sm text-red-800">
+										{errors.snippet?.english?.message}
+									</span>
+								)}
 							</div>
 							<div className="flex flex-1 flex-col gap-3 md:max-w-[33em]">
 								<div className="flex h-[15em] w-full items-stretch justify-stretch overflow-clip rounded-lg md:h-fit md:max-h-[25em]">
@@ -286,17 +297,6 @@ const ReviewArticle = function ({ model }) {
 								{errors.image?.caption?.english && (
 									<span className="text-sm text-red-800">
 										{errors.image.caption?.english.message}
-									</span>
-								)}
-								<input
-									{...register("snippet.english")}
-									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.snippet?.english ? "border-red-800" : "border-gray-400"}`}
-									placeholder={`${t("snippetField")} (${tMisc("optional")})`}
-									autoComplete="off"
-								/>
-								{errors.snippet?.english && (
-									<span className="text-sm text-red-800">
-										{errors.snippet?.english?.message}
 									</span>
 								)}
 							</div>
