@@ -5,6 +5,7 @@ export type EditorModelView = {
 	initialContent?: string;
 	isReadonly?: boolean;
 	className?: string;
+	locale?: string;
 };
 
 export type EditorModel = Model<EditorModelView>;

@@ -145,9 +145,7 @@ type ConsentPanelModel = InteractiveModel<
 function useConsentPanel(defaultShown?: boolean) {
 	const [isShown, setShown] = useState(defaultShown ?? false);
 	return {
-		interact: function (
-			interaction: ConsentPanelModelInteraction,
-		): void | Promise<void> {
+		interact(interaction) {
 			switch (interaction.type) {
 				case "SHOW": {
 					if (!isShown) setShown(true);

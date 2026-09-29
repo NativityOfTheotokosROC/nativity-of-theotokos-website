@@ -16,9 +16,9 @@ const Button = function ({ model, children }) {
 			className={twMerge(
 				`flex w-fit max-w-full items-center justify-center rounded-lg p-4 wrap-break-word hyphens-auto disabled:opacity-50`,
 				computedVariant === "standard"
-					? "bg-[#250203]/82 text-white not-disabled:hover:bg-[#250203]/92 not-disabled:active:bg-[#250203]"
+					? `bg-[#250203]/82 text-white ${!disabled ? "hover:bg-[#250203]/92 active:bg-[#250203]" : ""}`
 					: computedVariant === "alternative"
-						? "border border-[#250203]/62 bg-transparent text-[#250203]/82 not-disabled:hover:bg-[#250203]/52 not-disabled:hover:text-white not-disabled:active:bg-[#250203] not-disabled:active:text-white"
+						? `border border-[#250203]/62 bg-transparent text-[#250203]/82 ${!disabled ? "hover:bg-[#250203]/52 hover:text-white active:bg-[#250203] active:text-white" : ""}`
 						: undefined,
 				className ?? "",
 			)}

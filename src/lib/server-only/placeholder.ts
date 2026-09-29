@@ -42,10 +42,7 @@ async function findPlaceholder(src: string) {
 		: null;
 }
 
-async function setPlaceholder(
-	src: string,
-	placeholder: ImagePlaceholder,
-): Promise<void> {
+async function setPlaceholder(src: string, placeholder: ImagePlaceholder) {
 	let processedSrc;
 	try {
 		const url = new URL(src);

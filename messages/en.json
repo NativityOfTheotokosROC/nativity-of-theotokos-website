@@ -1,441 +1,441 @@
 {
-	"metadata": {
-		"templateTitle": "Nativity of the Theotokos Church",
-		"templateDefault": "Nativity of the Theotokos Church",
-		"home": "Home",
-		"description": "Official website of the Nativity of the Theotokos parish of the Russian Orthodox Church in Zimbabwe. (est. 2025)"
+	"aboutUs": {
+		"metaTitle": "About Us"
 	},
-	"error": {
-		"metaTitle": "Something went Wrong",
-		"title": "Something went Wrong",
-		"description": "An unexpected error occured on our end. Please try again in a few moments. If the problem persists",
-		"contactUs": "contact us",
-		"tryAgain": "Try Again"
+	"articlePreview": {
+		"authorPlaceholder": "Your Name",
+		"continueEdit": "Continue Editing",
+		"imagePlaceholder": "The article image will be placed here",
+		"submit": "Submit",
+		"title": "Article Preview"
 	},
-	"notFound": {
-		"metaTitle": "Resource not Found",
-		"title": "Nothing Here",
-		"description": "The page or resource you are looking for does not exist, was moved, or was deleted.",
-		"goHome": "Go Home"
-	},
-	"unauthorized": {
-		"metaTitle": "Unauthorized",
-		"title": "Unauthorized",
-		"description": "You are not authorized to access this resource.",
-		"goHome": "Go Home",
-		"signOut": "Sign Out"
-	},
-	"maintenance": {
-		"title": "We're working on it...",
-		"description": "The page is currently under maintenance. Please check back later. You may explore our other pages in the meantime.",
-		"goHome": "Go Home"
-	},
-	"header": {
-		"logoTop": "Nativity of the Theotokos",
-		"logoBottom": "Russian Orthodox Church"
-	},
-	"navMenu": {
-		"home": "Home",
-		"resources": "Resources",
-		"media": "Gallery",
-		"aboutUs": "About Us",
-		"contact": "Contact",
-		"parishBulletin": "News"
-	},
-	"userNavigation": {
-		"greeting": "Hello",
-		"signIn": "Sign In"
-	},
-	"userAction": {
-		"notifications": "Notifications",
-		"newQuote": "New Quote",
-		"signOut": "Sign Out",
-		"writeArticle": "Write Article",
-		"reviewArticle": "Review Article",
+	"assignArticle": {
 		"assignArticle": "Assign Article",
-		"scheduler": "Scheduler"
+		"assignFail": "Could not assign article. Error: {message}",
+		"assignments": "Number of Assignments",
+		"assignSuccess": "Article successfully assigned",
+		"authorNameField": "Author Name",
+		"emailField": "Email",
+		"metaTitle": "Assign Article"
 	},
-	"footer": {
-		"heading": "Nativity of the Theotokos Church",
-		"email": "Email",
-		"jurisdictional": "Jurisdictional",
-		"clergy": "Clergy",
-		"contact": "Contact",
-		"siteAttribution": "Website by <link>{name}</link>"
-	},
-	"footer_variable": {
-		"description": "Nativity of the Theotokos Parish of the Russian Orthodox Church in Zimbabwe. Located at Kingsmead Private Chapel, Cnr Rayl Road and Kingsmead Road, Borrowdale, Harare.",
-		"diocese": "Southern African Diocese",
-		"jurisdiction": "Patriarchal Exarchate of Africa",
-		"patriarch": "His Holiness Patriarch Kirill",
-		"patriarchate": "Moscow Patriarchate",
-		"frDimitri": "Archpriest Dmitry Polokhov",
-		"frSavva": "Fr Savva Kajawa",
-		"frEmilianos": "Fr Emilianos Shumba",
-		"phone": "Phone",
-		"larisa": "Larisa",
-		"vasily": "Vasily",
-		"admin": "Admin",
-		"privacy": "Privacy & Cookies",
-		"terms": "Terms",
-		"licenses": "Licenses",
-		"attribution": "Attribution",
-		"copyright": "2026 Nativity of the Theotokos Parish. All Rights Reserved."
-	},
-	"home": {
-		"heroTitle": "Hello and welcome",
-		"heroSubtitle": "Official website of the Nativity of the Theotokos parish of the Russian Orthodox Church in Zimbabwe. (est. 2025)",
-		"dailyReadingsHeader": "Daily Readings",
-		"dailyHymns": "Hymns for the Day",
-		"readings": "Readings",
-		"latestNewsHeader": "Latest Updates",
-		"featured": "Featured",
-		"schedule": "Schedule",
-		"moreNews": "More Articles",
-		"liturgicalResources": "Liturgical Resources",
-		"whatIsOrthodoxy": "What is Orthodoxy?",
-		"aboutOurParish": "About our Parish"
+	"attribution": {
+		"title": "Attribution"
 	},
 	"commemoration": {
 		"oldCalendar": "Julian Calendar",
 		"prologue": "Prologue of Ochrid"
 	},
-	"aboutUs": {
-		"metaTitle": "About Us"
+	"confirmationDialog": {
+		"defaultCancelButton": "Cancel",
+		"defaultProceedButton": "Proceed",
+		"defaultTitle": "Confirm"
 	},
-	"privacyPolicy": {
-		"title": "Privacy Policy",
-		"lastModified": "Last Updated"
+	"dailyReadings": {
+		"noFast": "No Fast Today"
 	},
-	"termsOfService": {
-		"title": "Terms of Service",
-		"lastModified": "Last Updated"
+	"editArticle": {
+		"title": "Edit Article"
 	},
-	"attribution": {
-		"title": "Attribution"
+	"editor": {
+		"initError": "Editor is uninitialized"
+	},
+	"editorTools": {
+		"bold": "Bold",
+		"bulletList": "Bullet List",
+		"heading": "Heading",
+		"italic": "Italic",
+		"link": "Link",
+		"numberedList": "Numbered List",
+		"quote": "Quote",
+		"redo": "Redo",
+		"rule": "Horizontal Rule",
+		"sub": "Subscript",
+		"super": "Superscript",
+		"underline": "Underline",
+		"undo": "Undo"
+	},
+	"editPanel": {
+		"delete": "Delete",
+		"disable": "Disable",
+		"edit": "Modify",
+		"enable": "Enable"
+	},
+	"editScheduleItem": {
+		"delete": "Delete",
+		"disable": "Disable",
+		"edit": "Edit",
+		"enable": "Enable",
+		"reinstate": "Reinstate",
+		"remove": "Remove"
+	},
+	"emptyNotifications": {
+		"detailedMessage": "You have no notifications. Check back later.",
+		"mainMessage": "Notifications Empty"
+	},
+	"emptyReviewArticle": {
+		"detailedMessage": "You have no pending article reviews assigned to you.",
+		"mainMessage": "No Pending Reviews"
+	},
+	"error": {
+		"contactUs": "contact us",
+		"description": "An unexpected error occured on our end. Please try again in a few moments. If the problem persists",
+		"metaTitle": "Something went Wrong",
+		"title": "Something went Wrong",
+		"tryAgain": "Try Again"
+	},
+	"fileUploader": {
+		"uploadFileFailure": "Could not upload the file. Error: {message}",
+		"uploadFileSuccess": "File successfully uploaded",
+		"uploadingFile": "Uploading file"
+	},
+	"footer": {
+		"clergy": "Clergy",
+		"contact": "Contact",
+		"email": "Email",
+		"heading": "Nativity of the Theotokos Church",
+		"jurisdictional": "Jurisdictional",
+		"siteAttribution": "Website by <link>{name}</link>"
+	},
+	"footer_variable": {
+		"admin": "Admin",
+		"attribution": "Attribution",
+		"copyright": "2026 Nativity of the Theotokos Parish. All Rights Reserved.",
+		"description": "Nativity of the Theotokos Parish of the Russian Orthodox Church in Zimbabwe. Located at Kingsmead Private Chapel, Cnr Rayl Road and Kingsmead Road, Borrowdale, Harare.",
+		"diocese": "Southern African Diocese",
+		"frDimitri": "Archpriest Dmitry Polokhov",
+		"frEmilianos": "Fr Emilianos Shumba",
+		"frSavva": "Fr Savva Kajawa",
+		"jurisdiction": "Patriarchal Exarchate of Africa",
+		"larisa": "Larisa",
+		"licenses": "Licenses",
+		"patriarch": "His Holiness Patriarch Kirill",
+		"patriarchate": "Moscow Patriarchate",
+		"phone": "Phone",
+		"privacy": "Privacy & Cookies",
+		"terms": "Terms",
+		"vasily": "Vasily"
+	},
+	"header": {
+		"logoBottom": "Russian Orthodox Church",
+		"logoTop": "Nativity of the Theotokos"
+	},
+	"home": {
+		"aboutOurParish": "About our Parish",
+		"dailyHymns": "Hymns for the Day",
+		"dailyReadingsHeader": "Daily Readings",
+		"featured": "Featured",
+		"heroSubtitle": "Official website of the Nativity of the Theotokos parish of the Russian Orthodox Church in Zimbabwe. (est. 2025)",
+		"heroTitle": "Hello and welcome",
+		"latestNewsHeader": "Latest Updates",
+		"liturgicalResources": "Liturgical Resources",
+		"moreNews": "More Articles",
+		"readings": "Readings",
+		"schedule": "Schedule",
+		"whatIsOrthodoxy": "What is Orthodoxy?"
+	},
+	"hymnsModal": {
+		"closeButton": "Close",
+		"hymnsForToday": "Today's Hymns"
+	},
+	"imageCaptions": {
+		"featuredArticleImage": "Featured Article Image",
+		"galleryImage": "Gallery Image",
+		"iconOfTheDay": "Icon of the Day",
+		"iconOfTheNativity": "Icon of the Nativity of the Theotokos",
+		"newsArticleImage": "News Article Image"
+	},
+	"imageProcessor": {
+		"formatNotSupported": "The format of the image is not supported",
+		"imageSizeTooBig": "Image is too big ({size} MB). The image should be at most {max} MB",
+		"imageSizeTooSmall": "Image is too small ({size} KB). The image should be at least {min} KB",
+		"notImage": "The file provided is not an image",
+		"processingImage": "Processing article image",
+		"processingImageFailure": "Could not process the image. Error: {message}"
 	},
 	"licenses_variable": {
 		"dailyReadingsLicense": "Daily readings, commemorations, and hymns sourced from",
 		"logoIconLicense": "Logo icon by",
 		"orthoGraphicsLicense": "Traditional Orthodox graphics (i.e. emblems, headers, icons, and other symbols) by the team at"
 	},
-	"news": {
-		"metaTitle": "News",
-		"byline": "By",
-		"articleUpdated": "Updated",
-		"editArticle": "Edit Article"
-	},
-	"newQuote": {
-		"metaTitle": "New Quote",
-		"title": "New Quote",
-		"english": "English",
-		"russian": "Russian",
-		"author": "Author",
-		"source": "Source",
-		"quote": "Quote",
-		"optional": "optional",
-		"schedulerCheckLabel": "Display the quote on a specific date",
-		"preview": "Preview",
-		"addQuote": "Add Quote",
-		"successMessage": "Quote successfully added",
-		"failureMessage": "Could not add the quote. Error:",
-		"quotePreview": "Quote Preview",
-		"mainMessage": "Quote Added",
-		"detailedMessage": "Your quote has been successfully added.",
-		"addAnother": "Add Another"
-	},
-	"assignArticle": {
-		"metaTitle": "Assign Article",
-		"authorNameField": "Author Name",
-		"emailField": "Email",
-		"assignArticle": "Assign Article",
-		"assignSuccess": "Article successfully assigned",
-		"assignFail": "Could not assign article. Error: {message}",
-		"assignments": "Number of Assignments"
-	},
-	"writeArticle": {
-		"metaTitle": "Write Article",
-		"title": "Write Article",
-		"titleField": "Article Title",
-		"bodyField": "Body",
-		"bodyPlaceholder": "Start writing here...",
-		"preview": "Preview",
-		"submit": "Submit",
-		"submitSuccess": "Article successfully submitted",
-		"submitFailure": "Could not submit the article. Error: {message}",
-		"author": "Author",
-		"unknownAuthor": "Your Name",
-		"saveDraft": "Save Draft",
-		"autoSave": "Auto Save",
-		"savingDraft": "Saving draft",
-		"saveDraftSuccess": "Draft saved",
-		"saveDraftFailure": "Could not save draft. Error: {message}",
-		"mainMessage": "Article Submitted",
-		"detailedMessage": "Your article has been submitted and will be reviewed and processed.",
-		"nextButton": "Continue",
-		"discardingDraft": "Discarding draft",
-		"discardDraftSuccess": "Your draft has been discarded",
-		"discardDraftMainMessage": "Draft Discarded",
-		"discardDraftFail": "Could not discard your draft. Error: {message}",
-		"discardDraftButton": "Discard Draft",
-		"discardDraftDialogTitle": "Discard Draft",
-		"discardDraftDialogMessage": "Are you sure you want to discard this draft? If you have submitted this draft before and it is pending approval, your submission will be deleted."
-	},
-	"editArticle": {
-		"title": "Edit Article"
-	},
-	"articlePreview": {
-		"title": "Article Preview",
-		"imagePlaceholder": "The article image will be placed here",
-		"authorPlaceholder": "Your Name",
-		"continueEdit": "Continue Editing",
-		"submit": "Submit"
-	},
-	"reviewArticle": {
-		"title": "Review Article",
-		"titleField": "Article Title",
-		"authorNameField": "Author Name",
-		"bodyField": "Body",
-		"modifyDraft": "Modify Draft",
-		"snippetField": "Snippet",
-		"imageField": "Image",
-		"imageCaptionField": "Image Caption",
-		"imageAlt": "Article image preview",
-		"selectImage": "Select Image",
-		"changeImage": "Change Image",
-		"articlePreview": "Article Preview",
-		"publish": "Publish",
-		"featureTheArticle": "Feature the article",
-		"uploadingImage": "Uploading article image",
-		"uploadImageSuccess": "Article image successfully uploaded",
-		"uploadImageFailure": "Could not upload the article image. Error: {message}",
-		"submitSuccess": "Article successfully published",
-		"submitFailure": "Could not publish the article. Error: {message}",
-		"mainMessage": "Article Published",
-		"detailedMessage": "The article has been successfully processed and published.",
-		"nextButton": "Continue"
-	},
-	"fileUploader": {
-		"uploadingFile": "Uploading file",
-		"uploadFileSuccess": "File successfully uploaded",
-		"uploadFileFailure": "Could not upload the file. Error: {message}"
-	},
-	"imageProcessor": {
-		"processingImage": "Processing article image",
-		"processingImageFailure": "Could not process the image. Error: {message}",
-		"imageSizeTooSmall": "Image is too small ({size} KB). The image should be at least {min} KB",
-		"imageSizeTooBig": "Image is too big ({size} MB). The image should be at most {max} MB",
-		"notImage": "The file provided is not an image",
-		"formatNotSupported": "The format of the image is not supported"
-	},
-	"editor": {
-		"initError": "Editor is uninitialized"
-	},
-	"editorTools": {
-		"heading": "Heading",
-		"bold": "Bold",
-		"italic": "Italic",
-		"underline": "Underline",
-		"quote": "Quote",
-		"bulletList": "Bullet List",
-		"numberedList": "Numbered List",
-		"undo": "Undo",
-		"redo": "Redo",
-		"super": "Superscript",
-		"sub": "Subscript",
-		"rule": "Horizontal Rule",
-		"link": "Link"
-	},
-	"signIn": {
-		"metaTitle": "Sign In",
-		"title": "Sign In",
-		"description": "Sign in to the website to proceed.",
-		"successMessage": "Redirecting you to {serviceName} sign-in shortly. Please wait...",
-		"failureMessage": "Could not connect to {serviceName} sign-in:",
-		"consent": "By signing in, you acknowledge that you agree with our <tos>{termsOfService}</tos> and consent to our <privacy>{privacyPolicy}</privacy>.",
-		"privacyPolicy": "Privacy Policy",
-		"termsOfService": "Terms of Service"
-	},
-	"signInButton": {
-		"buttonText": "Sign in with {serviceName}"
-	},
-	"dailyReadings": {
-		"noFast": "No Fast Today"
-	},
-	"hymnsModal": {
-		"hymnsForToday": "Today's Hymns",
-		"closeButton": "Close"
-	},
-	"quote": {
-		"openingQuote": "“",
-		"closingQuote": "”"
-	},
-	"scheduleItem": {
-		"titleField": "Title",
-		"venueField": "Venue",
-		"designationField": "Designation",
-		"timeField": "Time",
-		"dateField": "Date",
-		"recurringPatternField": "Recurring Pattern",
-		"emptyTimes": "Add at least 1 time",
-		"timeConflict": "Time is conflicting with another time",
-		"schedule": "Schedule",
-		"liturgyService": "Divine Liturgy",
-		"typikaService": "Typika Service",
-		"mainLocation": "Nativity of the Theotokos Parish",
-		"secondaryLocation": "St. Sergius Parish",
-		"orthros": "Orthros",
-		"confessions": "Confessions",
-		"liturgy": "Liturgy",
-		"typika": "Typika",
-		"catechism": "Catechism"
-	},
-	"scheduler": {
-		"title": "Scheduler",
-		"scheduleSpecific": "Schedule for Specific Date",
-		"scheduleRecurring": "Schedule New Recurring Event",
-		"scheduleEventTab": "Schedule Event",
-		"viewScheduleTab": "View Schedule",
-		"modifyExistingTab": "Modify Existing",
-		"eventSection": "Event",
-		"titleFieldEn": "Title",
-		"titleFieldRu": "Title (Russian)",
-		"venueFieldEn": "Venue",
-		"venueFieldRu": "Venue (Russian)",
-		"sundayAbbrev": "S",
-		"mondayAbbrev": "M",
-		"tuesdayAbbrev": "T",
-		"wednesdayAbbrev": "W",
-		"thursdayAbbrev": "T",
-		"fridayAbbrev": "F",
-		"saturdayAbbrev": "S",
-		"timesSection": "Times",
-		"addTime": "Add Time",
-		"timeField": "Time",
-		"designationFieldEn": "Designation",
-		"designationFieldRu": "Designation (Russian)",
-		"deleteTime": "Delete Time",
-		"currentScheduleSection": "Current Schedule",
-		"editEvent": "Edit Event",
-		"removeEvent": "Remove Event",
-		"reinstateEvent": "Reinstate Event",
-		"disableRecurring": "Disable Recurring Event",
-		"enableRecurring": "Enable Recurring Event",
-		"deleteEvent": "Delete Event",
-		"newScheduleSection": "New Schedule",
-		"recurringEvents": "Recurring Events",
-		"specificEvents": "Specific Events",
-		"scheduleButton": "Schedule Event",
-		"modifyButton": "Modify Event",
-		"previewButton": "Preview",
-		"continueEdit": "Continue Editing",
-		"scheduleSuccess": "Event Successfully Scheduled",
-		"modifySuccess": "Event Successfully Modified",
-		"deleteSuccess": "Event successfully deleted",
-		"deleteFailure": "Could not delete the event. Error: {message}",
-		"scheduleFailure": "Could not schedule the event: Error: {message}",
-		"modifyFailure": "Could not modify the event: Error: {message}",
-		"scheduleSummaryTab": "Schedule Summary",
-		"altScheduleSummaryTab": "Schedule Details",
-		"confirmDeleteSpecific": "Are you sure you want to delete the event ''{title}'' scheduled for {date} at {venue}?",
-		"confirmDeleteRecurring": "Are you sure you want to delete the event ''{title}'' which recurs {parsedCron} at {venue}?",
-		"confirmEnableSpecific": "Are you sure you want to enable the event ''{title}'' scheduled for {date} at {venue}?",
-		"confirmEnableRecurring": "Are you sure you want to enable the event ''{title}'' which recurs {parsedCron} at {venue}?",
-		"confirmDisableSpecific": "Are you sure you want to disable the event ''{title}'' scheduled for {date} at {venue}?",
-		"confirmDisableRecurring": "Are you sure you want to disable the event ''{title}'' which recurs {parsedCron} at {venue}?",
-		"normalEvent": "Normal Event",
-		"specialEvent": "Special Occasion",
-		"feastEvent": "Feast",
-		"englishPreview": "Preview in English",
-		"russianPreview": "Preview in Russian"
-	},
-	"editPanel": {
-		"edit": "Modify",
-		"disable": "Disable",
-		"enable": "Enable",
-		"delete": "Delete"
-	},
-	"recurringScheduleItem": {
-		"description": "Event recurs {parsedCronString}"
-	},
-	"editScheduleItem": {
-		"edit": "Edit",
-		"enable": "Enable",
-		"reinstate": "Reinstate",
-		"disable": "Disable",
-		"remove": "Remove",
-		"delete": "Delete"
-	},
-	"mailingList": {
-		"mailingListHeader": "Join our Mailing List",
-		"mailingListDescription": "Stay up to date with the latest church news, announcements, and events straight from your mailbox. Enter your email below and subscribe if you haven't already.",
-		"mailingListButton": "Subscribe",
-		"mailingListSuccessMessage": "Thank you for subscribing to our mailing list! We will be keeping you up to date with the latest news, updates, announcements and more.",
-		"errorMessage": "There was a problem subscribing you to our mailing list. Please try again, cross-check your email, or check your internet connection.",
-		"consent": "By subscribing, you acknowledge that you agree with our <tos>{termsOfService}</tos> and consent to our <privacy>{privacyPolicy}</privacy>.",
-		"privacyPolicy": "Privacy Policy",
-		"termsOfService": "Terms of Service"
+	"links": {
+		"diocese": "https://exarchate-africa.ru/en/dioceses_cat/south-african-diocese/",
+		"holyTrinityChurch": "https://holytrinityorthodox.com/",
+		"jurisdiction": "https://exarchate-africa.ru/en/",
+		"liturgicalResources": "https://eadiocese.org/litresource",
+		"patriarch": "https://mospat.ru/en/patriarch",
+		"patriarchate": "https://patriarchia.ru/en",
+		"whatIsOrthodoxy": "https://www.oca.org/orthodoxy/the-orthodox-faith"
 	},
 	"loginTooltip": {
 		"text": "You are now signed in"
 	},
-	"nonDescriptive": {
-		"menu": "Menu",
-		"close": "Close",
-		"share": "Share",
-		"download": "Download",
-		"print": "Print",
-		"saveAsPDF": "Save as PDF"
+	"mailingList": {
+		"consent": "By subscribing, you acknowledge that you agree with our <tos>{termsOfService}</tos> and consent to our <privacy>{privacyPolicy}</privacy>.",
+		"errorMessage": "There was a problem subscribing you to our mailing list. Please try again, cross-check your email, or check your internet connection.",
+		"mailingListButton": "Subscribe",
+		"mailingListDescription": "Stay up to date with the latest church news, announcements, and events straight from your mailbox. Enter your email below and subscribe if you haven't already.",
+		"mailingListHeader": "Join our Mailing List",
+		"mailingListSuccessMessage": "Thank you for subscribing to our mailing list! We will be keeping you up to date with the latest news, updates, announcements and more.",
+		"privacyPolicy": "Privacy Policy",
+		"termsOfService": "Terms of Service"
 	},
-	"links": {
-		"liturgicalResources": "https://eadiocese.org/litresource",
-		"whatIsOrthodoxy": "https://www.oca.org/orthodoxy/the-orthodox-faith",
-		"diocese": "https://exarchate-africa.ru/en/dioceses_cat/south-african-diocese/",
-		"jurisdiction": "https://exarchate-africa.ru/en/",
-		"patriarch": "https://mospat.ru/en/patriarch",
-		"patriarchate": "https://patriarchia.ru/en",
-		"holyTrinityChurch": "https://holytrinityorthodox.com/"
+	"maintenance": {
+		"description": "The page is currently under maintenance. Please check back later. You may explore our other pages in the meantime.",
+		"goHome": "Go Home",
+		"title": "We're working on it..."
 	},
-	"imageCaptions": {
-		"iconOfTheDay": "Icon of the Day",
-		"iconOfTheNativity": "Icon of the Nativity of the Theotokos",
-		"featuredArticleImage": "Featured Article Image",
-		"newsArticleImage": "News Article Image",
-		"galleryImage": "Gallery Image"
-	},
-	"validation": {
-		"nonEmpty": "{field} cannot be empty",
-		"maxCharacters": "{field} is too long (maximum of {max} characters)",
-		"minCharacters": "{field} is too short (minimum of {min} characters)",
-		"invalidField": "{field} is invalid",
-		"emptyFieldSet": "You must provide at least one {field}",
-		"invalidUrl": "You did not provide a valid URL for {field}",
-		"invalidEmail": "Invalid email provided for {field}"
+	"metadata": {
+		"description": "Official website of the Nativity of the Theotokos parish of the Russian Orthodox Church in Zimbabwe. (est. 2025)",
+		"home": "Home",
+		"templateDefault": "Nativity of the Theotokos Church",
+		"templateTitle": "Nativity of the Theotokos Church"
 	},
 	"miscellaneous": {
-		"modelInitError": "The model is not initialized",
-		"futureContent": "Content to be added soon!",
 		"closeButton": "Close",
-		"optional": "optional",
-		"goHome": "Go Home",
 		"continue": "Continue",
 		"english": "English",
+		"futureContent": "Content to be added soon!",
+		"goHome": "Go Home",
+		"modelInitError": "The model is not initialized",
+		"optional": "optional",
 		"russian": "Russian"
+	},
+	"navMenu": {
+		"aboutUs": "About Us",
+		"contact": "Contact",
+		"home": "Home",
+		"media": "Gallery",
+		"parishBulletin": "News",
+		"resources": "Resources"
+	},
+	"newQuote": {
+		"addAnother": "Add Another",
+		"addQuote": "Add Quote",
+		"author": "Author",
+		"detailedMessage": "Your quote has been successfully added.",
+		"english": "English",
+		"failureMessage": "Could not add the quote. Error:",
+		"mainMessage": "Quote Added",
+		"metaTitle": "New Quote",
+		"optional": "optional",
+		"preview": "Preview",
+		"quote": "Quote",
+		"quotePreview": "Quote Preview",
+		"russian": "Russian",
+		"schedulerCheckLabel": "Display the quote on a specific date",
+		"source": "Source",
+		"successMessage": "Quote successfully added",
+		"title": "New Quote"
+	},
+	"news": {
+		"articleUpdated": "Updated",
+		"byline": "By",
+		"editArticle": "Edit Article",
+		"metaTitle": "News"
+	},
+	"nonDescriptive": {
+		"close": "Close",
+		"download": "Download",
+		"menu": "Menu",
+		"print": "Print",
+		"saveAsPDF": "Save as PDF",
+		"share": "Share"
+	},
+	"notFound": {
+		"description": "The page or resource you are looking for does not exist, was moved, or was deleted.",
+		"goHome": "Go Home",
+		"metaTitle": "Resource not Found",
+		"title": "Nothing Here"
 	},
 	"notifications": {
 		"metaTitle": "Notifications"
 	},
-	"emptyNotifications": {
-		"mainMessage": "Notifications Empty",
-		"detailedMessage": "You have no notifications. Check back later."
+	"privacyPolicy": {
+		"lastModified": "Last Updated",
+		"title": "Privacy Policy"
 	},
-	"emptyReviewArticle": {
-		"mainMessage": "No Pending Reviews",
-		"detailedMessage": "You have no pending article reviews assigned to you."
+	"quote": {
+		"closingQuote": "”",
+		"openingQuote": "“"
 	},
-	"confirmationDialog": {
-		"defaultTitle": "Confirm",
-		"defaultProceedButton": "Proceed",
-		"defaultCancelButton": "Cancel"
+	"recurringScheduleItem": {
+		"description": "Event recurs {parsedCronString}"
+	},
+	"reviewArticle": {
+		"articlePreview": "Article Preview",
+		"authorNameField": "Author Name",
+		"bodyField": "Body",
+		"changeImage": "Change Image",
+		"detailedMessage": "The article has been successfully processed and published.",
+		"featureTheArticle": "Feature the article",
+		"imageAlt": "Article image preview",
+		"imageCaptionField": "Image Caption",
+		"imageField": "Image",
+		"mainMessage": "Article Published",
+		"modifyDraft": "Modify Draft",
+		"nextButton": "Continue",
+		"publish": "Publish",
+		"selectImage": "Select Image",
+		"snippetField": "Snippet",
+		"submitFailure": "Could not publish the article. Error: {message}",
+		"submitSuccess": "Article successfully published",
+		"title": "Review Article",
+		"titleField": "Article Title",
+		"uploadImageFailure": "Could not upload the article image. Error: {message}",
+		"uploadImageSuccess": "Article image successfully uploaded",
+		"uploadingImage": "Uploading article image"
+	},
+	"scheduleItem": {
+		"catechism": "Catechism",
+		"confessions": "Confessions",
+		"dateField": "Date",
+		"designationField": "Designation",
+		"emptyTimes": "Add at least 1 time",
+		"liturgy": "Liturgy",
+		"liturgyService": "Divine Liturgy",
+		"mainLocation": "Nativity of the Theotokos Parish",
+		"orthros": "Orthros",
+		"recurringPatternField": "Recurring Pattern",
+		"schedule": "Schedule",
+		"secondaryLocation": "St. Sergius Parish",
+		"timeConflict": "Time is conflicting with another time",
+		"timeField": "Time",
+		"titleField": "Title",
+		"typika": "Typika",
+		"typikaService": "Typika Service",
+		"venueField": "Venue"
+	},
+	"scheduler": {
+		"addTime": "Add Time",
+		"altScheduleSummaryTab": "Schedule Details",
+		"confirmDeleteRecurring": "Are you sure you want to delete the event ''{title}'' which recurs {parsedCron} at {venue}?",
+		"confirmDeleteSpecific": "Are you sure you want to delete the event ''{title}'' scheduled for {date} at {venue}?",
+		"confirmDisableRecurring": "Are you sure you want to disable the event ''{title}'' which recurs {parsedCron} at {venue}?",
+		"confirmDisableSpecific": "Are you sure you want to disable the event ''{title}'' scheduled for {date} at {venue}?",
+		"confirmEnableRecurring": "Are you sure you want to enable the event ''{title}'' which recurs {parsedCron} at {venue}?",
+		"confirmEnableSpecific": "Are you sure you want to enable the event ''{title}'' scheduled for {date} at {venue}?",
+		"continueEdit": "Continue Editing",
+		"currentScheduleSection": "Current Schedule",
+		"deleteEvent": "Delete Event",
+		"deleteFailure": "Could not delete the event. Error: {message}",
+		"deleteSuccess": "Event successfully deleted",
+		"deleteTime": "Delete Time",
+		"designationFieldEn": "Designation",
+		"designationFieldRu": "Designation (Russian)",
+		"disableRecurring": "Disable Recurring Event",
+		"editEvent": "Edit Event",
+		"enableRecurring": "Enable Recurring Event",
+		"englishPreview": "Preview in English",
+		"eventSection": "Event",
+		"feastEvent": "Feast",
+		"fridayAbbrev": "F",
+		"modifyButton": "Modify Event",
+		"modifyExistingTab": "Modify Existing",
+		"modifyFailure": "Could not modify the event: Error: {message}",
+		"modifySuccess": "Event Successfully Modified",
+		"mondayAbbrev": "M",
+		"newScheduleSection": "New Schedule",
+		"normalEvent": "Normal Event",
+		"previewButton": "Preview",
+		"recurringEvents": "Recurring Events",
+		"reinstateEvent": "Reinstate Event",
+		"removeEvent": "Remove Event",
+		"russianPreview": "Preview in Russian",
+		"saturdayAbbrev": "S",
+		"scheduleButton": "Schedule Event",
+		"scheduleEventTab": "Schedule Event",
+		"scheduleFailure": "Could not schedule the event: Error: {message}",
+		"scheduleRecurring": "Schedule New Recurring Event",
+		"scheduleSpecific": "Schedule for Specific Date",
+		"scheduleSuccess": "Event Successfully Scheduled",
+		"scheduleSummaryTab": "Schedule Summary",
+		"specialEvent": "Special Occasion",
+		"specificEvents": "Specific Events",
+		"sundayAbbrev": "S",
+		"thursdayAbbrev": "T",
+		"timeField": "Time",
+		"timesSection": "Times",
+		"title": "Scheduler",
+		"titleFieldEn": "Title",
+		"titleFieldRu": "Title (Russian)",
+		"tuesdayAbbrev": "T",
+		"venueFieldEn": "Venue",
+		"venueFieldRu": "Venue (Russian)",
+		"viewScheduleTab": "View Schedule",
+		"wednesdayAbbrev": "W"
+	},
+	"signIn": {
+		"consent": "By signing in, you acknowledge that you agree with our <tos>{termsOfService}</tos> and consent to our <privacy>{privacyPolicy}</privacy>.",
+		"description": "Sign in to the website to proceed.",
+		"failureMessage": "Could not connect to {serviceName} sign-in:",
+		"metaTitle": "Sign In",
+		"privacyPolicy": "Privacy Policy",
+		"successMessage": "Redirecting you to {serviceName} sign-in shortly. Please wait...",
+		"termsOfService": "Terms of Service",
+		"title": "Sign In"
+	},
+	"signInButton": {
+		"buttonText": "Sign in with {serviceName}"
+	},
+	"termsOfService": {
+		"lastModified": "Last Updated",
+		"title": "Terms of Service"
+	},
+	"unauthorized": {
+		"description": "You are not authorized to access this resource.",
+		"goHome": "Go Home",
+		"metaTitle": "Unauthorized",
+		"signOut": "Sign Out",
+		"title": "Unauthorized"
+	},
+	"userAction": {
+		"assignArticle": "Assign Article",
+		"newQuote": "New Quote",
+		"notifications": "Notifications",
+		"reviewArticle": "Review Article",
+		"scheduler": "Scheduler",
+		"signOut": "Sign Out",
+		"writeArticle": "Write Article"
+	},
+	"userNavigation": {
+		"greeting": "Hello",
+		"signIn": "Sign In"
+	},
+	"validation": {
+		"emptyFieldSet": "You must provide at least one {field}",
+		"invalidEmail": "Invalid email provided for {field}",
+		"invalidField": "{field} is invalid",
+		"invalidUrl": "You did not provide a valid URL for {field}",
+		"maxCharacters": "{field} is too long (maximum of {max} characters)",
+		"minCharacters": "{field} is too short (minimum of {min} characters)",
+		"nonEmpty": "{field} cannot be empty"
+	},
+	"writeArticle": {
+		"author": "Author",
+		"autoSave": "Auto Save",
+		"bodyField": "Body",
+		"bodyPlaceholder": "Start writing here...",
+		"detailedMessage": "Your article has been submitted and will be reviewed and processed.",
+		"discardDraftButton": "Discard Draft",
+		"discardDraftDialogMessage": "Are you sure you want to discard this draft? If you have submitted this draft before and it is pending approval, your submission will be deleted.",
+		"discardDraftDialogTitle": "Discard Draft",
+		"discardDraftFail": "Could not discard your draft. Error: {message}",
+		"discardDraftMainMessage": "Draft Discarded",
+		"discardDraftSuccess": "Your draft has been discarded",
+		"discardingDraft": "Discarding draft",
+		"mainMessage": "Article Submitted",
+		"metaTitle": "Write Article",
+		"nextButton": "Continue",
+		"preview": "Preview",
+		"saveDraft": "Save Draft",
+		"saveDraftFailure": "Could not save draft. Error: {message}",
+		"saveDraftSuccess": "Draft saved",
+		"savingDraft": "Saving draft",
+		"submit": "Submit",
+		"submitFailure": "Could not submit the article. Error: {message}",
+		"submitSuccess": "Article successfully submitted",
+		"title": "Write Article",
+		"titleField": "Article Title",
+		"unknownAuthor": "Your Name"
 	}
 }

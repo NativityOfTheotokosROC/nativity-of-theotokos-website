@@ -170,6 +170,7 @@ const ReviewArticle = function ({ model }) {
 							<div className="flex flex-1 flex-col gap-3">
 								<input
 									{...register("title.english")}
+									lang="en"
 									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title?.english ? "border-red-800" : "border-gray-400"}`}
 									placeholder={t("titleField")}
 									autoComplete="off"
@@ -182,6 +183,7 @@ const ReviewArticle = function ({ model }) {
 								)}
 								<input
 									{...register("authorName.english")}
+									lang="en"
 									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorName?.english ? "border-red-800" : "border-gray-400"}`}
 									placeholder={t("authorNameField")}
 									autoComplete="name"
@@ -205,6 +207,7 @@ const ReviewArticle = function ({ model }) {
 													? "border-red-800"
 													: "border-gray-400",
 												changeCallback: onChange,
+												locale: "en",
 											})}
 										/>
 									)}
@@ -216,6 +219,7 @@ const ReviewArticle = function ({ model }) {
 								)}
 								<input
 									{...register("snippet.english")}
+									lang="en"
 									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.snippet?.english ? "border-red-800" : "border-gray-400"}`}
 									placeholder={`${t("snippetField")} (${tMisc("optional")})`}
 									autoComplete="off"
@@ -290,6 +294,7 @@ const ReviewArticle = function ({ model }) {
 								</div>
 								<input
 									{...register("image.caption.english")}
+									lang="en"
 									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.image?.caption?.english ? "border-red-800" : "border-gray-400"}`}
 									placeholder={t("imageCaptionField")}
 									autoComplete="off"

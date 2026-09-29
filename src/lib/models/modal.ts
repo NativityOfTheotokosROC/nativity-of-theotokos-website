@@ -5,7 +5,7 @@ export type ModalModelView = {
 	title: string;
 	size: "smallest" | "small" | "medium" | "large";
 	position?: "top" | "center";
-	onClose: () => Promise<void>;
+	onClose: () => void;
 };
 
 export type ModalModel = Model<ModalModelView>;

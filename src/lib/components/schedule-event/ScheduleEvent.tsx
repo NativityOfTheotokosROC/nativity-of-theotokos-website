@@ -31,6 +31,7 @@ import Checkbox from "../checkbox/Checkbox";
 import { useScheduleEventForm } from "@/src/lib/utilities/scheduler";
 import RadioGroup from "../radio-group/RadioGroup";
 import { useMemo } from "react";
+import { useLocale } from "next-intl";
 
 const ScheduleEvent = function ({ model }) {
 	const { modelView } = model;
@@ -249,6 +250,7 @@ const RecurringScheduleEventForm = function ({ model }) {
 
 const SpecificScheduleEventForm = function ({ model }) {
 	const t = useTranslations("scheduler");
+	const locale = useLocale();
 	const {
 		interact,
 		modelView: { scheduleEvent, autoCompleteInfo, options },
@@ -298,6 +300,7 @@ const SpecificScheduleEventForm = function ({ model }) {
 					<>
 						<input
 							{...register("date")}
+							lang={locale}
 							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors && "date" in errors && errors.date ? "border-red-800" : "border-gray-400"}`}
 							type="date"
 							formNoValidate
@@ -438,6 +441,7 @@ function EventMetadataFormControl({
 					}) => (
 						<>
 							<input
+								lang="en"
 								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 								placeholder={t("titleFieldEn")}
 								autoCapitalize="words"
@@ -473,6 +477,7 @@ function EventMetadataFormControl({
 					}) => (
 						<>
 							<input
+								lang="ru"
 								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 								placeholder={t("titleFieldRu")}
 								autoCapitalize="words"
@@ -508,6 +513,7 @@ function EventMetadataFormControl({
 					}) => (
 						<>
 							<input
+								lang="en"
 								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 								placeholder={t("venueFieldEn")}
 								autoCapitalize="words"
@@ -543,6 +549,7 @@ function EventMetadataFormControl({
 					}) => (
 						<>
 							<input
+								lang="ru"
 								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 								placeholder={t("venueFieldRu")}
 								autoCapitalize="words"
@@ -622,6 +629,7 @@ function EventTimesFormControl({
 		designationTranslations: Translation[];
 	}>;
 }) {
+	const locale = useLocale();
 	const t = useTranslations("scheduler");
 	const { control, getValues, setValue, watch } =
 		useFormContext<Pick<NewScheduleItem, "times">>();
@@ -715,6 +723,7 @@ function EventTimesFormControl({
 								}) => (
 									<>
 										<input
+											lang="en"
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 											placeholder={t(
 												"designationFieldEn",
@@ -740,6 +749,7 @@ function EventTimesFormControl({
 											}}
 										/>
 										<input
+											lang="ru"
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 											placeholder={t(
 												"designationFieldRu",
@@ -781,6 +791,7 @@ function EventTimesFormControl({
 								}) => (
 									<>
 										<input
+											lang={locale}
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 											type="time"
 											placeholder={t("timeField")}

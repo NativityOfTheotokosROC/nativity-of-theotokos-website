@@ -13,7 +13,6 @@ import { ToastNotification } from "../models/toast";
 import {
 	ArticleDraft,
 	WriteArticleModel,
-	WriteArticleModelInteraction,
 	WriteArticleNotification,
 } from "../models/write-article";
 import {
@@ -91,9 +90,7 @@ export function useWriteArticle(
 			currentArticle: options?.currentArticle,
 			canDeleteTicket: options?.canDeleteTicket ?? false,
 		},
-		interact: async function (
-			interaction: WriteArticleModelInteraction,
-		): Promise<void> {
+		async interact(interaction) {
 			switch (interaction.type) {
 				case "SAVE_DRAFT": {
 					const draft = interaction.input.draft;
@@ -106,33 +103,30 @@ export function useWriteArticle(
 							},
 						},
 					});
-					await saveDraft(ticketId, draft, locale)
-						.then(() => setLastSavedDraft(draft))
-						.then(() =>
-							Promise.all([
-								notifier.interact({
-									type: "NOTIFY",
-									input: {
-										notification: {
-											type: "save_draft_success",
-											message: t("saveDraftSuccess"),
-										},
-									},
-								}),
-								interaction.input.options?.successCallback?.(),
-							]),
-						)
-						.catch(reason =>
-							notifier.interact({
-								type: "NOTIFY",
-								input: {
-									notification: {
-										type: "save_draft_failure",
-										message: `${t("saveDraftFailure", { message: JSON.stringify(reason) })}`,
-									},
+					try {
+						await saveDraft(ticketId, draft, locale);
+						setLastSavedDraft(draft);
+						await notifier.interact({
+							type: "NOTIFY",
+							input: {
+								notification: {
+									type: "save_draft_success",
+									message: t("saveDraftSuccess"),
 								},
-							}),
-						);
+							},
+						});
+						interaction.input.options?.successCallback?.();
+					} catch (error) {
+						notifier.interact({
+							type: "NOTIFY",
+							input: {
+								notification: {
+									type: "save_draft_failure",
+									message: `${t("saveDraftFailure", { message: JSON.stringify(error) })}`,
+								},
+							},
+						});
+					}
 					break;
 				}
 				case "SUBMIT": {

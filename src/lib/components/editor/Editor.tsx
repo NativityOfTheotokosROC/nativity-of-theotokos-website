@@ -1,21 +1,22 @@
 import "@/src/lib/styles/document.css";
+import OfficePaste from "@intevation/tiptap-extension-office-paste";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
+import { Subscript } from "@tiptap/extension-subscript";
+import { Superscript } from "@tiptap/extension-superscript";
 import { TextStyleKit } from "@tiptap/extension-text-style";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import { Superscript } from "@tiptap/extension-superscript";
-import { Subscript } from "@tiptap/extension-subscript";
+import { useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import { useEditorTools } from "../../model-implementations/editor-tools";
 import { EditorModel } from "../../models/editor";
-import OfficePaste from "@intevation/tiptap-extension-office-paste";
 import EditorTools from "../editor-tools/EditorTools";
-import { useEffect } from "react";
 
 const Editor = function ({ model }) {
 	const { modelView } = model;
-	const { initialContent, changeCallback, className, isReadonly } = modelView;
+	const { initialContent, changeCallback, className, isReadonly, locale } =
+		modelView;
 	const editor = useEditor({
 		editable: !isReadonly,
 		content: initialContent,
@@ -27,8 +28,8 @@ const Editor = function ({ model }) {
 			OfficePaste,
 		],
 		immediatelyRender: false,
-		async onUpdate({ editor }) {
-			await changeCallback?.(editor.getHTML());
+		onUpdate({ editor }) {
+			changeCallback?.(editor.getHTML());
 		},
 		editorProps: {
 			transformPastedHTML(html) {
@@ -66,6 +67,7 @@ const Editor = function ({ model }) {
 				<EditorContent
 					className="h-100 max-h-100 overflow-y-auto @xl:pr-4 @xl:text-lg/relaxed"
 					editor={editor}
+					lang={locale} // TODO: Address this in the future
 				/>
 			</div>
 		</div>

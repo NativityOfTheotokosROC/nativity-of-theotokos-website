@@ -1,440 +1,440 @@
 {
-	"metadata": {
-		"templateTitle": "Храм Рождества Пресвятой Богородицы",
-		"templateDefault": "Храм Рождества Пресвятой Богородицы",
-		"home": "Главная",
-		"description": "Официальный сайт прихода Рождества Пресвятой Богородицы Русской Православной Церкви в Зимбабве. (осн. 2025)"
+	"aboutUs": {
+		"metaTitle": "О приходе"
 	},
-	"error": {
-		"metaTitle": "Что-то пошло не так",
-		"title": "Что-то пошло не так",
-		"description": "На нашей стороне произошла непредвиденная ошибка. Пожалуйста, попробуйте снова через несколько минут. Если проблема сохранится",
-		"contactUs": "связаться с нами",
-		"tryAgain": "Попробовать снова"
+	"articlePreview": {
+		"authorPlaceholder": "Ваше имя",
+		"continueEdit": "Продолжить редактирование",
+		"imagePlaceholder": "Здесь будет размещено изображение статьи",
+		"submit": "Опубликовать",
+		"title": "Предпросмотр статьи"
 	},
-	"notFound": {
-		"metaTitle": "Ресурс не найден",
-		"title": "Здесь ничего нет",
-		"description": "Запрашиваемый ресурс не существует, был перемещён или удалён.",
-		"goHome": "На главную"
-	},
-	"unauthorized": {
-		"metaTitle": "Нет доступа",
-		"title": "Нет доступа",
-		"description": "У вас нет прав для доступа к этому ресурсу.",
-		"goHome": "На главную",
-		"signOut": "Выйти"
-	},
-	"maintenance": {
-		"title": "Мы работаем над этим...",
-		"description": "Страница временно недоступна из-за технических работ. Пожалуйста, зайдите позже. Пока вы можете посетить другие страницы сайта.",
-		"goHome": "На главную"
-	},
-	"header": {
-		"logoTop": "Рождество Пресвятой Богородицы",
-		"logoBottom": "Русская Православная Церковь"
-	},
-	"navMenu": {
-		"home": "Главная",
-		"resources": "Материалы",
-		"media": "Галереи",
-		"aboutUs": "О приходе",
-		"contact": "Контакты",
-		"parishBulletin": "Новости"
-	},
-	"userNavigation": {
-		"greeting": "Привет",
-		"signIn": "Вход"
-	},
-	"userAction": {
-		"notifications": "Уведомления",
-		"newQuote": "Новая цитата",
-		"signOut": "Выйти",
-		"writeArticle": "Написать статью",
-		"reviewArticle": "Проверка статьи",
+	"assignArticle": {
 		"assignArticle": "Назначить статью",
-		"scheduler": "Планирование событий"
+		"assignFail": "Не удалось назначить статью. Ошибка: {message}",
+		"assignments": "Количество назначений",
+		"assignSuccess": "Статья успешно назначена",
+		"authorNameField": "Имя автора",
+		"emailField": "Электронная почта",
+		"metaTitle": "Назначить статью"
 	},
-	"footer": {
-		"heading": "Храм Рождества Пресвятой Богородицы",
-		"email": "Электронная почта",
-		"jurisdictional": "Юрисдикция",
-		"clergy": "Духовенство прихода",
-		"contact": "Контакты",
-		"siteAttribution": "Разработка сайта — <link>{name}</link>"
-	},
-	"footer_variable": {
-		"description": "Приход Рождества Пресвятой Богородицы Русской Православной Церкви в Зимбабве. Расположен в частной часовне Kingsmead, угол Rayl Road и Kingsmead Road, Борроудейл, Хараре.",
-		"diocese": "Епархия Южной Африки",
-		"jurisdiction": "Патриарший экзархат Африки",
-		"patriarch": "Святейший Патриарх Кирилл",
-		"patriarchate": "Московский Патриархат",
-		"frDimitri": "Протоиерей Димитрий Полохов",
-		"frSavva": "иерей Савва Kajawa",
-		"frEmilianos": "иерей Емелиан Shumba",
-		"phone": "Телефон",
-		"larisa": "Лариса",
-		"vasily": "Василий",
-		"admin": "Админ",
-		"privacy": "Конфиденциальность",
-		"terms": "Условия",
-		"licenses": "Лицензии",
-		"attribution": "Атрибуция",
-		"copyright": "2026 Приход Рождества Пресвятой Богородицы. Все права защищены."
-	},
-	"home": {
-		"heroTitle": "Привет и добро пожаловать",
-		"heroSubtitle": "Официальный сайт прихода Рождества Пресвятой Богородицы Русской Православной Церкви в Зимбабве. (осн. 2025)",
-		"dailyReadingsHeader": "Ежедневные Чтения",
-		"dailyHymns": "Тропари и кондаки дня",
-		"readings": "Чтения",
-		"latestNewsHeader": "Приходской бюллетень",
-		"featured": "Главная",
-		"schedule": "Расписание",
-		"moreNews": "Другие статьи",
-		"liturgicalResources": "Богослужебные материалы",
-		"whatIsOrthodoxy": "Что такое Православие?",
-		"aboutOurParish": "О нашем приходе"
+	"attribution": {
+		"title": "Лицензии"
 	},
 	"commemoration": {
 		"oldCalendar": "Юлианский календарь",
 		"prologue": "Пролог Охридский"
 	},
-	"aboutUs": {
-		"metaTitle": "О приходе"
+	"confirmationDialog": {
+		"defaultCancelButton": "Отмена",
+		"defaultProceedButton": "Продолжить",
+		"defaultTitle": "Подтвердить"
 	},
-	"privacyPolicy": {
-		"title": "Политика конфиденциальности",
-		"lastModified": "Последнее обновление"
+	"dailyReadings": {
+		"noFast": "Сегодня поста нет"
 	},
-	"termsOfService": {
-		"title": "Условия использования",
-		"lastModified": "Последнее обновление"
+	"editArticle": {
+		"title": "Редактировать статью"
 	},
-	"attribution": {
-		"title": "Лицензии"
+	"editor": {
+		"initError": "Редактор не инициализирован"
+	},
+	"editorTools": {
+		"bold": "Полужирный",
+		"bulletList": "Маркированный список",
+		"heading": "Заголовок",
+		"italic": "Курсив",
+		"link": "Ссылка",
+		"numberedList": "Нумерованный список",
+		"quote": "Цитата",
+		"redo": "Повторить",
+		"rule": "Горизонтальная линия",
+		"sub": "Нижний индекс",
+		"super": "Верхний индекс",
+		"underline": "Подчёркнутый",
+		"undo": "Отменить"
+	},
+	"editPanel": {
+		"delete": "Удалить",
+		"disable": "Отключить",
+		"edit": "Изменить",
+		"enable": "Включить"
+	},
+	"editScheduleItem": {
+		"delete": "Удалить",
+		"disable": "Отключить",
+		"edit": "Изменить",
+		"enable": "Включить",
+		"reinstate": "Восстановить",
+		"remove": "Убрать"
+	},
+	"emptyNotifications": {
+		"detailedMessage": "У вас нет уведомлений. Загляните позже.",
+		"mainMessage": "Нет уведомлений"
+	},
+	"emptyReviewArticle": {
+		"detailedMessage": "У вас нет назначенных вам статей, ожидающих проверки.",
+		"mainMessage": "Нет ожидающих проверок"
+	},
+	"error": {
+		"contactUs": "связаться с нами",
+		"description": "На нашей стороне произошла непредвиденная ошибка. Пожалуйста, попробуйте снова через несколько минут. Если проблема сохранится",
+		"metaTitle": "Что-то пошло не так",
+		"title": "Что-то пошло не так",
+		"tryAgain": "Попробовать снова"
+	},
+	"fileUploader": {
+		"uploadFileFailure": "Не удалось загрузить файл. Ошибка: {message}",
+		"uploadFileSuccess": "Файл успешно загружен",
+		"uploadingFile": "Загрузка файла"
+	},
+	"footer": {
+		"clergy": "Духовенство прихода",
+		"contact": "Контакты",
+		"email": "Электронная почта",
+		"heading": "Храм Рождества Пресвятой Богородицы",
+		"jurisdictional": "Юрисдикция",
+		"siteAttribution": "Разработка сайта — <link>{name}</link>"
+	},
+	"footer_variable": {
+		"admin": "Админ",
+		"attribution": "Атрибуция",
+		"copyright": "2026 Приход Рождества Пресвятой Богородицы. Все права защищены.",
+		"description": "Приход Рождества Пресвятой Богородицы Русской Православной Церкви в Зимбабве. Расположен в частной часовне Kingsmead, угол Rayl Road и Kingsmead Road, Борроудейл, Хараре.",
+		"diocese": "Епархия Южной Африки",
+		"frDimitri": "Протоиерей Димитрий Полохов",
+		"frEmilianos": "иерей Емелиан Shumba",
+		"frSavva": "иерей Савва Kajawa",
+		"jurisdiction": "Патриарший экзархат Африки",
+		"larisa": "Лариса",
+		"licenses": "Лицензии",
+		"patriarch": "Святейший Патриарх Кирилл",
+		"patriarchate": "Московский Патриархат",
+		"phone": "Телефон",
+		"privacy": "Конфиденциальность",
+		"terms": "Условия",
+		"vasily": "Василий"
+	},
+	"header": {
+		"logoBottom": "Русская Православная Церковь",
+		"logoTop": "Рождество Пресвятой Богородицы"
+	},
+	"home": {
+		"aboutOurParish": "О нашем приходе",
+		"dailyHymns": "Тропари и кондаки дня",
+		"dailyReadingsHeader": "Ежедневные Чтения",
+		"featured": "Главная",
+		"heroSubtitle": "Официальный сайт прихода Рождества Пресвятой Богородицы Русской Православной Церкви в Зимбабве. (осн. 2025)",
+		"heroTitle": "Привет и добро пожаловать",
+		"latestNewsHeader": "Приходской бюллетень",
+		"liturgicalResources": "Богослужебные материалы",
+		"moreNews": "Другие статьи",
+		"readings": "Чтения",
+		"schedule": "Расписание",
+		"whatIsOrthodoxy": "Что такое Православие?"
+	},
+	"hymnsModal": {
+		"closeButton": "Закрыть",
+		"hymnsForToday": "Тропари и кондаки дня"
+	},
+	"imageCaptions": {
+		"featuredArticleImage": "Изображение главной статьи",
+		"galleryImage": "Изображение галереи",
+		"iconOfTheDay": "Икона дня",
+		"iconOfTheNativity": "Икона Рождества Пресвятой Богородицы",
+		"newsArticleImage": "Изображение новостной статьи"
+	},
+	"imageProcessor": {
+		"formatNotSupported": "Формат изображения не поддерживается",
+		"imageSizeTooBig": "Изображение слишком большое ({size} МБ). Размер изображения должен быть не более {max} МБ",
+		"imageSizeTooSmall": "Изображение слишком маленькое ({size} КБ). Размер изображения должен быть не менее {min} КБ",
+		"notImage": "Предоставленный файл не является изображением",
+		"processingImage": "Обработка изображения",
+		"processingImageFailure": "Не удалось обработать изображение. Ошибка: {message}"
 	},
 	"licenses_variable": {
 		"dailyReadingsLicense": "Ежедневные чтения, памятования и песнопения предоставлены",
 		"logoIconLicense": "Иконка логотипа",
 		"orthoGraphicsLicense": "Традиционная православная графика (то есть эмблемы, заголовки, иконки и другие символы) — работа команды"
 	},
-	"news": {
-		"metaTitle": "Новости",
-		"byline": "Автор:",
-		"articleUpdated": "Обновлено",
-		"editArticle": "Редактировать статью"
-	},
-	"newQuote": {
-		"metaTitle": "Новая цитата",
-		"title": "Новая цитата",
-		"english": "Английский",
-		"russian": "Русский",
-		"author": "Автор",
-		"source": "Источник",
-		"quote": "Цитата",
-		"optional": "необязательно",
-		"schedulerCheckLabel": "Показывать цитату в определённую дату",
-		"preview": "Предпросмотр",
-		"addQuote": "Добавить цитату",
-		"successMessage": "Цитата успешно добавлена",
-		"failureMessage": "Не удалось добавить цитату. Ошибка:",
-		"quotePreview": "Предпросмотр цитаты",
-		"mainMessage": "Цитата добавлена",
-		"detailedMessage": "Ваша цитата успешно добавлена.",
-		"addAnother": "Добавить ещё"
-	},
-	"assignArticle": {
-		"metaTitle": "Назначить статью",
-		"authorNameField": "Имя автора",
-		"emailField": "Электронная почта",
-		"assignArticle": "Назначить статью",
-		"assignSuccess": "Статья успешно назначена",
-		"assignFail": "Не удалось назначить статью. Ошибка: {message}",
-		"assignments": "Количество назначений"
-	},
-	"writeArticle": {
-		"metaTitle": "Написать статью",
-		"title": "Написать статью",
-		"titleField": "Название статьи",
-		"bodyField": "Текст статьи",
-		"bodyPlaceholder": "Начните писать здесь...",
-		"preview": "Предпросмотр",
-		"submit": "Опубликовать",
-		"author": "Автор",
-		"successMessage": "Статья успешно опубликована",
-		"failureMessage": "Не удалось опубликовать статью. Ошибка: {message}",
-		"unknownAuthor": "Ваше имя",
-		"saveDraft": "Сохранить черновик",
-		"autoSave": "Автосохранение",
-		"savingDraft": "Сохранение черновика",
-		"saveDraftSuccess": "Черновик сохранён",
-		"saveDraftFailure": "Не удалось сохранить черновик. Ошибка: {message}",
-		"mainMessage": "Статья отправлена",
-		"detailedMessage": "Ваша статья отправлена и будет рассмотрена и обработана.",
-		"nextButton": "Продолжить",
-		"discardingDraft": "Удаление черновика",
-		"discardDraftSuccess": "Ваш черновик удалён",
-		"discardDraftMainMessage": "Черновик удалён",
-		"discardDraftFail": "Не удалось удалить ваш черновик. Ошибка: {message}",
-		"discardDraftButton": "Удалить черновик",
-		"discardDraftDialogTitle": "Удалить черновик",
-		"discardDraftDialogMessage": "Вы уверены, что хотите удалить этот черновик? Если вы уже отправляли этот черновик ранее и он ожидает утверждения, ваша отправленная статья будет удалена."
-	},
-	"editArticle": {
-		"title": "Редактировать статью"
-	},
-	"articlePreview": {
-		"title": "Предпросмотр статьи",
-		"imagePlaceholder": "Здесь будет размещено изображение статьи",
-		"authorPlaceholder": "Ваше имя",
-		"continueEdit": "Продолжить редактирование",
-		"submit": "Опубликовать"
-	},
-	"reviewArticle": {
-		"title": "Проверка статьи",
-		"titleField": "Название статьи",
-		"authorNameField": "Имя автора",
-		"bodyField": "Текст статьи",
-		"modifyDraft": "Изменить черновик",
-		"snippetField": "Краткое описание",
-		"imageField": "Изображение",
-		"imageAlt": "Предпросмотр изображения статьи",
-		"imageCaptionField": "Подпись к изображению",
-		"selectImage": "Выбрать изображение",
-		"changeImage": "Изменить изображение",
-		"articlePreview": "Предпросмотр статьи",
-		"publish": "Опубликовать",
-		"featureTheArticle": "Сделать статью главной",
-		"uploadingImage": "Загрузка изображения статьи",
-		"uploadImageSuccess": "Изображение статьи успешно загружено",
-		"uploadImageFailure": "Не удалось загрузить изображение статьи. Ошибка: {message}",
-		"submitSuccess": "Статья успешно опубликована",
-		"submitFailure": "Не удалось опубликовать статью. Ошибка: {message}",
-		"mainMessage": "Статья опубликована",
-		"detailedMessage": "Статья успешно обработана и опубликована."
-	},
-	"fileUploader": {
-		"uploadingFile": "Загрузка файла",
-		"uploadFileSuccess": "Файл успешно загружен",
-		"uploadFileFailure": "Не удалось загрузить файл. Ошибка: {message}"
-	},
-	"imageProcessor": {
-		"processingImage": "Обработка изображения",
-		"processingImageFailure": "Не удалось обработать изображение. Ошибка: {message}",
-		"imageSizeTooSmall": "Изображение слишком маленькое ({size} КБ). Размер изображения должен быть не менее {min} КБ",
-		"imageSizeTooBig": "Изображение слишком большое ({size} МБ). Размер изображения должен быть не более {max} МБ",
-		"notImage": "Предоставленный файл не является изображением",
-		"formatNotSupported": "Формат изображения не поддерживается"
-	},
-	"editor": {
-		"initError": "Редактор не инициализирован"
-	},
-	"editorTools": {
-		"heading": "Заголовок",
-		"bold": "Полужирный",
-		"italic": "Курсив",
-		"underline": "Подчёркнутый",
-		"quote": "Цитата",
-		"bulletList": "Маркированный список",
-		"numberedList": "Нумерованный список",
-		"undo": "Отменить",
-		"redo": "Повторить",
-		"super": "Верхний индекс",
-		"sub": "Нижний индекс",
-		"rule": "Горизонтальная линия",
-		"link": "Ссылка"
-	},
-	"signIn": {
-		"metaTitle": "Вход",
-		"title": "Вход",
-		"description": "Войдите на сайт, чтобы продолжить.",
-		"successMessage": "Скоро вы будете перенаправлены на страницу входа {serviceName}. Пожалуйста, подождите...",
-		"failureMessage": "Не удалось подключиться к входу через {serviceName}:",
-		"consent": "Входя в систему, вы подтверждаете, что соглашаетесь с нашими <tos>{termsOfService}</tos> и принимаете нашу <privacy>{privacyPolicy}</privacy>.",
-		"privacyPolicy": "Политика конфиденциальности",
-		"termsOfService": "Условия использования"
-	},
-	"signInButton": {
-		"buttonText": "Войти через {serviceName}"
-	},
-	"dailyReadings": {
-		"noFast": "Сегодня поста нет"
-	},
-	"hymnsModal": {
-		"hymnsForToday": "Тропари и кондаки дня",
-		"closeButton": "Закрыть"
-	},
-	"quote": {
-		"openingQuote": "«",
-		"closingQuote": "»"
-	},
-	"scheduleItem": {
-		"titleField": "Название",
-		"venueField": "Место проведения",
-		"designationField": "Обозначение",
-		"timeField": "Время",
-		"dateField": "Дата",
-		"recurringPatternField": "Шаблон повторения",
-		"emptyTimes": "Добавьте хотя бы одно время",
-		"timeConflict": "Время конфликтует с другим временем",
-		"schedule": "Расписание",
-		"liturgyService": "Божественная литургия",
-		"typikaService": "Служба Типики",
-		"mainLocation": "Приход Рождества Пресвятой Богородицы",
-		"secondaryLocation": "Приход святого Сергия",
-		"orthros": "Утреня",
-		"confessions": "Исповедь",
-		"liturgy": "Литургия",
-		"typika": "Типика",
-		"catechism": "Катехизация"
-	},
-	"scheduler": {
-		"title": "Планирование событий",
-		"scheduleSpecific": "Запланировать на определённую дату",
-		"scheduleRecurring": "Запланировать новое повторяющееся событие",
-		"scheduleEventTab": "Запланировать событие",
-		"viewScheduleTab": "Просмотреть расписание",
-		"modifyExistingTab": "Изменить существующее",
-		"eventSection": "Событие",
-		"titleFieldEn": "Название",
-		"titleFieldRu": "Название (русский)",
-		"venueFieldEn": "Место проведения",
-		"venueFieldRu": "Место проведения (русский)",
-		"sundayAbbrev": "В",
-		"mondayAbbrev": "П",
-		"tuesdayAbbrev": "В",
-		"wednesdayAbbrev": "С",
-		"thursdayAbbrev": "Ч",
-		"fridayAbbrev": "П",
-		"saturdayAbbrev": "С",
-		"timesSection": "Время",
-		"addTime": "Добавить время",
-		"timeField": "Время",
-		"designationFieldEn": "Обозначение",
-		"designationFieldRu": "Обозначение (русский)",
-		"deleteTime": "Удалить время",
-		"currentScheduleSection": "Текущее расписание",
-		"editEvent": "Изменить событие",
-		"removeEvent": "Удалить событие",
-		"reinstateEvent": "Восстановить событие",
-		"disableRecurring": "Отключить повторяющееся событие",
-		"enableRecurring": "Включить повторяющееся событие",
-		"deleteEvent": "Удалить событие",
-		"newScheduleSection": "Новое расписание",
-		"recurringEvents": "Повторяющиеся события",
-		"specificEvents": "События на определённые даты",
-		"scheduleButton": "Запланировать событие",
-		"modifyButton": "Изменить событие",
-		"previewButton": "Предпросмотр",
-		"continueEdit": "Продолжить редактирование",
-		"scheduleSuccess": "Событие успешно запланировано",
-		"modifySuccess": "Событие успешно изменено",
-		"deleteSuccess": "Событие успешно удалено",
-		"deleteFailure": "Не удалось удалить событие. Ошибка: {message}",
-		"scheduleFailure": "Не удалось запланировать событие. Ошибка: {message}",
-		"modifyFailure": "Не удалось изменить событие. Ошибка: {message}",
-		"scheduleSummaryTab": "Обзор расписания",
-		"altScheduleSummaryTab": "Детали расписания",
-		"confirmDeleteSpecific": "Вы уверены, что хотите удалить событие «{title}», запланированное на {date} в {venue}?",
-		"confirmDeleteRecurring": "Вы уверены, что хотите удалить событие «{title}», которое повторяется {parsedCron} в {venue}?",
-		"confirmEnableSpecific": "Вы уверены, что хотите включить событие «{title}», запланированное на {date} в {venue}?",
-		"confirmEnableRecurring": "Вы уверены, что хотите включить событие «{title}», которое повторяется {parsedCron} в {venue}?",
-		"confirmDisableSpecific": "Вы уверены, что хотите отключить событие «{title}», запланированное на {date} в {venue}?",
-		"confirmDisableRecurring": "Вы уверены, что хотите отключить событие «{title}», которое повторяется {parsedCron} в {venue}?",
-		"normalEvent": "Обычное событие",
-		"specialEvent": "Особое событие",
-		"feastEvent": "Праздник",
-		"englishPreview": "Английский",
-		"russianPreview": "Русский"
-	},
-	"editPanel": {
-		"edit": "Изменить",
-		"disable": "Отключить",
-		"enable": "Включить",
-		"delete": "Удалить"
-	},
-	"recurringScheduleItem": {
-		"description": "Событие повторяется {parsedCronString}"
-	},
-	"editScheduleItem": {
-		"edit": "Изменить",
-		"enable": "Включить",
-		"reinstate": "Восстановить",
-		"disable": "Отключить",
-		"remove": "Убрать",
-		"delete": "Удалить"
-	},
-	"mailingList": {
-		"mailingListHeader": "Присоединяйтесь к нашей рассылке",
-		"mailingListDescription": "Получайте последние новости прихода, объявления и события по электронной почте. Введите ваш адрес ниже, чтобы подписаться.",
-		"mailingListButton": "Подписаться",
-		"mailingListSuccessMessage": "Спасибо за подписку! Мы будем информировать вас о последних новостях, обновлениях и объявлениях прихода.",
-		"errorMessage": "Возникла проблема при подписке на нашу рассылку. Пожалуйста, попробуйте снова, проверьте правильность указанного адреса электронной почты или проверьте подключение к интернету.",
-		"consent": "Подписываясь на рассылку, вы подтверждаете, что соглашаетесь с нашими <tos>{termsOfService}</tos> и принимаете нашу <privacy>{privacyPolicy}</privacy>.",
-		"privacyPolicy": "Политика конфиденциальности",
-		"termsOfService": "Условия использования"
+	"links": {
+		"diocese": "https://exarchate-africa.ru/dioceses_cat/yuzhno-afrikanskaya-eparhiya/",
+		"holyTrinityChurch": "https://holytrinityorthodox.com/ru",
+		"jurisdiction": "https://exarchate-africa.ru",
+		"liturgicalResources": "https://ru.eadiocese.org/litresource",
+		"patriarch": "https://mospat.ru/ru/patriarch",
+		"patriarchate": "https://patriarchia.ru",
+		"whatIsOrthodoxy": "https://azbyka.org/1/tserkov"
 	},
 	"loginTooltip": {
 		"text": "Вы вошли в систему"
 	},
-	"nonDescriptive": {
-		"menu": "Меню",
-		"close": "Закрыть",
-		"share": "Поделиться",
-		"download": "Скачать",
-		"print": "Печать",
-		"saveAsPDF": "Сохранить как PDF"
+	"mailingList": {
+		"consent": "Подписываясь на рассылку, вы подтверждаете, что соглашаетесь с нашими <tos>{termsOfService}</tos> и принимаете нашу <privacy>{privacyPolicy}</privacy>.",
+		"errorMessage": "Возникла проблема при подписке на нашу рассылку. Пожалуйста, попробуйте снова, проверьте правильность указанного адреса электронной почты или проверьте подключение к интернету.",
+		"mailingListButton": "Подписаться",
+		"mailingListDescription": "Получайте последние новости прихода, объявления и события по электронной почте. Введите ваш адрес ниже, чтобы подписаться.",
+		"mailingListHeader": "Присоединяйтесь к нашей рассылке",
+		"mailingListSuccessMessage": "Спасибо за подписку! Мы будем информировать вас о последних новостях, обновлениях и объявлениях прихода.",
+		"privacyPolicy": "Политика конфиденциальности",
+		"termsOfService": "Условия использования"
 	},
-	"links": {
-		"liturgicalResources": "https://ru.eadiocese.org/litresource",
-		"whatIsOrthodoxy": "https://azbyka.org/1/tserkov",
-		"diocese": "https://exarchate-africa.ru/dioceses_cat/yuzhno-afrikanskaya-eparhiya/",
-		"jurisdiction": "https://exarchate-africa.ru",
-		"patriarch": "https://mospat.ru/ru/patriarch",
-		"patriarchate": "https://patriarchia.ru",
-		"holyTrinityChurch": "https://holytrinityorthodox.com/ru"
+	"maintenance": {
+		"description": "Страница временно недоступна из-за технических работ. Пожалуйста, зайдите позже. Пока вы можете посетить другие страницы сайта.",
+		"goHome": "На главную",
+		"title": "Мы работаем над этим..."
 	},
-	"imageCaptions": {
-		"iconOfTheDay": "Икона дня",
-		"iconOfTheNativity": "Икона Рождества Пресвятой Богородицы",
-		"featuredArticleImage": "Изображение главной статьи",
-		"newsArticleImage": "Изображение новостной статьи",
-		"galleryImage": "Изображение галереи"
+	"metadata": {
+		"description": "Официальный сайт прихода Рождества Пресвятой Богородицы Русской Православной Церкви в Зимбабве. (осн. 2025)",
+		"home": "Главная",
+		"templateDefault": "Храм Рождества Пресвятой Богородицы",
+		"templateTitle": "Храм Рождества Пресвятой Богородицы"
 	},
 	"miscellaneous": {
-		"modelInitError": "Модель не инициализирована",
-		"futureContent": "Контент будет добавлен в ближайшее время!",
 		"closeButton": "Закрыть",
-		"optional": "необязательно",
-		"goHome": "На главную",
 		"continue": "Продолжить",
 		"english": "Английский",
+		"futureContent": "Контент будет добавлен в ближайшее время!",
+		"goHome": "На главную",
+		"modelInitError": "Модель не инициализирована",
+		"optional": "необязательно",
 		"russian": "Русский"
 	},
-	"validation": {
-		"nonEmpty": "Поле {field} не может быть пустым",
-		"maxCharacters": "Поле {field} слишком длинное ({max} максимум символов)",
-		"minCharacters": "Поле «{field}» слишком короткое (минимум {min} символов)",
-		"invalidField": "{field} недействительно",
-		"emptyFieldSet": "Необходимо указать хотя бы одно значение для поля «{field}»",
-		"invalidUrl": "Вы указали недействительный URL для поля «{field}»",
-		"invalidEmail": "Указан недействительный адрес электронной почты для поля «{field}»"
+	"navMenu": {
+		"aboutUs": "О приходе",
+		"contact": "Контакты",
+		"home": "Главная",
+		"media": "Галереи",
+		"parishBulletin": "Новости",
+		"resources": "Материалы"
+	},
+	"newQuote": {
+		"addAnother": "Добавить ещё",
+		"addQuote": "Добавить цитату",
+		"author": "Автор",
+		"detailedMessage": "Ваша цитата успешно добавлена.",
+		"english": "Английский",
+		"failureMessage": "Не удалось добавить цитату. Ошибка:",
+		"mainMessage": "Цитата добавлена",
+		"metaTitle": "Новая цитата",
+		"optional": "необязательно",
+		"preview": "Предпросмотр",
+		"quote": "Цитата",
+		"quotePreview": "Предпросмотр цитаты",
+		"russian": "Русский",
+		"schedulerCheckLabel": "Показывать цитату в определённую дату",
+		"source": "Источник",
+		"successMessage": "Цитата успешно добавлена",
+		"title": "Новая цитата"
+	},
+	"news": {
+		"articleUpdated": "Обновлено",
+		"byline": "Автор:",
+		"editArticle": "Редактировать статью",
+		"metaTitle": "Новости"
+	},
+	"nonDescriptive": {
+		"close": "Закрыть",
+		"download": "Скачать",
+		"menu": "Меню",
+		"print": "Печать",
+		"saveAsPDF": "Сохранить как PDF",
+		"share": "Поделиться"
+	},
+	"notFound": {
+		"description": "Запрашиваемый ресурс не существует, был перемещён или удалён.",
+		"goHome": "На главную",
+		"metaTitle": "Ресурс не найден",
+		"title": "Здесь ничего нет"
 	},
 	"notifications": {
 		"metaTitle": "Уведомления"
 	},
-	"emptyNotifications": {
-		"mainMessage": "Нет уведомлений",
-		"detailedMessage": "У вас нет уведомлений. Загляните позже."
+	"privacyPolicy": {
+		"lastModified": "Последнее обновление",
+		"title": "Политика конфиденциальности"
 	},
-	"emptyReviewArticle": {
-		"mainMessage": "Нет ожидающих проверок",
-		"detailedMessage": "У вас нет назначенных вам статей, ожидающих проверки."
+	"quote": {
+		"closingQuote": "»",
+		"openingQuote": "«"
 	},
-	"confirmationDialog": {
-		"defaultTitle": "Подтвердить",
-		"defaultProceedButton": "Продолжить",
-		"defaultCancelButton": "Отмена"
+	"recurringScheduleItem": {
+		"description": "Событие повторяется {parsedCronString}"
+	},
+	"reviewArticle": {
+		"articlePreview": "Предпросмотр статьи",
+		"authorNameField": "Имя автора",
+		"bodyField": "Текст статьи",
+		"changeImage": "Изменить изображение",
+		"detailedMessage": "Статья успешно обработана и опубликована.",
+		"featureTheArticle": "Сделать статью главной",
+		"imageAlt": "Предпросмотр изображения статьи",
+		"imageCaptionField": "Подпись к изображению",
+		"imageField": "Изображение",
+		"mainMessage": "Статья опубликована",
+		"modifyDraft": "Изменить черновик",
+		"publish": "Опубликовать",
+		"selectImage": "Выбрать изображение",
+		"snippetField": "Краткое описание",
+		"submitFailure": "Не удалось опубликовать статью. Ошибка: {message}",
+		"submitSuccess": "Статья успешно опубликована",
+		"title": "Проверка статьи",
+		"titleField": "Название статьи",
+		"uploadImageFailure": "Не удалось загрузить изображение статьи. Ошибка: {message}",
+		"uploadImageSuccess": "Изображение статьи успешно загружено",
+		"uploadingImage": "Загрузка изображения статьи"
+	},
+	"scheduleItem": {
+		"catechism": "Катехизация",
+		"confessions": "Исповедь",
+		"dateField": "Дата",
+		"designationField": "Обозначение",
+		"emptyTimes": "Добавьте хотя бы одно время",
+		"liturgy": "Литургия",
+		"liturgyService": "Божественная литургия",
+		"mainLocation": "Приход Рождества Пресвятой Богородицы",
+		"orthros": "Утреня",
+		"recurringPatternField": "Шаблон повторения",
+		"schedule": "Расписание",
+		"secondaryLocation": "Приход святого Сергия",
+		"timeConflict": "Время конфликтует с другим временем",
+		"timeField": "Время",
+		"titleField": "Название",
+		"typika": "Типика",
+		"typikaService": "Служба Типики",
+		"venueField": "Место проведения"
+	},
+	"scheduler": {
+		"addTime": "Добавить время",
+		"altScheduleSummaryTab": "Детали расписания",
+		"confirmDeleteRecurring": "Вы уверены, что хотите удалить событие «{title}», которое повторяется {parsedCron} в {venue}?",
+		"confirmDeleteSpecific": "Вы уверены, что хотите удалить событие «{title}», запланированное на {date} в {venue}?",
+		"confirmDisableRecurring": "Вы уверены, что хотите отключить событие «{title}», которое повторяется {parsedCron} в {venue}?",
+		"confirmDisableSpecific": "Вы уверены, что хотите отключить событие «{title}», запланированное на {date} в {venue}?",
+		"confirmEnableRecurring": "Вы уверены, что хотите включить событие «{title}», которое повторяется {parsedCron} в {venue}?",
+		"confirmEnableSpecific": "Вы уверены, что хотите включить событие «{title}», запланированное на {date} в {venue}?",
+		"continueEdit": "Продолжить редактирование",
+		"currentScheduleSection": "Текущее расписание",
+		"deleteEvent": "Удалить событие",
+		"deleteFailure": "Не удалось удалить событие. Ошибка: {message}",
+		"deleteSuccess": "Событие успешно удалено",
+		"deleteTime": "Удалить время",
+		"designationFieldEn": "Обозначение",
+		"designationFieldRu": "Обозначение (русский)",
+		"disableRecurring": "Отключить повторяющееся событие",
+		"editEvent": "Изменить событие",
+		"enableRecurring": "Включить повторяющееся событие",
+		"englishPreview": "Английский",
+		"eventSection": "Событие",
+		"feastEvent": "Праздник",
+		"fridayAbbrev": "П",
+		"modifyButton": "Изменить событие",
+		"modifyExistingTab": "Изменить существующее",
+		"modifyFailure": "Не удалось изменить событие. Ошибка: {message}",
+		"modifySuccess": "Событие успешно изменено",
+		"mondayAbbrev": "П",
+		"newScheduleSection": "Новое расписание",
+		"normalEvent": "Обычное событие",
+		"previewButton": "Предпросмотр",
+		"recurringEvents": "Повторяющиеся события",
+		"reinstateEvent": "Восстановить событие",
+		"removeEvent": "Удалить событие",
+		"russianPreview": "Русский",
+		"saturdayAbbrev": "С",
+		"scheduleButton": "Запланировать событие",
+		"scheduleEventTab": "Запланировать событие",
+		"scheduleFailure": "Не удалось запланировать событие. Ошибка: {message}",
+		"scheduleRecurring": "Запланировать новое повторяющееся событие",
+		"scheduleSpecific": "Запланировать на определённую дату",
+		"scheduleSuccess": "Событие успешно запланировано",
+		"scheduleSummaryTab": "Обзор расписания",
+		"specialEvent": "Особое событие",
+		"specificEvents": "События на определённые даты",
+		"sundayAbbrev": "В",
+		"thursdayAbbrev": "Ч",
+		"timeField": "Время",
+		"timesSection": "Время",
+		"title": "Планирование событий",
+		"titleFieldEn": "Название",
+		"titleFieldRu": "Название (русский)",
+		"tuesdayAbbrev": "В",
+		"venueFieldEn": "Место проведения",
+		"venueFieldRu": "Место проведения (русский)",
+		"viewScheduleTab": "Просмотреть расписание",
+		"wednesdayAbbrev": "С"
+	},
+	"signIn": {
+		"consent": "Входя в систему, вы подтверждаете, что соглашаетесь с нашими <tos>{termsOfService}</tos> и принимаете нашу <privacy>{privacyPolicy}</privacy>.",
+		"description": "Войдите на сайт, чтобы продолжить.",
+		"failureMessage": "Не удалось подключиться к входу через {serviceName}:",
+		"metaTitle": "Вход",
+		"privacyPolicy": "Политика конфиденциальности",
+		"successMessage": "Скоро вы будете перенаправлены на страницу входа {serviceName}. Пожалуйста, подождите...",
+		"termsOfService": "Условия использования",
+		"title": "Вход"
+	},
+	"signInButton": {
+		"buttonText": "Войти через {serviceName}"
+	},
+	"termsOfService": {
+		"lastModified": "Последнее обновление",
+		"title": "Условия использования"
+	},
+	"unauthorized": {
+		"description": "У вас нет прав для доступа к этому ресурсу.",
+		"goHome": "На главную",
+		"metaTitle": "Нет доступа",
+		"signOut": "Выйти",
+		"title": "Нет доступа"
+	},
+	"userAction": {
+		"assignArticle": "Назначить статью",
+		"newQuote": "Новая цитата",
+		"notifications": "Уведомления",
+		"reviewArticle": "Проверка статьи",
+		"scheduler": "Планирование событий",
+		"signOut": "Выйти",
+		"writeArticle": "Написать статью"
+	},
+	"userNavigation": {
+		"greeting": "Привет",
+		"signIn": "Вход"
+	},
+	"validation": {
+		"emptyFieldSet": "Необходимо указать хотя бы одно значение для поля «{field}»",
+		"invalidEmail": "Указан недействительный адрес электронной почты для поля «{field}»",
+		"invalidField": "{field} недействительно",
+		"invalidUrl": "Вы указали недействительный URL для поля «{field}»",
+		"maxCharacters": "Поле {field} слишком длинное ({max} максимум символов)",
+		"minCharacters": "Поле «{field}» слишком короткое (минимум {min} символов)",
+		"nonEmpty": "Поле {field} не может быть пустым"
+	},
+	"writeArticle": {
+		"author": "Автор",
+		"autoSave": "Автосохранение",
+		"bodyField": "Текст статьи",
+		"bodyPlaceholder": "Начните писать здесь...",
+		"detailedMessage": "Ваша статья отправлена и будет рассмотрена и обработана.",
+		"discardDraftButton": "Удалить черновик",
+		"discardDraftDialogMessage": "Вы уверены, что хотите удалить этот черновик? Если вы уже отправляли этот черновик ранее и он ожидает утверждения, ваша отправленная статья будет удалена.",
+		"discardDraftDialogTitle": "Удалить черновик",
+		"discardDraftFail": "Не удалось удалить ваш черновик. Ошибка: {message}",
+		"discardDraftMainMessage": "Черновик удалён",
+		"discardDraftSuccess": "Ваш черновик удалён",
+		"discardingDraft": "Удаление черновика",
+		"failureMessage": "Не удалось опубликовать статью. Ошибка: {message}",
+		"mainMessage": "Статья отправлена",
+		"metaTitle": "Написать статью",
+		"nextButton": "Продолжить",
+		"preview": "Предпросмотр",
+		"saveDraft": "Сохранить черновик",
+		"saveDraftFailure": "Не удалось сохранить черновик. Ошибка: {message}",
+		"saveDraftSuccess": "Черновик сохранён",
+		"savingDraft": "Сохранение черновика",
+		"submit": "Опубликовать",
+		"successMessage": "Статья успешно опубликована",
+		"title": "Написать статью",
+		"titleField": "Название статьи",
+		"unknownAuthor": "Ваше имя"
 	}
 }

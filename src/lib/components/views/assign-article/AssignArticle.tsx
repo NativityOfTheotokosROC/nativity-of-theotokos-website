@@ -85,6 +85,7 @@ const AssignArticle = function ({ model }) {
 								field: { onChange, onBlur, name, value },
 							}) => (
 								<input
+									lang="en"
 									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.name ? "border-red-800" : "border-gray-400"}`}
 									placeholder={t("authorNameField")}
 									autoCapitalize="words"
@@ -93,7 +94,9 @@ const AssignArticle = function ({ model }) {
 									autoComplete={
 										englishAuthorNameFields.autoComplete
 									}
-									data-tooltip-id={englishAuthorNameFields.dataTooltipId}
+									data-tooltip-id={
+										englishAuthorNameFields.dataTooltipId
+									}
 									onChange={e => {
 										onChange(e);
 										englishAuthorNameFields.onChange(
@@ -127,7 +130,9 @@ const AssignArticle = function ({ model }) {
 									autoComplete={
 										authorEmailFields.autoComplete
 									}
-									data-tooltip-id={authorEmailFields.dataTooltipId}
+									data-tooltip-id={
+										authorEmailFields.dataTooltipId
+									}
 									onChange={e => {
 										onChange(e);
 										authorEmailFields.onChange(

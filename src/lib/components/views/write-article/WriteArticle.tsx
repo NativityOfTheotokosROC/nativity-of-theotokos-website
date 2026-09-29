@@ -140,6 +140,7 @@ const WriteArticle = function ({ model }) {
 					<div className="flex flex-col gap-3">
 						<input
 							{...register("title.english")}
+							lang="en"
 							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.title?.english ? "border-red-800" : "border-gray-400"}`}
 							placeholder={t("titleField")}
 							autoComplete="off"
@@ -167,6 +168,7 @@ const WriteArticle = function ({ model }) {
 												? "border-red-800"
 												: "border-gray-400",
 											changeCallback: onChange,
+											locale: "en",
 										})}
 									/>
 									{error && (

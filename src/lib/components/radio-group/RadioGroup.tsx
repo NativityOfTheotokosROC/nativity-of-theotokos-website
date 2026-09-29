@@ -31,9 +31,9 @@ const RadioGroup = function ({ model }) {
 				<Field key={item.id} className={"flex items-center gap-3"}>
 					<Radio
 						value={item}
-						className="group flex size-4 max-h-6 max-w-6 items-center justify-center rounded-full border border-gray-400 bg-white transition duration-200 ease-out data-checked:border-2 data-checked:border-gray-800"
+						className="group flex size-4.5 max-h-4.5 max-w-4.5 items-stretch justify-stretch overflow-clip rounded-full border border-gray-400 bg-white p-0.5 transition duration-300 ease-out hover:border-2 active:border-2 active:border-gray-800 data-checked:border-2 data-checked:border-gray-800"
 					>
-						<div className="invisible size-2 rounded-full bg-gray-800 transition duration-200 ease-out group-data-checked:visible" />
+						<div className="invisible bg-gray-800 transition duration-300 ease-out group-data-checked:visible" />
 					</Radio>
 					<Label>{item.text}</Label>
 				</Field>

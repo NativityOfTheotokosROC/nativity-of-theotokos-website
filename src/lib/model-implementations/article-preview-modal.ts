@@ -8,9 +8,7 @@ import {
 	ArticlePreviewModalModel,
 } from "../models/article-preview-modal";
 
-export function articlePreviewModalVIInterface(
-	submitCallback: () => Promise<void>,
-) {
+export function articlePreviewModalVIInterface(submitCallback: () => void) {
 	return {
 		async produceModelView(interaction, currentModelView) {
 			const initErrorMessage = "The model is uninitialized";
@@ -27,7 +25,7 @@ export function articlePreviewModalVIInterface(
 				}
 				case "SUBMIT": {
 					if (!currentModelView) throw new Error(initErrorMessage);
-					await submitCallback();
+					submitCallback();
 					return { ...currentModelView, isOpen: false };
 				}
 			}
@@ -38,7 +36,7 @@ export function articlePreviewModalVIInterface(
 	>;
 }
 
-export function useArticlePreviewModal(submitCallback: () => Promise<void>) {
+export function useArticlePreviewModal(submitCallback: () => void) {
 	const model = useNewStatefulInteractiveModel(
 		articlePreviewModalVIInterface(submitCallback),
 	);

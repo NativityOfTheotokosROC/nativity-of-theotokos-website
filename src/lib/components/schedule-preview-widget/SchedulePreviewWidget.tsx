@@ -53,7 +53,13 @@ const SchedulePreviewWidget = function ({ model }) {
 					.slice(highlightedScheduleItem ? 0 : 1, maxDisplayedItems)
 					.map((scheduleItem, index) => (
 						<ScheduleItem
-							key={index}
+							key={
+								"id" in scheduleItem
+									? `specific_${scheduleItem.id ?? 0 + index}`
+									: "recurringItemId" in scheduleItem
+										? `recurring_${scheduleItem.recurringItemId ?? 0 + index}`
+										: index
+							}
 							model={newReadonlyModel({
 								scheduleItem,
 								variant: "basic",

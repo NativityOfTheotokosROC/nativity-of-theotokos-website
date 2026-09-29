@@ -21,6 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { addDays } from "date-fns";
+import { useLocale } from "next-intl";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
@@ -29,6 +30,7 @@ const NewQuote = function ({ model }) {
 	const { modelView, interact } = model;
 	const { newQuoteNotification, autoCompleteInfo } = modelView;
 	const t = useTranslations("newQuote");
+	const locale = useLocale();
 	const defaultValues = getDefaultValues();
 	const currentDate = getDateString(new Date(), true);
 	const {
@@ -184,6 +186,7 @@ const NewQuote = function ({ model }) {
 										},
 									}) => (
 										<input
+											lang="en"
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.author?.english ? "border-red-800" : "border-gray-400"}`}
 											placeholder={t("author")}
 											name={name}
@@ -225,6 +228,7 @@ const NewQuote = function ({ model }) {
 										},
 									}) => (
 										<input
+											lang="en"
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.source?.english ? "border-red-800" : "border-gray-400"}`}
 											placeholder={`${t("source")} (${t("optional")})`}
 											name={name}
@@ -258,11 +262,12 @@ const NewQuote = function ({ model }) {
 									</span>
 								)}
 								<textarea
+									{...register("quote.english")}
+									lang="en"
 									className={`w-full resize-none rounded-lg border bg-white p-4 ${errors.quote?.english ? "border-red-800" : "border-gray-400"}`}
 									placeholder={t("quote")}
 									rows={5}
 									autoComplete="off"
-									{...register("quote.english")}
 								/>
 								{errors.quote?.english && (
 									<span className="text-sm text-red-800">
@@ -283,6 +288,7 @@ const NewQuote = function ({ model }) {
 										},
 									}) => (
 										<input
+											lang="ru"
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.author?.russian ? "border-red-800" : "border-gray-400"}`}
 											placeholder={`${t("author")} (${t("optional")})`}
 											name={name}
@@ -328,6 +334,7 @@ const NewQuote = function ({ model }) {
 										},
 									}) => (
 										<input
+											lang="ru"
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.source?.russian ? "border-red-800" : "border-gray-400"}`}
 											placeholder={`${t("source")} (${t("optional")})`}
 											name={name}
@@ -361,11 +368,12 @@ const NewQuote = function ({ model }) {
 									</span>
 								)}
 								<textarea
+									{...register("quote.russian")}
+									lang="ru"
 									className={`w-full resize-none rounded-lg border bg-white p-4 ${errors.quote?.russian ? "border-red-800" : "border-gray-400"}`}
 									placeholder={`${t("quote")} (${t("optional")})`}
 									rows={5}
 									autoComplete="off"
-									{...register("quote.russian")}
 								/>
 								{errors.quote?.russian && (
 									<span className="text-sm text-red-800">
@@ -390,13 +398,14 @@ const NewQuote = function ({ model }) {
 										{value && (
 											<>
 												<input
+													{...register(
+														"scheduledDate",
+													)}
+													lang={locale}
 													className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.scheduledDate ? "border-red-800" : "border-gray-400"}`}
 													type="date"
 													formNoValidate
 													min={currentDate}
-													{...register(
-														"scheduledDate",
-													)}
 												/>
 												{errors.scheduledDate && (
 													<span className="text-sm text-red-800">
