@@ -28,12 +28,14 @@ const Tabs = function ({
 		animations,
 	} = modelView;
 	const [previousTab, setPreviousTab] = useState<number | undefined>();
-	let slideAnimation: "slide-right" | "slide-left" | null = null;
-	if (previousTab !== undefined && previousTab < selectedTab) {
-		slideAnimation = "slide-left";
-	} else if (previousTab !== undefined && previousTab > selectedTab) {
-		slideAnimation = "slide-right";
-	}
+	const slideAnimation: "slide-right" | "slide-left" | null =
+		previousTab !== undefined
+			? previousTab < selectedTab
+				? "slide-left"
+				: previousTab > selectedTab
+					? "slide-right"
+					: null
+			: null;
 
 	return (
 		<TabGroup
@@ -45,7 +47,7 @@ const Tabs = function ({
 		>
 			<TabList
 				className={twMerge(
-					`flex max-w-full items-end gap-1 overflow-x-auto`,
+					`flex max-w-full items-end gap-1 overflow-x-auto pb-2`,
 					tabsPosition === "center"
 						? "justify-center"
 						: tabsPosition === "start"
@@ -59,7 +61,7 @@ const Tabs = function ({
 				{tabs.map((tab, index) => (
 					<Tab
 						key={index}
-						className={`flex max-w-full ${tabsLayout === "fill" ? "flex-1" : ""} items-center justify-center border-b-5 border-gray-300 p-4 py-2 text-sm wrap-break-word hyphens-auto uppercase focus:outline-none data-hover:border-gray-600 data-selected:border-gray-900`}
+						className={`flex max-w-full ${tabsLayout === "fill" ? "flex-1" : ""} items-center justify-center border-b-5 border-gray-300 p-4 py-2 pt-0 text-sm wrap-break-word hyphens-auto uppercase focus:outline-none data-hover:border-gray-600 data-selected:border-gray-900`}
 						as={"button"}
 					>
 						{tab.modelView.name}
