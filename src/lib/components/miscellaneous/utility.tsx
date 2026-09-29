@@ -18,7 +18,6 @@ export function createToast(notification: ToastNotification) {
 			leaveFrom="opacity-100 scale-100"
 			leaveTo={`opacity-0 scale-92`}
 			as="div"
-			className="contents flex-1"
 		>
 			<Toast model={newReadonlyModel({ notification })} />
 		</Transition>
