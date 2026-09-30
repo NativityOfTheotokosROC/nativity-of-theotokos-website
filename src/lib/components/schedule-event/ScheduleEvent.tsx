@@ -153,7 +153,7 @@ const RecurringScheduleEventForm = function ({ model }) {
 							const days =
 								transformPatternToDays(value) ?? new Set<Day>();
 							return (
-								<div className="flex gap-1" ref={ref}>
+								<div className="flex gap-1" ref={ref} tabIndex={0}>
 									{dayTranslationMap
 										.entries()
 										.map(([day, translation]) => (
@@ -219,9 +219,7 @@ const RecurringScheduleEventForm = function ({ model }) {
 						<Button
 							model={newReadonlyModel({
 								disabled: !isValid,
-								action: () => {
-									options.previewCallback!();
-								},
+								action: options.previewCallback!,
 							})}
 						>
 							{t("previewButton")}
@@ -650,8 +648,13 @@ function EventTimesFormControl({
 }) {
 	const locale = useLocale();
 	const t = useTranslations("scheduler");
-	const { control, getValues, setValue, watch } =
-		useFormContext<Pick<NewScheduleItem, "times">>();
+	const {
+		control,
+		getValues,
+		setValue,
+		watch,
+		formState: { errors },
+	} = useFormContext<Pick<NewScheduleItem, "times">>();
 
 	const englishDesignationsAutoCompleteBox = useAutoCompleteBox<
 		Translation,
@@ -729,43 +732,41 @@ function EventTimesFormControl({
 				</Button>
 				<div className="flex flex-col gap-2">
 					{watch("times").map((_, index) => (
-						<div
-							key={index}
-							className="flex flex-col gap-1 md:flex-row"
-						>
-							<Controller
-								control={control}
-								name={`times.${index}.designation`}
-								render={({
-									field: {
-										name,
-										onChange,
-										onBlur,
-										value,
-										ref,
-									},
-									fieldState: { error },
-								}) => (
-									<div className="contents" ref={ref}>
+						<>
+							<div
+								key={index}
+								className="flex flex-col gap-1 md:flex-row"
+							>
+								<Controller
+									control={control}
+									name={`times.${index}.designation.english`}
+									render={({
+										field: {
+											onChange,
+											onBlur,
+											value,
+											name,
+											ref,
+										},
+										fieldState: { error },
+									}) => (
 										<input
+											ref={ref}
 											lang="en"
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 											placeholder={t(
 												"designationFieldEn",
 											)}
 											autoCapitalize="words"
-											name={`${name}.english`}
-											value={value.english}
+											name={name}
+											value={value}
 											autoComplete={"off"}
-											data-tooltip-id={`${name}.english`}
+											data-tooltip-id={name}
 											onChange={e => {
-												onChange({
-													...value,
-													english: e.target.value,
-												});
+												onChange(e.target.value);
 												englishDesignationFields.onChange(
 													e.target.value,
-													`${name}.english`,
+													name,
 												);
 											}}
 											onBlur={() => {
@@ -773,30 +774,42 @@ function EventTimesFormControl({
 												englishDesignationFields.onBlur();
 											}}
 										/>
+									)}
+								/>
+								<Controller
+									control={control}
+									name={`times.${index}.designation.russian`}
+									render={({
+										field: {
+											onChange,
+											onBlur,
+											value,
+											name,
+											ref,
+										},
+										fieldState: { error },
+									}) => (
 										<input
+											ref={ref}
 											lang="ru"
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 											placeholder={t(
 												"designationFieldRu",
 											)}
 											autoCapitalize="words"
-											name={`${name}.russian`}
+											name={name}
 											value={
-												typeof value.russian ===
-												"string"
-													? value.russian
+												typeof value === "string"
+													? value
 													: ""
 											}
 											autoComplete={"off"}
-											data-tooltip-id={`${name}.russian`}
+											data-tooltip-id={name}
 											onChange={e => {
-												onChange({
-													...value,
-													russian: e.target.value,
-												});
+												onChange(e.target.value);
 												russianDesignationFields.onChange(
 													e.target.value,
-													`${name}.russian`,
+													name,
 												);
 											}}
 											onBlur={() => {
@@ -804,58 +817,53 @@ function EventTimesFormControl({
 												russianDesignationFields.onBlur();
 											}}
 										/>
-									</div>
-								)}
-							/>
-							<Controller
-								control={control}
-								name={`times.${index}.time`}
-								render={({
-									field: {
-										name,
-										onChange,
-										onBlur,
-										value,
-										ref,
-									},
-									fieldState: { error },
-								}) => (
-									<>
-										<input
-											ref={ref}
-											lang={locale}
-											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
-											type="time"
-											placeholder={t("timeField")}
-											name={name}
-											value={value}
-											onChange={onChange}
-											onBlur={onBlur}
-											formNoValidate
-										/>
-									</>
-								)}
-							/>
-							<Button
-								model={newReadonlyModel({
-									title: t("deleteTime"),
-									variant: "alternative",
-									disabled: index === 0,
-									className:
-										"flex justify-center items-center w-fit",
-									action: () =>
-										setValue(
-											"times",
-											getValues("times").toSpliced(
-												index,
-												1,
+									)}
+								/>
+								<Controller
+									control={control}
+									name={`times.${index}.time`}
+									render={({
+										field,
+										fieldState: { error },
+									}) => (
+										<>
+											<input
+												{...field}
+												lang={locale}
+												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+												type="time"
+												placeholder={t("timeField")}
+												formNoValidate
+											/>
+										</>
+									)}
+								/>
+								<Button
+									model={newReadonlyModel({
+										title: t("deleteTime"),
+										variant: "alternative",
+										disabled: index === 0,
+										className:
+											"flex justify-center items-center w-fit",
+										action: () =>
+											setValue(
+												"times",
+												getValues("times").toSpliced(
+													index,
+													1,
+												),
 											),
-										),
-								})}
-							>
-								<Trash2Icon strokeWidth={1.5} />
-							</Button>
-						</div>
+									})}
+								>
+									<Trash2Icon strokeWidth={1.5} />
+								</Button>
+							</div>
+							{errors.times && errors.times[index] && (
+								<span className="text-sm text-red-800">
+									{errors.times[index].message}
+								</span>
+							)}
+						</>
 					))}
 				</div>
 			</div>

@@ -245,6 +245,7 @@ const ReviewArticle = function ({ model }) {
 											<div
 												className="flex h-[15em] w-full items-stretch justify-stretch overflow-clip rounded-lg md:h-fit md:max-h-[25em]"
 												ref={ref}
+												tabIndex={0}
 											>
 												<Image
 													className="h-full w-full grow object-cover object-center"
