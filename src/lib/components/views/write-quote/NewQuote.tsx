@@ -142,9 +142,9 @@ const NewQuote = function ({ model }) {
 								input: {
 									newQuote: form,
 									options: {
-										successCallback() {
+										async successCallback() {
 											reset();
-											tabs.interact({
+											await tabs.interact({
 												type: "SWITCH_TAB",
 												input: { id: 0 },
 											});
@@ -154,13 +154,13 @@ const NewQuote = function ({ model }) {
 								},
 							});
 						},
-						errors => {
+						async errors => {
 							if (
 								errors.author?.english ||
 								errors.source?.english ||
 								errors.quote?.english
 							)
-								tabs.interact({
+								await tabs.interact({
 									type: "SWITCH_TAB",
 									input: { id: 0 },
 								});
@@ -169,7 +169,7 @@ const NewQuote = function ({ model }) {
 								errors.source?.russian ||
 								errors.quote?.russian
 							)
-								tabs.interact({
+								await tabs.interact({
 									type: "SWITCH_TAB",
 									input: { id: 1 },
 								});

@@ -111,7 +111,7 @@ const RecurringScheduleEventForm = function ({ model }) {
 
 	return (
 		<form
-			className="schedule-event-form"
+			className="schedule-recurring-event-form"
 			onSubmit={handleSubmit(async form => {
 				const existingItemId = scheduleEvent.scheduleItem?.id;
 				await interact({
@@ -133,7 +133,7 @@ const RecurringScheduleEventForm = function ({ model }) {
 									},
 								},
 				});
-				scrollToElement("schedule-event-form");
+				scrollToElement("schedule-recurring-event-form");
 			})}
 		>
 			<div className="flex flex-col gap-4 md:w-3/4 lg:w-6/10">
@@ -271,6 +271,7 @@ const SpecificScheduleEventForm = function ({ model }) {
 
 	return (
 		<form
+			className="schedule-specific-event-form"
 			onSubmit={handleSubmit(async form => {
 				const existingItemId = scheduleEvent.scheduleItem?.id;
 				await interact({
@@ -292,6 +293,7 @@ const SpecificScheduleEventForm = function ({ model }) {
 									},
 								},
 				});
+				scrollToElement("schedule-specific-event-form");
 			})}
 		>
 			<div className="flex flex-col gap-4 md:w-3/4 lg:w-6/10">
