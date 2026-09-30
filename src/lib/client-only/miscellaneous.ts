@@ -1,6 +1,12 @@
 import { useEffect } from "react";
 
-export function scrollToElement(selector: string) {
+export function scrollToElement(selector?: string) {
+	if (selector === undefined) {
+		document.activeElement?.scrollIntoView({
+			behavior: "smooth",
+		});
+		return;
+	}
 	const target = document.querySelector(selector);
 	if (!target) return;
 	target?.scrollIntoView({

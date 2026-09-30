@@ -173,7 +173,7 @@ const NewQuote = function ({ model }) {
 									type: "SWITCH_TAB",
 									input: { id: 1 },
 								});
-							scrollToElement(".quote-form");
+							scrollToElement();
 						},
 					)}
 				>
