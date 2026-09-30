@@ -199,24 +199,27 @@ const ReviewArticle = function ({ model }) {
 									control={control}
 									name={"body.english"}
 									render={({ field: { onChange } }) => (
-										<Editor
-											model={newReadonlyModel({
-												initialContent:
-													draft.body.english,
-												className: errors.body?.english
-													? "border-red-800"
-													: "border-gray-400",
-												changeCallback: onChange,
-												locale: "en",
-											})}
-										/>
+										<>
+											<Editor
+												model={newReadonlyModel({
+													initialContent:
+														draft.body.english,
+													className: errors.body
+														?.english
+														? "border-red-800"
+														: "border-gray-400",
+													changeCallback: onChange,
+													locale: "en",
+												})}
+											/>
+											{errors.body?.english && (
+												<span className="text-sm text-red-800">
+													{errors.body.message}
+												</span>
+											)}
+										</>
 									)}
 								/>
-								{errors.body?.english && (
-									<span className="text-sm text-red-800">
-										{errors.body.message}
-									</span>
-								)}
 								<input
 									{...register("snippet.english")}
 									lang="en"
@@ -231,67 +234,98 @@ const ReviewArticle = function ({ model }) {
 								)}
 							</div>
 							<div className="flex flex-1 flex-col gap-3 md:max-w-[33em]">
-								<div className="flex h-[15em] w-full items-stretch justify-stretch overflow-clip rounded-lg md:h-fit md:max-h-[25em]">
-									<Image
-										className="h-full w-full grow object-cover object-center"
-										src={
-											imageProcessor.modelView
-												.processedImage?.blobURL ??
-											currentArticle?.articleImage.url ??
-											DEFAULT_ARTICLE_PREVIEW_IMAGE
-										}
-										placeholder="blur"
-										blurDataURL={
-											currentArticle?.articleImage
-												.placeholder ??
-											DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER
-										}
-										alt={t("imageAlt")}
-										unoptimized={true}
-									/>
-								</div>
-								{errors.image?.url && (
-									<span className="text-sm text-red-800">
-										{errors.image.url.message}
-									</span>
-								)}
-								<div className="flex items-center gap-6">
-									<FileSelectorButton
-										model={newReadonlyModel({
-											fileSelector: imageSelector,
-											contents:
-												currentArticle?.articleImage
-													? t("changeImage")
-													: t("selectImage"),
-											contentsWhenFile: t("changeImage"),
-										})}
-									/>
-									{imageStatus && (
-										<div className="flex items-center gap-3">
-											{imageStatus === "processing" && (
-												<Spinner
-													model={newReadonlyModel({
-														size: 20,
-														color: "black",
-													})}
+								<Controller
+									control={control}
+									name="image.url"
+									render={({
+										field: { value, ref },
+										fieldState: { error },
+									}) => (
+										<>
+											<div
+												className="flex h-[15em] w-full items-stretch justify-stretch overflow-clip rounded-lg md:h-fit md:max-h-[25em]"
+												ref={ref}
+											>
+												<Image
+													className="h-full w-full grow object-cover object-center"
+													src={
+														(imageProcessor
+															.modelView
+															.processedImage
+															?.blobURL ??
+														value !== "")
+															? value
+															: DEFAULT_ARTICLE_PREVIEW_IMAGE
+													}
+													placeholder="blur"
+													blurDataURL={
+														currentArticle
+															?.articleImage
+															.placeholder ??
+														DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER
+													}
+													alt={t("imageAlt")}
+													unoptimized={true}
 												/>
-											)}
-											{imageStatus === "success" && (
-												<Check className="size-8 stroke-black" />
-											)}
-											{imageStatus === "error" && (
-												<X className="size-8 stroke-red-800 text-red-800" />
-											)}
-											{imageStatusMessage && (
-												<span
-													className={`text-sm ${imageStatus === "error" ? "text-red-800" : "text-black"}`}
-												>
-													{imageStatusMessage}
+											</div>
+											{error && (
+												<span className="text-sm text-red-800">
+													{error.message}
 												</span>
 											)}
-										</div>
+											<div className="flex items-center gap-6">
+												<FileSelectorButton
+													model={newReadonlyModel({
+														fileSelector:
+															imageSelector,
+														contents:
+															currentArticle?.articleImage
+																? t(
+																		"changeImage",
+																	)
+																: t(
+																		"selectImage",
+																	),
+														contentsWhenFile:
+															t("changeImage"),
+													})}
+												/>
+												{imageStatus && (
+													<div className="flex items-center gap-3">
+														{imageStatus ===
+															"processing" && (
+															<Spinner
+																model={newReadonlyModel(
+																	{
+																		size: 20,
+																		color: "black",
+																	},
+																)}
+															/>
+														)}
+														{imageStatus ===
+															"success" && (
+															<Check className="size-8 stroke-black" />
+														)}
+														{imageStatus ===
+															"error" && (
+															<X className="size-8 stroke-red-800 text-red-800" />
+														)}
+														{imageStatusMessage && (
+															<span
+																className={`text-sm ${imageStatus === "error" ? "text-red-800" : "text-black"}`}
+															>
+																{
+																	imageStatusMessage
+																}
+															</span>
+														)}
+													</div>
+												)}
+											</div>
+										</>
 									)}
-								</div>
+								/>
 								<input
 									{...register("image.caption.english")}
 									lang="en"

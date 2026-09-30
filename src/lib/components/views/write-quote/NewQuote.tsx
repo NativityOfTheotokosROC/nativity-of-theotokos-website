@@ -188,9 +188,11 @@ const NewQuote = function ({ model }) {
 											onChange,
 											onBlur,
 											value,
+											ref,
 										},
 									}) => (
 										<input
+											ref={ref}
 											lang="en"
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.author?.english ? "border-red-800" : "border-gray-400"}`}
 											placeholder={t("author")}
@@ -230,9 +232,11 @@ const NewQuote = function ({ model }) {
 											onChange,
 											onBlur,
 											value,
+											ref,
 										},
 									}) => (
 										<input
+											ref={ref}
 											lang="en"
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.source?.english ? "border-red-800" : "border-gray-400"}`}
 											placeholder={`${t("source")} (${t("optional")})`}
@@ -290,9 +294,11 @@ const NewQuote = function ({ model }) {
 											onChange,
 											onBlur,
 											value,
+											ref,
 										},
 									}) => (
 										<input
+											ref={ref}
 											lang="ru"
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.author?.russian ? "border-red-800" : "border-gray-400"}`}
 											placeholder={`${t("author")} (${t("optional")})`}
@@ -336,9 +342,11 @@ const NewQuote = function ({ model }) {
 											onChange,
 											onBlur,
 											value,
+											ref,
 										},
 									}) => (
 										<input
+											ref={ref}
 											lang="ru"
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.source?.russian ? "border-red-800" : "border-gray-400"}`}
 											placeholder={`${t("source")} (${t("optional")})`}

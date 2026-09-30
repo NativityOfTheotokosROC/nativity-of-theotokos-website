@@ -22,7 +22,7 @@ const AssignArticle = function ({ model }) {
 		handleSubmit,
 		setValue,
 		reset,
-		formState: { errors, isSubmitting },
+		formState: { isSubmitting },
 	} = useForm({
 		defaultValues: { name: BLANK_TRANSLATION, email: "" },
 		resolver: zodResolver(useArticleAuthorSchema()),
@@ -82,75 +82,85 @@ const AssignArticle = function ({ model }) {
 							name="name.english"
 							control={control}
 							render={({
-								field: { onChange, onBlur, name, value },
+								field: { onChange, onBlur, name, value, ref },
+								fieldState: { error },
 							}) => (
-								<input
-									lang="en"
-									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.name ? "border-red-800" : "border-gray-400"}`}
-									placeholder={t("authorNameField")}
-									autoCapitalize="words"
-									name={name}
-									value={value}
-									autoComplete={
-										englishAuthorNameFields.autoComplete
-									}
-									data-tooltip-id={
-										englishAuthorNameFields.dataTooltipId
-									}
-									onChange={e => {
-										onChange(e);
-										englishAuthorNameFields.onChange(
-											e.target.value,
-										);
-									}}
-									onBlur={() => {
-										onBlur();
-										englishAuthorNameFields.onBlur();
-									}}
-								/>
+								<>
+									<input
+										ref={ref}
+										lang="en"
+										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+										placeholder={t("authorNameField")}
+										autoCapitalize="words"
+										name={name}
+										value={value}
+										autoComplete={
+											englishAuthorNameFields.autoComplete
+										}
+										data-tooltip-id={
+											englishAuthorNameFields.dataTooltipId
+										}
+										onChange={e => {
+											onChange(e);
+											englishAuthorNameFields.onChange(
+												e.target.value,
+											);
+										}}
+										onBlur={() => {
+											onBlur();
+											englishAuthorNameFields.onBlur();
+										}}
+									/>
+									{error && (
+										<span className="text-sm text-red-800">
+											{error.message}
+										</span>
+									)}
+								</>
 							)}
 						/>
-						{errors?.name && (
-							<span className="text-sm text-red-800">
-								{errors.name.message}
-							</span>
-						)}
+
 						<Controller
 							name="email"
 							control={control}
 							render={({
-								field: { onChange, onBlur, name, value },
+								field: { onChange, onBlur, name, value, ref },
+								fieldState: { error },
 							}) => (
-								<input
-									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.email ? "border-red-800" : "border-gray-400"}`}
-									placeholder={t("emailField")}
-									type="email"
-									name={name}
-									value={value}
-									autoComplete={
-										authorEmailFields.autoComplete
-									}
-									data-tooltip-id={
-										authorEmailFields.dataTooltipId
-									}
-									onChange={e => {
-										onChange(e);
-										authorEmailFields.onChange(
-											e.target.value,
-										);
-									}}
-									onBlur={() => {
-										onBlur();
-										authorEmailFields.onBlur();
-									}}
-								/>
+								<>
+									<input
+										ref={ref}
+										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+										placeholder={t("emailField")}
+										type="email"
+										name={name}
+										value={value}
+										autoComplete={
+											authorEmailFields.autoComplete
+										}
+										data-tooltip-id={
+											authorEmailFields.dataTooltipId
+										}
+										onChange={e => {
+											onChange(e);
+											authorEmailFields.onChange(
+												e.target.value,
+											);
+										}}
+										onBlur={() => {
+											onBlur();
+											authorEmailFields.onBlur();
+										}}
+									/>
+									{error && (
+										<span className="text-sm text-red-800">
+											{error.message}
+										</span>
+									)}
+								</>
 							)}
 						/>
-						{errors.email && (
-							<span className="text-sm text-red-800">
-								{errors.email.message}
-							</span>
-						)}
+
 						<hr className="mt-10 w-full" />
 						<Button
 							model={newReadonlyModel({

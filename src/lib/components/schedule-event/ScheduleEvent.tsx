@@ -33,6 +33,7 @@ import RadioGroup from "../radio-group/RadioGroup";
 import { useMemo } from "react";
 import { useLocale } from "next-intl";
 import { scrollToElement } from "../../client-only/miscellaneous";
+import Spinner from "../spinner/Spinner";
 
 const ScheduleEvent = function ({ model }) {
 	const { modelView } = model;
@@ -146,13 +147,13 @@ const RecurringScheduleEventForm = function ({ model }) {
 						control={control}
 						name="recurringPattern"
 						render={({
-							field: { value, onChange },
+							field: { value, onChange, ref },
 							fieldState: { error },
 						}) => {
 							const days =
 								transformPatternToDays(value) ?? new Set<Day>();
 							return (
-								<div className="flex gap-1">
+								<div className="flex gap-1" ref={ref}>
 									{dayTranslationMap
 										.entries()
 										.map(([day, translation]) => (
@@ -232,10 +233,19 @@ const RecurringScheduleEventForm = function ({ model }) {
 							type: "submit",
 						})}
 					>
-						{scheduleEvent.scheduleItem &&
-						"id" in scheduleEvent.scheduleItem
-							? t("modifyButton")
-							: t("scheduleButton")}
+						{isSubmitting ? (
+							<Spinner
+								model={newReadonlyModel({
+									color: "white",
+									size: 20,
+								})}
+							/>
+						) : scheduleEvent.scheduleItem &&
+						  "id" in scheduleEvent.scheduleItem ? (
+							t("modifyButton")
+						) : (
+							t("scheduleButton")
+						)}
 					</Button>
 				</ButtonBar>
 			</div>
@@ -441,11 +451,12 @@ function EventMetadataFormControl({
 					control={control}
 					name="title.english"
 					render={({
-						field: { onChange, onBlur, name, value },
+						field: { onChange, onBlur, name, value, ref },
 						fieldState: { error },
 					}) => (
 						<>
 							<input
+								ref={ref}
 								lang="en"
 								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 								placeholder={t("titleFieldEn")}
@@ -477,11 +488,12 @@ function EventMetadataFormControl({
 					control={control}
 					name="title.russian"
 					render={({
-						field: { onChange, onBlur, name, value },
+						field: { onChange, onBlur, name, value, ref },
 						fieldState: { error },
 					}) => (
 						<>
 							<input
+								ref={ref}
 								lang="ru"
 								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 								placeholder={t("titleFieldRu")}
@@ -513,11 +525,12 @@ function EventMetadataFormControl({
 					control={control}
 					name="venue.english"
 					render={({
-						field: { onChange, onBlur, name, value },
+						field: { onChange, onBlur, name, value, ref },
 						fieldState: { error },
 					}) => (
 						<>
 							<input
+								ref={ref}
 								lang="en"
 								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 								placeholder={t("venueFieldEn")}
@@ -549,11 +562,12 @@ function EventMetadataFormControl({
 					control={control}
 					name="venue.russian"
 					render={({
-						field: { onChange, onBlur, name, value },
+						field: { onChange, onBlur, name, value, ref },
 						fieldState: { error },
 					}) => (
 						<>
 							<input
+								ref={ref}
 								lang="ru"
 								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 								placeholder={t("venueFieldRu")}
@@ -723,10 +737,16 @@ function EventTimesFormControl({
 								control={control}
 								name={`times.${index}.designation`}
 								render={({
-									field: { name, onChange, onBlur, value },
+									field: {
+										name,
+										onChange,
+										onBlur,
+										value,
+										ref,
+									},
 									fieldState: { error },
 								}) => (
-									<>
+									<div className="contents" ref={ref}>
 										<input
 											lang="en"
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
@@ -784,18 +804,25 @@ function EventTimesFormControl({
 												russianDesignationFields.onBlur();
 											}}
 										/>
-									</>
+									</div>
 								)}
 							/>
 							<Controller
 								control={control}
 								name={`times.${index}.time`}
 								render={({
-									field: { name, onChange, onBlur, value },
+									field: {
+										name,
+										onChange,
+										onBlur,
+										value,
+										ref,
+									},
 									fieldState: { error },
 								}) => (
 									<>
 										<input
+											ref={ref}
 											lang={locale}
 											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
 											type="time"
