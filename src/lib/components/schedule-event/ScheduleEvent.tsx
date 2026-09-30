@@ -153,7 +153,11 @@ const RecurringScheduleEventForm = function ({ model }) {
 							const days =
 								transformPatternToDays(value) ?? new Set<Day>();
 							return (
-								<div className="flex gap-1" ref={ref} tabIndex={0}>
+								<div
+									className="flex gap-1"
+									ref={ref}
+									tabIndex={0}
+								>
 									{dayTranslationMap
 										.entries()
 										.map(([day, translation]) => (
@@ -860,7 +864,11 @@ function EventTimesFormControl({
 							</div>
 							{errors.times && errors.times[index] && (
 								<span className="text-sm text-red-800">
-									{errors.times[index].message}
+									{errors.times[index].designation?.english
+										?.message ||
+										errors.times[index].designation?.russian
+											?.message ||
+										errors.times[index].time?.message}
 								</span>
 							)}
 						</>
