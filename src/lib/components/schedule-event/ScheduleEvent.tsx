@@ -32,6 +32,7 @@ import { useScheduleEventForm } from "@/src/lib/utilities/scheduler";
 import RadioGroup from "../radio-group/RadioGroup";
 import { useMemo } from "react";
 import { useLocale } from "next-intl";
+import { scrollToElement } from "../../client-only/miscellaneous";
 
 const ScheduleEvent = function ({ model }) {
 	const { modelView } = model;
@@ -110,6 +111,7 @@ const RecurringScheduleEventForm = function ({ model }) {
 
 	return (
 		<form
+			className="schedule-event-form"
 			onSubmit={handleSubmit(async form => {
 				const existingItemId = scheduleEvent.scheduleItem?.id;
 				await interact({
@@ -131,6 +133,7 @@ const RecurringScheduleEventForm = function ({ model }) {
 									},
 								},
 				});
+				scrollToElement("schedule-event-form");
 			})}
 		>
 			<div className="flex flex-col gap-4 md:w-3/4 lg:w-6/10">

@@ -1,6 +1,9 @@
 "use client";
 
-import { useCloseWarning } from "@/src/lib/client-only/miscellaneous";
+import {
+	scrollToElement,
+	useCloseWarning,
+} from "@/src/lib/client-only/miscellaneous";
 import AutoCompleteBox from "@/src/lib/components/auto-complete-box/AutoCompleteBox";
 import Button from "@/src/lib/components/button/Button";
 import Checkbox from "@/src/lib/components/checkbox/Checkbox";
@@ -131,6 +134,7 @@ const NewQuote = function ({ model }) {
 					</>
 				)}
 				<form
+					className="quote-form"
 					onSubmit={handleSubmit(
 						async form => {
 							await interact({
@@ -144,6 +148,7 @@ const NewQuote = function ({ model }) {
 												type: "SWITCH_TAB",
 												input: { id: 0 },
 											});
+											scrollToElement("quote-form");
 										},
 									},
 								},
@@ -168,6 +173,7 @@ const NewQuote = function ({ model }) {
 									type: "SWITCH_TAB",
 									input: { id: 1 },
 								});
+							scrollToElement("quote-form");
 						},
 					)}
 				>
