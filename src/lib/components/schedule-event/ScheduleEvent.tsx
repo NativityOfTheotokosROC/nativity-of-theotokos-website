@@ -133,7 +133,7 @@ const RecurringScheduleEventForm = function ({ model }) {
 									},
 								},
 				});
-				scrollToElement("schedule-recurring-event-form");
+				scrollToElement(".schedule-recurring-event-form");
 			})}
 		>
 			<div className="flex flex-col gap-4 md:w-3/4 lg:w-6/10">
@@ -293,7 +293,7 @@ const SpecificScheduleEventForm = function ({ model }) {
 									},
 								},
 				});
-				scrollToElement("schedule-specific-event-form");
+				scrollToElement(".schedule-specific-event-form");
 			})}
 		>
 			<div className="flex flex-col gap-4 md:w-3/4 lg:w-6/10">

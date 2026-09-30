@@ -148,7 +148,7 @@ const NewQuote = function ({ model }) {
 												type: "SWITCH_TAB",
 												input: { id: 0 },
 											});
-											scrollToElement("quote-form");
+											scrollToElement(".quote-form");
 										},
 									},
 								},
@@ -173,7 +173,7 @@ const NewQuote = function ({ model }) {
 									type: "SWITCH_TAB",
 									input: { id: 1 },
 								});
-							scrollToElement("quote-form");
+							scrollToElement(".quote-form");
 						},
 					)}
 				>
