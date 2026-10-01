@@ -286,7 +286,6 @@ const SpecificScheduleEventForm = function ({ model }) {
 			className="schedule-specific-event-form"
 			onSubmit={handleSubmit(async form => {
 				const existingItemId = scheduleEvent.scheduleItem?.id;
-				console.log(form);
 				await interact({
 					type: "SCHEDULE_EVENT",
 					input:

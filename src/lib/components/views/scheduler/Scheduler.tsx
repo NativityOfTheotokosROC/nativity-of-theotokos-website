@@ -339,16 +339,17 @@ const Scheduler = function ({ model }) {
 								},
 								async interact(interaction) {
 									switch (interaction.type) {
-										case "SCHEDULE_EVENT":
-											if (readyEvent)
-												await interact({
-													type: "SCHEDULE_EVENT",
-													input: {
-														id: eventToEdit
-															.scheduleItem?.id,
-														newEvent: readyEvent,
-													},
-												});
+										case "SCHEDULE_EVENT": {
+											const { newEvent, existingId } =
+												interaction.input;
+											await interact({
+												type: "SCHEDULE_EVENT",
+												input: {
+													newEvent,
+													id: existingId,
+												},
+											});
+										}
 									}
 								},
 							}}
