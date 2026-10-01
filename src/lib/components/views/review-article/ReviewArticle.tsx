@@ -143,7 +143,6 @@ const ReviewArticle = function ({ model }) {
 				<GoHomeButton>{t("nextButton")}</GoHomeButton>
 			</InformationView>
 		);
-	register("image.url");
 
 	return (
 		<>
@@ -198,23 +197,24 @@ const ReviewArticle = function ({ model }) {
 								<Controller
 									control={control}
 									name={"body.english"}
-									render={({ field: { onChange } }) => (
+									render={({
+										field: { onChange, value },
+										fieldState: { error },
+									}) => (
 										<>
 											<Editor
 												model={newReadonlyModel({
-													initialContent:
-														draft.body.english,
-													className: errors.body
-														?.english
+													initialContent: value,
+													className: error
 														? "border-red-800"
 														: "border-gray-400",
 													changeCallback: onChange,
 													locale: "en",
 												})}
 											/>
-											{errors.body?.english && (
+											{error && (
 												<span className="text-sm text-red-800">
-													{errors.body.message}
+													{error.message}
 												</span>
 											)}
 										</>

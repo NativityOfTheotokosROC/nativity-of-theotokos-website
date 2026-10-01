@@ -224,6 +224,7 @@ const RecurringScheduleEventForm = function ({ model }) {
 							model={newReadonlyModel({
 								disabled: !isValid,
 								action: options.previewCallback!,
+								className: "min-w-[8em]",
 							})}
 						>
 							{t("previewButton")}
@@ -233,6 +234,7 @@ const RecurringScheduleEventForm = function ({ model }) {
 						model={newReadonlyModel({
 							disabled: isSubmitting,
 							type: "submit",
+							className: "min-w-[8em]",
 						})}
 					>
 						{isSubmitting ? (
@@ -345,9 +347,8 @@ const SpecificScheduleEventForm = function ({ model }) {
 						<Button
 							model={newReadonlyModel({
 								disabled: !isValid,
-								action: () => {
-									options.previewCallback!();
-								},
+								action: options.previewCallback!,
+								className: "min-w-[8em]",
 							})}
 						>
 							{t("previewButton")}
@@ -357,6 +358,7 @@ const SpecificScheduleEventForm = function ({ model }) {
 						model={newReadonlyModel({
 							disabled: isSubmitting,
 							type: "submit",
+							className: "min-w-[8em]",
 						})}
 					>
 						{isSubmitting ? (

@@ -155,16 +155,14 @@ const WriteArticle = function ({ model }) {
 							control={control}
 							name={"body.english"}
 							render={({
-								field: { onChange },
+								field: { onChange, value },
 								fieldState: { error },
 							}) => (
 								<>
 									<Editor
 										model={newReadonlyModel({
-											initialContent:
-												lastSavedDraft?.body.english ??
-												defaultBody.english,
-											className: errors.body?.english
+											initialContent: value,
+											className: error
 												? "border-red-800"
 												: "border-gray-400",
 											changeCallback: onChange,

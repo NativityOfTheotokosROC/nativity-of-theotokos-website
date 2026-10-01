@@ -1,9 +1,6 @@
 "use client";
 
-import {
-	scrollToElement,
-	useCloseWarning,
-} from "@/src/lib/client-only/miscellaneous";
+import { useCloseWarning } from "@/src/lib/client-only/miscellaneous";
 import AutoCompleteBox from "@/src/lib/components/auto-complete-box/AutoCompleteBox";
 import Button from "@/src/lib/components/button/Button";
 import Checkbox from "@/src/lib/components/checkbox/Checkbox";
@@ -24,8 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { addDays } from "date-fns";
-import { useLocale } from "next-intl";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 
@@ -34,7 +30,6 @@ const NewQuote = function ({ model }) {
 	const { newQuoteNotification, autoCompleteInfo } = modelView;
 	const t = useTranslations("newQuote");
 	const locale = useLocale();
-	const defaultValues = getDefaultValues();
 	const currentDate = getDateString(new Date(), true);
 	const {
 		control,
@@ -47,7 +42,7 @@ const NewQuote = function ({ model }) {
 		mode: "onChange",
 		resolver: zodResolver(useLocalizedSchema(getQuoteFormSchema)),
 		shouldUnregister: true,
-		defaultValues,
+		defaultValues: getDefaultValues(),
 	});
 
 	const tabs = useTabs({
@@ -143,12 +138,12 @@ const NewQuote = function ({ model }) {
 									newQuote: form,
 									options: {
 										async successCallback() {
-											reset();
+											reset(getDefaultValues());
 											await tabs.interact({
 												type: "SWITCH_TAB",
 												input: { id: 0 },
 											});
-											scrollToElement(".quote-form");
+											scrollTo(0, 0);
 										},
 									},
 								},
@@ -190,39 +185,42 @@ const NewQuote = function ({ model }) {
 											value,
 											ref,
 										},
+										fieldState: { error },
 									}) => (
-										<input
-											ref={ref}
-											lang="en"
-											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.author?.english ? "border-red-800" : "border-gray-400"}`}
-											placeholder={t("author")}
-											name={name}
-											value={value}
-											autoCapitalize="words"
-											autoComplete={
-												englishAuthorFields.autoComplete
-											}
-											data-tooltip-id={
-												englishAuthorFields.dataTooltipId
-											}
-											onChange={e => {
-												onChange(e);
-												englishAuthorFields.onChange(
-													e.target.value,
-												);
-											}}
-											onBlur={() => {
-												onBlur();
-												englishAuthorFields.onBlur();
-											}}
-										/>
+										<>
+											<input
+												ref={ref}
+												lang="en"
+												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+												placeholder={t("author")}
+												name={name}
+												value={value}
+												autoCapitalize="words"
+												autoComplete={
+													englishAuthorFields.autoComplete
+												}
+												data-tooltip-id={
+													englishAuthorFields.dataTooltipId
+												}
+												onChange={e => {
+													onChange(e);
+													englishAuthorFields.onChange(
+														e.target.value,
+													);
+												}}
+												onBlur={() => {
+													onBlur();
+													englishAuthorFields.onBlur();
+												}}
+											/>
+											{error && (
+												<span className="text-sm text-red-800">
+													{error.message}
+												</span>
+											)}
+										</>
 									)}
 								/>
-								{errors.author?.english && (
-									<span className="text-sm text-red-800">
-										{errors.author.english.message}
-									</span>
-								)}
 								<Controller
 									control={control}
 									name={"source.english"}
@@ -234,42 +232,45 @@ const NewQuote = function ({ model }) {
 											value,
 											ref,
 										},
+										fieldState: { error },
 									}) => (
-										<input
-											ref={ref}
-											lang="en"
-											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.source?.english ? "border-red-800" : "border-gray-400"}`}
-											placeholder={`${t("source")} (${t("optional")})`}
-											name={name}
-											value={
-												typeof value === "string"
-													? value
-													: ""
-											}
-											autoComplete={
-												englishSourceFields.autoComplete
-											}
-											data-tooltip-id={
-												englishSourceFields.dataTooltipId
-											}
-											onChange={e => {
-												onChange(e);
-												englishSourceFields.onChange(
-													e.target.value,
-												);
-											}}
-											onBlur={() => {
-												onBlur();
-												englishSourceFields.onBlur();
-											}}
-										/>
+										<>
+											<input
+												ref={ref}
+												lang="en"
+												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.source?.english ? "border-red-800" : "border-gray-400"}`}
+												placeholder={`${t("source")} (${t("optional")})`}
+												name={name}
+												value={
+													typeof value === "string"
+														? value
+														: ""
+												}
+												autoComplete={
+													englishSourceFields.autoComplete
+												}
+												data-tooltip-id={
+													englishSourceFields.dataTooltipId
+												}
+												onChange={e => {
+													onChange(e);
+													englishSourceFields.onChange(
+														e.target.value,
+													);
+												}}
+												onBlur={() => {
+													onBlur();
+													englishSourceFields.onBlur();
+												}}
+											/>
+											{error && (
+												<span className="text-sm text-red-800">
+													{error.message}
+												</span>
+											)}
+										</>
 									)}
 								/>
-								{errors.source?.english && (
-									<span className="text-sm text-red-800">
-										{errors.source.english.message}
-									</span>
-								)}
 								<textarea
 									{...register("quote.english")}
 									lang="en"
@@ -296,43 +297,46 @@ const NewQuote = function ({ model }) {
 											value,
 											ref,
 										},
+										fieldState: { error },
 									}) => (
-										<input
-											ref={ref}
-											lang="ru"
-											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.author?.russian ? "border-red-800" : "border-gray-400"}`}
-											placeholder={`${t("author")} (${t("optional")})`}
-											name={name}
-											value={
-												typeof value === "string"
-													? value
-													: ""
-											}
-											autoCapitalize="words"
-											autoComplete={
-												russianAuthorFields.autoComplete
-											}
-											data-tooltip-id={
-												russianAuthorFields.dataTooltipId
-											}
-											onChange={e => {
-												onChange(e);
-												russianAuthorFields.onChange(
-													e.target.value,
-												);
-											}}
-											onBlur={() => {
-												onBlur();
-												russianAuthorFields.onBlur();
-											}}
-										/>
+										<>
+											<input
+												ref={ref}
+												lang="ru"
+												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+												placeholder={`${t("author")} (${t("optional")})`}
+												name={name}
+												value={
+													typeof value === "string"
+														? value
+														: ""
+												}
+												autoCapitalize="words"
+												autoComplete={
+													russianAuthorFields.autoComplete
+												}
+												data-tooltip-id={
+													russianAuthorFields.dataTooltipId
+												}
+												onChange={e => {
+													onChange(e);
+													russianAuthorFields.onChange(
+														e.target.value,
+													);
+												}}
+												onBlur={() => {
+													onBlur();
+													russianAuthorFields.onBlur();
+												}}
+											/>
+											{error && (
+												<span className="text-sm text-red-800">
+													{error.message}
+												</span>
+											)}
+										</>
 									)}
 								/>
-								{errors.author?.russian && (
-									<span className="text-sm text-red-800">
-										{errors.author.russian.message}
-									</span>
-								)}
 								<Controller
 									control={control}
 									name={"source.russian"}
@@ -344,42 +348,45 @@ const NewQuote = function ({ model }) {
 											value,
 											ref,
 										},
+										fieldState: { error },
 									}) => (
-										<input
-											ref={ref}
-											lang="ru"
-											className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.source?.russian ? "border-red-800" : "border-gray-400"}`}
-											placeholder={`${t("source")} (${t("optional")})`}
-											name={name}
-											value={
-												typeof value === "string"
-													? value
-													: ""
-											}
-											autoComplete={
-												russianSourceFields.autoComplete
-											}
-											data-tooltip-id={
-												russianSourceFields.dataTooltipId
-											}
-											onChange={e => {
-												onChange(e);
-												russianSourceFields.onChange(
-													e.target.value,
-												);
-											}}
-											onBlur={() => {
-												onBlur();
-												russianSourceFields.onBlur();
-											}}
-										/>
+										<>
+											<input
+												ref={ref}
+												lang="ru"
+												className={`w-full overflow-clip rounded-lg border bg-white p-4 ${error ? "border-red-800" : "border-gray-400"}`}
+												placeholder={`${t("source")} (${t("optional")})`}
+												name={name}
+												value={
+													typeof value === "string"
+														? value
+														: ""
+												}
+												autoComplete={
+													russianSourceFields.autoComplete
+												}
+												data-tooltip-id={
+													russianSourceFields.dataTooltipId
+												}
+												onChange={e => {
+													onChange(e);
+													russianSourceFields.onChange(
+														e.target.value,
+													);
+												}}
+												onBlur={() => {
+													onBlur();
+													russianSourceFields.onBlur();
+												}}
+											/>
+											{error && (
+												<span className="text-sm text-red-800">
+													{error.message}
+												</span>
+											)}
+										</>
 									)}
 								/>
-								{errors.source?.russian && (
-									<span className="text-sm text-red-800">
-										{errors.source.russian.message}
-									</span>
-								)}
 								<textarea
 									{...register("quote.russian")}
 									lang="ru"
