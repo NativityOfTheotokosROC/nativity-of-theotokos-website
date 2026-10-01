@@ -286,6 +286,7 @@ const SpecificScheduleEventForm = function ({ model }) {
 			className="schedule-specific-event-form"
 			onSubmit={handleSubmit(async form => {
 				const existingItemId = scheduleEvent.scheduleItem?.id;
+				console.log(form);
 				await interact({
 					type: "SCHEDULE_EVENT",
 					input:
@@ -359,10 +360,19 @@ const SpecificScheduleEventForm = function ({ model }) {
 							type: "submit",
 						})}
 					>
-						{scheduleEvent.scheduleItem &&
-						"id" in scheduleEvent.scheduleItem
-							? t("modifyButton")
-							: t("scheduleButton")}
+						{isSubmitting ? (
+							<Spinner
+								model={newReadonlyModel({
+									color: "white",
+									size: 20,
+								})}
+							/>
+						) : scheduleEvent.scheduleItem &&
+						  "id" in scheduleEvent.scheduleItem ? (
+							t("modifyButton")
+						) : (
+							t("scheduleButton")
+						)}
 					</Button>
 				</ButtonBar>
 			</div>
@@ -863,7 +873,7 @@ function EventTimesFormControl({
 								</Button>
 							</div>
 							{errors.times && errors.times[index] && (
-								<span className="text-sm text-red-800">
+								<span className="mb-3 text-sm text-red-800">
 									{errors.times[index].designation?.english
 										?.message ||
 										errors.times[index].designation?.russian
