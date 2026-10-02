@@ -28,7 +28,7 @@ type MenuModel = InteractiveModel<MenuModelView, MenuModelInteraction>;
 
 const NavigationDrawer = function ({ model }) {
 	const { modelView, interact } = model;
-	const { isDrawn, navlinks, hasUserNavigationWidget } = modelView;
+	const { isDrawn, navlinks } = modelView;
 	const originalUserActions = useUserActions();
 
 	return (
