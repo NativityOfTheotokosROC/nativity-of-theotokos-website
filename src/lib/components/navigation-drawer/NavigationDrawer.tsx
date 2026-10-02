@@ -48,45 +48,43 @@ const NavigationDrawer = function ({ model }) {
 			}}
 		>
 			<div className="flex flex-col">
-				{hasUserNavigationWidget && (
-					<div className="[&_.dropdown-button]:px-6 [&_.dropdown-button]:py-4 *:[&_.dropdown-button]:w-full *:[&_.dropdown-button]:bg-gray-800 md:[&_.dropdown-button]:px-8">
-						<Suspense
-							fallback={
-								<UserNavigationWidgetSkeleton
-									model={newReadonlyModel({
-										variant: "full",
-									})}
-								/>
-							}
-						>
-							<UserNavigationWidget
+				<div className="[&_.dropdown-button]:px-6 [&_.dropdown-button]:py-4 *:[&_.dropdown-button]:w-full *:[&_.dropdown-button]:bg-gray-800 md:[&_.dropdown-button]:px-8">
+					<Suspense
+						fallback={
+							<UserNavigationWidgetSkeleton
 								model={newReadonlyModel({
-									style: "dropdown",
 									variant: "full",
-									signIn: {
-										navlinkVariant: "block",
-										async action() {
-											await interact({ type: "CLOSE" });
-										},
-									},
-									userActions: originalUserActions.map(
-										userAction => ({
-											modelView: {
-												...userAction.modelView,
-												async action() {
-													await interact({
-														type: "CLOSE",
-													});
-													return userAction.modelView.action();
-												},
-											},
-										}),
-									),
 								})}
 							/>
-						</Suspense>
-					</div>
-				)}
+						}
+					>
+						<UserNavigationWidget
+							model={newReadonlyModel({
+								style: "dropdown",
+								variant: "full",
+								signIn: {
+									navlinkVariant: "block",
+									async action() {
+										await interact({ type: "CLOSE" });
+									},
+								},
+								userActions: originalUserActions.map(
+									userAction => ({
+										modelView: {
+											...userAction.modelView,
+											async action() {
+												await interact({
+													type: "CLOSE",
+												});
+												return userAction.modelView.action();
+											},
+										},
+									}),
+								),
+							})}
+						/>
+					</Suspense>
+				</div>
 				{navlinks.map((navlink, index) => (
 					<Link
 						key={index}
