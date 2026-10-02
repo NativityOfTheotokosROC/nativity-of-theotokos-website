@@ -64,6 +64,7 @@ const Header = function ({ model }) {
 							model={newReadonlyModel({
 								menuItems: {
 									navlinks,
+									loginTooltip,
 								},
 							})}
 						/>
@@ -74,7 +75,7 @@ const Header = function ({ model }) {
 							onClick={() => {
 								navigationDrawer.interact({ type: "TOGGLE" });
 							}}
-							data-tooltip-id={"login-tooltip"}
+							data-tooltip-id={loginTooltip?.modelView.id}
 						>
 							<MenuIcon className="size-8" strokeWidth={1.75} />
 						</button>

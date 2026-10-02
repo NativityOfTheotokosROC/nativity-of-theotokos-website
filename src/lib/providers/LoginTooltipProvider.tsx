@@ -8,9 +8,14 @@ import { Path } from "../utilities/types";
 import { LoginTooltipContext } from "../utilities/contexts";
 
 const LoginTooltipProvider = function ({ model, children }) {
-	const { text, duration, autoTriggerExceptions } = model.modelView;
+	const {
+		text,
+		duration,
+		autoTriggerExceptions,
+		id = "login-tooltip",
+	} = model.modelView;
 	const t = useTranslations("loginTooltip");
-	const loginTooltip = useLoginTooltip(text ?? t("text"), {
+	const loginTooltip = useLoginTooltip(id, text ?? t("text"), {
 		autoTriggerExceptions,
 		duration,
 	});
@@ -22,6 +27,7 @@ const LoginTooltipProvider = function ({ model, children }) {
 	);
 } satisfies ModeledContainerComponent<
 	ReadonlyModel<{
+		id?: string;
 		autoTriggerExceptions?: Path[];
 		text?: string;
 		duration?: number;

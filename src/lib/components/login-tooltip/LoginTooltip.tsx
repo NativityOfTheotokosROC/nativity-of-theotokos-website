@@ -3,12 +3,12 @@ import { LoginTooltipModel } from "../../models/login-tooltip";
 import { Tooltip } from "react-tooltip";
 
 const LoginTooltip = function ({ model }) {
-	const { isOpen, text } = model.modelView;
+	const { isOpen, text, id } = model.modelView;
 
 	return (
 		<Tooltip
-			id="login-tooltip"
-			key="login-tooltip"
+			id={id}
+			key={id}
 			className="login-tooltip"
 			isOpen={isOpen}
 			content={text}

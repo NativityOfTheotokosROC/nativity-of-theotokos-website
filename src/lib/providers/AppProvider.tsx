@@ -3,7 +3,6 @@
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
-import { CookiesProvider } from "react-cookie";
 import { Language, Path } from "../utilities/types";
 import LoginTooltipProvider from "./LoginTooltipProvider";
 import PageLoadingBarProvider from "./PageLoadingBarProvider";
@@ -22,21 +21,19 @@ export const AppProvider = function ({ model, children }) {
 	const autoTriggerExceptions: Path[] = ["/", "/ru"];
 	return (
 		<QueryClientProvider client={queryClient}>
-			<CookiesProvider>
-				<NextIntlClientProvider
-					locale={locale}
-					messages={messages}
-					timeZone="UTC"
-				>
-					<PageLoadingBarProvider>
-						<LoginTooltipProvider
-							model={newReadonlyModel({ autoTriggerExceptions })}
-						>
-							<Polyfills>{children}</Polyfills>
-						</LoginTooltipProvider>
-					</PageLoadingBarProvider>
-				</NextIntlClientProvider>
-			</CookiesProvider>
+			<NextIntlClientProvider
+				locale={locale}
+				messages={messages}
+				timeZone="UTC"
+			>
+				<PageLoadingBarProvider>
+					<LoginTooltipProvider
+						model={newReadonlyModel({ autoTriggerExceptions })}
+					>
+						<Polyfills>{children}</Polyfills>
+					</LoginTooltipProvider>
+				</PageLoadingBarProvider>
+			</NextIntlClientProvider>
 		</QueryClientProvider>
 	);
 } satisfies ModeledContainerComponent<

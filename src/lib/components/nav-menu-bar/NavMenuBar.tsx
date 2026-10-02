@@ -4,10 +4,12 @@ import { useUserActions } from "../../model-implementations/user-action";
 import { Navlink } from "../../utilities/types";
 import { Link } from "../page-loading-bar/PageLoadingBar";
 import UserNavigationWidget from "../user-navigation-widget/UserNavigationWidget";
+import { LoginTooltipModel } from "../../models/login-tooltip";
+import { twMerge } from "tailwind-merge";
 
 const NavMenuBar = function ({ model }) {
 	const {
-		menuItems: { navlinks },
+		menuItems: { navlinks, loginTooltip },
 	} = model.modelView;
 	const userActions = useUserActions();
 
@@ -26,7 +28,14 @@ const NavMenuBar = function ({ model }) {
 						</Link>
 					)),
 				]}
-				<div className="flex" data-tooltip-id="login-tooltip">
+				<div
+					className={twMerge(
+						"flex",
+						loginTooltip?.modelView.isOpen &&
+							"border border-[#ffdc4f] transition ease-out",
+					)}
+					data-tooltip-id={loginTooltip?.modelView.id}
+				>
 					<UserNavigationWidget
 						model={newReadonlyModel({
 							style: "dropdown",
@@ -43,6 +52,7 @@ const NavMenuBar = function ({ model }) {
 	ReadonlyModel<{
 		menuItems: {
 			navlinks: Navlink[];
+			loginTooltip?: LoginTooltipModel;
 		};
 	}>
 >;

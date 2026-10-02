@@ -15,9 +15,14 @@ type LoginTooltipOptions = Partial<{
 
 export const LOGIN_TOOLTIP_COOKIE_NAME = "tooltipShown";
 
-export function useLoginTooltip(text: string, options: LoginTooltipOptions) {
+export function useLoginTooltip(
+	id: string,
+	text: string,
+	options: LoginTooltipOptions,
+) {
 	const [modelView, setLoginTooltipModelView] =
 		useState<LoginTooltipModelView>({
+			id,
 			isOpen: false,
 			text,
 		});
