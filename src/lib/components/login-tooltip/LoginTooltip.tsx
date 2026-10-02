@@ -8,6 +8,7 @@ const LoginTooltip = function ({ model }) {
 	return (
 		<Tooltip
 			id="login-tooltip"
+			key="login-tooltip"
 			className="login-tooltip"
 			isOpen={isOpen}
 			content={text}

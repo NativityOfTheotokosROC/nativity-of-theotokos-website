@@ -2,34 +2,27 @@
 
 import LogoIcon from "@/public/assets/logo-icon.svg";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
+import { newReadonlyModel } from "@mvc-react/mvc";
 import { TextAlignJustifyIcon as MenuIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useContext } from "react";
 import { useMediaQuery } from "react-responsive";
 import { useNavigationDrawer } from "../../model-implementations/navigation-drawer";
-import { useUserActions } from "../../model-implementations/user-action";
 import { HeaderModel } from "../../models/header";
 import { georgia } from "../../third-party/fonts";
-import { Navlink } from "../../utilities/types";
 import { LoginTooltipContext } from "../../utilities/contexts";
-import { usePageLoadingBarRouter } from "../../utilities/page-loading-bar";
 import { useUserInformation } from "../../utilities/user";
 import LoginTooltip from "../login-tooltip/LoginTooltip";
+import NavMenuBar from "../nav-menu-bar/NavMenuBar";
 import NavigationDrawer from "../navigation-drawer/NavigationDrawer";
 import { Link } from "../page-loading-bar/PageLoadingBar";
-import UserNavigationWidget from "../user-navigation-widget/UserNavigationWidget";
 import "./header.css";
 
 const Header = function ({ model }) {
-	const { navlinks, hasUserNavigationWidget } = model.modelView;
-	const router = usePageLoadingBarRouter();
+	const { navlinks } = model.modelView;
 	const isLargeScreen = useMediaQuery({ minWidth: 1024 });
 	const isPortrait = useMediaQuery({ orientation: "portrait" });
-	const navigationDrawer = useNavigationDrawer(
-		navlinks,
-		hasUserNavigationWidget,
-	);
+	const navigationDrawer = useNavigationDrawer(navlinks);
 	const t = useTranslations("header");
 	const tNonDescriptive = useTranslations("nonDescriptive");
 	const locale = useLocale();
@@ -71,7 +64,6 @@ const Header = function ({ model }) {
 							model={newReadonlyModel({
 								menuItems: {
 									navlinks,
-									hasUserNavigationWidget,
 								},
 							})}
 						/>
@@ -95,48 +87,5 @@ const Header = function ({ model }) {
 		</header>
 	);
 } satisfies ModeledVoidComponent<HeaderModel>;
-
-const NavMenuBar = function ({ model }) {
-	const {
-		menuItems: { navlinks, hasUserNavigationWidget },
-	} = model.modelView;
-	const userActions = useUserActions();
-
-	return (
-		<nav className="nav-menu">
-			<div className="flex flex-wrap items-center justify-center gap-6 px-4 lg:gap-8">
-				{[
-					...navlinks.map((navlink, index) => (
-						<Link
-							key={index}
-							href={navlink.link}
-							className="navlink text-base uppercase no-underline hover:text-[#ffdc4f]"
-							replace={navlink.isReplaceable}
-						>
-							{navlink.text}
-						</Link>
-					)),
-				]}
-				{hasUserNavigationWidget && (
-					<UserNavigationWidget
-						model={newReadonlyModel({
-							style: "dropdown",
-							variant: "abbreviated",
-							signIn: { navlinkVariant: "simple_link" },
-							userActions,
-						})}
-					/>
-				)}
-			</div>
-		</nav>
-	);
-} satisfies ModeledVoidComponent<
-	ReadonlyModel<{
-		menuItems: {
-			navlinks: Navlink[];
-			hasUserNavigationWidget: boolean;
-		};
-	}>
->;
 
 export default Header;

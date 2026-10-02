@@ -5,7 +5,6 @@ export type NavigationDrawerType = "sidebar" | "accordion";
 
 export type NavigationDrawerModelView = {
 	isDrawn: boolean;
-	hasUserNavigationWidget: boolean;
 	navlinks: Navlink[];
 };
 

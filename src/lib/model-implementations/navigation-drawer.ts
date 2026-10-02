@@ -1,35 +1,44 @@
-import { InitializedModel } from "@mvc-react/mvc";
-import { useState } from "react";
-import { NavigationDrawerModel } from "../models/navigation-drawer";
+import {
+	useInitializedStatefulInteractiveModel,
+	ViewInteractionInterface,
+} from "@mvc-react/stateful";
+import {
+	NavigationDrawerModel,
+	NavigationDrawerModelInteraction,
+	NavigationDrawerModelView,
+} from "../models/navigation-drawer";
+import { UninitializedModelError } from "../utilities/errors";
 import { Navlink } from "../utilities/types";
 
-export function useNavigationDrawer(
-	navlinks: Navlink[],
-	hasUserNavigationWidget: boolean,
-) {
-	const [isDrawn, setIsDrawn] = useState(false);
+function navigationDrawerVIInterface() {
 	return {
-		modelView: { isDrawn, navlinks, hasUserNavigationWidget },
-		interact(interaction) {
+		async produceModelView(interaction, currentModelView) {
+			if (!currentModelView) throw new UninitializedModelError();
 			switch (interaction.type) {
 				case "OPEN": {
-					setIsDrawn(true);
-					break;
+					return { ...currentModelView, isDrawn: true };
 				}
 				case "CLOSE": {
-					setIsDrawn(false);
-					break;
+					return { ...currentModelView, isDrawn: false };
 				}
 				case "TOGGLE": {
-					setIsDrawn(currentState => !currentState);
-					break;
-				}
-				default: {
-					throw new Error(
-						`Invalid interaction? ${interaction.type satisfies never}`,
-					);
+					return {
+						...currentModelView,
+						isDrawn: !currentModelView.isDrawn,
+					};
 				}
 			}
 		},
-	} satisfies InitializedModel<NavigationDrawerModel>;
+	} satisfies ViewInteractionInterface<
+		NavigationDrawerModelView,
+		NavigationDrawerModelInteraction
+	>;
+}
+
+export function useNavigationDrawer(navlinks: Navlink[]) {
+	const model = useInitializedStatefulInteractiveModel(
+		navigationDrawerVIInterface(),
+		{ isDrawn: false, navlinks },
+	);
+	return model satisfies NavigationDrawerModel;
 }
