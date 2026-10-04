@@ -40,7 +40,7 @@ const NavigationDrawer = function ({ model }) {
 				async interact(interaction) {
 					switch (interaction.type) {
 						case "CLOSE_MENU": {
-							await interact({ type: "CLOSE" });
+							interact({ type: "CLOSE" });
 							break;
 						}
 					}
@@ -64,9 +64,7 @@ const NavigationDrawer = function ({ model }) {
 								variant: "full",
 								signIn: {
 									navlinkVariant: "block",
-									async action() {
-										await interact({ type: "CLOSE" });
-									},
+									action: () => interact({ type: "CLOSE" }),
 								},
 								userActions: originalUserActions.map(
 									userAction => ({
@@ -76,7 +74,7 @@ const NavigationDrawer = function ({ model }) {
 												await interact({
 													type: "CLOSE",
 												});
-												return userAction.modelView.action();
+												userAction.modelView.action();
 											},
 										},
 									}),
@@ -91,7 +89,7 @@ const NavigationDrawer = function ({ model }) {
 						className="navlink block px-6 py-4 uppercase no-underline transition duration-200 ease-out hover:text-[#ffdc4f] active:bg-gray-950 active:text-[#ffdc4f] md:px-8"
 						href={navlink.link}
 						replace={navlink.isReplaceable}
-						onClick={async () => await interact({ type: "CLOSE" })}
+						onClick={() => interact({ type: "CLOSE" })}
 					>
 						{navlink.text}
 					</Link>

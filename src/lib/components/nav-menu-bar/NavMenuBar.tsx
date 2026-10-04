@@ -30,9 +30,8 @@ const NavMenuBar = function ({ model }) {
 				]}
 				<div
 					className={twMerge(
-						"flex",
-						loginTooltip?.modelView.isOpen &&
-							"scale-103 transition duration-150 ease-out",
+						"transition-scale flex ease-out",
+						loginTooltip?.modelView.isOpen && "scale-108",
 					)}
 					data-tooltip-id={loginTooltip?.modelView.id}
 				>
