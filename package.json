@@ -20,7 +20,7 @@
 		"@icons-pack/react-simple-icons": "^13.8.0",
 		"@intevation/tiptap-extension-office-paste": "^0.1.2",
 		"@mailerlite/mailerlite-nodejs": "^1.5.0",
-		"@mvc-react/components": "^2.1.0",
+		"@mvc-react/components": "^2.2.0",
 		"@mvc-react/mvc": "^4.0.0",
 		"@mvc-react/stateful": "^3.9.2",
 		"@tanstack/react-query": "^5.97.0",
