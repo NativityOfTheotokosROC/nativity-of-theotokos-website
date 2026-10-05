@@ -1,6 +1,6 @@
 "use client";
 
-import { ModeledContainerComponent } from "@mvc-react/components";
+import { ModeledComponent } from "@mvc-react/components";
 import { ButtonModel } from "../../models/button";
 import { twMerge } from "tailwind-merge";
 
@@ -28,6 +28,6 @@ const Button = function ({ model, children }) {
 			{children}
 		</button>
 	);
-} satisfies ModeledContainerComponent<ButtonModel>;
+} satisfies ModeledComponent<ButtonModel>;
 
 export default Button;

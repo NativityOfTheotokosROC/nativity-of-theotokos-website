@@ -1,4 +1,4 @@
-import { ModeledContainerComponent } from "@mvc-react/components";
+import { ModeledComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
 import { EditorButtonModel } from "../../models/editor-button";
 
@@ -17,6 +17,6 @@ const EditorButton = function ({ model, children }) {
 			{children}
 		</button>
 	);
-} satisfies ModeledContainerComponent<InitializedModel<EditorButtonModel>>;
+} satisfies ModeledComponent<InitializedModel<EditorButtonModel>>;
 
 export default EditorButton;

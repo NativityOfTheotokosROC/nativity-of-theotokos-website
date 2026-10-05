@@ -1,4 +1,4 @@
-import { ModeledContainerComponent } from "@mvc-react/components";
+import { ModeledComponent } from "@mvc-react/components";
 import React from "react";
 import { ProtectedComponentModel } from "../../models/protected-component";
 import { protect } from "../../server-actions/auth";
@@ -8,6 +8,6 @@ const ProtectedComponent = async function ({ model, children }) {
 	await protect({ roles });
 
 	return <>{children}</>;
-} satisfies ModeledContainerComponent<ProtectedComponentModel>;
+} satisfies ModeledComponent<ProtectedComponentModel>;
 
 export default ProtectedComponent;

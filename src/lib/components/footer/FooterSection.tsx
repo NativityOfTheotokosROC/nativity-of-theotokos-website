@@ -1,4 +1,4 @@
-import { ModeledContainerComponent } from "@mvc-react/components";
+import { ModeledComponent } from "@mvc-react/components";
 import { FooterSectionModel } from "../../models/footer-section";
 
 const FooterSection = function ({ model, children }) {
@@ -9,6 +9,6 @@ const FooterSection = function ({ model, children }) {
 			<div className="text-sm">{children}</div>
 		</div>
 	);
-} as ModeledContainerComponent<FooterSectionModel>;
+} as ModeledComponent<FooterSectionModel>;
 
 export default FooterSection;

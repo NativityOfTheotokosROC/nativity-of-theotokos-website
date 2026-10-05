@@ -1,9 +1,6 @@
 import SidebarDecoration from "@/public/assets/ornament_38.svg";
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
-import {
-	ModeledContainerComponent,
-	ModeledVoidComponent,
-} from "@mvc-react/components";
+import { ModeledComponent, ModeledVoidComponent } from "@mvc-react/components";
 import {
 	InitializedModel,
 	InteractiveModel,
@@ -129,6 +126,6 @@ const SidebarDrawer = function ({ model, children }) {
 			</div>
 		</Dialog>
 	);
-} satisfies ModeledContainerComponent<InitializedModel<MenuModel>>;
+} satisfies ModeledComponent<InitializedModel<MenuModel>>;
 
 export default NavigationDrawer;

@@ -1,4 +1,4 @@
-import { ModeledContainerComponent } from "@mvc-react/components";
+import { ModeledComponent } from "@mvc-react/components";
 import { ModalModel } from "../../models/modal";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import {
@@ -52,6 +52,6 @@ const Modal = function ({ model, children }) {
 			</div>
 		</Dialog>
 	);
-} satisfies ModeledContainerComponent<InitializedModel<ModalModel>>;
+} satisfies ModeledComponent<InitializedModel<ModalModel>>;
 
 export default Modal;

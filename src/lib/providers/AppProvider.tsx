@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { Language, Path } from "../utilities/types";
 import LoginTooltipProvider from "./LoginTooltipProvider";
 import PageLoadingBarProvider from "./PageLoadingBarProvider";
-import { ModeledContainerComponent } from "@mvc-react/components";
+import { ModeledComponent } from "@mvc-react/components";
 import { Messages, NextIntlClientProvider } from "next-intl";
 
 const Polyfills = dynamic(
@@ -36,7 +36,7 @@ export const AppProvider = function ({ model, children }) {
 			</NextIntlClientProvider>
 		</QueryClientProvider>
 	);
-} satisfies ModeledContainerComponent<
+} satisfies ModeledComponent<
 	ReadonlyModel<{ locale?: Language; messages?: Messages }>
 >;
 
