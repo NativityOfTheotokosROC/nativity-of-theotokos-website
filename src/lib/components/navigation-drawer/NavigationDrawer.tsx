@@ -37,7 +37,7 @@ const NavigationDrawer = function ({ model }) {
 				modelView: {
 					isDrawn,
 				},
-				async interact(interaction) {
+				interact(interaction) {
 					switch (interaction.type) {
 						case "CLOSE_MENU": {
 							interact({ type: "CLOSE" });
