@@ -4,6 +4,7 @@ import {
 	QuotePreviewModalModelInteraction,
 	QuotePreviewModalModelView,
 } from "../models/quote-preview-modal";
+import { BLANK_TRANSLATION } from "../utilities/constants";
 
 export function useQuotePreviewModal() {
 	const model = useInitializedStatefulInteractiveModel<
@@ -21,8 +22,7 @@ export function useQuotePreviewModal() {
 					case "OPEN": {
 						return {
 							isOpen: true,
-							englishQuote: interaction.input.englishQuote,
-							russianQuote: interaction.input.russianQuote,
+							quote: interaction.input.quote,
 						};
 					}
 				}
@@ -30,12 +30,11 @@ export function useQuotePreviewModal() {
 		},
 		{
 			isOpen: false,
-			englishQuote: {
-				author: "",
-				quote: "",
-				source: undefined,
+			quote: {
+				author: BLANK_TRANSLATION,
+				quote: BLANK_TRANSLATION,
+				source: BLANK_TRANSLATION,
 			},
-			russianQuote: undefined,
 		},
 	);
 

@@ -454,26 +454,10 @@ const NewQuote = function ({ model }) {
 									disabled: !isValid,
 									className: "w-fit max-w-1/2 min-w-[8em]",
 									action: handleSubmit(form => {
-										const { author, quote, source } = form;
 										quotePreviewModal.interact({
 											type: "OPEN",
 											input: {
-												englishQuote: {
-													author: author.english,
-													quote: quote.english,
-													source: source.english,
-												},
-												russianQuote: {
-													author:
-														author.russian ??
-														undefined,
-													quote:
-														quote.russian ??
-														undefined,
-													source:
-														source.russian ??
-														undefined,
-												},
+												quote: form,
 											},
 										});
 									}),

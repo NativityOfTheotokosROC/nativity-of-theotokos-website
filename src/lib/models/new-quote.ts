@@ -1,5 +1,5 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
-import { Notification, Options, Translation } from "../utilities/types";
+import { Notification, Options, Text, Translation } from "../utilities/types";
 import { NewQuote } from "../validation/quote";
 
 export type AutoCompleteInfo = {
@@ -7,10 +7,10 @@ export type AutoCompleteInfo = {
 	existingSources: Translation[];
 };
 
-export type Quote = {
-	author: string;
-	quote: string;
-	source?: string;
+export type Quote<T extends Text = string> = {
+	author: T;
+	quote: T;
+	source?: T;
 };
 
 export type NewQuoteNotification =

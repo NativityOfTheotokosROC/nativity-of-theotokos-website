@@ -1,11 +1,13 @@
 import DailyQuoteGraphic from "@/public/assets/daily-thought.webp";
 import { DailyQuoteSectionModel } from "@/src/lib/models/daily-quote-section";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { useTranslations } from "next-intl";
+import { newReadonlyModel } from "@mvc-react/mvc";
+import Quote from "../../../quote/Quote";
 
 const DailyQuoteSection = function ({ model }) {
 	const { dailyQuote } = model.modelView;
-	const t = useTranslations("quote");
+
+	if (!dailyQuote) return <></>;
 
 	return (
 		<section className="daily-thought border-t-15 border-b-15 border-t-gray-900/85 border-b-[#250203]/85">
@@ -15,21 +17,15 @@ const DailyQuoteSection = function ({ model }) {
 				}}
 				className="daily-thought-content flex min-h-[25em] items-center bg-[#0a0a0a] bg-contain bg-right bg-no-repeat p-8 py-14 text-white max-md:bg-none! md:p-20"
 			>
-				{dailyQuote && (
-					<div
-						className={`quote-box flex flex-col items-center gap-4 md:w-1/2`}
-					>
-						<p className="quote text-lg/relaxed font-light">
-							<span>{t("openingQuote")}</span>
-							{dailyQuote.quote}
-							<span>{t("closingQuote")}</span>
-						</p>
-						<span className="author w-full text-right font-light">
-							— {dailyQuote.author}
-							{dailyQuote.source && `, ${dailyQuote.source}`}
-						</span>
-					</div>
-				)}
+				<Quote
+					model={newReadonlyModel({
+						quote: {
+							...dailyQuote,
+							source: dailyQuote.source ?? undefined,
+						},
+					})}
+					className="md:w-1/2"
+				/>
 			</div>
 		</section>
 	);

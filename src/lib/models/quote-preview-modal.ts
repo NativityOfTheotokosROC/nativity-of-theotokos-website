@@ -3,19 +3,15 @@ import {
 	InteractiveModel,
 	ModelInteraction,
 } from "@mvc-react/mvc";
-import { Quote } from "./new-quote";
+import { NewQuote } from "../validation/quote";
 
 export type QuotePreviewModalModelView = {
 	isOpen: boolean;
-	englishQuote: Quote;
-	russianQuote?: Partial<Quote>;
+	quote: NewQuote;
 };
 
 export type QuotePreviewModalModelInteraction =
-	| InputModelInteraction<
-			"OPEN",
-			Pick<QuotePreviewModalModelView, "englishQuote" | "russianQuote">
-	  >
+	| InputModelInteraction<"OPEN", Pick<QuotePreviewModalModelView, "quote">>
 	| ModelInteraction<"CLOSE">;
 
 export type QuotePreviewModalModel = InteractiveModel<
