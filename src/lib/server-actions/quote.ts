@@ -1,63 +1,24 @@
 "use server";
 
-import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
 import { revalidateTag } from "next/cache";
 import database from "../third-party/prisma";
-import { getNativeTimeZone } from "../utilities/date-time";
 import { getMd5Hash } from "../utilities/miscellaneous";
 import { getQuoteSchema, NewQuote } from "../validation/quote";
 import { protect } from "./auth";
-import { Translation } from "../utilities/types";
-import { AutoCompleteInfo } from "../models/new-quote";
-
-export async function getAutoCompleteInfo() {
-	await protect({ roles: ["quotes"] });
-	const [authors, sources] = await Promise.all([
-		database.quoteAuthor
-			.findMany({
-				include: { name: true },
-				orderBy: { name: { english: "asc" } },
-			})
-			.then(records =>
-				records.map(
-					record =>
-						({
-							english: record.name.english,
-							russian: record.name.russian,
-						}) satisfies Translation,
-				),
-			),
-		database.quote
-			.findMany({
-				select: { source: true },
-				distinct: ["sourceTranslationId"],
-			})
-			.then(records =>
-				records.map(record =>
-					record.source
-						? ({
-								english: record.source?.english,
-								russian: record.source?.russian,
-							} satisfies Translation)
-						: undefined,
-				),
-			),
-	]);
-	return {
-		existingAuthors: authors,
-		existingSources: sources.filter(source => source !== undefined),
-	} satisfies AutoCompleteInfo;
-}
 
 export async function addNewQuote(newQuote: NewQuote) {
 	await protect({ roles: ["quotes"] });
 	const t = await getTranslations();
 	const quoteSchema = getQuoteSchema(t);
-	const { author, quote, source, scheduledDate } =
-		quoteSchema.parse(newQuote);
-	const scheduledLocalDate = scheduledDate
-		? toZonedTime(scheduledDate, getNativeTimeZone())
+	const {
+		author,
+		quote,
+		source,
+		scheduledDate: scheduledDateString,
+	} = quoteSchema.parse(newQuote);
+	const scheduledDate = scheduledDateString
+		? new Date(scheduledDateString)
 		: undefined;
 
 	await database.$transaction(async transaction => {
@@ -124,13 +85,13 @@ export async function addNewQuote(newQuote: NewQuote) {
 						englishHash: getMd5Hash(quote.english),
 					},
 				},
-				dailyQuotes: scheduledLocalDate && {
+				dailyQuotes: scheduledDate && {
 					connectOrCreate: {
-						where: {
-							date: scheduledLocalDate,
-						},
 						create: {
-							date: scheduledLocalDate,
+							date: scheduledDate,
+						},
+						where: {
+							date: scheduledDate,
 						},
 					},
 				},

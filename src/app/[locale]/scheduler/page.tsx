@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 export default async function Page() {
 	await connection();
 	const [scheduleItems, autoCompleteInfo] = await Promise.all([
-		getScheduleItems(getDateString(new Date(), true)),
+		getScheduleItems(new Date(getDateString(new Date(), true))),
 		getAutoCompleteInfo(),
 	]);
 	return (

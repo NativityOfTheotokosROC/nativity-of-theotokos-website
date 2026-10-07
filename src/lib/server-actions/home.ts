@@ -10,18 +10,17 @@ import {
 	getLatestArticles,
 } from "../server-only/home";
 import mailerLite from "../third-party/mailer-lite";
-import { getDateString } from "../utilities/date-time";
+import {
+	InstantaneousScheduleItemWithOptionalId,
+	RecurringScheduleItemInstanceWithOptionalId,
+} from "../utilities/schedule";
 import {
 	DailyQuote,
 	DailyReadings,
 	GalleryImage,
 	Language,
 } from "../utilities/types";
-import { getSchedule } from "./schedule";
-import {
-	InstantaneousScheduleItemWithOptionalId,
-	RecurringScheduleItemInstanceWithOptionalId,
-} from "../utilities/schedule";
+import { getSchedule } from "../server-only/schedule";
 
 export type LatestArticles = {
 	featuredArticle: ArticlePreview;
@@ -40,13 +39,14 @@ export type HomeSnapshot = {
 };
 
 export async function getHomeSnapshot(
+	referenceDate: string,
 	scheduleItemCount: number = 4,
 	otherArticleCount: number = 4,
 	dailyGalleryImagesCount: number = 5,
 	language?: Language,
 ): Promise<HomeSnapshot> {
 	const locale = language ?? (await getLocale());
-	const currentDate = new Date(getDateString(new Date(), true));
+	const parsedDate = new Date(z.iso.date().parse(referenceDate));
 	const [
 		dailyReadings,
 		scheduleItems,
@@ -54,11 +54,11 @@ export async function getHomeSnapshot(
 		dailyQuote,
 		dailyGalleryImages,
 	] = await Promise.all([
-		getDailyReadings(currentDate, locale),
-		getSchedule(currentDate, scheduleItemCount, locale),
+		getDailyReadings(parsedDate, locale),
+		getSchedule(parsedDate, scheduleItemCount, locale),
 		getLatestArticles(otherArticleCount, locale),
-		getDailyQuote(currentDate, locale),
-		getDailyGalleryImages(dailyGalleryImagesCount, currentDate),
+		getDailyQuote(parsedDate, locale),
+		getDailyGalleryImages(dailyGalleryImagesCount, parsedDate),
 	]);
 	return {
 		dailyReadings,

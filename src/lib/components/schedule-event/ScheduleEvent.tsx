@@ -28,7 +28,7 @@ import { Controller, FormProvider, useFormContext } from "react-hook-form";
 import AutoCompleteBox from "../auto-complete-box/AutoCompleteBox";
 import ButtonBar from "../button-bar/ButtonBar";
 import Checkbox from "../checkbox/Checkbox";
-import { useScheduleEventForm } from "@/src/lib/utilities/scheduler";
+import { useScheduleEventForm } from "@/src/lib/client-only/scheduler";
 import RadioGroup from "../radio-group/RadioGroup";
 import { useMemo } from "react";
 import { useLocale } from "next-intl";

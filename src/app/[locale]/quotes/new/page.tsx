@@ -1,6 +1,6 @@
 import { routing } from "@/src/i18n/routing";
 import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
-import { getAutoCompleteInfo } from "@/src/lib/server-actions/quote";
+import { getAutoCompleteInfo } from "@/src/lib/server-only/quote";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";

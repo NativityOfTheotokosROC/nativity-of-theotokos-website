@@ -1,11 +1,9 @@
 import { load } from "cheerio";
-import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
 import { cacheLife, cacheTag } from "next/cache";
 import { Commemoration } from "../models/commemoration";
-import { DailyReadings, Hymn, Image, Language } from "../utilities/types";
-import { getNativeTimeZone } from "../utilities/date-time";
 import { removeMarkup } from "../utilities/miscellaneous";
+import { DailyReadings, Hymn, Image, Language } from "../utilities/types";
 
 const MONTHS = [
 	"January",
@@ -26,7 +24,6 @@ export async function dailyReadings(date: Date, language: Language) {
 	"use cache: remote";
 	cacheLife("weeks");
 	cacheTag("holytrinity-readings");
-	const localDate = toZonedTime(date, getNativeTimeZone());
 	const [
 		liturgicalWeek,
 		saints,
@@ -35,12 +32,12 @@ export async function dailyReadings(date: Date, language: Language) {
 		iconOfTheDay,
 		hymns,
 	] = await Promise.all([
-		getLiturgicalWeek(localDate, language),
-		getSaints(localDate, language),
-		getScriptures(localDate, language),
-		getFastingInfo(localDate, language),
-		getIconOfTheDay(localDate, language),
-		getHymns(localDate, language),
+		getLiturgicalWeek(date, language),
+		getSaints(date, language),
+		getScriptures(date, language),
+		getFastingInfo(date, language),
+		getIconOfTheDay(date, language),
+		getHymns(date, language),
 	]);
 	return {
 		currentDate: date,
@@ -104,8 +101,7 @@ export async function getDailySaint(date: Date, language: Language) {
 	cacheTag("daily-saint");
 	cacheLife("weeks");
 
-	const localDate = toZonedTime(date, getNativeTimeZone());
-	const saints = await getSaints(localDate, language);
+	const saints = await getSaints(date, language);
 	const $ = load(saints);
 	const commemorationPathParts = $("a").attr("href")!.split("/");
 	return (await getCommemoration(

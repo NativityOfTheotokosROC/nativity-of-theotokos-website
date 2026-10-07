@@ -1,21 +1,12 @@
-import { getTranslations } from "next-intl/server";
 import { cacheLife, cacheTag } from "next/cache";
 import { notFound } from "next/navigation";
-import z from "zod";
 import database from "../third-party/prisma";
-import { removeMarkup, snippetify } from "../utilities/miscellaneous";
 import {
 	Article,
 	ArticleAuthor,
 	ArticleAuthorWithTranslations,
 	Language,
-	Translation,
 } from "../utilities/types";
-import {
-	getArticleSchema,
-	MAX_SNIPPET,
-	NewArticle,
-} from "../validation/article";
 
 export const _FULL_ARTICLE_INCLUDES = {
 	author: { include: { name: true } },
@@ -174,32 +165,4 @@ export async function getArticleAuthorsWithTranslations() {
 			}) satisfies Required<ArticleAuthorWithTranslations>,
 	);
 	return authors satisfies Required<ArticleAuthorWithTranslations>[];
-}
-
-export async function validateNewArticle(
-	newArticle: NewArticle,
-	locale?: Language,
-) {
-	const t = await getTranslations({ locale: locale ?? "en" });
-	const articleSchema = getArticleSchema(t).transform(newArticle => ({
-		...newArticle,
-		snippet: {
-			english:
-				newArticle.snippet.english ??
-				snippetify(removeMarkup(newArticle.body.english), MAX_SNIPPET),
-			russian:
-				newArticle.snippet.russian ??
-				(newArticle.body.russian
-					? snippetify(
-							removeMarkup(newArticle.body.russian),
-							MAX_SNIPPET,
-						)
-					: undefined),
-		} satisfies Translation,
-		link: z.string().slugify().parse(newArticle.title.english),
-	}));
-
-	return articleSchema.parse(newArticle) satisfies NewArticle & {
-		link: string;
-	};
 }

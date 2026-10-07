@@ -1,12 +1,11 @@
+import "server-only";
 import { ImagePlaceholder, getPlaceholder } from "@grod56/placeholder";
 import { arrayToShuffled } from "array-shuffle";
 import { cacheLife, cacheTag } from "next/cache";
-import "server-only";
 import { LatestArticles } from "../server-actions/home";
 import { dailyReadings } from "../third-party/holytrinityorthodox";
 import database from "../third-party/prisma";
-import { getDateString } from "../utilities/date-time";
-import { isRemotePath } from "../utilities/miscellaneous";
+import { isRemotePath, pickTranslation } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
 import {
 	ArticleAuthor,
@@ -17,10 +16,7 @@ import {
 import { _FULL_ARTICLE_INCLUDES } from "./article";
 import { getGalleryImages } from "./gallery";
 
-export const getDailyReadings = async (
-	currentDate: Date,
-	language: Language,
-) => {
+export async function getDailyReadings(currentDate: Date, language: Language) {
 	"use cache: remote";
 	cacheTag("daily-readings");
 	cacheLife("max");
@@ -36,20 +32,17 @@ export const getDailyReadings = async (
 			},
 		};
 	});
-};
+}
 
 export async function getDailyQuote(currentDate: Date, language: Language) {
 	"use cache: remote";
 	cacheTag("daily-quote");
 	cacheLife("days");
 
-	const locale = language;
-	const localDate = new Date(getDateString(currentDate, true));
-
 	let dailyQuote = await database.dailyQuote
 		.findFirst({
 			where: {
-				date: localDate,
+				date: currentDate,
 			},
 		})
 		.quote({
@@ -74,29 +67,18 @@ export async function getDailyQuote(currentDate: Date, language: Language) {
 		dailyQuote = quotes[Math.round(Math.random() * (quotes.length - 1))];
 		await database.dailyQuote.create({
 			data: {
-				date: localDate,
+				date: currentDate,
 				quoteId: dailyQuote.id,
 			},
 		});
 	}
-	return (
-		locale === "ru"
-			? {
-					quote: dailyQuote.quote.russian ?? dailyQuote.quote.english,
-					author:
-						dailyQuote.author.name.russian ??
-						dailyQuote.author.name.english,
-					source:
-						dailyQuote.source?.russian ??
-						dailyQuote.source?.english ??
-						null,
-				}
-			: {
-					quote: dailyQuote.quote.english,
-					author: dailyQuote.author.name.english,
-					source: dailyQuote.source?.english ?? null,
-				}
-	) satisfies DailyQuote;
+	return {
+		author: pickTranslation(dailyQuote.author.name, language),
+		source: dailyQuote.source
+			? pickTranslation(dailyQuote.source, language)
+			: null,
+		quote: pickTranslation(dailyQuote.quote, language),
+	} satisfies DailyQuote;
 }
 
 export async function getLatestArticles(
@@ -145,21 +127,12 @@ export async function getLatestArticles(
 	}
 
 	const featuredArticle = featuredArticleRecord.article;
-	const title =
-		language === "ru" && featuredArticle.title.russian
-			? featuredArticle.title.russian
-			: featuredArticle.title.english;
+	const title = pickTranslation(featuredArticle.title, language);
 	const author = {
-		name:
-			language === "ru" && featuredArticle.author.name.russian != null
-				? featuredArticle.author.name.russian
-				: featuredArticle.author.name.english,
+		name: pickTranslation(featuredArticle.author.name, language),
 		email: featuredArticle.author.email ?? undefined,
 	} satisfies ArticleAuthor;
-	const snippet =
-		language === "ru" && featuredArticle.snippet.russian
-			? featuredArticle.snippet.russian
-			: featuredArticle.snippet.english;
+	const snippet = pickTranslation(featuredArticle.snippet, language);
 	return {
 		featuredArticle: {
 			...featuredArticleRecord.article,
@@ -169,12 +142,10 @@ export async function getLatestArticles(
 			uri: featuredArticleRecord.article.link,
 			articleImage: {
 				url: featuredArticleRecord.article.image.link,
-				caption:
-					language === "ru"
-						? (featuredArticleRecord.article.image.caption
-								.russian ??
-							featuredArticleRecord.article.image.caption.english)
-						: featuredArticleRecord.article.image.caption.english,
+				caption: pickTranslation(
+					featuredArticleRecord.article.image.caption,
+					language,
+				),
 				placeholder:
 					(featuredArticleRecord.article.image.placeholder
 						?.placeholder as ImagePlaceholder) ??
@@ -183,21 +154,12 @@ export async function getLatestArticles(
 			isArticleFeatured: true,
 		},
 		otherNewsArticles: otherArticleRecords.map(article => {
-			const title =
-				language === "ru" && article.title.russian
-					? article.title.russian
-					: article.title.english;
+			const title = pickTranslation(article.title, language);
 			const author = {
-				name:
-					language === "ru" && article.author.name.russian != null
-						? article.author.name.russian
-						: article.author.name.english,
+				name: pickTranslation(article.author.name, language),
 				email: article.author.email ?? undefined,
 			} satisfies ArticleAuthor;
-			const snippet =
-				language === "ru" && article.snippet.russian
-					? article.snippet.russian
-					: article.snippet.english;
+			const snippet = pickTranslation(article.snippet, language);
 			return {
 				...article,
 				title,
@@ -206,11 +168,7 @@ export async function getLatestArticles(
 				uri: article.link,
 				articleImage: {
 					url: article.image.link,
-					caption:
-						language === "ru"
-							? (article.image.caption.russian ??
-								article.image.caption.english)
-							: article.image.caption.english,
+					caption: pickTranslation(article.image.caption, language),
 					placeholder:
 						(article.image.placeholder
 							?.placeholder as ImagePlaceholder) ??
@@ -229,7 +187,6 @@ export async function getDailyGalleryImages(count: number, currentDate: Date) {
 	cacheLife("days");
 
 	const baseUrl = BASE_URL;
-	const localDate = new Date(getDateString(currentDate, true));
 	const promises = await Promise.all([
 		getGalleryImages(),
 		database.dailyGalleryImage.findMany({
@@ -237,7 +194,7 @@ export async function getDailyGalleryImages(count: number, currentDate: Date) {
 				placeholder: true,
 			},
 			where: {
-				date: localDate,
+				date: currentDate,
 			},
 		}),
 	]);
@@ -258,7 +215,7 @@ export async function getDailyGalleryImages(count: number, currentDate: Date) {
 				await database.dailyGalleryImage.createManyAndReturn({
 					include: { placeholder: true },
 					data: shuffledGalleryImages.map(galleryImage => ({
-						date: localDate,
+						date: currentDate,
 						link: galleryImage.imageLink,
 					})),
 				});
@@ -273,7 +230,7 @@ export async function getDailyGalleryImages(count: number, currentDate: Date) {
 					data: shuffledGalleryImages
 						.slice(0, count - dailyGalleryImages.length)
 						.map(galleryImage => ({
-							date: localDate,
+							date: currentDate,
 							link: galleryImage.imageLink,
 						})),
 				});

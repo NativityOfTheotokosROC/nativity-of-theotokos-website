@@ -10,7 +10,7 @@ export type TabsModelView = {
 	selectedTab: number;
 	tabsPosition?: TabsPosition;
 	tabsLayout?: TabsLayout;
-	animations?: boolean;
+	animation?: boolean;
 	tabsToUnmount?: TabsToUnmount;
 };
 

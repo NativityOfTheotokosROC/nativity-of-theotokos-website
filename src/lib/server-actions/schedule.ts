@@ -1,22 +1,16 @@
 "use server";
 
 import { getTranslations } from "next-intl/server";
-import { cacheLife, cacheTag, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import z from "zod";
 import database from "../third-party/prisma";
-import { getDateString, getTimeString } from "../utilities/date-time";
-import { getMd5Hash, pickTranslation } from "../utilities/miscellaneous";
+import { getDateString } from "../utilities/date-time";
+import { getMd5Hash } from "../utilities/miscellaneous";
 import {
-	generateSchedule,
 	getNextRecurringScheduleItemDates,
 	parseNewScheduleItemWithId,
 } from "../utilities/schedule";
-import {
-	InstantaneousScheduleItem,
-	Language,
-	RecurringScheduleItem,
-	ScheduleItem,
-} from "../utilities/types";
+import { Language } from "../utilities/types";
 import {
 	getInstantaneousScheduleItemSchema,
 	getRecurringScheduleItemSchema,
@@ -24,155 +18,6 @@ import {
 	NewRecurringScheduleItem,
 } from "../validation/schedule";
 import { protect } from "./auth";
-
-export async function getSchedule(
-	referenceDate: Date | string,
-	limit: number = 10,
-	locale: Language = "en",
-) {
-	"use cache: remote";
-	cacheTag("schedule");
-	cacheLife("hours");
-
-	const parsedReferenceDate = new Date(
-		typeof referenceDate === "string"
-			? z.iso.date().parse(referenceDate)
-			: getDateString(referenceDate, true),
-	);
-
-	const [
-		instantaneousScheduleItemRecords,
-		recurringScheduleItemRecords,
-		removedInstantaneousScheduleItemRecords,
-	] = await Promise.all([
-		database.instantaneousScheduleItem.findMany({
-			include: {
-				title: true,
-				venue: true,
-				instantaneousScheduleItemTimes: {
-					include: {
-						designation: true,
-					},
-					orderBy: {
-						time: "asc",
-					},
-				},
-			},
-			where: {
-				date: {
-					gte: parsedReferenceDate,
-				},
-				removedScheduleItem: null,
-			},
-			orderBy: {
-				date: "asc",
-			},
-			take: limit,
-		}),
-		database.recurringScheduleItem.findMany({
-			include: {
-				title: true,
-				venue: true,
-				recurringScheduleItemTimes: {
-					include: {
-						designation: true,
-					},
-					orderBy: {
-						time: "asc",
-					},
-				},
-			},
-			where: {
-				disabledRecurringScheduleItem: null,
-			},
-		}),
-		database.removedInstantaneousScheduleItem.findMany({
-			include: {
-				scheduleItem: {
-					include: {
-						venue: true,
-					},
-				},
-			},
-			where: {
-				scheduleItem: {
-					date: {
-						gte: parsedReferenceDate,
-					},
-				},
-			},
-		}),
-	]);
-	const instantaneousScheduleItems = instantaneousScheduleItemRecords.map(
-		({
-			id,
-			title,
-			venue,
-			date,
-			eventTypeName,
-			instantaneousScheduleItemTimes,
-		}) =>
-			({
-				id,
-				title: pickTranslation(title, locale),
-				venue: pickTranslation(venue, locale),
-				date,
-				times: instantaneousScheduleItemTimes.map(
-					({ designation, time }) => ({
-						time: getTimeString(time),
-						designation: pickTranslation(designation, locale),
-					}),
-				),
-				isRemoved: false,
-				eventType: eventTypeName as ScheduleItem["eventType"],
-			}) satisfies InstantaneousScheduleItem,
-	);
-	const recurringScheduleItems = recurringScheduleItemRecords.map(
-		({
-			id,
-			title,
-			venue,
-			pattern,
-			eventTypeName,
-			recurringScheduleItemTimes,
-		}) =>
-			({
-				id,
-				title: pickTranslation(title, locale),
-				venue: pickTranslation(venue, locale),
-				recurringPattern: pattern,
-				times: recurringScheduleItemTimes.map(
-					({ time, designation }) => ({
-						designation: pickTranslation(designation, locale),
-						time: getTimeString(time),
-					}),
-				),
-				isDisabled: false,
-				eventType: eventTypeName as ScheduleItem["eventType"],
-			}) satisfies RecurringScheduleItem,
-	);
-	const recurringScheduleItemInstanceExclusions = new Set([
-		...removedInstantaneousScheduleItemRecords.map(
-			({ scheduleItem: { date, venue } }) =>
-				`${getDateString(date)}_${pickTranslation(venue, locale)}`,
-		),
-	]);
-	const schedule = generateSchedule(
-		instantaneousScheduleItems,
-		recurringScheduleItems,
-		limit + recurringScheduleItemInstanceExclusions.size,
-		parsedReferenceDate,
-	);
-	return recurringScheduleItemInstanceExclusions.size > 0
-		? schedule.filter(scheduleItem =>
-				"recurringItemId" in scheduleItem
-					? !recurringScheduleItemInstanceExclusions.has(
-							`${getDateString(scheduleItem.date)}_${scheduleItem.venue}`,
-						)
-					: true,
-			)
-		: schedule;
-}
 
 export async function scheduleInstantaneousItem(
 	newScheduleItem: NewInstantaneousScheduleItem,
@@ -629,7 +474,7 @@ export async function restoreInstantaneousItem(scheduleItemId: number) {
 export async function removeNextRecurringItem(
 	scheduleItemId: number,
 	instance?: number,
-	referenceDate?: Date | string,
+	referenceDate?: string,
 ) {
 	await protect({ roles: ["scheduler"] });
 	const recurringScheduleItem =
@@ -642,12 +487,7 @@ export async function removeNextRecurringItem(
 				id: scheduleItemId,
 			},
 		});
-	const parsedReferenceDate =
-		typeof referenceDate === "string"
-			? z.iso.date().optional().parse(referenceDate)
-			: referenceDate !== undefined
-				? getDateString(referenceDate, true)
-				: undefined;
+	const parsedReferenceDate = z.iso.date().optional().parse(referenceDate);
 	const specificDate = getNextRecurringScheduleItemDates(
 		recurringScheduleItem.pattern,
 		instance ?? 1,
