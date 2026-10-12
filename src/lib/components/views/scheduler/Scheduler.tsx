@@ -257,8 +257,6 @@ const Scheduler = function ({ model }) {
 					>
 						<Button
 							model={newReadonlyModel({
-								className:
-									"flex justify-start min-w-fit w-full md:w-fit max-w-full flex-1",
 								async action() {
 									await tabs.interact({
 										type: "SWITCH_TAB",
@@ -276,6 +274,7 @@ const Scheduler = function ({ model }) {
 									});
 								},
 							})}
+							className="flex w-full max-w-full min-w-fit flex-1 justify-start md:w-fit"
 						>
 							<span className="inline-flex items-center gap-3">
 								<Calendar1Icon
@@ -287,8 +286,6 @@ const Scheduler = function ({ model }) {
 						</Button>
 						<Button
 							model={newReadonlyModel({
-								className:
-									"flex min-w-fit justify-start w-full md:w-fit max-w-full flex-1",
 								async action() {
 									await tabs.interact({
 										type: "SWITCH_TAB",
@@ -306,6 +303,7 @@ const Scheduler = function ({ model }) {
 									});
 								},
 							})}
+							className="flex w-full max-w-full min-w-fit flex-1 justify-start md:w-fit"
 						>
 							<span className="inline-flex items-center gap-3">
 								<RotateCcwIcon

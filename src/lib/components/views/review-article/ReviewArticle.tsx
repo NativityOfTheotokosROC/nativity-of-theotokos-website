@@ -370,9 +370,8 @@ const ReviewArticle = function ({ model }) {
 									disabled:
 										isSubmitting ||
 										notification?.type === "submitting",
-									className:
-										"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
 								})}
+								className="flex w-fit max-w-1/2 min-w-[8em] items-center justify-center"
 							>
 								{notification?.type === "submitting" ? (
 									<Spinner

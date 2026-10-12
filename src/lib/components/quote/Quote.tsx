@@ -1,10 +1,11 @@
 import { StyledModeledComponent } from "@mvc-react/components";
-import { InitializedModel } from "@mvc-react/mvc";
+import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import { useLocale } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import { QuoteModel } from "../../models/quote";
 import { pickTranslation } from "../../utilities/miscellaneous";
 import { CompleteTranslation } from "../../utilities/types";
+import EditQuotePanel from "./EditQuotePanel";
 
 const QUOTATION_MARKS = {
 	openingQuote: { english: "“", russian: "«" } satisfies CompleteTranslation,
@@ -13,7 +14,7 @@ const QUOTATION_MARKS = {
 
 const Quote = function ({ model, className, style }) {
 	const {
-		modelView: { quote, language },
+		modelView: { quote, language, variant, modifiers },
 	} = model;
 	const locale = useLocale();
 	const parsedLanguage = language ?? locale;
@@ -21,12 +22,19 @@ const Quote = function ({ model, className, style }) {
 	return (
 		<div
 			className={twMerge(
-				`quote-box flex flex-col items-center gap-4 font-light md:w-md`,
+				`quote-box flex flex-col gap-4 md:w-md`,
+				variant === "highlight"
+					? "items-center gap-4"
+					: variant === "miniaturized"
+						? "gap-2"
+						: undefined,
 				className,
 			)}
 			style={style}
 		>
-			<p className="quote text-lg/relaxed">
+			<p
+				className={`quote ${variant === "highlight" ? "text-lg/relaxed" : variant === "miniaturized" ? "text-sm/relaxed" : ""}`}
+			>
 				<span>
 					{pickTranslation(
 						QUOTATION_MARKS.openingQuote,
@@ -51,6 +59,11 @@ const Quote = function ({ model, className, style }) {
 				{quote.source &&
 					`, ${typeof quote.source === "string" ? quote.source : pickTranslation(quote.source, parsedLanguage)}`}
 			</span>
+			{quote.id !== undefined && modifiers && (
+				<EditQuotePanel
+					model={newReadonlyModel({ quote, modifiers })}
+				/>
+			)}
 		</div>
 	);
 } satisfies StyledModeledComponent<InitializedModel<QuoteModel>>;

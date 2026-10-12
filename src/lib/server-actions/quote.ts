@@ -7,6 +7,8 @@ import { getMd5Hash } from "../utilities/miscellaneous";
 import { getQuoteSchema, NewQuote } from "../validation/quote";
 import { protect } from "./auth";
 import z from "zod";
+import { DetailedQuote } from "../utilities/quote";
+import { Translation } from "../utilities/types";
 
 export async function addNewQuote(newQuote: NewQuote) {
 	await protect({ roles: ["quotes"] });
@@ -22,10 +24,10 @@ export async function addNewQuote(newQuote: NewQuote) {
 		? new Date(scheduledDateString)
 		: undefined;
 
-	await database.$transaction(async transaction => {
+	const result = await database.$transaction(async transaction => {
 		const [authorTranslation, sourceTranslation] = await Promise.all([
 			transaction.translation.upsert({
-				select: { id: true },
+				select: { id: true, english: true, russian: true },
 				create: {
 					english: author.english,
 					russian: author.russian,
@@ -40,7 +42,7 @@ export async function addNewQuote(newQuote: NewQuote) {
 			}),
 			source.english
 				? transaction.translation.upsert({
-						select: { id: true },
+						select: { id: true, english: true, russian: true },
 						create: {
 							english: source.english,
 							russian: source.russian,
@@ -56,7 +58,7 @@ export async function addNewQuote(newQuote: NewQuote) {
 				: undefined,
 		]);
 		const quoteAuthor = await transaction.quoteAuthor.upsert({
-			select: { id: true },
+			select: { id: true, english: true, russian: true },
 			create: {
 				nameTranslationId: authorTranslation.id,
 			},
@@ -66,6 +68,14 @@ export async function addNewQuote(newQuote: NewQuote) {
 			},
 		});
 		const result = await transaction.quote.create({
+			select: {
+				id: true,
+				quote: true,
+				author: {
+					select: { id: true, name: true },
+				},
+				source: true,
+			},
 			data: {
 				author: {
 					connect: {
@@ -100,8 +110,14 @@ export async function addNewQuote(newQuote: NewQuote) {
 		});
 		revalidateTag("quotes", "max");
 		revalidateTag("daily-quote", "max");
-		return result;
+		return {
+			id: result.id,
+			author: result.author,
+			quote: result.quote,
+			source: result.source ?? undefined,
+		} satisfies DetailedQuote<Translation>;
 	});
+	return result satisfies DetailedQuote<Translation>;
 }
 
 export async function addDailyQuote(quoteId: number, date: string) {
@@ -117,6 +133,31 @@ export async function addDailyQuote(quoteId: number, date: string) {
 		},
 		where: {
 			date: parsedDate,
+		},
+	});
+	revalidateTag("daily-quote", "max");
+}
+
+export async function rescheduleDailyQuote(
+	quoteId: number,
+	oldDate: string,
+	newDate: string,
+) {
+	await protect({ roles: ["quotes"] });
+	const parsedOldDate = new Date(z.iso.date().parse(oldDate));
+	const parsedNewDate = new Date(z.iso.date().parse(newDate));
+	await database.dailyQuote.upsert({
+		create: {
+			date: parsedNewDate,
+			quoteId,
+		},
+		update: {
+			quoteId,
+			date: parsedNewDate,
+		},
+		where: {
+			date: parsedOldDate,
+			quoteId,
 		},
 	});
 	revalidateTag("daily-quote", "max");
@@ -180,6 +221,14 @@ export async function updateQuote(id: number, newQuote: NewQuote) {
 			},
 		});
 		const result = await transaction.quote.update({
+			select: {
+				id: true,
+				quote: true,
+				author: {
+					select: { id: true, name: true },
+				},
+				source: true,
+			},
 			data: {
 				author: {
 					connect: {
@@ -217,7 +266,12 @@ export async function updateQuote(id: number, newQuote: NewQuote) {
 		});
 		revalidateTag("quotes", "max");
 		revalidateTag("daily-quote", "max");
-		return result;
+		return {
+			id: result.id,
+			author: result.author,
+			quote: result.quote,
+			source: result.source ?? undefined,
+		} satisfies DetailedQuote<Translation>;
 	});
 	return result;
 }

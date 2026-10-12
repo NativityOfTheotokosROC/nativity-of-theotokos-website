@@ -51,6 +51,7 @@ const QuotePreviewModal = function ({ model }) {
 										: undefined,
 								},
 								language: "en",
+								variant: "highlight",
 							})}
 							className="h-[35dvh] max-h-[35dvh] max-w-full min-w-full flex-col items-center justify-center-safe gap-4 overflow-y-auto pr-4 data-closed:overflow-hidden"
 						/>
@@ -73,6 +74,7 @@ const QuotePreviewModal = function ({ model }) {
 											: undefined,
 								},
 								language: "ru",
+								variant: "highlight",
 							})}
 							className="h-[35dvh] max-h-[35dvh] max-w-full min-w-full flex-col items-center justify-center-safe gap-4 overflow-y-auto pr-4 data-closed:overflow-hidden"
 						/>

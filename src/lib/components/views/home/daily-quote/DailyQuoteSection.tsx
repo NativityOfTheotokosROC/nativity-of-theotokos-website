@@ -23,8 +23,9 @@ const DailyQuoteSection = function ({ model }) {
 							...dailyQuote,
 							source: dailyQuote.source ?? undefined,
 						},
+						variant: "highlight",
 					})}
-					className="md:w-1/2"
+					className="font-light md:w-1/2"
 				/>
 			</div>
 		</section>

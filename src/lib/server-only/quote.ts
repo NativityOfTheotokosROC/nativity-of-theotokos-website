@@ -1,23 +1,15 @@
 import "server-only";
 
-import { ReplacePropertyType, Text, Translation } from "../utilities/types";
-import { AutoCompleteInfo, Quote } from "../models/new-quote";
+import { DailyQuote, Language, Translation } from "../utilities/types";
+import { AutoCompleteInfo } from "../models/new-quote";
 import database from "../third-party/prisma";
-import { cacheTag } from "next/cache";
-
-export type DetailedQuote<T extends Text = string> = ReplacePropertyType<
-	Quote<T>,
-	"author",
-	QuoteAuthor<T>
-> & {
-	id: number;
-};
-
-export type QuoteAuthor<T extends Text = string> = { id: number; name: T };
+import { cacheLife, cacheTag } from "next/cache";
+import { pickTranslation } from "../utilities/miscellaneous";
+import { DetailedQuote, QuoteAuthor } from "../utilities/quote";
 
 export async function getAutoCompleteInfo() {
 	"use cache: remote";
-	cacheTag("quotes");
+	cacheTag("quotes", "quote_authors");
 
 	const [authors, sources] = await Promise.all([
 		database.quoteAuthor
@@ -121,4 +113,51 @@ export async function getScheduledQuotes(referenceDate: Date) {
 		source: source ?? undefined,
 		quote,
 	})) satisfies DetailedQuote<Translation>[];
+}
+
+export async function getDailyQuote(currentDate: Date, language: Language) {
+	"use cache: remote";
+	cacheTag("daily-quote");
+	cacheLife("days");
+
+	let dailyQuote = await database.dailyQuote
+		.findFirst({
+			where: {
+				date: currentDate,
+			},
+		})
+		.quote({
+			include: {
+				author: {
+					include: { name: true },
+				},
+				quote: true,
+				source: true,
+			},
+		});
+	if (!dailyQuote) {
+		const quotes = await database.quote.findMany({
+			include: {
+				author: {
+					include: { name: true },
+				},
+				quote: true,
+				source: true,
+			},
+		});
+		dailyQuote = quotes[Math.round(Math.random() * (quotes.length - 1))];
+		await database.dailyQuote.create({
+			data: {
+				date: currentDate,
+				quoteId: dailyQuote.id,
+			},
+		});
+	}
+	return {
+		author: pickTranslation(dailyQuote.author.name, language),
+		source: dailyQuote.source
+			? pickTranslation(dailyQuote.source, language)
+			: null,
+		quote: pickTranslation(dailyQuote.quote, language),
+	} satisfies DailyQuote;
 }

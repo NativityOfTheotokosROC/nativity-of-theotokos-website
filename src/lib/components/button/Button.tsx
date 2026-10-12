@@ -1,12 +1,11 @@
 "use client";
 
-import { ModeledComponent } from "@mvc-react/components";
-import { ButtonModel } from "../../models/button";
 import { twMerge } from "tailwind-merge";
+import { ButtonModel } from "../../models/button";
+import { StyledModeledComponent } from "@mvc-react/components";
 
-const Button = function ({ model, children }) {
-	const { action, disabled, className, type, variant, title } =
-		model.modelView;
+const Button = function ({ model, children, className, style }) {
+	const { action, disabled, type, variant, title } = model.modelView;
 	const computedVariant = variant ?? "standard";
 
 	return (
@@ -22,12 +21,13 @@ const Button = function ({ model, children }) {
 						: undefined,
 				className ?? "",
 			)}
+			style={style}
 			onClick={() => action?.()}
 			disabled={disabled}
 		>
 			{children}
 		</button>
 	);
-} satisfies ModeledComponent<ButtonModel>;
+} satisfies StyledModeledComponent<ButtonModel>;
 
 export default Button;

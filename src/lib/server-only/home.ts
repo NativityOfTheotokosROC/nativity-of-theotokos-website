@@ -1,18 +1,13 @@
-import "server-only";
 import { ImagePlaceholder, getPlaceholder } from "@grod56/placeholder";
 import { arrayToShuffled } from "array-shuffle";
 import { cacheLife, cacheTag } from "next/cache";
+import "server-only";
 import { LatestArticles } from "../server-actions/home";
 import { dailyReadings } from "../third-party/holytrinityorthodox";
 import database from "../third-party/prisma";
 import { isRemotePath, pickTranslation } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
-import {
-	ArticleAuthor,
-	DailyQuote,
-	GalleryImage,
-	Language,
-} from "../utilities/types";
+import { ArticleAuthor, GalleryImage, Language } from "../utilities/types";
 import { _FULL_ARTICLE_INCLUDES } from "./article";
 import { getGalleryImages } from "./gallery";
 
@@ -32,53 +27,6 @@ export async function getDailyReadings(currentDate: Date, language: Language) {
 			},
 		};
 	});
-}
-
-export async function getDailyQuote(currentDate: Date, language: Language) {
-	"use cache: remote";
-	cacheTag("daily-quote");
-	cacheLife("days");
-
-	let dailyQuote = await database.dailyQuote
-		.findFirst({
-			where: {
-				date: currentDate,
-			},
-		})
-		.quote({
-			include: {
-				author: {
-					include: { name: true },
-				},
-				quote: true,
-				source: true,
-			},
-		});
-	if (!dailyQuote) {
-		const quotes = await database.quote.findMany({
-			include: {
-				author: {
-					include: { name: true },
-				},
-				quote: true,
-				source: true,
-			},
-		});
-		dailyQuote = quotes[Math.round(Math.random() * (quotes.length - 1))];
-		await database.dailyQuote.create({
-			data: {
-				date: currentDate,
-				quoteId: dailyQuote.id,
-			},
-		});
-	}
-	return {
-		author: pickTranslation(dailyQuote.author.name, language),
-		source: dailyQuote.source
-			? pickTranslation(dailyQuote.source, language)
-			: null,
-		quote: pickTranslation(dailyQuote.quote, language),
-	} satisfies DailyQuote;
 }
 
 export async function getLatestArticles(

@@ -24,8 +24,8 @@ const SignOutButton = function ({ model, children }) {
 				disabled:
 					signOutStatus?.type === "pending" ||
 					signOutStatus?.type === "success",
-				className: "flex justify-center items-center",
 			})}
+			className="flex items-center justify-center"
 		>
 			{signOutStatus?.type === "pending" ? (
 				<Spinner

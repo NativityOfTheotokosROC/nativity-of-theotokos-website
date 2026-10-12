@@ -452,7 +452,6 @@ const NewQuote = function ({ model }) {
 								model={newReadonlyModel({
 									type: "button",
 									disabled: !isValid,
-									className: "w-fit max-w-1/2 min-w-[8em]",
 									action: handleSubmit(form => {
 										quotePreviewModal.interact({
 											type: "OPEN",
@@ -462,6 +461,7 @@ const NewQuote = function ({ model }) {
 										});
 									}),
 								})}
+								className="w-fit max-w-1/2 min-w-[8em]"
 							>
 								{t("preview")}
 							</Button>
@@ -473,9 +473,8 @@ const NewQuote = function ({ model }) {
 										isSubmitting ||
 										newQuoteNotification?.type ===
 											"pending",
-									className:
-										"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
 								})}
+								className="flex w-fit max-w-1/2 min-w-[8em] items-center justify-center"
 							>
 								{newQuoteNotification?.type === "pending" ? (
 									<Spinner

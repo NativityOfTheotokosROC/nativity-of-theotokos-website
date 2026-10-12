@@ -5,7 +5,6 @@ import z from "zod";
 import { ArticlePreview } from "../models/article-card";
 import {
 	getDailyGalleryImages,
-	getDailyQuote,
 	getDailyReadings,
 	getLatestArticles,
 } from "../server-only/home";
@@ -21,6 +20,7 @@ import {
 	Language,
 } from "../utilities/types";
 import { getSchedule } from "../server-only/schedule";
+import { getDailyQuote } from "../server-only/quote";
 
 export type LatestArticles = {
 	featuredArticle: ArticlePreview;

@@ -224,8 +224,8 @@ const RecurringScheduleEventForm = function ({ model }) {
 							model={newReadonlyModel({
 								disabled: !isValid,
 								action: options.previewCallback!,
-								className: "min-w-[8em]",
 							})}
+							className="min-w-[8em]"
 						>
 							{t("previewButton")}
 						</Button>
@@ -234,8 +234,8 @@ const RecurringScheduleEventForm = function ({ model }) {
 						model={newReadonlyModel({
 							disabled: isSubmitting,
 							type: "submit",
-							className: "min-w-[8em]",
 						})}
+						className="min-w-[8em]"
 					>
 						{isSubmitting ? (
 							<Spinner
@@ -348,8 +348,8 @@ const SpecificScheduleEventForm = function ({ model }) {
 							model={newReadonlyModel({
 								disabled: !isValid,
 								action: options.previewCallback!,
-								className: "min-w-[8em]",
 							})}
+							className="min-w-[8em]"
 						>
 							{t("previewButton")}
 						</Button>
@@ -358,8 +358,8 @@ const SpecificScheduleEventForm = function ({ model }) {
 						model={newReadonlyModel({
 							disabled: isSubmitting,
 							type: "submit",
-							className: "min-w-[8em]",
 						})}
+						className="min-w-[8em]"
 					>
 						{isSubmitting ? (
 							<Spinner
@@ -858,8 +858,6 @@ function EventTimesFormControl({
 										title: t("deleteTime"),
 										variant: "alternative",
 										disabled: index === 0,
-										className:
-											"flex justify-center items-center w-fit",
 										action: () =>
 											setValue(
 												"times",
@@ -869,6 +867,7 @@ function EventTimesFormControl({
 												),
 											),
 									})}
+									className="flex w-fit items-center justify-center"
 								>
 									<Trash2Icon strokeWidth={1.5} />
 								</Button>

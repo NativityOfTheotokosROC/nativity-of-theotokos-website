@@ -57,9 +57,8 @@ const ViewScheduleSection = function ({ model }) {
 					action() {
 						interact({ type: "SWITCH_LANGUAGE" });
 					},
-					className:
-						"bg-gray-800 hover:bg-gray-900 active:bg-gray-950 w-full",
 				})}
+				className="w-full bg-gray-800 hover:bg-gray-900 active:bg-gray-950"
 			>
 				<span className="flex items-center gap-2">
 					{language === "en" ? (

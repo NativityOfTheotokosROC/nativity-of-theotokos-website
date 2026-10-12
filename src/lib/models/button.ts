@@ -8,7 +8,6 @@ export type ButtonModelView = {
 	title?: string;
 	variant?: ButtonVariant;
 	disabled?: boolean;
-	className?: string;
 	type?: ButtonType;
 };
 

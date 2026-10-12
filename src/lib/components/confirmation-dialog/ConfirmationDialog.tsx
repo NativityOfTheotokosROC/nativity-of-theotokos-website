@@ -1,12 +1,11 @@
+import ConfirmationDialogOrnament from "@/public/assets/ornament_21.svg";
 import { ModeledVoidComponent } from "@mvc-react/components";
+import { newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 import { ConfirmationDialogModel } from "../../models/confirmation-dialog";
-import { ModalModel } from "../../models/modal";
-import Modal from "../modal/Modal";
-import ConfirmationDialogOrnament from "@/public/assets/ornament_21.svg";
-import { newReadonlyModel } from "@mvc-react/mvc";
 import ButtonBar from "../button-bar/ButtonBar";
 import Button from "../button/Button";
+import Modal from "../modal/Modal";
 
 const ConfirmationDialog = function ({ model }) {
 	const { modelView, interact } = model;
@@ -52,8 +51,8 @@ const ConfirmationDialog = function ({ model }) {
 						model={newReadonlyModel({
 							action: async () =>
 								await interact({ type: "CANCEL" }),
-							className: "min-w-[8em]",
 						})}
+						className="min-w-[8em]"
 					>
 						{cancelButtonText}
 					</Button>
@@ -61,8 +60,8 @@ const ConfirmationDialog = function ({ model }) {
 						model={newReadonlyModel({
 							action: async () =>
 								await interact({ type: "PROCEED" }),
-							className: "min-w-[8em]",
 						})}
+						className="min-w-[8em]"
 					>
 						{proceedButtonText}
 					</Button>
