@@ -1,4 +1,4 @@
-import { Quote } from "../models/new-quote";
+import { Quote } from "../models/write-quote";
 import { Text, ReplacePropertyType } from "./types";
 
 export type DetailedQuote<T extends Text = string> = ReplacePropertyType<

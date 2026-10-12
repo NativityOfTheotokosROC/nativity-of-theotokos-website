@@ -1,6 +1,6 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 import { NewQuote } from "../validation/quote";
-import { AutoCompleteInfo } from "./new-quote";
+import { AutoCompleteInfo } from "./write-quote";
 import { ScheduledQuote } from "./scheduled-quote";
 import { DetailedQuote } from "../utilities/quote";
 import { Translation } from "../utilities/types";

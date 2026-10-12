@@ -1,7 +1,7 @@
 import "server-only";
 
 import { DailyQuote, Language, Translation } from "../utilities/types";
-import { AutoCompleteInfo } from "../models/new-quote";
+import { AutoCompleteInfo } from "../models/write-quote";
 import database from "../third-party/prisma";
 import { cacheLife, cacheTag } from "next/cache";
 import { pickTranslation } from "../utilities/miscellaneous";

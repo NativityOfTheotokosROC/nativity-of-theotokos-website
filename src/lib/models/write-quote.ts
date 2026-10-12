@@ -1,6 +1,7 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 import { Notification, Options, Text, Translation } from "../utilities/types";
 import { NewQuote } from "../validation/quote";
+import { DetailedQuote } from "../utilities/quote";
 
 export type AutoCompleteInfo = {
 	existingAuthors: Translation[];
@@ -13,22 +14,25 @@ export type Quote<T extends Text = string> = {
 	source?: T;
 };
 
-export type NewQuoteNotification =
+export type WriteQuoteNotification =
 	| (Notification<"success"> & { message: string })
 	| (Notification<"failure"> & { message: string })
 	| Notification<"pending">;
 
-export type NewQuoteModelView = {
-	newQuoteNotification: NewQuoteNotification | null;
+export type WriteQuoteModelView = {
+	newQuoteNotification?: WriteQuoteNotification | null;
 	autoCompleteInfo?: AutoCompleteInfo;
+	quote?: DetailedQuote<Translation>;
 };
 
-export type NewQuoteModelInteraction = InputModelInteraction<
+export type WriteQuoteModelInteraction = InputModelInteraction<
 	"ADD_QUOTE",
-	{ newQuote: NewQuote } & Options<{ successCallback: () => void }>
+	{ newQuote: NewQuote; id?: number } & Options<{
+		successCallback: () => void;
+	}>
 >;
 
-export type NewQuoteModel = InteractiveModel<
-	NewQuoteModelView,
-	NewQuoteModelInteraction
+export type WriteQuoteModel = InteractiveModel<
+	WriteQuoteModelView,
+	WriteQuoteModelInteraction
 >;

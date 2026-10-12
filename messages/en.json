@@ -225,7 +225,7 @@
 		"schedulerCheckLabel": "Display the quote on a specific date",
 		"source": "Source",
 		"successMessage": "Quote successfully added",
-		"title": "New Quote"
+		"title": "Write Quote"
 	},
 	"news": {
 		"articleUpdated": "Updated",
