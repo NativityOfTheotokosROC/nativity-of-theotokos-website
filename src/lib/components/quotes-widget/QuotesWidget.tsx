@@ -116,12 +116,11 @@ const QuotesWidget = function ({ model }) {
 
 	return (
 		<div className="flex flex-col gap-3">
-			<div></div>
 			<Menu>
 				{({ open }) => (
 					<>
 						<MenuButton
-							className={`flex items-center justify-start gap-6 py-2 text-left`}
+							className={`flex items-center justify-end gap-6 p-3 text-left w-fit`}
 						>
 							{currentSortingColumn}
 							<ChevronDown
@@ -132,7 +131,7 @@ const QuotesWidget = function ({ model }) {
 						<MenuItems
 							anchor="bottom end"
 							transition
-							className="z-1 mr-1 flex w-45 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-800 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:px-6 *:py-4 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#ffdc4f] focus:outline-none *:active:bg-gray-950 *:active:text-[#ffdc4f] data-closed:scale-92 data-closed:opacity-0"
+							className="z-1 mr-1 text-sm flex w-45 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-800 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:p-3 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#ffdc4f] focus:outline-none *:active:bg-gray-950 *:active:text-[#ffdc4f] data-closed:scale-92 data-closed:opacity-0"
 						>
 							{table.getHeaderGroups()[0].headers.map(header => (
 								<MenuItem key={header.column.id} as={Fragment}>
@@ -150,7 +149,7 @@ const QuotesWidget = function ({ model }) {
 					</>
 				)}
 			</Menu>
-			<div className="flex h-[27em] max-h-[27em] flex-col overflow-y-auto p-6">
+			<div className="flex gap-3 h-[27em] max-h-[27em] flex-col overflow-y-auto p-6">
 				{table.getRowModel().rows.map(row => (
 					<>
 						<Quote

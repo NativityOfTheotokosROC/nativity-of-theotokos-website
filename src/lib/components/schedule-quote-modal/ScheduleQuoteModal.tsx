@@ -53,7 +53,7 @@ const ScheduleQuoteModal = function ({ model }) {
 				</div>
 				{modelView && (
 					<form
-						className="flex flex-col gap-4"
+						className="flex flex-col gap-4 p-6"
 						onSubmit={handleSubmit(async form => {
 							await interact({
 								type: "SCHEDULE_QUOTE",
@@ -98,7 +98,8 @@ const ScheduleQuoteModal = function ({ model }) {
 						<ButtonBar
 							model={newReadonlyModel({
 								orientation: "horizontal",
-								arrangement: "start",
+								arrangement: "center",
+								className: "w-full"
 							})}
 						>
 							<Button

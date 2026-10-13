@@ -13,7 +13,7 @@ const QuoteHighlight = function ({ model }) {
 	const [language] = useState(locale);
 
 	return (
-		<div className="align-center flex justify-center bg-[#0a0a0a] p-8 py-14 text-white md:p-20">
+		<div className="flex-col gap-4 align-center flex justify-center bg-[#0a0a0a] p-8 py-14 text-white md:p-20 border-t-15 border-[#dcb042]">
 			<span className="font-light uppercase">
 				{t("highlightedQuote")}
 			</span>

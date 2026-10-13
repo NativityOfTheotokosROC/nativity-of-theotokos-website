@@ -91,7 +91,7 @@ const ManageQuotes = function ({ model }) {
 			<ConfirmationDialog model={confirmationDialog} />
 			<WriteQuoteModal model={writeQuoteModal} />
 			<ScheduleQuoteModal model={scheduleQuoteModal} />
-			{quoteHighlight && (
+			<div className="flex flex-col bg-[#FEF8F3] text-black">{quoteHighlight && (
 				<QuoteHighlight
 					model={newReadonlyModel({
 						quote: quoteHighlight,
@@ -151,7 +151,7 @@ const ManageQuotes = function ({ model }) {
 						},
 					},
 				})}
-			/>
+			/></div>
 		</>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ManageQuotesModel>>;

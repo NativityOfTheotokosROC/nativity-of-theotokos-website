@@ -19,7 +19,7 @@ const MoreQuotes = function ({ model }) {
 	// });
 
 	return (
-		<div className="more-quotes-section flex flex-1 flex-col gap-3 border-t-5 border-red-900">
+		<div className="more-quotes-section flex flex-col gap-4 border-t-15 border-red-900 p-8 py-9 md:py-10 lg:px-20">
 			<span className="uppercase">{t("moreQuotes")}</span>
 			<div className="flex w-full flex-col gap-4 md:w-lg">
 				<Button

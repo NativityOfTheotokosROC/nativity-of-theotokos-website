@@ -98,9 +98,9 @@ const ScheduledQuotes = function ({ model }) {
 	const { pagination } = table.state;
 
 	return (
-		<div className="scheduled-quotes-section flex flex-1 flex-col gap-3 border-t-5 border-[#dcb042]">
+		<div className="scheduled-quotes-section flex flex-1 flex-col gap-3 border-t-15 border-[#dcb042]">
 			<span className="uppercase">{t("scheduledQuotes")}</span>
-			<div className="flex h-[27em] max-h-[27em] flex-col overflow-y-auto p-6">
+			<div className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto p-6">
 				{table.getRowModel().rows.map(row => (
 					<>
 						<ScheduledQuote

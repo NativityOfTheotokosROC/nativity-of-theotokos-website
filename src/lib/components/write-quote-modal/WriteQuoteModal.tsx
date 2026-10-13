@@ -22,7 +22,7 @@ const WriteQuoteModal = function ({ model }) {
 				<div className="w-full rounded-none border-0 bg-gray-800 p-6 text-[#FEF8F3]">
 					<span className="text-xl">{t("title")}</span>
 				</div>
-				<WriteQuote
+				<div className="p-6 flex"><WriteQuote
 					model={{
 						modelView: {
 							quote: modelView?.quote,
@@ -44,7 +44,7 @@ const WriteQuoteModal = function ({ model }) {
 							}
 						},
 					}}
-				/>
+				/></div>
 			</div>
 		</Modal>
 	);

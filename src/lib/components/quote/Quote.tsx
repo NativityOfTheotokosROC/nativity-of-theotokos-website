@@ -62,6 +62,7 @@ const Quote = function ({ model, className, style }) {
 			{quote.id !== undefined && modifiers && (
 				<EditQuotePanel
 					model={newReadonlyModel({ quote, modifiers })}
+					className="self-end"
 				/>
 			)}
 		</div>
