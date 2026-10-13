@@ -12,6 +12,7 @@ import { getDateString } from "../../utilities/date-time";
 import { addDays } from "date-fns";
 import ButtonBar from "../button-bar/ButtonBar";
 import Button from "../button/Button";
+import Spinner from "@/src/lib/components/spinner/Spinner";
 
 const ScheduleQuoteModal = function ({ model }) {
 	const t = useTranslations("scheduleQuoteModal");
@@ -53,7 +54,7 @@ const ScheduleQuoteModal = function ({ model }) {
 				</div>
 				{modelView && (
 					<form
-						className="flex flex-col gap-4 p-6"
+						className="flex flex-col gap-6 p-6"
 						onSubmit={handleSubmit(async form => {
 							await interact({
 								type: "SCHEDULE_QUOTE",
@@ -99,7 +100,7 @@ const ScheduleQuoteModal = function ({ model }) {
 							model={newReadonlyModel({
 								orientation: "horizontal",
 								arrangement: "center",
-								className: "w-full"
+								className: "w-full",
 							})}
 						>
 							<Button
@@ -107,6 +108,7 @@ const ScheduleQuoteModal = function ({ model }) {
 									disabled: isSubmitting,
 									action: () => interact({ type: "CLOSE" }),
 								})}
+								className="min-w-[8em]"
 							>
 								{t("cancel")}
 							</Button>
@@ -115,10 +117,20 @@ const ScheduleQuoteModal = function ({ model }) {
 									type: "submit",
 									disabled: isSubmitting,
 								})}
+								className="min-w-[8em]"
 							>
-								{isToReschedule
-									? t("reschedule")
-									: t("schedule")}
+								{isSubmitting ? (
+									<Spinner
+										model={newReadonlyModel({
+											color: "white",
+											size: 20,
+										})}
+									/>
+								) : isToReschedule ? (
+									t("reschedule")
+								) : (
+									t("schedule")
+								)}
 							</Button>
 						</ButtonBar>
 					</form>

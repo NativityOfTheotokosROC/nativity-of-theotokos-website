@@ -68,20 +68,23 @@ const QuotesWidget = function ({ model }) {
 					{
 						header: `${t("author")} (${tMisc("russian")})`,
 						id: "authorRu",
+						sortUndefined: 'last'
 					},
 				),
 				columnHelper.accessor(row => pickTranslation(row.quote, "en"), {
 					header: t("quote"),
-					id: "quoteEn",
+					id: "quoteEn"
 				}),
 				columnHelper.accessor(row => pickTranslation(row.quote, "ru"), {
 					header: `${t("quote")} (${tMisc("russian")})`,
 					id: "quoteRu",
+						sortUndefined: 'last'
 				}),
 				columnHelper.accessor(
 					row =>
 						pickTranslation(row.source ?? BLANK_TRANSLATION, "en"),
-					{ header: t("source"), id: "sourceEn" },
+					{ header: t("source"), id: "sourceEn",
+						sortUndefined: 'last' },
 				),
 				columnHelper.accessor(
 					row =>
@@ -89,6 +92,7 @@ const QuotesWidget = function ({ model }) {
 					{
 						header: `${t("source")} (${tMisc("russian")})`,
 						id: "sourceRu",
+						sortUndefined: 'last'
 					},
 				),
 			]),
@@ -120,9 +124,9 @@ const QuotesWidget = function ({ model }) {
 				{({ open }) => (
 					<>
 						<MenuButton
-							className={`flex items-center justify-end gap-6 p-3 text-left w-fit`}
+							className={`flex w-fit items-center gap-6 self-end p-3 text-left`}
 						>
-							{currentSortingColumn}
+							{t("sortedBy", { field: currentSortingColumn })}
 							<ChevronDown
 								className={`transition duration-200 ease-out ${open ? "rotate-180" : ""}`}
 								strokeWidth={1.5}
@@ -131,7 +135,7 @@ const QuotesWidget = function ({ model }) {
 						<MenuItems
 							anchor="bottom end"
 							transition
-							className="z-1 mr-1 text-sm flex w-45 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-800 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:p-3 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#ffdc4f] focus:outline-none *:active:bg-gray-950 *:active:text-[#ffdc4f] data-closed:scale-92 data-closed:opacity-0"
+							className="w- z-1 mr-1 flex origin-top-right flex-col rounded-lg border border-white/15 bg-gray-800 text-sm transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:p-3 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#ffdc4f] focus:outline-none *:active:bg-gray-950 *:active:text-[#ffdc4f] data-closed:scale-92 data-closed:opacity-0"
 						>
 							{table.getHeaderGroups()[0].headers.map(header => (
 								<MenuItem key={header.column.id} as={Fragment}>
@@ -149,7 +153,7 @@ const QuotesWidget = function ({ model }) {
 					</>
 				)}
 			</Menu>
-			<div className="flex gap-3 h-[27em] max-h-[27em] flex-col overflow-y-auto p-6">
+			<div className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto p-3 pr-5 rounded-lg border bg-white border-gray-400">
 				{table.getRowModel().rows.map(row => (
 					<>
 						<Quote
@@ -163,7 +167,7 @@ const QuotesWidget = function ({ model }) {
 								modifiers,
 							})}
 						/>
-						<hr className="mt-6 opacity-65" />
+						<hr className="mt-3 opacity-65" />
 					</>
 				))}
 			</div>

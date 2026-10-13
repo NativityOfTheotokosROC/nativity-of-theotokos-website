@@ -371,7 +371,7 @@ export function manageQuotesVIInterface(
 						return {
 							...currentModelView,
 							scheduledQuotes: scheduledQuotes.filter(
-								quote => !(quote.date === new Date(date)),
+								quote => !(getDateString(quote.date) === date),
 							),
 						};
 					} catch (error) {

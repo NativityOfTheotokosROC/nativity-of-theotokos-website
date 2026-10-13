@@ -445,6 +445,7 @@
 		"byAuthor": "По автору",
 		"allQuotes": "Все цитаты",
 		"sortBy": "Сортировать по",
+		"sortedBy": "Сортировка: {field}",
 		"author": "Автор",
 		"source": "Источник",
 		"quote": "Цитата",
@@ -480,7 +481,7 @@
 	"scheduleQuoteModal": {
 		"scheduleQuoteTitle": "Запланировать цитату",
 		"rescheduleQuoteTitle": "Перенести цитату",
-		"description": "Выберите дату для показа цитаты «{quote}» автора «{author}».",
+		"description": "Выберите дату для показа цитаты «{quote}» автора {author}.",
 		"schedule": "Запланировать",
 		"reschedule": "Перенести",
 		"cancel": "Отмена"

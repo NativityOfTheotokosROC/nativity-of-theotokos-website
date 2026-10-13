@@ -44,6 +44,7 @@ const WriteQuote = function ({ model }) {
 		shouldUnregister: true,
 		defaultValues: quote
 			? {
+					...getDefaultValues(),
 					author: {
 						...quote.author.name,
 						russian: quote.author.name.russian ?? "",

@@ -98,9 +98,9 @@ const ScheduledQuotes = function ({ model }) {
 	const { pagination } = table.state;
 
 	return (
-		<div className="scheduled-quotes-section flex flex-1 flex-col gap-3 border-t-15 border-[#dcb042]">
-			<span className="uppercase">{t("scheduledQuotes")}</span>
-			<div className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto p-6">
+		<div className="scheduled-quotes-section flex gap-4 p-8 py-9 md:py-10 lg:px-20 flex-col border-t-3 border-[#dcb042]">
+			<span className="text-2xl">{t("scheduledQuotes")}</span>
+			<div className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto p-3 pr-5 rounded-lg border bg-white border-gray-400">
 				{table.getRowModel().rows.map(row => (
 					<>
 						<ScheduledQuote
@@ -110,7 +110,7 @@ const ScheduledQuotes = function ({ model }) {
 								modifiers,
 							})}
 						/>
-						<hr className="mt-6 opacity-65" />
+						<hr className="mt-3 opacity-65" />
 					</>
 				))}
 			</div>

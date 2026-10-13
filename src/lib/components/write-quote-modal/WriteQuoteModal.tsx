@@ -19,32 +19,35 @@ const WriteQuoteModal = function ({ model }) {
 			})}
 		>
 			<div className="flex w-full flex-col items-center justify-center">
-				<div className="w-full rounded-none border-0 bg-gray-800 p-6 text-[#FEF8F3]">
+				<div className="w-full rounded-none border-0 bg-gray-800 p-6 px-3 text-[#FEF8F3]">
 					<span className="text-xl">{t("title")}</span>
 				</div>
-				<div className="p-6 flex"><WriteQuote
-					model={{
-						modelView: {
-							quote: modelView?.quote,
-							autoCompleteInfo: modelView?.autoCompleteInfo,
-						},
-						async interact(interaction) {
-							switch (interaction.type) {
-								case "ADD_QUOTE": {
-									const { newQuote, id } = interaction.input;
-									await interact({
-										type: "ADD_QUOTE",
-										input: {
-											newQuote,
-											id,
-										},
-									});
-									await interact({ type: "CLOSE" });
+				<div className="flex p-6 px-3">
+					<WriteQuote
+						model={{
+							modelView: {
+								quote: modelView?.quote,
+								autoCompleteInfo: modelView?.autoCompleteInfo,
+							},
+							async interact(interaction) {
+								switch (interaction.type) {
+									case "ADD_QUOTE": {
+										const { newQuote, id } =
+											interaction.input;
+										await interact({
+											type: "ADD_QUOTE",
+											input: {
+												newQuote,
+												id,
+											},
+										});
+										await interact({ type: "CLOSE" });
+									}
 								}
-							}
-						},
-					}}
-				/></div>
+							},
+						}}
+					/>
+				</div>
 			</div>
 		</Modal>
 	);
