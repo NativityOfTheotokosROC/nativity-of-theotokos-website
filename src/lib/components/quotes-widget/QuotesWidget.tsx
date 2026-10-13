@@ -18,8 +18,6 @@ import { ArrowLeft, ArrowRight, ChevronDown } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Fragment, useMemo } from "react";
 import { QuotesWidgetModel } from "../../models/quotes-widget";
-import { BLANK_TRANSLATION } from "../../utilities/constants";
-import { pickTranslation } from "../../utilities/miscellaneous";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/react";
 import Quote from "../quote/Quote";
 
@@ -60,39 +58,40 @@ const QuotesWidget = function ({ model }) {
 		() =>
 			columnHelper.columns([
 				columnHelper.accessor(
-					row => pickTranslation(row.author.name, "en"),
+					row => row.author.name.english,
 					{ header: t("author"), id: "authorEn" },
 				),
 				columnHelper.accessor(
-					row => pickTranslation(row.author.name, "ru"),
+					row => row.author.name.russian,
 					{
 						header: `${t("author")} (${tMisc("russian")})`,
 						id: "authorRu",
-						sortUndefined: 'last'
+						sortUndefined: "last",
 					},
 				),
-				columnHelper.accessor(row => pickTranslation(row.quote, "en"), {
+				columnHelper.accessor(row => row.quote.english, {
 					header: t("quote"),
-					id: "quoteEn"
+					id: "quoteEn",
 				}),
-				columnHelper.accessor(row => pickTranslation(row.quote, "ru"), {
+				columnHelper.accessor(row => row.quote.russian, {
 					header: `${t("quote")} (${tMisc("russian")})`,
 					id: "quoteRu",
-						sortUndefined: 'last'
+					sortUndefined: "last",
 				}),
 				columnHelper.accessor(
-					row =>
-						pickTranslation(row.source ?? BLANK_TRANSLATION, "en"),
-					{ header: t("source"), id: "sourceEn",
-						sortUndefined: 'last' },
+					row => row.source?.english,
+					{
+						header: t("source"),
+						id: "sourceEn",
+						sortUndefined: "last",
+					},
 				),
 				columnHelper.accessor(
-					row =>
-						pickTranslation(row.source ?? BLANK_TRANSLATION, "ru"),
+					row => row.source?.russian,
 					{
 						header: `${t("source")} (${tMisc("russian")})`,
 						id: "sourceRu",
-						sortUndefined: 'last'
+						sortUndefined: "last",
 					},
 				),
 			]),
@@ -124,9 +123,10 @@ const QuotesWidget = function ({ model }) {
 				{({ open }) => (
 					<>
 						<MenuButton
-							className={`flex w-fit items-center gap-6 self-end p-3 text-left`}
+							className={`uppercase text-sm flex w-fit items-center gap-3 self-end text-left`}
 						>
-							{currentSortingColumn && t("sortedBy", { field: currentSortingColumn })}
+							{currentSortingColumn &&
+								t("sortedBy", { field: currentSortingColumn })}
 							<ChevronDown
 								className={`transition duration-200 ease-out ${open ? "rotate-180" : ""}`}
 								strokeWidth={1.5}
@@ -153,7 +153,7 @@ const QuotesWidget = function ({ model }) {
 					</>
 				)}
 			</Menu>
-			<div className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto p-3 pr-5 rounded-lg border bg-white border-gray-400">
+			<div className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto rounded-lg border border-gray-400 bg-white p-5">
 				{table.getRowModel().rows.map(row => (
 					<>
 						<Quote

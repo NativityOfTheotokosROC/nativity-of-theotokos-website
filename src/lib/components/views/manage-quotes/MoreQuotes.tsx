@@ -24,6 +24,7 @@ const MoreQuotes = function ({ model }) {
 			<div className="flex w-full flex-col gap-4 md:w-lg">
 				<Button
 					model={newReadonlyModel({ action: newQuoteCallback })}
+					className="w-full"
 				>
 					{t("newQuote")}
 				</Button>

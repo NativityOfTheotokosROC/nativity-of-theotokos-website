@@ -99,8 +99,8 @@ const ScheduledQuotes = function ({ model }) {
 
 	return (
 		<div className="scheduled-quotes-section flex gap-4 p-8 py-9 md:py-10 lg:px-20 flex-col border-t-3 border-[#dcb042]">
-			<span className="text-2xl">{t("scheduledQuotes")}</span>
-			<div className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto p-3 pr-5 rounded-lg border bg-white border-gray-400">
+			<span className="text-xl">{t("scheduledQuotes")}</span>
+			<div className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto p-5 rounded-lg border bg-white border-gray-400">
 				{table.getRowModel().rows.map(row => (
 					<>
 						<ScheduledQuote
