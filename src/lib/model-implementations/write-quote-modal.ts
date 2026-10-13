@@ -7,19 +7,19 @@ import {
 	WriteQuoteModalModelInteraction,
 	WriteQuoteModalModelView,
 } from "../models/write-quote-modal";
+import { UninitializedModelError } from "../utilities/errors";
+import { NewQuote } from "../validation/quote";
 
 export function writeQuoteModalVIInterface(
-	addQuoteCallback: WriteQuoteModalModelView["addQuoteCallback"],
+	addQuoteCallback: (newQuote: NewQuote, id?: number) => Promise<void>,
 ) {
 	return {
 		async produceModelView(interaction, currentModelView) {
-			const initErrorMessage = "The model is uninitialized";
 			switch (interaction.type) {
 				case "OPEN": {
 					const input =
 						"input" in interaction ? interaction.input : null;
 					return {
-						addQuoteCallback,
 						isOpen: true,
 						quote: input ? input.quote : undefined,
 						autoCompleteInfo:
@@ -28,8 +28,14 @@ export function writeQuoteModalVIInterface(
 					};
 				}
 				case "CLOSE": {
-					if (!currentModelView) throw new Error(initErrorMessage);
+					if (!currentModelView) throw new UninitializedModelError();
 					return { ...currentModelView, isOpen: false };
+				}
+				case "ADD_QUOTE": {
+					if (!currentModelView) throw new UninitializedModelError();
+					const { newQuote, id } = interaction.input;
+					await addQuoteCallback(newQuote, id);
+					return { ...currentModelView, quote: undefined };
 				}
 			}
 		},
@@ -40,7 +46,7 @@ export function writeQuoteModalVIInterface(
 }
 
 export function useWriteQuoteModal(
-	addQuoteCallback: WriteQuoteModalModelView["addQuoteCallback"],
+	addQuoteCallback: (newQuote: NewQuote, id?: number) => Promise<void>,
 ) {
 	const model = useNewStatefulInteractiveModel(
 		writeQuoteModalVIInterface(addQuoteCallback),

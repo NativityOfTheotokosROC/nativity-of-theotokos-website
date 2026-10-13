@@ -32,10 +32,13 @@ const WriteQuoteModal = function ({ model }) {
 							switch (interaction.type) {
 								case "ADD_QUOTE": {
 									const { newQuote, id } = interaction.input;
-									await modelView?.addQuoteCallback(
-										newQuote,
-										id,
-									);
+									await interact({
+										type: "ADD_QUOTE",
+										input: {
+											newQuote,
+											id,
+										},
+									});
 									await interact({ type: "CLOSE" });
 								}
 							}

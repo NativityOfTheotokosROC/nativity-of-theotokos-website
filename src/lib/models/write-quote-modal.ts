@@ -10,7 +10,6 @@ import { WriteQuoteModelView } from "./write-quote";
 
 export type WriteQuoteModalModelView = {
 	isOpen: boolean;
-	addQuoteCallback: (newQuote: NewQuote, id?: number) => Promise<void>;
 } & WriteQuoteModelView;
 
 export type WriteQuoteModalModelInteraction =
@@ -22,7 +21,8 @@ export type WriteQuoteModalModelInteraction =
 				autoCompleteInfo?: WriteQuoteModalModelView["autoCompleteInfo"];
 			}
 	  >
-	| ModelInteraction<"CLOSE">;
+	| ModelInteraction<"CLOSE">
+	| InputModelInteraction<"ADD_QUOTE", { newQuote: NewQuote; id?: number }>;
 
 export type WriteQuoteModalModel = InteractiveModel<
 	WriteQuoteModalModelView,

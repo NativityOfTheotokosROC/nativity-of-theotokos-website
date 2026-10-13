@@ -477,5 +477,13 @@
 		"rescheduleFailure": "Could not reschedule the quote. Error: {message}",
 		"deleteSuccess": "Quote successfully deleted",
 		"deleteFailure": "Could not delete the quote. Error: {message}"
+	},
+	"scheduleQuoteModal": {
+		"scheduleQuoteTitle": "Schedule Quote",
+		"rescheduleQuoteTitle": "Reschedule Quote",
+		"description": "Pick a date to schedule the quote, ''{quote}'' by ''{author}''.",
+		"schedule": "Schedule",
+		"reschedule": "Reschedule",
+		"cancel": "Cancel"
 	}
 }

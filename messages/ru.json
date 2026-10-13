@@ -476,5 +476,13 @@
 		"rescheduleFailure": "Не удалось изменить дату показа цитаты. Ошибка: {message}",
 		"deleteSuccess": "Цитата успешно удалена",
 		"deleteFailure": "Не удалось удалить цитату. Ошибка: {message}"
+	},
+	"scheduleQuoteModal": {
+		"scheduleQuoteTitle": "Запланировать цитату",
+		"rescheduleQuoteTitle": "Перенести цитату",
+		"description": "Выберите дату для показа цитаты «{quote}» автора «{author}».",
+		"schedule": "Запланировать",
+		"reschedule": "Перенести",
+		"cancel": "Отмена"
 	}
 }
