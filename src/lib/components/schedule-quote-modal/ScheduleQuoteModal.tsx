@@ -80,7 +80,7 @@ const ScheduleQuoteModal = function ({ model }) {
 										modelView.quote.quote,
 										locale,
 									),
-									60,
+									100,
 								),
 								author: pickTranslation(
 									modelView.quote.author.name,

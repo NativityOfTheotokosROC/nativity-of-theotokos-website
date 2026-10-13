@@ -59,7 +59,6 @@ const WriteQuote = function ({ model }) {
 								russian: quote.source.russian ?? "",
 							}
 						: BLANK_TRANSLATION,
-					scheduledDate: getDefaultValues().scheduledDate,
 				}
 			: getDefaultValues(),
 	});

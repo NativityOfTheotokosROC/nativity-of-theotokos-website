@@ -57,18 +57,15 @@ const QuotesWidget = function ({ model }) {
 	const columns = useMemo(
 		() =>
 			columnHelper.columns([
-				columnHelper.accessor(
-					row => row.author.name.english,
-					{ header: t("author"), id: "authorEn" },
-				),
-				columnHelper.accessor(
-					row => row.author.name.russian,
-					{
-						header: `${t("author")} (${tMisc("russian")})`,
-						id: "authorRu",
-						sortUndefined: "last",
-					},
-				),
+				columnHelper.accessor(row => row.author.name.english, {
+					header: t("author"),
+					id: "authorEn",
+				}),
+				columnHelper.accessor(row => row.author.name.russian, {
+					header: `${t("author")} (${tMisc("russian")})`,
+					id: "authorRu",
+					//sortUndefined: "last",
+				}),
 				columnHelper.accessor(row => row.quote.english, {
 					header: t("quote"),
 					id: "quoteEn",
@@ -76,24 +73,18 @@ const QuotesWidget = function ({ model }) {
 				columnHelper.accessor(row => row.quote.russian, {
 					header: `${t("quote")} (${tMisc("russian")})`,
 					id: "quoteRu",
-					sortUndefined: "last",
+					//sortUndefined: "last",
 				}),
-				columnHelper.accessor(
-					row => row.source?.english,
-					{
-						header: t("source"),
-						id: "sourceEn",
-						sortUndefined: "last",
-					},
-				),
-				columnHelper.accessor(
-					row => row.source?.russian,
-					{
-						header: `${t("source")} (${tMisc("russian")})`,
-						id: "sourceRu",
-						sortUndefined: "last",
-					},
-				),
+				columnHelper.accessor(row => row.source?.english, {
+					header: t("source"),
+					id: "sourceEn",
+					//sortUndefined: "last",
+				}),
+				columnHelper.accessor(row => row.source?.russian, {
+					header: `${t("source")} (${tMisc("russian")})`,
+					id: "sourceRu",
+					//sortUndefined: "last",
+				}),
 			]),
 		[t, tMisc, columnHelper],
 	);
@@ -123,7 +114,7 @@ const QuotesWidget = function ({ model }) {
 				{({ open }) => (
 					<>
 						<MenuButton
-							className={`uppercase text-sm flex w-fit items-center gap-3 self-end text-left`}
+							className={`flex w-fit items-center gap-3 self-end text-left text-sm uppercase`}
 						>
 							{currentSortingColumn &&
 								t("sortedBy", { field: currentSortingColumn })}

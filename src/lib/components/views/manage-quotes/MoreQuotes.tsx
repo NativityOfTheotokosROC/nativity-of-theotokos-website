@@ -19,9 +19,9 @@ const MoreQuotes = function ({ model }) {
 	// });
 
 	return (
-		<div className="more-quotes-section flex flex-col gap-4 p-8 py-9 md:py-10 lg:px-20">
+		<div className="more-quotes-section flex flex-col gap-5 p-8 py-9 md:py-10 lg:px-20">
 			<span className="text-xl">{t("moreQuotes")}</span>
-			<div className="flex w-full flex-col gap-4 md:w-lg">
+			<div className="flex w-full flex-col gap-5 md:w-lg">
 				<Button
 					model={newReadonlyModel({ action: newQuoteCallback })}
 					className="w-full"
