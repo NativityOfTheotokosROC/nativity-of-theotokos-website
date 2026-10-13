@@ -6,6 +6,7 @@ import database from "../third-party/prisma";
 import { cacheLife, cacheTag } from "next/cache";
 import { pickTranslation } from "../utilities/miscellaneous";
 import { DetailedQuote, QuoteAuthor } from "../utilities/quote";
+import { ScheduledQuote } from "../models/scheduled-quote";
 
 export async function getAutoCompleteInfo() {
 	"use cache: remote";
@@ -107,12 +108,15 @@ export async function getScheduledQuotes(referenceDate: Date) {
 		},
 		where: { date: { gte: referenceDate } },
 	});
-	return scheduledQuotes.map(({ quote: { id, author, source, quote } }) => ({
-		id,
-		author: { id: author.id, name: author.name },
-		source: source ?? undefined,
-		quote,
-	})) satisfies DetailedQuote<Translation>[];
+	return scheduledQuotes.map(
+		({ quote: { id, author, source, quote }, date }) => ({
+			id,
+			author: { id: author.id, name: author.name },
+			source: source ?? undefined,
+			quote,
+			date,
+		}),
+	) satisfies ScheduledQuote<Translation>[];
 }
 
 export async function getDailyQuote(currentDate: Date, language: Language) {

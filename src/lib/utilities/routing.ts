@@ -7,6 +7,7 @@ export function getProtectedRoutes() {
 		"/admin",
 		"/notifications",
 		"/quotes/new",
+		"/quotes/manage",
 		"/write-article", //TODO: Cater for /news/[slug]/edit too
 		"/review-article",
 		"/assign-article",

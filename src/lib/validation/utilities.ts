@@ -12,6 +12,7 @@ export type StringValidationOptions = Partial<{
 	min: ValidationOption<number>;
 	max: ValidationOption<number>;
 	pattern: ValidationOption<RegExp>;
+	preprocess: (string: string) => string;
 }>;
 export type NewTranslation = z.infer<ReturnType<typeof getTranslationSchema>>;
 
@@ -66,7 +67,9 @@ export function getStringSchema(options?: StringValidationOptions) {
 		const { value, invalidMessage } = options.pattern;
 		expression = expression.regex(value, { error: invalidMessage });
 	}
-	return expression;
+	return options?.preprocess
+		? z.preprocess(options.preprocess!, expression)
+		: expression;
 }
 
 export function getOptionalStringSchema(

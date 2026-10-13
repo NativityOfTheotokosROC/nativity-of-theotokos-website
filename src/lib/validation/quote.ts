@@ -36,6 +36,9 @@ export function getQuoteSchema(t?: Translator) {
 							max: maxQuoteEn,
 						}),
 				},
+				preprocess(string) {
+					return string.replace(/\n+/gm, " ");
+				},
 			},
 			russianValidationOptions: {
 				trim: true,
@@ -47,6 +50,9 @@ export function getQuoteSchema(t?: Translator) {
 							field: t("newQuote.quote"),
 							max: maxQuoteRu,
 						}),
+				},
+				preprocess(string) {
+					return string.replace(/\n+/gm, " ");
 				},
 			},
 		}),

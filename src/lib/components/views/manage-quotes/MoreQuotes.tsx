@@ -1,4 +1,3 @@
-import { Translation } from "@/src/generated/prisma/client";
 import { EditableQuoteModelView } from "@/src/lib/models/editable-quote";
 import { QuoteModelView } from "@/src/lib/models/quote";
 import { DetailedQuote } from "@/src/lib/utilities/quote";
@@ -7,6 +6,7 @@ import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
 import Button from "../../button/Button";
 import QuotesWidget from "../../quotes-widget/QuotesWidget";
+import { Translation } from "@/src/lib/utilities/types";
 
 const MoreQuotes = function ({ model }) {
 	const { quotes, newQuoteCallback, quoteModifiers } = model.modelView;
