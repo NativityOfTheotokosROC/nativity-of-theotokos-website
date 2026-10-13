@@ -126,7 +126,7 @@ const QuotesWidget = function ({ model }) {
 						<MenuButton
 							className={`flex w-fit items-center gap-6 self-end p-3 text-left`}
 						>
-							{t("sortedBy", { field: currentSortingColumn })}
+							{currentSortingColumn && t("sortedBy", { field: currentSortingColumn })}
 							<ChevronDown
 								className={`transition duration-200 ease-out ${open ? "rotate-180" : ""}`}
 								strokeWidth={1.5}
