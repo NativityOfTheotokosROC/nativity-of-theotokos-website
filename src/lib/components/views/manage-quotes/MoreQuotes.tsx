@@ -19,7 +19,7 @@ const MoreQuotes = function ({ model }) {
 	// });
 
 	return (
-		<div className="more-quotes-section flex flex-col gap-5 p-8 py-9 md:py-10 lg:px-20">
+		<div className="more-quotes-section flex flex-col gap-5 p-8 py-9 md:py-10 lg:px-20 bg-[antiquewhite]">
 			<span className="text-xl">{t("moreQuotes")}</span>
 			<div className="flex w-full flex-col gap-5 md:w-lg">
 				<Button
@@ -45,6 +45,6 @@ const MoreQuotes = function ({ model }) {
 			quoteModifiers: QuoteModelView["modifiers"];
 		}
 	>
->;
+>; 
 
 export default MoreQuotes;

@@ -36,8 +36,8 @@ export function getQuoteSchema(t?: Translator) {
 							max: maxQuoteEn,
 						}),
 				},
-				preprocess(string) {
-					return string.replace(/\n+/gm, " ");
+				preprocess(value) {
+					return typeof value === "string" ? value.replace(/\n+/gm, " ") : ""
 				},
 			},
 			russianValidationOptions: {
@@ -51,8 +51,8 @@ export function getQuoteSchema(t?: Translator) {
 							max: maxQuoteRu,
 						}),
 				},
-				preprocess(string) {
-					return string.replace(/\n+/gm, " ");
+				preprocess(value) {
+					return typeof value === "string" ? value.replace(/\n+/gm, " ") : "";
 				},
 			},
 		}),

@@ -12,7 +12,7 @@ export type StringValidationOptions = Partial<{
 	min: ValidationOption<number>;
 	max: ValidationOption<number>;
 	pattern: ValidationOption<RegExp>;
-	preprocess: (string: string) => string;
+	preprocess: (value: unknown) => string;
 }>;
 export type NewTranslation = z.infer<ReturnType<typeof getTranslationSchema>>;
 
