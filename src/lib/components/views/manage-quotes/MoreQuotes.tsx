@@ -21,9 +21,9 @@ const MoreQuotes = function ({ model }) {
 
 	return (
 		<div className="more-quotes-section flex flex-col gap-5 bg-[antiquewhite] p-8 py-9 md:py-10 lg:px-20">
-			<div className="ornament mb-4 flex w-full items-center justify-center md:mb-0">
+			<div className="ornament flex w-full items-center justify-center md:mb-0">
 				<Ornament
-					className="h-[5em] w-[8em] max-w-9/10"
+					className="h-[6em] w-[9em] max-w-9/10"
 					fill="#88815899"
 				/>
 			</div>
