@@ -21,7 +21,7 @@ const WriteQuoteModal = function ({ model }) {
 			})}
 		>
 			<div className="flex w-full flex-col items-center justify-center">
-				<div className="align-center flex w-full justify-between rounded-none border-0 bg-gray-800 p-6 text-[#FEF8F3]">
+				<div className="flex w-full justify-between rounded-none border-0 bg-gray-800 p-6 text-[#FEF8F3]">
 					<span className="text-xl">{t("title")}</span>
 					<button
 						title={tNonDescriptive("close")}

@@ -30,6 +30,7 @@ const QuoteHighlight = function ({ model }) {
 						variant: "highlight",
 						modifiers,
 					})}
+					className="w-fit max-w-full"
 				/>
 			</div>
 			<div
