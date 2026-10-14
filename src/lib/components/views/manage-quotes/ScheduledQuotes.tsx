@@ -104,7 +104,7 @@ const ScheduledQuotes = function ({ model }) {
 			<hr className="mb-4 opacity-50" />
 			<div className="flex flex-col gap-3 overflow-clip rounded-lg border border-gray-400 bg-white p-5 lg:max-w-6/10">
 				<div
-					className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto"
+					className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto pr-5"
 					ref={tableRef}
 				>
 					{table.getRowModel().rows.map(row => (
