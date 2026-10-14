@@ -99,7 +99,7 @@ const ScheduledQuotes = function ({ model }) {
 	const tableRef = useRef<HTMLDivElement>(null)
 
 	return (
-		<div className="scheduled-quotes-section flex flex-col gap-5 border-t-3 border-[#dcb042] bg-white/70 p-8 py-9 md:py-10 lg:px-20">
+		<div className="scheduled-quotes-section flex flex-col gap-5 border-t-3 border-[#dcb042] bg-[#FEF8F3] p-8 py-9 md:py-10 lg:px-20">
 			<span className="text-2xl">{t("scheduledQuotes")}</span>
 			<hr className="mb-4 opacity-50" />
 			<div className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto rounded-lg border border-gray-400 bg-white p-5 lg:max-w-6/10" ref={tableRef}>
