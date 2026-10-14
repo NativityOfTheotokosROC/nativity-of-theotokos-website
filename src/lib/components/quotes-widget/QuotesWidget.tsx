@@ -16,7 +16,7 @@ import {
 } from "@tanstack/react-table";
 import { ArrowLeft, ArrowRight, ChevronDown } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { Fragment, useMemo } from "react";
+import { Fragment, useMemo, useRef } from "react";
 import { QuotesWidgetModel } from "../../models/quotes-widget";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/react";
 import Quote from "../quote/Quote";
@@ -107,6 +107,7 @@ const QuotesWidget = function ({ model }) {
 	const currentSortingColumn =
 		table.getColumn(currentSortingColumnId)?.columnDef.header?.toString() ??
 		t("none");
+	const widgetRef = useRef<HTMLDivElement>(null);
 
 	return (
 		<div className="flex flex-col gap-3">
@@ -144,7 +145,10 @@ const QuotesWidget = function ({ model }) {
 				)}
 			</Menu>
 			<div className="flex flex-col gap-3 overflow-clip rounded-lg border border-gray-400 bg-white p-5">
-				<div className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto">
+				<div
+					className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto"
+					ref={widgetRef}
+				>
 					{table.getRowModel().rows.map(row => (
 						<>
 							<Quote
