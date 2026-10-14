@@ -20,7 +20,7 @@ const QuoteHighlight = function ({ model }) {
 				className="h-3.75 w-full bg-[#250203] bg-size-[25%] bg-position-[50%_50%] bg-repeat-x md:bg-size-[15%] lg:bg-size-[15%]"
 			/>
 			<div className="align-center flex w-full flex-col justify-center gap-4 bg-[#0a0a0a] p-8 py-14 text-white md:p-20">
-				<span className="font-light uppercase">
+				<span className="self-center font-light uppercase">
 					{t("highlightedQuote")}
 				</span>
 				<Quote
