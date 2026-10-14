@@ -18,7 +18,7 @@ import {
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useLocale } from "next-intl";
 import { useTranslations } from "next-intl";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import ScheduledQuote from "../../scheduled-quote/ScheduledQuote";
 
 const features = tableFeatures({
@@ -96,12 +96,13 @@ const ScheduledQuotes = function ({ model }) {
 		},
 	});
 	const { pagination } = table.state;
+	const tableRef = useRef<HTMLDivElement>(null)
 
 	return (
-		<div className="scheduled-quotes-section flex flex-col gap-4 border-t-3 border-[#dcb042] bg-white/70 p-8 py-9 md:py-10 lg:px-20">
-			<span className="text-xl">{t("scheduledQuotes")}</span>
+		<div className="scheduled-quotes-section flex flex-col gap-5 border-t-3 border-[#dcb042] bg-white/70 p-8 py-9 md:py-10 lg:px-20">
+			<span className="text-2xl">{t("scheduledQuotes")}</span>
 			<hr className="mb-4 opacity-50" />
-			<div className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto rounded-lg border border-gray-400 bg-white p-5 lg:max-w-6/10">
+			<div className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto rounded-lg border border-gray-400 bg-white p-5 lg:max-w-6/10" ref={tableRef}>
 				{table.getRowModel().rows.map(row => (
 					<>
 						<ScheduledQuote
@@ -117,13 +118,13 @@ const ScheduledQuotes = function ({ model }) {
 			</div>
 			<div className="flex items-center justify-end gap-4 text-sm">
 				{table.getCanPreviousPage() && (
-					<button onClick={table.previousPage}>
+					<button onClick={() => {table.previousPage(); tableRef.current?.scrollTo({top: 0, behavior: "smooth"})}}>
 						<ArrowLeft strokeWidth={1.5} />
 					</button>
 				)}
 				{pagination.pageIndex + 1}
 				{table.getCanNextPage() && (
-					<button onClick={table.nextPage}>
+					<button onClick={() => {table.nextPage(); tableRef.current?.scrollTo({top: 0, behavior: "smooth"})}}>
 						<ArrowRight strokeWidth={1.5} />
 					</button>
 				)}

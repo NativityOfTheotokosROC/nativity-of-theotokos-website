@@ -16,7 +16,7 @@ import {
 } from "@tanstack/react-table";
 import { ArrowLeft, ArrowRight, ChevronDown } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { Fragment, useMemo } from "react";
+import { Fragment, useMemo, useRef } from "react";
 import { QuotesWidgetModel } from "../../models/quotes-widget";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/react";
 import Quote from "../quote/Quote";
@@ -107,6 +107,7 @@ const QuotesWidget = function ({ model }) {
 	const currentSortingColumn =
 		table.getColumn(currentSortingColumnId)?.columnDef.header?.toString() ??
 		t("none");
+	const widgetRef = useRef<HTMLDivElement>(null);
 
 	return (
 		<div className="flex flex-col gap-3">
@@ -143,7 +144,10 @@ const QuotesWidget = function ({ model }) {
 					</>
 				)}
 			</Menu>
-			<div className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto rounded-lg border border-gray-400 bg-white p-5">
+			<div
+				className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto rounded-lg border border-gray-400 bg-white p-5"
+				ref={widgetRef}
+			>
 				{table.getRowModel().rows.map(row => (
 					<>
 						<Quote
@@ -163,13 +167,29 @@ const QuotesWidget = function ({ model }) {
 			</div>
 			<div className="flex items-center justify-end gap-4 text-sm">
 				{table.getCanPreviousPage() && (
-					<button onClick={table.previousPage}>
+					<button
+						onClick={() => {
+							table.previousPage();
+							widgetRef.current?.scrollTo({
+								top: 0,
+								behavior: "smooth",
+							});
+						}}
+					>
 						<ArrowLeft strokeWidth={1.5} />
 					</button>
 				)}
 				{pagination.pageIndex + 1}
 				{table.getCanNextPage() && (
-					<button onClick={table.nextPage}>
+					<button
+						onClick={() => {
+							table.nextPage();
+							widgetRef.current?.scrollTo({
+								top: 0,
+								behavior: "smooth",
+							});
+						}}
+					>
 						<ArrowRight strokeWidth={1.5} />
 					</button>
 				)}
