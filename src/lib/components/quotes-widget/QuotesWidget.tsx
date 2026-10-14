@@ -145,7 +145,7 @@ const QuotesWidget = function ({ model }) {
 				)}
 			</Menu>
 			<div
-				className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto rounded-lg border border-gray-400 bg-white p-5"
+				className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto rounded-lg border border-gray-400 bg-[#FEF8F3] p-5"
 				ref={widgetRef}
 			>
 				{table.getRowModel().rows.map(row => (
