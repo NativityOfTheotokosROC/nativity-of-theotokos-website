@@ -1,6 +1,6 @@
 "use client";
 
-import { ModeledContainerComponent } from "@mvc-react/components";
+import { ModeledComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { PageNavigationButtonModel } from "../../models/page-navigation-button";
 import Button from "./Button";
@@ -26,6 +26,6 @@ const PageNavigationButton = function ({ model, children }) {
 			{children}
 		</Button>
 	);
-} satisfies ModeledContainerComponent<PageNavigationButtonModel>;
+} satisfies ModeledComponent<PageNavigationButtonModel>;
 
 export default PageNavigationButton;

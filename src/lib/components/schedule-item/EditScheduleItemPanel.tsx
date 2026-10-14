@@ -17,7 +17,6 @@ const EditScheduleItemPanel = function ({ model }) {
 
 	return (
 		<div className="flex gap-3 text-xs">
-			{/* TODO: Add titles for accessibility*/}
 			<button
 				title={t("edit")}
 				className="no-outline flex items-center"

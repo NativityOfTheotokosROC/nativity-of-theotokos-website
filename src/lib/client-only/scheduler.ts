@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useCloseWarning } from "../client-only/miscellaneous";
+import { useCloseWarning } from "./miscellaneous";
 import {
 	SpecificScheduleEventWithOptionalId,
 	RecurringScheduleEventWithOptionalId,
@@ -13,9 +13,9 @@ import {
 	useInstantaneousScheduleItemSchema,
 	useRecurringScheduleItemSchema,
 } from "../validation/schedule";
-import { getDateString } from "./date-time";
+import { getDateString } from "../utilities/date-time";
 import { addDays } from "date-fns";
-import { BLANK_TRANSLATION } from "./constants";
+import { BLANK_TRANSLATION } from "../utilities/constants";
 
 export function useScheduleEventForm({
 	scheduleEvent,

@@ -199,8 +199,6 @@ const WriteArticle = function ({ model }) {
 											"discarding_draft" ||
 										notification?.type === "saving_draft" ||
 										notification?.type === "submitting",
-									className:
-										"flex justify-center items-center w-fit",
 									action() {
 										confirmationDialog.interact({
 											type: "OPEN",
@@ -216,6 +214,7 @@ const WriteArticle = function ({ model }) {
 										});
 									},
 								})}
+								className="flex w-fit items-center justify-center"
 							>
 								{notification?.type === "discarding_draft" ? (
 									<Spinner
@@ -236,8 +235,6 @@ const WriteArticle = function ({ model }) {
 										notification?.type ===
 											"discarding_draft" ||
 										notification?.type === "submitting",
-									className:
-										"flex justify-center items-center w-fit max-w-1/2 min-w-[8em]",
 									action: async () => {
 										const {
 											english: titleEnglish,
@@ -272,6 +269,7 @@ const WriteArticle = function ({ model }) {
 										});
 									},
 								})}
+								className="flex w-fit max-w-1/2 min-w-[8em] items-center justify-center"
 							>
 								{notification?.type === "saving_draft" ? (
 									<Spinner
@@ -293,9 +291,8 @@ const WriteArticle = function ({ model }) {
 										notification?.type === "submitting" ||
 										notification?.type ===
 											"discarding_draft",
-									className:
-										"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
 								})}
+								className="flex w-fit max-w-1/2 min-w-[8em] items-center justify-center"
 							>
 								{notification?.type === "submitting" ? (
 									<Spinner

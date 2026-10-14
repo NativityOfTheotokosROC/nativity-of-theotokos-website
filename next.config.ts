@@ -78,6 +78,13 @@ const nextConfig: NextConfig = {
 	experimental: {
 		authInterrupts: true,
 		useTypeScriptCli: true,
+		serverActions: {
+			allowedOrigins: [
+				"nativityoftheotokos.com",
+				"*.nativityoftheotokos.com",
+				"*.app.github.dev",
+			],
+		},
 	},
 	allowedDevOrigins: ["192.168.100.7", "192.168.100.15"],
 	output: IS_DOCKER_BUILD ? "standalone" : undefined,

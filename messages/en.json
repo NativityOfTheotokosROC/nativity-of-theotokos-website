@@ -225,7 +225,7 @@
 		"schedulerCheckLabel": "Display the quote on a specific date",
 		"source": "Source",
 		"successMessage": "Quote successfully added",
-		"title": "New Quote"
+		"title": "Write Quote"
 	},
 	"news": {
 		"articleUpdated": "Updated",
@@ -391,6 +391,7 @@
 	"userAction": {
 		"assignArticle": "Assign Article",
 		"newQuote": "New Quote",
+		"manageQuotes": "Manage Quotes",
 		"notifications": "Notifications",
 		"reviewArticle": "Review Article",
 		"scheduler": "Scheduler",
@@ -437,5 +438,55 @@
 		"title": "Write Article",
 		"titleField": "Article Title",
 		"unknownAuthor": "Your Name"
+	},
+	"manageQuotes": {
+		"title": "Manage Quotes",
+		"highlightedQuote": "Today's Quote",
+		"highlightedQuoteAlt": "Highlighted Quote",
+		"moreQuotes": "More Quotes",
+		"byAuthor": "By Author",
+		"allQuotes": "All Quotes",
+		"sortBy": "Sort By",
+		"none": "None",
+		"author": "Author",
+		"source": "Source",
+		"quote": "Quote",
+		"newQuote": "New Quote",
+		"nextPage": "Next Page",
+		"previousPage": "Previous Page",
+		"paginationOf": "of",
+		"scheduledQuotes": "Scheduled Quotes",
+		"all": "All",
+		"scheduleNew": "Schedule New",
+		"edit": "Edit",
+		"delete": "Delete",
+		"schedule": "Schedule",
+		"sortedBy": "Sorted by {field}",
+		"share": "Share",
+		"download": "Download",
+		"confirmDeleteQuote": "Are you sure you want to delete this quote by {author}?",
+		"confirmDeleteScheduledQuote": "Are you sure you want to delete the quote scheduled for {date}?",
+		"modifyQuote": "Modify Quote",
+		"cancel": "Cancel",
+		"scheduleQuote": "Schedule Quote",
+		"pickDate": "Pick a date",
+		"modifySuccess": "Quote successfully modified",
+		"modifyFailure": "Could not modify the quote. Error: {message}",
+		"scheduleSuccess": "Quote successfully scheduled",
+		"scheduleFailure": "Could not schedule the quote. Error: {message}",
+		"deleteScheduledSuccess": "Scheduled quote successfully deleted.",
+		"deleteScheduleFailure": "Could not delete the scheduled quote. Error: {message}",
+		"rescheduleSuccess": "Quote successfully rescheduled",
+		"rescheduleFailure": "Could not reschedule the quote. Error: {message}",
+		"deleteSuccess": "Quote successfully deleted",
+		"deleteFailure": "Could not delete the quote. Error: {message}"
+	},
+	"scheduleQuoteModal": {
+		"scheduleQuoteTitle": "Schedule Quote",
+		"rescheduleQuoteTitle": "Reschedule Quote",
+		"description": "Pick a date to schedule the quote, “{quote}” by {author}.",
+		"schedule": "Schedule",
+		"reschedule": "Reschedule",
+		"cancel": "Cancel"
 	}
 }

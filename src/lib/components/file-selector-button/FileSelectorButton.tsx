@@ -40,12 +40,11 @@ const FileSelectorButton = function ({ model }) {
 			<Button
 				model={newReadonlyModel({
 					type: "button",
-					className:
-						"w-fit flex items-center justify-center max-w-1/2 min-w-[8em]",
 					action() {
 						inputRef.current?.click();
 					},
 				})}
+				className="flex w-fit max-w-1/2 min-w-[8em] items-center justify-center"
 			>
 				{file ? contents : (contentsWhenFile ?? contents)}
 			</Button>

@@ -1,14 +1,13 @@
-import { routing } from "@/src/i18n/routing";
 import { DynamicMarker } from "@/src/lib/components/miscellaneous/utility";
 import { getDailySaint } from "@/src/lib/third-party/holytrinityorthodox";
 import { getDateString } from "@/src/lib/utilities/date-time";
-import { hasLocale } from "next-intl";
+import { isValidLocale } from "@/src/lib/utilities/internationalization";
+import { cacheLife } from "next/cache";
 import { locale as rootLocale } from "next/root-params";
 import { connection } from "next/server";
 import CommemorationPage, {
 	generateMetadata as commemorationMetadata,
 } from "../commemorations/[commemoration]/page";
-import { cacheLife } from "next/cache";
 
 export async function generateMetadata(
 	props: PageProps<"/[locale]/daily-saint">,
@@ -17,9 +16,9 @@ export async function generateMetadata(
 	cacheLife("minutes");
 
 	const locale = await rootLocale();
-	const language = hasLocale(routing.locales, locale) ? locale : "en";
-	const date = getDateString(new Date(), true);
-	const dailySaint = await getDailySaint(new Date(date), language);
+	const language = isValidLocale(locale) ? locale : "en";
+	const date = new Date(getDateString(new Date(), true));
+	const dailySaint = await getDailySaint(date, language);
 
 	return await commemorationMetadata({
 		...props,
@@ -33,9 +32,9 @@ export async function generateMetadata(
 export default async function Page(props: PageProps<"/[locale]/daily-saint">) {
 	await connection();
 	const locale = await rootLocale();
-	const language = hasLocale(routing.locales, locale) ? locale : "en";
-	const date = getDateString(new Date(), true);
-	const dailySaint = await getDailySaint(new Date(date), language);
+	const language = isValidLocale(locale) ? locale : "en";
+	const date = new Date(getDateString(new Date(), true));
+	const dailySaint = await getDailySaint(date, language);
 	return (
 		<>
 			<CommemorationPage

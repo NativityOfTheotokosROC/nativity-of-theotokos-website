@@ -1,11 +1,11 @@
 import { routing } from "@/src/i18n/routing";
 import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
-import { getAutoCompleteInfo } from "@/src/lib/server-actions/quote";
+import { getAutoCompleteInfo } from "@/src/lib/server-only/quote";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import NewQuoteClient from "../../../../lib/components/views/write-quote/client";
+import WriteQuoteClient from "../../../../lib/components/views/write-quote/client";
 
 export async function generateMetadata({
 	params,
@@ -27,7 +27,7 @@ export default async function Page() {
 
 	return (
 		<ProtectedComponent model={newReadonlyModel({ roles: ["quotes"] })}>
-			<NewQuoteClient
+			<WriteQuoteClient
 				model={newReadonlyModel({
 					autoCompleteInfo: await autoCompleteInfo,
 				})}

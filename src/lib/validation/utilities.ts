@@ -1,8 +1,8 @@
 import { useTranslations } from "next-intl";
+import { useMemo } from "react";
 import z from "zod";
 import { emptyStringAsUndefined } from "../utilities/miscellaneous";
 import { Translator } from "../utilities/types";
-import { useMemo } from "react";
 
 export type ValidationOption<T> = { value: T; invalidMessage?: string };
 export type StringValidationOptions = Partial<{
@@ -12,6 +12,7 @@ export type StringValidationOptions = Partial<{
 	min: ValidationOption<number>;
 	max: ValidationOption<number>;
 	pattern: ValidationOption<RegExp>;
+	preprocess: (value: unknown) => string;
 }>;
 export type NewTranslation = z.infer<ReturnType<typeof getTranslationSchema>>;
 
@@ -66,7 +67,9 @@ export function getStringSchema(options?: StringValidationOptions) {
 		const { value, invalidMessage } = options.pattern;
 		expression = expression.regex(value, { error: invalidMessage });
 	}
-	return expression;
+	return options?.preprocess
+		? z.preprocess(options.preprocess!, expression) as z.ZodPipe<z.ZodTransform<string, string>, typeof expression> // HACK
+		: expression;
 }
 
 export function getOptionalStringSchema(

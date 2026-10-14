@@ -27,7 +27,7 @@ import { useRouter } from "@/src/i18n/navigation";
 
 export function schedulerVIInterface(
 	router: ReturnType<typeof useRouter>,
-	notification?: {
+	notifications?: {
 		notifier: ToastNotifierModel;
 		t: Translator;
 	},
@@ -51,12 +51,12 @@ export function schedulerVIInterface(
 										id,
 										newEvent.scheduleItem,
 									);
-									await notification?.notifier.interact({
+									await notifications?.notifier.interact({
 										type: "NOTIFY",
 										input: {
 											notification: {
 												type: "success",
-												message: notification.t(
+												message: notifications.t(
 													"scheduler.modifySuccess",
 												),
 											},
@@ -73,12 +73,12 @@ export function schedulerVIInterface(
 										),
 									];
 								} catch (error) {
-									await notification?.notifier.interact({
+									await notifications?.notifier.interact({
 										type: "NOTIFY",
 										input: {
 											notification: {
 												type: "failure",
-												message: notification.t(
+												message: notifications.t(
 													"scheduler.modifyFailure",
 													{
 														message:
@@ -98,12 +98,12 @@ export function schedulerVIInterface(
 										await scheduleInstantaneousItem(
 											newEvent.scheduleItem,
 										);
-									await notification?.notifier.interact({
+									await notifications?.notifier.interact({
 										type: "NOTIFY",
 										input: {
 											notification: {
 												type: "success",
-												message: notification.t(
+												message: notifications.t(
 													"scheduler.scheduleSuccess",
 												),
 											},
@@ -114,12 +114,12 @@ export function schedulerVIInterface(
 										newScheduleItem,
 									];
 								} catch (error) {
-									await notification?.notifier.interact({
+									await notifications?.notifier.interact({
 										type: "NOTIFY",
 										input: {
 											notification: {
 												type: "failure",
-												message: notification.t(
+												message: notifications.t(
 													"scheduler.scheduleFailure",
 													{
 														message:
@@ -156,12 +156,12 @@ export function schedulerVIInterface(
 										id,
 										newEvent.scheduleItem,
 									);
-									await notification?.notifier.interact({
+									await notifications?.notifier.interact({
 										type: "NOTIFY",
 										input: {
 											notification: {
 												type: "success",
-												message: notification.t(
+												message: notifications.t(
 													"scheduler.modifySuccess",
 												),
 											},
@@ -178,12 +178,12 @@ export function schedulerVIInterface(
 										),
 									];
 								} catch (error) {
-									await notification?.notifier.interact({
+									await notifications?.notifier.interact({
 										type: "NOTIFY",
 										input: {
 											notification: {
 												type: "failure",
-												message: notification.t(
+												message: notifications.t(
 													"scheduler.modifyFailure",
 													{
 														message:
@@ -203,12 +203,12 @@ export function schedulerVIInterface(
 										await scheduleRecurringItem(
 											newEvent.scheduleItem,
 										);
-									await notification?.notifier.interact({
+									await notifications?.notifier.interact({
 										type: "NOTIFY",
 										input: {
 											notification: {
 												type: "success",
-												message: notification.t(
+												message: notifications.t(
 													"scheduler.scheduleSuccess",
 												),
 											},
@@ -219,12 +219,12 @@ export function schedulerVIInterface(
 										newScheduleItem,
 									];
 								} catch (error) {
-									await notification?.notifier.interact({
+									await notifications?.notifier.interact({
 										type: "NOTIFY",
 										input: {
 											notification: {
 												type: "failure",
-												message: notification.t(
+												message: notifications.t(
 													"scheduler.scheduleFailure",
 													{
 														message:
@@ -272,12 +272,12 @@ export function schedulerVIInterface(
 										event.scheduleItem.id,
 									);
 								}
-								await notification?.notifier.interact({
+								await notifications?.notifier.interact({
 									type: "NOTIFY",
 									input: {
 										notification: {
 											type: "success",
-											message: notification.t(
+											message: notifications.t(
 												"scheduler.modifySuccess",
 											),
 										},
@@ -320,12 +320,12 @@ export function schedulerVIInterface(
 										? false
 										: true,
 								);
-								await notification?.notifier.interact({
+								await notifications?.notifier.interact({
 									type: "NOTIFY",
 									input: {
 										notification: {
 											type: "success",
-											message: notification.t(
+											message: notifications.t(
 												"scheduler.modifySuccess",
 											),
 										},
@@ -375,12 +375,12 @@ export function schedulerVIInterface(
 										isRemoved:
 											!event.scheduleItem.isRemoved,
 									});
-								await notification?.notifier.interact({
+								await notifications?.notifier.interact({
 									type: "NOTIFY",
 									input: {
 										notification: {
 											type: "success",
-											message: notification.t(
+											message: notifications.t(
 												"scheduler.modifySuccess",
 											),
 										},
@@ -403,12 +403,12 @@ export function schedulerVIInterface(
 							}
 						}
 					} catch (error) {
-						await notification?.notifier.interact({
+						await notifications?.notifier.interact({
 							type: "NOTIFY",
 							input: {
 								notification: {
 									type: "failure",
-									message: notification.t(
+									message: notifications.t(
 										"scheduler.modifyFailure",
 										{
 											message: JSON.stringify(error),
@@ -430,12 +430,12 @@ export function schedulerVIInterface(
 									event.scheduleItem.id,
 								);
 							} catch (error) {
-								await notification?.notifier.interact({
+								await notifications?.notifier.interact({
 									type: "NOTIFY",
 									input: {
 										notification: {
 											type: "failure",
-											message: notification.t(
+											message: notifications.t(
 												"scheduler.deleteFailure",
 												{
 													message:
@@ -447,12 +447,12 @@ export function schedulerVIInterface(
 								});
 								throw error;
 							}
-							await notification?.notifier.interact({
+							await notifications?.notifier.interact({
 								type: "NOTIFY",
 								input: {
 									notification: {
 										type: "success",
-										message: notification.t(
+										message: notifications.t(
 											"scheduler.deleteSuccess",
 										),
 									},
@@ -481,12 +481,12 @@ export function schedulerVIInterface(
 									event.scheduleItem.id,
 								);
 							} catch (error) {
-								await notification?.notifier.interact({
+								await notifications?.notifier.interact({
 									type: "NOTIFY",
 									input: {
 										notification: {
 											type: "failure",
-											message: notification.t(
+											message: notifications.t(
 												"scheduler.deleteFailure",
 												{
 													message:
@@ -498,12 +498,12 @@ export function schedulerVIInterface(
 								});
 								throw error;
 							}
-							await notification?.notifier.interact({
+							await notifications?.notifier.interact({
 								type: "NOTIFY",
 								input: {
 									notification: {
 										type: "success",
-										message: notification.t(
+										message: notifications.t(
 											"scheduler.deleteSuccess",
 										),
 									},

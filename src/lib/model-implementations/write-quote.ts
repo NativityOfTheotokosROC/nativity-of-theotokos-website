@@ -7,18 +7,18 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import {
 	AutoCompleteInfo,
-	NewQuoteModel,
-	NewQuoteNotification,
-} from "../models/new-quote";
+	WriteQuoteModel,
+	WriteQuoteNotification,
+} from "../models/write-quote";
 import {
 	NotifierModel,
 	NotifierModelInteraction,
 	NotifierModelView,
 } from "../models/notifier";
 import { ToastNotification } from "../models/toast";
-import { addNewQuote } from "../server-actions/quote";
+import { addNewQuote, updateQuote } from "../server-actions/quote";
 
-function newQuoteNotifierVIInterface(
+function writeQuoteNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
 ) {
 	return {
@@ -44,8 +44,8 @@ function newQuoteNotifierVIInterface(
 			}
 		},
 	} satisfies ViewInteractionInterface<
-		NotifierModelView<NewQuoteNotification>,
-		NotifierModelInteraction<NewQuoteNotification>
+		NotifierModelView<WriteQuoteNotification>,
+		NotifierModelInteraction<WriteQuoteNotification>
 	>;
 }
 
@@ -56,7 +56,7 @@ export function useNewQuote(
 	}>,
 ) {
 	const notifier = useNewStatefulInteractiveModel(
-		newQuoteNotifierVIInterface(options?.toastNotifier),
+		writeQuoteNotifierVIInterface(options?.toastNotifier),
 	);
 	const t = useTranslations("newQuote");
 	const router = useRouter();
@@ -75,8 +75,13 @@ export function useNewQuote(
 							notification: { type: "pending" },
 						},
 					});
+					const { newQuote, id, options } = interaction.input;
 					try {
-						await addNewQuote(interaction.input.newQuote);
+						if (id === undefined) {
+							await addNewQuote(newQuote);
+						} else {
+							await updateQuote(id, newQuote);
+						}
 						await Promise.all([
 							notifier.interact({
 								type: "NOTIFY",
@@ -87,7 +92,7 @@ export function useNewQuote(
 									},
 								},
 							}),
-							interaction.input.options?.successCallback?.(),
+							options?.successCallback?.(),
 						]);
 						router.refresh();
 					} catch (error) {
@@ -104,5 +109,5 @@ export function useNewQuote(
 				}
 			}
 		},
-	} satisfies InitializedModel<NewQuoteModel>;
+	} satisfies InitializedModel<WriteQuoteModel>;
 }

@@ -1,4 +1,4 @@
-import { ModeledContainerComponent } from "@mvc-react/components";
+import { ModeledComponent } from "@mvc-react/components";
 import { PageViewModel } from "../../models/page-view";
 import { georgia } from "../../third-party/fonts";
 import { twMerge } from "tailwind-merge";
@@ -29,6 +29,6 @@ const PageView = function ({ model, children }) {
 			</div>
 		</main>
 	);
-} satisfies ModeledContainerComponent<PageViewModel>;
+} satisfies ModeledComponent<PageViewModel>;
 
 export default PageView;

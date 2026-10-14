@@ -168,8 +168,8 @@ const AssignArticle = function ({ model }) {
 								disabled:
 									isSubmitting ||
 									notification?.type === "submitting",
-								className: "min-w-[8em]",
 							})}
+							className="min-w-[8em]"
 						>
 							{notification?.type === "submitting" ? (
 								<Spinner

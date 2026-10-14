@@ -1,4 +1,4 @@
-import { ModeledContainerComponent } from "@mvc-react/components";
+import { ModeledComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
 import { ButtonBarModel } from "../../models/button-bar";
 import { twMerge } from "tailwind-merge";
@@ -35,6 +35,6 @@ const ButtonBar = function ({ model, children }) {
 			{children}
 		</div>
 	);
-} satisfies ModeledContainerComponent<InitializedModel<ButtonBarModel>>;
+} satisfies ModeledComponent<InitializedModel<ButtonBarModel>>;
 
 export default ButtonBar;

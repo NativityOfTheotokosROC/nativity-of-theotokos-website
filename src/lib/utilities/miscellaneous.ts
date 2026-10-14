@@ -80,3 +80,11 @@ export function parseCronPattern(
 		? parsedCronString[0].toUpperCase() + parsedCronString.slice(1)
 		: parsedCronString[0].toLowerCase() + parsedCronString.slice(1);
 }
+
+export function truncateText(
+	text: string,
+	maxLength: number,
+	disableEllipsis: boolean = false,
+) {
+	return `${text.slice(0, maxLength)}${disableEllipsis ? "" : "..."}`;
+}

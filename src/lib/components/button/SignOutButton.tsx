@@ -2,7 +2,7 @@
 
 import { useSignOut } from "@/src/lib/model-implementations/sign-out";
 import { Path } from "@/src/lib/utilities/types";
-import { ModeledContainerComponent } from "@mvc-react/components";
+import { ModeledComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import Spinner from "../spinner/Spinner";
 import Button from "./Button";
@@ -24,8 +24,8 @@ const SignOutButton = function ({ model, children }) {
 				disabled:
 					signOutStatus?.type === "pending" ||
 					signOutStatus?.type === "success",
-				className: "flex justify-center items-center",
 			})}
+			className="flex items-center justify-center"
 		>
 			{signOutStatus?.type === "pending" ? (
 				<Spinner
@@ -39,6 +39,6 @@ const SignOutButton = function ({ model, children }) {
 			)}
 		</Button>
 	);
-} satisfies ModeledContainerComponent<ReadonlyModel<{ signOutEndpoint: Path }>>;
+} satisfies ModeledComponent<ReadonlyModel<{ signOutEndpoint: Path }>>;
 
 export default SignOutButton;

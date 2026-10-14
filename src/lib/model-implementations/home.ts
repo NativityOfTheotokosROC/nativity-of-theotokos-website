@@ -2,13 +2,15 @@ import { useLocale } from "next-intl";
 import { HomeModel, HomeModelInteraction } from "../models/home";
 import { getHomeSnapshot } from "../server-actions/home";
 import { useQuery } from "@tanstack/react-query";
+import { getDateString } from "../utilities/date-time";
 
 export function useHome(): HomeModel {
 	const language = useLocale();
 
 	const { data, isSuccess, refetch } = useQuery({
 		queryKey: ["home"],
-		queryFn: () => getHomeSnapshot(4, 4, 7, language),
+		queryFn: () =>
+			getHomeSnapshot(getDateString(new Date()), 4, 4, 7, language),
 		staleTime: Infinity,
 		gcTime: Infinity,
 		refetchOnMount: false,

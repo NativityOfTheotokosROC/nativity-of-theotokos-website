@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useLoginTooltip } from "../model-implementations/login-tooltip";
 import { ReadonlyModel } from "@mvc-react/mvc";
-import { ModeledContainerComponent } from "@mvc-react/components";
+import { ModeledComponent } from "@mvc-react/components";
 import { Path } from "../utilities/types";
 import { LoginTooltipContext } from "../utilities/contexts";
 
@@ -25,7 +25,7 @@ const LoginTooltipProvider = function ({ model, children }) {
 			{children}
 		</LoginTooltipContext.Provider>
 	);
-} satisfies ModeledContainerComponent<
+} satisfies ModeledComponent<
 	ReadonlyModel<{
 		id?: string;
 		autoTriggerExceptions?: Path[];

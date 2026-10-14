@@ -7,7 +7,7 @@ import { AppLayoutModel } from "@/src/lib/models/app-layout";
 import { FooterModel } from "@/src/lib/models/footer";
 import { Navlink } from "@/src/lib/utilities/types";
 import { MAILING_ADDRESS } from "@/src/lib/utilities/constants";
-import { ModeledContainerComponent } from "@mvc-react/components";
+import { ModeledComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
@@ -138,6 +138,6 @@ const AppLayout = async function ({ model, children }) {
 			<Toaster position="bottom-center" containerStyle={{ bottom: 35 }} />
 		</Suspense>
 	);
-} satisfies ModeledContainerComponent<AppLayoutModel>;
+} satisfies ModeledComponent<AppLayoutModel>;
 
 export default AppLayout;

@@ -1,4 +1,4 @@
-import { ModeledContainerComponent } from "@mvc-react/components";
+import { ModeledComponent } from "@mvc-react/components";
 import { InformationViewModel } from "../../models/information-view";
 import { InitializedModel } from "@mvc-react/mvc";
 import { georgia } from "../../third-party/fonts";
@@ -31,6 +31,6 @@ const InformationView = function ({ model, children }) {
 			</div>
 		</PageView>
 	);
-} satisfies ModeledContainerComponent<InitializedModel<InformationViewModel>>;
+} satisfies ModeledComponent<InitializedModel<InformationViewModel>>;
 
 export default InformationView;

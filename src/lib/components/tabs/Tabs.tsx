@@ -25,7 +25,7 @@ const Tabs = function ({
 		tabsPosition,
 		tabsLayout,
 		tabsToUnmount,
-		animations,
+		animation,
 	} = modelView;
 	const [previousTab, setPreviousTab] = useState<number | undefined>();
 	const slideAnimation: "slide-right" | "slide-left" | null =
@@ -79,7 +79,7 @@ const Tabs = function ({
 							false
 						}
 					>
-						{animations ? (
+						{animation ? (
 							<Transition
 								appear
 								show={selectedTab === index}

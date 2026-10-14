@@ -3,6 +3,7 @@ import { Role } from "./user";
 export const ALL_ACTION_NAMES = [
 	"NOTIFICATIONS",
 	"NEW_QUOTE",
+	"MANAGE_QUOTES",
 	"SCHEDULER",
 	"WRITE_ARTICLE",
 	"REVIEW_ARTICLE",
@@ -37,6 +38,7 @@ export function getUserActionNames(roles: Role[]) {
 			}
 			case "quotes": {
 				specificActions.add("NEW_QUOTE");
+				specificActions.add("MANAGE_QUOTES");
 				break;
 			}
 			case "user": {

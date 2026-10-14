@@ -1,19 +1,31 @@
 "use client";
 
-import { useNewQuote } from "@/src/lib/model-implementations/new-quote";
-import NewQuote from "./NewQuote";
+import { useNewQuote } from "@/src/lib/model-implementations/write-quote";
+import WriteQuote from "./WriteQuote";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { ReadonlyModel } from "@mvc-react/mvc";
+import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { useToastNotifier } from "@/src/lib/model-implementations/notifier";
-import { AutoCompleteInfo } from "@/src/lib/models/new-quote";
+import { AutoCompleteInfo } from "@/src/lib/models/write-quote";
+import { useTranslations } from "next-intl";
+import PageView from "../../page-view/PageView";
 
-const NewQuoteClient = function ({ model }) {
+const WriteQuoteClient = function ({ model }) {
 	const { autoCompleteInfo } = model.modelView;
 	const toastNotifier = useToastNotifier();
-	const newQuote = useNewQuote({ autoCompleteInfo, toastNotifier });
-	return <NewQuote model={newQuote} />;
+	const t = useTranslations("newQuote");
+	const writeQuote = useNewQuote({ autoCompleteInfo, toastNotifier });
+	return (
+		<PageView
+			model={newReadonlyModel({
+				title: t("title"),
+				topBarColor: "#976029",
+			})}
+		>
+			<WriteQuote model={writeQuote} />
+		</PageView>
+	);
 } satisfies ModeledVoidComponent<
 	ReadonlyModel<{ autoCompleteInfo?: AutoCompleteInfo }>
 >;
 
-export default NewQuoteClient;
+export default WriteQuoteClient;

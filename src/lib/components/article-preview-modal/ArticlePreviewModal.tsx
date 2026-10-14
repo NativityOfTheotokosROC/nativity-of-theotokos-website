@@ -33,9 +33,7 @@ const ArticlePreviewModal = function ({ model }) {
 				title: t("title"),
 				size: "large",
 				isOpen: isOpen ?? false,
-				async onClose() {
-					await interact({ type: "CLOSE" });
-				},
+				onClose: () => interact({ type: "CLOSE" }),
 			})}
 		>
 			<div className="flex w-full flex-col items-center justify-center">

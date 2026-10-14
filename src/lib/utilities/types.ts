@@ -102,8 +102,8 @@ type ToggleOptional<
 	P extends keyof T,
 	V extends boolean,
 > = V extends true
-	? { [K in P]?: T[K] } & { [K in Exclude<keyof T, P>]: T[K] }
-	: { [K in P]-?: T[K] } & { [K in Exclude<keyof T, P>]: T[K] };
+	? { [K in P]?: T[K] } & Omit<T, P>
+	: { [K in P]-?: T[K] } & Omit<T, P>;
 
 export type MakeOptional<
 	T extends Record<string, unknown>,

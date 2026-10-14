@@ -9,11 +9,9 @@ import {
 	ArticleAuthorWithTranslations,
 	ArticleWithTranslations,
 	ReplacePropertyType,
+	Translation,
 } from "../utilities/types";
-import {
-	_FULL_ARTICLE_INCLUDES,
-	validateNewArticle,
-} from "../server-only/article";
+import { _FULL_ARTICLE_INCLUDES } from "../server-only/article";
 import { getPlaceholder } from "../server-only/placeholder";
 import database from "../third-party/prisma";
 import {
@@ -23,16 +21,25 @@ import {
 	Language,
 } from "../utilities/types";
 import { hasArticleChanged } from "../utilities/article";
-import { getMd5Hash, isRemotePath } from "../utilities/miscellaneous";
+import {
+	getMd5Hash,
+	isRemotePath,
+	pickTranslation,
+	removeMarkup,
+	snippetify,
+} from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
 import {
 	getArticleAuthorSchema,
+	getArticleSchema,
+	MAX_SNIPPET,
 	NewArticle,
 	NewArticleSubmission,
 } from "../validation/article";
 import { getArticleSubmissionSchema } from "../validation/article";
 import { getUser, protect } from "./auth";
 import { NewTranslation } from "../validation/utilities";
+import z from "zod";
 
 export async function getArticle(
 	articleId: string,
@@ -56,29 +63,14 @@ export async function getArticle(
 					? article.image.link
 					: `${baseUrl}${article.image.link}`,
 			));
-		const title =
-			locale === "ru" && article.title.russian
-				? article.title.russian
-				: article.title.english;
+		const title = pickTranslation(article.title, locale);
 		const author = {
-			name:
-				locale === "ru" && article.author.name.russian != null
-					? article.author.name.russian
-					: article.author.name.english,
+			name: pickTranslation(article.author.name, locale),
 			email: article.author.email ?? undefined,
 		} satisfies ArticleAuthor;
-		const body =
-			locale === "ru" && article.body.russian
-				? article.body.russian
-				: article.body.english;
-		const snippet =
-			locale === "ru" && article.snippet.russian
-				? article.snippet.russian
-				: article.snippet.english;
-		const imageCaption =
-			locale === "ru" && article.image.caption.russian
-				? article.image.caption.russian
-				: article.image.caption.english;
+		const body = pickTranslation(article.body, locale);
+		const snippet = pickTranslation(article.snippet, locale);
+		const imageCaption = pickTranslation(article.image.caption, locale);
 
 		return {
 			uri: articleId,
@@ -718,7 +710,7 @@ export async function publishNewArticle({
 		forbidden();
 
 	const { link, title, body, snippet, image, isArticleFeatured } =
-		await validateNewArticle(incomingArticle, locale);
+		await _validateNewArticle(incomingArticle, locale);
 
 	const newArticle = database.$transaction(async transaction => {
 		const result = await transaction.article.create({
@@ -841,7 +833,7 @@ export async function publishExistingArticle({
 	}
 
 	const { title, body, snippet, authorName, image, isArticleFeatured } =
-		await validateNewArticle(incomingArticle, locale);
+		await _validateNewArticle(incomingArticle, locale);
 
 	const newArticle = await database.$transaction(async transaction => {
 		const result = await transaction.article.update({
@@ -902,7 +894,7 @@ export async function publishExistingArticle({
 					},
 				},
 				image: {
-					connectOrCreate: {
+					upsert: {
 						create: {
 							link: image.url,
 							caption: {
@@ -921,7 +913,23 @@ export async function publishExistingArticle({
 								},
 							},
 						},
-						where: { link: image.url },
+						update: {
+							caption: {
+								connectOrCreate: {
+									create: {
+										...image.caption,
+										englishHash: getMd5Hash(
+											image.caption.english,
+										),
+									},
+									where: {
+										englishHash: getMd5Hash(
+											image.caption.english,
+										),
+									},
+								},
+							},
+						},
 					},
 				},
 				dateUpdated: hasArticleChanged(
@@ -956,4 +964,29 @@ export async function publishExistingArticle({
 	revalidateTag("latest-articles", "max");
 	revalidateTag(`article_${articleId}`, "max");
 	return newArticle;
+}
+
+async function _validateNewArticle(newArticle: NewArticle, locale?: Language) {
+	const t = await getTranslations({ locale: locale ?? "en" });
+	const articleSchema = getArticleSchema(t).transform(newArticle => ({
+		...newArticle,
+		snippet: {
+			english:
+				newArticle.snippet.english ??
+				snippetify(removeMarkup(newArticle.body.english), MAX_SNIPPET),
+			russian:
+				newArticle.snippet.russian ??
+				(newArticle.body.russian
+					? snippetify(
+							removeMarkup(newArticle.body.russian),
+							MAX_SNIPPET,
+						)
+					: undefined),
+		} satisfies Translation,
+		link: z.string().slugify().parse(newArticle.title.english),
+	}));
+
+	return articleSchema.parse(newArticle) satisfies NewArticle & {
+		link: string;
+	};
 }

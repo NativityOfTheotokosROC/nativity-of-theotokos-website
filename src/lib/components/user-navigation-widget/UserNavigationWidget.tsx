@@ -7,10 +7,7 @@ import {
 	MenuItem,
 	MenuItems,
 } from "@headlessui/react";
-import {
-	ModeledContainerComponent,
-	ModeledVoidComponent,
-} from "@mvc-react/components";
+import { ModeledComponent, ModeledVoidComponent } from "@mvc-react/components";
 import {
 	InitializedModel,
 	newReadonlyModel,
@@ -119,7 +116,7 @@ const DropdownButtonContent = function ({ model, children }) {
 			/>
 		</>
 	);
-} satisfies ModeledContainerComponent<DropdownButtonModel>;
+} satisfies ModeledComponent<DropdownButtonModel>;
 
 const UserNavigationWidget = function ({ model }) {
 	const { variant } = model.modelView;

@@ -1,66 +1,183 @@
 "use server";
 
-import { toZonedTime } from "date-fns-tz";
 import { getTranslations } from "next-intl/server";
 import { revalidateTag } from "next/cache";
 import database from "../third-party/prisma";
-import { getNativeTimeZone } from "../utilities/date-time";
 import { getMd5Hash } from "../utilities/miscellaneous";
 import { getQuoteSchema, NewQuote } from "../validation/quote";
 import { protect } from "./auth";
+import z from "zod";
+import { DetailedQuote } from "../utilities/quote";
 import { Translation } from "../utilities/types";
-import { AutoCompleteInfo } from "../models/new-quote";
-
-export async function getAutoCompleteInfo() {
-	await protect({ roles: ["quotes"] });
-	const [authors, sources] = await Promise.all([
-		database.quoteAuthor
-			.findMany({
-				include: { name: true },
-				orderBy: { name: { english: "asc" } },
-			})
-			.then(records =>
-				records.map(
-					record =>
-						({
-							english: record.name.english,
-							russian: record.name.russian,
-						}) satisfies Translation,
-				),
-			),
-		database.quote
-			.findMany({
-				select: { source: true },
-				distinct: ["sourceTranslationId"],
-			})
-			.then(records =>
-				records.map(record =>
-					record.source
-						? ({
-								english: record.source?.english,
-								russian: record.source?.russian,
-							} satisfies Translation)
-						: undefined,
-				),
-			),
-	]);
-	return {
-		existingAuthors: authors,
-		existingSources: sources.filter(source => source !== undefined),
-	} satisfies AutoCompleteInfo;
-}
 
 export async function addNewQuote(newQuote: NewQuote) {
 	await protect({ roles: ["quotes"] });
 	const t = await getTranslations();
 	const quoteSchema = getQuoteSchema(t);
-	const { author, quote, source, scheduledDate } =
-		quoteSchema.parse(newQuote);
-	const scheduledLocalDate = scheduledDate
-		? toZonedTime(scheduledDate, getNativeTimeZone())
+	const {
+		author,
+		quote,
+		source,
+		scheduledDate: scheduledDateString,
+	} = quoteSchema.parse(newQuote);
+	const scheduledDate = scheduledDateString
+		? new Date(scheduledDateString)
 		: undefined;
 
-	await database.$transaction(async transaction => {
+	const result = await database.$transaction(async transaction => {
+		const [authorTranslation, sourceTranslation] = await Promise.all([
+			transaction.translation.upsert({
+				select: { id: true, english: true, russian: true },
+				create: {
+					english: author.english,
+					russian: author.russian,
+					englishHash: getMd5Hash(author.english),
+				},
+				update: {
+					russian: author.russian,
+				},
+				where: {
+					englishHash: getMd5Hash(author.english),
+				},
+			}),
+			source.english
+				? transaction.translation.upsert({
+						select: { id: true, english: true, russian: true },
+						create: {
+							english: source.english,
+							russian: source.russian,
+							englishHash: getMd5Hash(source.english),
+						},
+						update: {
+							russian: source.russian,
+						},
+						where: {
+							englishHash: getMd5Hash(source.english),
+						},
+					})
+				: undefined,
+		]);
+		const quoteAuthor = await transaction.quoteAuthor.upsert({
+			select: { id: true, english: true, russian: true },
+			create: {
+				nameTranslationId: authorTranslation.id,
+			},
+			update: {},
+			where: {
+				nameTranslationId: authorTranslation.id,
+			},
+		});
+		const result = await transaction.quote.create({
+			select: {
+				id: true,
+				quote: true,
+				author: {
+					select: { id: true, name: true },
+				},
+				source: true,
+			},
+			data: {
+				author: {
+					connect: {
+						id: quoteAuthor.id,
+					},
+				},
+				source: sourceTranslation?.id
+					? {
+							connect: {
+								id: sourceTranslation.id,
+							},
+						}
+					: undefined,
+				quote: {
+					create: {
+						english: quote.english,
+						russian: quote.russian,
+						englishHash: getMd5Hash(quote.english),
+					},
+				},
+				dailyQuotes: scheduledDate && {
+					connectOrCreate: {
+						create: {
+							date: scheduledDate,
+						},
+						where: {
+							date: scheduledDate,
+						},
+					},
+				},
+			},
+		});
+		revalidateTag("quotes", "max");
+		revalidateTag("daily-quote", "max");
+		return {
+			id: result.id,
+			author: result.author,
+			quote: result.quote,
+			source: result.source ?? undefined,
+		} satisfies DetailedQuote<Translation>;
+	});
+	return result satisfies DetailedQuote<Translation>;
+}
+
+export async function addDailyQuote(quoteId: number, date: string) {
+	await protect({ roles: ["quotes"] });
+	const parsedDate = new Date(z.iso.date().parse(date));
+	await database.dailyQuote.upsert({
+		create: {
+			date: parsedDate,
+			quoteId,
+		},
+		update: {
+			quoteId,
+		},
+		where: {
+			date: parsedDate,
+		},
+	});
+	revalidateTag("daily-quote", "max");
+}
+
+export async function rescheduleDailyQuote(
+	quoteId: number,
+	oldDate: string,
+	newDate: string,
+) {
+	await protect({ roles: ["quotes"] });
+	const parsedOldDate = new Date(z.iso.date().parse(oldDate));
+	const parsedNewDate = new Date(z.iso.date().parse(newDate));
+	await database.dailyQuote.upsert({
+		create: {
+			date: parsedNewDate,
+			quoteId,
+		},
+		update: {
+			quoteId,
+			date: parsedNewDate,
+		},
+		where: {
+			date: parsedOldDate,
+			quoteId,
+		},
+	});
+	revalidateTag("daily-quote", "max");
+}
+
+export async function updateQuote(id: number, newQuote: NewQuote) {
+	await protect({ roles: ["quotes"] });
+	const t = await getTranslations();
+	const quoteSchema = getQuoteSchema(t);
+	const {
+		author,
+		quote,
+		source,
+		scheduledDate: scheduledDateString,
+	} = quoteSchema.parse(newQuote);
+	const scheduledDate = scheduledDateString
+		? new Date(scheduledDateString)
+		: undefined;
+
+	const result = await database.$transaction(async transaction => {
 		const [authorTranslation, sourceTranslation] = await Promise.all([
 			transaction.translation.upsert({
 				select: { id: true },
@@ -103,7 +220,15 @@ export async function addNewQuote(newQuote: NewQuote) {
 				nameTranslationId: authorTranslation.id,
 			},
 		});
-		const result = await transaction.quote.create({
+		const result = await transaction.quote.update({
+			select: {
+				id: true,
+				quote: true,
+				author: {
+					select: { id: true, name: true },
+				},
+				source: true,
+			},
 			data: {
 				author: {
 					connect: {
@@ -118,25 +243,60 @@ export async function addNewQuote(newQuote: NewQuote) {
 						}
 					: undefined,
 				quote: {
-					create: {
+					update: {
 						english: quote.english,
 						russian: quote.russian,
 						englishHash: getMd5Hash(quote.english),
 					},
 				},
-				dailyQuotes: scheduledLocalDate && {
+				dailyQuotes: scheduledDate && {
 					connectOrCreate: {
-						where: {
-							date: scheduledLocalDate,
-						},
 						create: {
-							date: scheduledLocalDate,
+							date: scheduledDate,
+						},
+						where: {
+							date: scheduledDate,
 						},
 					},
 				},
 			},
+			where: {
+				id,
+			},
 		});
+		revalidateTag("quotes", "max");
 		revalidateTag("daily-quote", "max");
-		return result;
+		return {
+			id: result.id,
+			author: result.author,
+			quote: result.quote,
+			source: result.source ?? undefined,
+		} satisfies DetailedQuote<Translation>;
 	});
+	return result;
+}
+
+export async function deleteQuote(id: number) {
+	await protect({ roles: ["quotes"] });
+	await database.quote.delete({
+		where: {
+			id,
+		},
+	});
+	revalidateTag("quotes", "max");
+	revalidateTag("daily-quote", "max");
+}
+
+export async function deleteScheduledQuote(date: string) {
+	await protect({ roles: ["quotes"] });
+	const parsedDate = new Date(z.iso.date().parse(date));
+	await database.dailyQuote.delete({ where: { date: parsedDate } });
+	revalidateTag("quotes", "max");
+	revalidateTag("daily-quote", "max");
+}
+
+export async function deleteAuthor(id: number) {
+	await protect({ roles: ["quotes"] });
+	await database.quoteAuthor.delete({ where: { id } });
+	revalidateTag("quote_authors", "max");
 }

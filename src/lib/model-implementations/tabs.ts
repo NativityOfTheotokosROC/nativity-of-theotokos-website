@@ -51,7 +51,7 @@ export function useTabs({
 		selectedTab,
 		tabsPosition,
 		tabsLayout,
-		animations,
+		animation: animations,
 		tabsToUnmount,
 	});
 	return model;
