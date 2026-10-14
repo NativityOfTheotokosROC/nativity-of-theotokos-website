@@ -98,35 +98,37 @@ const ScheduledQuotes = function ({ model }) {
 	const { pagination } = table.state;
 
 	return (
-		<div className="scheduled-quotes-section flex flex-col gap-4 border-t-3 border-[#dcb042] bg-white/70 p-8 py-9 md:py-10 lg:px-20">
+		<div className="scheduled-quotes-section flex flex-col gap-4 border-t-3 border-[#dcb042] bg-white/70 p-8 py-9 md:py-10 lg:items-center lg:justify-center lg:px-20">
 			<span className="text-xl">{t("scheduledQuotes")}</span>
 			<hr className="mb-4 opacity-50" />
-			<div className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto rounded-lg border border-gray-400 bg-white p-5 lg:max-w-6/10">
-				{table.getRowModel().rows.map(row => (
-					<>
-						<ScheduledQuote
-							key={row.id}
-							model={newReadonlyModel({
-								quote: row.original,
-								modifiers,
-							})}
-						/>
-						<hr className="mt-3 opacity-30" />
-					</>
-				))}
-			</div>
-			<div className="flex items-center justify-end gap-4 text-sm">
-				{table.getCanPreviousPage() && (
-					<button onClick={table.previousPage}>
-						<ArrowLeft strokeWidth={1.5} />
-					</button>
-				)}
-				{pagination.pageIndex + 1}
-				{table.getCanNextPage() && (
-					<button onClick={table.nextPage}>
-						<ArrowRight strokeWidth={1.5} />
-					</button>
-				)}
+			<div className="flex flex-col gap-3 overflow-clip rounded-lg border border-gray-400 bg-white p-5 lg:max-w-6/10">
+				<div className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto">
+					{table.getRowModel().rows.map(row => (
+						<>
+							<ScheduledQuote
+								key={row.id}
+								model={newReadonlyModel({
+									quote: row.original,
+									modifiers,
+								})}
+							/>
+							<hr className="mt-3 opacity-30" />
+						</>
+					))}
+				</div>
+				<div className="flex w-full items-center justify-end gap-4 text-sm">
+					{table.getCanPreviousPage() && (
+						<button onClick={table.previousPage}>
+							<ArrowLeft strokeWidth={1.5} />
+						</button>
+					)}
+					{pagination.pageIndex + 1}
+					{table.getCanNextPage() && (
+						<button onClick={table.nextPage}>
+							<ArrowRight strokeWidth={1.5} />
+						</button>
+					)}
+				</div>
 			</div>
 		</div>
 	);
