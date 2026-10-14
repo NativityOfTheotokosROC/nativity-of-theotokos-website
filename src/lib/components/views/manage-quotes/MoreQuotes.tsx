@@ -22,7 +22,7 @@ const MoreQuotes = function ({ model }) {
 	return (
 		<div className="more-quotes-section flex flex-col gap-5 bg-[antiquewhite] p-8 py-9 md:py-10 lg:px-20">
 			<Ornament
-				className="h-[8em] max-w-9/10 self-center"
+				className="h-[6em] max-w-9/10 self-center"
 				fill="#88815899"
 			/>
 			<span className="text-2xl">{t("moreQuotes")}</span>
