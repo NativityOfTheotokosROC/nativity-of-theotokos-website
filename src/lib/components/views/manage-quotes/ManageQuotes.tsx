@@ -91,67 +91,74 @@ const ManageQuotes = function ({ model }) {
 			<ConfirmationDialog model={confirmationDialog} />
 			<WriteQuoteModal model={writeQuoteModal} />
 			<ScheduleQuoteModal model={scheduleQuoteModal} />
-			<div className="flex flex-col bg-[#FEF8F3] text-black">{quoteHighlight && (
-				<QuoteHighlight
+			<div className="flex flex-col bg-[#FEF8F3] text-black">
+				{quoteHighlight && (
+					<QuoteHighlight
+						model={newReadonlyModel({
+							quote: quoteHighlight,
+						})}
+					/>
+				)}
+				<MoreQuotes
 					model={newReadonlyModel({
-						quote: quoteHighlight,
-						modifiers: quoteModifiers,
+						quotes,
+						quoteModifiers,
+						newQuoteCallback: () =>
+							writeQuoteModal.interact({
+								type: "OPEN",
+								input: { autoCompleteInfo },
+							}),
 					})}
 				/>
-			)}
-			<MoreQuotes
-				model={newReadonlyModel({
-					quotes,
-					quoteModifiers,
-					newQuoteCallback: () =>
-						writeQuoteModal.interact({ type: "OPEN" }),
-				})}
-			/>
-			<ScheduledQuotes
-				model={newReadonlyModel({
-					quotes: scheduledQuotes,
-					modifiers: {
-						editCallback(id) {
-							const quote = scheduledQuotes.find(
-								quote => quote.id === id,
-							)!;
-							scheduleQuoteModal.interact({
-								type: "OPEN",
-								input: { quote },
-							});
-						},
-						deleteCallback(id) {
-							const quote = scheduledQuotes.find(
-								quote => quote.id === id,
-							)!;
-							confirmationDialog.interact({
-								type: "OPEN",
-								input: {
-									message: t("confirmDeleteScheduledQuote", {
-										date: pickDateTranslation(
-											toZonedTime(
-												quote.date,
-												getNativeTimeZone(),
-											),
-											locale,
-										),
-									}),
-									proceedCallback: async () =>
-										await interact({
-											type: "DELETE_SCHEDULED_QUOTE",
-											input: {
-												date: getDateString(
-													quote.date,
-													true,
+				<ScheduledQuotes
+					model={newReadonlyModel({
+						quotes: scheduledQuotes,
+						modifiers: {
+							editCallback(id) {
+								const quote = scheduledQuotes.find(
+									quote => quote.id === id,
+								)!;
+								scheduleQuoteModal.interact({
+									type: "OPEN",
+									input: { quote },
+								});
+							},
+							deleteCallback(id) {
+								const quote = scheduledQuotes.find(
+									quote => quote.id === id,
+								)!;
+								confirmationDialog.interact({
+									type: "OPEN",
+									input: {
+										message: t(
+											"confirmDeleteScheduledQuote",
+											{
+												date: pickDateTranslation(
+													toZonedTime(
+														quote.date,
+														getNativeTimeZone(),
+													),
+													locale,
 												),
 											},
-										}),
-								},
-							});
+										),
+										proceedCallback: async () =>
+											await interact({
+												type: "DELETE_SCHEDULED_QUOTE",
+												input: {
+													date: getDateString(
+														quote.date,
+														true,
+													),
+												},
+											}),
+									},
+								});
+							},
 						},
-					},
-				})}
-			/></div>
+					})}
+				/>
+			</div>
 		</>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<ManageQuotesModel>>;

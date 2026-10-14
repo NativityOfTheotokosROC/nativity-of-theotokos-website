@@ -390,6 +390,7 @@
 	"userAction": {
 		"assignArticle": "Назначить статью",
 		"newQuote": "Новая цитата",
+		"manageQuotes": "Управление цитатами",
 		"notifications": "Уведомления",
 		"reviewArticle": "Проверка статьи",
 		"scheduler": "Планирование событий",
@@ -446,6 +447,7 @@
 		"allQuotes": "Все цитаты",
 		"sortBy": "Сортировать по",
 		"sortedBy": "Сортировка: {field}",
+		"none": "Нет",
 		"author": "Автор",
 		"source": "Источник",
 		"quote": "Цитата",

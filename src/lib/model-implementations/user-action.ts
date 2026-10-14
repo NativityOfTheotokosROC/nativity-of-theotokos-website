@@ -34,6 +34,14 @@ export function useUserActions() {
 					},
 				});
 			}
+			case "MANAGE_QUOTES": {
+				return newReadonlyModel({
+					name: "MANAGE_QUOTES",
+					action: () => {
+						router.push("/quotes/manage");
+					},
+				});
+			}
 			case "SCHEDULER": {
 				return newReadonlyModel({
 					name: "SCHEDULER",

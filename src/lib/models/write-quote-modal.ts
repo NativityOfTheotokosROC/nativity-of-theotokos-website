@@ -17,7 +17,7 @@ export type WriteQuoteModalModelInteraction =
 	| InputModelInteraction<
 			"OPEN",
 			{
-				quote: DetailedQuote<Translation>;
+				quote?: DetailedQuote<Translation>;
 				autoCompleteInfo?: WriteQuoteModalModelView["autoCompleteInfo"];
 			}
 	  >

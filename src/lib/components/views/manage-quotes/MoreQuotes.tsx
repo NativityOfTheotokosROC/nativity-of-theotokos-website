@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import Button from "../../button/Button";
 import QuotesWidget from "../../quotes-widget/QuotesWidget";
 import { Translation } from "@/src/lib/utilities/types";
+import Ornament from "@/public/assets/ornament_1.svg";
 
 const MoreQuotes = function ({ model }) {
 	const { quotes, newQuoteCallback, quoteModifiers } = model.modelView;
@@ -19,9 +20,13 @@ const MoreQuotes = function ({ model }) {
 	// });
 
 	return (
-		<div className="more-quotes-section flex flex-col gap-5 p-8 py-9 md:py-10 lg:px-20 bg-[antiquewhite]">
-			<span className="text-xl">{t("moreQuotes")}</span>
-			<div className="flex w-full flex-col gap-5 md:w-lg">
+		<div className="more-quotes-section flex flex-col gap-5 bg-[antiquewhite] p-8 py-9 md:py-10 lg:px-20">
+			<div className="ornament mb-4 flex w-full items-center justify-center md:mb-0">
+				<Ornament className="w-[12em] max-w-9/10" fill="#88815899" />
+			</div>
+			<span className="text-2xl">{t("moreQuotes")}</span>
+			<hr className="m-0 opacity-50" />
+			<div className="flex w-full flex-col gap-5 lg:max-w-6/10">
 				<Button
 					model={newReadonlyModel({ action: newQuoteCallback })}
 					className="w-full"
@@ -45,6 +50,6 @@ const MoreQuotes = function ({ model }) {
 			quoteModifiers: QuoteModelView["modifiers"];
 		}
 	>
->; 
+>;
 
 export default MoreQuotes;

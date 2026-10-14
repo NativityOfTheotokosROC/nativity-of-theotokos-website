@@ -391,6 +391,7 @@
 	"userAction": {
 		"assignArticle": "Assign Article",
 		"newQuote": "New Quote",
+		"manageQuotes": "Manage Quotes",
 		"notifications": "Notifications",
 		"reviewArticle": "Review Article",
 		"scheduler": "Scheduler",
@@ -446,6 +447,7 @@
 		"byAuthor": "By Author",
 		"allQuotes": "All Quotes",
 		"sortBy": "Sort By",
+		"none": "None",
 		"author": "Author",
 		"source": "Source",
 		"quote": "Quote",

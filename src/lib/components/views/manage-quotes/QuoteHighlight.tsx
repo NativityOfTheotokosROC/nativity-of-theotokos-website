@@ -5,6 +5,7 @@ import { useLocale } from "next-intl";
 import { useState } from "react";
 import Quote from "../../quote/Quote";
 import { useTranslations } from "next-intl";
+import Border from "@/public/assets/border-8.webp";
 
 const QuoteHighlight = function ({ model }) {
 	const { quote, modifiers } = model.modelView;
@@ -13,17 +14,27 @@ const QuoteHighlight = function ({ model }) {
 	const [language] = useState(locale);
 
 	return (
-		<div className="flex-col gap-4 align-center flex justify-center bg-[#0a0a0a] p-8 py-14 text-white md:p-20 border-y-15 border-y-[#976029]/82">
-			<span className="font-light uppercase underline">
-				{t("highlightedQuote")}
-			</span>
-			<Quote
-				model={newReadonlyModel({
-					quote: { ...quote, author: quote.author.name },
-					language,
-					variant: "highlight",
-					modifiers,
-				})}
+		<div className="w-full">
+			<div
+				style={{ backgroundImage: `url(${Border.src})` }}
+				className="h-3.75 w-full bg-[#250203] bg-size-[25%] bg-position-[50%_50%] bg-repeat-x md:bg-size-[15%] lg:bg-size-[15%]"
+			/>
+			<div className="align-center flex w-full flex-col justify-center gap-4 bg-[#0a0a0a] p-8 py-14 text-white md:p-20">
+				<span className="font-light uppercase">
+					{t("highlightedQuote")}
+				</span>
+				<Quote
+					model={newReadonlyModel({
+						quote: { ...quote, author: quote.author.name },
+						language,
+						variant: "highlight",
+						modifiers,
+					})}
+				/>
+			</div>
+			<div
+				style={{ backgroundImage: `url(${Border.src})` }}
+				className="h-3.75 w-full bg-[#250203] bg-size-[25%] bg-position-[50%_50%] bg-repeat-x md:bg-size-[15%] lg:bg-size-[15%]"
 			/>
 		</div>
 	);

@@ -103,10 +103,10 @@ const QuotesWidget = function ({ model }) {
 		},
 	});
 	const { sorting, pagination } = table.state;
-	const { id: currentSortingColumnId } = sorting[0];
-	const currentSortingColumn = table
-		.getColumn(currentSortingColumnId)
-		?.columnDef.header?.toString();
+	const currentSortingColumnId = sorting[0]?.id;
+	const currentSortingColumn =
+		table.getColumn(currentSortingColumnId)?.columnDef.header?.toString() ??
+		t("none");
 
 	return (
 		<div className="flex flex-col gap-3">
@@ -116,8 +116,7 @@ const QuotesWidget = function ({ model }) {
 						<MenuButton
 							className={`flex w-fit items-center gap-3 self-end text-left text-sm uppercase`}
 						>
-							{currentSortingColumn &&
-								t("sortedBy", { field: currentSortingColumn })}
+							{t("sortedBy", { field: currentSortingColumn })}
 							<ChevronDown
 								className={`transition duration-200 ease-out ${open ? "rotate-180" : ""}`}
 								strokeWidth={1.5}
@@ -158,7 +157,7 @@ const QuotesWidget = function ({ model }) {
 								modifiers,
 							})}
 						/>
-						<hr className="mt-3 opacity-65" />
+						<hr className="mt-3 opacity-30" />
 					</>
 				))}
 			</div>
