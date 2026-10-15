@@ -27,7 +27,6 @@ export async function addNewQuote(newQuote: NewQuote) {
 	const result = await database.$transaction(async transaction => {
 		const [authorTranslation, sourceTranslation] = await Promise.all([
 			transaction.translation.upsert({
-				select: { id: true, english: true, russian: true },
 				create: {
 					english: author.english,
 					russian: author.russian,
@@ -58,7 +57,6 @@ export async function addNewQuote(newQuote: NewQuote) {
 				: undefined,
 		]);
 		const quoteAuthor = await transaction.quoteAuthor.upsert({
-			select: { id: true, english: true, russian: true },
 			create: {
 				nameTranslationId: authorTranslation.id,
 			},
@@ -180,7 +178,6 @@ export async function updateQuote(id: number, newQuote: NewQuote) {
 	const result = await database.$transaction(async transaction => {
 		const [authorTranslation, sourceTranslation] = await Promise.all([
 			transaction.translation.upsert({
-				select: { id: true },
 				create: {
 					english: author.english,
 					russian: author.russian,
@@ -211,7 +208,6 @@ export async function updateQuote(id: number, newQuote: NewQuote) {
 				: undefined,
 		]);
 		const quoteAuthor = await transaction.quoteAuthor.upsert({
-			select: { id: true },
 			create: {
 				nameTranslationId: authorTranslation.id,
 			},
