@@ -103,6 +103,7 @@ const ManageQuotes = function ({ model }) {
 					model={newReadonlyModel({
 						quotes,
 						quoteModifiers,
+						highlightedQuotes: [quoteHighlight],
 						newQuoteCallback: () =>
 							writeQuoteModal.interact({
 								type: "OPEN",

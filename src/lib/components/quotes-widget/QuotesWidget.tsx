@@ -1,3 +1,4 @@
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import {
@@ -9,28 +10,35 @@ import {
 	filterFn_includesString,
 	flexRender,
 	rowPaginationFeature,
+	rowPinningFeature,
 	rowSortingFeature,
 	sortFn_text,
 	tableFeatures,
 	useTable,
 } from "@tanstack/react-table";
-import { ArrowLeft, ArrowRight, ChevronDown } from "lucide-react";
+import {
+	ArrowDownNarrowWideIcon,
+	ArrowDownWideNarrowIcon,
+	ArrowLeft,
+	ArrowRight,
+	PinIcon,
+} from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Fragment, useMemo, useRef } from "react";
 import { QuotesWidgetModel } from "../../models/quotes-widget";
-import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/react";
 import Quote from "../quote/Quote";
 
 const defaultTableFeatures = {
 	rowSortingFeature,
 	rowPaginationFeature,
+	rowPinningFeature,
 	sortedRowModel: createSortedRowModel(),
 	paginatedRowModel: createPaginatedRowModel(),
 	sortFns: { text: sortFn_text },
 };
 
 const QuotesWidget = function ({ model }) {
-	const { quotes, includeFilter, modifiers } = model.modelView;
+	const { quotes, includeFilter, pinnedRows, modifiers } = model.modelView;
 	const t = useTranslations("manageQuotes");
 	const tMisc = useTranslations("miscellaneous");
 	const locale = useLocale();
@@ -100,10 +108,17 @@ const QuotesWidget = function ({ model }) {
 					desc: false,
 				},
 			],
+			rowPinning: pinnedRows
+				? {
+						top: pinnedRows,
+						bottom: [],
+					}
+				: undefined,
 		},
 	});
 	const { sorting, pagination } = table.state;
 	const currentSortingColumnId = sorting[0]?.id;
+	const isDesc = sorting[0]?.desc;
 	const currentSortingColumn =
 		table.getColumn(currentSortingColumnId)?.columnDef.header?.toString() ??
 		t("none");
@@ -118,15 +133,17 @@ const QuotesWidget = function ({ model }) {
 							className={`flex w-fit items-center gap-3 self-end text-left text-sm uppercase`}
 						>
 							{t("sortedBy", { field: currentSortingColumn })}
-							<ChevronDown
-								className={`transition duration-200 ease-out ${open ? "rotate-180" : ""}`}
-								strokeWidth={1.5}
-							/>
+							{isDesc && (
+								<ArrowDownWideNarrowIcon strokeWidth={1.5} />
+							)}
+							{isDesc === false && (
+								<ArrowDownNarrowWideIcon strokeWidth={1.5} />
+							)}
 						</MenuButton>
 						<MenuItems
 							anchor="bottom end"
 							transition
-							className="z-1 mr-1 flex w-35 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-800 text-sm transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:p-3 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#ffdc4f] focus:outline-none *:active:bg-gray-950 *:active:text-[#ffdc4f] data-closed:scale-92 data-closed:opacity-0"
+							className="z-1 mr-1 flex w-45 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-800 text-sm opacity-90 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:p-3 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#ffdc4f] focus:outline-none *:active:bg-gray-950 *:active:text-[#ffdc4f] data-closed:scale-92 data-closed:opacity-0"
 						>
 							{table.getHeaderGroups()[0].headers.map(header => (
 								<MenuItem key={header.column.id} as={Fragment}>
@@ -151,17 +168,24 @@ const QuotesWidget = function ({ model }) {
 				>
 					{table.getRowModel().rows.map(row => (
 						<>
-							<Quote
-								key={row.id}
-								model={newReadonlyModel({
-									quote: {
-										...row.original,
-										author: row.original.author.name,
-									},
-									variant: "miniaturized",
-									modifiers,
-								})}
-							/>
+							<div key={row.id} className={`flex gap-1`}>
+								{row.getIsPinned() && (
+									<PinIcon
+										className="size-2"
+										fill="#88815899"
+									/>
+								)}
+								<Quote
+									model={newReadonlyModel({
+										quote: {
+											...row.original,
+											author: row.original.author.name,
+										},
+										variant: "miniaturized",
+										modifiers,
+									})}
+								/>
+							</div>
 							<hr className="mt-3 opacity-30" />
 						</>
 					))}

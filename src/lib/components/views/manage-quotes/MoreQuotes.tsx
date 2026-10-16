@@ -10,7 +10,8 @@ import { Translation } from "@/src/lib/utilities/types";
 import Ornament from "@/public/assets/ornament_1.svg";
 
 const MoreQuotes = function ({ model }) {
-	const { quotes, newQuoteCallback, quoteModifiers } = model.modelView;
+	const { quotes, newQuoteCallback, quoteModifiers, highlightedQuotes } =
+		model.modelView;
 	const t = useTranslations("manageQuotes");
 	// const tabs = useTabs({
 	// 	tabs: [
@@ -38,6 +39,9 @@ const MoreQuotes = function ({ model }) {
 					model={newReadonlyModel({
 						quotes,
 						modifiers: quoteModifiers,
+						pinnedRows: highlightedQuotes?.map(row =>
+							row.id.toString(),
+						),
 					})}
 				/>
 			</div>
@@ -47,6 +51,7 @@ const MoreQuotes = function ({ model }) {
 	ReadonlyModel<
 		Omit<EditableQuoteModelView, "quote"> & {
 			quotes: DetailedQuote<Translation>[];
+			highlightedQuotes?: DetailedQuote<Translation>[];
 			newQuoteCallback: () => void;
 			quoteModifiers: QuoteModelView["modifiers"];
 		}
