@@ -102,7 +102,6 @@ const QuotesWidget = function ({ model }) {
 		columns,
 		features,
 		getRowId: row => row.id.toString(),
-		keepPinnedRows: false,
 		initialState: {
 			sorting: [
 				{
@@ -169,8 +168,8 @@ const QuotesWidget = function ({ model }) {
 				>
 					{table.getTopRows().map(row => (
 						<>
-							<div key={row.id} className={`flex gap-1`}>
-								<PinIcon className="size-6" fill="#88815899" />
+							<div key={row.id} className={`flex gap-2`}>
+								<PinIcon className="size-9" fill="#88815899" />
 								<Quote
 									model={newReadonlyModel({
 										quote: {
