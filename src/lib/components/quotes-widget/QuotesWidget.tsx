@@ -21,6 +21,7 @@ import {
 	ArrowDownWideNarrowIcon,
 	ArrowLeft,
 	ArrowRight,
+	ListIcon,
 	PinIcon,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -127,54 +128,48 @@ const QuotesWidget = function ({ model }) {
 	return (
 		<div className="flex flex-col gap-3">
 			<Menu>
-				{({ open }) => (
-					<>
-						<MenuButton
-							className={`flex w-fit items-center gap-3 self-end text-left text-sm uppercase`}
-						>
-							{t("sortedBy", { field: currentSortingColumn })}
-							{isDesc && (
-								<ArrowDownWideNarrowIcon strokeWidth={1.5} />
-							)}
-							{isDesc === false && (
-								<ArrowDownNarrowWideIcon strokeWidth={1.5} />
-							)}
-						</MenuButton>
-						<MenuItems
-							anchor="bottom end"
-							transition
-							className="z-1 mr-1 flex w-45 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-800 text-sm opacity-90 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:p-3 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#ffdc4f] focus:outline-none *:active:bg-gray-950 *:active:text-[#ffdc4f] data-closed:scale-92 data-closed:opacity-0"
-						>
-							{table.getHeaderGroups()[0].headers.map(header => (
-								<MenuItem key={header.column.id} as={Fragment}>
-									<button
-										onClick={header.column.getToggleSortingHandler()}
-									>
-										{flexRender(
-											header.column.columnDef.header,
-											header.getContext(),
-										)}
-									</button>
-								</MenuItem>
-							))}
-						</MenuItems>
-					</>
-				)}
+				<>
+					<MenuButton
+						className={`flex w-fit items-center gap-3 self-end text-left text-sm uppercase`}
+					>
+						{t("sortedBy", { field: currentSortingColumn })}
+						{isDesc && (
+							<ArrowDownWideNarrowIcon strokeWidth={1.5} />
+						)}
+						{isDesc === false && (
+							<ArrowDownNarrowWideIcon strokeWidth={1.5} />
+						)}
+						{isDesc === false && <ListIcon strokeWidth={1.5} />}
+					</MenuButton>
+					<MenuItems
+						anchor="bottom end"
+						transition
+						className="z-1 mr-1 flex w-45 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-800 text-sm opacity-95 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:p-3 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#ffdc4f] focus:outline-none *:active:bg-gray-950 *:active:text-[#ffdc4f] data-closed:scale-92 data-closed:opacity-0"
+					>
+						{table.getHeaderGroups()[0].headers.map(header => (
+							<MenuItem key={header.column.id} as={Fragment}>
+								<button
+									onClick={header.column.getToggleSortingHandler()}
+								>
+									{flexRender(
+										header.column.columnDef.header,
+										header.getContext(),
+									)}
+								</button>
+							</MenuItem>
+						))}
+					</MenuItems>
+				</>
 			</Menu>
 			<div className="flex flex-col gap-3 overflow-clip rounded-lg border border-gray-400 bg-[#FEF8F3] p-5">
 				<div
 					className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto pr-5"
 					ref={widgetRef}
 				>
-					{table.getRowModel().rows.map(row => (
+					{table.getTopRows().map(row => (
 						<>
 							<div key={row.id} className={`flex gap-1`}>
-								{row.getIsPinned() && (
-									<PinIcon
-										className="size-2"
-										fill="#88815899"
-									/>
-								)}
+								<PinIcon className="size-2" fill="#88815899" />
 								<Quote
 									model={newReadonlyModel({
 										quote: {
@@ -186,6 +181,21 @@ const QuotesWidget = function ({ model }) {
 									})}
 								/>
 							</div>
+							<hr className="mt-3 opacity-30" />
+						</>
+					))}
+					{table.getCenterRows().map(row => (
+						<>
+							<Quote
+								model={newReadonlyModel({
+									quote: {
+										...row.original,
+										author: row.original.author.name,
+									},
+									variant: "miniaturized",
+									modifiers,
+								})}
+							/>
 							<hr className="mt-3 opacity-30" />
 						</>
 					))}
