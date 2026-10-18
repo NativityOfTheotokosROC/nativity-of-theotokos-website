@@ -169,7 +169,7 @@ const QuotesWidget = function ({ model }) {
 					{table.getTopRows().map(row => (
 						<>
 							<div key={row.id} className={`flex gap-2`}>
-								<PinIcon className="size-9" fill="#88815899" />
+								<PinIcon className="min-w-9 size-9" fill="#88815899" />
 								<Quote
 									model={newReadonlyModel({
 										quote: {
