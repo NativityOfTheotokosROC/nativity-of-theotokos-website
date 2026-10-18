@@ -139,7 +139,7 @@ const QuotesWidget = function ({ model }) {
 						{isDesc === false && (
 							<ArrowDownNarrowWideIcon strokeWidth={1.5} />
 						)}
-						{isDesc === false && <ListIcon strokeWidth={1.5} />}
+						{isDesc === undefined && <ListIcon strokeWidth={1.5} />}
 					</MenuButton>
 					<MenuItems
 						anchor="bottom end"
@@ -169,7 +169,7 @@ const QuotesWidget = function ({ model }) {
 					{table.getTopRows().map(row => (
 						<>
 							<div key={row.id} className={`flex gap-1`}>
-								<PinIcon className="size-2" fill="#88815899" />
+								<PinIcon className="size-6" fill="#88815899" />
 								<Quote
 									model={newReadonlyModel({
 										quote: {
