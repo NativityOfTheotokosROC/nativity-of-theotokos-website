@@ -102,6 +102,7 @@ const QuotesWidget = function ({ model }) {
 		columns,
 		features,
 		getRowId: row => row.id.toString(),
+		keepPinnedRows: false,
 		initialState: {
 			sorting: [
 				{
