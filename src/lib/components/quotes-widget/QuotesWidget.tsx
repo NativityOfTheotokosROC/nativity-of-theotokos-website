@@ -1,4 +1,5 @@
 import {
+	CloseButton,
 	Disclosure,
 	DisclosureButton,
 	DisclosurePanel,
@@ -183,7 +184,7 @@ const QuotesWidget = function ({ model }) {
 								<input
 									placeholder={t("searchQuotes")}
 									value={globalFilter}
-									className={`w-0 overflow-clip rounded-lg border bg-white p-2 transition duration-300 ease-out group-data-open:w-full`}
+									className={`overflow-clip rounded-lg border bg-white p-2 transition duration-300 ease-out ${open ? "w-full" : "w-0"}`}
 									onChange={e =>
 										table.setGlobalFilter(
 											e.target.value.trim(),
@@ -191,16 +192,16 @@ const QuotesWidget = function ({ model }) {
 									}
 								/>
 							</DisclosurePanel>
-							<DisclosureButton
-								onClick={() => {
-									if (open) {
-										close();
-										table.resetGlobalFilter(true);
-									}
-								}}
-							>
+							<DisclosureButton>
 								{open ? (
-									<X strokeWidth={1.5} />
+									<CloseButton
+										onClick={() => {
+											close();
+											table.resetGlobalFilter();
+										}}
+									>
+										<X strokeWidth={1.5} />
+									</CloseButton>
 								) : (
 									<Search strokeWidth={1.5} />
 								)}
