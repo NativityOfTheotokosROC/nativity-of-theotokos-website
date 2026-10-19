@@ -116,7 +116,7 @@ const QuotesWidget = function ({ model }) {
 		},
 		globalFilterFn: "includesString",
 	});
-	const { sorting, pagination } = table.state;
+	const { sorting, pagination, globalFilter } = table.state;
 	const currentSortingColumnId = sorting[0]?.id;
 	const isDesc = sorting[0]?.desc;
 	const currentSortingColumn =
@@ -130,17 +130,26 @@ const QuotesWidget = function ({ model }) {
 				<Menu>
 					<>
 						<MenuButton
-							className={`flex w-fit items-center gap-3 text-left text-sm uppercase`}
+							className={`flex w-fit items-center gap-2 text-left text-sm uppercase`}
 						>
 							{t("sortedBy", { field: currentSortingColumn })}
 							{isDesc && (
-								<ArrowDownWideNarrowIcon strokeWidth={1.5} />
+								<ArrowDownWideNarrowIcon
+									className="min-w-fit"
+									strokeWidth={1.5}
+								/>
 							)}
 							{isDesc === false && (
-								<ArrowDownNarrowWideIcon strokeWidth={1.5} />
+								<ArrowDownNarrowWideIcon
+									className="min-w-fit"
+									strokeWidth={1.5}
+								/>
 							)}
 							{isDesc === undefined && (
-								<ListIcon strokeWidth={1.5} />
+								<ListIcon
+									className="min-w-fit"
+									strokeWidth={1.5}
+								/>
 							)}
 						</MenuButton>
 						<MenuItems
@@ -165,7 +174,7 @@ const QuotesWidget = function ({ model }) {
 				</Menu>
 				<Disclosure
 					as="div"
-					className="flex items-center gap-2"
+					className="flex flex-1 items-center gap-2"
 					defaultOpen={false}
 				>
 					{({ open, close }) => (
@@ -173,6 +182,7 @@ const QuotesWidget = function ({ model }) {
 							<DisclosurePanel className="group">
 								<input
 									placeholder={t("searchQuotes")}
+									value={globalFilter}
 									className={`w-0 overflow-clip rounded-lg border bg-white p-2 transition duration-300 ease-out group-data-open:w-full`}
 									onChange={e =>
 										table.setGlobalFilter(
@@ -190,9 +200,9 @@ const QuotesWidget = function ({ model }) {
 								}}
 							>
 								{open ? (
-									<Search strokeWidth={1.5} />
-								) : (
 									<X strokeWidth={1.5} />
+								) : (
+									<Search strokeWidth={1.5} />
 								)}
 							</DisclosureButton>
 						</>
@@ -205,6 +215,7 @@ const QuotesWidget = function ({ model }) {
 					ref={listRef}
 				>
 					{pagination.pageIndex == 0 &&
+						!globalFilter &&
 						table.getTopRows().map(row => (
 							<>
 								<div key={row.id} className={`flex gap-2`}>
