@@ -6,7 +6,6 @@ import { QuoteModelView } from "./quote";
 export type QuotesWidgetModelView = {
 	quotes: DetailedQuote<Translation>[];
 	pinnedRows?: string[];
-	includeFilter?: boolean;
 } & Pick<QuoteModelView, "modifiers">;
 
 export type QuotesWidgetModel = Model<QuotesWidgetModelView>;
