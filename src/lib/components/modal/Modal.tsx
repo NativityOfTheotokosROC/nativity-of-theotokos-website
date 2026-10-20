@@ -41,7 +41,7 @@ const Modal = function ({ model, children }) {
 					{(variant === "titled" ||
 						variant === "titled-with-close") && (
 						<div className="flex w-full items-center justify-between rounded-none border-0 bg-gray-800 p-6 text-[#FEF8F3]">
-							<div className="flex items-center gap-4">
+							<div className="flex items-center gap-3">
 								<div className="size-10">
 									<LogoIcon
 										className="logo-icon object-contain object-center"
@@ -50,7 +50,7 @@ const Modal = function ({ model, children }) {
 										strokeWidth={9}
 									/>
 								</div>
-								<span className="text-xl">{title}</span>
+								<span className="text-lg">{title}</span>
 							</div>
 							{variant === "titled-with-close" && (
 								<CloseButton
