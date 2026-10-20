@@ -5,6 +5,7 @@ import { Quote } from "./write-quote";
 export type QuoteModelView = {
 	quote: Quote<Text> & { id?: number };
 	variant: "miniaturized" | "highlight";
+	quoteStyle?: "quotation_marks" | "giant_mark";
 	language?: Language;
 	modifiers?: {
 		editCallback: (id: number) => void;

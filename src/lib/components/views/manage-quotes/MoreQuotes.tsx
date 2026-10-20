@@ -8,6 +8,7 @@ import Button from "../../button/Button";
 import QuotesWidget from "../../quotes-widget/QuotesWidget";
 import { Translation } from "@/src/lib/utilities/types";
 import Ornament from "@/public/assets/ornament_1.svg";
+import { georgia } from "@/src/lib/third-party/fonts";
 
 const MoreQuotes = function ({ model }) {
 	const { quotes, newQuoteCallback, quoteModifiers, highlightedQuotes } =
@@ -26,7 +27,9 @@ const MoreQuotes = function ({ model }) {
 				className="h-[6em] max-w-9/10 self-center"
 				fill="#88815899"
 			/>
-			<span className="text-2xl">{t("moreQuotes")}</span>
+			<span className={`text-2xl ${georgia.className}`}>
+				{t("moreQuotes")}
+			</span>
 			<hr className="m-0 opacity-50" />
 			<div className="flex w-full flex-col gap-5 lg:max-w-6/10">
 				<Button

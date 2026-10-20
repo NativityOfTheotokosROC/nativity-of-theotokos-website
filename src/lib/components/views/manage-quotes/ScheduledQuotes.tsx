@@ -20,6 +20,7 @@ import { useLocale } from "next-intl";
 import { useTranslations } from "next-intl";
 import { useMemo, useRef } from "react";
 import ScheduledQuote from "../../scheduled-quote/ScheduledQuote";
+import { georgia } from "@/src/lib/third-party/fonts";
 
 const features = tableFeatures({
 	rowSortingFeature,
@@ -100,7 +101,9 @@ const ScheduledQuotes = function ({ model }) {
 
 	return (
 		<div className="scheduled-quotes-section flex flex-col gap-5 border-t-3 border-[#dcb042] bg-[#FEF8F3] p-8 py-9 md:py-10 lg:items-center lg:justify-center lg:px-20">
-			<span className="text-2xl">{t("scheduledQuotes")}</span>
+			<span className={`text-2xl ${georgia.className}`}>
+				{t("scheduledQuotes")}
+			</span>
 			<hr className="mb-4 opacity-50" />
 			<div className="flex flex-col gap-3 overflow-clip rounded-lg border border-gray-400 bg-white p-5 lg:max-w-6/10">
 				<div

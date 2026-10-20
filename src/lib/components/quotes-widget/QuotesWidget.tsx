@@ -218,6 +218,7 @@ const QuotesWidget = function ({ model }) {
 													.name,
 											},
 											variant: "miniaturized",
+											quoteStyle: "quotation_marks",
 											modifiers,
 										})}
 									/>
