@@ -142,7 +142,7 @@ export function manageQuotesVIInterface(
 							].map(
 								scheduledQuote =>
 									[
-										scheduledQuote.date,
+										getDateString(scheduledQuote.date),
 										scheduledQuote,
 									] as const,
 							),

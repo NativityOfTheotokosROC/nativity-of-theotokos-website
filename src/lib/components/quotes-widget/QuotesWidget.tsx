@@ -119,7 +119,7 @@ const QuotesWidget = function ({ model }) {
 
 	return (
 		<div className="flex flex-col gap-3">
-			<div className="list-tools flex grow justify-end gap-2 self-end">
+			<div className="list-tools flex w-full justify-end gap-2 self-end">
 				<Menu>
 					<>
 						<MenuButton
@@ -166,14 +166,14 @@ const QuotesWidget = function ({ model }) {
 						</MenuItems>
 					</>
 				</Menu>
-				<div className="flex flex-1 items-center gap-3">
+				<div className="flex flex-1 items-center gap-2">
 					<>
 						<input
 							placeholder={t("searchQuotes")}
-							value={globalFilter}
+							value={globalFilter ?? ""}
 							className={`grow overflow-clip rounded-lg border bg-white p-2 text-sm transition duration-300 ease-out ${isFilterOpen ? "w-full opacity-100" : "w-0 opacity-0"}`}
 							onChange={e =>
-								table.setGlobalFilter(e.target.value.trim())
+								table.setGlobalFilter(e.target.value)
 							}
 						/>
 						<button
