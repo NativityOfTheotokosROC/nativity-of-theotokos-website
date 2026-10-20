@@ -19,9 +19,9 @@ const ScheduledQuote = function ({ model }) {
 		<div className="flex flex-col gap-2">
 			<span className="bold inline-flex items-center gap-2 opacity-75">
 				<span>{"\u2022"}</span>
-				<span>
+				<span className="bold">
 					{quote.date.toLocaleDateString(dateLocale, {
-						dateStyle: "long",
+						dateStyle: "full",
 					})}
 				</span>
 			</span>

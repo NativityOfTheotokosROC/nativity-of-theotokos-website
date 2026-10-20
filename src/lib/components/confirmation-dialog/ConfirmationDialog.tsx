@@ -24,10 +24,8 @@ const ConfirmationDialog = function ({ model }) {
 				isOpen,
 				title,
 				size: "smallest",
-				position: "top",
-				async onClose() {
-					await interact({ type: "CANCEL" });
-				},
+				position: "center",
+				onClose: () => interact({ type: "CANCEL" }),
 			})}
 		>
 			<div className="flex w-full flex-col items-center">

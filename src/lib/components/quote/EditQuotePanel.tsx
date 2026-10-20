@@ -14,7 +14,10 @@ const EditQuotePanel = function ({ model, className, style }) {
 
 	return (
 		<div
-			className={twMerge("flex gap-4 text-xs text-[#250203]", className)}
+			className={twMerge(
+				"mt-2 flex gap-4 text-xs text-[#250203]/80",
+				className,
+			)}
 			style={style}
 		>
 			<button
@@ -22,7 +25,7 @@ const EditQuotePanel = function ({ model, className, style }) {
 				className="no-outline flex items-center"
 				onClick={() => modifiers.editCallback(id)}
 			>
-				<SquarePenIcon className="size-5" strokeWidth={1.25} />
+				<SquarePenIcon className="size-5" strokeWidth={1.5} />
 			</button>
 			{modifiers.scheduleCallback && (
 				<button
@@ -30,7 +33,7 @@ const EditQuotePanel = function ({ model, className, style }) {
 					className="no-outline flex items-center"
 					onClick={() => modifiers.scheduleCallback!(id)}
 				>
-					<CalendarPlusIcon className="size-5" strokeWidth={1.25} />
+					<CalendarPlusIcon className="size-5" strokeWidth={1.5} />
 				</button>
 			)}
 			<button
@@ -38,7 +41,7 @@ const EditQuotePanel = function ({ model, className, style }) {
 				className="no-outline flex items-center"
 				onClick={() => modifiers.deleteCallback(id)}
 			>
-				<Trash2Icon className="size-5" strokeWidth={1.25} />
+				<Trash2Icon className="size-5" strokeWidth={1.5} />
 			</button>
 		</div>
 	);
