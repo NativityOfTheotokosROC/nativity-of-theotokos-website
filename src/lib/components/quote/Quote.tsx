@@ -51,7 +51,9 @@ const Quote = function ({ model, className, style }) {
 					)}
 				</span>
 			</p>
-			<span className={`author w-full text-right ${variant === "miniaturized" ? "text-sm" : ""}`}>
+			<span
+				className={`author w-full text-right ${variant === "miniaturized" ? "text-sm" : ""}`}
+			>
 				—{" "}
 				{typeof quote.author === "string"
 					? quote.author

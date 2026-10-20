@@ -208,6 +208,7 @@ const QuotesWidget = function ({ model }) {
 									<PinIcon
 										className="size-5 min-w-5"
 										fill="#88815899"
+										strokeWidth={1.25}
 									/>
 									<Quote
 										model={newReadonlyModel({

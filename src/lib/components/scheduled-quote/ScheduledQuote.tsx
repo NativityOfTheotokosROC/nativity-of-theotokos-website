@@ -17,17 +17,18 @@ const ScheduledQuote = function ({ model }) {
 
 	return (
 		<div className="flex flex-col gap-2">
+			<span className="inline-flex items-center gap-2 opacity-75">
+				{"\u2022"}
+				{quote.date.toLocaleDateString(dateLocale, {
+					dateStyle: "long",
+				})}
+			</span>
 			<Quote
 				model={newReadonlyModel({
 					quote: { ...quote, author: quote.author.name },
 					variant: "miniaturized",
 				})}
 			/>
-			<span className="underline">
-				{quote.date.toLocaleDateString(dateLocale, {
-					dateStyle: "medium",
-				})}
-			</span>
 			{modifiers && (
 				<EditQuotePanel
 					model={newReadonlyModel({
