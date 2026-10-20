@@ -45,13 +45,11 @@ const ScheduleQuoteModal = function ({ model }) {
 				isOpen: modelView?.isOpen ?? false,
 				onClose: () => interact({ type: "CLOSE" }),
 				size: "small",
+				variant: "titled",
 				title,
 			})}
 		>
 			<div className="flex w-full flex-col items-center justify-center">
-				<div className="w-full rounded-none border-0 bg-gray-800 p-6 text-[#FEF8F3]">
-					<span className="text-xl">{title}</span>
-				</div>
 				{modelView && (
 					<form
 						className="flex flex-col gap-6 p-6"

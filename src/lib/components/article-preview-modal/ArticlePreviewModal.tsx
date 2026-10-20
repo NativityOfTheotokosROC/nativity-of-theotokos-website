@@ -33,13 +33,11 @@ const ArticlePreviewModal = function ({ model }) {
 				title: t("title"),
 				size: "large",
 				isOpen: isOpen ?? false,
+				variant: "titled",
 				onClose: () => interact({ type: "CLOSE" }),
 			})}
 		>
 			<div className="flex w-full flex-col items-center justify-center">
-				<div className="w-full rounded-none border-0 bg-gray-800 p-6 text-[#FEF8F3]">
-					<span className="text-xl">{t("title")}</span>
-				</div>
 				<div className="article-box h-full max-h-[65svh] min-h-[5em] w-full shrink-2 overflow-y-auto">
 					<Article
 						model={newReadonlyModel({

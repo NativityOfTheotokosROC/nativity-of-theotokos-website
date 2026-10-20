@@ -1,24 +1,28 @@
-import { ModeledComponent } from "@mvc-react/components";
-import { ModalModel } from "../../models/modal";
-import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import {
+	CloseButton,
 	Dialog,
 	DialogBackdrop,
 	DialogPanel,
 	DialogTitle,
 } from "@headlessui/react";
-import { Suspense } from "react";
-import Spinner from "../spinner/Spinner";
+import { ModeledComponent } from "@mvc-react/components";
+import { InitializedModel } from "@mvc-react/mvc";
+import { ModalModel } from "../../models/modal";
+
+import LogoIcon from "@/public/assets/logo-icon.svg";
+import { useTranslations } from "next-intl";
+import { XIcon } from "lucide-react";
 
 const Modal = function ({ model, children }) {
 	const {
-		modelView: { isOpen, title, onClose, size, position },
+		modelView: { isOpen, title, onClose, size, position, variant },
 	} = model;
+	const tNonDescriptive = useTranslations("nonDescriptive");
 
 	return (
 		<Dialog
 			open={isOpen}
-			onClose={async () => await onClose()}
+			onClose={onClose}
 			className="relative z-20"
 			as="div"
 		>
@@ -34,20 +38,34 @@ const Modal = function ({ model, children }) {
 					transition
 				>
 					<DialogTitle className="sr-only">{title}</DialogTitle>
-					<Suspense
-						fallback={
-							<div className="flex min-h-64 min-w-64 items-center justify-center">
-								<Spinner
-									model={newReadonlyModel({
-										color: "#5555580",
-										size: 30,
-									})}
-								/>
+					{(variant === "titled" ||
+						variant === "titled-with-close") && (
+						<div className="flex w-full items-center justify-between rounded-none border-0 bg-gray-800 p-6 text-[#FEF8F3]">
+							<div className="flex items-center gap-4">
+								<div className="size-12">
+									<LogoIcon
+										className="logo-icon object-contain object-center"
+										width={48}
+										height={48}
+										strokeWidth={9}
+									/>
+								</div>
+								<span className="text-xl">{title}</span>
 							</div>
-						}
-					>
-						{children}
-					</Suspense>
+							{variant === "titled-with-close" && (
+								<CloseButton
+									title={tNonDescriptive("close")}
+									className={`flex items-center justify-center rounded-lg bg-transparent p-1 text-[28px] transition ease-out hover:text-[#ffdc4f]`}
+								>
+									<XIcon
+										className="size-8"
+										strokeWidth={1.75}
+									/>
+								</CloseButton>
+							)}
+						</div>
+					)}
+					{children}
 				</DialogPanel>
 			</div>
 		</Dialog>
