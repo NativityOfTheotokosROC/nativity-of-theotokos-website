@@ -59,7 +59,7 @@ const Quote = function ({ model, className, style }) {
 				{quoteStyle === "giant_mark" && (
 					<span className="inline-flex gap-2">
 						<span
-							className={`${variant === "highlight" ? "text-4xl" : variant === "miniaturized" ? "text-2xl" : ""} opacity-65`}
+							className={`${variant === "highlight" ? "text-8xl" : variant === "miniaturized" ? "text-4xl" : ""} opacity-50`}
 						>
 							{QUOTATION_MARKS.openingQuote.english}
 						</span>

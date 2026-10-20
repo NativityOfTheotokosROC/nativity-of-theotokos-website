@@ -12,7 +12,6 @@ import { ModalModel } from "../../models/modal";
 import LogoIcon from "@/public/assets/logo-icon.svg";
 import { useTranslations } from "next-intl";
 import { XIcon } from "lucide-react";
-import { georgia } from "../../third-party/fonts";
 
 const Modal = function ({ model, children }) {
 	const {
@@ -51,11 +50,7 @@ const Modal = function ({ model, children }) {
 										strokeWidth={9}
 									/>
 								</div>
-								<span
-									className={`text-lg ${georgia.className}`}
-								>
-									{title}
-								</span>
+								<span className="text-lg">{title}</span>
 							</div>
 							{variant === "titled-with-close" && (
 								<CloseButton
