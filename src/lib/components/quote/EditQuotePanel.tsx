@@ -13,7 +13,10 @@ const EditQuotePanel = function ({ model, className, style }) {
 	if (id === undefined) return <></>;
 
 	return (
-		<div className={twMerge("flex gap-5 text-xs", className)} style={style}>
+		<div
+			className={twMerge("flex gap-4 text-xs text-[#250203]", className)}
+			style={style}
+		>
 			<button
 				title={t("edit")}
 				className="no-outline flex items-center"

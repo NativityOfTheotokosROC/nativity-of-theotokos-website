@@ -206,7 +206,7 @@ const QuotesWidget = function ({ model }) {
 							<>
 								<div key={row.id} className={`flex gap-2`}>
 									<PinIcon
-										className="size-5 min-w-5"
+										className="size-5 min-w-5 -rotate-45"
 										fill="#88815899"
 										strokeWidth={1.25}
 									/>
