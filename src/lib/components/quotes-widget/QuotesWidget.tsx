@@ -171,7 +171,7 @@ const QuotesWidget = function ({ model }) {
 						<input
 							placeholder={t("searchQuotes")}
 							value={globalFilter}
-							className={`grow overflow-clip rounded-lg border bg-white p-2 text-sm transition duration-300 ease-out ${isFilterOpen ? "w-full" : "w-0"}`}
+							className={`grow overflow-clip rounded-lg border bg-white p-2 text-sm transition duration-300 ease-out ${isFilterOpen ? "w-full opacity-100" : "w-0 opacity-0"}`}
 							onChange={e =>
 								table.setGlobalFilter(e.target.value.trim())
 							}
@@ -193,83 +193,83 @@ const QuotesWidget = function ({ model }) {
 						</button>
 					</>
 				</div>
-				<div className="flex flex-col gap-3 overflow-clip rounded-lg border border-gray-400 bg-[#FEF8F3] p-5">
-					<div
-						className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto pr-5"
-						ref={listRef}
-					>
-						{pagination.pageIndex == 0 &&
-							!globalFilter &&
-							table.getTopRows().map(row => (
-								<>
-									<div key={row.id} className={`flex gap-2`}>
-										<PinIcon
-											className="size-5 min-w-5"
-											fill="#88815899"
-										/>
-										<Quote
-											model={newReadonlyModel({
-												quote: {
-													...row.original,
-													author: row.original.author
-														.name,
-												},
-												variant: "miniaturized",
-												modifiers,
-											})}
-										/>
-									</div>
-									<hr className="mt-3 opacity-30" />
-								</>
-							))}
-						{(pinnedRows?.length && !globalFilter
-							? table.getCenterRows()
-							: table.getRowModel().rows
-						).map(row => (
+			</div>
+			<div className="flex flex-col gap-3 overflow-clip rounded-lg border border-gray-400 bg-[#FEF8F3] p-5">
+				<div
+					className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto pr-5"
+					ref={listRef}
+				>
+					{pagination.pageIndex == 0 &&
+						!globalFilter &&
+						table.getTopRows().map(row => (
 							<>
-								<Quote
-									model={newReadonlyModel({
-										quote: {
-											...row.original,
-											author: row.original.author.name,
-										},
-										variant: "miniaturized",
-										modifiers,
-									})}
-								/>
+								<div key={row.id} className={`flex gap-2`}>
+									<PinIcon
+										className="size-5 min-w-5"
+										fill="#88815899"
+									/>
+									<Quote
+										model={newReadonlyModel({
+											quote: {
+												...row.original,
+												author: row.original.author
+													.name,
+											},
+											variant: "miniaturized",
+											modifiers,
+										})}
+									/>
+								</div>
 								<hr className="mt-3 opacity-30" />
 							</>
 						))}
-					</div>
-					<div className="flex items-center justify-end gap-4 text-sm">
-						{table.getCanPreviousPage() && (
-							<button
-								onClick={() => {
-									table.previousPage();
-									listRef.current?.scrollTo({
-										top: 0,
-										behavior: "smooth",
-									});
-								}}
-							>
-								<ArrowLeft strokeWidth={1.5} />
-							</button>
-						)}
-						{pagination.pageIndex + 1}
-						{table.getCanNextPage() && (
-							<button
-								onClick={() => {
-									table.nextPage();
-									listRef.current?.scrollTo({
-										top: 0,
-										behavior: "smooth",
-									});
-								}}
-							>
-								<ArrowRight strokeWidth={1.5} />
-							</button>
-						)}
-					</div>
+					{(pinnedRows?.length && !globalFilter
+						? table.getCenterRows()
+						: table.getRowModel().rows
+					).map(row => (
+						<>
+							<Quote
+								model={newReadonlyModel({
+									quote: {
+										...row.original,
+										author: row.original.author.name,
+									},
+									variant: "miniaturized",
+									modifiers,
+								})}
+							/>
+							<hr className="mt-3 opacity-30" />
+						</>
+					))}
+				</div>
+				<div className="flex items-center justify-end gap-4 text-sm">
+					{table.getCanPreviousPage() && (
+						<button
+							onClick={() => {
+								table.previousPage();
+								listRef.current?.scrollTo({
+									top: 0,
+									behavior: "smooth",
+								});
+							}}
+						>
+							<ArrowLeft strokeWidth={1.5} />
+						</button>
+					)}
+					{pagination.pageIndex + 1}
+					{table.getCanNextPage() && (
+						<button
+							onClick={() => {
+								table.nextPage();
+								listRef.current?.scrollTo({
+									top: 0,
+									behavior: "smooth",
+								});
+							}}
+						>
+							<ArrowRight strokeWidth={1.5} />
+						</button>
+					)}
 				</div>
 			</div>
 		</div>
