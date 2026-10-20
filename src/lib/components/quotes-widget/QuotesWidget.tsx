@@ -123,7 +123,7 @@ const QuotesWidget = function ({ model }) {
 				<Menu>
 					<>
 						<MenuButton
-							className={`flex w-fit items-center gap-2 text-left text-sm uppercase`}
+							className={`flex w-fit items-center gap-2 text-left text-sm`}
 						>
 							{isDesc && (
 								<ArrowDownWideNarrowIcon
@@ -171,10 +171,11 @@ const QuotesWidget = function ({ model }) {
 						<input
 							placeholder={t("searchQuotes")}
 							value={globalFilter ?? ""}
-							className={`grow overflow-clip rounded-lg border bg-white p-2 text-sm transition duration-300 ease-out ${isFilterOpen ? "w-full opacity-100" : "w-0 opacity-0"}`}
+							className={`grow overflow-clip rounded-lg border bg-[#FEF8F3] p-2 text-sm transition duration-300 ease-out ${isFilterOpen ? "w-full opacity-100" : "w-0 opacity-0"}`}
 							onChange={e =>
 								table.setGlobalFilter(e.target.value)
 							}
+							disabled={!isFilterOpen}
 						/>
 						<button
 							className="flex"
@@ -256,7 +257,7 @@ const QuotesWidget = function ({ model }) {
 							<ArrowLeft strokeWidth={1.5} />
 						</button>
 					)}
-					{pagination.pageIndex + 1}
+					{`${pagination.pageIndex + 1} ${t("paginationOf")} ${table.getPageCount()}`}
 					{table.getCanNextPage() && (
 						<button
 							onClick={() => {

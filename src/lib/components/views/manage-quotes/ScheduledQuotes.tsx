@@ -134,7 +134,7 @@ const ScheduledQuotes = function ({ model }) {
 							<ArrowLeft strokeWidth={1.5} />
 						</button>
 					)}
-					{pagination.pageIndex + 1}
+					{`${pagination.pageIndex + 1} ${t("paginationOf")} ${table.getPageCount()}`}
 					{table.getCanNextPage() && (
 						<button
 							onClick={() => {
