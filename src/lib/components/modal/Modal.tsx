@@ -42,11 +42,11 @@ const Modal = function ({ model, children }) {
 						variant === "titled-with-close") && (
 						<div className="flex w-full items-center justify-between rounded-none border-0 bg-gray-800 p-6 text-[#FEF8F3]">
 							<div className="flex items-center gap-4">
-								<div className="size-12">
+								<div className="size-10">
 									<LogoIcon
 										className="logo-icon object-contain object-center"
-										width={48}
-										height={48}
+										width={40}
+										height={40}
 										strokeWidth={9}
 									/>
 								</div>
