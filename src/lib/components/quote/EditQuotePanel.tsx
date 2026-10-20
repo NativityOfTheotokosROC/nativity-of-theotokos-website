@@ -15,7 +15,7 @@ const EditQuotePanel = function ({ model, className, style }) {
 	return (
 		<div
 			className={twMerge(
-				"mt-2 flex gap-4 text-xs text-[#250203]/80",
+				"mt-1 flex gap-4 text-xs text-[#250203]/80",
 				className,
 			)}
 			style={style}
