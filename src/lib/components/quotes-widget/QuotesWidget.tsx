@@ -1,24 +1,15 @@
-import {
-	CloseButton,
-	Disclosure,
-	DisclosureButton,
-	DisclosurePanel,
-	Menu,
-	MenuButton,
-	MenuItem,
-	MenuItems,
-} from "@headlessui/react";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
 import {
 	columnFilteringFeature,
-	globalFilteringFeature,
 	createColumnHelper,
 	createFilteredRowModel,
 	createPaginatedRowModel,
 	createSortedRowModel,
 	filterFn_includesString,
 	flexRender,
+	globalFilteringFeature,
 	rowPaginationFeature,
 	rowPinningFeature,
 	rowSortingFeature,
@@ -37,7 +28,7 @@ import {
 	X,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { Fragment, useMemo, useRef } from "react";
+import { Fragment, useMemo, useRef, useState } from "react";
 import { QuotesWidgetModel } from "../../models/quotes-widget";
 import Quote from "../quote/Quote";
 
@@ -124,16 +115,16 @@ const QuotesWidget = function ({ model }) {
 		table.getColumn(currentSortingColumnId)?.columnDef.header?.toString() ??
 		t("none");
 	const listRef = useRef<HTMLDivElement>(null);
+	const [isFilterOpen, setFilterOpen] = useState(false);
 
 	return (
 		<div className="flex flex-col gap-3">
-			<div className="list-tools flex justify-end gap-2 self-end">
+			<div className="list-tools flex grow justify-end gap-2 self-end">
 				<Menu>
 					<>
 						<MenuButton
 							className={`flex w-fit items-center gap-2 text-left text-sm uppercase`}
 						>
-							{t("sortedBy", { field: currentSortingColumn })}
 							{isDesc && (
 								<ArrowDownWideNarrowIcon
 									className="min-w-fit"
@@ -152,6 +143,8 @@ const QuotesWidget = function ({ model }) {
 									strokeWidth={1.5}
 								/>
 							)}
+							{!isFilterOpen &&
+								t("sortedBy", { field: currentSortingColumn })}
 						</MenuButton>
 						<MenuItems
 							anchor="bottom end"
@@ -173,116 +166,110 @@ const QuotesWidget = function ({ model }) {
 						</MenuItems>
 					</>
 				</Menu>
-				<Disclosure
-					as="div"
-					className="flex flex-1 items-center gap-2"
-					defaultOpen={false}
-				>
-					{({ open, close }) => (
-						<>
-							<DisclosurePanel className="group">
-								<input
-									placeholder={t("searchQuotes")}
-									value={globalFilter}
-									className={`overflow-clip rounded-lg border bg-white p-2 transition duration-300 ease-out ${open ? "w-full" : "w-0"}`}
-									onChange={e =>
-										table.setGlobalFilter(
-											e.target.value.trim(),
-										)
-									}
-								/>
-							</DisclosurePanel>
-							<DisclosureButton>
-								{open ? (
-									<CloseButton
-										onClick={() => {
-											close();
-											table.resetGlobalFilter();
-										}}
-									>
-										<X strokeWidth={1.5} />
-									</CloseButton>
-								) : (
-									<Search strokeWidth={1.5} />
-								)}
-							</DisclosureButton>
-						</>
-					)}
-				</Disclosure>
-			</div>
-			<div className="flex flex-col gap-3 overflow-clip rounded-lg border border-gray-400 bg-[#FEF8F3] p-5">
-				<div
-					className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto pr-5"
-					ref={listRef}
-				>
-					{pagination.pageIndex == 0 &&
-						!globalFilter &&
-						table.getTopRows().map(row => (
+				<div className="flex flex-1 items-center gap-3">
+					<>
+						<input
+							placeholder={t("searchQuotes")}
+							value={globalFilter}
+							className={`grow overflow-clip rounded-lg border bg-white p-2 text-sm transition duration-300 ease-out ${isFilterOpen ? "w-full" : "w-0"}`}
+							onChange={e =>
+								table.setGlobalFilter(e.target.value.trim())
+							}
+						/>
+						<button
+							className="flex"
+							onClick={() => {
+								if (isFilterOpen) {
+									table.resetGlobalFilter();
+								}
+								setFilterOpen(filterOpen => !filterOpen);
+							}}
+						>
+							{isFilterOpen ? (
+								<X strokeWidth={1.5} />
+							) : (
+								<Search strokeWidth={1.5} />
+							)}
+						</button>
+					</>
+				</div>
+				<div className="flex flex-col gap-3 overflow-clip rounded-lg border border-gray-400 bg-[#FEF8F3] p-5">
+					<div
+						className="flex h-[27em] max-h-[27em] flex-col gap-3 overflow-y-auto pr-5"
+						ref={listRef}
+					>
+						{pagination.pageIndex == 0 &&
+							!globalFilter &&
+							table.getTopRows().map(row => (
+								<>
+									<div key={row.id} className={`flex gap-2`}>
+										<PinIcon
+											className="size-5 min-w-5"
+											fill="#88815899"
+										/>
+										<Quote
+											model={newReadonlyModel({
+												quote: {
+													...row.original,
+													author: row.original.author
+														.name,
+												},
+												variant: "miniaturized",
+												modifiers,
+											})}
+										/>
+									</div>
+									<hr className="mt-3 opacity-30" />
+								</>
+							))}
+						{(pinnedRows?.length && !globalFilter
+							? table.getCenterRows()
+							: table.getRowModel().rows
+						).map(row => (
 							<>
-								<div key={row.id} className={`flex gap-2`}>
-									<PinIcon
-										className="size-5 min-w-5"
-										fill="#88815899"
-									/>
-									<Quote
-										model={newReadonlyModel({
-											quote: {
-												...row.original,
-												author: row.original.author
-													.name,
-											},
-											variant: "miniaturized",
-											modifiers,
-										})}
-									/>
-								</div>
+								<Quote
+									model={newReadonlyModel({
+										quote: {
+											...row.original,
+											author: row.original.author.name,
+										},
+										variant: "miniaturized",
+										modifiers,
+									})}
+								/>
 								<hr className="mt-3 opacity-30" />
 							</>
 						))}
-					{table.getCenterRows().map(row => (
-						<>
-							<Quote
-								model={newReadonlyModel({
-									quote: {
-										...row.original,
-										author: row.original.author.name,
-									},
-									variant: "miniaturized",
-									modifiers,
-								})}
-							/>
-							<hr className="mt-3 opacity-30" />
-						</>
-					))}
-				</div>
-				<div className="flex items-center justify-end gap-4 text-sm">
-					{table.getCanPreviousPage() && (
-						<button
-							onClick={() => {
-								table.previousPage();
-								listRef.current?.scrollTo({
-									top: 0,
-									behavior: "smooth",
-								});
-							}}
-						>
-							<ArrowLeft strokeWidth={1.5} />
-						</button>
-					)}
-					{pagination.pageIndex + 1}
-					{table.getCanNextPage() && (
-						<button
-							onClick={() => {
-								table.nextPage();
-								listRef.current?.scrollTo({
-									top: 0,
-									behavior: "smooth",
-								});
-							}}
-						>
-							<ArrowRight strokeWidth={1.5} />
-						</button>
-					)}
+					</div>
+					<div className="flex items-center justify-end gap-4 text-sm">
+						{table.getCanPreviousPage() && (
+							<button
+								onClick={() => {
+									table.previousPage();
+									listRef.current?.scrollTo({
+										top: 0,
+										behavior: "smooth",
+									});
+								}}
+							>
+								<ArrowLeft strokeWidth={1.5} />
+							</button>
+						)}
+						{pagination.pageIndex + 1}
+						{table.getCanNextPage() && (
+							<button
+								onClick={() => {
+									table.nextPage();
+									listRef.current?.scrollTo({
+										top: 0,
+										behavior: "smooth",
+									});
+								}}
+							>
+								<ArrowRight strokeWidth={1.5} />
+							</button>
+						)}
+					</div>
 				</div>
 			</div>
 		</div>
