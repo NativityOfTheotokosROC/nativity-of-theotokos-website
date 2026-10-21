@@ -27,7 +27,7 @@ const MoreQuotes = function ({ model }) {
 				className="h-[6em] max-w-9/10 self-center"
 				fill="#88815899"
 			/>
-			<span className={`text-2xl ${georgia.className}`}>
+			<span className={`text-3xl font-semibold ${georgia.className}`}>
 				{t("moreQuotes")}
 			</span>
 			<hr className="m-0 opacity-50" />

@@ -22,6 +22,7 @@ import {
 	ArrowDownZAIcon,
 	ArrowLeft,
 	ArrowRight,
+	CheckIcon,
 	ListIcon,
 	PinIcon,
 	Search,
@@ -31,6 +32,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Fragment, useMemo, useRef, useState } from "react";
 import { QuotesWidgetModel } from "../../models/quotes-widget";
 import Quote from "../quote/Quote";
+import { pickTranslation } from "../../utilities/miscellaneous";
 
 const features = tableFeatures({
 	rowSortingFeature,
@@ -50,7 +52,6 @@ const features = tableFeatures({
 const QuotesWidget = function ({ model }) {
 	const { quotes, pinnedRows, modifiers } = model.modelView;
 	const t = useTranslations("manageQuotes");
-	const tMisc = useTranslations("miscellaneous");
 	const locale = useLocale();
 
 	const columnHelper = useMemo(
@@ -60,32 +61,32 @@ const QuotesWidget = function ({ model }) {
 	const columns = useMemo(
 		() =>
 			columnHelper.columns([
-				columnHelper.accessor(row => row.author.name.english, {
-					header: t("author"),
-					id: "authorEn",
-				}),
-				columnHelper.accessor(row => row.author.name.russian, {
-					header: `${t("author")} (${tMisc("russian")})`,
-					id: "authorRu",
-				}),
-				columnHelper.accessor(row => row.quote.english, {
-					header: t("quote"),
-					id: "quoteEn",
-				}),
-				columnHelper.accessor(row => row.quote.russian, {
-					header: `${t("quote")} (${tMisc("russian")})`,
-					id: "quoteRu",
-				}),
-				columnHelper.accessor(row => row.source?.english, {
-					header: t("source"),
-					id: "sourceEn",
-				}),
-				columnHelper.accessor(row => row.source?.russian, {
-					header: `${t("source")} (${tMisc("russian")})`,
-					id: "sourceRu",
-				}),
+				columnHelper.accessor(
+					row => pickTranslation(row.author.name, locale),
+					{
+						header: t("author"),
+						id: "author",
+					},
+				),
+				columnHelper.accessor(
+					row => pickTranslation(row.quote, locale),
+					{
+						header: t("quote"),
+						id: "quote",
+					},
+				),
+				columnHelper.accessor(
+					row =>
+						row.source
+							? pickTranslation(row.source, locale)
+							: undefined,
+					{
+						header: t("source"),
+						id: "source",
+					},
+				),
 			]),
-		[t, tMisc, columnHelper],
+		[columnHelper, t, locale],
 	);
 	const table = useTable({
 		data: quotes,
@@ -95,7 +96,7 @@ const QuotesWidget = function ({ model }) {
 		initialState: {
 			sorting: [
 				{
-					id: locale === "ru" ? "quoteRu" : "quoteEn",
+					id: "quote",
 					desc: false,
 				},
 			],
@@ -147,18 +148,23 @@ const QuotesWidget = function ({ model }) {
 								t("sortedBy", { field: currentSortingColumn })}
 						</MenuButton>
 						<MenuItems
-							anchor="bottom end"
+							anchor="bottom start"
 							transition
-							className="z-1 mr-1 flex w-45 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-900 text-sm opacity-95 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:p-3 *:text-left *:uppercase *:hover:bg-gray-900/50 *:hover:text-[#ffdc4f] focus:outline-none *:active:bg-gray-950 *:active:text-[#ffdc4f] data-closed:scale-92 data-closed:opacity-0"
+							className="z-1 mr-1 flex w-45 max-w-50 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-900 text-sm opacity-95 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:p-3 *:text-left *:hover:bg-gray-900/50 *:hover:text-[#ffdc4f] focus:outline-none *:active:bg-gray-950 *:active:text-[#ffdc4f] data-closed:scale-92 data-closed:opacity-0"
 						>
 							{table.getHeaderGroups()[0].headers.map(header => (
 								<MenuItem key={header.column.id} as={Fragment}>
 									<button
+										className="flex w-full items-center justify-between gap-3"
 										onClick={header.column.getToggleSortingHandler()}
 									>
 										{flexRender(
 											header.column.columnDef.header,
 											header.getContext(),
+										)}
+										{header.column.id ===
+											currentSortingColumnId && (
+											<CheckIcon strokeWidth={1.5} />
 										)}
 									</button>
 								</MenuItem>

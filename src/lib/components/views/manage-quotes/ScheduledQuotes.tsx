@@ -1,26 +1,24 @@
 import { ScheduledQuoteModelView } from "@/src/lib/models/scheduled-quote";
-import { BLANK_TRANSLATION } from "@/src/lib/utilities/constants";
+import { georgia } from "@/src/lib/third-party/fonts";
 import { pickDateTranslation } from "@/src/lib/utilities/date-time";
 import { pickTranslation } from "@/src/lib/utilities/miscellaneous";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import {
-	rowSortingFeature,
-	rowPaginationFeature,
-	createSortedRowModel,
-	createPaginatedRowModel,
-	sortFn_text,
-	sortFn_datetime,
-	tableFeatures,
 	createColumnHelper,
+	createPaginatedRowModel,
+	createSortedRowModel,
+	rowPaginationFeature,
+	rowSortingFeature,
+	sortFn_datetime,
+	sortFn_text,
+	tableFeatures,
 	useTable,
 } from "@tanstack/react-table";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useLocale } from "next-intl";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useMemo, useRef } from "react";
 import ScheduledQuote from "../../scheduled-quote/ScheduledQuote";
-import { georgia } from "@/src/lib/third-party/fonts";
 
 const features = tableFeatures({
 	rowSortingFeature,
@@ -39,7 +37,7 @@ const ScheduledQuotes = function ({ model }) {
 	const { quotes, modifiers } = model.modelView;
 	const locale = useLocale();
 	const t = useTranslations("manageQuotes");
-	const tMisc = useTranslations("miscellaneous");
+
 	const columns = useMemo(
 		() =>
 			columnHelper.columns([
@@ -48,39 +46,31 @@ const ScheduledQuotes = function ({ model }) {
 					{ header: "Date", id: "date" },
 				),
 				columnHelper.accessor(
-					row => pickTranslation(row.author.name, "en"),
-					{ header: t("author"), id: "authorEn" },
-				),
-				columnHelper.accessor(
-					row => pickTranslation(row.author.name, "ru"),
+					row => pickTranslation(row.author.name, locale),
 					{
-						header: `${t("author")} (${tMisc("russian")})`,
-						id: "authorRu",
+						header: t("author"),
+						id: "author",
 					},
 				),
-				columnHelper.accessor(row => pickTranslation(row.quote, "en"), {
-					header: t("quote"),
-					id: "quoteEn",
-				}),
-				columnHelper.accessor(row => pickTranslation(row.quote, "ru"), {
-					header: `${t("quote")} (${tMisc("russian")})`,
-					id: "quoteRu",
-				}),
 				columnHelper.accessor(
-					row =>
-						pickTranslation(row.source ?? BLANK_TRANSLATION, "en"),
-					{ header: t("source"), id: "sourceEn" },
+					row => pickTranslation(row.quote, locale),
+					{
+						header: t("quote"),
+						id: "quote",
+					},
 				),
 				columnHelper.accessor(
 					row =>
-						pickTranslation(row.source ?? BLANK_TRANSLATION, "ru"),
+						row.source
+							? pickTranslation(row.source, locale)
+							: undefined,
 					{
-						header: `${t("source")} (${tMisc("russian")})`,
-						id: "sourceRu",
+						header: t("source"),
+						id: "source",
 					},
 				),
 			]),
-		[locale, t, tMisc],
+		[locale, t],
 	);
 	const table = useTable({
 		data: quotes,
@@ -101,7 +91,7 @@ const ScheduledQuotes = function ({ model }) {
 
 	return (
 		<div className="scheduled-quotes-section flex flex-col gap-5 border-t-3 border-[#dcb042] bg-[#FEF8F3] p-8 py-9 md:py-10 lg:items-center lg:justify-center lg:px-20">
-			<span className={`text-2xl ${georgia.className}`}>
+			<span className={`text-3xl font-semibold ${georgia.className}`}>
 				{t("scheduledQuotes")}
 			</span>
 			<hr className="mb-4 opacity-50" />
