@@ -18,8 +18,8 @@ import {
 	useTable,
 } from "@tanstack/react-table";
 import {
-	ArrowDownNarrowWideIcon,
-	ArrowDownWideNarrowIcon,
+	ArrowDownAZIcon,
+	ArrowDownZAIcon,
 	ArrowLeft,
 	ArrowRight,
 	ListIcon,
@@ -126,13 +126,13 @@ const QuotesWidget = function ({ model }) {
 							className={`flex w-fit items-center gap-2 text-left text-sm`}
 						>
 							{isDesc && (
-								<ArrowDownWideNarrowIcon
+								<ArrowDownZAIcon
 									className="min-w-fit"
 									strokeWidth={1.5}
 								/>
 							)}
 							{isDesc === false && (
-								<ArrowDownNarrowWideIcon
+								<ArrowDownAZIcon
 									className="min-w-fit"
 									strokeWidth={1.5}
 								/>
