@@ -30,7 +30,7 @@ const QuoteHighlight = function ({ model }) {
 						variant: "highlight",
 						modifiers,
 					})}
-					className="w-fit max-w-full self-center"
+					className="w-fit max-w-full self-center font-light"
 				/>
 			</div>
 			<div
