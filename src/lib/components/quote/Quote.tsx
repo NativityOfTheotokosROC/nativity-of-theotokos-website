@@ -35,9 +35,9 @@ const Quote = function ({ model, className, style }) {
 	return (
 		<div
 			className={twMerge(
-				`quote-box flex flex-col gap-4 md:w-md`,
+				`quote-box flex flex-col gap-4`,
 				variant === "highlight"
-					? "items-center gap-4"
+					? "items-center gap-4 md:w-md"
 					: variant === "miniaturized"
 						? "gap-2"
 						: undefined,
@@ -60,8 +60,8 @@ const Quote = function ({ model, className, style }) {
 					<span
 						className={`inline-flex gap-2 ${variant === "highlight" ? "flex-col md:flex-row" : ""}`}
 					>
-						<span 
-							className={`${variant === "highlight" ? "text-8xl md:static md:translate-0 -translate-4/10 absolute" : variant === "miniaturized" ? "text-4xl" : ""} opacity-50`}
+						<span
+							className={`${variant === "highlight" ? "absolute -top-10 -left-7.5 text-8xl md:static md:translate-0" : variant === "miniaturized" ? "text-4xl" : ""} opacity-50`}
 						>
 							{QUOTATION_MARKS.openingQuote.english}
 						</span>

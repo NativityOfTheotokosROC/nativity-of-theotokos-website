@@ -150,7 +150,7 @@ const QuotesWidget = function ({ model }) {
 						<MenuItems
 							anchor="bottom start"
 							transition
-							className="z-1 mr-1 flex w-45 max-w-50 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-900 text-sm opacity-95 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:p-3 *:text-left *:hover:bg-gray-900/50 *:hover:text-[#ffdc4f] focus:outline-none *:active:bg-gray-950 *:active:text-[#ffdc4f] data-closed:scale-92 data-closed:opacity-0"
+							className="z-1 mr-1 flex w-45 max-w-50 origin-top-right flex-col rounded-lg border border-white/15 bg-gray-900 text-sm opacity-95 transition duration-200 ease-out [--anchor-gap:--spacing(1)] *:w-full *:p-3 *:px-4 *:text-left *:hover:bg-gray-900/50 *:hover:text-[#ffdc4f] focus:outline-none *:active:bg-gray-950 *:active:text-[#ffdc4f] data-closed:scale-92 data-closed:opacity-0"
 						>
 							{table.getHeaderGroups()[0].headers.map(header => (
 								<MenuItem key={header.column.id} as={Fragment}>

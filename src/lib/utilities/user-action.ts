@@ -50,8 +50,8 @@ export function getUserActionNames(roles: Role[]) {
 		}
 	}
 	return new Set([
-		...specificActions,
 		"NOTIFICATIONS",
+		...specificActions,
 		"SIGN_OUT",
 	]) satisfies Set<ActionName>;
 }
