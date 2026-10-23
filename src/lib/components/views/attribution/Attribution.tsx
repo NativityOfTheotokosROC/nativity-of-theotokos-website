@@ -62,11 +62,7 @@ const License = function ({ model, className, style }) {
 				{subLicenseText && `. ${subLicenseText}`}
 			</span>
 			{subLicenses && (
-				<ul
-					className={
-						"flex list-inside list-[circle] flex-col gap-3 pl-3"
-					}
-				>
+				<ul className={"flex list-inside list-[circle] flex-col pl-3"}>
 					{subLicenses.map((subLicense, index) => (
 						<License
 							key={index}
