@@ -62,24 +62,18 @@ export function triggerLoading(
 	if (
 		localeInfo?.targetLocale &&
 		localeInfo.currentLocale != localeInfo.targetLocale
-	) {
-		console.log("different locales apparently");
+	)
 		return true;
-	}
+	if (typeof href === "string" && href.startsWith("#")) return false;
 	if (typeof href === "string" || href instanceof URL)
 		try {
 			const linkURL = new URL(href);
 			if (linkURL.origin !== window.location.origin) return false;
-			console.log("Hash id is valid URL somehow");
 			return linkURL.pathname !== pathName;
 		} catch {}
 	const destinationPathname =
 		typeof href === "string"
 			? new URL(href, window.location.origin).pathname
 			: href.pathname;
-	if (destinationPathname !== pathName) {
-		console.log("How are they not equal??");
-		console.log(`1: ${destinationPathname} 2: ${pathName}`);
-	}
 	return destinationPathname !== pathName;
 }
