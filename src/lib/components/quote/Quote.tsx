@@ -13,6 +13,7 @@ import { QuoteModel } from "../../models/quote";
 import { pickTranslation } from "../../utilities/miscellaneous";
 import { CompleteTranslation, Language, Text } from "../../utilities/types";
 import EditQuotePanel from "./EditQuotePanel";
+import QuoteIcon from "@/public/assets/quote.svg";
 
 const QUOTATION_MARKS = {
 	openingQuote: { english: "“", russian: "«" } satisfies CompleteTranslation,
@@ -58,13 +59,15 @@ const Quote = function ({ model, className, style }) {
 				)}
 				{quoteStyle === "giant_mark" && (
 					<span
-						className={`inline-flex gap-2 ${variant === "highlight" ? "relative flex-col md:static md:flex-row" : ""}`}
+						className={`inline-flex items-start gap-2 ${variant === "highlight" ? "ml-2 flex-col md:m-0 md:flex-row" : ""}`}
 					>
-						<span
-							className={`${variant === "highlight" ? "absolute -top-10 -left-7.5 text-8xl md:static md:translate-0" : variant === "miniaturized" ? "text-4xl" : ""} opacity-50`}
-						>
-							{QUOTATION_MARKS.openingQuote.english}
-						</span>
+						{variant === "highlight" ? (
+							<QuoteIcon className="h-20 text-inherit" />
+						) : (
+							<span className={`text-4xl opacity-50`}>
+								{QUOTATION_MARKS.openingQuote.english}
+							</span>
+						)}
 						<span>
 							{typeof quote.quote === "string"
 								? quote.quote
