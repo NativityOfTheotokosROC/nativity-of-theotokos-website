@@ -144,9 +144,12 @@ const QuotesWidget = function ({ model }) {
 									strokeWidth={1.5}
 								/>
 							)}
-							{!isFilterOpen && currentSortingColumn
-								? t("sortedBy", { field: currentSortingColumn })
-								: t("unsorted")}
+							{!isFilterOpen &&
+								(currentSortingColumn
+									? t("sortedBy", {
+											field: currentSortingColumn,
+										})
+									: t("unsorted"))}
 						</MenuButton>
 						<MenuItems
 							anchor="bottom start"
