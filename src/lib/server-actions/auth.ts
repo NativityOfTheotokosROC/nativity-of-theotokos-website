@@ -19,6 +19,6 @@ export async function getUser() {
 	const session = await auth.api.getSession({
 		headers: await headers(),
 	});
-	const user = session?.user ?? null;
-	return user;
+	const user = session?.user;
+	return user ? { ...user, email: user.email.toLowerCase() } : null;
 }

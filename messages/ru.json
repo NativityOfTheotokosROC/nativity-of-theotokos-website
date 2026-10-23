@@ -155,7 +155,8 @@
 	"licenses_variable": {
 		"dailyReadingsLicense": "Ежедневные чтения, памятования и песнопения предоставлены",
 		"logoIconLicense": "Иконка логотипа",
-		"orthoGraphicsLicense": "Традиционная православная графика (то есть эмблемы, заголовки, иконки и другие символы) — работа команды"
+		"orthoGraphicsLicense": "Традиционная православная графика (например, эмблемы, заголовки, иконки и другие символы) предоставлена нашими друзьями с сайта",
+		"orthoGraphicsSubLicense": "В их числе (но не ограничиваясь ими) — работы следующих авторов"
 	},
 	"links": {
 		"diocese": "https://exarchate-africa.ru/dioceses_cat/yuzhno-afrikanskaya-eparhiya/",

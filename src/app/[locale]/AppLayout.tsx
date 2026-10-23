@@ -45,7 +45,7 @@ const AppLayout = async function ({ model, children }) {
 			isReplaceable: true,
 		},
 		{
-			link: "/#footer",
+			link: "/#contact-section",
 			text: tNavMenu("contact"),
 			isReplaceable: true,
 		},

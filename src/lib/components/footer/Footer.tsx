@@ -139,7 +139,10 @@ const Footer = function ({ model }) {
 						<FooterSection
 							model={newReadonlyModel({ title: t("contact") })}
 						>
-							<div className="grid grid-cols-2 gap-2">
+							<div
+								id="contact-section"
+								className="grid grid-cols-2 gap-2"
+							>
 								{[
 									...contacts.map(contact => (
 										<Fragment key={contact.phone}>

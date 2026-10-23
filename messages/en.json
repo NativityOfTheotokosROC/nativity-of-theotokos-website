@@ -155,7 +155,8 @@
 	"licenses_variable": {
 		"dailyReadingsLicense": "Daily readings, commemorations, and hymns sourced from",
 		"logoIconLicense": "Logo icon by",
-		"orthoGraphicsLicense": "Traditional Orthodox graphics (i.e. emblems, headers, icons, and other symbols) by the team at"
+		"orthoGraphicsLicense": "Traditional Orthodox graphics (i.e. emblems, headers, icons, and other symbols) by our friends over at",
+		"orthoGraphicsSubLicense": "Included (though not exhaustive) are works by"
 	},
 	"links": {
 		"diocese": "https://exarchate-africa.ru/en/dioceses_cat/south-african-diocese/",

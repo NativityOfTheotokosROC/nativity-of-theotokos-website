@@ -11,18 +11,20 @@ export async function getUserInformation(): Promise<UserInformation> {
 	const [roleRecords, isWriter, isEditor] = await Promise.all([
 		database.admin.findMany({
 			where: {
-				email: user.email,
+				email: { equals: user.email, mode: "insensitive" },
 			},
 			select: {
 				role: true,
 			},
 		}),
 		database.articleTicket.findFirst({
-			where: { assigneeEmail: user.email },
-		}),
-		database.editor.findUnique({
 			where: {
-				email: user.email,
+				assigneeEmail: { equals: user.email, mode: "insensitive" },
+			},
+		}),
+		database.editor.findFirst({
+			where: {
+				email: { equals: user.email, mode: "insensitive" },
 			},
 		}),
 	]);

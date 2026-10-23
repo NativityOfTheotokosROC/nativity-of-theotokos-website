@@ -33,18 +33,66 @@ export default async function Page({ params }: PageProps<"/[locale]">) {
 	const licenses = [
 		{
 			text: t("dailyReadingsLicense"),
-			link: tLinks("holyTrinityChurch"),
-			linkLabel: "Holy Trinity Orthodox Church",
+			website: {
+				link: tLinks("holyTrinityChurch"),
+				linkLabel: "Holy Trinity Orthodox Church",
+			},
 		},
 		{
 			text: t("orthoGraphicsLicense"),
-			link: "https://orthodoxartsjournal.org/orthodox-illustration-project/",
-			linkLabel: "The Orthodox Illustration Project",
+			subLicenseText: t("orthoGraphicsSubLicense"),
+			website: {
+				link: "https://orthodoxartsjournal.org/orthodox-illustration-project/",
+				linkLabel: "The Orthodox Illustration Project",
+			},
+			subLicenses: [
+				{
+					text: "Scott Patrick O’Rourke",
+				},
+				{
+					text: "Christabel Anderson",
+					website: {
+						link: "https://www.christabelanderson.com/",
+					},
+				},
+				{
+					text: "Andrew Gould",
+					website: {
+						link: "https://www.newworldbyzantine.com",
+					},
+				},
+				{
+					text: "Alvin Alexsi Currier",
+					website: {
+						link: "https://alvinalexsicurrier.com/",
+					},
+				},
+				{
+					text: "Fr. Silouan Justiniano",
+				},
+				{
+					text: "Lauren Pope",
+					website: {
+						link: "https://www.flickr.com/photos/lavatican/",
+					},
+				},
+				{
+					text: "Bess Crider",
+				},
+				{
+					text: "Vojislav Lukovich",
+					website: {
+						link: "https://www.srpske-pravoslavne-ikone.com/",
+					},
+				},
+			],
 		},
 		{
 			text: t("logoIconLicense"),
-			link: "https://lordicon.com",
-			linkLabel: "Lordicon.com",
+			website: {
+				link: "https://lordicon.com",
+				linkLabel: "Lordicon.com",
+			},
 		},
 	] satisfies AttributionModelView["licenses"];
 

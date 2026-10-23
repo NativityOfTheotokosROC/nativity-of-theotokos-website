@@ -1,8 +1,11 @@
 import { Link } from "@/src/lib/components/page-loading-bar/PageLoadingBar";
 import PageView from "@/src/lib/components/page-view/PageView";
-import { AttributionModel } from "@/src/lib/models/attribution";
+import {
+	AttributionModel,
+	License as LicenseType,
+} from "@/src/lib/models/attribution";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { newReadonlyModel } from "@mvc-react/mvc";
+import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
 
 const Attribution = async function ({ model }) {
@@ -23,19 +26,46 @@ const Attribution = async function ({ model }) {
 			<div className="flex flex-col gap-6 [&_a]:underline [&_a]:hover:text-[#dcb042] [&_a]:active:text-[#dcb042]">
 				<ul className="flex list-inside list-disc flex-col gap-3">
 					{licenses.map((license, index) => (
-						<li key={index}>
-							<span>
-								{`${license.text}: `}
-								<Link href={license.link} target="_blank">
-									{license.linkLabel}
-								</Link>
-							</span>
-						</li>
+						<License
+							key={index}
+							model={newReadonlyModel({ license })}
+						/>
 					))}
 				</ul>
 			</div>
 		</PageView>
 	);
 } satisfies ModeledVoidComponent<AttributionModel>;
+
+const License = function ({ model }) {
+	const {
+		license: { website, text, subLicenseText, subLicenses },
+	} = model.modelView;
+
+	return (
+		<li>
+			<span>
+				{`${text}${website ? ": " : ""}`}
+				{website && (
+					<Link
+						href={website.link}
+						target="_blank"
+						rel="noopener"
+						referrerPolicy="origin"
+					>
+						{website.linkLabel ?? website.link}
+					</Link>
+				)}
+				{subLicenseText && `. ${subLicenseText}`}
+			</span>
+			{subLicenses?.map((subLicense, index) => (
+				<License
+					key={index}
+					model={newReadonlyModel({ license: subLicense })}
+				/>
+			))}
+		</li>
+	);
+} satisfies ModeledVoidComponent<ReadonlyModel<{ license: LicenseType }>>;
 
 export default Attribution;
