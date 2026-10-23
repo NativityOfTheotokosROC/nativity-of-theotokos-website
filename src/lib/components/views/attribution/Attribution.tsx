@@ -4,7 +4,10 @@ import {
 	AttributionModel,
 	License as LicenseType,
 } from "@/src/lib/models/attribution";
-import { ModeledVoidComponent } from "@mvc-react/components";
+import {
+	ModeledVoidComponent,
+	StyledModeledComponent,
+} from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
 
@@ -37,13 +40,13 @@ const Attribution = async function ({ model }) {
 	);
 } satisfies ModeledVoidComponent<AttributionModel>;
 
-const License = function ({ model }) {
+const License = function ({ model, className, style }) {
 	const {
 		license: { website, text, subLicenseText, subLicenses },
 	} = model.modelView;
 
 	return (
-		<li>
+		<li style={style} className={className}>
 			<span>
 				{`${text}${website ? ": " : ""}`}
 				{website && (
@@ -58,14 +61,18 @@ const License = function ({ model }) {
 				)}
 				{subLicenseText && `. ${subLicenseText}`}
 			</span>
-			{subLicenses?.map((subLicense, index) => (
-				<License
-					key={index}
-					model={newReadonlyModel({ license: subLicense })}
-				/>
-			))}
+			{subLicenses && (
+				<ul>
+					{subLicenses.map((subLicense, index) => (
+						<License
+							key={index}
+							model={newReadonlyModel({ license: subLicense })}
+						/>
+					))}
+				</ul>
+			)}
 		</li>
 	);
-} satisfies ModeledVoidComponent<ReadonlyModel<{ license: LicenseType }>>;
+} satisfies StyledModeledComponent<ReadonlyModel<{ license: LicenseType }>>;
 
 export default Attribution;
