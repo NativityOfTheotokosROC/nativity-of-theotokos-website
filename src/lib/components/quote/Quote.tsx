@@ -59,10 +59,10 @@ const Quote = function ({ model, className, style }) {
 				)}
 				{quoteStyle === "giant_mark" && (
 					<span
-						className={`inline-flex items-baseline gap-2 ${variant === "highlight" ? "ml-2 flex-col md:m-0 md:flex-row" : ""}`}
+						className={`inline-flex items-baseline gap-2 ${variant === "highlight" ? "flex-col gap-3 pl-2 md:flex-row md:p-0" : ""}`}
 					>
 						{variant === "highlight" ? (
-							<QuoteIcon className="h-10 fill-current opacity-50" />
+							<QuoteIcon className="h-6 min-w-5 fill-current opacity-50" />
 						) : (
 							<span className={`text-4xl opacity-50`}>
 								{QUOTATION_MARKS.openingQuote.english}
