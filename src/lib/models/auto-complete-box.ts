@@ -8,6 +8,7 @@ export type AutoCompleteBoxModelView<I, K extends string> = {
 	id: K;
 	isOpen?: boolean;
 	query?: string;
+	maxListedItems?: number;
 	items: I[];
 	transformer: (item: I) => string;
 };

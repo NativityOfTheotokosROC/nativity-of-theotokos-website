@@ -68,9 +68,7 @@ const Quote = function ({ model, className, style }) {
 								{QUOTATION_MARKS.openingQuote.english}
 							</span>
 						)}
-						<span
-							className={`${variant === "highlight" ? "pl-2 md:p-0" : ""}`}
-						>
+						<span>
 							{typeof quote.quote === "string"
 								? quote.quote
 								: pickTranslation(quote.quote, parsedLanguage)}

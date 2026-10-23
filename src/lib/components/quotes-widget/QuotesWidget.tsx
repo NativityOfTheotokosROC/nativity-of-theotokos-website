@@ -112,9 +112,9 @@ const QuotesWidget = function ({ model }) {
 	const { sorting, pagination, globalFilter } = table.state;
 	const currentSortingColumnId = sorting[0]?.id;
 	const isDesc = sorting[0]?.desc;
-	const currentSortingColumn =
-		table.getColumn(currentSortingColumnId)?.columnDef.header?.toString() ??
-		t("none");
+	const currentSortingColumn = table
+		.getColumn(currentSortingColumnId)
+		?.columnDef.header?.toString();
 	const listRef = useRef<HTMLDivElement>(null);
 	const [isFilterOpen, setFilterOpen] = useState(false);
 
@@ -144,8 +144,9 @@ const QuotesWidget = function ({ model }) {
 									strokeWidth={1.5}
 								/>
 							)}
-							{!isFilterOpen &&
-								t("sortedBy", { field: currentSortingColumn })}
+							{!isFilterOpen && currentSortingColumn
+								? t("sortedBy", { field: currentSortingColumn })
+								: t("unsorted")}
 						</MenuButton>
 						<MenuItems
 							anchor="bottom start"

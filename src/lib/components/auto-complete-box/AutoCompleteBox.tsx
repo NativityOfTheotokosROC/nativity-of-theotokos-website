@@ -10,7 +10,14 @@ export default function AutoCompleteBox<I, K extends string>({
 	model: InitializedModel<AutoCompleteBoxModel<I, K>>;
 }) {
 	const { modelView, interact } = model;
-	const { id, items, query, isOpen, transformer } = modelView;
+	const {
+		id,
+		items,
+		query,
+		maxListedItems = 10,
+		isOpen,
+		transformer,
+	} = modelView;
 	const filteredItems = items
 		.map((item, arrayIndex) => ({ item, arrayIndex }))
 		.filter(({ item }) => {
@@ -22,7 +29,9 @@ export default function AutoCompleteBox<I, K extends string>({
 	const computedOpen = (isOpen && filteredItems.length > 0) ?? false;
 	const [isClickable, setClickable] = useState(computedOpen);
 	const [lastVisibleItems, setLastVisibleItems] = useState(filteredItems);
-	const displayedItems = computedOpen ? filteredItems : lastVisibleItems;
+	const displayedItems = (
+		computedOpen ? filteredItems : lastVisibleItems
+	).slice(0, maxListedItems);
 
 	if (
 		computedOpen &&
