@@ -30,6 +30,11 @@ const AppLayout = async function ({ model, children }) {
 	});
 	const navlinks = [
 		{
+			link: "/",
+			text: tNavMenu("home"),
+			isReplaceable: true,
+		},
+		{
 			link: "/#bulletin",
 			text: tNavMenu("parishBulletin"),
 			isReplaceable: true,
@@ -40,12 +45,7 @@ const AppLayout = async function ({ model, children }) {
 			isReplaceable: true,
 		},
 		{
-			link: "/#media",
-			text: tNavMenu("media"),
-			isReplaceable: true,
-		},
-		{
-			link: "/#contact-section",
+			link: "#contact-section",
 			text: tNavMenu("contact"),
 			isReplaceable: true,
 		},
