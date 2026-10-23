@@ -156,7 +156,15 @@ const QuotesWidget = function ({ model }) {
 								<MenuItem key={header.column.id} as={Fragment}>
 									<button
 										className="flex w-full items-center justify-between gap-3"
-										onClick={header.column.getToggleSortingHandler()}
+										onClick={e => {
+											header.column.getToggleSortingHandler()?.(
+												e,
+											);
+											listRef.current?.scrollTo({
+												top: 0,
+												behavior: "smooth",
+											});
+										}}
 									>
 										{flexRender(
 											header.column.columnDef.header,

@@ -59,7 +59,7 @@ const Quote = function ({ model, className, style }) {
 				)}
 				{quoteStyle === "giant_mark" && (
 					<span
-						className={`inline-flex items-baseline gap-2 ${variant === "highlight" ? "flex-col gap-3 pl-2 md:flex-row md:p-0" : ""}`}
+						className={`inline-flex gap-2 ${variant === "highlight" ? "flex-col items-baseline gap-3 md:flex-row" : ""}`}
 					>
 						{variant === "highlight" ? (
 							<QuoteIcon className="h-6 min-w-5 fill-current opacity-50" />
@@ -68,7 +68,9 @@ const Quote = function ({ model, className, style }) {
 								{QUOTATION_MARKS.openingQuote.english}
 							</span>
 						)}
-						<span>
+						<span
+							className={`${variant === "highlight" ? "pl-2 md:p-0" : ""}`}
+						>
 							{typeof quote.quote === "string"
 								? quote.quote
 								: pickTranslation(quote.quote, parsedLanguage)}
