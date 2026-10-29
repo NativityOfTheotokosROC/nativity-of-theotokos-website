@@ -43,7 +43,11 @@ const ScheduledQuotes = function ({ model }) {
 			columnHelper.columns([
 				columnHelper.accessor(
 					row => pickDateTranslation(row.date, locale),
-					{ header: "Date", id: "date" },
+					{ 
+						header: "Date", 
+						id: "date",
+						sortFn: "datetime"
+					},
 				),
 				columnHelper.accessor(
 					row => pickTranslation(row.author.name, locale),
