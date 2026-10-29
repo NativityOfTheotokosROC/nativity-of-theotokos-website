@@ -1,6 +1,5 @@
 import { ScheduledQuoteModelView } from "@/src/lib/models/scheduled-quote";
 import { georgia } from "@/src/lib/third-party/fonts";
-import { pickDateTranslation } from "@/src/lib/utilities/date-time";
 import { pickTranslation } from "@/src/lib/utilities/miscellaneous";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
@@ -42,7 +41,7 @@ const ScheduledQuotes = function ({ model }) {
 		() =>
 			columnHelper.columns([
 				columnHelper.accessor(
-					row => pickDateTranslation(row.date, locale),
+					row => row.date,
 					{ 
 						header: "Date", 
 						id: "date",
