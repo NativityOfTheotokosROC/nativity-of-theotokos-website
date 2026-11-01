@@ -88,3 +88,19 @@ export function truncateText(
 ) {
 	return `${text.slice(0, maxLength)}${disableEllipsis ? "" : "..."}`;
 }
+
+// For holytrinityorthodox weirdness
+export function fixUrl(url: URL) {
+	if (url.pathname === "/") return url;
+	const segments = url.pathname.split("/").slice(1);
+	const finalSegments: string[] = [];
+	for (const segment of segments) {
+		if (segment === "..") {
+			const previousSegment = finalSegments.pop();
+			if (!previousSegment) throw new Error("Invalid URL");
+			continue;
+		}
+		finalSegments.push(segment);
+	}
+	return new URL(`/${finalSegments.join("/")}`, url.origin);
+}
