@@ -90,9 +90,9 @@ export function useSignIn(endpoint: string, signInServices: SignInService[]) {
 							break;
 						}
 						case "yandex": {
-							await signIn.oauth2(
+							await signIn.social(
 								{
-									providerId: "yandex",
+									provider: "yandex",
 									callbackURL: endpoint,
 								},
 								callbacks("Yandex"),
