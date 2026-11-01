@@ -2,7 +2,7 @@ import { load } from "cheerio";
 import { getTranslations } from "next-intl/server";
 import { cacheLife, cacheTag } from "next/cache";
 import { Commemoration } from "../models/commemoration";
-import { removeMarkup } from "../utilities/miscellaneous";
+import { fixUrl, removeMarkup } from "../utilities/miscellaneous";
 import { DailyReadings, Hymn, Image, Language } from "../utilities/types";
 
 const MONTHS = [
@@ -327,7 +327,11 @@ function _getCommemorationURL(language: Language) {
 
 function _getCommemorationImageURL(path: string, language: Language) {
 	const interpolation = language === "ru" ? "/ru/" : "/";
-	return `https://www.holytrinityorthodox.com/htc/ocalendar${interpolation}los${path}`;
+	return fixUrl(
+		new URL(
+			`https://www.holytrinityorthodox.com/htc/ocalendar${interpolation}los${path}`,
+		),
+	).href;
 }
 
 function _getMarkedUpText(
