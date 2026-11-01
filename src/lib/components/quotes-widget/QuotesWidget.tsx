@@ -118,7 +118,7 @@ const QuotesWidget = function ({ model }) {
 	const listRef = useRef<HTMLDivElement>(null);
 	const [isFilterOpen, setFilterOpen] = useState(false);
 	const [currentPinnedRows, setCurrentPinnedRows] = useState(pinnedRows);
-	if (pinnedRows && currentPinnedRows !== table.state.rowPinning.top) {
+	if (pinnedRows && currentPinnedRows !== pinnedRows) {
 		table.setRowPinning({ ...table.state.rowPinning, top: pinnedRows });
 		setCurrentPinnedRows(pinnedRows);
 	}
