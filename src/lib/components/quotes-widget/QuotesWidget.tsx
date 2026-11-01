@@ -117,8 +117,11 @@ const QuotesWidget = function ({ model }) {
 		?.columnDef.header?.toString();
 	const listRef = useRef<HTMLDivElement>(null);
 	const [isFilterOpen, setFilterOpen] = useState(false);
-	if (pinnedRows?.length)
+	const [currentPinnedRows, setCurrentPinnedRows] = useState(pinnedRows);
+	if (pinnedRows && currentPinnedRows !== table.state.rowPinning.top) {
 		table.setRowPinning({ ...table.state.rowPinning, top: pinnedRows });
+		setCurrentPinnedRows(pinnedRows);
+	}
 
 	return (
 		<div className="flex flex-col gap-3">
