@@ -21,6 +21,7 @@ services:
                 - aws_region
                 - yandex_client_id
                 - yandex_client_secret
+                - resend_api_key
         ports:
             - ${HOST_PORT:-3000}:${CONTAINER_PORT:-3000}
         env_file:
@@ -57,3 +58,7 @@ secrets:
         environment: YANDEX_CLIENT_ID
     yandex_client_secret:
         environment: YANDEX_CLIENT_SECRET
+    resend_api_key:
+        environment: RESEND_API_KEY
+    fallback_sender_email:
+        environment: FALLBACK_SENDER_EMAIL

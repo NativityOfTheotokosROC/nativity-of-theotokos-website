@@ -9,14 +9,14 @@ import PageLoadingBarProvider from "./PageLoadingBarProvider";
 import { ModeledComponent } from "@mvc-react/components";
 import { Messages, NextIntlClientProvider } from "next-intl";
 
-const Polyfills = dynamic(
-	() => import("@/src/lib/components/miscellaneous/polyfills"),
-	{ ssr: false },
-);
+// const Polyfills = dynamic(
+// 	() => import("@/src/lib/components/miscellaneous/polyfills"),
+// 	{ ssr: false },
+// );
 
 const queryClient = new QueryClient();
 
-export const AppProvider = function ({ model, children }) {
+export const AppProviders = function ({ model, children }) {
 	const { locale, messages } = model.modelView;
 	const autoTriggerExceptions: Path[] = ["/", "/ru"];
 	return (
@@ -30,7 +30,7 @@ export const AppProvider = function ({ model, children }) {
 					<LoginTooltipProvider
 						model={newReadonlyModel({ autoTriggerExceptions })}
 					>
-						<Polyfills>{children}</Polyfills>
+						{children}
 					</LoginTooltipProvider>
 				</PageLoadingBarProvider>
 			</NextIntlClientProvider>
@@ -40,4 +40,4 @@ export const AppProvider = function ({ model, children }) {
 	ReadonlyModel<{ locale?: Language; messages?: Messages }>
 >;
 
-export default AppProvider;
+export default AppProviders;

@@ -48,6 +48,8 @@ jobs:
                       aws_region=${{secrets.AWS_REGION}}
                       yandex_client_id=${{secrets.YANDEX_CLIENT_ID}}
                       yandex_client_secret=${{secrets.YANDEX_CLIENT_SECRET}}
+                      resend_api_key=${{secrets.RESEND_API_KEY}}
+                      fallback_sender_email=${{vars.FALLBACK_SENDER_EMAIL}}
                   push: ${{ github.event_name != 'pull_request' }}
                   tags: ${{ steps.meta.outputs.tags }}
                   annotations: ${{ steps.meta.outputs.annotations }}

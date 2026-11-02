@@ -55,3 +55,11 @@ export const AWS_SECRET_ACCESS_KEY = z
 	.nonempty()
 	.parse(process.env.AWS_SECRET_ACCESS_KEY);
 export const S3_BUCKET = z.string().nonempty().parse(process.env.S3_BUCKET);
+export const RESEND_API_KEY = z
+	.string()
+	.nonempty()
+	.parse(process.env.RESEND_API_KEY);
+export const FALLBACK_SENDER_EMAIL = z
+	.string()
+	.nonempty()
+	.parse(process.env.FALLBACK_SENDER_EMAIL);
