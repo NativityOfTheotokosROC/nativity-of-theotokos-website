@@ -491,5 +491,16 @@
 		"schedule": "Schedule",
 		"reschedule": "Reschedule",
 		"cancel": "Cancel"
+	},
+	"authorInvite": {
+		"title": "Author an article for us",
+		"alternativeTitle": "You have been invited",
+		"message": "Hello {author}! You have been invited to author an article for our church website. Click the link below to start writing!",
+		"writeArticleButton": "Write Article"
+	},
+	"emailFooter": {
+		"ignoreMessage": "If this email was wrongfully addressed, you may ignore it.",
+		"copyright": "2026 Nativity of the Theotokos Parish. All Rights Reserved.",
+		"broadcastDisclaimer": "You received this email because you subscribed for updates from our website. You may <unsub>Unsubscribe</unsub> or <pref>Manage your Preferences</pref>."
 	}
 }

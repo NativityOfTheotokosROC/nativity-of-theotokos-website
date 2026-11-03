@@ -49,6 +49,7 @@ jobs:
                       yandex_client_id=${{secrets.YANDEX_CLIENT_ID}}
                       yandex_client_secret=${{secrets.YANDEX_CLIENT_SECRET}}
                       resend_api_key=${{secrets.RESEND_API_KEY}}
+                      mailing_address=${{vars.NEXT_PUBLIC_MAILING_ADDRESS}}
                       fallback_sender_email=${{vars.FALLBACK_SENDER_EMAIL}}
                   push: ${{ github.event_name != 'pull_request' }}
                   tags: ${{ steps.meta.outputs.tags }}
