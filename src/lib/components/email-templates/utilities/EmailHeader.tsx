@@ -9,6 +9,7 @@ import { BASE_URL } from "@/src/lib/utilities/server-constants";
 const EmailHeader = async function ({ model }) {
 	const { language } = model.modelView;
 	const t = await getTranslations({ namespace: "header", locale: language });
+	console.log("Rendering header");
 
 	return (
 		<header

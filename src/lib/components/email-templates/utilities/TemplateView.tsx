@@ -9,7 +9,8 @@ const TemplateView = function ({ model, children }) {
 	const { variant, language } = model.modelView;
 	console.log("rendering template view");
 	return (
-		<Tailwind config={{ presets: [pixelBasedPreset] }}>
+		<>
+			{/* <Tailwind config={{ presets: [pixelBasedPreset] }}> */}
 			{children}
 			<EmailFooter
 				model={newReadonlyModel({
@@ -18,7 +19,8 @@ const TemplateView = function ({ model, children }) {
 					socials: SOCIALS,
 				})}
 			/>
-		</Tailwind>
+			{/* </Tailwind> */}
+		</>
 	);
 } satisfies ModeledComponent<InitializedModel<TemplateViewModel>>;
 
