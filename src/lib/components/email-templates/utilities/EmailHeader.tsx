@@ -20,6 +20,7 @@ const EmailHeader = async function ({ model }) {
 						<Container className="size-12">
 							<Img
 								className="logo-icon object-contain object-center"
+								alt="Logo Icon"
 								src={`${BASE_URL}/icon2.png`}
 								width={48}
 								height={48}

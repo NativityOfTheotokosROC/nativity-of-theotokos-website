@@ -9,9 +9,9 @@ import { googleSans, googleSansFlex } from "@/src/lib/third-party/fonts";
 const TemplateView = function ({ model, children }) {
 	const { variant, language } = model.modelView;
 	return (
-		<Html lang={language}>
-			<Head />
-			<Tailwind>
+		<Tailwind config={{ presets: [pixelBasedPreset] }}>
+			<Html lang={language}>
+				<Head />
 				<Body
 					className={`${googleSans.className} ${googleSansFlex.className}`}
 				>
@@ -24,8 +24,8 @@ const TemplateView = function ({ model, children }) {
 						})}
 					/>
 				</Body>
-			</Tailwind>
-		</Html>
+			</Html>
+		</Tailwind>
 	);
 } satisfies ModeledComponent<InitializedModel<TemplateViewModel>>;
 
