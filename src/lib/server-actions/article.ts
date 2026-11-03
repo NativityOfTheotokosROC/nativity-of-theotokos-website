@@ -313,7 +313,7 @@ export async function assignArticle(
 	const isSelfAssigned = ticket.assigneeEmail === user.email;
 	if (!isSelfAssigned)
 		after(async () => {
-			const {data, errors} = await resend.emails.send({
+			const { data, error } = await resend.emails.send({
 				from: `The Editorial <${FALLBACK_SENDER_EMAIL}>`,
 				to: [assigneeEmail],
 				subject: t("authorInvite.alternativeTitle"),
@@ -328,8 +328,8 @@ export async function assignArticle(
 					}),
 				}),
 			});
-			console.log(JSON.stringify(data))
-			console.error(JSON.stringify(errors))
+			console.log(JSON.stringify(data));
+			console.error(JSON.stringify(error));
 		});
 
 	return {
