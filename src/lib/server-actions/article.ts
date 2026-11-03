@@ -313,10 +313,10 @@ export async function assignArticle(
 	const isSelfAssigned = ticket.assigneeEmail === user.email;
 	if (!isSelfAssigned)
 		after(async () => {
-			const { data, error } = await resend.emails.send({
-				from: `The Editorial <${FALLBACK_SENDER_EMAIL}>`,
+			const { error } = await resend.emails.send({
+				from: `${t("miscellaneous.churchName")} <${FALLBACK_SENDER_EMAIL}>`,
 				to: [assigneeEmail],
-				subject: t("authorInvite.alternativeTitle"),
+				subject: t("authorInvite.title"),
 				react: AuthorInvite({
 					model: newReadonlyModel({
 						language,
@@ -328,8 +328,7 @@ export async function assignArticle(
 					}),
 				}),
 			});
-			console.log(JSON.stringify(data));
-			console.error(JSON.stringify(error));
+			if (error) console.error(JSON.stringify(error));
 		});
 
 	return {

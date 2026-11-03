@@ -199,7 +199,8 @@
 		"goHome": "Go Home",
 		"modelInitError": "The model is not initialized",
 		"optional": "optional",
-		"russian": "Russian"
+		"russian": "Russian",
+		"churchName": "Nativity of the Theotokos Russian Orthodox Church"
 	},
 	"navMenu": {
 		"aboutUs": "About Us",

@@ -4,46 +4,45 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
 import SocialLink from "../../social-link/SocialLink";
+import { Container, Hr, Text } from "react-email";
 
 const EmailFooter = async function ({ model }) {
-	console.log("rendering footer");
 	const { socials, variant, language } = model.modelView;
 	const t = await getTranslations({
 		namespace: "emailFooter",
 		locale: language,
 	});
-	console.log("(almost) rendered footer");
 
 	return (
-		<footer className="email-footer flex flex-col gap-4 bg-[#0a0a0a] p-9 text-sm text-white">
+		<Container className="email-footer flex flex-col gap-4 bg-[#0a0a0a] p-9 text-sm text-white">
 			{variant.type === "broadcast" && (
-				<span className="text-sm">
+				<Text className="text-sm">
 					{t.rich("broadcastDisclaimer", {
 						unsub: text => <a href={variant.unsubLink}>{text}</a>,
 						pref: text => <a href={variant.unsubLink}>{text}</a>,
 					})}
-				</span>
+				</Text>
 			)}
 			{variant.type === "transactional" &&
 				variant.includeIgnoreMessage && (
-					<span className="text-sm">{t("ignoreMessage")}</span>
+					<Text className="text-sm">{t("ignoreMessage")}</Text>
 				)}
-			<hr className="mt-6 opacity-50" />
+			<Hr className="mt-6 opacity-50" />
 			{socials && socials.length && (
-				<div className="social-links flex gap-5 text-lg **:size-4 **:hover:text-[#ffdc4f]">
+				<Container className="social-links flex gap-5 text-lg **:size-4 **:hover:text-[#ffdc4f]">
 					{socials.map(social => (
 						<SocialLink
 							key={social.modelView.details.link}
 							model={social}
 						/>
 					))}
-				</div>
+				</Container>
 			)}
-			<span className="copyright w-fit text-sm">
-				<span className={georgia.className}>&copy;</span>{" "}
+			<Text className="copyright w-fit text-sm">
+				<Text className={georgia.className}>&copy;</Text>{" "}
 				{t("copyright")}
-			</span>
-		</footer>
+			</Text>
+		</Container>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<EmailFooterModel>>;
 

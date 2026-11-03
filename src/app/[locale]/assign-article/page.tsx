@@ -1,13 +1,12 @@
 import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
 import AssignArticleClient from "@/src/lib/components/views/assign-article/client";
-import {
-	getArticleAuthors,
-	getArticleAuthorsWithTranslations,
-} from "@/src/lib/server-only/article";
+import { getArticleAuthorsWithTranslations } from "@/src/lib/server-only/article";
 import { isValidLocale } from "@/src/lib/utilities/internationalization";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+
+export const maxDuration = 30;
 
 export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 	const { locale: localeParam } = await params;

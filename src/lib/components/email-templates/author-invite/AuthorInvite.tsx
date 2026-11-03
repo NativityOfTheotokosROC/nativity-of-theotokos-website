@@ -4,7 +4,7 @@ import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import EmailContent from "../utilities/EmailContent";
 import EmailHeader from "../utilities/EmailHeader";
 import TemplateView from "../utilities/TemplateView";
-import { Button, Text } from "react-email";
+import { Button, Container, Text } from "react-email";
 import { getTranslations } from "next-intl/server";
 
 const AuthorInvite = async function ({ model }) {
@@ -23,7 +23,10 @@ const AuthorInvite = async function ({ model }) {
 		>
 			<EmailHeader model={newReadonlyModel({ language })} />
 			<EmailContent>
-				<div className="flex flex-col gap-4">
+				<Container className="flex flex-col gap-4">
+					<Text className="text-3xl font-semibold">
+						{t("alternativeTitle")}
+					</Text>
 					<Text>{t("message", { author: author.name })}</Text>
 					<Button
 						className="flex items-center justify-center bg-[#250203]/82"
@@ -31,7 +34,7 @@ const AuthorInvite = async function ({ model }) {
 					>
 						{t("writeArticleButton")}
 					</Button>
-				</div>
+				</Container>
 			</EmailContent>
 		</TemplateView>
 	);
