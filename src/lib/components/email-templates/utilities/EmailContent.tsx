@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { googleSans, googleSansFlex } from "../../../third-party/fonts";
 
 export default function EmailContent({ children }: { children: ReactNode }) {
+	console.log("rendering email content");
 	return (
 		<main
 			className={twMerge(

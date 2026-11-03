@@ -7,6 +7,7 @@ import { SOCIALS } from "@/src/lib/utilities/constants";
 
 const TemplateView = function ({ model, children }) {
 	const { variant, language } = model.modelView;
+	console.log("rendering template view");
 	return (
 		<Tailwind config={{ presets: [pixelBasedPreset] }}>
 			{children}

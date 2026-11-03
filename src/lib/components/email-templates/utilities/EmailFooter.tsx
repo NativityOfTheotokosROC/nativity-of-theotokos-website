@@ -1,18 +1,18 @@
-import { SocialLinkModel } from "@/src/lib/models/social-link";
-import { ModeledVoidComponent } from "@mvc-react/components";
-import { InitializedModel, ReadonlyModel } from "@mvc-react/mvc";
-import SocialLink from "../../social-link/SocialLink";
-import { georgia } from "@/src/lib/third-party/fonts";
-import { getTranslations } from "next-intl/server";
-import { Language } from "@/src/lib/utilities/types";
 import { EmailFooterModel } from "@/src/lib/models/email-footer";
+import { georgia } from "@/src/lib/third-party/fonts";
+import { ModeledVoidComponent } from "@mvc-react/components";
+import { InitializedModel } from "@mvc-react/mvc";
+import { getTranslations } from "next-intl/server";
+import SocialLink from "../../social-link/SocialLink";
 
 const EmailFooter = async function ({ model }) {
+	console.log("rendering footer");
 	const { socials, variant, language } = model.modelView;
 	const t = await getTranslations({
 		namespace: "emailFooter",
 		locale: language,
 	});
+	console.log("(almost) rendered footer");
 
 	return (
 		<footer className="email-footer flex flex-col gap-4 bg-[#0a0a0a] p-9 text-sm text-white">

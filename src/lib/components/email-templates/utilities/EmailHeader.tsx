@@ -7,8 +7,10 @@ import LogoIcon from "@/public/assets/logo-icon.svg";
 import Link from "next/link";
 
 const EmailHeader = async function ({ model }) {
+	console.log("rendering header");
 	const { language } = model.modelView;
 	const t = await getTranslations({ namespace: "header", locale: language });
+	console.log("(almost) rendered header");
 
 	return (
 		<header

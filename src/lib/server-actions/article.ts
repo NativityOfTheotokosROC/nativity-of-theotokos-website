@@ -39,7 +39,7 @@ import {
 import { getArticleSubmissionSchema } from "../validation/article";
 import { getUser, protect } from "./auth";
 import { NewTranslation } from "../validation/utilities";
-import z from "zod";
+import z, { email } from "zod";
 import { after } from "next/server";
 import resend from "../third-party/resend";
 import AuthorInvite from "../components/email-templates/author-invite/AuthorInvite";
@@ -311,26 +311,28 @@ export async function assignArticle(
 			},
 		}));
 	const isSelfAssigned = ticket.assigneeEmail === user.email;
-	if (!isSelfAssigned)
-		after(async () => {
-			const { data, error } = await resend.emails.send({
-				from: `The Editorial <${FALLBACK_SENDER_EMAIL}>`,
-				to: [assigneeEmail],
-				subject: t("authorInvite.alternativeTitle"),
-				react: await AuthorInvite({
-					model: newReadonlyModel({
-						language,
-						author: {
-							email: assigneeEmail,
-							name: pickTranslation(assigneeName, language),
-						},
-						articleLink: `${BASE_URL}/write-article`,
-					}),
+	if (!isSelfAssigned) {
+		console.log("trying");
+		const { data, error } = await resend.emails.send({
+			from: `The Editorial <${FALLBACK_SENDER_EMAIL}>`,
+			to: [assigneeEmail],
+			subject: t("authorInvite.alternativeTitle"),
+			react: AuthorInvite({
+				model: newReadonlyModel({
+					language,
+					author: {
+						email: assigneeEmail,
+						name: pickTranslation(assigneeName, language),
+					},
+					articleLink: `${BASE_URL}/write-article`,
 				}),
-			});
-			console.log(JSON.stringify(data));
-			console.error(JSON.stringify(error));
+			}),
 		});
+		console.log(JSON.stringify(data));
+		console.error(JSON.stringify(error));
+	}
+	// after(async () => {
+	// });
 
 	return {
 		ticketId: ticket.id,
