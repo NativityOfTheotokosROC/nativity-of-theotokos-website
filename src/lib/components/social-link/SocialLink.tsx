@@ -21,7 +21,7 @@ const SocialLink = function ({ model }) {
 	const { details } = model.modelView;
 
 	return (
-		<Link href={details.link} title={details.type} target="_blank">
+		<a href={details.link} title={details.type} target="_blank">
 			<ConditionalComponent
 				model={newReadonlyModel({
 					condition: details.type,
@@ -40,7 +40,7 @@ const SocialLink = function ({ model }) {
 					FallbackComponent: () => <Other />,
 				})}
 			/>
-		</Link>
+		</a>
 	);
 } as ModeledVoidComponent<SocialLinkModel>;
 
