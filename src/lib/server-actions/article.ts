@@ -313,11 +313,11 @@ export async function assignArticle(
 	const isSelfAssigned = ticket.assigneeEmail === user.email;
 	if (!isSelfAssigned)
 		after(async () => {
-			await resend.emails.send({
+			const {data, errors} = await resend.emails.send({
 				from: `The Editorial <${FALLBACK_SENDER_EMAIL}>`,
 				to: [assigneeEmail],
 				subject: t("authorInvite.alternativeTitle"),
-				react: AuthorInvite({
+				react: await AuthorInvite({
 					model: newReadonlyModel({
 						language,
 						author: {
@@ -328,6 +328,8 @@ export async function assignArticle(
 					}),
 				}),
 			});
+			console.log(JSON.stringify(data))
+			console.error(JSON.stringify(errors))
 		});
 
 	return {
