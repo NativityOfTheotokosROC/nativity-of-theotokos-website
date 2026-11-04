@@ -19,60 +19,55 @@ const EmailHeader = async function ({ model }) {
 			className="email-header"
 		>
 			<Link style={{ display: "contents" }} href={BASE_URL}>
-				<Container>
-					<Section
-						style={{
-							width: "fit-content",
-						}}
-						className="logo"
-					>
-						<Column style={{ paddingRight: "8px" }}>
-							<Container
-								style={{ width: "48px", height: "48px" }}
-							>
-								<Img
-									style={{
-										objectFit: "contain",
-										objectPosition: "center",
-									}}
-									className="logo-icon"
-									alt="Logo Icon"
-									src={`${BASE_URL}/icon2.png`}
-									width={48}
-									height={48}
-								/>
-							</Container>
-						</Column>
-						<Column>
-							<Section
+				<Section
+					style={{
+						width: "fit-content",
+					}}
+					className="logo"
+				>
+					<Column style={{ paddingRight: "8px" }}>
+						<Container style={{ width: "48px", height: "48px" }}>
+							<Img
 								style={{
-									color: "white",
-									fontFamily:
-										"Georgia, Times New Roman, serif",
+									objectFit: "contain",
+									objectPosition: "center",
 								}}
-								className={`logo-text ${georgia.className}`}
-							>
-								<Column>
-									<Row style={{ paddingBottom: "1px" }}>
-										<span
-											style={{
-												fontSize: "18px",
-												lineHeight: "24.75px",
-											}}
-										>
-											{t("logoTop")}
-										</span>
-									</Row>
-									<Row>
-										<span style={{ fontSize: "14px" }}>
-											{t("logoBottom")}
-										</span>
-									</Row>
-								</Column>
-							</Section>
-						</Column>
-					</Section>
-				</Container>
+								className="logo-icon"
+								alt="Logo Icon"
+								src={`${BASE_URL}/icon2.png`}
+								width={48}
+								height={48}
+							/>
+						</Container>
+					</Column>
+					<Column>
+						<Section
+							style={{
+								color: "white",
+								fontFamily: "Georgia, serif",
+							}}
+							className={`logo-text ${georgia.className}`}
+						>
+							<Column>
+								<Row style={{ paddingBottom: "1px" }}>
+									<span
+										style={{
+											fontSize: "18px",
+											lineHeight: "24.75px",
+										}}
+									>
+										{t("logoTop")}
+									</span>
+								</Row>
+								<Row>
+									<span style={{ fontSize: "14px" }}>
+										{t("logoBottom")}
+									</span>
+								</Row>
+							</Column>
+						</Section>
+					</Column>
+				</Section>
 			</Link>
 		</Section>
 	);

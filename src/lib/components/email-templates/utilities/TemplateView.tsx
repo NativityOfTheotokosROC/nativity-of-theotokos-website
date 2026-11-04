@@ -22,13 +22,18 @@ const TemplateView = function ({ model, children }) {
 					fontWeight={400}
 				/>
 				<style>{`
+					:root {
+						color-scheme: light dark;
+						supported-color-schemes: light dark;
+					}
 					body {
 						font-family: "Google Sans", sans-serif
 					}
 					.body-content {
 						background-color: #FEF8F3;
-						border: solid 1px #9ca3af;
+						border: solid 1px #9ca3af8e;
 						border-radius: 8px;
+						overflow: clip;
 						color: black;
 						width: fit-content;
 						max-width: 100%;
@@ -38,8 +43,8 @@ const TemplateView = function ({ model, children }) {
 					}
 					@media (prefers-color-scheme: dark) {
 						.body-content {
-							background-color: #222222;
-							color: white;
+							background-color: #222222 !important;
+							color: white !important;
 						}
 					}
 				`}</style>
