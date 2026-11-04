@@ -37,10 +37,12 @@ const TemplateView = function ({ model, children }) {
 						url: "https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap",
 						format: "woff2",
 					}}
+					fontStyle="normal"
+					fontWeight={400}
 				/>
 			</Head>
 			{previewText && <Preview>{snippetify(previewText, 90)}</Preview>}
-			<Body style={{ fontFamily: "Google Sans" }}>
+			<Body style={{ fontFamily: "'Google Sans', sans-serif" }}>
 				{children}
 				<EmailFooter
 					model={newReadonlyModel({

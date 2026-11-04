@@ -45,9 +45,10 @@ const AuthorInvite = async function ({ model }) {
 							color: "white",
 							backgroundColor: "#250203be",
 							borderRadius: "8px",
+							minWidth: "128px",
+							padding: "16px",
 							overflow: "clip",
 						}}
-						className="flex"
 						href={articleLink}
 					>
 						{t("writeArticleButton")}

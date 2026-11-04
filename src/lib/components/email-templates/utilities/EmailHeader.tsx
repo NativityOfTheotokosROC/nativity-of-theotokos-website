@@ -3,7 +3,7 @@ import { ReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
 import { Language } from "../../../utilities/types";
 import { georgia } from "../../../third-party/fonts";
-import { Column, Container, Img, Link, Section, Text } from "react-email";
+import { Column, Container, Img, Link, Row, Section, Text } from "react-email";
 import { BASE_URL } from "@/src/lib/utilities/server-constants";
 
 const EmailHeader = async function ({ model }) {
@@ -27,7 +27,7 @@ const EmailHeader = async function ({ model }) {
 						}}
 						className="logo"
 					>
-						<Column style={{ paddingRight: "12px" }}>
+						<Column style={{ paddingRight: "8px" }}>
 							<Container
 								style={{ width: "48px", height: "48px" }}
 							>
@@ -53,18 +53,23 @@ const EmailHeader = async function ({ model }) {
 								}}
 								className={`logo-text ${georgia.className}`}
 							>
-								<span
-									style={{
-										fontSize: "18px",
-										lineHeight: "24.75px",
-										paddingBottom: "1px",
-									}}
-								>
-									{t("logoTop")}
-								</span>
-								<span style={{ fontSize: "14px" }}>
-									{t("logoBottom")}
-								</span>
+								<Column>
+									<Row style={{ paddingBottom: "1px" }}>
+										<span
+											style={{
+												fontSize: "18px",
+												lineHeight: "24.75px",
+											}}
+										>
+											{t("logoTop")}
+										</span>
+									</Row>
+									<Row>
+										<span style={{ fontSize: "14px" }}>
+											{t("logoBottom")}
+										</span>
+									</Row>
+								</Column>
 							</Section>
 						</Column>
 					</Section>
