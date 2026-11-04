@@ -13,6 +13,8 @@ const EmailHeader = async function ({ model }) {
 	return (
 		<Section
 			style={{
+				display: "flex",
+				justifyContent: "flex-start",
 				padding: "16px",
 				background: "#111827",
 			}}
@@ -44,7 +46,7 @@ const EmailHeader = async function ({ model }) {
 						<Section
 							style={{
 								color: "white",
-								fontFamily: "Georgia, serif",
+								fontFamily: "serif",
 							}}
 							className={`logo-text ${georgia.className}`}
 						>

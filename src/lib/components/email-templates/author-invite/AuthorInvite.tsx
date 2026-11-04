@@ -41,15 +41,13 @@ const AuthorInvite = async function ({ model }) {
 					<Text>{message}</Text>
 					<Button
 						style={{
-							display: "flex",
 							color: "white",
 							backgroundColor: "#4b2c29",
 							borderRadius: "8px",
 							minWidth: "64px",
 							padding: "16px",
 							overflow: "clip",
-							marginInline: "auto",
-							marginBlock: "auto",
+							textAlign: "center",
 						}}
 						href={articleLink}
 					>

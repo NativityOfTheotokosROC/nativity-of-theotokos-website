@@ -9,9 +9,10 @@ export default function EmailContent({ children }: { children: ReactNode }) {
 				border: "solid #991B1B",
 				borderWidth: "15px 0 0 0",
 				padding: "32px",
-				paddingBlock: "36px",
+				paddingTop: "36px",
+				paddingBottom: "36px",
 			}}
-			className={twMerge("email-content")}
+			className={"email-content"}
 		>
 			{children}
 		</Container>

@@ -27,14 +27,16 @@ const TemplateView = function ({ model, children }) {
 						supported-color-schemes: light dark;
 					}
 					body {
-						font-family: "Google Sans", sans-serif
+						font-family: "Google Sans", sans-serif;
+						width: 100%;
 					}
 					.body-content {
-						background-color: #FEF8F3;
+						background-color: #fff;
 						border: solid 1px #9ca3af8e;
 						border-radius: 8px;
 						overflow: clip;
 						color: black;
+						min-width: 80%;
 						width: fit-content;
 						max-width: 100%;
 					}
