@@ -23,6 +23,7 @@ const EmailFooter = async function ({ model }) {
 				padding: "36px",
 				fontSize: "14px",
 				lineHeight: "20px",
+				width: "100%",
 			}}
 			className="email-footer"
 		>

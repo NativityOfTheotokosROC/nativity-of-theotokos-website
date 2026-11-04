@@ -30,6 +30,7 @@ const AuthorInvite = async function ({ model }) {
 						display: "flex",
 						flexDirection: "column",
 						gap: "16px",
+						width: "100%",
 					}}
 				>
 					<Heading
@@ -48,6 +49,7 @@ const AuthorInvite = async function ({ model }) {
 							padding: "16px",
 							overflow: "clip",
 							textAlign: "center",
+							marginTop: "10px",
 						}}
 						href={articleLink}
 					>
