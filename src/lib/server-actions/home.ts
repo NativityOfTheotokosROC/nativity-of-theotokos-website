@@ -21,6 +21,7 @@ import {
 } from "../utilities/types";
 import { getSchedule } from "../server-only/schedule";
 import { getDailyQuote } from "../server-only/quote";
+import resend from "../third-party/resend";
 
 export type LatestArticles = {
 	featuredArticle: ArticlePreview;
@@ -71,5 +72,8 @@ export async function getHomeSnapshot(
 
 export async function subscribeToMailingList(email: string) {
 	const validatedEmail = z.email().trim().parse(email);
-	await mailerLite.subscribers.createOrUpdate({ email: validatedEmail });
+	const { error } = await resend.contacts.create({
+		email: validatedEmail,
+	});
+	if (error) throw new Error(JSON.stringify(error));
 }

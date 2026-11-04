@@ -11,10 +11,9 @@ const EmailHeader = async function ({ model }) {
 	const t = await getTranslations({ namespace: "header", locale: language });
 
 	return (
-		<Container
+		<Section
 			style={{
 				padding: "16px",
-				height: "fit-content",
 				background: "#111827",
 			}}
 			className="email-header"
@@ -75,7 +74,7 @@ const EmailHeader = async function ({ model }) {
 					</Section>
 				</Container>
 			</Link>
-		</Container>
+		</Section>
 	);
 } satisfies ModeledVoidComponent<ReadonlyModel<{ language: Language }>>;
 

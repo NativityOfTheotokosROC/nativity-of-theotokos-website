@@ -2,7 +2,7 @@ import { TemplateViewModel } from "@/src/lib/models/template-view";
 import { SOCIALS } from "@/src/lib/utilities/constants";
 import { ModeledComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import { Body, Font, Head, Html, Preview } from "react-email";
+import { Body, Container, Font, Head, Html, Preview } from "react-email";
 import EmailFooter from "./EmailFooter";
 import { snippetify } from "@/src/lib/utilities/miscellaneous";
 
@@ -11,25 +11,6 @@ const TemplateView = function ({ model, children }) {
 	return (
 		<Html lang={language}>
 			<Head>
-				<style>{`
-					body {
-						background-color: #FEF8F3;
-						border: solid 1px #9ca3af;
-						border-radius: 8px;
-						color: black;
-						width: fit-content;
-						max-width: 100%;
-					}
-					body > * {
-						min-width: 100%;
-					}
-					@media (prefers-color-scheme: dark) {
-						body {
-							background-color: #222222;
-							color: white;
-						}
-					}
-				`}</style>
 				<Font
 					fontFamily="Google Sans"
 					fallbackFontFamily="Arial"
@@ -40,17 +21,41 @@ const TemplateView = function ({ model, children }) {
 					fontStyle="normal"
 					fontWeight={400}
 				/>
+				<style>{`
+					body {
+						font-family: "Google Sans", sans-serif
+					}
+					.body-content {
+						background-color: #FEF8F3;
+						border: solid 1px #9ca3af;
+						border-radius: 8px;
+						color: black;
+						width: fit-content;
+						max-width: 100%;
+					}
+					.body-content > * {
+						min-width: 100%;
+					}
+					@media (prefers-color-scheme: dark) {
+						.body-content {
+							background-color: #222222;
+							color: white;
+						}
+					}
+				`}</style>
 			</Head>
 			{previewText && <Preview>{snippetify(previewText, 90)}</Preview>}
-			<Body style={{ fontFamily: "'Google Sans', sans-serif" }}>
-				{children}
-				<EmailFooter
-					model={newReadonlyModel({
-						variant,
-						language,
-						socials: SOCIALS,
-					})}
-				/>
+			<Body>
+				<Container className="body-content">
+					{children}
+					<EmailFooter
+						model={newReadonlyModel({
+							variant,
+							language,
+							socials: SOCIALS,
+						})}
+					/>
+				</Container>
 			</Body>
 		</Html>
 	);
