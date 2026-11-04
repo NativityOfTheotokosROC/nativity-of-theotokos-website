@@ -13,12 +13,14 @@ const AuthorInvite = async function ({ model }) {
 		namespace: "authorInvite",
 		locale: language,
 	});
+	const message = t("message", { author: author.name });
 
 	return (
 		<TemplateView
 			model={newReadonlyModel({
 				language,
 				variant: { type: "transactional", includeIgnoreMessage: true },
+				previewText: message,
 			})}
 		>
 			<EmailHeader model={newReadonlyModel({ language })} />
@@ -36,16 +38,16 @@ const AuthorInvite = async function ({ model }) {
 					>
 						{t("alternativeTitle")}
 					</Heading>
-					<Text>{t("message", { author: author.name })}</Text>
+					<Text>{message}</Text>
 					<Button
 						style={{
 							display: "flex",
-							justifyContent: "center",
-							alignItems: "center",
-							backgroundColor:
-								"color-mix(in srgb, #250203 82%, transparent)",
+							color: "white",
+							backgroundColor: "#250203be",
+							borderRadius: "8px",
+							overflow: "clip",
 						}}
-						className="flex items-center justify-center bg-[#250203]/82"
+						className="flex"
 						href={articleLink}
 					>
 						{t("writeArticleButton")}

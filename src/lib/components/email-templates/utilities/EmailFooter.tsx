@@ -1,10 +1,9 @@
 import { EmailFooterModel } from "@/src/lib/models/email-footer";
-import { georgia } from "@/src/lib/third-party/fonts";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
+import { Container, Hr, Section, Text } from "react-email";
 import SocialLink from "../../social-link/SocialLink";
-import { Container, Hr, Text } from "react-email";
 
 const EmailFooter = async function ({ model }) {
 	const { socials, variant, language } = model.modelView;
@@ -41,7 +40,7 @@ const EmailFooter = async function ({ model }) {
 				)}
 			<Hr style={{ marginTop: "24px", opacity: 0.5 }} />
 			{socials && socials.length && (
-				<Container
+				<Section
 					style={{ display: "flex", gap: "20px" }}
 					className="social-links"
 				>
@@ -51,12 +50,9 @@ const EmailFooter = async function ({ model }) {
 							model={social}
 						/>
 					))}
-				</Container>
+				</Section>
 			)}
-			<Text className="copyright">
-				<Text className={georgia.className}>&copy;</Text>{" "}
-				{t("copyright")}
-			</Text>
+			<Text className="copyright">&copy; {t("copyright")}</Text>
 		</Container>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<EmailFooterModel>>;

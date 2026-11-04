@@ -1,20 +1,27 @@
-import { ModeledComponent } from "@mvc-react/components";
-import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import { Body, Head, Html, pixelBasedPreset, Tailwind } from "react-email";
-import EmailFooter from "./EmailFooter";
 import { TemplateViewModel } from "@/src/lib/models/template-view";
 import { SOCIALS } from "@/src/lib/utilities/constants";
-import { googleSans, googleSansFlex } from "@/src/lib/third-party/fonts";
+import { ModeledComponent } from "@mvc-react/components";
+import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
+import { Body, Font, Head, Html, Preview } from "react-email";
+import EmailFooter from "./EmailFooter";
+import { snippetify } from "@/src/lib/utilities/miscellaneous";
 
 const TemplateView = function ({ model, children }) {
-	const { variant, language } = model.modelView;
+	const { variant, language, previewText } = model.modelView;
 	return (
 		<Html lang={language}>
 			<Head>
 				<style>{`
 					body {
 						background-color: #FEF8F3;
+						border: solid 1px #9ca3af;
+						border-radius: 8px;
 						color: black;
+						width: fit-content;
+						max-width: 100%;
+					}
+					body > * {
+						min-width: 100%;
 					}
 					@media (prefers-color-scheme: dark) {
 						body {
@@ -23,8 +30,17 @@ const TemplateView = function ({ model, children }) {
 						}
 					}
 				`}</style>
+				<Font
+					fontFamily="Google Sans"
+					fallbackFontFamily="Arial"
+					webFont={{
+						url: "https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap",
+						format: "woff2",
+					}}
+				/>
 			</Head>
-			<Body>
+			{previewText && <Preview>{snippetify(previewText, 90)}</Preview>}
+			<Body style={{ fontFamily: "Google Sans" }}>
 				{children}
 				<EmailFooter
 					model={newReadonlyModel({
