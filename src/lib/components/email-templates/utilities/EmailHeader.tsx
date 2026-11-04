@@ -12,14 +12,43 @@ const EmailHeader = async function ({ model }) {
 
 	return (
 		<Container
-			className={`email-header flex h-fit w-full max-w-full flex-col bg-gray-900`}
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				height: "fit-content",
+				width: "100%",
+				maxWidth: "100%",
+				background: "#111827",
+			}}
+			className={`email-header`}
 		>
-			<Container className="header-content flex items-center justify-center p-4 text-white lg:p-6 lg:px-7">
+			<Container
+				style={{
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+					padding: "16px",
+				}}
+				className="header-content"
+			>
 				<Link className="contents" href="/">
-					<Container className="logo flex w-fit items-center justify-center gap-3 select-none hover:cursor-pointer">
-						<Container className="size-12">
+					<Container
+						style={{
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+							gap: "12px",
+							width: "fit-content",
+						}}
+						className="logo"
+					>
+						<Container style={{ width: "48px", height: "48px" }}>
 							<Img
-								className="logo-icon object-contain object-center"
+								style={{
+									objectFit: "contain",
+									objectPosition: "center",
+								}}
+								className="logo-icon"
 								alt="Logo Icon"
 								src={`${BASE_URL}/icon2.png`}
 								width={48}
@@ -27,12 +56,24 @@ const EmailHeader = async function ({ model }) {
 							/>
 						</Container>
 						<Container
-							className={`logo-text flex flex-col gap-px ${georgia.className}`}
+							style={{
+								display: "flex",
+								flexDirection: "column",
+								gap: "1px",
+							}}
+							className={`logo-text ${georgia.className}`}
 						>
-							<Text className={`text-lg/snug`}>
+							<Text
+								style={{
+									fontSize: "18px",
+									lineHeight: "24.75px",
+								}}
+							>
 								{t("logoTop")}
 							</Text>
-							<Text className={`text-sm`}>{t("logoBottom")}</Text>
+							<Text style={{ fontSize: "14px" }}>
+								{t("logoBottom")}
+							</Text>
 						</Container>
 					</Container>
 				</Link>

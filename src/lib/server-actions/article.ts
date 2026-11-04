@@ -313,6 +313,7 @@ export async function assignArticle(
 	const isSelfAssigned = ticket.assigneeEmail === user.email;
 	if (!isSelfAssigned)
 		after(async () => {
+			const t = await getTranslations({ locale: "en" });
 			const { error } = await resend.emails.send({
 				from: `${t("miscellaneous.churchName")} <${FALLBACK_SENDER_EMAIL}>`,
 				to: [assigneeEmail],

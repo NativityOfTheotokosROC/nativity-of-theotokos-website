@@ -6,8 +6,6 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
-export const maxDuration = 30;
-
 export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 	const { locale: localeParam } = await params;
 	const locale = isValidLocale(localeParam) ? localeParam : "en";

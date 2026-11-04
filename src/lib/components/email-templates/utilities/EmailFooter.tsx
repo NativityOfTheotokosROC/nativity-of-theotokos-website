@@ -14,9 +14,21 @@ const EmailFooter = async function ({ model }) {
 	});
 
 	return (
-		<Container className="email-footer flex flex-col gap-4 bg-[#0a0a0a] p-9 text-sm text-white">
+		<Container
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				gap: "16px",
+				backgroundColor: "#0a0a0a",
+				color: "white",
+				padding: "36px",
+				fontSize: "14px",
+				lineHeight: "20px",
+			}}
+			className="email-footer"
+		>
 			{variant.type === "broadcast" && (
-				<Text className="text-sm">
+				<Text>
 					{t.rich("broadcastDisclaimer", {
 						unsub: text => <a href={variant.unsubLink}>{text}</a>,
 						pref: text => <a href={variant.unsubLink}>{text}</a>,
@@ -25,11 +37,14 @@ const EmailFooter = async function ({ model }) {
 			)}
 			{variant.type === "transactional" &&
 				variant.includeIgnoreMessage && (
-					<Text className="text-sm">{t("ignoreMessage")}</Text>
+					<Text>{t("ignoreMessage")}</Text>
 				)}
-			<Hr className="mt-6 opacity-50" />
+			<Hr style={{ marginTop: "24px", opacity: 0.5 }} />
 			{socials && socials.length && (
-				<Container className="social-links flex gap-5 text-lg **:size-4 **:hover:text-[#ffdc4f]">
+				<Container
+					style={{ display: "flex", gap: "20px" }}
+					className="social-links"
+				>
 					{socials.map(social => (
 						<SocialLink
 							key={social.modelView.details.link}
@@ -38,7 +53,7 @@ const EmailFooter = async function ({ model }) {
 					))}
 				</Container>
 			)}
-			<Text className="copyright w-fit text-sm">
+			<Text className="copyright">
 				<Text className={georgia.className}>&copy;</Text>{" "}
 				{t("copyright")}
 			</Text>

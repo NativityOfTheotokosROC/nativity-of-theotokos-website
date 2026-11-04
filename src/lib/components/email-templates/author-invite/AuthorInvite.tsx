@@ -23,12 +23,28 @@ const AuthorInvite = async function ({ model }) {
 		>
 			<EmailHeader model={newReadonlyModel({ language })} />
 			<EmailContent>
-				<Container className="flex flex-col gap-4">
-					<Heading as="h1" className="text-3xl font-semibold">
+				<Container
+					style={{
+						display: "flex",
+						flexDirection: "column",
+						gap: "16px",
+					}}
+				>
+					<Heading
+						as="h1"
+						style={{ fontSize: "30px", fontWeight: "600" }}
+					>
 						{t("alternativeTitle")}
 					</Heading>
 					<Text>{t("message", { author: author.name })}</Text>
 					<Button
+						style={{
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+							backgroundColor:
+								"color-mix(in srgb, #250203 82%, transparent)",
+						}}
 						className="flex items-center justify-center bg-[#250203]/82"
 						href={articleLink}
 					>

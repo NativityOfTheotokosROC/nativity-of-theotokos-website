@@ -9,23 +9,32 @@ import { googleSans, googleSansFlex } from "@/src/lib/third-party/fonts";
 const TemplateView = function ({ model, children }) {
 	const { variant, language } = model.modelView;
 	return (
-		<Tailwind config={{ presets: [pixelBasedPreset] }}>
-			<Html lang={language}>
-				<Head />
-				<Body
-					className={`${googleSans.className} ${googleSansFlex.className}`}
-				>
-					{children}
-					<EmailFooter
-						model={newReadonlyModel({
-							variant,
-							language,
-							socials: SOCIALS,
-						})}
-					/>
-				</Body>
-			</Html>
-		</Tailwind>
+		<Html lang={language}>
+			<Head>
+				<style>{`
+					body {
+						background-color: #FEF8F3;
+						color: black;
+					}
+					@media (prefers-color-scheme: dark) {
+						body {
+							background-color: #222222;
+							color: white;
+						}
+					}
+				`}</style>
+			</Head>
+			<Body>
+				{children}
+				<EmailFooter
+					model={newReadonlyModel({
+						variant,
+						language,
+						socials: SOCIALS,
+					})}
+				/>
+			</Body>
+		</Html>
 	);
 } satisfies ModeledComponent<InitializedModel<TemplateViewModel>>;
 
