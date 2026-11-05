@@ -13,7 +13,7 @@ const EmailFooter = async function ({ model }) {
 	});
 
 	return (
-		<Container
+		<Section
 			style={{
 				display: "flex",
 				flexDirection: "column",
@@ -23,7 +23,6 @@ const EmailFooter = async function ({ model }) {
 				padding: "36px",
 				fontSize: "14px",
 				lineHeight: "20px",
-				width: "100%",
 			}}
 			className="email-footer"
 		>
@@ -54,7 +53,7 @@ const EmailFooter = async function ({ model }) {
 				</Section>
 			)}
 			<Text className="copyright">&copy; {t("copyright")}</Text>
-		</Container>
+		</Section>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<EmailFooterModel>>;
 

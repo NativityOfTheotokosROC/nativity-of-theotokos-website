@@ -1,10 +1,9 @@
 import { ReactNode } from "react";
-import { Container } from "react-email";
-import { twMerge } from "tailwind-merge";
+import { Section } from "react-email";
 
 export default function EmailContent({ children }: { children: ReactNode }) {
 	return (
-		<Container
+		<Section
 			style={{
 				border: "solid #991B1B",
 				borderWidth: "15px 0 0 0",
@@ -15,6 +14,6 @@ export default function EmailContent({ children }: { children: ReactNode }) {
 			className={"email-content"}
 		>
 			{children}
-		</Container>
+		</Section>
 	);
 }

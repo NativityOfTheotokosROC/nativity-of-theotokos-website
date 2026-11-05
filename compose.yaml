@@ -14,7 +14,6 @@ services:
                 - database_url
                 - google_client_id
                 - google_client_secret
-                - mailerlite_api_key
                 - microsoft_client_id
                 - microsoft_client_secret
                 - s3_bucket
@@ -46,8 +45,6 @@ secrets:
         environment: GOOGLE_CLIENT_ID
     google_client_secret:
         environment: GOOGLE_CLIENT_SECRET
-    mailerlite_api_key:
-        environment: MAILERLITE_API_KEY
     microsoft_client_id:
         environment: MICROSOFT_CLIENT_ID
     microsoft_client_secret:

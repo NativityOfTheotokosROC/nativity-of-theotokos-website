@@ -30,7 +30,6 @@ const AuthorInvite = async function ({ model }) {
 						display: "flex",
 						flexDirection: "column",
 						gap: "16px",
-						width: "100%",
 					}}
 				>
 					<Heading

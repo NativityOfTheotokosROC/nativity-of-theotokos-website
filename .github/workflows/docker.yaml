@@ -39,7 +39,6 @@ jobs:
                       database_url=${{secrets.DATABASE_URL}}
                       google_client_id=${{secrets.GOOGLE_CLIENT_ID}}
                       google_client_secret=${{secrets.GOOGLE_CLIENT_SECRET}}
-                      mailerlite_api_key=${{secrets.MAILERLITE_API_KEY}}
                       microsoft_client_id=${{secrets.MICROSOFT_CLIENT_ID}}
                       microsoft_client_secret=${{secrets.MICROSOFT_CLIENT_SECRET}}
                       aws_access_key_id=${{secrets.AWS_ACCESS_KEY_ID}}

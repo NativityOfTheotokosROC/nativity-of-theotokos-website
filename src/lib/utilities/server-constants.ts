@@ -41,10 +41,6 @@ export const YANDEX_CLIENT_SECRET = z
 	.string()
 	.nonempty()
 	.parse(process.env.YANDEX_CLIENT_SECRET);
-export const MAILERLITE_API_KEY = z
-	.string()
-	.nonempty()
-	.parse(process.env.MAILERLITE_API_KEY);
 export const AWS_REGION = z.string().nonempty().parse(process.env.AWS_REGION);
 export const AWS_ACCESS_KEY_ID = z
 	.string()

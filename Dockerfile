@@ -22,7 +22,6 @@ RUN --mount=type=secret,id=base_url,env=BASE_URL \
     --mount=type=secret,id=database_url,env=DATABASE_URL \ 
     --mount=type=secret,id=google_client_id,env=GOOGLE_CLIENT_ID \
     --mount=type=secret,id=google_client_secret,env=GOOGLE_CLIENT_SECRET \
-    --mount=type=secret,id=mailerlite_api_key,env=MAILERLITE_API_KEY \
     --mount=type=secret,id=microsoft_client_id,env=MICROSOFT_CLIENT_ID \
     --mount=type=secret,id=microsoft_client_secret,env=MICROSOFT_CLIENT_SECRET \
     --mount=type=secret,id=aws_access_key_id,env=AWS_ACCESS_KEY_ID \

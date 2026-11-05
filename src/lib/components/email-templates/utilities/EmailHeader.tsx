@@ -27,8 +27,10 @@ const EmailHeader = async function ({ model }) {
 					}}
 					className="logo"
 				>
-					<Column style={{ paddingRight: "8px" }}>
-						<Container style={{ width: "48px", height: "48px" }}>
+					<Column style={{ paddingRight: "12px" }}>
+						<Container
+							style={{ width: "fit-content", height: "48px" }}
+						>
 							<Img
 								style={{
 									objectFit: "contain",
@@ -36,9 +38,9 @@ const EmailHeader = async function ({ model }) {
 								}}
 								className="logo-icon"
 								alt="Logo Icon"
-								src={`${BASE_URL}/icon2.png`}
-								width={48}
+								src={`${BASE_URL}/full-logo.png`}
 								height={48}
+								width={128}
 							/>
 						</Container>
 					</Column>
