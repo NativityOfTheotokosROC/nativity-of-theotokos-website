@@ -15,7 +15,12 @@
 			"{?\\s?[\\w].*:\\s*?[\"'`]([^\"'`]*).*?,?\\s?}?"
 		]
 	],
+	"js/ts.preferences.autoImportFileExcludePatterns": [
+		"**/node_modules/schema-dts",
+		"**/src/generated/prisma"
+	],
 	"js/ts.experimental.useTsgo": false,
+	"js/ts.tsdk.path": "./node_modules/typescript/lib",
 	"[tailwindcss]": {
 		"tailwindCSS.lint.invalidTailwindDirective": "warning",
 		"tailwindCSS.validate": true

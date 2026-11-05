@@ -14,13 +14,15 @@ services:
                 - database_url
                 - google_client_id
                 - google_client_secret
-                - mailerlite_api_key
                 - microsoft_client_id
                 - microsoft_client_secret
                 - s3_bucket
                 - aws_region
                 - yandex_client_id
                 - yandex_client_secret
+                - resend_api_key
+                - mailing_address
+                - fallback_sender_email
         ports:
             - ${HOST_PORT:-3000}:${CONTAINER_PORT:-3000}
         env_file:
@@ -43,8 +45,6 @@ secrets:
         environment: GOOGLE_CLIENT_ID
     google_client_secret:
         environment: GOOGLE_CLIENT_SECRET
-    mailerlite_api_key:
-        environment: MAILERLITE_API_KEY
     microsoft_client_id:
         environment: MICROSOFT_CLIENT_ID
     microsoft_client_secret:
@@ -57,3 +57,9 @@ secrets:
         environment: YANDEX_CLIENT_ID
     yandex_client_secret:
         environment: YANDEX_CLIENT_SECRET
+    resend_api_key:
+        environment: RESEND_API_KEY
+    mailing_address:
+        environment: NEXT_PUBLIC_MAILING_ADDRESS
+    fallback_sender_email:
+        environment: FALLBACK_SENDER_EMAIL

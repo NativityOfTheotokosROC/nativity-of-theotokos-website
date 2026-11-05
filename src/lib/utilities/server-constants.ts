@@ -41,10 +41,6 @@ export const YANDEX_CLIENT_SECRET = z
 	.string()
 	.nonempty()
 	.parse(process.env.YANDEX_CLIENT_SECRET);
-export const MAILERLITE_API_KEY = z
-	.string()
-	.nonempty()
-	.parse(process.env.MAILERLITE_API_KEY);
 export const AWS_REGION = z.string().nonempty().parse(process.env.AWS_REGION);
 export const AWS_ACCESS_KEY_ID = z
 	.string()
@@ -55,3 +51,11 @@ export const AWS_SECRET_ACCESS_KEY = z
 	.nonempty()
 	.parse(process.env.AWS_SECRET_ACCESS_KEY);
 export const S3_BUCKET = z.string().nonempty().parse(process.env.S3_BUCKET);
+export const RESEND_API_KEY = z
+	.string()
+	.nonempty()
+	.parse(process.env.RESEND_API_KEY);
+export const FALLBACK_SENDER_EMAIL = z
+	.string()
+	.nonempty()
+	.parse(process.env.FALLBACK_SENDER_EMAIL);

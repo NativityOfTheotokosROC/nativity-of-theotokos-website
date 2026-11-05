@@ -1,7 +1,7 @@
 import "@/src/app/globals.css";
 import { routing } from "@/src/i18n/routing";
 import LayoutLoadingSkeleton from "@/src/lib/components/layout-loading-skeleton/LayoutLoadingSkeleton";
-import AppProvider from "@/src/lib/providers/AppProvider";
+import AppProviders from "@/src/lib/providers/AppProviders";
 import {
 	georgia,
 	googleSans,
@@ -86,13 +86,15 @@ export default async function RootLayout({
 				className={`antialiased ${googleSansFlex.variable} ${googleSans.variable} ${georgia.variable}`}
 			>
 				<Suspense fallback={<LayoutLoadingSkeleton />}>
-					<AppProvider model={newReadonlyModel({ locale, messages })}>
+					<AppProviders
+						model={newReadonlyModel({ locale, messages })}
+					>
 						<AppLayout
 							model={newReadonlyModel({ language: locale })}
 						>
 							{children}
 						</AppLayout>
-					</AppProvider>
+					</AppProviders>
 				</Suspense>
 			</body>
 		</html>

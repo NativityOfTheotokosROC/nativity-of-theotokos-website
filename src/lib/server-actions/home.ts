@@ -8,7 +8,9 @@ import {
 	getDailyReadings,
 	getLatestArticles,
 } from "../server-only/home";
-import mailerLite from "../third-party/mailer-lite";
+import { getDailyQuote } from "../server-only/quote";
+import { getSchedule } from "../server-only/schedule";
+import resend from "../third-party/resend";
 import {
 	InstantaneousScheduleItemWithOptionalId,
 	RecurringScheduleItemInstanceWithOptionalId,
@@ -19,8 +21,6 @@ import {
 	GalleryImage,
 	Language,
 } from "../utilities/types";
-import { getSchedule } from "../server-only/schedule";
-import { getDailyQuote } from "../server-only/quote";
 
 export type LatestArticles = {
 	featuredArticle: ArticlePreview;
@@ -71,5 +71,13 @@ export async function getHomeSnapshot(
 
 export async function subscribeToMailingList(email: string) {
 	const validatedEmail = z.email().trim().parse(email);
-	await mailerLite.subscribers.createOrUpdate({ email: validatedEmail });
+	const locale = await getLocale();
+	const { error } = await resend.contacts.create({
+		email: validatedEmail,
+		unsubscribed: false,
+		properties: {
+			preferredLang: locale,
+		},
+	});
+	if (error) throw new Error(JSON.stringify(error));
 }

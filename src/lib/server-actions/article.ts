@@ -28,7 +28,7 @@ import {
 	removeMarkup,
 	snippetify,
 } from "../utilities/miscellaneous";
-import { BASE_URL } from "../utilities/server-constants";
+import { BASE_URL, FALLBACK_SENDER_EMAIL } from "../utilities/server-constants";
 import {
 	getArticleAuthorSchema,
 	getArticleSchema,
@@ -40,6 +40,10 @@ import { getArticleSubmissionSchema } from "../validation/article";
 import { getUser, protect } from "./auth";
 import { NewTranslation } from "../validation/utilities";
 import z from "zod";
+import { after } from "next/server";
+import resend from "../third-party/resend";
+import AuthorInvite from "../components/email-templates/author-invite/AuthorInvite";
+import { newReadonlyModel } from "@mvc-react/mvc";
 
 export async function getArticle(
 	articleId: string,
@@ -161,8 +165,8 @@ export async function assignArticle(
 	}>,
 ): Promise<{ ticketId: string; canDeleteTicket: boolean }> {
 	const user = await protect({ roles: ["editor"] });
-
-	const t = await getTranslations({ locale: options?.locale ?? "en" });
+	const language = options?.locale ?? "en";
+	const t = await getTranslations({ locale: language });
 	const assignArticleFormSchema = getArticleAuthorSchema(t);
 
 	const { email: assigneeEmail, name: assigneeName } =
@@ -261,9 +265,10 @@ export async function assignArticle(
 					},
 				});
 		revalidateTag("article_authors", "max");
+		const isSelfAssigned = ticket.assigneeEmail === user.email;
 		return {
 			ticketId: ticket.id,
-			canDeleteTicket: ticket.assigneeEmail === user.email,
+			canDeleteTicket: isSelfAssigned,
 		};
 	}
 
@@ -305,10 +310,31 @@ export async function assignArticle(
 				},
 			},
 		}));
+	const isSelfAssigned = ticket.assigneeEmail === user.email;
+	if (!isSelfAssigned)
+		after(async () => {
+			const t = await getTranslations({ locale: "en" });
+			const { error } = await resend.emails.send({
+				from: `${t("miscellaneous.churchName")} <${FALLBACK_SENDER_EMAIL}>`,
+				to: [assigneeEmail],
+				subject: t("authorInvite.title"),
+				react: AuthorInvite({
+					model: newReadonlyModel({
+						language,
+						author: {
+							email: assigneeEmail,
+							name: pickTranslation(assigneeName, language),
+						},
+						articleLink: `${BASE_URL}/write-article`,
+					}),
+				}),
+			});
+			if (error) console.error(JSON.stringify(error));
+		});
 
 	return {
 		ticketId: ticket.id,
-		canDeleteTicket: ticket.assignerEmail === user.email,
+		canDeleteTicket: isSelfAssigned,
 	};
 }
 
