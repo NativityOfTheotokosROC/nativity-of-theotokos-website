@@ -27,50 +27,19 @@ const EmailHeader = async function ({ model }) {
 					}}
 					className="logo"
 				>
-					<Column style={{ paddingRight: "12px" }}>
-						<Container
-							style={{ width: "fit-content", height: "48px" }}
-						>
-							<Img
-								style={{
-									objectFit: "contain",
-									objectPosition: "center",
-								}}
-								className="logo-icon"
-								alt="Logo Icon"
-								src={`${BASE_URL}/full-logo.png`}
-								height={48}
-								width={128}
-							/>
-						</Container>
-					</Column>
-					<Column>
-						<Section
+					<Container style={{ width: "fit-content", height: "48px" }}>
+						<Img
 							style={{
-								color: "white",
-								fontFamily: "serif",
+								objectFit: "contain",
+								objectPosition: "center",
 							}}
-							className={`logo-text ${georgia.className}`}
-						>
-							<Column>
-								<Row style={{ paddingBottom: "1px" }}>
-									<span
-										style={{
-											fontSize: "18px",
-											lineHeight: "24.75px",
-										}}
-									>
-										{t("logoTop")}
-									</span>
-								</Row>
-								<Row>
-									<span style={{ fontSize: "14px" }}>
-										{t("logoBottom")}
-									</span>
-								</Row>
-							</Column>
-						</Section>
-					</Column>
+							className="logo-icon"
+							alt="Logo Icon"
+							src={`${BASE_URL}/assets/full-logo.png`}
+							height={48}
+							width={128}
+						/>
+					</Container>
 				</Section>
 			</Link>
 		</Section>
