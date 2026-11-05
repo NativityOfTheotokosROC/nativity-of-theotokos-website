@@ -15,8 +15,8 @@ const EmailHeader = async function ({ model }) {
 			style={{
 				display: "flex",
 				justifyContent: "flex-start",
-				padding: "16px",
-				paddingLeft: "28px",
+				padding: "20px",
+				paddingLeft: "24px",
 				background: "#111827",
 			}}
 			className="email-header"
