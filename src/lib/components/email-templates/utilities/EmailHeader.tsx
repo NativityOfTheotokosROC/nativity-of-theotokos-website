@@ -16,7 +16,7 @@ const EmailHeader = async function ({ model }) {
 				display: "flex",
 				justifyContent: "flex-start",
 				padding: "16px",
-				paddingLeft: "20px",
+				paddingLeft: "28px",
 				background: "#111827",
 			}}
 			className="email-header"
@@ -30,12 +30,12 @@ const EmailHeader = async function ({ model }) {
 				>
 					<Img
 						style={{
-							height: "24px",
+							height: "32px",
 						}}
 						className="logo-icon"
 						alt="Logo Icon"
 						src={`${BASE_URL}/assets/full-logo.png`}
-						height={24}
+						height={32}
 					/>
 				</Section>
 			</Link>
