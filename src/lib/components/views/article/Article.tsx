@@ -18,7 +18,6 @@ import ArticleInteractiveLink from "../../article-interactive-link/ArticleIntera
 import { EditIcon } from "lucide-react";
 import { usePathname } from "@/src/i18n/navigation";
 import { useCanUserEditArticle } from "@/src/lib/utilities/article";
-import { canUserEditArticle } from "@/src/lib/server-actions/article";
 
 const Article = function ({ model }) {
 	const { article, permalink, options } = model.modelView;
@@ -97,7 +96,7 @@ const Article = function ({ model }) {
 					</div>
 				</div>
 				<div className="flex items-end gap-5 self-end text-sm text-gray-900 **:hover:text-[#dcb042] md:mt-4">
-					{!options?.sharingDisabled && (
+					{!options?.isSharingDisabled && (
 						<>
 							<ShareButton
 								model={newReadonlyModel({
@@ -131,7 +130,7 @@ const Article = function ({ model }) {
 							/>
 						</>
 					)}
-					{options?.isEditingEnabled && canUserEdit && (
+					{!options?.isEditingDisabled && canUserEdit && (
 						<ArticleInteractiveLink
 							model={newReadonlyModel({
 								title: t("editArticle"),

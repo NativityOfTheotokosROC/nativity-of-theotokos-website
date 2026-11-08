@@ -63,8 +63,8 @@ const ArticlePreviewModal = function ({ model }) {
 								isArticleFeatured: false,
 							},
 							options: {
-								sharingDisabled: true,
-								editingDisabled: true,
+								isSharingDisabled: true,
+								isEditingDisabled: true,
 							},
 						})}
 					/>
