@@ -11,7 +11,8 @@ import { ViewTransition } from "react";
 
 const ArticleCard = function ({ model }) {
 	const { articlePreview: article, isDetailed } = model.modelView;
-	const { title, author, dateCreated, snippet, articleImage, uri } = article;
+	const { title, author: unparsedAuthor, dateCreated, snippet, articleImage, uri } = article;
+	const author = typeof unparsedAuthor === "string" ? unparsedAuthor : unparsedAuthor.name;
 	const { placeholder } = articleImage;
 	const articleLink = `/news/${uri}`;
 	const dateString = getNewsArticleDateString(dateCreated);
@@ -43,7 +44,7 @@ const ArticleCard = function ({ model }) {
 						{title}
 					</span>
 					<span className="timestamp text-base text-gray-600">
-						{author.name} — {dateString}
+						{author} — {dateString}
 					</span>
 					<p className="line-clamp-4 text-base md:line-clamp-5">
 						{snippet}
@@ -73,7 +74,7 @@ const ArticleCard = function ({ model }) {
 				<div className="card-details flex flex-col gap-1.5 py-4 md:px-6">
 					<span className="title text-sm lg:text-base">{title}</span>
 					<span className="byline text-xs text-gray-600 lg:text-sm">
-						{author.name} — {dateString}
+						{author} — {dateString}
 					</span>
 				</div>
 			</div>
