@@ -1,6 +1,6 @@
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { createContext } from "react";
-import { getUserInformation } from "../server-only/user";
+import { getUserInformation } from "../server-actions/user";
 
 export const ALL_USER_ROLES = [
 	"admin",

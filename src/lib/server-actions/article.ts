@@ -44,7 +44,7 @@ import { after } from "next/server";
 import resend from "../third-party/resend";
 import AuthorInvite from "../components/email-templates/author-invite/AuthorInvite";
 import { newReadonlyModel } from "@mvc-react/mvc";
-import { getUserInformation } from "../server-only/user";
+import { getUserInformation } from "./user";
 
 export async function assignArticle(
 	email: string,
@@ -884,8 +884,8 @@ export async function publishExistingArticle({
 }
 
 export async function canUserEditArticle(articleUri: string) {
-	const articlePromise = getArticle(articleUri, "en");
 	const user = await getUserInformation();
+	const articlePromise = getArticle(articleUri, "en");
 	if (!user) return false;
 	if (user.roles.some(role => role === "admin" || role === "editor"))
 		return true;

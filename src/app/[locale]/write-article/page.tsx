@@ -2,7 +2,7 @@ import {
 	assignArticle,
 	getLatestUnsubmittedArticle,
 } from "@/src/lib/server-actions/article";
-import { getUserInformation } from "@/src/lib/server-only/user";
+import { getUserInformation } from "@/src/lib/server-actions/user";
 import { isValidLocale } from "@/src/lib/utilities/internationalization";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
