@@ -1,9 +1,9 @@
-"use server";
+import "server-only";
 
 import database from "../third-party/prisma";
 import { Role } from "../utilities/user";
 import { UserInformation } from "../utilities/user";
-import { getUser } from "./auth";
+import { getUser } from "../server-actions/auth";
 
 export async function getUserInformation(): Promise<UserInformation> {
 	const user = await getUser();

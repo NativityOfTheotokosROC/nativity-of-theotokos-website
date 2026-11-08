@@ -1,9 +1,7 @@
 import { QueryClient, useQuery } from "@tanstack/react-query";
-import { getUserInformation } from "../server-actions/user";
+import { canUserEditArticle } from "../server-actions/article";
 import { NewArticle } from "../validation/article";
 import { ArticleWithTranslations } from "./types";
-import { useUserInformation } from "./user";
-import { canUserEditArticle } from "../server-actions/article";
 
 export function hasArticleChanged(
 	existingArticle: Omit<

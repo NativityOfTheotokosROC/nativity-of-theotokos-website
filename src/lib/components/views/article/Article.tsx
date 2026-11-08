@@ -1,23 +1,22 @@
 "use client";
 
+import { usePathname } from "@/src/i18n/navigation";
 import ShareButton from "@/src/lib/components/share-button/ShareButton";
 import SocialLink from "@/src/lib/components/social-link/SocialLink";
 import { ArticleModel } from "@/src/lib/models/article";
 import "@/src/lib/styles/document.css";
 import { georgia } from "@/src/lib/third-party/fonts";
+import { useCanUserEditArticle } from "@/src/lib/utilities/article";
 import { getNewsArticleDateString } from "@/src/lib/utilities/date-time";
 import { getEncodedShareData } from "@/src/lib/utilities/miscellaneous";
-import { useUserInformation } from "@/src/lib/utilities/user";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
+import { EditIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { ViewTransition } from "react";
 import ArticleInteractiveLink from "../../article-interactive-link/ArticleInteractiveLink";
-import { EditIcon } from "lucide-react";
-import { usePathname } from "@/src/i18n/navigation";
-import { useCanUserEditArticle } from "@/src/lib/utilities/article";
 
 const Article = function ({ model }) {
 	const { article, permalink, options } = model.modelView;

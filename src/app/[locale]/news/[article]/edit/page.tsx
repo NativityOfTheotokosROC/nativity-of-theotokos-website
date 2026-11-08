@@ -2,7 +2,7 @@ import { routing } from "@/src/i18n/routing";
 import ProtectedComponent from "@/src/lib/components/protected-component/ProtectedComponent";
 import ReviewArticleClient from "@/src/lib/components/views/review-article/client";
 import { makeArticleEdit } from "@/src/lib/server-actions/article";
-import { getUserInformation } from "@/src/lib/server-actions/user";
+import { getUserInformation } from "@/src/lib/server-only/user";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
