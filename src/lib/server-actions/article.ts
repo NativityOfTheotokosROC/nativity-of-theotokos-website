@@ -11,7 +11,7 @@ import {
 	ReplacePropertyType,
 	Translation,
 } from "../utilities/types";
-import { _FULL_ARTICLE_INCLUDES } from "../server-only/article";
+import { _FULL_ARTICLE_INCLUDES, getArticle } from "../server-only/article";
 import { getPlaceholder } from "../server-only/placeholder";
 import database from "../third-party/prisma";
 import {
@@ -44,116 +44,7 @@ import { after } from "next/server";
 import resend from "../third-party/resend";
 import AuthorInvite from "../components/email-templates/author-invite/AuthorInvite";
 import { newReadonlyModel } from "@mvc-react/mvc";
-
-export async function getArticle(
-	articleId: string,
-	language: Language,
-): Promise<Omit<Article, "url">> {
-	"use cache: remote";
-	cacheTag(`article_${articleId}`);
-
-	const locale = language;
-	try {
-		const article = await database.article.findUniqueOrThrow({
-			where: { link: articleId },
-			include: _FULL_ARTICLE_INCLUDES,
-		});
-		const baseUrl = BASE_URL;
-
-		const placeholder =
-			(article.image.placeholder?.placeholder as ImagePlaceholder) ??
-			(await getPlaceholder(
-				isRemotePath(article.image.link)
-					? article.image.link
-					: `${baseUrl}${article.image.link}`,
-			));
-		const title = pickTranslation(article.title, locale);
-		const author = {
-			name: pickTranslation(article.author.name, locale),
-			email: article.author.email ?? undefined,
-		} satisfies ArticleAuthor;
-		const body = pickTranslation(article.body, locale);
-		const snippet = pickTranslation(article.snippet, locale);
-		const imageCaption = pickTranslation(article.image.caption, locale);
-
-		return {
-			uri: articleId,
-			title,
-			author,
-			dateCreated: article.dateCreated,
-			dateUpdated: article.dateUpdated ?? undefined,
-			body,
-			snippet,
-			articleImage: {
-				url: article.image.link,
-				caption: imageCaption ?? undefined,
-				placeholder,
-			},
-			isArticleFeatured: article.featuredArticle !== null,
-		};
-	} catch (error) {
-		if (
-			error instanceof Object &&
-			"code" in error &&
-			error["code"] === "P2025"
-		)
-			notFound();
-		throw error;
-	}
-}
-
-//TODO: Refactor
-export async function getArticleWithTranslations(articleId: string) {
-	"use cache: remote";
-	cacheTag(`article_${articleId}`);
-
-	try {
-		const {
-			title,
-			author,
-			body,
-			snippet,
-			dateCreated,
-			dateUpdated,
-			image,
-			featuredArticle,
-		} = await database.article.findUniqueOrThrow({
-			where: { link: articleId },
-			include: _FULL_ARTICLE_INCLUDES,
-		});
-		const baseUrl = BASE_URL;
-		const placeholder =
-			(image.placeholder?.placeholder as ImagePlaceholder) ??
-			(await getPlaceholder(
-				isRemotePath(image.link)
-					? image.link
-					: `${baseUrl}${image.link}`,
-			));
-		return {
-			uri: articleId,
-			title,
-			author,
-			dateCreated,
-			dateUpdated: dateUpdated ?? undefined,
-			body,
-			snippet,
-			articleImage: {
-				url: image.link,
-				caption: image.caption ?? undefined,
-				placeholder,
-			},
-			isArticleFeatured: featuredArticle !== null,
-		};
-	} catch (error) {
-		if (
-			error instanceof Object &&
-			"code" in error &&
-			error["code"] === "P2025"
-		)
-			notFound();
-		throw error;
-	}
-}
+import { getUserInformation } from "./user";
 
 export async function assignArticle(
 	email: string,
@@ -990,6 +881,15 @@ export async function publishExistingArticle({
 	revalidateTag("latest-articles", "max");
 	revalidateTag(`article_${articleId}`, "max");
 	return newArticle;
+}
+
+export async function canUserEditArticle(articleUri: string) {
+	const user = await getUserInformation();
+	if (!user) return false;
+	if (user.roles.some(role => role === "admin" || role === "editor"))
+		return true;
+	const article = await getArticle(articleUri, "en");
+	return user.email === article.author.email;
 }
 
 async function _validateNewArticle(newArticle: NewArticle, locale?: Language) {

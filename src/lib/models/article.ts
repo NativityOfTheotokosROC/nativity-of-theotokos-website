@@ -4,7 +4,7 @@ import { Article } from "../utilities/types";
 export type ArticleModelView = {
 	article: Article;
 	permalink: string;
-	options?: Partial<{ sharingDisabled: boolean; editingDisabled: boolean }>;
+	options?: Partial<{ sharingDisabled: boolean; isEditingEnabled: boolean }>;
 };
 
 export type ArticleModel = ReadonlyModel<ArticleModelView>;

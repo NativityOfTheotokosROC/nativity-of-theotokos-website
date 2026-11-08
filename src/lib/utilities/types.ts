@@ -166,7 +166,7 @@ export type ReplacePropertyTypes<
 export type Article = {
 	uri: string;
 	title: string;
-	author: ArticleAuthor;
+	author: ArticleAuthor | string;
 	body: string;
 	dateCreated: Date;
 	dateUpdated?: Date;

@@ -2,11 +2,10 @@ import { EmailFooterModel } from "@/src/lib/models/email-footer";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
-import { Container, Hr, Section, Text } from "react-email";
-import SocialLink from "../../social-link/SocialLink";
+import { Hr, Section, Text } from "react-email";
 
 const EmailFooter = async function ({ model }) {
-	const { socials, variant, language } = model.modelView;
+	const { variant, language } = model.modelView;
 	const t = await getTranslations({
 		namespace: "emailFooter",
 		locale: language,
@@ -39,19 +38,6 @@ const EmailFooter = async function ({ model }) {
 					<Text>{t("ignoreMessage")}</Text>
 				)}
 			<Hr style={{ marginTop: "24px", opacity: 0.5 }} />
-			{socials && socials.length && (
-				<Section
-					style={{ display: "flex", gap: "20px" }}
-					className="social-links"
-				>
-					{socials.map(social => (
-						<SocialLink
-							key={social.modelView.details.link}
-							model={social}
-						/>
-					))}
-				</Section>
-			)}
 			<Text className="copyright">&copy; {t("copyright")}</Text>
 		</Section>
 	);

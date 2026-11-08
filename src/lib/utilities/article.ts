@@ -1,5 +1,9 @@
+import { QueryClient, useQuery } from "@tanstack/react-query";
+import { getUserInformation } from "../server-actions/user";
 import { NewArticle } from "../validation/article";
 import { ArticleWithTranslations } from "./types";
+import { useUserInformation } from "./user";
+import { canUserEditArticle } from "../server-actions/article";
 
 export function hasArticleChanged(
 	existingArticle: Omit<
@@ -26,4 +30,24 @@ export function hasArticleChanged(
 		existingArticle.articleImage.caption === newArticle.image.caption &&
 		existingArticle.body.russian === newArticle.body.russian
 	);
+}
+
+export function useCanUserEditArticle(
+	articleUri: string,
+	queryClient?: QueryClient,
+) {
+	const { data, isSuccess } = useQuery(
+		{
+			queryKey: ["canUserEditArticle"],
+			queryFn: () => canUserEditArticle(articleUri),
+			staleTime: Infinity,
+			gcTime: Infinity,
+			refetchOnMount: false,
+			refetchOnReconnect: false,
+			refetchOnWindowFocus: false,
+		},
+		queryClient,
+	);
+
+	if (isSuccess) return data;
 }

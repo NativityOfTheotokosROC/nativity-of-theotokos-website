@@ -1,6 +1,4 @@
 import { routing } from "@/src/i18n/routing";
-import { getArticle } from "@/src/lib/server-actions/article";
-import { Article as ArticleType } from "@/src/lib/utilities/types";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
@@ -8,12 +6,14 @@ import Article from "../../../../lib/components/views/article/Article";
 import { BASE_URL } from "@/src/lib/utilities/server-constants";
 import {
 	getAllArticles,
+	getArticle,
 	getArticleMetadata,
 } from "@/src/lib/server-only/article";
 import { Article as JSONLdArticle, WithContext } from "schema-dts";
 import { cacheTag } from "next/cache";
 
 // const CACHE_TAG = "article";
+type ArticleMetadata = Awaited<ReturnType<typeof getArticleMetadata>>;
 
 export async function generateStaticParams() {
 	const [articlesEn, articlesRu] = await Promise.all([
@@ -26,7 +26,7 @@ export async function generateStaticParams() {
 	];
 }
 
-function articleJsonLd(article: ArticleType) {
+function articleJsonLd(article: ArticleMetadata) {
 	const { title, author, articleImage, dateCreated, snippet } = article;
 	return {
 		"@context": "https://schema.org",
@@ -36,7 +36,7 @@ function articleJsonLd(article: ArticleType) {
 		datePublished: dateCreated.toISOString(),
 		author: {
 			"@type": "Person",
-			name: author.name,
+			name: author,
 		},
 		image: articleImage.url,
 	} satisfies WithContext<JSONLdArticle>;
@@ -67,7 +67,7 @@ export async function generateMetadata({
 			title,
 			description: snippet,
 			url: `/news/${uri}`,
-			authors: author.name,
+			authors: author,
 			type: "article",
 			images: [articleImage.url],
 		},
@@ -88,10 +88,11 @@ export default async function Page({
 	const { article: articleId, locale } = await params;
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 	const article = await getArticle(articleId, language);
+	const processedArticle = { ...article, author: article.author.name };
 	cacheTag(`article_${article.uri}`);
 	const baseUrl = `${BASE_URL}${language == "ru" ? "/ru" : ""}`;
 	const permalink = `${baseUrl}/news/${article.uri.toString()}`;
-	const jsonLd = articleJsonLd(article);
+	const jsonLd = articleJsonLd(processedArticle);
 
 	return (
 		<>
@@ -99,7 +100,12 @@ export default async function Page({
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 			/>
-			<Article model={newReadonlyModel({ article, permalink })} />
+			<Article
+				model={newReadonlyModel({
+					article: processedArticle,
+					permalink,
+				})}
+			/>
 		</>
 	);
 }

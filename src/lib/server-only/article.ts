@@ -7,6 +7,9 @@ import {
 	ArticleAuthorWithTranslations,
 	Language,
 } from "../utilities/types";
+import { ImagePlaceholder, getPlaceholder } from "@grod56/placeholder";
+import { isRemotePath, pickTranslation } from "../utilities/miscellaneous";
+import { BASE_URL } from "../utilities/server-constants";
 
 export const _FULL_ARTICLE_INCLUDES = {
 	author: { include: { name: true } },
@@ -16,12 +19,120 @@ export const _FULL_ARTICLE_INCLUDES = {
 	image: { include: { placeholder: true, caption: true } },
 	featuredArticle: true,
 };
-export async function getAllArticles(language: Language): Promise<Article[]> {
+
+export async function getArticle(articleId: string, language: Language) {
+	"use cache: remote";
+	cacheTag(`article_${articleId}`);
+
+	const locale = language;
+	try {
+		const article = await database.article.findUniqueOrThrow({
+			where: { link: articleId },
+			include: _FULL_ARTICLE_INCLUDES,
+		});
+		const baseUrl = BASE_URL;
+
+		const placeholder =
+			(article.image.placeholder?.placeholder as ImagePlaceholder) ??
+			(await getPlaceholder(
+				isRemotePath(article.image.link)
+					? article.image.link
+					: `${baseUrl}${article.image.link}`,
+			));
+		const title = pickTranslation(article.title, locale);
+		const author = {
+			name: pickTranslation(article.author.name, locale),
+			email: article.author.email ?? undefined,
+		} satisfies ArticleAuthor;
+		const body = pickTranslation(article.body, locale);
+		const snippet = pickTranslation(article.snippet, locale);
+		const imageCaption = pickTranslation(article.image.caption, locale);
+
+		return {
+			uri: articleId,
+			title,
+			author,
+			dateCreated: article.dateCreated,
+			dateUpdated: article.dateUpdated ?? undefined,
+			body,
+			snippet,
+			articleImage: {
+				url: article.image.link,
+				caption: imageCaption ?? undefined,
+				placeholder,
+			},
+			isArticleFeatured: article.featuredArticle !== null,
+		} satisfies Omit<Article, "url">;
+	} catch (error) {
+		if (
+			error instanceof Object &&
+			"code" in error &&
+			error["code"] === "P2025"
+		)
+			notFound();
+		throw error;
+	}
+}
+
+//TODO: Refactor
+export async function getArticleWithTranslations(articleId: string) {
+	"use cache: remote";
+	cacheTag(`article_${articleId}`);
+
+	try {
+		const {
+			title,
+			author,
+			body,
+			snippet,
+			dateCreated,
+			dateUpdated,
+			image,
+			featuredArticle,
+		} = await database.article.findUniqueOrThrow({
+			where: { link: articleId },
+			include: _FULL_ARTICLE_INCLUDES,
+		});
+		const baseUrl = BASE_URL;
+		const placeholder =
+			(image.placeholder?.placeholder as ImagePlaceholder) ??
+			(await getPlaceholder(
+				isRemotePath(image.link)
+					? image.link
+					: `${baseUrl}${image.link}`,
+			));
+		return {
+			uri: articleId,
+			title,
+			author,
+			dateCreated,
+			dateUpdated: dateUpdated ?? undefined,
+			body,
+			snippet,
+			articleImage: {
+				url: image.link,
+				caption: image.caption ?? undefined,
+				placeholder,
+			},
+			isArticleFeatured: featuredArticle !== null,
+		};
+	} catch (error) {
+		if (
+			error instanceof Object &&
+			"code" in error &&
+			error["code"] === "P2025"
+		)
+			notFound();
+		throw error;
+	}
+}
+
+export async function getAllArticles(language: Language) {
 	"use cache: remote";
 	cacheTag("bulletin_articles");
 	cacheLife("hours");
 
-	const articles: Article[] = await database.article
+	const articles = await database.article
 		.findMany({
 			include: _FULL_ARTICLE_INCLUDES,
 		})
@@ -82,48 +193,40 @@ export async function getAllArticles(language: Language): Promise<Article[]> {
 export async function getArticleMetadata(
 	articleId: string,
 	language: Language,
-): Promise<
-	Pick<Article, "uri" | "title" | "author" | "snippet" | "articleImage">
-> {
+) {
 	"use cache";
 	cacheTag(`article_${articleId}`);
 
-	const locale = language;
 	try {
 		const article = await database.article.findUniqueOrThrow({
 			include: _FULL_ARTICLE_INCLUDES,
 			where: { link: articleId },
-			omit: { dateCreated: true, dateUpdated: true },
 		});
-		const title =
-			locale === "ru" && article.title.russian
-				? article.title.russian
-				: article.title.english;
-		const author = {
-			name:
-				locale === "ru" && article.author.name.russian
-					? article.author.name.russian
-					: article.author.name.english,
-			email: article.author.email ?? undefined,
-		} satisfies ArticleAuthor;
-		const snippet =
-			locale === "ru" && article.snippet.russian
-				? article.snippet.russian
-				: article.snippet.english;
-		const caption =
-			locale === "ru" && article.image.caption.russian
-				? article.image.caption.russian
-				: article.image.caption.english;
+		const title = pickTranslation(article.title, language);
+		const author = pickTranslation(article.author.name, language);
+		const snippet = pickTranslation(article.snippet, language);
+		const caption = pickTranslation(article.image.caption, language);
 		return {
 			uri: article.link.toString(),
 			title,
 			author,
 			snippet,
+			dateCreated: article.dateCreated,
+			dateUpdated: article.dateUpdated ?? undefined,
 			articleImage: {
 				url: article.image.link,
 				caption,
 			},
-		};
+		} satisfies Pick<
+			Article,
+			| "uri"
+			| "title"
+			| "author"
+			| "snippet"
+			| "articleImage"
+			| "dateCreated"
+			| "dateUpdated"
+		>;
 	} catch (error) {
 		if (
 			error instanceof Object &&

@@ -17,6 +17,8 @@ import { ViewTransition } from "react";
 import ArticleInteractiveLink from "../../article-interactive-link/ArticleInteractiveLink";
 import { EditIcon } from "lucide-react";
 import { usePathname } from "@/src/i18n/navigation";
+import { useCanUserEditArticle } from "@/src/lib/utilities/article";
+import { canUserEditArticle } from "@/src/lib/server-actions/article";
 
 const Article = function ({ model }) {
 	const { article, permalink, options } = model.modelView;
@@ -30,15 +32,8 @@ const Article = function ({ model }) {
 		url: permalink,
 	};
 	const encodedShareData = getEncodedShareData(shareData);
-	const userInformation = useUserInformation();
-	const canEdit =
-		!options?.editingDisabled &&
-		((author.email && userInformation !== "pending"
-			? userInformation?.email === author.email
-			: false) ||
-			(userInformation !== "pending" &&
-				userInformation?.roles.includes("admin"))); //TODO: Tidy up
 	const path = usePathname();
+	const canUserEdit = useCanUserEditArticle(uri);
 
 	return (
 		<main className="article bg-[#FEF8F3] text-black">
@@ -57,7 +52,7 @@ const Article = function ({ model }) {
 						</ViewTransition>
 						<div className="byline flex flex-col gap-1">
 							<div className="md:max-[50vw] -ml-8 flex w-fit max-w-[80vw] min-w-3/4 items-center gap-2 bg-gray-900/80 p-2 pr-4 pl-8 text-white md:-ml-12 md:pl-12">
-								<span className="author text-base md:text-xl">{`${t("byline")} ${author.name}`}</span>
+								<span className="author text-base md:text-xl">{`${t("byline")} ${typeof author === "string" ? author : author.name}`}</span>
 							</div>
 							<span className="date text-lg">
 								{`${getNewsArticleDateString(dateCreated)}${
@@ -136,7 +131,7 @@ const Article = function ({ model }) {
 							/>
 						</>
 					)}
-					{canEdit && (
+					{options?.isEditingEnabled && canUserEdit && (
 						<ArticleInteractiveLink
 							model={newReadonlyModel({
 								title: t("editArticle"),
