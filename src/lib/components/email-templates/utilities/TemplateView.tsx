@@ -1,10 +1,10 @@
 import { TemplateViewModel } from "@/src/lib/models/template-view";
 import { SOCIALS } from "@/src/lib/utilities/constants";
+import { snippetify } from "@/src/lib/utilities/miscellaneous";
 import { ModeledComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import { Body, Container, Font, Head, Html, Preview } from "react-email";
+import { Body, Container, Head, Html, Preview } from "react-email";
 import EmailFooter from "./EmailFooter";
-import { snippetify } from "@/src/lib/utilities/miscellaneous";
 
 const TemplateView = function ({ model, children }) {
 	const { variant, language, previewText } = model.modelView;

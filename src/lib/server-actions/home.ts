@@ -1,6 +1,6 @@
 "use server";
 
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import z from "zod";
 import { ArticlePreview } from "../models/article-card";
 import {
@@ -21,6 +21,10 @@ import {
 	GalleryImage,
 	Language,
 } from "../utilities/types";
+import { after } from "next/server";
+import NewSubscriber from "../components/email-templates/new-subscriber/NewSubscriber";
+import { newReadonlyModel } from "@mvc-react/mvc";
+import { BASE_URL, SENDER_EMAIL } from "../utilities/server-constants";
 
 export type LatestArticles = {
 	featuredArticle: ArticlePreview;
@@ -72,12 +76,28 @@ export async function getHomeSnapshot(
 export async function subscribeToMailingList(email: string) {
 	const validatedEmail = z.email().trim().parse(email);
 	const locale = await getLocale();
-	const { error } = await resend.contacts.create({
+	const { data, error: subError } = await resend.contacts.create({
 		email: validatedEmail,
 		unsubscribed: false,
 		properties: {
 			preferredLang: locale,
 		},
 	});
-	if (error) throw new Error(JSON.stringify(error));
+	if (subError) throw new Error(JSON.stringify(subError));
+	after(async () => {
+		const t = await getTranslations({ locale });
+		const { error: emailError } = await resend.emails.send({
+			from: `${t("miscellaneous.churchName")} <${SENDER_EMAIL}>`,
+			to: [validatedEmail],
+			subject: t("newSubscriber.title"),
+			react: NewSubscriber({
+				model: newReadonlyModel({
+					language: locale,
+					unsubLink: "{{{RESEND_UNSUBSCRIBE_URL}}}",
+					prefsLink: `${BASE_URL}/emailPrefs?id=${data.id}`,
+				}),
+			}),
+		});
+		if (emailError) console.error(JSON.stringify(emailError));
+	});
 }
