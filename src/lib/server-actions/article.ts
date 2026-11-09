@@ -208,6 +208,7 @@ export async function assignArticle(
 			const { data, error: contactError } = await resend.contacts.get({
 				email: assigneeEmail,
 			});
+			console.log(data);
 			const language = isValidLocale(data?.properties.preferredLang)
 				? data.properties.preferredLang
 				: "en";
