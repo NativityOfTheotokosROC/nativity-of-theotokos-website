@@ -209,7 +209,7 @@ export async function assignArticle(
 				email: assigneeEmail,
 			});
 			console.log(data);
-			const language = isValidLocale(data?.properties.preferredLang)
+			const language = isValidLocale(data?.properties.preferredLang.value)
 				? data.properties.preferredLang.value
 				: "en";
 			const t = await getTranslations({ locale: language });
