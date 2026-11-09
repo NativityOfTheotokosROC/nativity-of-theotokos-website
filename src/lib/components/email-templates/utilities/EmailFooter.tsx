@@ -33,7 +33,7 @@ const EmailFooter = async function ({ model }) {
 								<a href={variant.unsubLink}>{text}</a>
 							),
 							pref: text => (
-								<a href={variant.unsubLink}>{text}</a>
+								<a href={variant.prefsLink}>{text}</a>
 							),
 						})}
 					</Text>

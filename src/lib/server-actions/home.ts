@@ -76,6 +76,20 @@ export async function getHomeSnapshot(
 export async function subscribeToMailingList(email: string) {
 	const validatedEmail = z.email().trim().parse(email);
 	const locale = await getLocale();
+	const { data: existingData } = await resend.contacts.get({
+		email: validatedEmail,
+	});
+	if (existingData?.unsubscribed === false) {
+		const { error: subError } = await resend.contacts.update({
+			id: existingData.id,
+			properties: {
+				preferredLang: locale,
+			},
+		});
+		if (subError) throw new Error(JSON.stringify(subError));
+		return;
+	}
+
 	const { data, error: subError } = await resend.contacts.create({
 		email: validatedEmail,
 		unsubscribed: false,
@@ -86,6 +100,7 @@ export async function subscribeToMailingList(email: string) {
 	if (subError) throw new Error(JSON.stringify(subError));
 	after(async () => {
 		const t = await getTranslations({ locale });
+		const unsubLink = `${BASE_URL}/emailUnsubscribe?id=${data.id}`;
 		const { error: emailError } = await resend.emails.send({
 			from: `${t("miscellaneous.churchName")} <${SENDER_EMAIL}>`,
 			to: [validatedEmail],
@@ -93,10 +108,14 @@ export async function subscribeToMailingList(email: string) {
 			react: NewSubscriber({
 				model: newReadonlyModel({
 					language: locale,
-					unsubLink: "{{{RESEND_UNSUBSCRIBE_URL}}}",
+					unsubLink,
 					prefsLink: `${BASE_URL}/emailPrefs?id=${data.id}`,
 				}),
 			}),
+			headers: {
+				"List-Unsubscribe": unsubLink,
+				"List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+			},
 		});
 		if (emailError) console.error(JSON.stringify(emailError));
 	});
