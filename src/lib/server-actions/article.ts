@@ -210,7 +210,7 @@ export async function assignArticle(
 			});
 			console.log(data);
 			const language = isValidLocale(data?.properties.preferredLang)
-				? data.properties.preferredLang
+				? data.properties.preferredLang.value
 				: "en";
 			const t = await getTranslations({ locale: language });
 			const { error: sendingError } = await resend.emails.send({
