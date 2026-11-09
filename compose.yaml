@@ -22,7 +22,7 @@ services:
                 - yandex_client_secret
                 - resend_api_key
                 - mailing_address
-                - fallback_sender_email
+                - sender_email
         ports:
             - ${HOST_PORT:-3000}:${CONTAINER_PORT:-3000}
         env_file:
@@ -61,5 +61,5 @@ secrets:
         environment: RESEND_API_KEY
     mailing_address:
         environment: NEXT_PUBLIC_MAILING_ADDRESS
-    fallback_sender_email:
-        environment: FALLBACK_SENDER_EMAIL
+    sender_email:
+        environment: SENDER_EMAIL

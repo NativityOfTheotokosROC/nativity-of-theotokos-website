@@ -55,7 +55,7 @@ export const RESEND_API_KEY = z
 	.string()
 	.nonempty()
 	.parse(process.env.RESEND_API_KEY);
-export const FALLBACK_SENDER_EMAIL = z
+export const SENDER_EMAIL = z
 	.string()
 	.nonempty()
-	.parse(process.env.FALLBACK_SENDER_EMAIL);
+	.parse(process.env.SENDER_EMAIL);

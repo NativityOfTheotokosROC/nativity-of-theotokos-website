@@ -32,7 +32,7 @@ RUN --mount=type=secret,id=base_url,env=BASE_URL \
     --mount=type=secret,id=yandex_client_secret,env=YANDEX_CLIENT_SECRET \
     --mount=type=secret,id=resend_api_key,env=RESEND_API_KEY \
     --mount=type=secret,id=mailing_address,env=NEXT_PUBLIC_MAILING_ADDRESS \
-    --mount=type=secret,id=fallback_sender_email,env=FALLBACK_SENDER_EMAIL \
+    --mount=type=secret,id=sender_email,env=SENDER_EMAIL \
     if [ -f package-lock.json ]; then \
         npm run build; \
     else \

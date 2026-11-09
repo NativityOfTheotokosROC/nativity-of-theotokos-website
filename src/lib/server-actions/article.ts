@@ -28,7 +28,7 @@ import {
 	removeMarkup,
 	snippetify,
 } from "../utilities/miscellaneous";
-import { BASE_URL, FALLBACK_SENDER_EMAIL } from "../utilities/server-constants";
+import { BASE_URL, SENDER_EMAIL } from "../utilities/server-constants";
 import {
 	getArticleAuthorSchema,
 	getArticleSchema,
@@ -45,6 +45,7 @@ import resend from "../third-party/resend";
 import AuthorInvite from "../components/email-templates/author-invite/AuthorInvite";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { getUserInformation } from "./user";
+import { isValidLocale } from "../utilities/internationalization";
 
 export async function assignArticle(
 	email: string,
@@ -204,9 +205,15 @@ export async function assignArticle(
 	const isSelfAssigned = ticket.assigneeEmail === user.email;
 	if (!isSelfAssigned)
 		after(async () => {
-			const t = await getTranslations({ locale: "en" });
-			const { error } = await resend.emails.send({
-				from: `${t("miscellaneous.churchName")} <${FALLBACK_SENDER_EMAIL}>`,
+			const { data, error: contactError } = await resend.contacts.get({
+				email: assigneeEmail,
+			});
+			const language = isValidLocale(data?.properties.preferredLang)
+				? data.properties.preferredLang
+				: "en";
+			const t = await getTranslations({ locale: language });
+			const { error: sendingError } = await resend.emails.send({
+				from: `${t("miscellaneous.churchName")} <${SENDER_EMAIL}>`,
 				to: [assigneeEmail],
 				subject: t("authorInvite.title"),
 				react: AuthorInvite({
@@ -214,13 +221,16 @@ export async function assignArticle(
 						language,
 						author: {
 							email: assigneeEmail,
-							name: pickTranslation(assigneeName, language),
+							name:
+								data?.first_name ??
+								pickTranslation(assigneeName, language),
 						},
 						articleLink: `${BASE_URL}/write-article`,
 					}),
 				}),
 			});
-			if (error) console.error(JSON.stringify(error));
+			if (sendingError) console.error(JSON.stringify(sendingError));
+			if (contactError) console.error(JSON.stringify(contactError));
 		});
 
 	return {
