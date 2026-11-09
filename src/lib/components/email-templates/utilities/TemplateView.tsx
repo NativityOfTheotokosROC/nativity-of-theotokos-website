@@ -11,16 +11,6 @@ const TemplateView = function ({ model, children }) {
 	return (
 		<Html lang={language}>
 			<Head>
-				<Font
-					fontFamily="Google Sans"
-					fallbackFontFamily="Arial"
-					webFont={{
-						url: "https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap",
-						format: "woff2",
-					}}
-					fontStyle="normal"
-					fontWeight={400}
-				/>
 				<style>{`
 					:root {
 						color-scheme: light dark;

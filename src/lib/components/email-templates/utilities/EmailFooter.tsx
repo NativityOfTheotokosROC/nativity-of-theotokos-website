@@ -37,7 +37,7 @@ const EmailFooter = async function ({ model }) {
 				variant.includeIgnoreMessage && (
 					<Text>{t("ignoreMessage")}</Text>
 				)}
-			<Hr style={{ marginTop: "24px", opacity: 0.65 }} />
+			<Hr style={{ marginTop: "24px", opacity: 0.5 }} />
 			<Text className="copyright">&copy; {t("copyright")}</Text>
 		</Section>
 	);
