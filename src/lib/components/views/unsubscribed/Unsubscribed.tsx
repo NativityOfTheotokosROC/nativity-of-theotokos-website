@@ -18,7 +18,7 @@ const Unsubscribed = function ({ model }) {
 				mainMessage: t("unsubscribe.title"),
 			})}
 		>
-			<span>
+			<span className="text-lg wrap-break-word hyphens-auto">
 				{t.rich("unsubscribe.message", {
 					emailText: email,
 					email: text => (
