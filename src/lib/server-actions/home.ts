@@ -100,7 +100,7 @@ export async function subscribeToMailingList(email: string) {
 	if (subError) throw new Error(JSON.stringify(subError));
 	after(async () => {
 		const t = await getTranslations({ locale });
-		const unsubLink = `${BASE_URL}/emailUnsubscribe?id=${data.id}`;
+		const unsubLink = `${BASE_URL}/unsubscribe?id=${data.id}`;
 		const { error: emailError } = await resend.emails.send({
 			from: `${t("miscellaneous.churchName")} <${SENDER_EMAIL}>`,
 			to: [validatedEmail],
@@ -109,7 +109,7 @@ export async function subscribeToMailingList(email: string) {
 				model: newReadonlyModel({
 					language: locale,
 					unsubLink,
-					prefsLink: `${BASE_URL}/emailPrefs?id=${data.id}`,
+					prefsLink: `${BASE_URL}/email-prefs?id=${data.id}`,
 				}),
 			}),
 			headers: {

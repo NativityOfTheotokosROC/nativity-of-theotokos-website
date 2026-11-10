@@ -1,3 +1,5 @@
+"use client";
+
 import { ModeledComponent } from "@mvc-react/components";
 import { InformationViewModel } from "../../models/information-view";
 import { InitializedModel } from "@mvc-react/mvc";

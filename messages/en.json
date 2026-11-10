@@ -507,5 +507,15 @@
 	"newSubscriber": {
 		"title": "Thank you for subscribing!",
 		"message": "Hello there! Thank you for subscribing to our website. Stay tuned for the latest news articles, updates, digests, announcements and more."
+	},
+	"unsubscribe": {
+		"title": "Unsubscribed",
+		"message": "Your email {email} has been unsubscribed from all notifications and updates."
+	},
+	"emailPrefs": {
+		"title": "Manage Preferences",
+		"preferredLanguage": "Preferred Language",
+		"savePreferences": "Save Preferences",
+		"unsubscribe": "Unsubscribe"
 	}
 }
