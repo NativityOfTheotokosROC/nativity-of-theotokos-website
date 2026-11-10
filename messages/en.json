@@ -510,7 +510,7 @@
 	},
 	"unsubscribe": {
 		"title": "Unsubscribed",
-		"message": "Your email {email} has been unsubscribed from all notifications and updates."
+		"message": "Your email <email>{emailText}</email> has been unsubscribed from all notifications and updates."
 	},
 	"emailPrefs": {
 		"title": "Manage Preferences",

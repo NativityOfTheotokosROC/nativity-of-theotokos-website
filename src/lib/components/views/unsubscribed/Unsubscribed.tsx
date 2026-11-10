@@ -16,9 +16,16 @@ const Unsubscribed = function ({ model }) {
 			model={newReadonlyModel({
 				Graphic: UnsubscribeGraphic,
 				mainMessage: t("unsubscribe.title"),
-				detailedMessage: t("unsubscribe.message", { email }),
 			})}
 		>
+			<span>
+				{t.rich("unsubscribe.message", {
+					emailText: email,
+					email: text => (
+						<span className="font-semibold">{text}</span>
+					),
+				})}
+			</span>
 			<GoHomeButton>{t("miscellaneous.goHome")}</GoHomeButton>
 		</InformationView>
 	);
