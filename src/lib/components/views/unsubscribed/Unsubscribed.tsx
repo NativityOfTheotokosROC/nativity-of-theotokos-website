@@ -1,3 +1,5 @@
+"use client";
+
 import UnsubscribeGraphic from "@/public/assets/graphic-4.svg";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { useTranslations } from "next-intl";
