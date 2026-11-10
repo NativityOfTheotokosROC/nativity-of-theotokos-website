@@ -21,7 +21,10 @@ import "./header.css";
 const Header = function ({ model }) {
 	const { navlinks } = model.modelView;
 	const isLargeScreen = useMediaQuery({ minWidth: 1024 });
-	const isPortrait = useMediaQuery({ orientation: "portrait" });
+	const isPortrait = useMediaQuery(
+		{ orientation: "portrait" },
+		{ orientation: "portrait" },
+	);
 	const navigationDrawer = useNavigationDrawer(navlinks);
 	const t = useTranslations("header");
 	const tNonDescriptive = useTranslations("nonDescriptive");
