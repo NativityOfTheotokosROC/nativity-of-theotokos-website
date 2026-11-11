@@ -17,8 +17,8 @@ const InformationView = function ({ model, children }) {
 
 	return (
 		<PageView model={{ modelView: { topBarColor } }}>
-			<div className="information-view flex h-full min-h-fit grow justify-center text-center">
-				<div className="flex w-md flex-col items-center justify-center gap-6 landscape:h-[70svh]">
+			<div className="information-view flex h-full grow justify-center text-center">
+				<div className="flex min-h-fit w-md flex-col items-center justify-center gap-6 landscape:h-[70svh]">
 					<Graphic className="h-64 min-h-64 w-80 fill-black opacity-90 md:h-48 md:min-h-48" />
 					<span
 						className={`text-4xl font-semibold ${georgia.className}`}
