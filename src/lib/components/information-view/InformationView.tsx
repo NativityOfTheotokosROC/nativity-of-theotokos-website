@@ -19,7 +19,7 @@ const InformationView = function ({ model, children }) {
 		<PageView model={{ modelView: { topBarColor } }}>
 			<div className="information-view flex h-full grow justify-center text-center">
 				<div className="flex w-md flex-col items-center justify-center gap-6 landscape:h-[70svh]">
-					<Graphic className="h-64 w-80 fill-black opacity-90 md:h-48" />
+					<Graphic className="h-64 min-h-64 w-80 fill-black opacity-90 md:h-48 md:min-h-48" />
 					<span
 						className={`text-4xl font-semibold ${georgia.className}`}
 					>
@@ -28,7 +28,7 @@ const InformationView = function ({ model, children }) {
 					{detailedMessage && (
 						<span className="text-lg">{detailedMessage}</span>
 					)}
-					{children} {/*TODO: Make children optional mvc-react */}
+					{children}
 				</div>
 			</div>
 		</PageView>
