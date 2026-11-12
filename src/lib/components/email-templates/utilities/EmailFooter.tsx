@@ -25,19 +25,24 @@ const EmailFooter = async function ({ model }) {
 			}}
 			className="email-footer"
 		>
-			{variant.type === "broadcast" && (
-				<Text>
-					{t.rich("broadcastDisclaimer", {
-						unsub: text => <a href={variant.unsubLink}>{text}</a>,
-						pref: text => <a href={variant.unsubLink}>{text}</a>,
-					})}
-				</Text>
-			)}
+			{variant.type === "broadcast" ||
+				(variant.type === "new_sub" && (
+					<Text>
+						{t.rich("broadcastDisclaimer", {
+							unsub: text => (
+								<a href={variant.unsubLink}>{text}</a>
+							),
+							pref: text => (
+								<a href={variant.prefsLink}>{text}</a>
+							),
+						})}
+					</Text>
+				))}
 			{variant.type === "transactional" &&
 				variant.includeIgnoreMessage && (
 					<Text>{t("ignoreMessage")}</Text>
 				)}
-			<Hr style={{ marginTop: "24px", opacity: 0.65 }} />
+			<Hr style={{ marginTop: "24px", opacity: 0.5 }} />
 			<Text className="copyright">&copy; {t("copyright")}</Text>
 		</Section>
 	);

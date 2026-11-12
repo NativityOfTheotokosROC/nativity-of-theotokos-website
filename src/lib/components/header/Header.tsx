@@ -27,7 +27,7 @@ const Header = function ({ model }) {
 	const tNonDescriptive = useTranslations("nonDescriptive");
 	const locale = useLocale();
 	useUserInformation(); // Prefetch
-	const loginTooltip = useContext(LoginTooltipContext)!;
+	const loginTooltip = useContext(LoginTooltipContext);
 
 	return (
 		<header
@@ -84,7 +84,7 @@ const Header = function ({ model }) {
 			</div>
 			{!isLargeScreen && <NavigationDrawer model={navigationDrawer} />}
 			<hr className="header-border self-center text-gray-500" />
-			<LoginTooltip model={loginTooltip} />
+			{loginTooltip && <LoginTooltip model={loginTooltip} />}
 		</header>
 	);
 } satisfies ModeledVoidComponent<HeaderModel>;

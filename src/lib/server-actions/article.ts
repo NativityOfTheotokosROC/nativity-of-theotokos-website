@@ -208,8 +208,8 @@ export async function assignArticle(
 			const { data, error: contactError } = await resend.contacts.get({
 				email: assigneeEmail,
 			});
-			const language = isValidLocale(data?.properties.preferredLang)
-				? data.properties.preferredLang
+			const language = isValidLocale(data?.properties.preferredLang.value)
+				? data.properties.preferredLang.value
 				: "en";
 			const t = await getTranslations({ locale: language });
 			const { error: sendingError } = await resend.emails.send({

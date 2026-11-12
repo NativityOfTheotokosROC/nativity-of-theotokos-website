@@ -493,15 +493,36 @@
 		"reschedule": "Reschedule",
 		"cancel": "Cancel"
 	},
+	"emailFooter": {
+		"ignoreMessage": "If this email was wrongfully addressed, you may ignore it.",
+		"copyright": "2026 Nativity of the Theotokos Parish. All Rights Reserved.",
+		"broadcastDisclaimer": "You received this email because you subscribed for updates from our website. You may <unsub>Unsubscribe</unsub> or <pref>Manage your Preferences</pref>."
+	},
 	"authorInvite": {
 		"title": "Author an article for us",
 		"alternativeTitle": "You have been invited",
 		"message": "Hello {author}! You have been invited to author an article for our church website. Click the link below to start writing!",
 		"writeArticleButton": "Write Article"
 	},
-	"emailFooter": {
-		"ignoreMessage": "If this email was wrongfully addressed, you may ignore it.",
-		"copyright": "2026 Nativity of the Theotokos Parish. All Rights Reserved.",
-		"broadcastDisclaimer": "You received this email because you subscribed for updates from our website. You may <unsub>Unsubscribe</unsub> or <pref>Manage your Preferences</pref>."
+	"newSubscriber": {
+		"title": "Thank you for subscribing!",
+		"message": "Hello there! Thank you for subscribing to our website. Stay tuned for the latest news articles, updates, digests, announcements and more."
+	},
+	"unsubscribe": {
+		"title": "Unsubscribed",
+		"message": "Your email <email>{emailText}</email> has been unsubscribed from all notifications and updates."
+	},
+	"emailPrefs": {
+		"title": "Manage Preferences",
+		"nameSection": "Name",
+		"firstName": "First Name",
+		"lastName": "Last Name",
+		"preferredLanguage": "Preferred Language",
+		"description": "Preferences for {email}",
+		"savePreferences": "Save Preferences",
+		"savePreferencesSuccess": "Preferences successfully updated",
+		"savePreferencesFailure": "Could not update your preferences. Error: {message}",
+		"subscribe": "Subscribe",
+		"unsubscribe": "Unsubscribe"
 	}
 }

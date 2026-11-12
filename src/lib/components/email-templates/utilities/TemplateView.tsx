@@ -1,26 +1,16 @@
 import { TemplateViewModel } from "@/src/lib/models/template-view";
 import { SOCIALS } from "@/src/lib/utilities/constants";
+import { snippetify } from "@/src/lib/utilities/miscellaneous";
 import { ModeledComponent } from "@mvc-react/components";
 import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import { Body, Container, Font, Head, Html, Preview } from "react-email";
+import { Body, Container, Head, Html, Preview } from "react-email";
 import EmailFooter from "./EmailFooter";
-import { snippetify } from "@/src/lib/utilities/miscellaneous";
 
 const TemplateView = function ({ model, children }) {
 	const { variant, language, previewText } = model.modelView;
 	return (
 		<Html lang={language}>
 			<Head>
-				<Font
-					fontFamily="Google Sans"
-					fallbackFontFamily="Arial"
-					webFont={{
-						url: "https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap",
-						format: "woff2",
-					}}
-					fontStyle="normal"
-					fontWeight={400}
-				/>
 				<style>{`
 					:root {
 						color-scheme: light dark;
