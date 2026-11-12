@@ -8,9 +8,9 @@
 ALTER TABLE "Article"
 RENAME COLUMN "dateCreated" TO "datePublished";
 
-ALTER TABLE "Article";
+ALTER TABLE "Article"
 ALTER COLUMN "datePublished" TYPE TIMESTAMPTZ
-USING "datePublished" AT TIME ZONE 'Africa/Harare'
+USING "datePublished" AT TIME ZONE 'Africa/Harare';
 
 -- CreateTable
 CREATE TABLE "RemovedArticle" (
