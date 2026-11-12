@@ -24,6 +24,7 @@ export async function updatePreferences(
 			Exclude<(typeof customPropertyEntries)[number][1], undefined>,
 		][],
 	);
+	console.log(nonUndefinedProperties);
 	const { error } = await resend.contacts.update({
 		...identifier,
 		unsubscribed: isUnsubscribed,

@@ -56,58 +56,84 @@ const EmailPrefs = function ({ model }) {
 				title: t("title"),
 			})}
 		>
-			<form className="email-prefs-form">
-				<div className="flex flex-col gap-4 md:w-3/4 lg:w-6/10">
-					<span className="uppercase">{t("nameSection")}</span>
-					<div className="flex flex-col gap-3">
-						<input
-							{...register("firstName")}
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.firstName ? "border-red-800" : "border-gray-400"}`}
-							placeholder={`${t("firstName")} (${tMisc("optional")})`}
-							autoCapitalize="words"
-						/>
-						{errors.firstName && (
-							<span className="text-sm text-red-800">
-								{errors.firstName.message}
-							</span>
-						)}
-						<input
-							{...register("lastName")}
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.lastName ? "border-red-800" : "border-gray-400"}`}
-							placeholder={`${t("lastName")} (${tMisc("optional")})`}
-							autoCapitalize="words"
-						/>
-						{errors.lastName && (
-							<span className="text-sm text-red-800">
-								{errors.lastName.message}
-							</span>
-						)}
+			<form
+				className="email-prefs-form"
+				onSubmit={handleSubmit(async form =>
+					interact({
+						type: "UPDATE_PREFS",
+						input: {
+							id,
+							prefs: {
+								...form,
+								isUnsubscribed:
+									form.isUnsubscribed ?? isUnsubscribed,
+								preferredLang:
+									form.preferredLang ?? preferredLang,
+							},
+						},
+					}),
+				)}
+			>
+				<div className="flex flex-col gap-8 md:w-3/4 lg:w-6/10">
+					<div className="flex flex-col gap-4">
+						<span className="uppercase">{t("nameSection")}</span>
+						<div className="flex flex-col gap-3">
+							<input
+								{...register("firstName")}
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.firstName ? "border-red-800" : "border-gray-400"}`}
+								placeholder={`${t("firstName")} (${tMisc("optional")})`}
+								autoCapitalize="words"
+							/>
+							{errors.firstName && (
+								<span className="text-sm text-red-800">
+									{errors.firstName.message}
+								</span>
+							)}
+							<input
+								{...register("lastName")}
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.lastName ? "border-red-800" : "border-gray-400"}`}
+								placeholder={`${t("lastName")} (${tMisc("optional")})`}
+								autoCapitalize="words"
+							/>
+							{errors.lastName && (
+								<span className="text-sm text-red-800">
+									{errors.lastName.message}
+								</span>
+							)}
+						</div>
 					</div>
-					<span className="uppercase">{t("preferredLanguage")}</span>
-					<Controller
-						control={control}
-						name={"preferredLang"}
-						render={({ field: { onChange, value } }) => {
-							const text = languagesMap.get(value!)!;
-							return (
-								<RadioGroup
-									model={newReadonlyModel({
-										selected: { id: value!, text },
-										items: languagesMap
-											.entries()
-											.map(([id, text]) => ({ id, text }))
-											.toArray(),
-										selectedChangedCallback(selected) {
-											onChange(selected.id);
-										},
-										options: {
-											orientation: "vertical",
-										},
-									})}
-								/>
-							);
-						}}
-					/>
+					<div className="flex flex-col gap-4">
+						<span className="uppercase">
+							{t("preferredLanguage")}
+						</span>
+						<Controller
+							control={control}
+							name={"preferredLang"}
+							render={({ field: { onChange, value } }) => {
+								const text = languagesMap.get(value!)!;
+								return (
+									<RadioGroup
+										model={newReadonlyModel({
+											selected: { id: value!, text },
+											items: languagesMap
+												.entries()
+												.map(([id, text]) => ({
+													id,
+													text,
+												}))
+												.toArray(),
+											selectedChangedCallback(selected) {
+												onChange(selected.id);
+											},
+											options: {
+												orientation: "vertical",
+											},
+										})}
+									/>
+								);
+							}}
+						/>
+					</div>
 					<ButtonBar
 						model={newReadonlyModel({
 							arrangement: "start",
@@ -116,11 +142,12 @@ const EmailPrefs = function ({ model }) {
 					>
 						<Button
 							model={newReadonlyModel({
-								action: () =>
+								action: handleSubmit(async () =>
 									interact({
 										type: "TOGGLE_SUBSCRIBE",
 										input: { value: !isUnsubscribed },
 									}),
+								),
 								disabled: isSubmitting,
 							})}
 							className="min-w-[8em]"
