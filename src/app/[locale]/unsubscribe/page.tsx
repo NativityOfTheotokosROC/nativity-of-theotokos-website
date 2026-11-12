@@ -1,5 +1,5 @@
 import Unsubscribed from "@/src/lib/components/views/unsubscribed/Unsubscribed";
-import { unsubscribe } from "@/src/lib/server-actions/email";
+import { toggleSubscribe } from "@/src/lib/server-actions/email";
 import { getContact } from "@/src/lib/server-only/email";
 import { isValidLocale } from "@/src/lib/utilities/internationalization";
 import { newReadonlyModel } from "@mvc-react/mvc";
@@ -25,7 +25,7 @@ export default async function Page({ searchParams }: PageProps<"/[locale]">) {
 
 	const contact = await getContact(id);
 	if (!contact) notFound();
-	await unsubscribe(id);
+	await toggleSubscribe(id, false);
 
 	return <Unsubscribed model={newReadonlyModel({ email: contact.email })} />;
 }

@@ -514,8 +514,15 @@
 	},
 	"emailPrefs": {
 		"title": "Manage Preferences",
+		"nameSection": "Name",
+		"firstName": "First Name",
+		"lastName": "Last Name",
 		"preferredLanguage": "Preferred Language",
+		"description": "Preferences for {email}",
 		"savePreferences": "Save Preferences",
+		"savePreferencesSuccess": "Preferences successfully updated",
+		"savePreferencesFailure": "Could not update your preferences. Error: {message}",
+		"subscribe": "Subscribe",
 		"unsubscribe": "Unsubscribe"
 	}
 }

@@ -513,8 +513,15 @@
 	},
 	"emailPrefs": {
 		"title": "Настройки подписки",
+		"nameSection": "Личные данные",
+		"firstName": "Имя",
+		"lastName": "Фамилия",
 		"preferredLanguage": "Предпочитаемый язык",
+		"description": "Настройки подписки для адреса {email}",
 		"savePreferences": "Сохранить настройки",
+		"savePreferencesSuccess": "Настройки успешно обновлены",
+		"savePreferencesFailure": "Не удалось обновить настройки. Ошибка: {message}",
+		"subscribe": "Подписаться",
 		"unsubscribe": "Отписаться"
 	}
 }
