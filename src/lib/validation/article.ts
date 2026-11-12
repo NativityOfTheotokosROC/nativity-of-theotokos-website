@@ -149,6 +149,7 @@ export function getArticleSchema(t?: Translator) {
 			}),
 		}),
 		isArticleFeatured: z.boolean(),
+		publishingDate: z.iso.datetime().optional(),
 	});
 }
 

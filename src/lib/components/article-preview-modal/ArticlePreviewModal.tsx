@@ -16,12 +16,12 @@ import {
 
 const ArticlePreviewModal = function ({ model }) {
 	const { modelView, interact } = model;
-	const { isOpen, title, authorName, body, dateCreated, snippet, image } = {
+	const { isOpen, title, authorName, body, datePublished, snippet, image } = {
 		isOpen: modelView?.isOpen,
 		title: modelView?.title,
 		authorName: modelView?.authorName,
 		body: modelView?.body,
-		dateCreated: modelView?.dateCreated,
+		datePublished: modelView?.datePublished,
 		snippet: modelView?.snippet,
 		image: modelView?.image,
 	} satisfies Partial<ArticlePreviewModalModelView>;
@@ -49,7 +49,7 @@ const ArticlePreviewModal = function ({ model }) {
 								author: {
 									name: authorName?.english ?? "",
 								},
-								dateCreated: dateCreated ?? new Date(),
+								datePublished: datePublished ?? new Date(),
 								snippet: snippet?.english ?? "",
 								articleImage: (image && {
 									...image,

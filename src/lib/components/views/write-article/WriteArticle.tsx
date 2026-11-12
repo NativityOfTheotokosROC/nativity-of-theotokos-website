@@ -130,7 +130,8 @@ const WriteArticle = function ({ model }) {
 									title: form.title,
 									body: form.body,
 									authorName: previewAuthor,
-									dateCreated: currentArticle?.dateCreated,
+									datePublished:
+										currentArticle?.datePublished,
 									snippet: currentArticle?.snippet,
 									image: currentArticle?.articleImage,
 								},

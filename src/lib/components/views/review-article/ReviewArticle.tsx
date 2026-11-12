@@ -156,8 +156,8 @@ const ReviewArticle = function ({ model }) {
 								title: form.title,
 								body: form.body,
 								authorName: form.authorName,
-								dateCreated:
-									currentArticle?.dateCreated ?? new Date(),
+								datePublished:
+									currentArticle?.datePublished ?? new Date(),
 								snippet: form.snippet,
 								image: form.image,
 							},

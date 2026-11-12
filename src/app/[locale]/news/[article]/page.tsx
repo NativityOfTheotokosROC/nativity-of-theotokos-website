@@ -27,13 +27,13 @@ export async function generateStaticParams() {
 }
 
 function articleJsonLd(article: ArticleMetadata) {
-	const { title, author, articleImage, dateCreated, snippet } = article;
+	const { title, author, articleImage, datePublished, snippet } = article;
 	return {
 		"@context": "https://schema.org",
 		"@type": "BlogPosting",
 		headline: title,
 		description: snippet,
-		datePublished: dateCreated.toISOString(),
+		datePublished: datePublished.toISOString(),
 		author: {
 			"@type": "Person",
 			name: author,

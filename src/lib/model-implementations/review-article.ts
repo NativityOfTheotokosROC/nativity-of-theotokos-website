@@ -16,7 +16,7 @@ import {
 import { ToastNotification } from "../models/toast";
 import { ArticleDraft } from "../models/write-article";
 import {
-	publishExistingArticle,
+	updateExistingArticle,
 	publishNewArticle,
 } from "../server-actions/article";
 import { Translation } from "../utilities/types";
@@ -88,7 +88,7 @@ export function useReviewArticle(
 					});
 					try {
 						if (currentArticle) {
-							await publishExistingArticle({
+							await updateExistingArticle({
 								articleId: currentArticle.uri,
 								incomingArticle: interaction.input.article,
 								ticketId,

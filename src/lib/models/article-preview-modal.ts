@@ -10,7 +10,7 @@ export type ArticlePreviewModalModelView = {
 	title: Translation;
 	body: Translation;
 	authorName: Translation;
-	dateCreated?: Date;
+	datePublished?: Date;
 	image?: {
 		[K in keyof Article["articleImage"]]: K extends "caption"
 			? Translation

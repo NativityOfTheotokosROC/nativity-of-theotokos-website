@@ -39,16 +39,28 @@ export async function getLatestArticles(
 	const featuredArticleRecord =
 		await database.featuredArticle.findFirstOrThrow({
 			include: { article: { include: _FULL_ARTICLE_INCLUDES } },
+			where: {
+				article: {
+					removedArticle: { is: null },
+					datePublished: {
+						lte: new Date(),
+					},
+				},
+			},
 		});
 	const otherArticleRecords = await database.article.findMany({
 		where: {
 			featuredArticle: {
 				is: null,
 			},
+			removedArticle: { is: null },
+			datePublished: {
+				lte: new Date(),
+			},
 		},
 		include: _FULL_ARTICLE_INCLUDES,
 		orderBy: {
-			dateCreated: "desc",
+			datePublished: "desc",
 		},
 		take: otherArticlesCount,
 	});

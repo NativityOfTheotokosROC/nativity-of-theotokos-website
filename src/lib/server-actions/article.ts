@@ -46,6 +46,8 @@ import AuthorInvite from "../components/email-templates/author-invite/AuthorInvi
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { getUserInformation } from "./user";
 import { isValidLocale } from "../utilities/internationalization";
+import { toZonedTime } from "date-fns-tz";
+import { getNativeTimeZone } from "../utilities/date-time";
 
 export async function assignArticle(
 	email: string,
@@ -382,7 +384,7 @@ export async function makeArticleEdit(articleId: string) {
 			author: { name: article.author.name },
 			body: article.body,
 			snippet: article.snippet,
-			dateCreated: article.dateCreated,
+			datePublished: article.datePublished,
 			uri: article.link,
 			articleImage: {
 				url: article.image.link,
@@ -466,7 +468,8 @@ export async function getLatestUnsubmittedArticle() {
 						},
 						body: unsubmittedDraftTicket.article.body,
 						snippet: unsubmittedDraftTicket.article.snippet,
-						dateCreated: unsubmittedDraftTicket.article.dateCreated,
+						datePublished:
+							unsubmittedDraftTicket.article.datePublished,
 						uri: unsubmittedDraftTicket.article.link,
 						articleImage: {
 							url: unsubmittedDraftTicket.article.image.link,
@@ -510,7 +513,7 @@ export async function getLatestUnsubmittedArticle() {
 				author: { name: unusedTicket.article.author.name },
 				body: unusedTicket.article.body,
 				snippet: unusedTicket.article.snippet,
-				dateCreated: unusedTicket.article.dateCreated,
+				datePublished: unusedTicket.article.datePublished,
 				uri: unusedTicket.article.link,
 				articleImage: {
 					url: unusedTicket.article.image.link,
@@ -587,7 +590,7 @@ export async function getPendingArticleSubmission() {
 				author: { name: ticketData.article.author.name },
 				body: ticketData.article.body,
 				snippet: ticketData.article.snippet,
-				dateCreated: ticketData.article.dateCreated,
+				datePublished: ticketData.article.datePublished,
 				uri: ticketData.article.link,
 				articleImage: {
 					url: ticketData.article.image.link,
@@ -636,8 +639,15 @@ export async function publishNewArticle({
 	)
 		forbidden();
 
-	const { link, title, body, snippet, image, isArticleFeatured } =
-		await _validateNewArticle(incomingArticle, locale);
+	const {
+		link,
+		title,
+		body,
+		snippet,
+		image,
+		isArticleFeatured,
+		publishingDate,
+	} = await _validateNewArticle(incomingArticle, locale);
 
 	const newArticle = database.$transaction(async transaction => {
 		const result = await transaction.article.create({
@@ -705,6 +715,9 @@ export async function publishNewArticle({
 						where: { link: image.url },
 					},
 				},
+				datePublished: publishingDate
+					? toZonedTime(publishingDate, getNativeTimeZone())
+					: undefined,
 			},
 		});
 		if (isArticleFeatured) {
@@ -720,7 +733,7 @@ export async function publishNewArticle({
 	return newArticle;
 }
 
-export async function publishExistingArticle({
+export async function updateExistingArticle({
 	articleId,
 	incomingArticle,
 	ticketId,
@@ -759,8 +772,16 @@ export async function publishExistingArticle({
 			forbidden();
 	}
 
-	const { title, body, snippet, authorName, image, isArticleFeatured } =
-		await _validateNewArticle(incomingArticle, locale);
+	const {
+		title,
+		body,
+		snippet,
+		authorName,
+		image,
+		isArticleFeatured,
+		publishingDate,
+	} = await _validateNewArticle(incomingArticle, locale);
+	const currentDate = new Date();
 
 	const newArticle = await database.$transaction(async transaction => {
 		const result = await transaction.article.update({
@@ -859,20 +880,30 @@ export async function publishExistingArticle({
 						},
 					},
 				},
-				dateUpdated: hasArticleChanged(
-					{
-						title: existingArticle.title,
-						author: { name: existingArticle.author.name },
-						body: existingArticle.body,
-						articleImage: {
-							url: existingArticle.image.link,
-							caption: existingArticle.image.caption,
+				dateUpdated:
+					existingArticle.datePublished.getTime() <
+						currentDate.getTime() &&
+					hasArticleChanged(
+						{
+							title: existingArticle.title,
+							author: { name: existingArticle.author.name },
+							body: existingArticle.body,
+							articleImage: {
+								url: existingArticle.image.link,
+								caption: existingArticle.image.caption,
+							},
 						},
-					},
-					incomingArticle,
-				)
-					? new Date()
-					: undefined,
+						incomingArticle,
+					)
+						? currentDate
+						: undefined,
+				datePublished:
+					existingArticle.datePublished.getTime() >
+					currentDate.getTime()
+						? publishingDate
+							? toZonedTime(publishingDate, getNativeTimeZone())
+							: undefined
+						: undefined,
 			},
 			where: {
 				link: articleId, // TODO: Change articleId to articleLink in future to avoid confusion

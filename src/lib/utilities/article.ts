@@ -8,7 +8,11 @@ import { canUserEditArticle } from "../server-actions/article";
 export function hasArticleChanged(
 	existingArticle: Omit<
 		ArticleWithTranslations,
-		"dateUpdated" | "dateCreated" | "uri" | "isArticleFeatured" | "snippet"
+		| "dateUpdated"
+		| "datePublished"
+		| "uri"
+		| "isArticleFeatured"
+		| "snippet"
 	>,
 	newArticle: NewArticle,
 ) {

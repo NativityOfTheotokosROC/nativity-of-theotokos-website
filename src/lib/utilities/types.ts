@@ -168,7 +168,7 @@ export type Article = {
 	title: string;
 	author: ArticleAuthor | string;
 	body: string;
-	dateCreated: Date;
+	datePublished: Date;
 	dateUpdated?: Date;
 	snippet: string;
 	articleImage: RenameProperties<

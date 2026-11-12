@@ -116,16 +116,22 @@ model Article {
   snippet         Translation      @relation("ArticleSnippetTranslation", fields: [snippetTranslationId], references: [id])
   author          ArticleAuthor    @relation(fields: [authorId], references: [id])
   image           ArticleImage     @relation(fields: [imageId], references: [id])
-  dateCreated     DateTime         @default(now())
+  datePublished   DateTime         @default(now()) @db.Timestamptz
   dateUpdated     DateTime?
+  articleTickets  ArticleTicket[]
   featuredArticle FeaturedArticle?
+  removedArticle  RemovedArticle?
 
   titleTranslationId   Int
   bodyTranslationId    Int
   snippetTranslationId Int
   authorId             Int
   imageId              Int
-  articleTickets       ArticleTicket[]
+}
+
+model RemovedArticle {
+  article   Article @relation(fields: [articleId], references: [id])
+  articleId Int     @id
 }
 
 model ArticleAuthor {

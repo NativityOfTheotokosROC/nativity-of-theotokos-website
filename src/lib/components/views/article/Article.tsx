@@ -21,8 +21,15 @@ import { useCanUserEditArticle } from "@/src/lib/utilities/article";
 
 const Article = function ({ model }) {
 	const { article, permalink, options } = model.modelView;
-	const { title, author, articleImage, dateCreated, dateUpdated, body, uri } =
-		article;
+	const {
+		title,
+		author,
+		articleImage,
+		datePublished: datePublished,
+		dateUpdated,
+		body,
+		uri,
+	} = article;
 	const { url: imageUrl, caption, placeholder } = articleImage;
 	const t = useTranslations("news");
 	const tCaptions = useTranslations("imageCaptions");
@@ -54,7 +61,7 @@ const Article = function ({ model }) {
 								<span className="author text-base md:text-xl">{`${t("byline")} ${typeof author === "string" ? author : author.name}`}</span>
 							</div>
 							<span className="date text-lg">
-								{`${getNewsArticleDateString(dateCreated)}${
+								{`${getNewsArticleDateString(datePublished)}${
 									dateUpdated
 										? ` (${t("articleUpdated")}: ${getNewsArticleDateString(dateUpdated)})`
 										: ""

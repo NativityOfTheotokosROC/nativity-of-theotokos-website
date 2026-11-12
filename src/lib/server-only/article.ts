@@ -52,7 +52,7 @@ export async function getArticle(articleId: string, language: Language) {
 			uri: articleId,
 			title,
 			author,
-			dateCreated: article.dateCreated,
+			datePublished: article.datePublished,
 			dateUpdated: article.dateUpdated ?? undefined,
 			body,
 			snippet,
@@ -85,7 +85,7 @@ export async function getArticleWithTranslations(articleId: string) {
 			author,
 			body,
 			snippet,
-			dateCreated,
+			datePublished,
 			dateUpdated,
 			image,
 			featuredArticle,
@@ -105,7 +105,7 @@ export async function getArticleWithTranslations(articleId: string) {
 			uri: articleId,
 			title,
 			author,
-			dateCreated,
+			datePublished,
 			dateUpdated: dateUpdated ?? undefined,
 			body,
 			snippet,
@@ -145,7 +145,7 @@ export async function getAllArticles(language: Language) {
 					snippet,
 					link,
 					image,
-					dateCreated,
+					datePublished,
 					dateUpdated,
 					featuredArticle,
 				} = record;
@@ -158,7 +158,7 @@ export async function getAllArticles(language: Language) {
 							email: author.email ?? undefined,
 						},
 						body: body.russian ?? body.english,
-						dateCreated,
+						datePublished: datePublished,
 						dateUpdated: dateUpdated ?? undefined,
 						snippet: snippet.russian ?? snippet.english,
 						articleImage: {
@@ -176,7 +176,7 @@ export async function getAllArticles(language: Language) {
 						email: author.email ?? undefined,
 					},
 					body: body.english,
-					dateCreated,
+					datePublished: datePublished,
 					dateUpdated: dateUpdated ?? undefined,
 					snippet: snippet.english,
 					articleImage: {
@@ -211,7 +211,7 @@ export async function getArticleMetadata(
 			title,
 			author,
 			snippet,
-			dateCreated: article.dateCreated,
+			datePublished: article.datePublished,
 			dateUpdated: article.dateUpdated ?? undefined,
 			articleImage: {
 				url: article.image.link,
@@ -224,7 +224,7 @@ export async function getArticleMetadata(
 			| "author"
 			| "snippet"
 			| "articleImage"
-			| "dateCreated"
+			| "datePublished"
 			| "dateUpdated"
 		>;
 	} catch (error) {
