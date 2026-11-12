@@ -43,8 +43,8 @@ const EmailPrefs = function ({ model }) {
 	} = useForm({
 		resolver: zodResolver(emailPrefsSchema),
 		defaultValues: {
-			isUnsubscribed: isUnsubscribed ?? false,
-			preferredLang: preferredLang ?? locale,
+			isUnsubscribed,
+			preferredLang,
 			firstName: firstName ?? "",
 			lastName: lastName ?? "",
 		},
@@ -145,7 +145,7 @@ const EmailPrefs = function ({ model }) {
 								action: handleSubmit(async () =>
 									interact({
 										type: "TOGGLE_SUBSCRIBE",
-										input: { value: !isUnsubscribed },
+										input: { value: isUnsubscribed }, // A bit mind-bending but we good
 									}),
 								),
 								disabled: isSubmitting,
