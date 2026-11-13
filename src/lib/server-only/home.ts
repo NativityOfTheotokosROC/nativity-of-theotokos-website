@@ -8,7 +8,7 @@ import database from "../third-party/prisma";
 import { isRemotePath, pickTranslation } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
 import { ArticleAuthor, GalleryImage, Language } from "../utilities/types";
-import { _FULL_ARTICLE_INCLUDES } from "./article";
+import { _FULL_ARTICLE_INCLUDES, getFeaturedArticle } from "./article";
 import { getGalleryImages } from "./gallery";
 
 export async function getDailyReadings(currentDate: Date, language: Language) {
@@ -36,18 +36,9 @@ export async function getLatestArticles(
 	"use cache: remote";
 	cacheTag("latest-articles");
 
-	const featuredArticleRecord =
-		await database.featuredArticle.findFirstOrThrow({
-			include: { article: { include: _FULL_ARTICLE_INCLUDES } },
-			where: {
-				article: {
-					removedArticle: { is: null },
-					datePublished: {
-						lte: new Date(),
-					},
-				},
-			},
-		});
+	const currentDate = new Date();
+	const featuredArticle = await getFeaturedArticle(language);
+	if (!featuredArticle) throw new Error("Featured article not found");
 	const otherArticleRecords = await database.article.findMany({
 		where: {
 			featuredArticle: {
@@ -55,7 +46,7 @@ export async function getLatestArticles(
 			},
 			removedArticle: { is: null },
 			datePublished: {
-				lte: new Date(),
+				lte: currentDate,
 			},
 		},
 		include: _FULL_ARTICLE_INCLUDES,
@@ -64,55 +55,9 @@ export async function getLatestArticles(
 		},
 		take: otherArticlesCount,
 	});
-	const allArticleRecords = [
-		featuredArticleRecord.article,
-		...otherArticleRecords,
-	];
-	const unplaceholderedArticles = allArticleRecords.filter(
-		article => article.image.placeholder === null,
-	);
-	const newPlaceholders = new Map<number, ImagePlaceholder>();
 
-	if (unplaceholderedArticles.length) {
-		for (let i = 0; i < unplaceholderedArticles.length; i++) {
-			const imageLink = unplaceholderedArticles[i].image.link;
-			const imageURL = isRemotePath(imageLink)
-				? imageLink
-				: `${BASE_URL}${imageLink}`;
-			newPlaceholders.set(
-				unplaceholderedArticles[i].id,
-				await getPlaceholder(imageURL),
-			);
-		}
-	}
-
-	const featuredArticle = featuredArticleRecord.article;
-	const title = pickTranslation(featuredArticle.title, language);
-	const author = {
-		name: pickTranslation(featuredArticle.author.name, language),
-		email: featuredArticle.author.email ?? undefined,
-	} satisfies ArticleAuthor;
-	const snippet = pickTranslation(featuredArticle.snippet, language);
 	return {
-		featuredArticle: {
-			...featuredArticleRecord.article,
-			title,
-			author,
-			snippet,
-			uri: featuredArticleRecord.article.link,
-			articleImage: {
-				url: featuredArticleRecord.article.image.link,
-				caption: pickTranslation(
-					featuredArticleRecord.article.image.caption,
-					language,
-				),
-				placeholder:
-					(featuredArticleRecord.article.image.placeholder
-						?.placeholder as ImagePlaceholder) ??
-					newPlaceholders.get(featuredArticleRecord.article.id),
-			},
-			isArticleFeatured: true,
-		},
+		featuredArticle,
 		otherNewsArticles: otherArticleRecords.map(article => {
 			const title = pickTranslation(article.title, language);
 			const author = {
@@ -129,10 +74,8 @@ export async function getLatestArticles(
 				articleImage: {
 					url: article.image.link,
 					caption: pickTranslation(article.image.caption, language),
-					placeholder:
-						(article.image.placeholder
-							?.placeholder as ImagePlaceholder) ??
-						newPlaceholders.get(article.id),
+					placeholder: article.image.placeholder
+						.placeholder as ImagePlaceholder,
 				},
 				isArticleFeatured: article.featuredArticle !== null,
 			};

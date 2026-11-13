@@ -144,18 +144,19 @@ model ArticleAuthor {
 }
 
 model ArticleImage {
-  id                   Int               @id @default(autoincrement())
-  link                 String            @unique
-  caption              Translation       @relation(fields: [captionTranslationId], references: [id])
-  placeholder          ImagePlaceholder? @relation(fields: [placeholderId], references: [id])
+  id                   Int              @id @default(autoincrement())
+  link                 String           @unique
+  caption              Translation      @relation(fields: [captionTranslationId], references: [id])
+  placeholder          ImagePlaceholder @relation(fields: [placeholderId], references: [id])
   captionTranslationId Int
-  placeholderId        Int?
+  placeholderId        Int
   articles             Article[]
 }
 
 model FeaturedArticle {
-  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  articleId Int     @id
+  article      Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId    Int      @id
+  dateFeatured DateTime @default(now())
 }
 
 model ArticleTicket {

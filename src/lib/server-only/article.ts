@@ -238,6 +238,56 @@ export async function getArticleMetadata(
 	}
 }
 
+export async function getFeaturedArticle(language: Language) {
+	"use cache: remote";
+	cacheTag("bulletin_articles");
+
+	const currentDate = new Date();
+
+	const featuredArticle = await database.featuredArticle.findFirst({
+		include: { article: { include: _FULL_ARTICLE_INCLUDES } },
+		where: {
+			dateFeatured: { lte: currentDate },
+			article: {
+				removedArticle: { is: null },
+			},
+		},
+		orderBy: {
+			dateFeatured: "desc",
+		},
+	});
+	if (!featuredArticle) return null;
+	const {
+		title,
+		body,
+		author,
+		snippet,
+		datePublished,
+		dateUpdated,
+		link,
+		image,
+	} = featuredArticle.article;
+
+	return {
+		uri: link,
+		title: pickTranslation(title, language),
+		author: {
+			name: pickTranslation(author.name, language),
+			email: author.email,
+		},
+		body: pickTranslation(body, language),
+		datePublished,
+		dateUpdated: dateUpdated ?? undefined,
+		snippet: pickTranslation(snippet, language),
+		articleImage: {
+			url: image.link,
+			caption: pickTranslation(image.caption, language),
+			placeholder: image.placeholder.placeholder as ImagePlaceholder,
+		},
+		isArticleFeatured: true as const,
+	} satisfies Article & { isArticleFeatured: true };
+}
+
 export async function getArticleAuthors() {
 	// "use cache: remote";
 	// cacheTag(`article_authors`);

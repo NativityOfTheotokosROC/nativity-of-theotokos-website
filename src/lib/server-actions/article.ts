@@ -48,6 +48,7 @@ import { getUserInformation } from "./user";
 import { isValidLocale } from "../utilities/internationalization";
 import { toZonedTime } from "date-fns-tz";
 import { getNativeTimeZone } from "../utilities/date-time";
+import { MAILING_ADDRESS } from "../utilities/constants";
 
 export async function assignArticle(
 	email: string,
@@ -210,22 +211,30 @@ export async function assignArticle(
 			const { data, error: contactError } = await resend.contacts.get({
 				email: assigneeEmail,
 			});
-			const language = isValidLocale(data?.properties.preferredLang.value)
+			const preferredLanguage = isValidLocale(
+				data?.properties.preferredLang.value,
+			)
 				? data.properties.preferredLang.value
 				: "en";
-			const t = await getTranslations({ locale: language });
+			const t = await getTranslations({ locale: preferredLanguage });
 			const { error: sendingError } = await resend.emails.send({
 				from: `${t("miscellaneous.churchName")} <${SENDER_EMAIL}>`,
-				to: [assigneeEmail],
+				to: [
+					`${data?.first_name ?? pickTranslation(assigneeName, preferredLanguage)} <${assigneeEmail}>`,
+				],
+				replyTo: MAILING_ADDRESS,
 				subject: t("authorInvite.title"),
 				react: AuthorInvite({
 					model: newReadonlyModel({
-						language,
+						language: preferredLanguage,
 						author: {
 							email: assigneeEmail,
 							name:
 								data?.first_name ??
-								pickTranslation(assigneeName, language),
+								pickTranslation(
+									assigneeName,
+									preferredLanguage,
+								),
 						},
 						articleLink: `${BASE_URL}/write-article`,
 					}),
@@ -648,6 +657,7 @@ export async function publishNewArticle({
 		isArticleFeatured,
 		publishingDate,
 	} = await _validateNewArticle(incomingArticle, locale);
+	const placeholder = await getPlaceholder(image.url);
 
 	const newArticle = database.$transaction(async transaction => {
 		const result = await transaction.article.create({
@@ -708,6 +718,17 @@ export async function publishNewArticle({
 										englishHash: getMd5Hash(
 											image.caption.english,
 										),
+									},
+								},
+							},
+							placeholder: {
+								connectOrCreate: {
+									create: {
+										imageLink: image.url,
+										placeholder,
+									},
+									where: {
+										imageLink: image.url,
 									},
 								},
 							},
@@ -782,6 +803,7 @@ export async function updateExistingArticle({
 		publishingDate,
 	} = await _validateNewArticle(incomingArticle, locale);
 	const currentDate = new Date();
+	const placeholder = await getPlaceholder(image.url);
 
 	const newArticle = await database.$transaction(async transaction => {
 		const result = await transaction.article.update({
@@ -857,6 +879,17 @@ export async function updateExistingArticle({
 										englishHash: getMd5Hash(
 											image.caption.english,
 										),
+									},
+								},
+							},
+							placeholder: {
+								connectOrCreate: {
+									create: {
+										imageLink: image.url,
+										placeholder,
+									},
+									where: {
+										imageLink: image.url,
 									},
 								},
 							},

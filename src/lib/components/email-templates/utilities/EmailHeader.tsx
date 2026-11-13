@@ -1,10 +1,10 @@
+import Logo from "@/public/assets/full-logo-light.png";
+import { BASE_URL } from "@/src/lib/utilities/server-constants";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
+import { Img, Link, Section } from "react-email";
 import { Language } from "../../../utilities/types";
-import { georgia } from "../../../third-party/fonts";
-import { Column, Container, Img, Link, Row, Section, Text } from "react-email";
-import { BASE_URL } from "@/src/lib/utilities/server-constants";
 
 const EmailHeader = async function ({ model }) {
 	const { language } = model.modelView;
@@ -34,7 +34,7 @@ const EmailHeader = async function ({ model }) {
 						}}
 						className="logo-icon"
 						alt="Logo Icon"
-						src={`${BASE_URL}/assets/full-logo.png`}
+						src={Logo.src}
 						height={32}
 					/>
 				</Section>
