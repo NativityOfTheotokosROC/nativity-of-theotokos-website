@@ -287,7 +287,7 @@
 		"uploadingImage": "Загрузка изображения статьи",
 		"schedulePublish": "Запланировать публикацию",
 		"scheduledPublishMainMessage": "Статья отправлена",
-		"scheduledPublishDetailedMessage": "Статья успешно отправлена и запланирована к публикации на {date}.",
+		"scheduledPublishDetailedMessage": "Статья успешно отправлена и запланирована к публикации на {date} в {time}.",
 		"publishingDateField": "Дата публикации"
 	},
 	"scheduleItem": {

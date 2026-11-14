@@ -16,6 +16,8 @@ import {
 import {
 	getDateTimeString,
 	NATIVE_TIMEZONE,
+	pickDateTranslation,
+	pickTimeTranslation,
 } from "@/src/lib/utilities/date-time";
 import { generateUniqueName } from "@/src/lib/utilities/miscellaneous";
 import { useArticleSchema } from "@/src/lib/validation/article";
@@ -37,6 +39,7 @@ import InformationView from "../../information-view/InformationView";
 import PageView from "../../page-view/PageView";
 import Spinner from "../../spinner/Spinner";
 import { toZonedTime } from "date-fns-tz";
+import { useLocale } from "next-intl";
 
 const ReviewArticle = function ({ model }) {
 	const { modelView, interact } = model;
@@ -44,13 +47,13 @@ const ReviewArticle = function ({ model }) {
 		modelView;
 	const t = useTranslations("reviewArticle");
 	const tMisc = useTranslations("miscellaneous");
+	const locale = useLocale();
 	const currentDate = new Date();
 	const {
 		control,
 		register,
 		handleSubmit,
 		setValue,
-		getValues,
 		watch,
 		formState: { errors, isSubmitting, isDirty },
 	} = useForm({
@@ -102,7 +105,7 @@ const ReviewArticle = function ({ model }) {
 				!(
 					notification?.type === "submitting" ||
 					notification?.type === "submit_success"
-				)
+				) // TODO: Should have its own notifier
 			)
 				await imageProcessor.interact({
 					type: "PROCESS",
@@ -157,11 +160,21 @@ const ReviewArticle = function ({ model }) {
 		return (
 			<InformationView
 				model={newReadonlyModel(
-					getValues("publishingDate")
+					notification.publishingDate
 						? {
 								mainMessage: t("scheduledPublishMainMessage"),
 								detailedMessage: t(
 									"scheduledPublishDetailedMessage",
+									{
+										date: pickDateTranslation(
+											notification.publishingDate,
+											locale,
+										),
+										time: pickTimeTranslation(
+											notification.publishingDate,
+											locale,
+										),
+									},
 								),
 								Graphic: SuccessGraphic,
 							}

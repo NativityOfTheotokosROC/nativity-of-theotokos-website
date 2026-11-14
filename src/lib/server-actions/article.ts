@@ -362,7 +362,7 @@ export async function makeArticleEdit(articleId: string) {
 	if (article.author.email !== user.email)
 		await protect({ roles: ["editor"] });
 
-	const featuredArticlePromise = getFeaturedArticle("en");
+	const featuredArticlePromise = getFeaturedArticle();
 	const ticket = await database.articleTicket.upsert({
 		include: { articleDraft: true },
 		create: {
@@ -438,7 +438,7 @@ export async function getLatestUnsubmittedArticle() {
 	const user = await getUser();
 	if (!user) forbidden();
 
-	const featuredArticlePromise = getFeaturedArticle("en");
+	const featuredArticlePromise = getFeaturedArticle();
 	const unsubmittedDraftTicket = await database.articleTicket.findFirst({
 		orderBy: {
 			articleDraft: { lastSaved: "desc" },
@@ -573,7 +573,7 @@ export async function getPendingArticleSubmission() {
 		},
 	});
 	if (!ticketData) return null;
-	const featuredArticlePromise = getFeaturedArticle("en");
+	const featuredArticlePromise = getFeaturedArticle();
 	if (
 		!ticketData.articleDraft!.pendingArticleSubmission!.editorEmail === null
 	)

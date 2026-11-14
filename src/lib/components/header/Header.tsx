@@ -77,7 +77,7 @@ const Header = function ({ model }) {
 							}}
 							data-tooltip-id={loginTooltip?.modelView.id}
 						>
-							<MenuIcon className="size-8" strokeWidth={1.75} />
+							<MenuIcon className="size-8" strokeWidth={1.5} />
 						</button>
 					)}
 				</div>

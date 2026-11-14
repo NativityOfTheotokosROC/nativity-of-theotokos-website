@@ -1,15 +1,14 @@
-import { cacheLife, cacheTag } from "next/cache";
+import { ImagePlaceholder } from "@grod56/placeholder";
+import { cacheTag } from "next/cache";
 import { notFound } from "next/navigation";
 import database from "../third-party/prisma";
+import { pickTranslation } from "../utilities/miscellaneous";
 import {
 	Article,
 	ArticleAuthor,
 	ArticleAuthorWithTranslations,
 	Language,
 } from "../utilities/types";
-import { ImagePlaceholder, getPlaceholder } from "@grod56/placeholder";
-import { isRemotePath, pickTranslation } from "../utilities/miscellaneous";
-import { BASE_URL } from "../utilities/server-constants";
 
 export const _FULL_ARTICLE_INCLUDES = {
 	author: { include: { name: true } },
@@ -26,19 +25,13 @@ export async function getArticle(articleId: string, language: Language) {
 
 	const locale = language;
 	try {
+		const featuredArticle = getFeaturedArticle(language);
 		const article = await database.article.findUniqueOrThrow({
 			where: { link: articleId },
 			include: _FULL_ARTICLE_INCLUDES,
 		});
-		const baseUrl = BASE_URL;
-
-		const placeholder =
-			(article.image.placeholder?.placeholder as ImagePlaceholder) ??
-			(await getPlaceholder(
-				isRemotePath(article.image.link)
-					? article.image.link
-					: `${baseUrl}${article.image.link}`,
-			));
+		const placeholder = article.image.placeholder
+			.placeholder as ImagePlaceholder;
 		const title = pickTranslation(article.title, locale);
 		const author = {
 			name: pickTranslation(article.author.name, locale),
@@ -61,7 +54,7 @@ export async function getArticle(articleId: string, language: Language) {
 				caption: imageCaption ?? undefined,
 				placeholder,
 			},
-			isArticleFeatured: article.featuredArticle !== null,
+			isArticleFeatured: article.link === (await featuredArticle)?.uri,
 		} satisfies Omit<Article, "url">;
 	} catch (error) {
 		if (
@@ -80,6 +73,7 @@ export async function getArticleWithTranslations(articleId: string) {
 	cacheTag(`article_${articleId}`);
 
 	try {
+		const featuredArticle = getFeaturedArticle();
 		const {
 			title,
 			author,
@@ -88,19 +82,11 @@ export async function getArticleWithTranslations(articleId: string) {
 			datePublished,
 			dateUpdated,
 			image,
-			featuredArticle,
 		} = await database.article.findUniqueOrThrow({
 			where: { link: articleId },
 			include: _FULL_ARTICLE_INCLUDES,
 		});
-		const baseUrl = BASE_URL;
-		const placeholder =
-			(image.placeholder?.placeholder as ImagePlaceholder) ??
-			(await getPlaceholder(
-				isRemotePath(image.link)
-					? image.link
-					: `${baseUrl}${image.link}`,
-			));
+		const placeholder = image.placeholder.placeholder as ImagePlaceholder;
 		return {
 			uri: articleId,
 			title,
@@ -114,7 +100,7 @@ export async function getArticleWithTranslations(articleId: string) {
 				caption: image.caption ?? undefined,
 				placeholder,
 			},
-			isArticleFeatured: featuredArticle !== null,
+			isArticleFeatured: articleId === (await featuredArticle)?.uri,
 		};
 	} catch (error) {
 		if (
@@ -130,8 +116,8 @@ export async function getArticleWithTranslations(articleId: string) {
 export async function getAllArticles(language: Language) {
 	"use cache: remote";
 	cacheTag("bulletin_articles");
-	cacheLife("hours");
 
+	const featuredArticle = await getFeaturedArticle();
 	const articles = await database.article
 		.findMany({
 			include: _FULL_ARTICLE_INCLUDES,
@@ -147,7 +133,6 @@ export async function getAllArticles(language: Language) {
 					image,
 					datePublished,
 					dateUpdated,
-					featuredArticle,
 				} = record;
 				if (language === "ru")
 					return {
@@ -166,7 +151,7 @@ export async function getAllArticles(language: Language) {
 							caption:
 								image.caption.russian ?? image.caption.english,
 						},
-						isArticleFeatured: featuredArticle !== null,
+						isArticleFeatured: link === featuredArticle?.uri,
 					} satisfies Article;
 				return {
 					uri: link,
@@ -183,7 +168,7 @@ export async function getAllArticles(language: Language) {
 						url: image.link,
 						caption: image.caption.russian ?? image.caption.english,
 					},
-					isArticleFeatured: featuredArticle !== null,
+					isArticleFeatured: link === featuredArticle?.uri,
 				} satisfies Article;
 			}),
 		);
@@ -238,12 +223,11 @@ export async function getArticleMetadata(
 	}
 }
 
-export async function getFeaturedArticle(language: Language) {
+export async function getFeaturedArticle(language: Language = "en") {
 	"use cache: remote";
 	cacheTag("bulletin_articles");
 
 	const currentDate = new Date();
-	console.log(currentDate);
 
 	const featuredArticle = await database.featuredArticle.findFirst({
 		include: { article: { include: _FULL_ARTICLE_INCLUDES } },

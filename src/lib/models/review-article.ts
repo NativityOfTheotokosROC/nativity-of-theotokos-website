@@ -1,12 +1,21 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
-import { Notification, Translation } from "../utilities/types";
-import { NewArticle, NewArticleSubmission } from "../validation/article";
+import {
+	ArticleWithTranslations,
+	Notification,
+	Translation,
+} from "../utilities/types";
+import { NewArticle } from "../validation/article";
 import { ArticleDraft } from "./write-article";
-import { ArticleWithTranslations } from "../utilities/types";
 
 export type ReviewArticleNotification =
 	| Notification<"submitting">
-	| (Notification<"submit_success" | "submit_failure"> & { message: string });
+	| (Notification<"submit_failure"> & {
+			message: string;
+	  })
+	| (Notification<"submit_success"> & {
+			message: string;
+			publishingDate?: Date;
+	  });
 
 export type ReviewArticleModelView = {
 	draft: ArticleDraft;

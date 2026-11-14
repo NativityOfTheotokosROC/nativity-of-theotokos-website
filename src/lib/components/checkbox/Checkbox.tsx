@@ -27,13 +27,14 @@ const Checkbox = function ({ model }) {
 							: labelPosition === "top"
 								? "flex-col-reverse"
 								: null,
+				disabled && "opacity-70",
 				options?.className,
 			)}
 		>
 			<HeadlessUICheckbox
 				className={twMerge(
 					`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white transition duration-250 ease-out hover:border-gray-600 active:border-gray-800 data-checked:bg-gray-800`,
-					disabled && "opacity-70 grayscale",
+					disabled && "grayscale",
 					options?.checkboxClassName,
 				)}
 				onChange={checkedChangeCallback}

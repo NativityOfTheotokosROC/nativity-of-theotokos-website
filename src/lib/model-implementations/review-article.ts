@@ -82,15 +82,19 @@ export function useReviewArticle(
 		async interact(interaction) {
 			switch (interaction.type) {
 				case "PUBLISH": {
+					const { article } = interaction.input;
 					await notifier.interact({
 						type: "NOTIFY",
 						input: { notification: { type: "submitting" } },
 					});
+					const notificationPublishingDate = article.publishingDate
+						? new Date(article.publishingDate)
+						: undefined;
 					try {
 						if (currentArticle) {
 							await updateExistingArticle({
 								articleId: currentArticle.uri,
-								incomingArticle: interaction.input.article,
+								incomingArticle: article,
 								ticketId,
 								locale,
 							});
@@ -100,6 +104,8 @@ export function useReviewArticle(
 									notification: {
 										type: "submit_success",
 										message: t("submitSuccess"),
+										publishingDate:
+											notificationPublishingDate,
 									},
 								},
 							});
@@ -118,6 +124,7 @@ export function useReviewArticle(
 								notification: {
 									type: "submit_success",
 									message: t("submitSuccess"),
+									publishingDate: notificationPublishingDate,
 								},
 							},
 						});
