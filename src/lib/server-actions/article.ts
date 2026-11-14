@@ -11,7 +11,11 @@ import {
 	ReplacePropertyType,
 	Translation,
 } from "../utilities/types";
-import { _FULL_ARTICLE_INCLUDES, getArticle } from "../server-only/article";
+import {
+	_FULL_ARTICLE_INCLUDES,
+	getArticle,
+	getFeaturedArticle,
+} from "../server-only/article";
 import { getPlaceholder } from "../server-only/placeholder";
 import database from "../third-party/prisma";
 import {
@@ -47,7 +51,7 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { getUserInformation } from "./user";
 import { isValidLocale } from "../utilities/internationalization";
 import { toZonedTime } from "date-fns-tz";
-import { getNativeTimeZone } from "../utilities/date-time";
+import { NATIVE_TIMEZONE } from "../utilities/date-time";
 import { MAILING_ADDRESS } from "../utilities/constants";
 
 export async function assignArticle(
@@ -358,6 +362,7 @@ export async function makeArticleEdit(articleId: string) {
 	if (article.author.email !== user.email)
 		await protect({ roles: ["editor"] });
 
+	const featuredArticlePromise = getFeaturedArticle("en");
 	const ticket = await database.articleTicket.upsert({
 		include: { articleDraft: true },
 		create: {
@@ -402,7 +407,8 @@ export async function makeArticleEdit(articleId: string) {
 					(article.image.placeholder
 						?.placeholder as ImagePlaceholder) ?? undefined,
 			},
-			isArticleFeatured: article.featuredArticle !== null,
+			isArticleFeatured:
+				(await featuredArticlePromise)?.uri === article.link,
 		},
 	} satisfies {
 		ticketId: string;
@@ -432,6 +438,7 @@ export async function getLatestUnsubmittedArticle() {
 	const user = await getUser();
 	if (!user) forbidden();
 
+	const featuredArticlePromise = getFeaturedArticle("en");
 	const unsubmittedDraftTicket = await database.articleTicket.findFirst({
 		orderBy: {
 			articleDraft: { lastSaved: "desc" },
@@ -491,8 +498,8 @@ export async function getLatestUnsubmittedArticle() {
 								undefined,
 						},
 						isArticleFeatured:
-							unsubmittedDraftTicket.article.featuredArticle !==
-							null,
+							unsubmittedDraftTicket.article.link ===
+							(await featuredArticlePromise)?.uri,
 					}
 				: undefined,
 		} satisfies {
@@ -532,7 +539,8 @@ export async function getLatestUnsubmittedArticle() {
 							?.placeholder as ImagePlaceholder) ?? undefined,
 				},
 				isArticleFeatured:
-					unusedTicket.article.featuredArticle !== null,
+					unusedTicket.article.link ===
+					(await featuredArticlePromise)?.uri,
 			} satisfies ArticleWithTranslations)
 		: null;
 
@@ -565,6 +573,7 @@ export async function getPendingArticleSubmission() {
 		},
 	});
 	if (!ticketData) return null;
+	const featuredArticlePromise = getFeaturedArticle("en");
 	if (
 		!ticketData.articleDraft!.pendingArticleSubmission!.editorEmail === null
 	)
@@ -608,7 +617,9 @@ export async function getPendingArticleSubmission() {
 						(ticketData.article.image.placeholder
 							?.placeholder as ImagePlaceholder) ?? undefined,
 				},
-				isArticleFeatured: ticketData.article.featuredArticle !== null,
+				isArticleFeatured:
+					ticketData.article.link ===
+					(await featuredArticlePromise)?.uri,
 			} satisfies ArticleWithTranslations)
 		: undefined;
 	return {
@@ -737,14 +748,15 @@ export async function publishNewArticle({
 					},
 				},
 				datePublished: publishingDate
-					? toZonedTime(publishingDate, getNativeTimeZone())
+					? new Date(publishingDate)
 					: undefined,
 			},
 		});
 		if (isArticleFeatured) {
-			await transaction.featuredArticle.deleteMany({});
-			await transaction.featuredArticle.create({
-				data: { articleId: result.id },
+			await transaction.featuredArticle.upsert({
+				create: { articleId: result.id },
+				update: { dateFeatured: new Date() },
+				where: { articleId: result.id },
 			});
 		}
 		await transaction.articleTicket.delete({ where: { id: ticketId } });
@@ -934,7 +946,7 @@ export async function updateExistingArticle({
 					existingArticle.datePublished.getTime() >
 					currentDate.getTime()
 						? publishingDate
-							? toZonedTime(publishingDate, getNativeTimeZone())
+							? new Date(publishingDate)
 							: undefined
 						: undefined,
 			},
@@ -943,9 +955,10 @@ export async function updateExistingArticle({
 			},
 		});
 		if (isArticleFeatured) {
-			await transaction.featuredArticle.deleteMany({});
-			await transaction.featuredArticle.create({
-				data: { articleId: result.id },
+			await transaction.featuredArticle.upsert({
+				create: { articleId: result.id },
+				update: { dateFeatured: new Date() },
+				where: { articleId: result.id },
 			});
 		}
 		if (ticketId)

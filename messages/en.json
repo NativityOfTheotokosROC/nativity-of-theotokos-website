@@ -285,7 +285,11 @@
 		"titleField": "Article Title",
 		"uploadImageFailure": "Could not upload the article image. Error: {message}",
 		"uploadImageSuccess": "Article image successfully uploaded",
-		"uploadingImage": "Uploading article image"
+		"uploadingImage": "Uploading article image",
+		"schedulePublish": "Schedule publishing date",
+		"scheduledPublishMainMessage": "Article Submitted",
+		"scheduledPublishDetailedMessage": "The article has been successfully submitted and is slated for publishing on {date}",
+		"publishingDateField": "Publishing Date"
 	},
 	"scheduleItem": {
 		"catechism": "Catechism",

@@ -2,14 +2,12 @@ import { format, formatInTimeZone, toZonedTime } from "date-fns-tz";
 import { Language } from "./types";
 import { subDays } from "date-fns";
 
-export const DATE_FORMAT = "yyyy-MM-dd" as const;
+export const DATE_FORMAT = "yyyy-MM-dd";
 export const TIME_FORMAT = "HH:mm";
+export const DATE_TIME_FORMAT = `${DATE_FORMAT}'T'${TIME_FORMAT}`;
 export const ENGLISH_DATE_LOCALE = "en-uk";
 export const RUSSIAN_DATE_LOCALE = "ru-RU";
-
-export function getNativeTimeZone() {
-	return "Africa/Harare" as const;
-}
+export const NATIVE_TIMEZONE = "Africa/Harare";
 
 export function getFormattedDateString(
 	date: Date,
@@ -17,7 +15,7 @@ export function getFormattedDateString(
 	nativeTimezone?: boolean,
 ) {
 	if (nativeTimezone)
-		return formatInTimeZone(date, getNativeTimeZone(), dateFormat);
+		return formatInTimeZone(date, NATIVE_TIMEZONE, dateFormat);
 	return format(date, dateFormat);
 }
 
@@ -29,8 +27,12 @@ export function getTimeString(date: Date, nativeTimezone?: boolean) {
 	return getFormattedDateString(date, TIME_FORMAT, nativeTimezone);
 }
 
+export function getDateTimeString(date: Date, nativeTimezone?: boolean) {
+	return getFormattedDateString(date, DATE_TIME_FORMAT, nativeTimezone);
+}
+
 export function getNewsArticleDateString(date: Date) {
-	return toZonedTime(date, getNativeTimeZone()).toLocaleDateString("ru-RU", {
+	return toZonedTime(date, NATIVE_TIMEZONE).toLocaleDateString("ru-RU", {
 		dateStyle: "short",
 	});
 }

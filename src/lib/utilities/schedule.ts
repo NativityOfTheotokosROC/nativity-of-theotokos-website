@@ -1,5 +1,5 @@
 import { Cron } from "croner";
-import { getDateString, getNativeTimeZone } from "./date-time";
+import { getDateString, NATIVE_TIMEZONE } from "./date-time";
 import {
 	InstantaneousScheduleItem,
 	Language,
@@ -49,7 +49,7 @@ export function validateRecurringPattern(
 		const cron = new Cron(
 			pattern,
 			options?.useLocalTimezone
-				? { timezone: getNativeTimeZone() }
+				? { timezone: NATIVE_TIMEZONE }
 				: undefined,
 		);
 		// TODO: This needs work

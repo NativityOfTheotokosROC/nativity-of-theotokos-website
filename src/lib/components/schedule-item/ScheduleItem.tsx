@@ -11,7 +11,7 @@ import { ScheduleItemModel } from "../../models/schedule-item";
 import { georgia } from "../../third-party/fonts";
 import {
 	getDateString,
-	getNativeTimeZone,
+	NATIVE_TIMEZONE,
 	pickDateTranslation,
 	pickTimeTranslation,
 } from "../../utilities/date-time";
@@ -27,7 +27,7 @@ const ScheduleItem = function ({ model }) {
 	const { title, venue, date, times, eventType } = scheduleItem;
 	const locale = useLocale();
 	const language = options?.language ?? locale;
-	const nativeDate = toZonedTime(date, getNativeTimeZone());
+	const nativeDate = toZonedTime(date, NATIVE_TIMEZONE);
 	const sortedTimes = times
 		.map(({ designation, time }) => ({
 			designation,

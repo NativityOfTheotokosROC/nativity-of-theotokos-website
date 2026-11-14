@@ -117,7 +117,7 @@ model Article {
   author          ArticleAuthor    @relation(fields: [authorId], references: [id])
   image           ArticleImage     @relation(fields: [imageId], references: [id])
   datePublished   DateTime         @default(now()) @db.Timestamptz
-  dateUpdated     DateTime?
+  dateUpdated     DateTime?        @db.Timestamptz
   articleTickets  ArticleTicket[]
   featuredArticle FeaturedArticle?
   removedArticle  RemovedArticle?

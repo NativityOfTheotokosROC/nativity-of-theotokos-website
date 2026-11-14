@@ -14,7 +14,7 @@ import { useLocale } from "next-intl";
 import { pickTranslation } from "@/src/lib/utilities/miscellaneous";
 import {
 	getDateString,
-	getNativeTimeZone,
+	NATIVE_TIMEZONE,
 	pickDateTranslation,
 } from "@/src/lib/utilities/date-time";
 import MoreQuotes from "./MoreQuotes";
@@ -137,7 +137,7 @@ const ManageQuotes = function ({ model }) {
 												date: pickDateTranslation(
 													toZonedTime(
 														quote.date,
-														getNativeTimeZone(),
+														NATIVE_TIMEZONE,
 													),
 													locale,
 												),

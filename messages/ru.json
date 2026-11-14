@@ -284,7 +284,11 @@
 		"titleField": "Название статьи",
 		"uploadImageFailure": "Не удалось загрузить изображение статьи. Ошибка: {message}",
 		"uploadImageSuccess": "Изображение статьи успешно загружено",
-		"uploadingImage": "Загрузка изображения статьи"
+		"uploadingImage": "Загрузка изображения статьи",
+		"schedulePublish": "Запланировать публикацию",
+		"scheduledPublishMainMessage": "Статья отправлена",
+		"scheduledPublishDetailedMessage": "Статья успешно отправлена и запланирована к публикации на {date}.",
+		"publishingDateField": "Дата публикации"
 	},
 	"scheduleItem": {
 		"catechism": "Катехизация",
