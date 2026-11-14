@@ -27,19 +27,19 @@ const Checkbox = function ({ model }) {
 							: labelPosition === "top"
 								? "flex-col-reverse"
 								: null,
-				disabled && "opacity-70",
 				options?.className,
 			)}
 		>
 			<HeadlessUICheckbox
 				className={twMerge(
-					`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white transition duration-250 ease-out hover:border-gray-600 active:border-gray-800 data-checked:bg-gray-800`,
-					disabled && "grayscale",
+					`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white transition duration-250 ease-out hover:border-gray-600 active:border-gray-800 disabled:outline-none data-checked:bg-gray-800`,
+					disabled && "opacity-50 grayscale",
 					options?.checkboxClassName,
 				)}
 				onChange={checkedChangeCallback}
 				checked={isChecked}
 				disabled={disabled}
+				aria-disabled={disabled}
 			>
 				<Check
 					className={twMerge(
@@ -48,7 +48,14 @@ const Checkbox = function ({ model }) {
 					)}
 				/>
 			</HeadlessUICheckbox>
-			<Label className={options?.labelClassName}>{label}</Label>
+			<Label
+				className={twMerge(
+					disabled && "opacity-50",
+					options?.labelClassName,
+				)}
+			>
+				{label}
+			</Label>
 		</Field>
 	);
 } satisfies ModeledVoidComponent<InitializedModel<CheckboxModel>>;

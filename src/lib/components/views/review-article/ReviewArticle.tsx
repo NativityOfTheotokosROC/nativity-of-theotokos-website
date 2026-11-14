@@ -105,7 +105,7 @@ const ReviewArticle = function ({ model }) {
 				!(
 					notification?.type === "submitting" ||
 					notification?.type === "submit_success"
-				) // TODO: Should have its own notifier
+				)
 			)
 				await imageProcessor.interact({
 					type: "PROCESS",

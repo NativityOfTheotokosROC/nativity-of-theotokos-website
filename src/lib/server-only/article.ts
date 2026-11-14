@@ -224,9 +224,6 @@ export async function getArticleMetadata(
 }
 
 export async function getFeaturedArticle(language: Language = "en") {
-	"use cache: remote";
-	cacheTag("bulletin_articles");
-
 	const currentDate = new Date();
 
 	const featuredArticle = await database.featuredArticle.findFirst({

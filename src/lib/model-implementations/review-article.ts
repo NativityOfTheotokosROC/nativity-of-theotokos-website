@@ -128,7 +128,6 @@ export function useReviewArticle(
 								},
 							},
 						});
-						router.refresh();
 					} catch (error) {
 						await notifier.interact({
 							type: "NOTIFY",
