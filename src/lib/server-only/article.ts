@@ -243,13 +243,14 @@ export async function getFeaturedArticle(language: Language) {
 	cacheTag("bulletin_articles");
 
 	const currentDate = new Date();
+	console.log(currentDate);
 
 	const featuredArticle = await database.featuredArticle.findFirst({
 		include: { article: { include: _FULL_ARTICLE_INCLUDES } },
 		where: {
-			dateFeatured: { lte: currentDate },
 			article: {
 				removedArticle: { is: null },
+				datePublished: { lte: currentDate },
 			},
 		},
 		orderBy: {

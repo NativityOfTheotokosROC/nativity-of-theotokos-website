@@ -41,9 +41,7 @@ export async function getLatestArticles(
 	if (!featuredArticle) throw new Error("Featured article not found");
 	const otherArticleRecords = await database.article.findMany({
 		where: {
-			featuredArticle: {
-				is: null,
-			},
+			link: { not: featuredArticle.uri },
 			removedArticle: { is: null },
 			datePublished: {
 				lte: currentDate,
