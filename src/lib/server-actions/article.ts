@@ -362,7 +362,7 @@ export async function makeArticleEdit(articleId: string) {
 	if (article.author.email !== user.email)
 		await protect({ roles: ["editor"] });
 
-	const featuredArticlePromise = getFeaturedArticle();
+	const featuredArticlePromise = getFeaturedArticle(undefined, true);
 	const ticket = await database.articleTicket.upsert({
 		include: { articleDraft: true },
 		create: {
@@ -438,7 +438,7 @@ export async function getLatestUnsubmittedArticle() {
 	const user = await getUser();
 	if (!user) forbidden();
 
-	const featuredArticlePromise = getFeaturedArticle();
+	const featuredArticlePromise = getFeaturedArticle(undefined, true);
 	const unsubmittedDraftTicket = await database.articleTicket.findFirst({
 		orderBy: {
 			articleDraft: { lastSaved: "desc" },
@@ -573,7 +573,7 @@ export async function getPendingArticleSubmission() {
 		},
 	});
 	if (!ticketData) return null;
-	const featuredArticlePromise = getFeaturedArticle();
+	const featuredArticlePromise = getFeaturedArticle(undefined, true);
 	if (
 		!ticketData.articleDraft!.pendingArticleSubmission!.editorEmail === null
 	)
@@ -815,6 +815,13 @@ export async function updateExistingArticle({
 		publishingDate,
 	} = await _validateNewArticle(incomingArticle, locale);
 	const currentDate = new Date();
+	if (
+		publishingDate &&
+		existingArticle.datePublished.getTime() <= currentDate.getTime()
+	)
+		throw new Error(
+			"Article publishing date can no longer be rescheduled because the article has already been published.",
+		);
 	const placeholder = await getPlaceholder(image.url);
 
 	const newArticle = await database.$transaction(async transaction => {

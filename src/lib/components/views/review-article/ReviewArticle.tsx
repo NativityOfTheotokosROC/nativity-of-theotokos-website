@@ -14,6 +14,7 @@ import {
 	DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER,
 } from "@/src/lib/utilities/constants";
 import {
+	getDateLocale,
 	getDateTimeString,
 	NATIVE_TIMEZONE,
 	pickDateTranslation,
@@ -49,6 +50,10 @@ const ReviewArticle = function ({ model }) {
 	const tMisc = useTranslations("miscellaneous");
 	const locale = useLocale();
 	const currentDate = new Date();
+	const hasBeenPublished = currentArticle
+		? currentDate.getTime() >=
+			toZonedTime(currentArticle.datePublished, NATIVE_TIMEZONE).getTime()
+		: false;
 	const {
 		control,
 		register,
@@ -73,10 +78,11 @@ const ReviewArticle = function ({ model }) {
 					currentArticle?.articleImage.caption ?? BLANK_TRANSLATION,
 			},
 			isArticleFeatured: currentArticle?.isArticleFeatured ?? false,
-			isPublishingScheduled: false,
-			publishingDate:
-				currentArticle?.datePublished.toISOString() ??
-				getDateTimeString(currentDate),
+			isPublishingScheduled:
+				!hasBeenPublished && Boolean(currentArticle?.datePublished),
+			publishingDate: currentArticle
+				? getDateTimeString(currentArticle.datePublished, true)
+				: getDateTimeString(currentDate),
 		},
 		shouldUnregister: true,
 	});
@@ -96,8 +102,8 @@ const ReviewArticle = function ({ model }) {
 			});
 		}),
 	);
-	const imageProcessor = useImageProcessor();
 	const fileUploader = useFileUploader();
+	const imageProcessor = useImageProcessor();
 	const imageSelector = useFileSelector({
 		type: "image",
 		async selectCallback(file) {
@@ -175,15 +181,19 @@ const ReviewArticle = function ({ model }) {
 				<span className="text-lg">
 					{notification.publishingDate &&
 						t.rich("scheduledPublishDetailedMessage", {
-							date: pickDateTranslation(
-								notification.publishingDate,
-								locale,
+							date: notification.publishingDate.toLocaleDateString(
+								getDateLocale(locale),
+								{ dateStyle: "full" },
 							),
 							time: pickTimeTranslation(
 								notification.publishingDate,
 								locale,
 							),
-							mkp: innerText => <strong>{innerText}</strong>,
+							mkp: innerHtml => (
+								<span className="font-semibold">
+									{innerHtml}
+								</span>
+							),
 						})}
 				</span>
 				<GoHomeButton>{t("nextButton")}</GoHomeButton>
@@ -414,14 +424,8 @@ const ReviewArticle = function ({ model }) {
 							render={({ field: { onChange, value } }) => (
 								<Checkbox
 									model={newReadonlyModel({
-										isChecked: value,
-										disabled:
-											currentArticle &&
-											toZonedTime(
-												currentArticle.datePublished,
-												NATIVE_TIMEZONE,
-											).getTime() <=
-												currentDate.getTime(),
+										isChecked: value && !hasBeenPublished,
+										disabled: hasBeenPublished,
 										label: t("schedulePublish"),
 										checkedChangeCallback: onChange,
 									})}

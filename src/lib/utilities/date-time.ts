@@ -9,6 +9,10 @@ export const ENGLISH_DATE_LOCALE = "en-uk";
 export const RUSSIAN_DATE_LOCALE = "ru-RU";
 export const NATIVE_TIMEZONE = "Africa/Harare";
 
+export function getDateLocale(language: Language) {
+	return language === "ru" ? RUSSIAN_DATE_LOCALE : ENGLISH_DATE_LOCALE;
+}
+
 export function getFormattedDateString(
 	date: Date,
 	dateFormat: string,

@@ -223,7 +223,10 @@ export async function getArticleMetadata(
 	}
 }
 
-export async function getFeaturedArticle(language: Language = "en") {
+export async function getFeaturedArticle(
+	language: Language = "en",
+	includeUnpublished: boolean = false,
+) {
 	const currentDate = new Date();
 
 	const featuredArticle = await database.featuredArticle.findFirst({
@@ -231,7 +234,9 @@ export async function getFeaturedArticle(language: Language = "en") {
 		where: {
 			article: {
 				removedArticle: { is: null },
-				datePublished: { lte: currentDate },
+				datePublished: !includeUnpublished
+					? { lte: currentDate }
+					: undefined,
 			},
 		},
 		orderBy: {
