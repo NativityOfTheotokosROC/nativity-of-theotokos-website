@@ -284,13 +284,12 @@ const ReviewArticle = function ({ model }) {
 												<Image
 													className="h-full w-full grow object-cover object-center"
 													src={
-														(imageProcessor
-															.modelView
+														imageProcessor.modelView
 															.processedImage
 															?.blobURL ??
-														value !== "")
+														(value !== ""
 															? value
-															: DEFAULT_ARTICLE_PREVIEW_IMAGE
+															: DEFAULT_ARTICLE_PREVIEW_IMAGE)
 													}
 													placeholder="blur"
 													blurDataURL={
