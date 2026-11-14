@@ -432,22 +432,23 @@ const ReviewArticle = function ({ model }) {
 								/>
 							)}
 						/>
-						{watch("isPublishingScheduled") && (
-							<>
-								<input
-									{...register("publishingDate")}
-									type="datetime-local"
-									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.publishingDate ? "border-red-800" : "border-gray-400"}`}
-									placeholder={t("publishingDateField")}
-									min={getDateTimeString(currentDate)}
-								/>
-								{errors.publishingDate && (
-									<span className="text-sm text-red-800">
-										{errors.publishingDate.message}
-									</span>
-								)}
-							</>
-						)}
+						{!hasBeenPublished &&
+							watch("isPublishingScheduled") && (
+								<>
+									<input
+										{...register("publishingDate")}
+										type="datetime-local"
+										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.publishingDate ? "border-red-800" : "border-gray-400"}`}
+										placeholder={t("publishingDateField")}
+										min={getDateTimeString(currentDate)}
+									/>
+									{errors.publishingDate && (
+										<span className="text-sm text-red-800">
+											{errors.publishingDate.message}
+										</span>
+									)}
+								</>
+							)}
 						<hr className="mt-6 w-full opacity-50" />
 						<div className="mt-1 flex w-full justify-start gap-3">
 							<Button

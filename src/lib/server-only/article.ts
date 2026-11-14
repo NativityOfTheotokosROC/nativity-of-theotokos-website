@@ -69,11 +69,8 @@ export async function getArticle(articleId: string, language: Language) {
 
 //TODO: Refactor
 export async function getArticleWithTranslations(articleId: string) {
-	"use cache: remote";
-	cacheTag(`article_${articleId}`);
-
 	try {
-		const featuredArticle = getFeaturedArticle();
+		const featuredArticle = getFeaturedArticle(undefined, true);
 		const {
 			title,
 			author,
