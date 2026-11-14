@@ -46,7 +46,7 @@ const FileSelectorButton = function ({ model }) {
 				})}
 				className="flex w-fit max-w-1/2 min-w-[8em] items-center justify-center"
 			>
-				{file ? contents : (contentsWhenFile ?? contents)}
+				{file ? (contentsWhenFile ?? contents) : contents}
 			</Button>
 		</>
 	);

@@ -32,8 +32,8 @@ const Checkbox = function ({ model }) {
 		>
 			<HeadlessUICheckbox
 				className={twMerge(
-					`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white transition duration-250 ease-out hover:border-gray-600 active:border-gray-800 disabled:outline-none data-checked:bg-gray-800`,
-					disabled && "opacity-50 grayscale",
+					`group flex size-6 items-center justify-center rounded border border-gray-400 bg-white transition duration-265 ease-out hover:border-gray-600 active:border-gray-800 data-checked:bg-gray-800`,
+					disabled && "opacity-70 grayscale outline-none",
 					options?.checkboxClassName,
 				)}
 				onChange={checkedChangeCallback}
@@ -43,16 +43,17 @@ const Checkbox = function ({ model }) {
 			>
 				<Check
 					className={twMerge(
-						"invisible size-4 stroke-white transition duration-250 ease-out group-data-checked:visible",
+						"invisible size-4 stroke-white transition duration-265 ease-out group-data-checked:visible",
 						options?.checkClassName,
 					)}
 				/>
 			</HeadlessUICheckbox>
 			<Label
 				className={twMerge(
-					disabled && "opacity-50",
+					disabled && "opacity-70",
 					options?.labelClassName,
 				)}
+				aria-disabled={disabled}
 			>
 				{label}
 			</Label>
