@@ -288,7 +288,7 @@
 		"uploadingImage": "Uploading article image",
 		"schedulePublish": "Schedule publishing date",
 		"scheduledPublishMainMessage": "Article Submitted",
-		"scheduledPublishDetailedMessage": "The article has been successfully submitted and is slated for publishing on {date} at {time}.",
+		"scheduledPublishDetailedMessage": "The article has been successfully submitted and is slated for publishing on <mkp>{date}</mkp> at <mkp>{time}</mkp>.",
 		"publishingDateField": "Publishing Date"
 	},
 	"scheduleItem": {

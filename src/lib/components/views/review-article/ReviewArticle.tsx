@@ -163,19 +163,6 @@ const ReviewArticle = function ({ model }) {
 					notification.publishingDate
 						? {
 								mainMessage: t("scheduledPublishMainMessage"),
-								detailedMessage: t(
-									"scheduledPublishDetailedMessage",
-									{
-										date: pickDateTranslation(
-											notification.publishingDate,
-											locale,
-										),
-										time: pickTimeTranslation(
-											notification.publishingDate,
-											locale,
-										),
-									},
-								),
 								Graphic: SuccessGraphic,
 							}
 						: {
@@ -185,6 +172,20 @@ const ReviewArticle = function ({ model }) {
 							},
 				)}
 			>
+				<span className="text-lg">
+					{notification.publishingDate &&
+						t.rich("scheduledPublishDetailedMessage", {
+							date: pickDateTranslation(
+								notification.publishingDate,
+								locale,
+							),
+							time: pickTimeTranslation(
+								notification.publishingDate,
+								locale,
+							),
+							mkp: innerText => <strong>{innerText}</strong>,
+						})}
+				</span>
 				<GoHomeButton>{t("nextButton")}</GoHomeButton>
 			</InformationView>
 		);
