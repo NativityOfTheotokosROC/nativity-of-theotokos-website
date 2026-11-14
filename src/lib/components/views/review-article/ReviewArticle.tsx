@@ -287,7 +287,7 @@ const ReviewArticle = function ({ model }) {
 														imageProcessor.modelView
 															.processedImage
 															?.blobURL ??
-														(value !== ""
+														(value
 															? value
 															: DEFAULT_ARTICLE_PREVIEW_IMAGE)
 													}
