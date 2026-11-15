@@ -1,3 +1,5 @@
+import { pickFullDateTimeTranslation } from "@/src/lib/utilities/date-time";
+import { removeMarkup } from "@/src/lib/utilities/miscellaneous";
 import { Language } from "@/src/lib/utilities/types";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
@@ -6,9 +8,6 @@ import { Container, Heading, Text } from "react-email";
 import EmailContent from "../utilities/EmailContent";
 import EmailHeader from "../utilities/EmailHeader";
 import TemplateView from "../utilities/TemplateView";
-import { pickFullDateTimeTranslation } from "@/src/lib/utilities/date-time";
-import { removeMarkup } from "@/src/lib/utilities/miscellaneous";
-import { renderToString } from "react-dom/server";
 
 const ArticleRescheduled = async function ({ model }) {
 	const { language, recipientName, articleTitle, oldDate, newDate } =
@@ -26,13 +25,21 @@ const ArticleRescheduled = async function ({ model }) {
 			<span style={{ fontWeight: 600 }}>{innerHtml}</span>
 		),
 	});
+	const textMessage = removeMarkup(
+		t("message", {
+			name: recipientName,
+			title: articleTitle,
+			oldDate: pickFullDateTimeTranslation(oldDate, language, true, true),
+			newDate: pickFullDateTimeTranslation(newDate, language, true, true),
+		}),
+	);
 
 	return (
 		<TemplateView
 			model={newReadonlyModel({
 				language,
 				variant: { type: "transactional", includeIgnoreMessage: true },
-				previewText: removeMarkup(renderToString(message)),
+				previewText: textMessage,
 			})}
 		>
 			<EmailHeader model={newReadonlyModel({ language })} />

@@ -2,13 +2,13 @@
 
 import { ImagePlaceholder } from "@grod56/placeholder";
 import { newReadonlyModel } from "@mvc-react/mvc";
-import { formatInTimeZone } from "date-fns-tz";
-import { enGB, ru } from "date-fns/locale";
 import { getTranslations } from "next-intl/server";
 import { revalidateTag } from "next/cache";
 import { forbidden, notFound } from "next/navigation";
 import { after } from "next/server";
 import z from "zod";
+import ArticlePublished from "../components/email-templates/article-published/ArticlePublished";
+import ArticleRescheduled from "../components/email-templates/article-rescheduled/ArticleRescheduled";
 import ArticleScheduled from "../components/email-templates/article-scheduled/ArticleScheduled";
 import AuthorInvite from "../components/email-templates/author-invite/AuthorInvite";
 import { ArticleDraft, NewArticleDraft } from "../models/write-article";
@@ -23,7 +23,6 @@ import resend from "../third-party/resend";
 import { hasArticleChanged } from "../utilities/article";
 import { MAILING_ADDRESS } from "../utilities/constants";
 import {
-	NATIVE_TIMEZONE,
 	pickFullDateTranslation,
 	pickFullTimeTranslation,
 } from "../utilities/date-time";
@@ -54,8 +53,6 @@ import {
 import { NewTranslation } from "../validation/utilities";
 import { getUser, protect } from "./auth";
 import { getUserInformation } from "./user";
-import ArticlePublished from "../components/email-templates/article-published/ArticlePublished";
-import ArticleRescheduled from "../components/email-templates/article-rescheduled/ArticleRescheduled";
 
 export async function assignArticle(
 	email: string,
