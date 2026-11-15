@@ -1,16 +1,17 @@
 "use server";
 
 import { ImagePlaceholder } from "@grod56/placeholder";
+import { newReadonlyModel } from "@mvc-react/mvc";
+import { formatInTimeZone } from "date-fns-tz";
+import { enGB, ru } from "date-fns/locale";
 import { getTranslations } from "next-intl/server";
-import { cacheTag, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { forbidden, notFound } from "next/navigation";
+import { after } from "next/server";
+import z from "zod";
+import ArticleScheduled from "../components/email-templates/article-scheduled/ArticleScheduled";
+import AuthorInvite from "../components/email-templates/author-invite/AuthorInvite";
 import { ArticleDraft, NewArticleDraft } from "../models/write-article";
-import {
-	ArticleAuthorWithTranslations,
-	ArticleWithTranslations,
-	ReplacePropertyType,
-	Translation,
-} from "../utilities/types";
 import {
 	_FULL_ARTICLE_INCLUDES,
 	getArticle,
@@ -18,41 +19,37 @@ import {
 } from "../server-only/article";
 import { getPlaceholder } from "../server-only/placeholder";
 import database from "../third-party/prisma";
-import {
-	Article,
-	ArticleAuthor,
-	ArticleTicket,
-	Language,
-} from "../utilities/types";
+import resend from "../third-party/resend";
 import { hasArticleChanged } from "../utilities/article";
+import { MAILING_ADDRESS } from "../utilities/constants";
+import { NATIVE_TIMEZONE } from "../utilities/date-time";
+import { isValidLocale } from "../utilities/internationalization";
 import {
 	getMd5Hash,
-	isRemotePath,
 	pickTranslation,
 	removeMarkup,
 	snippetify,
 } from "../utilities/miscellaneous";
 import { BASE_URL, SENDER_EMAIL } from "../utilities/server-constants";
 import {
+	ArticleAuthorWithTranslations,
+	ArticleTicket,
+	ArticleWithTranslations,
+	Language,
+	ReplacePropertyType,
+	Translation,
+} from "../utilities/types";
+import {
 	getArticleAuthorSchema,
 	getArticleSchema,
+	getArticleSubmissionSchema,
 	MAX_SNIPPET,
 	NewArticle,
 	NewArticleSubmission,
 } from "../validation/article";
-import { getArticleSubmissionSchema } from "../validation/article";
-import { getUser, protect } from "./auth";
 import { NewTranslation } from "../validation/utilities";
-import z from "zod";
-import { after } from "next/server";
-import resend from "../third-party/resend";
-import AuthorInvite from "../components/email-templates/author-invite/AuthorInvite";
-import { newReadonlyModel } from "@mvc-react/mvc";
+import { getUser, protect } from "./auth";
 import { getUserInformation } from "./user";
-import { isValidLocale } from "../utilities/internationalization";
-import { toZonedTime } from "date-fns-tz";
-import { NATIVE_TIMEZONE } from "../utilities/date-time";
-import { MAILING_ADDRESS } from "../utilities/constants";
 
 export async function assignArticle(
 	email: string,
@@ -647,7 +644,9 @@ export async function publishNewArticle({
 	const draft = await database.articleDraft.findUnique({
 		include: {
 			pendingArticleSubmission: true,
-			articleTicket: true,
+			articleTicket: {
+				include: { assignee: { include: { name: true } } },
+			},
 		},
 		where: { articleTicketId: ticketId },
 	});
@@ -763,6 +762,64 @@ export async function publishNewArticle({
 		return result;
 	});
 	revalidateTag("latest-articles", "max");
+	if (publishingDate)
+		after(async () => {
+			const recipientEmail = draft.articleTicket.assigneeEmail;
+			const contact = await resend.contacts.get({
+				email: recipientEmail,
+			});
+			const preferredLanguage =
+				(contact.data?.properties.preferredLang.value as Language) ??
+				"en";
+			const recipientName =
+				contact.data?.first_name ??
+				pickTranslation(
+					draft.articleTicket.assignee.name,
+					preferredLanguage,
+				);
+			const t = await getTranslations({ locale: preferredLanguage });
+			const { error } = await resend.emails.send({
+				from: `${t("miscellaneous.churchName")} <${SENDER_EMAIL}>`,
+				to: [`${recipientName} <${recipientEmail}>`],
+				replyTo: MAILING_ADDRESS,
+				subject: t("articleScheduledEmail.subject"),
+				react: ArticleScheduled({
+					model: newReadonlyModel({
+						language: preferredLanguage,
+						message: t("articleScheduledEmail.message", {
+							date: formatInTimeZone(
+								publishingDate,
+								NATIVE_TIMEZONE,
+								"EEEE, dd MMMM yyyy",
+								{
+									locale:
+										preferredLanguage === "ru" ? ru : enGB,
+								},
+							),
+							time: formatInTimeZone(
+								publishingDate,
+								NATIVE_TIMEZONE,
+								"h:mm a z",
+								{
+									locale:
+										preferredLanguage === "ru" ? ru : enGB,
+								},
+							),
+						}),
+						articlePreview: {
+							title: pickTranslation(title, preferredLanguage),
+							image: image.url,
+							snippet: pickTranslation(
+								snippet,
+								preferredLanguage,
+							),
+							link: `${BASE_URL}/news/`,
+						},
+					}),
+				}),
+			});
+			if (contact.error) console.error(contact.error);
+		});
 	return newArticle;
 }
 
