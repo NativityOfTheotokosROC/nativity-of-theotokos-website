@@ -85,14 +85,14 @@ const useLanguageToggle = (
 ) => {
 	const alternateLanguage: Language = locale === "en" ? "ru" : "en";
 	const currentPathName = usePathname();
-	const searchParams = useSearchParams();
+	// const searchParams = useSearchParams();
 	const [localeChangeEmitter] = useState(new EventEmitter());
 	const languageToggle = useInitializedStatefulInteractiveModel(
 		languageToggleVIInterface(
 			router,
 			currentPathName,
 			localeChangeEmitter,
-			searchParams,
+			// searchParams,
 		),
 		{ alternateLanguage },
 	);
