@@ -778,6 +778,7 @@ export async function publishNewArticle({
 					preferredLanguage,
 				);
 			const t = await getTranslations({ locale: preferredLanguage });
+
 			const { error } = await resend.emails.send({
 				from: `${t("miscellaneous.churchName")} <${SENDER_EMAIL}>`,
 				to: [`${recipientName} <${recipientEmail}>`],
@@ -787,6 +788,7 @@ export async function publishNewArticle({
 					model: newReadonlyModel({
 						language: preferredLanguage,
 						message: t("articleScheduledEmail.message", {
+							name: recipientName,
 							date: formatInTimeZone(
 								publishingDate,
 								NATIVE_TIMEZONE,
@@ -813,12 +815,13 @@ export async function publishNewArticle({
 								snippet,
 								preferredLanguage,
 							),
-							link: `${BASE_URL}/news/`,
+							link: `${BASE_URL}/news/${link}`,
 						},
 					}),
 				}),
 			});
 			if (contact.error) console.error(contact.error);
+			if (error) console.error(error);
 		});
 	return newArticle;
 }
