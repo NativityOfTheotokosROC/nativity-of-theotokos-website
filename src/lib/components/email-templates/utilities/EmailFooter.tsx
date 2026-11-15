@@ -14,6 +14,7 @@ const EmailFooter = async function ({ model }) {
 	return (
 		<Section
 			style={{
+				width: "100%",
 				display: "flex",
 				flexDirection: "column",
 				gap: "16px",

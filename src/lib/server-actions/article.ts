@@ -787,6 +787,7 @@ export async function publishNewArticle({
 				react: ArticleScheduled({
 					model: newReadonlyModel({
 						language: preferredLanguage,
+						title: t("articleScheduledEmail.title"),
 						message: t("articleScheduledEmail.message", {
 							name: recipientName,
 							date: formatInTimeZone(

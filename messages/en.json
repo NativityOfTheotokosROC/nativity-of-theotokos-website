@@ -498,7 +498,7 @@
 		"cancel": "Cancel"
 	},
 	"emailFooter": {
-		"ignoreMessage": "If this email was wrongfully addressed, you may ignore it.",
+		"ignoreMessage": "If this email was a mistake or it was wrongfully addressed, you may ignore it.",
 		"copyright": "2026 Nativity of the Theotokos Parish. All Rights Reserved.",
 		"broadcastDisclaimer": "You received this email because you subscribed for updates from our website. You may <unsub>Unsubscribe</unsub> or <pref>Manage your Preferences</pref>."
 	},
@@ -531,7 +531,8 @@
 	},
 	"articleScheduledEmail": {
 		"subject": "Your article is slated for publishing!",
-		"message": "Good day {name}! We just wanted to inform you that we have reviewed and processed your article, and it will be published on {date} at {time} -- notwithstanding any potential changes (in which case, we would notify you beforehand). Thank you so much for writing for our website, we really appreciate you taking time out of your schedule to do this for us. We are hopeful that our relationship continues to flourish, and that God-willing, we will work on more joint endevors in the future.",
+		"title": "We have reviewed and processed your article",
+		"message": "Good day {name}! We just wanted to inform you that we have reviewed and processed your article, and it will be published on {date} at {time} -- notwithstanding any potential changes (in which case, we would notify you beforehand). Thank you so much for writing for our website, we really appreciate you taking time out of your schedule to do this for us. We are hopeful that our relationship continues to flourish, and that God-willing, we will work on more joint endeavors in the future.",
 		"snippet": "Snippet of the article"
 	}
 }

@@ -2,16 +2,18 @@ import { Language } from "@/src/lib/utilities/types";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel, ReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
-import { Container, Heading, Img, Text } from "react-email";
+import { Container, Heading, Hr, Img, Text } from "react-email";
 import EmailContent from "../utilities/EmailContent";
 import EmailHeader from "../utilities/EmailHeader";
 import TemplateView from "../utilities/TemplateView";
+import style from "styled-jsx/style";
 
 const ArticleScheduled = async function ({ model }) {
 	const {
 		language,
+		title,
 		message,
-		articlePreview: { title, image, snippet },
+		articlePreview: { title: articleTitle, image, snippet },
 	} = model.modelView;
 	const t = await getTranslations({
 		namespace: "articleScheduledEmail",
@@ -35,13 +37,21 @@ const ArticleScheduled = async function ({ model }) {
 						gap: "16px",
 					}}
 				>
+					<Heading
+						as="h1"
+						style={{ fontSize: "30px", fontWeight: "600" }}
+					>
+						{title}
+					</Heading>
 					<Text>{message}</Text>
+					<Hr style={{ marginBottom: "24px", opacity: 0.5 }} />
 					<Img
 						style={{
 							borderRadius: "8px",
 							overflow: "clip",
-							height: "400px",
-							width: "600px",
+							height: "auto",
+							maxHeight: "240px",
+							width: "300px",
 							maxWidth: "100%",
 							objectFit: "cover",
 							objectPosition: "center",
@@ -49,13 +59,13 @@ const ArticleScheduled = async function ({ model }) {
 						className="article-image"
 						alt="Article Image"
 						src={image}
-						height={400}
+						height={240}
 					/>
 					<Heading
-						as="h1"
+						as="h2"
 						style={{ fontSize: "26px", fontWeight: "600" }}
 					>
-						{title}
+						{articleTitle}
 					</Heading>
 					<Text style={{ fontSize: "20px" }}>{t("snippet")}</Text>
 					<Text>{snippet}</Text>
@@ -66,6 +76,7 @@ const ArticleScheduled = async function ({ model }) {
 } satisfies ModeledVoidComponent<
 	ReadonlyModel<{
 		language: Language;
+		title: string;
 		message: string;
 		articlePreview: {
 			title: string;
