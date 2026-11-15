@@ -82,7 +82,7 @@ const Article = function ({ model }) {
 								>
 									<Image
 										className="grow cursor-pointer object-cover object-center"
-										height={600}
+										height={400}
 										width={600}
 										alt={tCaptions("newsArticleImage")}
 										title={caption}

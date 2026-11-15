@@ -1,5 +1,4 @@
 import Footer from "@/src/lib/components/footer/Footer";
-import Header from "@/src/lib/components/header/Header";
 import LanguageSwitcher from "@/src/lib/components/language-switcher/LanguageSwitcher";
 import LayoutLoadingSkeleton from "@/src/lib/components/layout-loading-skeleton/LayoutLoadingSkeleton";
 import PageLoadingBar from "@/src/lib/components/page-loading-bar/PageLoadingBar";
@@ -12,6 +11,7 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
+import { HeaderDynamic } from "@/src/lib/components/miscellaneous/no-ssr";
 
 const AppLayout = async function ({ model, children }) {
 	const { language } = model.modelView;
@@ -127,7 +127,7 @@ const AppLayout = async function ({ model, children }) {
 	return (
 		<Suspense fallback={<LayoutLoadingSkeleton />}>
 			<PageLoadingBar />
-			<Header
+			<HeaderDynamic
 				model={newReadonlyModel({
 					navlinks,
 				})}

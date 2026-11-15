@@ -1,3 +1,4 @@
+import { usePathname } from "@/src/i18n/navigation";
 import {
 	Disclosure,
 	DisclosureButton,
@@ -24,8 +25,9 @@ import {
 	UserNavigationWidgetVariant,
 } from "../../models/user-navigation-widget";
 import { UserInformation, useUserInformation } from "../../utilities/user";
-import UserAction from "../user-action/UserAction";
 import { Link } from "../page-loading-bar/PageLoadingBar";
+import UserAction from "../user-action/UserAction";
+import { getSegmentIndex } from "../../utilities/miscellaneous";
 
 type WidgetVariantModel = ReadonlyModel<{
 	user: NavigationUser;
@@ -40,84 +42,6 @@ type UserNavigationWidgetCoreModel = ReadonlyModel<
 	}
 >;
 
-const UserDisplay = function ({ model }) {
-	const { variant, greeting, user } = model.modelView;
-	switch (variant) {
-		case "abbreviated": {
-			return (
-				<div
-					className="user-pane flex w-full items-center gap-3"
-					title={greeting}
-				>
-					<div className="avatar-frame flex size-10 min-w-10 items-stretch justify-stretch overflow-clip rounded-lg border border-white/15">
-						<Image
-							className="grow object-cover object-center"
-							alt={user.avatar?.about ?? user.name}
-							width={40}
-							height={40}
-							src={
-								user.avatar?.source ??
-								"/assets/default-profile-photo-min.webp"
-							}
-						/>
-					</div>
-				</div>
-			);
-		}
-		case "no_avatar": {
-			return (
-				<div className="user-pane flex w-full items-center gap-3">
-					<span
-						className={`greeting max-w-40 wrap-break-word hyphens-auto`}
-					>
-						{greeting}
-					</span>
-				</div>
-			);
-		}
-		case "full": {
-			return (
-				<div className="user-pane flex w-full items-center gap-3">
-					<div className="avatar-frame flex size-10 min-w-10 items-stretch justify-stretch overflow-clip rounded-lg border border-white/15">
-						<Image
-							className="grow object-cover object-center"
-							alt={user.avatar?.about ?? user.name}
-							width={40}
-							height={40}
-							src={
-								user.avatar?.source ??
-								"/assets/default-profile-photo-min.webp"
-							}
-						/>
-					</div>
-					<span
-						className={`greeting max-w-30 wrap-break-word hyphens-auto`}
-					>
-						{greeting}
-					</span>
-				</div>
-			);
-		}
-		default: {
-			throw new Error(`Invalid variant: ${variant satisfies never}`);
-		}
-	}
-} satisfies ModeledVoidComponent<WidgetVariantModel>;
-
-const DropdownButtonContent = function ({ model, children }) {
-	const { isDrawn } = model.modelView;
-
-	return (
-		<>
-			{children}
-			<DropdownIcon
-				className={`min-w-fit transition duration-200 ease-out ${isDrawn && "-rotate-180"}`}
-				strokeWidth={1.75}
-			/>
-		</>
-	);
-} satisfies ModeledComponent<DropdownButtonModel>;
-
 const UserNavigationWidget = function ({ model }) {
 	const { variant } = model.modelView;
 	const userInformation = useUserInformation();
@@ -130,35 +54,13 @@ const UserNavigationWidget = function ({ model }) {
 	);
 } satisfies ModeledVoidComponent<InitializedModel<UserNavigationWidgetModel>>;
 
-export const UserNavigationWidgetSkeleton = function ({ model }) {
-	const { variant } = model.modelView;
-
-	switch (variant) {
-		case "no_avatar":
-			return <div className={`h-10 w-full max-w-40`} />;
-		case "abbreviated":
-			return (
-				<div className="flex w-fit animate-pulse items-center gap-3 *:bg-white/20">
-					<div className="size-10 overflow-clip rounded-lg" />
-				</div>
-			);
-		case "full":
-			return (
-				<div className="dropdown-button flex w-full animate-pulse items-center gap-3 overflow-clip rounded-lg *:h-10 *:bg-white/20">
-					<div className="size-10 min-w-10 overflow-clip rounded-lg" />
-					<div className={`h-full w-full max-w-40`} />
-				</div>
-			);
-	}
-} satisfies ModeledVoidComponent<
-	ReadonlyModel<{ variant: UserNavigationWidgetVariant }>
->;
-
-export const UserNavigationWidgetCore = function ({ model }) {
+const UserNavigationWidgetCore = function ({ model }) {
 	const {
 		modelView: { variant, style, userActions, userInformation, signIn },
 	} = model;
 
+	const path = usePathname();
+	const signInPath = `/sign-in${getSegmentIndex(path, "sign-in") !== 0 ? `?endpoint=${path}` : ""}`;
 	const t = useTranslations("userNavigation");
 	const userDetails = userInformation
 		? {
@@ -169,7 +71,6 @@ export const UserNavigationWidgetCore = function ({ model }) {
 				userActions: userActions!,
 			}
 		: null;
-
 	const greeting =
 		userDetails &&
 		`${t("greeting")}, ${userDetails.user.name.split(" ")[0]}`;
@@ -284,7 +185,7 @@ export const UserNavigationWidgetCore = function ({ model }) {
 		<>
 			{signIn?.navlinkVariant === "simple_link" && (
 				<Link
-					href={"/sign-in"}
+					href={signInPath}
 					className="navlink text-base uppercase no-underline hover:text-[#ffdc4f]"
 					onClick={signIn.action}
 				>
@@ -293,7 +194,7 @@ export const UserNavigationWidgetCore = function ({ model }) {
 			)}
 			{signIn?.navlinkVariant === "block" && (
 				<Link
-					href={"/sign-in"}
+					href={signInPath}
 					className="navlink block px-6 py-4 uppercase no-underline transition duration-200 ease-out hover:text-[#ffdc4f] active:bg-gray-950 active:text-[#ffdc4f] md:px-8"
 					onClick={signIn.action}
 				>
@@ -303,5 +204,107 @@ export const UserNavigationWidgetCore = function ({ model }) {
 		</>
 	);
 } satisfies ModeledVoidComponent<UserNavigationWidgetCoreModel>;
+
+export const UserNavigationWidgetSkeleton = function ({ model }) {
+	const { variant } = model.modelView;
+
+	switch (variant) {
+		case "no_avatar":
+			return <div className={`h-10 w-full max-w-40`} />;
+		case "abbreviated":
+			return (
+				<div className="flex w-fit animate-pulse items-center gap-3 *:bg-white/20">
+					<div className="size-10 overflow-clip rounded-lg" />
+				</div>
+			);
+		case "full":
+			return (
+				<div className="dropdown-button flex w-full animate-pulse items-center gap-3 overflow-clip rounded-lg *:h-10 *:bg-white/20">
+					<div className="size-10 min-w-10 overflow-clip rounded-lg" />
+					<div className={`h-full w-full max-w-40`} />
+				</div>
+			);
+	}
+} satisfies ModeledVoidComponent<
+	ReadonlyModel<{ variant: UserNavigationWidgetVariant }>
+>;
+
+const UserDisplay = function ({ model }) {
+	const { variant, greeting, user } = model.modelView;
+	switch (variant) {
+		case "abbreviated": {
+			return (
+				<div
+					className="user-pane flex w-full items-center gap-3"
+					title={greeting}
+				>
+					<div className="avatar-frame flex size-10 min-w-10 items-stretch justify-stretch overflow-clip rounded-lg border border-white/15">
+						<Image
+							className="grow object-cover object-center"
+							alt={user.avatar?.about ?? user.name}
+							width={40}
+							height={40}
+							src={
+								user.avatar?.source ??
+								"/assets/default-profile-photo-min.webp"
+							}
+						/>
+					</div>
+				</div>
+			);
+		}
+		case "no_avatar": {
+			return (
+				<div className="user-pane flex w-full items-center gap-3">
+					<span
+						className={`greeting max-w-40 wrap-break-word hyphens-auto`}
+					>
+						{greeting}
+					</span>
+				</div>
+			);
+		}
+		case "full": {
+			return (
+				<div className="user-pane flex w-full items-center gap-3">
+					<div className="avatar-frame flex size-10 min-w-10 items-stretch justify-stretch overflow-clip rounded-lg border border-white/15">
+						<Image
+							className="grow object-cover object-center"
+							alt={user.avatar?.about ?? user.name}
+							width={40}
+							height={40}
+							src={
+								user.avatar?.source ??
+								"/assets/default-profile-photo-min.webp"
+							}
+						/>
+					</div>
+					<span
+						className={`greeting max-w-30 wrap-break-word hyphens-auto`}
+					>
+						{greeting}
+					</span>
+				</div>
+			);
+		}
+		default: {
+			throw new Error(`Invalid variant: ${variant satisfies never}`);
+		}
+	}
+} satisfies ModeledVoidComponent<WidgetVariantModel>;
+
+const DropdownButtonContent = function ({ model, children }) {
+	const { isDrawn } = model.modelView;
+
+	return (
+		<>
+			{children}
+			<DropdownIcon
+				className={`min-w-fit transition duration-200 ease-out ${isDrawn && "-rotate-180"}`}
+				strokeWidth={1.75}
+			/>
+		</>
+	);
+} satisfies ModeledComponent<DropdownButtonModel>;
 
 export default UserNavigationWidget;
