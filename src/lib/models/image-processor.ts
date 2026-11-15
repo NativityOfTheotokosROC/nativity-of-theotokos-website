@@ -17,7 +17,7 @@ export type ImageProcessorModelInteraction = InputModelInteraction<
 	"PROCESS",
 	{
 		file: File;
-		successCallback?: (processedImage: File, extension: string) => void;
+		successCallback?: (processedImage: File, extension?: string) => void;
 	}
 >;
 

@@ -117,7 +117,7 @@ const ReviewArticle = function ({ model }) {
 						file,
 						async successCallback(processedImage, extension) {
 							const presignedUrl = await getPresignedUrl(
-								`${generateUniqueName()}.${extension}`,
+								`${generateUniqueName()}${extension ? `.${extension}` : ""}`,
 								"news",
 								processedImage.type,
 							);

@@ -34,7 +34,7 @@ const EmailHeader = async function ({ model }) {
 						}}
 						className="logo-icon"
 						alt="Logo Icon"
-						src={Logo.src}
+						src={`${BASE_URL}/${Logo.src}`}
 						height={32}
 					/>
 				</Section>

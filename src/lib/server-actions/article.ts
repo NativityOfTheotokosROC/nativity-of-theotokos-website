@@ -22,7 +22,11 @@ import database from "../third-party/prisma";
 import resend from "../third-party/resend";
 import { hasArticleChanged } from "../utilities/article";
 import { MAILING_ADDRESS } from "../utilities/constants";
-import { NATIVE_TIMEZONE } from "../utilities/date-time";
+import {
+	NATIVE_TIMEZONE,
+	pickFullDateTranslation,
+	pickFullTimeTranslation,
+} from "../utilities/date-time";
 import { isValidLocale } from "../utilities/internationalization";
 import {
 	getMd5Hash,
@@ -50,6 +54,8 @@ import {
 import { NewTranslation } from "../validation/utilities";
 import { getUser, protect } from "./auth";
 import { getUserInformation } from "./user";
+import ArticlePublished from "../components/email-templates/article-published/ArticlePublished";
+import ArticleRescheduled from "../components/email-templates/article-rescheduled/ArticleRescheduled";
 
 export async function assignArticle(
 	email: string,
@@ -762,68 +768,85 @@ export async function publishNewArticle({
 		return result;
 	});
 	revalidateTag("latest-articles", "max");
-	if (publishingDate)
-		after(async () => {
-			const recipientEmail = draft.articleTicket.assigneeEmail;
-			const contact = await resend.contacts.get({
-				email: recipientEmail,
-			});
-			const preferredLanguage =
-				(contact.data?.properties.preferredLang.value as Language) ??
-				"en";
-			const recipientName =
-				contact.data?.first_name ??
-				pickTranslation(
-					draft.articleTicket.assignee.name,
-					preferredLanguage,
-				);
-			const t = await getTranslations({ locale: preferredLanguage });
-
-			const { error } = await resend.emails.send({
-				from: `${t("miscellaneous.churchName")} <${SENDER_EMAIL}>`,
-				to: [`${recipientName} <${recipientEmail}>`],
-				replyTo: MAILING_ADDRESS,
-				subject: t("articleScheduledEmail.subject"),
-				react: ArticleScheduled({
-					model: newReadonlyModel({
-						language: preferredLanguage,
-						title: t("articleScheduledEmail.title"),
-						message: t("articleScheduledEmail.message", {
-							name: recipientName,
-							date: formatInTimeZone(
-								publishingDate,
-								NATIVE_TIMEZONE,
-								"EEEE, dd MMMM yyyy",
-								{
-									locale:
-										preferredLanguage === "ru" ? ru : enGB,
-								},
-							),
-							time: formatInTimeZone(
-								publishingDate,
-								NATIVE_TIMEZONE,
-								"h:mm a z",
-								{
-									locale:
-										preferredLanguage === "ru" ? ru : enGB,
-								},
-							),
-						}),
-						articlePreview: {
-							title: pickTranslation(title, preferredLanguage),
-							image: image.url,
-							snippet: pickTranslation(
-								snippet,
-								preferredLanguage,
-							),
-							link: `${BASE_URL}/news/${link}`,
-						},
-					}),
-				}),
-			});
-			if (contact.error) console.error(contact.error);
-			if (error) console.error(error);
+	after(async () => {
+		const recipientEmail = draft.articleTicket.assigneeEmail;
+		const contact = await resend.contacts.get({
+			email: recipientEmail,
 		});
+		const preferredLanguage =
+			(contact.data?.properties.preferredLang.value as Language) ?? "en";
+		const recipientName =
+			contact.data?.first_name ??
+			pickTranslation(
+				draft.articleTicket.assignee.name,
+				preferredLanguage,
+			);
+		const t = await getTranslations({ locale: preferredLanguage });
+		const subject = publishingDate
+			? t("articleScheduledEmail.subject")
+			: t("articlePublished.subject");
+
+		const { error } = await resend.emails.send({
+			from: `${t("miscellaneous.churchName")} <${SENDER_EMAIL}>`,
+			to: [`${recipientName} <${recipientEmail}>`],
+			replyTo: MAILING_ADDRESS,
+			subject: subject,
+			react: publishingDate
+				? ArticleScheduled({
+						model: newReadonlyModel({
+							language: preferredLanguage,
+							title: t("articleScheduledEmail.title"),
+							message: t("articleScheduledEmail.message", {
+								name: recipientName,
+								date: pickFullDateTranslation(
+									new Date(publishingDate),
+									preferredLanguage,
+									true,
+								),
+								time: pickFullTimeTranslation(
+									new Date(publishingDate),
+									preferredLanguage,
+									true,
+									true,
+								),
+							}),
+							articlePreview: {
+								title: pickTranslation(
+									title,
+									preferredLanguage,
+								),
+								image: image.url,
+								snippet: pickTranslation(
+									snippet,
+									preferredLanguage,
+								),
+								link: `${BASE_URL}/news/${link}`,
+							},
+						}),
+					})
+				: ArticlePublished({
+						model: newReadonlyModel({
+							language: preferredLanguage,
+							title: t("articlePublished.title"),
+							message: t("articlePublished.message"),
+							articlePreview: {
+								title: pickTranslation(
+									title,
+									preferredLanguage,
+								),
+								image: image.url,
+								snippet: pickTranslation(
+									snippet,
+									preferredLanguage,
+								),
+								link: `${BASE_URL}/news/${link}`,
+							},
+						}),
+					}),
+		});
+		if (contact.error) console.error(contact.error);
+		if (error) console.error(error);
+	});
 	return newArticle;
 }
 
@@ -1035,6 +1058,37 @@ export async function updateExistingArticle({
 	});
 	revalidateTag("latest-articles", "max");
 	revalidateTag(`article_${articleId}`, "max");
+	if (publishingDate)
+		after(async () => {
+			const recipientEmail = existingArticle.author.email;
+			const contact = await resend.contacts.get({
+				email: recipientEmail,
+			});
+			const preferredLanguage =
+				(contact.data?.properties.preferredLang.value as Language) ??
+				"en";
+			const recipientName =
+				contact.data?.first_name ??
+				pickTranslation(existingArticle.author.name, preferredLanguage);
+			const t = await getTranslations({ locale: preferredLanguage });
+			const { error } = await resend.emails.send({
+				from: `${t("miscellaneous.churchName")} <${SENDER_EMAIL}>`,
+				to: [`${recipientName} <${recipientEmail}>`],
+				replyTo: MAILING_ADDRESS,
+				subject: t("articleRescheduled.subject"),
+				react: ArticleRescheduled({
+					model: newReadonlyModel({
+						language: preferredLanguage,
+						title: t("articleRescheduled.title"),
+						recipientName,
+						articleTitle: pickTranslation(title, preferredLanguage),
+						oldDate: existingArticle.datePublished,
+						newDate: new Date(publishingDate),
+					}),
+				}),
+			});
+			if (error) console.error(error);
+		});
 	return newArticle;
 }
 

@@ -534,5 +534,17 @@
 		"title": "We have reviewed and processed your article",
 		"message": "Good day {name}! We just wanted to inform you that we have reviewed and processed your article, and it will be published on {date} at {time} -- notwithstanding any potential changes (in which case, we would notify you beforehand). Thank you so much for writing for our website, we really appreciate you taking time out of your schedule to do this for us. We are hopeful that our relationship continues to flourish, and that God-willing, we will work on more joint endeavors in the future.",
 		"snippet": "Snippet of the article"
+	},
+	"articlePublished": {
+		"subject": "Your article has been published!",
+		"title": "Your article is now live",
+		"message": "Good day {name}. We just wanted to inform you that we have reviewed and published your article to our website. Thank you so much for writing for our website, we really appreciate you taking time out of your schedule to do this for us. We are hopeful that our relationship continues to flourish, and that God-willing, we will work on more joint endeavors in the future.",
+		"snippet": "Snippet of the article",
+		"continue": "View full article"
+	},
+	"articleRescheduled": {
+		"subject": "Your article's publishing date has been rescheduled",
+		"title": "We've made some changes",
+		"message": "Good day {name}! We just thought we would update you on some changes regarding your scheduled article <emphasis>'{title}'</emphasis>. We have shifted your article's publishing date from {oldDate} to <emphasis>{newDate}</emphasis>. If there are any more changes we will be sure to let you know, and if you have any inquiries, do not hesitate to reach out us. That's it! Thank you and enjoy the rest of your day."
 	}
 }

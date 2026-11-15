@@ -6,7 +6,6 @@ import { Container, Heading, Hr, Img, Text } from "react-email";
 import EmailContent from "../utilities/EmailContent";
 import EmailHeader from "../utilities/EmailHeader";
 import TemplateView from "../utilities/TemplateView";
-import style from "styled-jsx/style";
 
 const ArticleScheduled = async function ({ model }) {
 	const {
@@ -44,7 +43,7 @@ const ArticleScheduled = async function ({ model }) {
 						{title}
 					</Heading>
 					<Text>{message}</Text>
-					<Hr style={{ marginBottom: "24px", opacity: 0.5 }} />
+					<Hr style={{ marginBottom: "24px", opacity: 0.8 }} />
 					<Img
 						style={{
 							borderRadius: "8px",
