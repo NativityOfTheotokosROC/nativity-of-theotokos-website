@@ -134,7 +134,12 @@ const AppLayout = async function ({ model, children }) {
 			/>
 			{children}
 			<Footer model={footer} />
-			<LanguageSwitcher model={newReadonlyModel({ locale: language })} />
+			{/* For the dumb useSearchParams event-handling muck-ups */}
+			<Suspense fallback={null}>
+				<LanguageSwitcher
+					model={newReadonlyModel({ locale: language })}
+				/>
+			</Suspense>
 			<Toaster position="bottom-center" containerStyle={{ bottom: 35 }} />
 		</Suspense>
 	);
