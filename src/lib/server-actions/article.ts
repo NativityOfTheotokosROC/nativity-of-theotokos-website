@@ -825,7 +825,9 @@ export async function publishNewArticle({
 						model: newReadonlyModel({
 							language: preferredLanguage,
 							title: t("articlePublished.title"),
-							message: t("articlePublished.message"),
+							message: t("articlePublished.message", {
+								name: recipientName,
+							}),
 							articlePreview: {
 								title: pickTranslation(
 									title,

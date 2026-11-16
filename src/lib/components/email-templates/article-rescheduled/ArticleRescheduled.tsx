@@ -26,11 +26,12 @@ const ArticleRescheduled = async function ({ model }) {
 		),
 	});
 	const textMessage = removeMarkup(
-		t("message", {
+		t.markup("message", {
 			name: recipientName,
 			title: articleTitle,
 			oldDate: pickFullDateTimeTranslation(oldDate, language, true, true),
 			newDate: pickFullDateTimeTranslation(newDate, language, true, true),
+			emphasis: innerHtml => `<strong>${innerHtml}</strong>`,
 		}),
 	);
 

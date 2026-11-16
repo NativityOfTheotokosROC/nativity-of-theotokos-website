@@ -289,7 +289,8 @@
 		"schedulePublish": "Запланировать публикацию",
 		"scheduledPublishMainMessage": "Статья отправлена",
 		"scheduledPublishDetailedMessage": "Статья успешно отправлена и запланирована к публикации на <mkp>{date}</mkp> в <mkp>{time}</mkp>.",
-		"publishingDateField": "Дата публикации"
+		"publishingDateField": "Дата публикации",
+		"submit": "Опубликовать"
 	},
 	"scheduleItem": {
 		"catechism": "Катехизация",

@@ -21,6 +21,8 @@ import {
 } from "../server-actions/article";
 import { Translation } from "../utilities/types";
 import { useRouter } from "@/src/i18n/navigation";
+import { NATIVE_TIMEZONE } from "../utilities/date-time";
+import { toZonedTime } from "date-fns-tz";
 
 export function reviewArticleNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
@@ -89,7 +91,12 @@ export function useReviewArticle(
 					});
 					const notificationPublishingDate = article.publishingDate
 						? new Date(article.publishingDate)
-						: undefined;
+						: currentArticle?.datePublished
+							? toZonedTime(
+									currentArticle.datePublished,
+									NATIVE_TIMEZONE,
+								)
+							: undefined;
 					try {
 						if (currentArticle) {
 							await updateExistingArticle({
