@@ -22,8 +22,8 @@ export async function compressImage(
 		compressedImage,
 		extension: options?.useWebp
 			? "webp"
-			: file.type
-					.split(".")
-					.findLast(segment => typeof segment === "string"),
+			: file.name.includes(".")
+				? file.name.split(".").pop()
+				: undefined,
 	};
 }
