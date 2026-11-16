@@ -5,7 +5,7 @@ import {
 	getQuotes,
 	getScheduledQuotes,
 } from "@/src/lib/server-only/quote";
-import { getNativeTimeZone } from "@/src/lib/utilities/date-time";
+import { NATIVE_TIMEZONE } from "@/src/lib/utilities/date-time";
 import { isValidLocale } from "@/src/lib/utilities/internationalization";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { toZonedTime } from "date-fns-tz";
@@ -32,7 +32,7 @@ export default async function Page() {
 	await connection();
 	const [quotes, scheduledQuotes, autoCompleteInfo] = [
 		getQuotes(),
-		getScheduledQuotes(toZonedTime(new Date(), getNativeTimeZone())),
+		getScheduledQuotes(toZonedTime(new Date(), NATIVE_TIMEZONE)),
 		getAutoCompleteInfo(),
 	];
 

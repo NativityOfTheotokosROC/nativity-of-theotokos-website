@@ -11,11 +11,21 @@ import { ViewTransition } from "react";
 
 const ArticleCard = function ({ model }) {
 	const { articlePreview: article, isDetailed } = model.modelView;
-	const { title, author: unparsedAuthor, dateCreated, snippet, articleImage, uri } = article;
-	const author = typeof unparsedAuthor === "string" ? unparsedAuthor : unparsedAuthor.name;
+	const {
+		title,
+		author: unparsedAuthor,
+		datePublished: datePublished,
+		snippet,
+		articleImage,
+		uri,
+	} = article;
+	const author =
+		typeof unparsedAuthor === "string"
+			? unparsedAuthor
+			: unparsedAuthor.name;
 	const { placeholder } = articleImage;
 	const articleLink = `/news/${uri}`;
-	const dateString = getNewsArticleDateString(dateCreated);
+	const dateString = getNewsArticleDateString(datePublished);
 	const tCaptions = useTranslations("imageCaptions");
 
 	return isDetailed ? (

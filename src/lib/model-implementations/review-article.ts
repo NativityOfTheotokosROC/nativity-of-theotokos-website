@@ -16,11 +16,13 @@ import {
 import { ToastNotification } from "../models/toast";
 import { ArticleDraft } from "../models/write-article";
 import {
-	publishExistingArticle,
+	updateExistingArticle,
 	publishNewArticle,
 } from "../server-actions/article";
 import { Translation } from "../utilities/types";
 import { useRouter } from "@/src/i18n/navigation";
+import { NATIVE_TIMEZONE } from "../utilities/date-time";
+import { toZonedTime } from "date-fns-tz";
 
 export function reviewArticleNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
@@ -82,15 +84,24 @@ export function useReviewArticle(
 		async interact(interaction) {
 			switch (interaction.type) {
 				case "PUBLISH": {
+					const { article } = interaction.input;
 					await notifier.interact({
 						type: "NOTIFY",
 						input: { notification: { type: "submitting" } },
 					});
+					const notificationPublishingDate = article.publishingDate
+						? new Date(article.publishingDate)
+						: currentArticle?.datePublished
+							? toZonedTime(
+									currentArticle.datePublished,
+									NATIVE_TIMEZONE,
+								)
+							: undefined;
 					try {
 						if (currentArticle) {
-							await publishExistingArticle({
+							await updateExistingArticle({
 								articleId: currentArticle.uri,
-								incomingArticle: interaction.input.article,
+								incomingArticle: article,
 								ticketId,
 								locale,
 							});
@@ -100,6 +111,8 @@ export function useReviewArticle(
 									notification: {
 										type: "submit_success",
 										message: t("submitSuccess"),
+										publishingDate:
+											notificationPublishingDate,
 									},
 								},
 							});
@@ -118,10 +131,10 @@ export function useReviewArticle(
 								notification: {
 									type: "submit_success",
 									message: t("submitSuccess"),
+									publishingDate: notificationPublishingDate,
 								},
 							},
 						});
-						router.refresh();
 					} catch (error) {
 						await notifier.interact({
 							type: "NOTIFY",

@@ -1,5 +1,4 @@
 import Footer from "@/src/lib/components/footer/Footer";
-import Header from "@/src/lib/components/header/Header";
 import LanguageSwitcher from "@/src/lib/components/language-switcher/LanguageSwitcher";
 import LayoutLoadingSkeleton from "@/src/lib/components/layout-loading-skeleton/LayoutLoadingSkeleton";
 import PageLoadingBar from "@/src/lib/components/page-loading-bar/PageLoadingBar";
@@ -12,6 +11,7 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
+import Header from "@/src/lib/components/header/Header";
 
 const AppLayout = async function ({ model, children }) {
 	const { language } = model.modelView;
@@ -134,7 +134,12 @@ const AppLayout = async function ({ model, children }) {
 			/>
 			{children}
 			<Footer model={footer} />
-			<LanguageSwitcher model={newReadonlyModel({ locale: language })} />
+			{/* For the dumb useSearchParams event-handling muck-ups */}
+			<Suspense fallback={null}>
+				<LanguageSwitcher
+					model={newReadonlyModel({ locale: language })}
+				/>
+			</Suspense>
 			<Toaster position="bottom-center" containerStyle={{ bottom: 35 }} />
 		</Suspense>
 	);

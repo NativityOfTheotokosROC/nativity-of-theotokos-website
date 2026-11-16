@@ -1,15 +1,14 @@
-import { cacheLife, cacheTag } from "next/cache";
+import { ImagePlaceholder } from "@grod56/placeholder";
+import { cacheTag } from "next/cache";
 import { notFound } from "next/navigation";
 import database from "../third-party/prisma";
+import { pickTranslation } from "../utilities/miscellaneous";
 import {
 	Article,
 	ArticleAuthor,
 	ArticleAuthorWithTranslations,
 	Language,
 } from "../utilities/types";
-import { ImagePlaceholder, getPlaceholder } from "@grod56/placeholder";
-import { isRemotePath, pickTranslation } from "../utilities/miscellaneous";
-import { BASE_URL } from "../utilities/server-constants";
 
 export const _FULL_ARTICLE_INCLUDES = {
 	author: { include: { name: true } },
@@ -26,19 +25,13 @@ export async function getArticle(articleId: string, language: Language) {
 
 	const locale = language;
 	try {
+		const featuredArticle = getFeaturedArticle(language);
 		const article = await database.article.findUniqueOrThrow({
 			where: { link: articleId },
 			include: _FULL_ARTICLE_INCLUDES,
 		});
-		const baseUrl = BASE_URL;
-
-		const placeholder =
-			(article.image.placeholder?.placeholder as ImagePlaceholder) ??
-			(await getPlaceholder(
-				isRemotePath(article.image.link)
-					? article.image.link
-					: `${baseUrl}${article.image.link}`,
-			));
+		const placeholder = article.image.placeholder
+			.placeholder as ImagePlaceholder;
 		const title = pickTranslation(article.title, locale);
 		const author = {
 			name: pickTranslation(article.author.name, locale),
@@ -52,7 +45,7 @@ export async function getArticle(articleId: string, language: Language) {
 			uri: articleId,
 			title,
 			author,
-			dateCreated: article.dateCreated,
+			datePublished: article.datePublished,
 			dateUpdated: article.dateUpdated ?? undefined,
 			body,
 			snippet,
@@ -61,7 +54,7 @@ export async function getArticle(articleId: string, language: Language) {
 				caption: imageCaption ?? undefined,
 				placeholder,
 			},
-			isArticleFeatured: article.featuredArticle !== null,
+			isArticleFeatured: article.link === (await featuredArticle)?.uri,
 		} satisfies Omit<Article, "url">;
 	} catch (error) {
 		if (
@@ -76,36 +69,26 @@ export async function getArticle(articleId: string, language: Language) {
 
 //TODO: Refactor
 export async function getArticleWithTranslations(articleId: string) {
-	"use cache: remote";
-	cacheTag(`article_${articleId}`);
-
 	try {
+		const featuredArticle = getFeaturedArticle(undefined, true);
 		const {
 			title,
 			author,
 			body,
 			snippet,
-			dateCreated,
+			datePublished,
 			dateUpdated,
 			image,
-			featuredArticle,
 		} = await database.article.findUniqueOrThrow({
 			where: { link: articleId },
 			include: _FULL_ARTICLE_INCLUDES,
 		});
-		const baseUrl = BASE_URL;
-		const placeholder =
-			(image.placeholder?.placeholder as ImagePlaceholder) ??
-			(await getPlaceholder(
-				isRemotePath(image.link)
-					? image.link
-					: `${baseUrl}${image.link}`,
-			));
+		const placeholder = image.placeholder.placeholder as ImagePlaceholder;
 		return {
 			uri: articleId,
 			title,
 			author,
-			dateCreated,
+			datePublished,
 			dateUpdated: dateUpdated ?? undefined,
 			body,
 			snippet,
@@ -114,7 +97,7 @@ export async function getArticleWithTranslations(articleId: string) {
 				caption: image.caption ?? undefined,
 				placeholder,
 			},
-			isArticleFeatured: featuredArticle !== null,
+			isArticleFeatured: articleId === (await featuredArticle)?.uri,
 		};
 	} catch (error) {
 		if (
@@ -130,8 +113,8 @@ export async function getArticleWithTranslations(articleId: string) {
 export async function getAllArticles(language: Language) {
 	"use cache: remote";
 	cacheTag("bulletin_articles");
-	cacheLife("hours");
 
+	const featuredArticle = await getFeaturedArticle();
 	const articles = await database.article
 		.findMany({
 			include: _FULL_ARTICLE_INCLUDES,
@@ -145,9 +128,8 @@ export async function getAllArticles(language: Language) {
 					snippet,
 					link,
 					image,
-					dateCreated,
+					datePublished,
 					dateUpdated,
-					featuredArticle,
 				} = record;
 				if (language === "ru")
 					return {
@@ -158,7 +140,7 @@ export async function getAllArticles(language: Language) {
 							email: author.email ?? undefined,
 						},
 						body: body.russian ?? body.english,
-						dateCreated,
+						datePublished: datePublished,
 						dateUpdated: dateUpdated ?? undefined,
 						snippet: snippet.russian ?? snippet.english,
 						articleImage: {
@@ -166,7 +148,7 @@ export async function getAllArticles(language: Language) {
 							caption:
 								image.caption.russian ?? image.caption.english,
 						},
-						isArticleFeatured: featuredArticle !== null,
+						isArticleFeatured: link === featuredArticle?.uri,
 					} satisfies Article;
 				return {
 					uri: link,
@@ -176,14 +158,14 @@ export async function getAllArticles(language: Language) {
 						email: author.email ?? undefined,
 					},
 					body: body.english,
-					dateCreated,
+					datePublished: datePublished,
 					dateUpdated: dateUpdated ?? undefined,
 					snippet: snippet.english,
 					articleImage: {
 						url: image.link,
 						caption: image.caption.russian ?? image.caption.english,
 					},
-					isArticleFeatured: featuredArticle !== null,
+					isArticleFeatured: link === featuredArticle?.uri,
 				} satisfies Article;
 			}),
 		);
@@ -211,7 +193,7 @@ export async function getArticleMetadata(
 			title,
 			author,
 			snippet,
-			dateCreated: article.dateCreated,
+			datePublished: article.datePublished,
 			dateUpdated: article.dateUpdated ?? undefined,
 			articleImage: {
 				url: article.image.link,
@@ -224,7 +206,7 @@ export async function getArticleMetadata(
 			| "author"
 			| "snippet"
 			| "articleImage"
-			| "dateCreated"
+			| "datePublished"
 			| "dateUpdated"
 		>;
 	} catch (error) {
@@ -236,6 +218,58 @@ export async function getArticleMetadata(
 			notFound();
 		throw error;
 	}
+}
+
+export async function getFeaturedArticle(
+	language: Language = "en",
+	includeUnpublished: boolean = false,
+) {
+	const currentDate = new Date();
+
+	const featuredArticle = await database.featuredArticle.findFirst({
+		include: { article: { include: _FULL_ARTICLE_INCLUDES } },
+		where: {
+			article: {
+				removedArticle: { is: null },
+				datePublished: !includeUnpublished
+					? { lte: currentDate }
+					: undefined,
+			},
+		},
+		orderBy: {
+			dateFeatured: "desc",
+		},
+	});
+	if (!featuredArticle) return null;
+	const {
+		title,
+		body,
+		author,
+		snippet,
+		datePublished,
+		dateUpdated,
+		link,
+		image,
+	} = featuredArticle.article;
+
+	return {
+		uri: link,
+		title: pickTranslation(title, language),
+		author: {
+			name: pickTranslation(author.name, language),
+			email: author.email,
+		},
+		body: pickTranslation(body, language),
+		datePublished,
+		dateUpdated: dateUpdated ?? undefined,
+		snippet: pickTranslation(snippet, language),
+		articleImage: {
+			url: image.link,
+			caption: pickTranslation(image.caption, language),
+			placeholder: image.placeholder.placeholder as ImagePlaceholder,
+		},
+		isArticleFeatured: true as const,
+	} satisfies Article & { isArticleFeatured: true };
 }
 
 export async function getArticleAuthors() {

@@ -1,51 +1,58 @@
 "use server";
 
 import { ImagePlaceholder } from "@grod56/placeholder";
+import { newReadonlyModel } from "@mvc-react/mvc";
 import { getTranslations } from "next-intl/server";
-import { cacheTag, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { forbidden, notFound } from "next/navigation";
+import { after } from "next/server";
+import z from "zod";
+import ArticlePublished from "../components/email-templates/article-published/ArticlePublished";
+import ArticleRescheduled from "../components/email-templates/article-rescheduled/ArticleRescheduled";
+import ArticleScheduled from "../components/email-templates/article-scheduled/ArticleScheduled";
+import AuthorInvite from "../components/email-templates/author-invite/AuthorInvite";
 import { ArticleDraft, NewArticleDraft } from "../models/write-article";
 import {
-	ArticleAuthorWithTranslations,
-	ArticleWithTranslations,
-	ReplacePropertyType,
-	Translation,
-} from "../utilities/types";
-import { _FULL_ARTICLE_INCLUDES, getArticle } from "../server-only/article";
+	_FULL_ARTICLE_INCLUDES,
+	getArticle,
+	getFeaturedArticle,
+} from "../server-only/article";
 import { getPlaceholder } from "../server-only/placeholder";
 import database from "../third-party/prisma";
-import {
-	Article,
-	ArticleAuthor,
-	ArticleTicket,
-	Language,
-} from "../utilities/types";
+import resend from "../third-party/resend";
 import { hasArticleChanged } from "../utilities/article";
+import { MAILING_ADDRESS } from "../utilities/constants";
+import {
+	pickFullDateTranslation,
+	pickFullTimeTranslation,
+} from "../utilities/date-time";
+import { isValidLocale } from "../utilities/internationalization";
 import {
 	getMd5Hash,
-	isRemotePath,
 	pickTranslation,
 	removeMarkup,
 	snippetify,
 } from "../utilities/miscellaneous";
 import { BASE_URL, SENDER_EMAIL } from "../utilities/server-constants";
 import {
+	ArticleAuthorWithTranslations,
+	ArticleTicket,
+	ArticleWithTranslations,
+	Language,
+	ReplacePropertyType,
+	Translation,
+} from "../utilities/types";
+import {
 	getArticleAuthorSchema,
 	getArticleSchema,
+	getArticleSubmissionSchema,
 	MAX_SNIPPET,
 	NewArticle,
 	NewArticleSubmission,
 } from "../validation/article";
-import { getArticleSubmissionSchema } from "../validation/article";
-import { getUser, protect } from "./auth";
 import { NewTranslation } from "../validation/utilities";
-import z from "zod";
-import { after } from "next/server";
-import resend from "../third-party/resend";
-import AuthorInvite from "../components/email-templates/author-invite/AuthorInvite";
-import { newReadonlyModel } from "@mvc-react/mvc";
+import { getUser, protect } from "./auth";
 import { getUserInformation } from "./user";
-import { isValidLocale } from "../utilities/internationalization";
 
 export async function assignArticle(
 	email: string,
@@ -208,22 +215,30 @@ export async function assignArticle(
 			const { data, error: contactError } = await resend.contacts.get({
 				email: assigneeEmail,
 			});
-			const language = isValidLocale(data?.properties.preferredLang.value)
+			const preferredLanguage = isValidLocale(
+				data?.properties.preferredLang.value,
+			)
 				? data.properties.preferredLang.value
 				: "en";
-			const t = await getTranslations({ locale: language });
+			const t = await getTranslations({ locale: preferredLanguage });
 			const { error: sendingError } = await resend.emails.send({
 				from: `${t("miscellaneous.churchName")} <${SENDER_EMAIL}>`,
-				to: [assigneeEmail],
+				to: [
+					`${data?.first_name ?? pickTranslation(assigneeName, preferredLanguage)} <${assigneeEmail}>`,
+				],
+				replyTo: MAILING_ADDRESS,
 				subject: t("authorInvite.title"),
 				react: AuthorInvite({
 					model: newReadonlyModel({
-						language,
+						language: preferredLanguage,
 						author: {
 							email: assigneeEmail,
 							name:
 								data?.first_name ??
-								pickTranslation(assigneeName, language),
+								pickTranslation(
+									assigneeName,
+									preferredLanguage,
+								),
 						},
 						articleLink: `${BASE_URL}/write-article`,
 					}),
@@ -347,6 +362,7 @@ export async function makeArticleEdit(articleId: string) {
 	if (article.author.email !== user.email)
 		await protect({ roles: ["editor"] });
 
+	const featuredArticlePromise = getFeaturedArticle(undefined, true);
 	const ticket = await database.articleTicket.upsert({
 		include: { articleDraft: true },
 		create: {
@@ -382,7 +398,7 @@ export async function makeArticleEdit(articleId: string) {
 			author: { name: article.author.name },
 			body: article.body,
 			snippet: article.snippet,
-			dateCreated: article.dateCreated,
+			datePublished: article.datePublished,
 			uri: article.link,
 			articleImage: {
 				url: article.image.link,
@@ -391,7 +407,8 @@ export async function makeArticleEdit(articleId: string) {
 					(article.image.placeholder
 						?.placeholder as ImagePlaceholder) ?? undefined,
 			},
-			isArticleFeatured: article.featuredArticle !== null,
+			isArticleFeatured:
+				(await featuredArticlePromise)?.uri === article.link,
 		},
 	} satisfies {
 		ticketId: string;
@@ -421,6 +438,7 @@ export async function getLatestUnsubmittedArticle() {
 	const user = await getUser();
 	if (!user) forbidden();
 
+	const featuredArticlePromise = getFeaturedArticle(undefined, true);
 	const unsubmittedDraftTicket = await database.articleTicket.findFirst({
 		orderBy: {
 			articleDraft: { lastSaved: "desc" },
@@ -466,7 +484,8 @@ export async function getLatestUnsubmittedArticle() {
 						},
 						body: unsubmittedDraftTicket.article.body,
 						snippet: unsubmittedDraftTicket.article.snippet,
-						dateCreated: unsubmittedDraftTicket.article.dateCreated,
+						datePublished:
+							unsubmittedDraftTicket.article.datePublished,
 						uri: unsubmittedDraftTicket.article.link,
 						articleImage: {
 							url: unsubmittedDraftTicket.article.image.link,
@@ -479,8 +498,8 @@ export async function getLatestUnsubmittedArticle() {
 								undefined,
 						},
 						isArticleFeatured:
-							unsubmittedDraftTicket.article.featuredArticle !==
-							null,
+							unsubmittedDraftTicket.article.link ===
+							(await featuredArticlePromise)?.uri,
 					}
 				: undefined,
 		} satisfies {
@@ -510,7 +529,7 @@ export async function getLatestUnsubmittedArticle() {
 				author: { name: unusedTicket.article.author.name },
 				body: unusedTicket.article.body,
 				snippet: unusedTicket.article.snippet,
-				dateCreated: unusedTicket.article.dateCreated,
+				datePublished: unusedTicket.article.datePublished,
 				uri: unusedTicket.article.link,
 				articleImage: {
 					url: unusedTicket.article.image.link,
@@ -520,7 +539,8 @@ export async function getLatestUnsubmittedArticle() {
 							?.placeholder as ImagePlaceholder) ?? undefined,
 				},
 				isArticleFeatured:
-					unusedTicket.article.featuredArticle !== null,
+					unusedTicket.article.link ===
+					(await featuredArticlePromise)?.uri,
 			} satisfies ArticleWithTranslations)
 		: null;
 
@@ -553,6 +573,7 @@ export async function getPendingArticleSubmission() {
 		},
 	});
 	if (!ticketData) return null;
+	const featuredArticlePromise = getFeaturedArticle(undefined, true);
 	if (
 		!ticketData.articleDraft!.pendingArticleSubmission!.editorEmail === null
 	)
@@ -587,7 +608,7 @@ export async function getPendingArticleSubmission() {
 				author: { name: ticketData.article.author.name },
 				body: ticketData.article.body,
 				snippet: ticketData.article.snippet,
-				dateCreated: ticketData.article.dateCreated,
+				datePublished: ticketData.article.datePublished,
 				uri: ticketData.article.link,
 				articleImage: {
 					url: ticketData.article.image.link,
@@ -596,7 +617,9 @@ export async function getPendingArticleSubmission() {
 						(ticketData.article.image.placeholder
 							?.placeholder as ImagePlaceholder) ?? undefined,
 				},
-				isArticleFeatured: ticketData.article.featuredArticle !== null,
+				isArticleFeatured:
+					ticketData.article.link ===
+					(await featuredArticlePromise)?.uri,
 			} satisfies ArticleWithTranslations)
 		: undefined;
 	return {
@@ -624,7 +647,9 @@ export async function publishNewArticle({
 	const draft = await database.articleDraft.findUnique({
 		include: {
 			pendingArticleSubmission: true,
-			articleTicket: true,
+			articleTicket: {
+				include: { assignee: { include: { name: true } } },
+			},
 		},
 		where: { articleTicketId: ticketId },
 	});
@@ -636,8 +661,16 @@ export async function publishNewArticle({
 	)
 		forbidden();
 
-	const { link, title, body, snippet, image, isArticleFeatured } =
-		await _validateNewArticle(incomingArticle, locale);
+	const {
+		link,
+		title,
+		body,
+		snippet,
+		image,
+		isArticleFeatured,
+		publishingDate,
+	} = await _validateNewArticle(incomingArticle, locale);
+	const placeholder = await getPlaceholder(image.url);
 
 	const newArticle = database.$transaction(async transaction => {
 		const result = await transaction.article.create({
@@ -701,26 +734,122 @@ export async function publishNewArticle({
 									},
 								},
 							},
+							placeholder: {
+								connectOrCreate: {
+									create: {
+										imageLink: image.url,
+										placeholder,
+									},
+									where: {
+										imageLink: image.url,
+									},
+								},
+							},
 						},
 						where: { link: image.url },
 					},
 				},
+				datePublished: publishingDate
+					? new Date(publishingDate)
+					: undefined,
 			},
 		});
 		if (isArticleFeatured) {
-			await transaction.featuredArticle.deleteMany({});
-			await transaction.featuredArticle.create({
-				data: { articleId: result.id },
+			await transaction.featuredArticle.upsert({
+				create: { articleId: result.id },
+				update: { dateFeatured: new Date() },
+				where: { articleId: result.id },
 			});
 		}
 		await transaction.articleTicket.delete({ where: { id: ticketId } });
 		return result;
 	});
 	revalidateTag("latest-articles", "max");
+	after(async () => {
+		const recipientEmail = draft.articleTicket.assigneeEmail;
+		const contact = await resend.contacts.get({
+			email: recipientEmail,
+		});
+		const preferredLanguage =
+			(contact.data?.properties.preferredLang.value as Language) ?? "en";
+		const recipientName =
+			contact.data?.first_name ??
+			pickTranslation(
+				draft.articleTicket.assignee.name,
+				preferredLanguage,
+			);
+		const t = await getTranslations({ locale: preferredLanguage });
+		const subject = publishingDate
+			? t("articleScheduledEmail.subject")
+			: t("articlePublished.subject");
+
+		const { error } = await resend.emails.send({
+			from: `${t("miscellaneous.churchName")} <${SENDER_EMAIL}>`,
+			to: [`${recipientName} <${recipientEmail}>`],
+			replyTo: MAILING_ADDRESS,
+			subject: subject,
+			react: publishingDate
+				? ArticleScheduled({
+						model: newReadonlyModel({
+							language: preferredLanguage,
+							title: t("articleScheduledEmail.title"),
+							message: t("articleScheduledEmail.message", {
+								name: recipientName,
+								date: pickFullDateTranslation(
+									new Date(publishingDate),
+									preferredLanguage,
+									true,
+								),
+								time: pickFullTimeTranslation(
+									new Date(publishingDate),
+									preferredLanguage,
+									true,
+									true,
+								),
+							}),
+							articlePreview: {
+								title: pickTranslation(
+									title,
+									preferredLanguage,
+								),
+								image: image.url,
+								snippet: pickTranslation(
+									snippet,
+									preferredLanguage,
+								),
+								link: `${BASE_URL}/news/${link}`,
+							},
+						}),
+					})
+				: ArticlePublished({
+						model: newReadonlyModel({
+							language: preferredLanguage,
+							title: t("articlePublished.title"),
+							message: t("articlePublished.message", {
+								name: recipientName,
+							}),
+							articlePreview: {
+								title: pickTranslation(
+									title,
+									preferredLanguage,
+								),
+								image: image.url,
+								snippet: pickTranslation(
+									snippet,
+									preferredLanguage,
+								),
+								link: `${BASE_URL}/news/${link}`,
+							},
+						}),
+					}),
+		});
+		if (contact.error) console.error(contact.error);
+		if (error) console.error(error);
+	});
 	return newArticle;
 }
 
-export async function publishExistingArticle({
+export async function updateExistingArticle({
 	articleId,
 	incomingArticle,
 	ticketId,
@@ -759,8 +888,24 @@ export async function publishExistingArticle({
 			forbidden();
 	}
 
-	const { title, body, snippet, authorName, image, isArticleFeatured } =
-		await _validateNewArticle(incomingArticle, locale);
+	const {
+		title,
+		body,
+		snippet,
+		authorName,
+		image,
+		isArticleFeatured,
+		publishingDate,
+	} = await _validateNewArticle(incomingArticle, locale);
+	const currentDate = new Date();
+	if (
+		publishingDate &&
+		existingArticle.datePublished.getTime() <= currentDate.getTime()
+	)
+		throw new Error(
+			"Article publishing date can no longer be rescheduled because the article has already been published.",
+		);
+	const placeholder = await getPlaceholder(image.url);
 
 	const newArticle = await database.$transaction(async transaction => {
 		const result = await transaction.article.update({
@@ -839,6 +984,17 @@ export async function publishExistingArticle({
 									},
 								},
 							},
+							placeholder: {
+								connectOrCreate: {
+									create: {
+										imageLink: image.url,
+										placeholder,
+									},
+									where: {
+										imageLink: image.url,
+									},
+								},
+							},
 						},
 						update: {
 							caption: {
@@ -859,29 +1015,40 @@ export async function publishExistingArticle({
 						},
 					},
 				},
-				dateUpdated: hasArticleChanged(
-					{
-						title: existingArticle.title,
-						author: { name: existingArticle.author.name },
-						body: existingArticle.body,
-						articleImage: {
-							url: existingArticle.image.link,
-							caption: existingArticle.image.caption,
+				dateUpdated:
+					existingArticle.datePublished.getTime() <
+						currentDate.getTime() &&
+					hasArticleChanged(
+						{
+							title: existingArticle.title,
+							author: { name: existingArticle.author.name },
+							body: existingArticle.body,
+							articleImage: {
+								url: existingArticle.image.link,
+								caption: existingArticle.image.caption,
+							},
 						},
-					},
-					incomingArticle,
-				)
-					? new Date()
-					: undefined,
+						incomingArticle,
+					)
+						? currentDate
+						: undefined,
+				datePublished:
+					existingArticle.datePublished.getTime() >
+					currentDate.getTime()
+						? publishingDate
+							? new Date(publishingDate)
+							: undefined
+						: undefined,
 			},
 			where: {
 				link: articleId, // TODO: Change articleId to articleLink in future to avoid confusion
 			},
 		});
 		if (isArticleFeatured) {
-			await transaction.featuredArticle.deleteMany({});
-			await transaction.featuredArticle.create({
-				data: { articleId: result.id },
+			await transaction.featuredArticle.upsert({
+				create: { articleId: result.id },
+				update: { dateFeatured: new Date() },
+				where: { articleId: result.id },
 			});
 		}
 		if (ticketId)
@@ -890,6 +1057,37 @@ export async function publishExistingArticle({
 	});
 	revalidateTag("latest-articles", "max");
 	revalidateTag(`article_${articleId}`, "max");
+	if (publishingDate)
+		after(async () => {
+			const recipientEmail = existingArticle.author.email;
+			const contact = await resend.contacts.get({
+				email: recipientEmail,
+			});
+			const preferredLanguage =
+				(contact.data?.properties.preferredLang.value as Language) ??
+				"en";
+			const recipientName =
+				contact.data?.first_name ??
+				pickTranslation(existingArticle.author.name, preferredLanguage);
+			const t = await getTranslations({ locale: preferredLanguage });
+			const { error } = await resend.emails.send({
+				from: `${t("miscellaneous.churchName")} <${SENDER_EMAIL}>`,
+				to: [`${recipientName} <${recipientEmail}>`],
+				replyTo: MAILING_ADDRESS,
+				subject: t("articleRescheduled.subject"),
+				react: ArticleRescheduled({
+					model: newReadonlyModel({
+						language: preferredLanguage,
+						title: t("articleRescheduled.title"),
+						recipientName,
+						articleTitle: pickTranslation(title, preferredLanguage),
+						oldDate: existingArticle.datePublished,
+						newDate: new Date(publishingDate),
+					}),
+				}),
+			});
+			if (error) console.error(error);
+		});
 	return newArticle;
 }
 

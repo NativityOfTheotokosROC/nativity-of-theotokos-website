@@ -11,6 +11,9 @@ import {
 } from "@/src/lib/server-only/article";
 import { Article as JSONLdArticle, WithContext } from "schema-dts";
 import { cacheTag } from "next/cache";
+import { connection } from "next/server";
+import { getUser, protect } from "@/src/lib/server-actions/auth";
+import { PHASE_PRODUCTION_BUILD } from "next/dist/shared/lib/constants";
 
 // const CACHE_TAG = "article";
 type ArticleMetadata = Awaited<ReturnType<typeof getArticleMetadata>>;
@@ -27,13 +30,13 @@ export async function generateStaticParams() {
 }
 
 function articleJsonLd(article: ArticleMetadata) {
-	const { title, author, articleImage, dateCreated, snippet } = article;
+	const { title, author, articleImage, datePublished, snippet } = article;
 	return {
 		"@context": "https://schema.org",
 		"@type": "BlogPosting",
 		headline: title,
 		description: snippet,
-		datePublished: dateCreated.toISOString(),
+		datePublished: datePublished.toISOString(),
 		author: {
 			"@type": "Person",
 			name: author,
@@ -83,16 +86,22 @@ export async function generateMetadata({
 export default async function Page({
 	params,
 }: PageProps<"/[locale]/news/[article]">) {
-	"use cache";
+	await connection();
 
 	const { article: articleId, locale } = await params;
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 	const article = await getArticle(articleId, language);
 	const processedArticle = { ...article, author: article.author.name };
-	cacheTag(`article_${article.uri}`);
 	const baseUrl = `${BASE_URL}${language == "ru" ? "/ru" : ""}`;
 	const permalink = `${baseUrl}/news/${article.uri.toString()}`;
 	const jsonLd = articleJsonLd(processedArticle);
+
+	if (
+		process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD &&
+		Date.now() < article.datePublished.getTime() &&
+		!(article.author.email === (await getUser())?.email)
+	)
+		await protect({ roles: ["editor"] });
 
 	return (
 		<>

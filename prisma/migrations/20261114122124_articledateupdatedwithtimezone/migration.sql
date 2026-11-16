@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Article" ALTER COLUMN "dateUpdated" SET DATA TYPE TIMESTAMPTZ;

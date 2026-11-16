@@ -10,20 +10,20 @@ import {
 import EventEmitter from "node:events";
 import { Language } from "../utilities/types";
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { URLSearchParams } from "node:url";
 
 export function languageToggleVIInterface(
 	localeRouter: ReturnType<typeof useRouter>,
 	currentPathName: string,
 	localeChangeEmitter: EventEmitter,
+	searchParams?: URLSearchParams,
 ): ViewInteractionInterface<
 	LanguageToggleModelView,
 	LanguageToggleModelInteraction
 > {
 	return {
-		produceModelView: async function (
-			interaction: LanguageToggleModelInteraction,
-			currentModelView: LanguageToggleModelView | null,
-		): Promise<LanguageToggleModelView> {
+		async produceModelView(interaction, currentModelView) {
 			if (!currentModelView)
 				throw new Error("The model is uninitialized");
 			const { alternateLanguage } = currentModelView;
@@ -40,26 +40,26 @@ export function languageToggleVIInterface(
 						});
 					});
 
-					let newPathName = ["/", "#", "?"]
-						.map(delimiter =>
-							currentPathName.replace(
-								`/${currentLanguage}${delimiter}`,
-								`/${alternateLanguage}${delimiter}`,
-							),
-						)
-						.filter(
-							candidate => !currentPathName.includes(candidate),
-						)[0];
-					if (
-						!newPathName &&
-						currentPathName.endsWith(`/${currentLanguage}`)
-					)
-						newPathName = currentPathName.replace(
-							new RegExp(`\\/${currentLanguage}$`),
-							`/${alternateLanguage}`,
-						);
-					if (!newPathName)
-						newPathName = `/${alternateLanguage}${currentPathName}`;
+					// let newPathName = ["/", "#", "?"]
+					// 	.map(delimiter =>
+					// 		currentPathName.replace(
+					// 			`/${currentLanguage}${delimiter}`,
+					// 			`/${alternateLanguage}${delimiter}`,
+					// 		),
+					// 	)
+					// 	.find(
+					// 		candidate => !currentPathName.includes(candidate),
+					// 	);
+					// if (
+					// 	!newPathName &&
+					// 	currentPathName.endsWith(`/${currentLanguage}`)
+					// )
+					// 	newPathName = currentPathName.replace(
+					// 		new RegExp(`\\/${currentLanguage}$`),
+					// 		`/${alternateLanguage}`,
+					// 	);
+					// if (!newPathName)
+					const newFullPath = `/${alternateLanguage}${currentPathName}${searchParams ? `?${searchParams.toString()}` : ""}`;
 
 					// localeRouter.replace( //TODO: Revisit once caching situation is figured out
 					// 	currentPathName.slice(
@@ -71,7 +71,7 @@ export function languageToggleVIInterface(
 					// 	{ locale: alternateLanguage, },
 					// );
 					// localeRouter.refresh();
-					location.replace(newPathName);
+					location.replace(newFullPath);
 					return await promise;
 				}
 			}
@@ -85,9 +85,15 @@ const useLanguageToggle = (
 ) => {
 	const alternateLanguage: Language = locale === "en" ? "ru" : "en";
 	const currentPathName = usePathname();
+	const searchParams = useSearchParams();
 	const [localeChangeEmitter] = useState(new EventEmitter());
 	const languageToggle = useInitializedStatefulInteractiveModel(
-		languageToggleVIInterface(router, currentPathName, localeChangeEmitter),
+		languageToggleVIInterface(
+			router,
+			currentPathName,
+			localeChangeEmitter,
+			searchParams,
+		),
 		{ alternateLanguage },
 	);
 

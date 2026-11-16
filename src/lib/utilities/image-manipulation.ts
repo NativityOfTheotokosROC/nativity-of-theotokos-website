@@ -6,6 +6,7 @@ export async function compressImage(
 		maxSizeMB: number;
 		useWebWorker: boolean;
 		maxWidthOrHeight: number;
+		useWebp: boolean;
 	}>,
 ) {
 	if (!file.type.startsWith("image/")) throw new Error("Invalid file type");
@@ -13,9 +14,16 @@ export async function compressImage(
 	const compressedImage = await imageCompression(file, {
 		maxSizeMB: options?.maxSizeMB,
 		maxWidthOrHeight: options?.maxWidthOrHeight,
-		fileType: "image/webp",
+		fileType: options?.useWebp ? "image/webp" : file.type,
 		useWebWorker: options?.useWebWorker ?? true,
 	});
 
-	return { compressedImage, extension: "webp" };
+	return {
+		compressedImage,
+		extension: options?.useWebp
+			? "webp"
+			: file.type
+					.split(".")
+					.findLast(segment => typeof segment === "string"),
+	};
 }

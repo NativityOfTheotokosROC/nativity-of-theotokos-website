@@ -44,6 +44,12 @@ export function isRemotePath(src: string) {
 	}
 }
 
+export function getSegmentIndex(path: string, segment: string) {
+	const pathSegments = path.split("/");
+	const segmentIndex = pathSegments.indexOf(segment);
+	return segmentIndex === -1 ? null : segmentIndex;
+}
+
 export const emptyStringAsUndefined = (value: string) => {
 	return value && value.length > 0 ? value : undefined;
 };

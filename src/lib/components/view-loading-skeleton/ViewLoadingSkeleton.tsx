@@ -9,9 +9,7 @@ export default function ViewLoadingSkeleton() {
 					<div
 						className={`mx-auto my-auto flex h-full max-w-[25em] animate-pulse items-center justify-center gap-3`}
 					>
-						<ViewTransition name="logo-icon">
-							<LogoIcon className="size-20 stroke-gray-800 object-contain object-center" />
-						</ViewTransition>
+						<LogoIcon className="size-20 stroke-gray-800 object-contain object-center" />
 					</div>
 				</div>
 			</div>

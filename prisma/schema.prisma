@@ -116,16 +116,22 @@ model Article {
   snippet         Translation      @relation("ArticleSnippetTranslation", fields: [snippetTranslationId], references: [id])
   author          ArticleAuthor    @relation(fields: [authorId], references: [id])
   image           ArticleImage     @relation(fields: [imageId], references: [id])
-  dateCreated     DateTime         @default(now())
-  dateUpdated     DateTime?
+  datePublished   DateTime         @default(now()) @db.Timestamptz
+  dateUpdated     DateTime?        @db.Timestamptz
+  articleTickets  ArticleTicket[]
   featuredArticle FeaturedArticle?
+  removedArticle  RemovedArticle?
 
   titleTranslationId   Int
   bodyTranslationId    Int
   snippetTranslationId Int
   authorId             Int
   imageId              Int
-  articleTickets       ArticleTicket[]
+}
+
+model RemovedArticle {
+  article   Article @relation(fields: [articleId], references: [id])
+  articleId Int     @id
 }
 
 model ArticleAuthor {
@@ -138,18 +144,19 @@ model ArticleAuthor {
 }
 
 model ArticleImage {
-  id                   Int               @id @default(autoincrement())
-  link                 String            @unique
-  caption              Translation       @relation(fields: [captionTranslationId], references: [id])
-  placeholder          ImagePlaceholder? @relation(fields: [placeholderId], references: [id])
+  id                   Int              @id @default(autoincrement())
+  link                 String           @unique
+  caption              Translation      @relation(fields: [captionTranslationId], references: [id])
+  placeholder          ImagePlaceholder @relation(fields: [placeholderId], references: [id])
   captionTranslationId Int
-  placeholderId        Int?
+  placeholderId        Int
   articles             Article[]
 }
 
 model FeaturedArticle {
-  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  articleId Int     @id
+  article      Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId    Int      @id
+  dateFeatured DateTime @default(now())
 }
 
 model ArticleTicket {

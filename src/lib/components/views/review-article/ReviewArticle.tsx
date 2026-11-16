@@ -1,36 +1,44 @@
 "use client";
 
-import { ReviewArticleModel } from "@/src/lib/models/review-article";
-import { ModeledVoidComponent } from "@mvc-react/components";
-import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
-import PageView from "../../page-view/PageView";
-import { useTranslations } from "next-intl";
+import SuccessGraphic from "@/public/assets/ornament_32.svg";
+import { useCloseWarning } from "@/src/lib/client-only/miscellaneous";
 import { useArticlePreviewModal } from "@/src/lib/model-implementations/article-preview-modal";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useArticleSchema } from "@/src/lib/validation/article";
-import Spinner from "../../spinner/Spinner";
-import Editor from "../../editor/Editor";
-import Button from "../../button/Button";
-import ArticlePreviewModal from "../../article-preview-modal/ArticlePreviewModal";
 import { useFileSelector } from "@/src/lib/model-implementations/file-selector";
-import Image from "next/image";
+import { useFileUploader } from "@/src/lib/model-implementations/file-uploader";
+import { useImageProcessor } from "@/src/lib/model-implementations/image-processor";
+import { ReviewArticleModel } from "@/src/lib/models/review-article";
+import { getPresignedUrl } from "@/src/lib/server-actions/file-transfer";
 import {
 	BLANK_TRANSLATION,
 	DEFAULT_ARTICLE_PREVIEW_IMAGE,
 	DEFAULT_ARTICLE_PREVIEW_IMAGE_PLACEHOLDER,
 } from "@/src/lib/utilities/constants";
-import { useImageProcessor } from "@/src/lib/model-implementations/image-processor";
-import { useFileUploader } from "@/src/lib/model-implementations/file-uploader";
-import { getPresignedUrl } from "@/src/lib/server-actions/file-transfer";
+import {
+	getDateLocale,
+	getDateTimeString,
+	NATIVE_TIMEZONE,
+	pickTimeTranslation,
+} from "@/src/lib/utilities/date-time";
 import { generateUniqueName } from "@/src/lib/utilities/miscellaneous";
-import FileSelectorButton from "../../file-selector-button/FileSelectorButton";
-import { useCloseWarning } from "@/src/lib/client-only/miscellaneous";
-import GoHomeButton from "../../button/GoHomeButton";
-import SuccessGraphic from "@/public/assets/ornament_32.svg";
+import { useArticleSchema } from "@/src/lib/validation/article";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ModeledVoidComponent } from "@mvc-react/components";
+import { InitializedModel, newReadonlyModel } from "@mvc-react/mvc";
+import { toZonedTime } from "date-fns-tz";
 import { Check, X } from "lucide-react";
-import InformationView from "../../information-view/InformationView";
+import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
+import { Controller, useForm } from "react-hook-form";
+import z from "zod";
+import ArticlePreviewModal from "../../article-preview-modal/ArticlePreviewModal";
+import Button from "../../button/Button";
+import GoHomeButton from "../../button/GoHomeButton";
 import Checkbox from "../../checkbox/Checkbox";
+import Editor from "../../editor/Editor";
+import FileSelectorButton from "../../file-selector-button/FileSelectorButton";
+import InformationView from "../../information-view/InformationView";
+import PageView from "../../page-view/PageView";
+import Spinner from "../../spinner/Spinner";
 
 const ReviewArticle = function ({ model }) {
 	const { modelView, interact } = model;
@@ -38,14 +46,25 @@ const ReviewArticle = function ({ model }) {
 		modelView;
 	const t = useTranslations("reviewArticle");
 	const tMisc = useTranslations("miscellaneous");
+	const locale = useLocale();
+	const currentDate = new Date();
+	const hasBeenPublished = currentArticle
+		? currentDate.getTime() >=
+			toZonedTime(currentArticle.datePublished, NATIVE_TIMEZONE).getTime()
+		: false;
 	const {
 		control,
 		register,
 		handleSubmit,
 		setValue,
+		watch,
 		formState: { errors, isSubmitting, isDirty },
 	} = useForm({
-		resolver: zodResolver(useArticleSchema()),
+		resolver: zodResolver(
+			useArticleSchema().extend({
+				isPublishingScheduled: z.boolean(),
+			}),
+		),
 		defaultValues: {
 			title: draft.title,
 			body: draft.body,
@@ -57,6 +76,11 @@ const ReviewArticle = function ({ model }) {
 					currentArticle?.articleImage.caption ?? BLANK_TRANSLATION,
 			},
 			isArticleFeatured: currentArticle?.isArticleFeatured ?? false,
+			isPublishingScheduled:
+				!hasBeenPublished && Boolean(currentArticle?.datePublished),
+			publishingDate: currentArticle
+				? getDateTimeString(currentArticle.datePublished, true)
+				: getDateTimeString(currentDate),
 		},
 		shouldUnregister: true,
 	});
@@ -66,13 +90,18 @@ const ReviewArticle = function ({ model }) {
 			await interact({
 				type: "PUBLISH",
 				input: {
-					article: form,
+					article: {
+						...form,
+						publishingDate: form.publishingDate
+							? new Date(form.publishingDate).toISOString()
+							: undefined,
+					},
 				},
 			});
 		}),
 	);
-	const imageProcessor = useImageProcessor();
 	const fileUploader = useFileUploader();
+	const imageProcessor = useImageProcessor();
 	const imageSelector = useFileSelector({
 		type: "image",
 		async selectCallback(file) {
@@ -88,7 +117,7 @@ const ReviewArticle = function ({ model }) {
 						file,
 						async successCallback(processedImage, extension) {
 							const presignedUrl = await getPresignedUrl(
-								`${generateUniqueName()}.${extension}`,
+								`${generateUniqueName()}${extension ? `.${extension}` : ""}`,
 								"news",
 								processedImage.type,
 							);
@@ -134,12 +163,37 @@ const ReviewArticle = function ({ model }) {
 	if (notification?.type === "submit_success")
 		return (
 			<InformationView
-				model={newReadonlyModel({
-					mainMessage: t("mainMessage"),
-					detailedMessage: t("detailedMessage"),
-					Graphic: SuccessGraphic,
-				})}
+				model={newReadonlyModel(
+					notification.publishingDate
+						? {
+								mainMessage: t("scheduledPublishMainMessage"),
+								Graphic: SuccessGraphic,
+							}
+						: {
+								mainMessage: t("mainMessage"),
+								detailedMessage: t("detailedMessage"),
+								Graphic: SuccessGraphic,
+							},
+				)}
 			>
+				<span className="text-lg">
+					{notification.publishingDate &&
+						t.rich("scheduledPublishDetailedMessage", {
+							date: notification.publishingDate.toLocaleDateString(
+								getDateLocale(locale),
+								{ dateStyle: "full" },
+							),
+							time: pickTimeTranslation(
+								notification.publishingDate,
+								locale,
+							),
+							mkp: innerHtml => (
+								<span className="font-semibold">
+									{innerHtml}
+								</span>
+							),
+						})}
+				</span>
 				<GoHomeButton>{t("nextButton")}</GoHomeButton>
 			</InformationView>
 		);
@@ -156,8 +210,10 @@ const ReviewArticle = function ({ model }) {
 								title: form.title,
 								body: form.body,
 								authorName: form.authorName,
-								dateCreated:
-									currentArticle?.dateCreated ?? new Date(),
+								datePublished: form.publishingDate
+									? new Date(form.publishingDate)
+									: (currentArticle?.datePublished ??
+										new Date()),
 								snippet: form.snippet,
 								image: form.image,
 							},
@@ -250,13 +306,12 @@ const ReviewArticle = function ({ model }) {
 												<Image
 													className="h-full w-full grow object-cover object-center"
 													src={
-														(imageProcessor
-															.modelView
+														imageProcessor.modelView
 															.processedImage
 															?.blobURL ??
-														value !== "")
+														(value
 															? value
-															: DEFAULT_ARTICLE_PREVIEW_IMAGE
+															: DEFAULT_ARTICLE_PREVIEW_IMAGE)
 													}
 													placeholder="blur"
 													blurDataURL={
@@ -361,6 +416,37 @@ const ReviewArticle = function ({ model }) {
 								{errors.form.message}
 							</span>
 						)}
+						<Controller
+							control={control}
+							name={"isPublishingScheduled"}
+							render={({ field: { onChange, value } }) => (
+								<Checkbox
+									model={newReadonlyModel({
+										isChecked: value && !hasBeenPublished,
+										disabled: hasBeenPublished,
+										label: t("schedulePublish"),
+										checkedChangeCallback: onChange,
+									})}
+								/>
+							)}
+						/>
+						{!hasBeenPublished &&
+							watch("isPublishingScheduled") && (
+								<>
+									<input
+										{...register("publishingDate")}
+										type="datetime-local"
+										className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.publishingDate ? "border-red-800" : "border-gray-400"}`}
+										placeholder={t("publishingDateField")}
+										min={getDateTimeString(currentDate)}
+									/>
+									{errors.publishingDate && (
+										<span className="text-sm text-red-800">
+											{errors.publishingDate.message}
+										</span>
+									)}
+								</>
+							)}
 						<hr className="mt-6 w-full opacity-50" />
 						<div className="mt-1 flex w-full justify-start gap-3">
 							<Button
@@ -380,6 +466,8 @@ const ReviewArticle = function ({ model }) {
 											size: 20,
 										})}
 									/>
+								) : watch("isPublishingScheduled") ? (
+									t("submit")
 								) : (
 									t("publish")
 								)}
