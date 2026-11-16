@@ -467,9 +467,9 @@ const ReviewArticle = function ({ model }) {
 										})}
 									/>
 								) : watch("isPublishingScheduled") ? (
-									t("publish")
-								) : (
 									t("submit")
+								) : (
+									t("publish")
 								)}
 							</Button>
 						</div>
