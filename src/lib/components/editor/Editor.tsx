@@ -24,6 +24,7 @@ const Editor = function ({ model }) {
 			StarterKit.configure({
 				link: {
 					openOnClick: "whenNotEditable",
+					enableClickSelection: true,
 				},
 			}),
 			TextStyleKit,
