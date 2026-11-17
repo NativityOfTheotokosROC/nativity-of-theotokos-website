@@ -2,7 +2,6 @@ import "@/src/lib/styles/document.css";
 import OfficePaste from "@intevation/tiptap-extension-office-paste";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
-import Link from "@tiptap/extension-link";
 import { Subscript } from "@tiptap/extension-subscript";
 import { Superscript } from "@tiptap/extension-superscript";
 import { TextStyleKit } from "@tiptap/extension-text-style";
@@ -22,14 +21,15 @@ const Editor = function ({ model }) {
 		editable: !isReadonly,
 		content: initialContent,
 		extensions: [
-			StarterKit,
+			StarterKit.configure({
+				link: {
+					openOnClick: "whenNotEditable",
+				},
+			}),
 			TextStyleKit,
 			Superscript,
 			Subscript,
 			OfficePaste,
-			Link.configure({
-				openOnClick: false,
-			}),
 		],
 		immediatelyRender: false,
 		onUpdate({ editor }) {

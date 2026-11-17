@@ -112,9 +112,7 @@ export function useEditorTools(editor: Editor | null) {
 							.focus()
 							.insertContent(label ?? url)
 							.run();
-						editor.chain().unsetLink().run();
 					}
-					editor.chain().focus().run();
 					break;
 				}
 				default: {
