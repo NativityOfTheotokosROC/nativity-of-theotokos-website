@@ -43,7 +43,7 @@ const InsertLinkModal = function ({ model }) {
 		>
 			<div className="flex w-full flex-col items-center justify-center">
 				{modelView && (
-					<form className="flex w-full flex-1 flex-col gap-6 p-6">
+					<form className="flex w-full flex-1 flex-col gap-4 p-6">
 						{!modelView.initialLinkDetails?.selectionExists && (
 							<input
 								{...register("label")}
@@ -57,6 +57,7 @@ const InsertLinkModal = function ({ model }) {
 							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.url ? "border-red-800" : "border-gray-400"}`}
 							placeholder={t("linkField")}
 							autoCapitalize="none"
+							autoFocus
 						/>
 						{errors.url && (
 							<span className="text-sm text-red-800">
@@ -67,7 +68,7 @@ const InsertLinkModal = function ({ model }) {
 							model={newReadonlyModel({
 								orientation: "horizontal",
 								arrangement: "center",
-								className: "w-full",
+								className: "w-full mt-3",
 							})}
 						>
 							<Button

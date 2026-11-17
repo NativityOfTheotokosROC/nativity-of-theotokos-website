@@ -90,17 +90,31 @@ export function useEditorTools(editor: Editor | null) {
 					break;
 				}
 				case "UNSET_LINK": {
-					editor.chain().focus().unsetLink().run();
+					editor
+						.chain()
+						.focus()
+						.extendMarkRange("link")
+						.unsetLink()
+						.run();
 					break;
 				}
 				case "SET_LINK": {
 					const { url, label } = interaction.input;
-					editor.chain().focus().setLink({ href: url });
+					editor
+						.chain()
+						.focus()
+						.extendMarkRange("link")
+						.setLink({ href: url })
+						.run();
 					if (editor.state.selection.empty) {
-						editor.chain().insertContent(label ?? url);
-						editor.chain().unsetLink();
+						editor
+							.chain()
+							.focus()
+							.insertContent(label ?? url)
+							.run();
+						editor.chain().unsetLink().run();
 					}
-					editor.chain().run();
+					editor.chain().focus().run();
 					break;
 				}
 				default: {
