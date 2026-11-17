@@ -21,16 +21,16 @@ const Editor = function ({ model }) {
 		editable: !isReadonly,
 		content: initialContent,
 		extensions: [
+			TextStyleKit,
+			Superscript,
+			Subscript,
+			OfficePaste,
 			StarterKit.configure({
 				link: {
 					openOnClick: "whenNotEditable",
 					enableClickSelection: true,
 				},
 			}),
-			TextStyleKit,
-			Superscript,
-			Subscript,
-			OfficePaste,
 		],
 		immediatelyRender: false,
 		onUpdate({ editor }) {
