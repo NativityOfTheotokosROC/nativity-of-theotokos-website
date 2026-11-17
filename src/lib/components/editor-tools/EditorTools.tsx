@@ -157,29 +157,29 @@ const EditorTools = function ({ model }) {
 					>
 						<Subscript />
 					</EditorButton>
-					<EditorButton
-						model={{
-							modelView: {
-								title: link ? t("removeLink") : t("insertLink"),
-								isDisabled: !canLink,
-							},
-							interact: () =>
-								link
-									? interact({ type: "UNSET_LINK" })
-									: insertLinkModal.interact({
-											type: "OPEN",
-											input: {
-												initialLinkDetails: {
-													selectionExists:
-														selection !== undefined,
-												},
-											},
-										}),
-						}}
-					>
-						<Link2Icon />
-					</EditorButton>
 				</EditorButtonGroup>
+				<EditorButton
+					model={{
+						modelView: {
+							title: link ? t("removeLink") : t("insertLink"),
+							isDisabled: !canLink,
+						},
+						interact: () =>
+							link
+								? interact({ type: "UNSET_LINK" })
+								: insertLinkModal.interact({
+										type: "OPEN",
+										input: {
+											initialLinkDetails: {
+												selectionExists:
+													selection !== undefined,
+											},
+										},
+									}),
+					}}
+				>
+					<Link2Icon />
+				</EditorButton>
 				<EditorButtonGroup>
 					<EditorButton
 						model={{

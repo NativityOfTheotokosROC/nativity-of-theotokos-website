@@ -43,27 +43,20 @@ const InsertLinkModal = function ({ model }) {
 		>
 			<div className="flex w-full flex-col items-center justify-center">
 				{modelView && (
-					<form
-						className="flex flex-col gap-6 p-6"
-						onSubmit={handleSubmit(async form => {
-							await interact({
-								type: "INSERT_LINK",
-								input: form,
-							});
-							await interact({ type: "CLOSE" });
-						})}
-					>
+					<form className="flex flex-1 flex-col gap-6 p-6">
 						{!modelView.initialLinkDetails?.selectionExists && (
 							<input
 								{...register("label")}
 								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.label ? "border-red-800" : "border-gray-400"}`}
 								placeholder={`${t("labelFieldAlt")} (${tMisc("optional")})`}
+								autoCapitalize="none"
 							/>
 						)}
 						<input
 							{...register("url")}
 							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.url ? "border-red-800" : "border-gray-400"}`}
 							placeholder={t("linkField")}
+							autoCapitalize="none"
 						/>
 						{errors.url && (
 							<span className="text-sm text-red-800">
@@ -87,8 +80,14 @@ const InsertLinkModal = function ({ model }) {
 							</Button>
 							<Button
 								model={newReadonlyModel({
-									type: "submit",
-									disabled: !isValid,
+									action: () =>
+										handleSubmit(async form => {
+											await interact({
+												type: "INSERT_LINK",
+												input: form,
+											});
+											await interact({ type: "CLOSE" });
+										}),
 								})}
 								className="min-w-[8em]"
 							>
