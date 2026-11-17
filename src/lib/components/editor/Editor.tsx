@@ -40,6 +40,13 @@ const Editor = function ({ model }) {
 			transformPastedHTML(html) {
 				return html.replace(/style="[^"]*"/gi, "");
 			},
+			handleClick(_view, _pos, event) {
+				if ((event.target as HTMLElement).closest("a") && !isReadonly) {
+					event.preventDefault();
+					return true;
+				}
+				return false;
+			},
 		},
 	});
 	const editorTools = useEditorTools(editor);
