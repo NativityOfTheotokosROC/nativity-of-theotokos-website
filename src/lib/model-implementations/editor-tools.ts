@@ -20,17 +20,22 @@ export function useEditorTools(editor: Editor | null) {
 	return {
 		modelView: editorState
 			? {
-					bold: editorState.isBold,
-					italic: editorState.isItalic,
-					underline: editorState.isUnderlined,
-					canUndo: editorState.canUndo,
-					canRedo: editorState.canRedo,
-					quote: editorState.isBlockquote,
-					heading: editorState.isHeading1,
-					bulletList: editorState.isBulletList,
-					numberedList: editorState.isOrderedList,
-					superscript: editorState.isSuperscript,
-					subscript: editorState.isSubscript,
+					currentState: {
+						bold: editorState.isBold,
+						italic: editorState.isItalic,
+						underline: editorState.isUnderlined,
+						canUndo: editorState.canUndo,
+						canRedo: editorState.canRedo,
+						canLink: editorState.canLink,
+						quote: editorState.isBlockquote,
+						heading: editorState.isHeading1,
+						bulletList: editorState.isBulletList,
+						numberedList: editorState.isOrderedList,
+						superscript: editorState.isSuperscript,
+						subscript: editorState.isSubscript,
+						link: editorState.isLink,
+						selection: editorState.selection,
+					},
 				}
 			: null,
 		interact: async function (interaction: EditorToolsModelInteraction) {
@@ -84,8 +89,34 @@ export function useEditorTools(editor: Editor | null) {
 					editor.chain().focus().toggleSubscript().run();
 					break;
 				}
+				case "UNSET_LINK": {
+					editor
+						.chain()
+						.focus()
+						.extendMarkRange("link")
+						.unsetLink()
+						.run();
+					break;
+				}
+				case "SET_LINK": {
+					const { url, label } = interaction.input;
+					editor
+						.chain()
+						.focus()
+						.extendMarkRange("link")
+						.setLink({ href: url })
+						.run();
+					if (editor.state.selection.empty) {
+						editor
+							.chain()
+							.focus()
+							.insertContent(label ?? url)
+							.run();
+					}
+					break;
+				}
 				default: {
-					interaction.type satisfies never;
+					interaction satisfies never;
 				}
 			}
 		},

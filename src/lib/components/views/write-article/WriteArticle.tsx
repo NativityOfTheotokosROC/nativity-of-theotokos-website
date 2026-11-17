@@ -146,6 +146,7 @@ const WriteArticle = function ({ model }) {
 							placeholder={t("titleField")}
 							autoComplete="off"
 							autoCapitalize="words"
+							autoFocus
 						/>
 						{errors.title?.english && (
 							<span className="text-sm text-red-800">

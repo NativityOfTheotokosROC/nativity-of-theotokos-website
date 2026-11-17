@@ -52,7 +52,9 @@
 		"sub": "Subscript",
 		"super": "Superscript",
 		"underline": "Underline",
-		"undo": "Undo"
+		"undo": "Undo",
+		"insertLink": "Insert Link",
+		"removeLink": "Remove Link"
 	},
 	"editPanel": {
 		"delete": "Delete",
@@ -547,5 +549,14 @@
 		"subject": "Your article's publishing date has been rescheduled",
 		"title": "We've made some changes",
 		"message": "Good day {name}! We just thought we would update you on some changes regarding your scheduled article <emphasis>''{title}''</emphasis>. We have shifted your article's publishing date from {oldDate} to <emphasis>{newDate}</emphasis>. If there are any more changes we will be sure to let you know; and if you have any inquiries, do not hesitate to reach out us. That's it! Thank you and enjoy the rest of your day."
+	},
+	"insertLinkModal": {
+		"title": "Insert Link",
+		"linkField": "URL",
+		"linkFieldAlt": "Link",
+		"labelField": "Label",
+		"labelFieldAlt": "Link Label",
+		"cancel": "Cancel",
+		"insertLink": "Insert Link"
 	}
 }

@@ -1,6 +1,9 @@
 import { EditorStateSnapshot, Editor } from "@tiptap/react";
 
 export function editorToolsStateSelector(ctx: EditorStateSnapshot<Editor>) {
+	const { view, state } = ctx.editor;
+	const { from, to } = view.state.selection;
+	const text = state.doc.textBetween(from, to, "").trim();
 	return {
 		isEditable: ctx.editor.isEditable,
 		// Text formatting
@@ -14,6 +17,9 @@ export function editorToolsStateSelector(ctx: EditorStateSnapshot<Editor>) {
 		canClearMarks: ctx.editor.can().chain().unsetAllMarks().run() ?? false,
 		isSuperscript: ctx.editor.isActive("superscript") ?? false,
 		isSubscript: ctx.editor.isActive("subscript") ?? false,
+		isLink: ctx.editor.isActive("link") ?? false,
+		canLink: ctx.editor.can().chain().toggleLink().run() ?? undefined,
+		selection: text === "" ? undefined : text,
 
 		// Block types
 		isParagraph: ctx.editor.isActive("paragraph") ?? false,
