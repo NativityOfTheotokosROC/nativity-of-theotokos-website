@@ -52,7 +52,9 @@
 		"sub": "Subscript",
 		"super": "Superscript",
 		"underline": "Underline",
-		"undo": "Undo"
+		"undo": "Undo",
+		"insertLink": "Insert Link",
+		"removeLink": "Remove Link"
 	},
 	"editPanel": {
 		"delete": "Delete",

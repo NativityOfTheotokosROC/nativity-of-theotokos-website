@@ -12,7 +12,7 @@ export type InsertLinkModalModelView = {
 	isOpen: boolean;
 	initialLinkDetails?: Partial<{
 		url: string;
-		label: string;
+		selectionExists?: boolean;
 	}>;
 };
 

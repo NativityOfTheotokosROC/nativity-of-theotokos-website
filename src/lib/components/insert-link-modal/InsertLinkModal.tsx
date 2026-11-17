@@ -26,7 +26,7 @@ const InsertLinkModal = function ({ model }) {
 
 	useEffect(() => {
 		reset({
-			label: modelView?.initialLinkDetails?.label ?? "",
+			label: "",
 			url: modelView?.initialLinkDetails?.url ?? "",
 		});
 	}, [reset, modelView]);
@@ -53,11 +53,13 @@ const InsertLinkModal = function ({ model }) {
 							await interact({ type: "CLOSE" });
 						})}
 					>
-						<input
-							{...register("label")}
-							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.label ? "border-red-800" : "border-gray-400"}`}
-							placeholder={`${t("labelFieldAlt")} (${tMisc("optional")})`}
-						/>
+						{!modelView.initialLinkDetails?.selectionExists && (
+							<input
+								{...register("label")}
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.label ? "border-red-800" : "border-gray-400"}`}
+								placeholder={`${t("labelFieldAlt")} (${tMisc("optional")})`}
+							/>
+						)}
 						<input
 							{...register("url")}
 							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.url ? "border-red-800" : "border-gray-400"}`}
