@@ -43,7 +43,7 @@ const InsertLinkModal = function ({ model }) {
 		>
 			<div className="flex w-full flex-col items-center justify-center">
 				{modelView && (
-					<form className="flex flex-1 flex-col gap-6 p-6">
+					<form className="flex w-full flex-1 flex-col gap-6 p-6">
 						{!modelView.initialLinkDetails?.selectionExists && (
 							<input
 								{...register("label")}
@@ -80,14 +80,13 @@ const InsertLinkModal = function ({ model }) {
 							</Button>
 							<Button
 								model={newReadonlyModel({
-									action: () =>
-										handleSubmit(async form => {
-											await interact({
-												type: "INSERT_LINK",
-												input: form,
-											});
-											await interact({ type: "CLOSE" });
-										}),
+									action: handleSubmit(async form => {
+										await interact({
+											type: "INSERT_LINK",
+											input: form,
+										});
+										await interact({ type: "CLOSE" });
+									}),
 								})}
 								className="min-w-[8em]"
 							>
