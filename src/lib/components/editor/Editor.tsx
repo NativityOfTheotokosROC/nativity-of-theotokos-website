@@ -27,7 +27,9 @@ const Editor = function ({ model }) {
 			Superscript,
 			Subscript,
 			OfficePaste,
-			Link,
+			Link.configure({
+				openOnClick: false,
+			}),
 		],
 		immediatelyRender: false,
 		onUpdate({ editor }) {

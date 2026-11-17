@@ -22,6 +22,7 @@ import { EditorToolsModel } from "../../models/editor-tools";
 import EditorButtonGroup from "../editor-button-group/EditorButtonGroup";
 import EditorButton from "../editor-button/EditorButton";
 import InsertLinkModal from "../insert-link-modal/InsertLinkModal";
+import { link } from "node:fs";
 
 const EditorTools = function ({ model }) {
 	const { modelView, interact } = model;
@@ -48,6 +49,7 @@ const EditorTools = function ({ model }) {
 			interact({ type: "SET_LINK", input: newLink });
 		},
 	});
+	const x = 0;
 
 	return (
 		<>
@@ -163,6 +165,7 @@ const EditorTools = function ({ model }) {
 						modelView: {
 							title: link ? t("removeLink") : t("insertLink"),
 							isDisabled: !canLink,
+							isToggled: link,
 						},
 						interact: () =>
 							link
