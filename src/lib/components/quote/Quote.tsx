@@ -83,8 +83,16 @@ const Quote = function ({ model, className, style }) {
 				{typeof quote.author === "string"
 					? quote.author
 					: pickTranslation(quote.author, parsedLanguage)}
-				{quote.source &&
-					`, ${typeof quote.source === "string" ? quote.source : pickTranslation(quote.source, parsedLanguage)}`}
+				{quote.source && (
+					<>
+						{", "}
+						<span className="italic">
+							{typeof quote.source === "string"
+								? quote.source
+								: pickTranslation(quote.source, parsedLanguage)}
+						</span>
+					</>
+				)}
 			</span>
 			{quote.id !== undefined && modifiers && (
 				<EditQuotePanel
