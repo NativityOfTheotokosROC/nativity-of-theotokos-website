@@ -997,6 +997,7 @@ export async function updateExistingArticle({
 							},
 						},
 						update: {
+							link: image.url,
 							caption: {
 								connectOrCreate: {
 									create: {
@@ -1009,6 +1010,17 @@ export async function updateExistingArticle({
 										englishHash: getMd5Hash(
 											image.caption.english,
 										),
+									},
+								},
+							},
+							placeholder: {
+								connectOrCreate: {
+									create: {
+										imageLink: image.url,
+										placeholder,
+									},
+									where: {
+										imageLink: image.url,
 									},
 								},
 							},
