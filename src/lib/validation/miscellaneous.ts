@@ -8,7 +8,7 @@ export function getInsertLinkSchema(t?: Translator) {
 			error:
 				t &&
 				t("validation.invalidUrl", {
-					field: t("insertLinkModal.linkField"),
+					field: t("insertLinkModal.linkFieldAlt"),
 				}),
 		}),
 		label: getOptionalStringSchema({ trim: true }),

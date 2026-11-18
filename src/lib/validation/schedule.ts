@@ -1,7 +1,8 @@
 import z from "zod";
 import { Translator } from "../utilities/types";
 import { getTranslationSchema, useLocalizedSchema } from "./utilities";
-import { validateRecurringPattern } from "../utilities/schedule";
+import { Cron } from "croner";
+import { NATIVE_TIMEZONE } from "../utilities/date-time";
 
 export type NewScheduleItem = z.infer<ReturnType<typeof getScheduleItemSchema>>;
 export type NewInstantaneousScheduleItem = z.infer<
@@ -95,4 +96,27 @@ export function useInstantaneousScheduleItemSchema() {
 
 export function useRecurringScheduleItemSchema() {
 	return useLocalizedSchema(getRecurringScheduleItemSchema);
+}
+
+export function validateRecurringPattern(
+	pattern: string,
+	options?: Partial<{ useLocalTimezone: boolean }>,
+) {
+	try {
+		const cron = new Cron(
+			pattern,
+			options?.useLocalTimezone
+				? { timezone: NATIVE_TIMEZONE }
+				: undefined,
+		);
+		// TODO: This needs work
+		if (
+			!cron.getPattern()?.startsWith("0 0") ||
+			cron.getPattern()?.endsWith("* * *")
+		)
+			return null;
+		return cron;
+	} catch {
+		return null;
+	}
 }

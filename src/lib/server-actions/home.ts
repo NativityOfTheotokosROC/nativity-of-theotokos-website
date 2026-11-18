@@ -25,6 +25,7 @@ import { after } from "next/server";
 import NewSubscriber from "../components/email-templates/new-subscriber/NewSubscriber";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { BASE_URL, SENDER_EMAIL } from "../utilities/server-constants";
+import database from "../third-party/prisma";
 
 export type LatestArticles = {
 	featuredArticle: ArticlePreview;
@@ -101,9 +102,18 @@ export async function subscribeToMailingList(email: string) {
 	after(async () => {
 		const t = await getTranslations({ locale });
 		const unsubLink = `${BASE_URL}/unsubscribe?id=${data.id}`;
+		const user = await database.user.findFirst({
+			where: {
+				email: { equals: validatedEmail, mode: "insensitive" },
+			},
+		});
 		const { error: emailError } = await resend.emails.send({
 			from: `${t("miscellaneous.churchName")} <${SENDER_EMAIL}>`,
-			to: [validatedEmail],
+			to: [
+				user?.name
+					? `${user.name} <${validatedEmail}>`
+					: validatedEmail,
+			],
 			subject: t("newSubscriber.title"),
 			react: NewSubscriber({
 				model: newReadonlyModel({

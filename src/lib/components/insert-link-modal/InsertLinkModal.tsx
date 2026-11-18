@@ -17,7 +17,7 @@ const InsertLinkModal = function ({ model }) {
 	const tMisc = useTranslations("miscellaneous");
 	const {
 		handleSubmit,
-		formState: { errors, isValid },
+		formState: { errors },
 		reset,
 		register,
 	} = useForm({
@@ -50,13 +50,15 @@ const InsertLinkModal = function ({ model }) {
 								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.label ? "border-red-800" : "border-gray-400"}`}
 								placeholder={`${t("labelFieldAlt")} (${tMisc("optional")})`}
 								autoCapitalize="none"
+								autoComplete="on"
 							/>
 						)}
 						<input
 							{...register("url")}
 							className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.url ? "border-red-800" : "border-gray-400"}`}
-							placeholder={t("linkField")}
-							autoCapitalize="none"
+							placeholder={`${t("linkFieldAlt")} (https://example.com)`}
+							type={"url"}
+							autoComplete="on"
 							autoFocus
 						/>
 						{errors.url && (

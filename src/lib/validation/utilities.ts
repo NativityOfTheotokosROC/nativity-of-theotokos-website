@@ -68,7 +68,10 @@ export function getStringSchema(options?: StringValidationOptions) {
 		expression = expression.regex(value, { error: invalidMessage });
 	}
 	return options?.preprocess
-		? z.preprocess(options.preprocess!, expression) as z.ZodPipe<z.ZodTransform<string, string>, typeof expression> // HACK
+		? (z.preprocess(options.preprocess!, expression) as z.ZodPipe<
+				z.ZodTransform<string, string>,
+				typeof expression
+			>) // HACK
 		: expression;
 }
 

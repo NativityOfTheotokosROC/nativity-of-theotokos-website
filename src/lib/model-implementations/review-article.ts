@@ -91,7 +91,11 @@ export function useReviewArticle(
 					});
 					const notificationPublishingDate = article.publishingDate
 						? new Date(article.publishingDate)
-						: currentArticle?.datePublished
+						: currentArticle?.datePublished &&
+							  toZonedTime(
+									currentArticle.datePublished,
+									NATIVE_TIMEZONE,
+							  ).getTime() > Date.now()
 							? toZonedTime(
 									currentArticle.datePublished,
 									NATIVE_TIMEZONE,

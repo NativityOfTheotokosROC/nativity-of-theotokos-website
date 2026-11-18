@@ -1,5 +1,4 @@
-import { Cron } from "croner";
-import { getDateString, NATIVE_TIMEZONE } from "./date-time";
+import { getDateString } from "./date-time";
 import {
 	InstantaneousScheduleItem,
 	Language,
@@ -16,6 +15,7 @@ import {
 	NewRecurringScheduleItem,
 } from "../validation/schedule";
 import { subDays } from "date-fns";
+import { validateRecurringPattern } from "../validation/schedule";
 
 export type BaseScheduleEvent<
 	T extends string,
@@ -40,29 +40,6 @@ export type RecurringScheduleItemWithOptionalId<T extends Text = string> =
 export type RecurringScheduleItemInstanceWithOptionalId<
 	T extends Text = string,
 > = MakeOptional<RecurringScheduleItemInstance<T>, "recurringItemId">;
-
-export function validateRecurringPattern(
-	pattern: string,
-	options?: Partial<{ useLocalTimezone: boolean }>,
-) {
-	try {
-		const cron = new Cron(
-			pattern,
-			options?.useLocalTimezone
-				? { timezone: NATIVE_TIMEZONE }
-				: undefined,
-		);
-		// TODO: This needs work
-		if (
-			!cron.getPattern()?.startsWith("0 0") ||
-			cron.getPattern()?.endsWith("* * *")
-		)
-			return null;
-		return cron;
-	} catch {
-		return null;
-	}
-}
 
 export function getNextRecurringScheduleItemDate(
 	pattern: string,
