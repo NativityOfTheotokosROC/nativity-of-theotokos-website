@@ -5,6 +5,7 @@ import {
 	getTranslationSchema,
 	useLocalizedSchema,
 } from "./utilities";
+import { removeMarkup } from "../utilities/miscellaneous";
 
 export const MAX_TITLE = 100;
 export const MIN_BODY = 100;
@@ -72,15 +73,18 @@ export function getArticleSubmissionSchema(t?: Translator) {
 							field: t("writeArticle.bodyField"),
 						}),
 				},
-				min: {
-					value: MIN_BODY,
-					invalidMessage:
-						t &&
-						t("validation.minCharacters", {
-							field: t("writeArticle.bodyField"),
-							min: MIN_BODY,
-						}),
-				},
+				refinements: [
+					{
+						value: markedUpText =>
+							removeMarkup(markedUpText).length > MIN_BODY,
+						invalidMessage:
+							t &&
+							t("validation.minCharacters", {
+								field: t("writeArticle.bodyField"),
+								min: MIN_BODY,
+							}),
+					},
+				],
 			},
 		}),
 	});
