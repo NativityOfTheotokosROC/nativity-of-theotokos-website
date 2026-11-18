@@ -29,6 +29,7 @@ const Editor = function ({ model }) {
 				link: {
 					openOnClick: "whenNotEditable",
 					enableClickSelection: true,
+					autolink: false,
 				},
 			}),
 		],
