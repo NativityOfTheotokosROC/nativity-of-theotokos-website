@@ -1,23 +1,24 @@
 "use client";
 
+import { usePathname } from "@/src/i18n/navigation";
 import ShareButton from "@/src/lib/components/share-button/ShareButton";
 import SocialLink from "@/src/lib/components/social-link/SocialLink";
 import { ArticleModel } from "@/src/lib/models/article";
 import "@/src/lib/styles/document.css";
 import { georgia } from "@/src/lib/third-party/fonts";
+import { useCanUserEditArticle } from "@/src/lib/utilities/article";
 import { getNewsArticleDateString } from "@/src/lib/utilities/date-time";
 import { getEncodedShareData } from "@/src/lib/utilities/miscellaneous";
-import { useUserInformation } from "@/src/lib/utilities/user";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
+import { EditIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { ViewTransition } from "react";
 import ArticleInteractiveLink from "../../article-interactive-link/ArticleInteractiveLink";
-import { EditIcon } from "lucide-react";
-import { usePathname } from "@/src/i18n/navigation";
-import { useCanUserEditArticle } from "@/src/lib/utilities/article";
+import Ornament from "@/public/assets/ornament_1.svg";
+import AuthorProfileCard from "../../author-profile-card/AuthorProfileCard";
 
 const Article = function ({ model }) {
 	const { article, permalink, options } = model.modelView;
@@ -153,6 +154,22 @@ const Article = function ({ model }) {
 					className={`body document self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed`}
 					dangerouslySetInnerHTML={{ __html: body }}
 				/>
+				{typeof author !== "string" && author.profile && (
+					<div className="flex flex-col gap-6 self-center">
+						<Ornament
+							className="h-[6em] max-w-9/10 self-center"
+							fill="#88815899"
+						/>
+						<AuthorProfileCard
+							model={newReadonlyModel({
+								name: author.name,
+								description: author.profile.description,
+								profilePicture: author.profile.picture,
+								contactEmail: author.profile.contactEmail,
+							})}
+						/>
+					</div>
+				)}
 			</div>
 		</main>
 	);

@@ -135,6 +135,11 @@ export type ArticleTicket = {
 export type ArticleAuthor = {
 	name: string;
 	email?: string;
+	profile?: {
+		description: string;
+		picture?: Image;
+		contactEmail?: string;
+	};
 };
 
 export type Unravel<T> = { [K in keyof T]: T[K] };
