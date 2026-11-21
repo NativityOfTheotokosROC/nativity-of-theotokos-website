@@ -48,6 +48,7 @@ import {
 	getArticleSubmissionSchema,
 	MAX_SNIPPET,
 	NewArticle,
+	NewArticleAuthor,
 	NewArticleSubmission,
 } from "../validation/article";
 import { NewTranslation } from "../validation/utilities";
@@ -1110,6 +1111,92 @@ export async function canUserEditArticle(articleUri: string) {
 	if (user.roles.some(role => role === "admin" || role === "editor"))
 		return true;
 	return user.email === (await articlePromise).author.email;
+}
+
+export async function addArticleAuthor(author: NewArticleAuthor) {
+	await protect({ roles: ["editor"] });
+	const { email, name, profile } = getArticleAuthorSchema().parse(author);
+
+	const nameHash = getMd5Hash(name.english);
+	const profilePicturePlaceholder =
+		profile?.picture && (await getPlaceholder(profile.picture));
+
+	await database.articleAuthor.upsert({
+		create: {
+			email,
+			name: {
+				connectOrCreate: {
+					create: { ...name, englishHash: nameHash },
+					where: {
+						englishHash: nameHash,
+					},
+				},
+			},
+			articleAuthorProfile: profile && {
+				create: {
+					description: {
+						create: {
+							...profile.description,
+							englishHash: getMd5Hash(
+								profile.description.english,
+							),
+						},
+					},
+					articleAuthorProfilePicture: profile.picture
+						? {
+								create: {
+									link: profile.picture,
+									placeholder: {
+										create: {
+											imageLink: profile.picture,
+											placeholder:
+												profilePicturePlaceholder!,
+										},
+									},
+								},
+							}
+						: undefined,
+				},
+			},
+		},
+		update: {
+			name: {
+				update: {
+					...name,
+					englishHash: nameHash,
+				},
+			},
+			articleAuthorProfile: profile && {
+				update: {
+					description: {
+						update: {
+							...profile.description,
+							englishHash: getMd5Hash(
+								profile.description.english,
+							),
+						},
+					},
+					articleAuthorProfilePicture: profile.picture
+						? {
+								update: {
+									link: profile.picture,
+									placeholder: {
+										update: {
+											imageLink: profile.picture,
+											placeholder:
+												profilePicturePlaceholder!,
+										},
+									},
+								},
+							}
+						: undefined,
+				},
+			},
+		},
+		where: {
+			email,
+		},
+	});
 }
 
 async function _validateNewArticle(newArticle: NewArticle, locale?: Language) {

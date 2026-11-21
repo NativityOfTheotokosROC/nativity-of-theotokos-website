@@ -135,12 +135,30 @@ model RemovedArticle {
 }
 
 model ArticleAuthor {
-  id                Int             @id @default(autoincrement())
-  name              Translation     @relation(fields: [nameTranslationId], references: [id])
-  email             String          @unique
-  nameTranslationId Int             @unique
-  articles          Article[]
-  articleTickets    ArticleTicket[]
+  id                   Int                   @id @default(autoincrement())
+  name                 Translation           @relation(fields: [nameTranslationId], references: [id])
+  email                String                @unique
+  nameTranslationId    Int                   @unique
+  articles             Article[]
+  articleTickets       ArticleTicket[]
+  articleAuthorProfile ArticleAuthorProfile?
+}
+
+model ArticleAuthorProfile {
+  articleAuthor               ArticleAuthor                @relation(fields: [articleAuthorId], references: [id], onDelete: Cascade)
+  description                 Translation                  @relation(fields: [descriptionTranslationId], references: [id])
+  articleAuthorProfilePicture ArticleAuthorProfilePicture?
+  contactEmail                String?
+  articleAuthorId             Int                          @id
+  descriptionTranslationId    Int
+}
+
+model ArticleAuthorProfilePicture {
+  articleAuthorProfile                ArticleAuthorProfile @relation(fields: [articleAuthorProfileArticleAuthorId], references: [articleAuthorId], onDelete: Cascade)
+  link                                String               @unique
+  placeholder                         ImagePlaceholder     @relation(fields: [imagePlaceholderId], references: [id])
+  imagePlaceholderId                  Int
+  articleAuthorProfileArticleAuthorId Int                  @id
 }
 
 model ArticleImage {
@@ -211,11 +229,12 @@ model Editor {
 }
 
 model ImagePlaceholder {
-  id                 Int                 @id @default(autoincrement())
-  imageLink          String              @unique
-  placeholder        String
-  articleImages      ArticleImage[]
-  dailyGalleryImages DailyGalleryImage[]
+  id                           Int                           @id @default(autoincrement())
+  imageLink                    String                        @unique
+  placeholder                  String
+  articleImages                ArticleImage[]
+  dailyGalleryImages           DailyGalleryImage[]
+  articleAuthorProfilePictures ArticleAuthorProfilePicture[]
 }
 
 model Translation {
@@ -238,6 +257,7 @@ model Translation {
   instantaneousScheduleItemsVenues         InstantaneousScheduleItem[]     @relation("ScheduleItemVenueTranslation")
   recurringScheduleItemTitles              RecurringScheduleItem[]         @relation("ScheduleItemTitleTranslation")
   recurringScheduleItemVenues              RecurringScheduleItem[]         @relation("ScheduleItemVenueTranslation")
+  articleAuthorProfiles                    ArticleAuthorProfile[]
 }
 
 model Commemoration {

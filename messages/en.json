@@ -558,5 +558,14 @@
 		"labelFieldAlt": "Link Label",
 		"cancel": "Cancel",
 		"insertLink": "Insert Link"
+	},
+	"authorProfile": {
+		"title": "Author Profile",
+		"nameField": "Name",
+		"descriptionField": "Description",
+		"contactEmailField": "Contact Email",
+		"profilePictureUrlField": "Profile Picture URL",
+		"email": "Email",
+		"submit": "Submit"
 	}
 }

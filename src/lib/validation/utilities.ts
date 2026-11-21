@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import z from "zod";
-import { emptyStringAsUndefined } from "../utilities/miscellaneous";
+import { emptyStringAsNullable } from "../utilities/miscellaneous";
 import { Translator } from "../utilities/types";
 
 export type ValidationOption<T> = { value: T; invalidMessage?: string };
@@ -86,7 +86,8 @@ export function getOptionalStringSchema(
 	options?: Omit<StringValidationOptions, "nonEmpty"> | z.ZodStringFormat, // Works ig
 ) {
 	return z.preprocess(
-		emptyStringAsUndefined,
+		value =>
+			typeof value === "string" ? emptyStringAsNullable(value) : value,
 		options && "_zod" in options
 			? options.optional()
 			: getStringSchema(options).optional(),

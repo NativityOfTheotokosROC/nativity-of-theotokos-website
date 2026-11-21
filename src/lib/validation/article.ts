@@ -1,17 +1,21 @@
 import z from "zod";
+import {
+	emptyStringAsNullable,
+	removeMarkup,
+} from "../utilities/miscellaneous";
 import { Translator } from "../utilities/types";
 import {
 	getOptionalStringSchema,
 	getTranslationSchema,
 	useLocalizedSchema,
 } from "./utilities";
-import { removeMarkup } from "../utilities/miscellaneous";
 
 export const MAX_TITLE = 100;
 export const MIN_BODY = 100;
 export const MIN_SNIPPET = 100;
 export const MAX_SNIPPET = 300;
 export const MAX_IMAGE_CAPTION = 200;
+export const MAX_AUTHOR_DESCRIPTION = 1000;
 
 export type NewArticleAuthor = z.infer<
 	ReturnType<typeof getArticleAuthorSchema>
@@ -34,6 +38,73 @@ export function getArticleAuthorSchema(t?: Translator) {
 					field: t("assignArticle.emailField"),
 				}),
 		}),
+		profile: z
+			.object({
+				description: getTranslationSchema({
+					...(t
+						? {
+								t,
+								fieldName: t("assignArticle.authorNameField"),
+							}
+						: {}),
+					englishValidationOptions: {
+						trim: true,
+						nonEmpty: { value: true },
+						max: {
+							value: MAX_AUTHOR_DESCRIPTION,
+							invalidMessage:
+								t &&
+								t("validation.maxCharacters", {
+									field: t("authorProfile.descriptionField"),
+								}),
+						},
+					},
+					russianValidationOptions: {
+						trim: true,
+						max: {
+							value: MAX_AUTHOR_DESCRIPTION,
+							invalidMessage:
+								t &&
+								t("validation.maxCharacters", {
+									field: t("authorProfile.descriptionField"),
+								}),
+						},
+					},
+				}),
+				picture: z.preprocess(
+					value =>
+						typeof value === "string"
+							? emptyStringAsNullable(value, null)
+							: value,
+					z
+						.httpUrl({
+							error:
+								t &&
+								t("validation.invalidUrl", {
+									field: t(
+										"authorProfile.profilePictureUrlField",
+									),
+								}),
+						})
+						.nullable(),
+				),
+				contactEmail: z.preprocess(
+					value =>
+						typeof value === "string"
+							? emptyStringAsNullable(value, null)
+							: value,
+					z
+						.email({
+							error:
+								t &&
+								t("validation.invalidEmail", {
+									field: t("authorProfile.contactEmailField"),
+								}),
+						})
+						.nullable(),
+				),
+			})
+			.optional(),
 	});
 }
 

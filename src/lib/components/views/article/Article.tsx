@@ -154,12 +154,13 @@ const Article = function ({ model }) {
 					className={`body document self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed`}
 					dangerouslySetInnerHTML={{ __html: body }}
 				/>
-				{typeof author !== "string" && author.profile && (
-					<div className="flex flex-col gap-6 self-center">
-						<Ornament
-							className="h-[6em] max-w-9/10 self-center"
-							fill="#88815899"
-						/>
+
+				<div className="flex flex-col gap-6 self-center">
+					<Ornament
+						className="h-[6em] max-w-9/10 self-center"
+						fill="#88815899"
+					/>
+					{typeof author !== "string" && author.profile && (
 						<AuthorProfileCard
 							model={newReadonlyModel({
 								name: author.name,
@@ -168,8 +169,8 @@ const Article = function ({ model }) {
 								contactEmail: author.profile.contactEmail,
 							})}
 						/>
-					</div>
-				)}
+					)}
+				</div>
 			</div>
 		</main>
 	);

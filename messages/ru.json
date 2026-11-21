@@ -559,5 +559,14 @@
 		"labelFieldAlt": "Текст ссылки",
 		"cancel": "Отмена",
 		"insertLink": "Вставить ссылку"
+	},
+	"authorProfile": {
+		"title": "Профиль автора",
+		"nameField": "Имя",
+		"descriptionField": "Описание",
+		"contactEmailField": "Контактный адрес электронной почты",
+		"profilePictureUrlField": "URL фотографии профиля",
+		"email": "Электронная почта",
+		"submit": "Отправить"
 	}
 }
