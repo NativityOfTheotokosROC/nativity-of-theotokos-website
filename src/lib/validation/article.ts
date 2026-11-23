@@ -26,6 +26,37 @@ export type NewArticleSubmission = z.infer<
 >;
 
 export function getArticleAuthorSchema(t?: Translator) {
+	const originalDescriptionSchema = getTranslationSchema({
+		...(t
+			? {
+					t,
+					fieldName: t("assignArticle.authorNameField"),
+				}
+			: {}),
+		englishValidationOptions: {
+			trim: true,
+			max: {
+				value: MAX_AUTHOR_DESCRIPTION,
+				invalidMessage:
+					t &&
+					t("validation.maxCharacters", {
+						field: t("authorProfile.descriptionField"),
+					}),
+			},
+		},
+		russianValidationOptions: {
+			trim: true,
+			max: {
+				value: MAX_AUTHOR_DESCRIPTION,
+				invalidMessage:
+					t &&
+					t("validation.maxCharacters", {
+						field: t("authorProfile.descriptionField"),
+					}),
+			},
+		},
+	});
+
 	return z.object({
 		//TODO: assign to new translation field
 		name: getTranslationSchema(
@@ -40,36 +71,14 @@ export function getArticleAuthorSchema(t?: Translator) {
 		}),
 		profile: z
 			.object({
-				description: getTranslationSchema({
-					...(t
-						? {
-								t,
-								fieldName: t("assignArticle.authorNameField"),
-							}
-						: {}),
-					englishValidationOptions: {
-						trim: true,
-						nonEmpty: { value: true },
-						max: {
-							value: MAX_AUTHOR_DESCRIPTION,
-							invalidMessage:
-								t &&
-								t("validation.maxCharacters", {
-									field: t("authorProfile.descriptionField"),
-								}),
-						},
-					},
-					russianValidationOptions: {
-						trim: true,
-						max: {
-							value: MAX_AUTHOR_DESCRIPTION,
-							invalidMessage:
-								t &&
-								t("validation.maxCharacters", {
-									field: t("authorProfile.descriptionField"),
-								}),
-						},
-					},
+				description: originalDescriptionSchema.extend({
+					english: z.preprocess(
+						value =>
+							typeof value === "string"
+								? emptyStringAsNullable(value, null)
+								: value,
+						originalDescriptionSchema.shape.english.nullable(),
+					),
 				}),
 				picture: z.preprocess(
 					value =>

@@ -7,7 +7,7 @@ import { Translator } from "../utilities/types";
 export type ValidationOption<T> = { value: T; invalidMessage?: string };
 export type StringValidationOptions = Partial<{
 	trim: boolean;
-	nonEmpty: ValidationOption<true>;
+	nonEmpty: ValidationOption<true> | "empty_undefined" | "empty_null";
 	invalidStringMessage: string;
 	min: ValidationOption<number>;
 	max: ValidationOption<number>;
@@ -52,7 +52,7 @@ export function getTranslationSchema(
 export function getStringSchema(options?: StringValidationOptions) {
 	let expression = z.string({ error: options?.invalidStringMessage });
 	if (options?.trim) expression = expression.trim();
-	if (options?.nonEmpty)
+	if (options?.nonEmpty && typeof options.nonEmpty !== "string")
 		expression = expression.nonempty({
 			error: options.nonEmpty.invalidMessage,
 		});
@@ -76,7 +76,7 @@ export function getStringSchema(options?: StringValidationOptions) {
 	}
 	return options?.preprocess
 		? (z.preprocess(options.preprocess!, expression) as z.ZodPipe<
-				z.ZodTransform<string, string>,
+				z.ZodTransform<unknown, string>,
 				typeof expression
 			>) // HACK
 		: expression;

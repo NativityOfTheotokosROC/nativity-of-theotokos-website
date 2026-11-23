@@ -135,22 +135,23 @@ model RemovedArticle {
 }
 
 model ArticleAuthor {
-  id                   Int                   @id @default(autoincrement())
-  name                 Translation           @relation(fields: [nameTranslationId], references: [id])
-  email                String                @unique
-  nameTranslationId    Int                   @unique
-  articles             Article[]
-  articleTickets       ArticleTicket[]
-  articleAuthorProfile ArticleAuthorProfile?
+  id                Int                   @id @default(autoincrement())
+  name              Translation           @relation(fields: [nameTranslationId], references: [id])
+  email             String                @unique
+  nameTranslationId Int                   @unique
+  token             String                @default(dbgenerated("gen_random_uuid()"))
+  articles          Article[]
+  articleTickets    ArticleTicket[]
+  profile           ArticleAuthorProfile?
 }
 
 model ArticleAuthorProfile {
-  articleAuthor               ArticleAuthor                @relation(fields: [articleAuthorId], references: [id], onDelete: Cascade)
-  description                 Translation                  @relation(fields: [descriptionTranslationId], references: [id])
-  articleAuthorProfilePicture ArticleAuthorProfilePicture?
-  contactEmail                String?
-  articleAuthorId             Int                          @id
-  descriptionTranslationId    Int
+  articleAuthor            ArticleAuthor                @relation(fields: [articleAuthorId], references: [id], onDelete: Cascade)
+  description              Translation?                 @relation(fields: [descriptionTranslationId], references: [id])
+  picture                  ArticleAuthorProfilePicture?
+  contactEmail             String?
+  articleAuthorId          Int                          @id
+  descriptionTranslationId Int?
 }
 
 model ArticleAuthorProfilePicture {

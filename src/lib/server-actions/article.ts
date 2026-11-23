@@ -1121,8 +1121,8 @@ export async function addArticleAuthor(author: NewArticleAuthor) {
 	const profilePicturePlaceholder =
 		profile?.picture && (await getPlaceholder(profile.picture));
 
-	await database.articleAuthor.upsert({
-		create: {
+	await database.articleAuthor.create({
+		data: {
 			email,
 			name: {
 				connectOrCreate: {
@@ -1132,17 +1132,20 @@ export async function addArticleAuthor(author: NewArticleAuthor) {
 					},
 				},
 			},
-			articleAuthorProfile: profile && {
+			profile: profile && {
 				create: {
-					description: {
-						create: {
-							...profile.description,
-							englishHash: getMd5Hash(
-								profile.description.english,
-							),
-						},
-					},
-					articleAuthorProfilePicture: profile.picture
+					description: profile.description.english
+						? {
+								create: {
+									...profile.description,
+									english: profile.description.english,
+									englishHash: getMd5Hash(
+										profile.description.english,
+									),
+								},
+							}
+						: undefined,
+					picture: profile.picture
 						? {
 								create: {
 									link: profile.picture,
@@ -1156,45 +1159,174 @@ export async function addArticleAuthor(author: NewArticleAuthor) {
 								},
 							}
 						: undefined,
+					contactEmail: profile.contactEmail ?? undefined,
 				},
 			},
 		},
-		update: {
-			name: {
-				update: {
-					...name,
-					englishHash: nameHash,
-				},
-			},
-			articleAuthorProfile: profile && {
-				update: {
-					description: {
-						update: {
-							...profile.description,
-							englishHash: getMd5Hash(
-								profile.description.english,
-							),
-						},
-					},
-					articleAuthorProfilePicture: profile.picture
-						? {
-								update: {
-									link: profile.picture,
-									placeholder: {
-										update: {
-											imageLink: profile.picture,
-											placeholder:
-												profilePicturePlaceholder!,
-										},
-									},
-								},
-							}
-						: undefined,
+	});
+}
+
+export async function updateArticleAuthor(
+	id: number,
+	author: NewArticleAuthor,
+) {
+	await protect({ roles: ["editor"] });
+	const { email, name, profile } = getArticleAuthorSchema().parse(author);
+
+	const existingAuthor = await database.articleAuthor.findUnique({
+		include: {
+			name: true,
+			profile: {
+				include: {
+					description: true,
+					picture: { include: { placeholder: true } },
 				},
 			},
 		},
 		where: {
-			email,
+			id,
+		},
+	});
+
+	if (!existingAuthor) notFound();
+
+	const nameHash =
+		existingAuthor.name.english !== name.english
+			? getMd5Hash(name.english)
+			: existingAuthor.name.englishHash;
+	const profilePicturePlaceholder =
+		profile?.picture &&
+		((profile.picture !== existingAuthor.profile?.picture?.link
+			? await getPlaceholder(profile.picture)
+			: existingAuthor.profile.picture.placeholder.placeholder) ??
+			(await getPlaceholder(profile.picture)));
+
+	await database.$transaction(async transaction => {
+		await transaction.articleAuthor.update({
+			data: {
+				email,
+				name: {
+					update: {
+						...name,
+						englishHash: nameHash,
+					},
+				},
+				profile: {
+					update: {
+						description: profile?.description.english
+							? {
+									upsert: {
+										create: {
+											...profile.description,
+											english:
+												profile.description.english,
+											englishHash: getMd5Hash(
+												profile.description.english,
+											),
+										},
+										update: {
+											...profile.description,
+											english:
+												profile.description.english,
+											englishHash: getMd5Hash(
+												profile.description.english,
+											),
+										},
+									},
+								}
+							: existingAuthor.profile?.description
+								? { delete: true }
+								: undefined,
+						picture: profile?.picture
+							? {
+									upsert: {
+										create: {
+											link: profile.picture,
+											placeholder: {
+												create: {
+													imageLink: profile.picture,
+													placeholder:
+														profilePicturePlaceholder!,
+												},
+											},
+										},
+										update: {
+											link: profile.picture,
+											placeholder: {
+												upsert: {
+													create: {
+														imageLink:
+															profile.picture,
+														placeholder:
+															profilePicturePlaceholder!,
+													},
+													update: {
+														imageLink:
+															profile.picture,
+														placeholder:
+															profilePicturePlaceholder!,
+													},
+												},
+											},
+										},
+									},
+								}
+							: existingAuthor.profile?.picture
+								? { delete: true }
+								: undefined,
+						contactEmail: profile?.contactEmail,
+					},
+				},
+			},
+			where: { id },
+		});
+	});
+}
+
+export async function deleteAuthorProfile(id: number) {
+	await protect({ roles: ["editor"] });
+
+	const author = await database.articleAuthor.findUnique({
+		include: {
+			profile: true,
+		},
+		where: {
+			id,
+		},
+	});
+
+	if (!author) notFound();
+
+	if (author.profile)
+		await database.articleAuthor.update({
+			data: {
+				profile: {
+					delete: true,
+				},
+			},
+			where: {
+				id,
+			},
+		});
+}
+
+export async function deleteAuthor(id: number) {
+	await protect({ roles: ["editor"] });
+
+	const author = await database.articleAuthor.findUnique({
+		include: {
+			profile: true,
+		},
+		where: {
+			id,
+		},
+	});
+
+	if (!author) notFound();
+
+	await database.articleAuthor.delete({
+		where: {
+			id,
 		},
 	});
 }
