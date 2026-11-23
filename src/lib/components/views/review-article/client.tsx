@@ -2,11 +2,8 @@
 
 import { useToastNotifier } from "@/src/lib/model-implementations/notifier";
 import { useReviewArticle } from "@/src/lib/model-implementations/review-article";
-import { ArticleDraft, NewArticleDraft } from "@/src/lib/models/write-article";
-import {
-	ArticleWithTranslations,
-	Translation,
-} from "@/src/lib/utilities/types";
+import { ArticleDraft } from "@/src/lib/models/write-article";
+import { Article, Translation } from "@/src/lib/utilities/types";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { ReadonlyModel } from "@mvc-react/mvc";
 import ReviewArticle from "./ReviewArticle";
@@ -15,7 +12,7 @@ type ReviewArticleClientModel = ReadonlyModel<{
 	articleDraft: ArticleDraft;
 	draftAssigneeName: Translation;
 	ticketId?: string;
-	article?: ArticleWithTranslations;
+	article?: Article<Translation>;
 }>;
 
 const ReviewArticleClient = function ({ model }) {

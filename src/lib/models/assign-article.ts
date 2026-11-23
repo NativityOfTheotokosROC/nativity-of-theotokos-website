@@ -11,7 +11,9 @@ export type AssignArticleNotification =
 	| MessageNotification<"submit_success" | "submit_failure">;
 
 export type AssignArticleModelView = {
-	suggestions?: Required<ArticleAuthorWithTranslations>[];
+	suggestions?: Required<
+		Pick<ArticleAuthorWithTranslations, "name" | "email">
+	>[];
 	notification: AssignArticleNotification | null;
 };
 

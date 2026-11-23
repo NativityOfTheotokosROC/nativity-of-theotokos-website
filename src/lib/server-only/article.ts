@@ -6,6 +6,7 @@ import { pickTranslation } from "../utilities/miscellaneous";
 import {
 	Article,
 	ArticleAuthor,
+	ArticleWithTranslations,
 	Language,
 	MakeRequired,
 	Translation,
@@ -122,6 +123,7 @@ export async function getArticleWithTranslations(articleId: string) {
 			title,
 			author: {
 				id: author.id,
+				uri: author.uri,
 				name: author.name,
 				email: author.email,
 				profile: author.profile
@@ -151,7 +153,7 @@ export async function getArticleWithTranslations(articleId: string) {
 				placeholder,
 			},
 			isArticleFeatured: articleId === (await featuredArticle)?.uri,
-		};
+		} satisfies Article<Translation>;
 	} catch (error) {
 		if (
 			error instanceof Object &&

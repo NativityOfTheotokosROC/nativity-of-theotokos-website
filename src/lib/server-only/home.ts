@@ -59,6 +59,8 @@ export async function getLatestArticles(
 		otherNewsArticles: otherArticleRecords.map(article => {
 			const title = pickTranslation(article.title, language);
 			const author = {
+				id: article.author.id,
+				uri: article.author.uri,
 				name: pickTranslation(article.author.name, language),
 				email: article.author.email ?? undefined,
 			} satisfies ArticleAuthor;

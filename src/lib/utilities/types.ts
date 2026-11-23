@@ -121,10 +121,10 @@ export type SelectByDiscriminator<
 	U extends string,
 > = U extends T[K] ? Unravel<Extract<T, Record<K, U>>> : never;
 
-export type Image = {
+export type Image<T extends Text = string> = {
 	source: string;
 	placeholder: ImagePlaceholder;
-	about?: string;
+	about?: T;
 };
 
 export type ArticleTicket = {
@@ -170,17 +170,17 @@ export type ReplacePropertyTypes<
 	[P in N[number][0]]: N[number][1];
 };
 
-export type Article = {
+export type Article<T extends Text = string> = {
 	uri: string;
-	title: string;
-	author: ArticleAuthor | string;
-	body: string;
+	title: T;
+	author: ArticleAuthor<T> | string;
+	body: T;
 	datePublished: Date;
 	dateUpdated?: Date;
-	snippet: string;
+	snippet: T;
 	articleImage: RenameProperties<
-		Required<Pick<Image, "source" | "about">> &
-			Partial<Pick<Image, "placeholder"> & {}>,
+		Required<Pick<Image<T>, "source" | "about">> &
+			Partial<Pick<Image<T>, "placeholder"> & {}>,
 		[["source", "url"], ["about", "caption"]]
 	>;
 	isArticleFeatured: boolean;
