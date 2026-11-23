@@ -132,14 +132,16 @@ export type ArticleTicket = {
 	assignee: ArticleAuthor;
 };
 
-export type ArticleAuthor = {
-	name: string;
+export type ArticleAuthor<T extends Text = string> = {
+	id: number;
+	name: T;
 	email?: string;
-	profile?: {
-		description: string;
-		picture?: Image;
-		contactEmail?: string;
-	};
+	profile?: Partial<{
+		description: T;
+		picture: Image;
+		contactEmail: string;
+	}>;
+	uri: string;
 };
 
 export type Unravel<T> = { [K in keyof T]: T[K] };

@@ -139,7 +139,7 @@ model ArticleAuthor {
   name              Translation           @relation(fields: [nameTranslationId], references: [id])
   email             String                @unique
   nameTranslationId Int                   @unique
-  token             String                @default(dbgenerated("gen_random_uuid()"))
+  uri               String                @unique @default(dbgenerated("gen_random_uuid()"))
   articles          Article[]
   articleTickets    ArticleTicket[]
   profile           ArticleAuthorProfile?

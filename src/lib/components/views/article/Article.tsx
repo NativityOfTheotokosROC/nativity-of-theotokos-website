@@ -160,16 +160,17 @@ const Article = function ({ model }) {
 						className="h-[6em] max-w-9/10 self-center"
 						fill="#88815899"
 					/>
-					{typeof author !== "string" && author.profile && (
-						<AuthorProfileCard
-							model={newReadonlyModel({
-								name: author.name,
-								description: author.profile.description,
-								profilePicture: author.profile.picture,
-								contactEmail: author.profile.contactEmail,
-							})}
-						/>
-					)}
+					{typeof author !== "string" &&
+						author.profile?.description && (
+							<AuthorProfileCard
+								model={newReadonlyModel({
+									name: author.name,
+									description: author.profile.description,
+									profilePicture: author.profile.picture,
+									contactEmail: author.profile.contactEmail,
+								})}
+							/>
+						)}
 				</div>
 			</div>
 		</main>

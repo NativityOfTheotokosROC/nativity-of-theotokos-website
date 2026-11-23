@@ -35,6 +35,7 @@ import {
 } from "../utilities/miscellaneous";
 import { BASE_URL, SENDER_EMAIL } from "../utilities/server-constants";
 import {
+	ArticleAuthor,
 	ArticleAuthorWithTranslations,
 	ArticleTicket,
 	ArticleWithTranslations,
@@ -396,7 +397,11 @@ export async function makeArticleEdit(articleId: string) {
 		canDeleteTicket: true,
 		currentArticle: {
 			title: article.title,
-			author: { name: article.author.name },
+			author: {
+				id: article.author.id,
+				uri: article.author.uri,
+				name: article.author.name,
+			},
 			body: article.body,
 			snippet: article.snippet,
 			datePublished: article.datePublished,
@@ -481,6 +486,8 @@ export async function getLatestUnsubmittedArticle() {
 				? {
 						title: unsubmittedDraftTicket.article.title,
 						author: {
+							id: unsubmittedDraftTicket.article.author.id,
+							uri: unsubmittedDraftTicket.article.author.uri,
 							name: unsubmittedDraftTicket.article.author.name,
 						},
 						body: unsubmittedDraftTicket.article.body,
@@ -527,7 +534,11 @@ export async function getLatestUnsubmittedArticle() {
 	const article = unusedTicket.article
 		? ({
 				title: unusedTicket.article.title,
-				author: { name: unusedTicket.article.author.name },
+				author: {
+					id: unusedTicket.article.author.id,
+					uri: unusedTicket.article.author.uri,
+					name: unusedTicket.article.author.name,
+				},
 				body: unusedTicket.article.body,
 				snippet: unusedTicket.article.snippet,
 				datePublished: unusedTicket.article.datePublished,
@@ -593,11 +604,17 @@ export async function getPendingArticleSubmission() {
 	type ArticleTicketWithAssigneeTranslations = ReplacePropertyType<
 		ArticleTicket,
 		"assignee",
-		ArticleAuthorWithTranslations
+		ArticleAuthor<Translation>
 	>;
 	const ticket = {
 		ticketId: ticketData.id,
-		assignee: { email: ticketData.assigneeEmail, name: assigneeName },
+		// TODO: Stinky. Address later
+		assignee: {
+			id: ticketData.assignee.id,
+			uri: ticketData.assignee.uri,
+			email: ticketData.assigneeEmail,
+			name: assigneeName,
+		},
 	} satisfies ArticleTicketWithAssigneeTranslations;
 	const draft = {
 		title: { english: ticketData.articleDraft!.title, russian: null },
@@ -606,7 +623,11 @@ export async function getPendingArticleSubmission() {
 	const currentArticle = ticketData.article
 		? ({
 				title: ticketData.article.title,
-				author: { name: ticketData.article.author.name },
+				author: {
+					id: ticketData.article.author.id,
+					uri: ticketData.article.author.uri,
+					name: ticketData.article.author.name,
+				},
 				body: ticketData.article.body,
 				snippet: ticketData.article.snippet,
 				datePublished: ticketData.article.datePublished,
@@ -1034,7 +1055,11 @@ export async function updateExistingArticle({
 					hasArticleChanged(
 						{
 							title: existingArticle.title,
-							author: { name: existingArticle.author.name },
+							author: {
+								...existingArticle.author,
+								name: existingArticle.author.name,
+								profile: undefined,
+							},
 							body: existingArticle.body,
 							articleImage: {
 								url: existingArticle.image.link,

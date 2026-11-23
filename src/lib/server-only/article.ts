@@ -6,12 +6,23 @@ import { pickTranslation } from "../utilities/miscellaneous";
 import {
 	Article,
 	ArticleAuthor,
-	ArticleAuthorWithTranslations,
 	Language,
+	MakeRequired,
+	Translation,
 } from "../utilities/types";
 
+export const _FULL_AUTHOR_INCLUDES = {
+	name: true,
+	profile: {
+		include: {
+			description: true,
+			picture: { include: { placeholder: true } },
+		},
+	},
+};
+
 export const _FULL_ARTICLE_INCLUDES = {
-	author: { include: { name: true } },
+	author: { include: _FULL_AUTHOR_INCLUDES },
 	title: true,
 	body: true,
 	snippet: true,
@@ -34,8 +45,30 @@ export async function getArticle(articleId: string, language: Language) {
 			.placeholder as ImagePlaceholder;
 		const title = pickTranslation(article.title, locale);
 		const author = {
+			id: article.author.id,
+			uri: article.author.uri,
 			name: pickTranslation(article.author.name, locale),
-			email: article.author.email ?? undefined,
+			email: article.author.email,
+			profile: article.author.profile
+				? {
+						description: article.author.profile.description
+							? pickTranslation(
+									article.author.profile.description,
+									locale,
+								)
+							: undefined,
+						picture: article.author.profile.picture
+							? {
+									source: article.author.profile.picture.link,
+									placeholder: article.author.profile.picture
+										.placeholder
+										.placeholder as ImagePlaceholder,
+								}
+							: undefined,
+						contactEmail:
+							article.author.profile.contactEmail ?? undefined,
+					}
+				: undefined,
 		} satisfies ArticleAuthor;
 		const body = pickTranslation(article.body, locale);
 		const snippet = pickTranslation(article.snippet, locale);
@@ -87,7 +120,27 @@ export async function getArticleWithTranslations(articleId: string) {
 		return {
 			uri: articleId,
 			title,
-			author,
+			author: {
+				id: author.id,
+				name: author.name,
+				email: author.email,
+				profile: author.profile
+					? {
+							description:
+								author.profile.description ?? undefined,
+							picture: author.profile.picture
+								? {
+										source: author.profile.picture.link,
+										placeholder: author.profile.picture
+											.placeholder
+											.placeholder as ImagePlaceholder,
+									}
+								: undefined,
+							contactEmail:
+								author.profile.contactEmail ?? undefined,
+						}
+					: undefined,
+			},
 			datePublished,
 			dateUpdated: dateUpdated ?? undefined,
 			body,
@@ -120,8 +173,8 @@ export async function getAllArticles(language: Language) {
 			include: _FULL_ARTICLE_INCLUDES,
 		})
 		.then(records =>
-			records.map(record => {
-				const {
+			records.map(
+				({
 					title,
 					author,
 					body,
@@ -130,44 +183,50 @@ export async function getAllArticles(language: Language) {
 					image,
 					datePublished,
 					dateUpdated,
-				} = record;
-				if (language === "ru")
+				}) => {
 					return {
 						uri: link,
-						title: title.russian ?? title.english,
+						title: pickTranslation(title, language),
 						author: {
-							name: author.name.russian ?? author.name.english,
+							id: author.id,
+							uri: author.uri,
+							name: pickTranslation(author.name, language),
 							email: author.email ?? undefined,
+							profile: author.profile
+								? {
+										description: author.profile.description
+											? pickTranslation(
+													author.profile.description,
+													language,
+												)
+											: undefined,
+										picture: author.profile.picture
+											? {
+													source: author.profile
+														.picture.link,
+													placeholder: author.profile
+														.picture.placeholder
+														.placeholder as ImagePlaceholder,
+												}
+											: undefined,
+										contactEmail:
+											author.profile.contactEmail ??
+											undefined,
+									}
+								: undefined,
 						},
-						body: body.russian ?? body.english,
+						body: pickTranslation(body, language),
 						datePublished: datePublished,
 						dateUpdated: dateUpdated ?? undefined,
-						snippet: snippet.russian ?? snippet.english,
+						snippet: pickTranslation(snippet, language),
 						articleImage: {
 							url: image.link,
-							caption:
-								image.caption.russian ?? image.caption.english,
+							caption: pickTranslation(image.caption, language),
 						},
 						isArticleFeatured: link === featuredArticle?.uri,
 					} satisfies Article;
-				return {
-					uri: link,
-					title: title.english,
-					author: {
-						name: author.name.english,
-						email: author.email ?? undefined,
-					},
-					body: body.english,
-					datePublished: datePublished,
-					dateUpdated: dateUpdated ?? undefined,
-					snippet: snippet.english,
-					articleImage: {
-						url: image.link,
-						caption: image.caption.russian ?? image.caption.english,
-					},
-					isArticleFeatured: link === featuredArticle?.uri,
-				} satisfies Article;
-			}),
+				},
+			),
 		);
 	return articles;
 }
@@ -189,7 +248,7 @@ export async function getArticleMetadata(
 		const snippet = pickTranslation(article.snippet, language);
 		const caption = pickTranslation(article.image.caption, language);
 		return {
-			uri: article.link.toString(),
+			uri: article.link,
 			title,
 			author,
 			snippet,
@@ -256,8 +315,29 @@ export async function getFeaturedArticle(
 		uri: link,
 		title: pickTranslation(title, language),
 		author: {
+			id: author.id,
+			uri: author.uri,
 			name: pickTranslation(author.name, language),
 			email: author.email,
+			profile: author.profile
+				? {
+						description: author.profile.description
+							? pickTranslation(
+									author.profile.description,
+									language,
+								)
+							: undefined,
+						picture: author.profile.picture
+							? {
+									source: author.profile.picture.link,
+									placeholder: author.profile.picture
+										.placeholder
+										.placeholder as ImagePlaceholder,
+								}
+							: undefined,
+						contactEmail: author.profile.contactEmail ?? undefined,
+					}
+				: undefined,
 		},
 		body: pickTranslation(body, language),
 		datePublished,
@@ -272,20 +352,61 @@ export async function getFeaturedArticle(
 	} satisfies Article & { isArticleFeatured: true };
 }
 
-export async function getArticleAuthors() {
-	// "use cache: remote";
-	// cacheTag(`article_authors`);
+export async function getArticleAuthorWithTranslations({
+	uri,
+}: {
+	uri: string;
+}) {
+	const record = await database.articleAuthor.findUnique({
+		include: _FULL_AUTHOR_INCLUDES,
+		where: { uri },
+	});
 
-	const authors = (
-		await database.articleAuthor.findMany({ include: { name: true } })
-	).map(
-		record =>
-			({
-				name: record.name.english,
-				email: record.email,
-			}) satisfies Required<ArticleAuthor>,
+	if (!record) notFound();
+
+	const { name, email, profile, id } = record;
+
+	return {
+		id,
+		uri,
+		name,
+		email,
+		profile: profile
+			? {
+					description: profile.description ?? undefined,
+					picture: profile.picture
+						? {
+								source: profile.picture.link,
+								placeholder: profile.picture.placeholder
+									.placeholder as ImagePlaceholder,
+							}
+						: undefined,
+					contactEmail: profile.contactEmail ?? undefined,
+				}
+			: undefined,
+	} satisfies ArticleAuthor<Translation>;
+}
+
+export async function getArticleAuthor(uri: string, language: Language) {
+	const { email, name, profile, id } = await getArticleAuthorWithTranslations(
+		{
+			uri,
+		},
 	);
-	return authors satisfies Required<ArticleAuthor>[];
+	return {
+		id,
+		uri,
+		name: pickTranslation(name, language),
+		email,
+		profile: profile
+			? {
+					...profile,
+					description: profile.description
+						? pickTranslation(profile.description, language)
+						: undefined,
+				}
+			: undefined,
+	} satisfies ArticleAuthor;
 }
 
 export async function getArticleAuthorsWithTranslations() {
@@ -293,13 +414,30 @@ export async function getArticleAuthorsWithTranslations() {
 	// cacheTag(`article_authors`);
 
 	const authors = (
-		await database.articleAuthor.findMany({ include: { name: true } })
+		await database.articleAuthor.findMany({
+			include: _FULL_AUTHOR_INCLUDES,
+		})
 	).map(
-		record =>
+		({ name, email, profile, uri, id }) =>
 			({
-				name: record.name,
-				email: record.email,
-			}) satisfies Required<ArticleAuthorWithTranslations>,
+				id,
+				uri,
+				name,
+				email,
+				profile: profile
+					? {
+							description: profile.description ?? undefined,
+							picture: profile.picture
+								? {
+										source: profile.picture.link,
+										placeholder: profile.picture.placeholder
+											.placeholder as ImagePlaceholder,
+									}
+								: undefined,
+							contactEmail: profile.contactEmail ?? undefined,
+						}
+					: undefined,
+			}) satisfies MakeRequired<ArticleAuthor<Translation>, "email">,
 	);
-	return authors satisfies Required<ArticleAuthorWithTranslations>[];
+	return authors;
 }
