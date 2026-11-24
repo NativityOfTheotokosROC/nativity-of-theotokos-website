@@ -152,10 +152,10 @@ export type RenameProperty<
 	N extends string,
 > = Omit<T, O> & { [K in N]: T[O] };
 
-export type RenameProperties<
-	T extends Record<string, unknown>,
-	N extends [keyof T, string][],
-> = Omit<T, N[number][0]> & { [K in N[number][1]]: T[N[number][0]] };
+// export type RenameProperties<
+// 	T extends Record<string, unknown>,
+// 	N extends [keyof T, string][],
+// > = Omit<T, N[number][0]> & { [K in N[number][1]]: T[N[number][0]] };
 
 export type ReplacePropertyType<
 	T extends Record<string, unknown>,
@@ -178,10 +178,15 @@ export type Article<T extends Text = string> = {
 	datePublished: Date;
 	dateUpdated?: Date;
 	snippet: T;
-	articleImage: RenameProperties<
-		Required<Pick<Image<T>, "source" | "about">> &
-			Partial<Pick<Image<T>, "placeholder"> & {}>,
-		[["source", "url"], ["about", "caption"]]
+	articleImage: RenameProperty<
+		RenameProperty<
+			Required<Pick<Image<T>, "source" | "about">> &
+				Partial<Pick<Image<T>, "placeholder">>,
+			"source",
+			"url"
+		>,
+		"about",
+		"caption"
 	>;
 	isArticleFeatured: boolean;
 };
