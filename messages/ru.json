@@ -560,13 +560,23 @@
 		"cancel": "Отмена",
 		"insertLink": "Вставить ссылку"
 	},
-	"authorProfile": {
-		"title": "Профиль автора",
+	"articleAuthor": {
+		"title": "Автор статьи",
 		"nameField": "Имя",
 		"descriptionField": "Описание",
 		"contactEmailField": "Контактный адрес электронной почты",
 		"profilePictureUrlField": "URL фотографии профиля",
 		"email": "Электронная почта",
-		"submit": "Отправить"
+		"submit": "Отправить",
+		"addAuthor": "Добавить автора",
+		"updateAuthor": "Изменить данные автора",
+		"deleteProfile": "Удалить профиль",
+		"deleteProfileConfirmation": "Вы уверены, что хотите удалить профиль? (Обратите внимание: удаление профиля сбросит его настройки, но не приведёт к удалению самого автора.)",
+		"addSuccessMessage": "Автор успешно добавлен.",
+		"updateSuccessMessage": "Данные автора успешно изменены.",
+		"deleteSuccessMessage": "Профиль успешно удалён.",
+		"addFailureMessage": "Не удалось добавить автора. Ошибка: {message}",
+		"updateFailureMessage": "Не удалось изменить данные автора. Ошибка: {message}",
+		"deleteFailureMessage": "Не удалось удалить профиль. Ошибка: {message}"
 	}
 }

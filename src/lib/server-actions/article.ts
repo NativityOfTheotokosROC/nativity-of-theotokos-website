@@ -1146,7 +1146,7 @@ export async function addArticleAuthor(author: NewArticleAuthor) {
 	const profilePicturePlaceholder =
 		profile?.picture && (await getPlaceholder(profile.picture));
 
-	await database.articleAuthor.create({
+	const newAuthor = await database.articleAuthor.create({
 		data: {
 			email,
 			name: {
@@ -1189,6 +1189,8 @@ export async function addArticleAuthor(author: NewArticleAuthor) {
 			},
 		},
 	});
+	revalidateTag("article_authors", "max")
+	return newAuthor;
 }
 
 export async function updateArticleAuthor(
@@ -1226,8 +1228,8 @@ export async function updateArticleAuthor(
 			: existingAuthor.profile.picture.placeholder.placeholder) ??
 			(await getPlaceholder(profile.picture)));
 
-	await database.$transaction(async transaction => {
-		await transaction.articleAuthor.update({
+	const record = await database.$transaction(async transaction => {
+		return await transaction.articleAuthor.update({
 			data: {
 				email,
 				name: {
@@ -1306,6 +1308,8 @@ export async function updateArticleAuthor(
 			where: { id },
 		});
 	});
+	return record;
+	revalidateTag("article_authors", "max")
 }
 
 export async function deleteAuthorProfile(id: number) {
@@ -1333,6 +1337,7 @@ export async function deleteAuthorProfile(id: number) {
 				id,
 			},
 		});
+	revalidateTag("article_authors", "max")
 }
 
 export async function deleteAuthor(id: number) {
@@ -1354,6 +1359,7 @@ export async function deleteAuthor(id: number) {
 			id,
 		},
 	});
+	revalidateTag("article_authors", "max")
 }
 
 async function _validateNewArticle(newArticle: NewArticle, locale?: Language) {

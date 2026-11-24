@@ -559,13 +559,23 @@
 		"cancel": "Cancel",
 		"insertLink": "Insert Link"
 	},
-	"authorProfile": {
-		"title": "Author Profile",
+	"articleAuthor": {
+		"title": "Article Author",
 		"nameField": "Name",
 		"descriptionField": "Description",
 		"contactEmailField": "Contact Email",
 		"profilePictureUrlField": "Profile Picture URL",
 		"email": "Email",
-		"submit": "Submit"
+		"submit": "Submit",
+		"addAuthor": "Add Author",
+		"updateAuthor": "Update Author",
+		"deleteProfile": "Delete Profile",
+		"deleteProfileConfirmation": "Are you sure you want to delete the profile (note: deleting the profile will reset the profile but not delete the author)?",
+		"addSuccessMessage": "Author successfully added.",
+		"updateSuccessMessage": "Author successfully modified.",
+		"deleteSuccessMessage": "Profile successfully deleted.",
+		"addFailureMessage": "Could not add author. Error: {message}",
+		"updateFailureMessage": "Could not modify author. Error: {message}",
+		"deleteFailureMessage": "Could not delete profile. Error: {message}"
 	}
 }
