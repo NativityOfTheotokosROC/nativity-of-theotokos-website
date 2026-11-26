@@ -7,7 +7,7 @@ const IS_DOCKER_BUILD = process.env.IS_DOCKER_BUILD;
 
 const nextConfig: NextConfig = {
 	images: {
-		minimumCacheTTL: 60 * 60 * 24 * 90,
+		minimumCacheTTL: 60 * 60 * 24 * 365,
 		remotePatterns: [
 			{
 				protocol: "https",
