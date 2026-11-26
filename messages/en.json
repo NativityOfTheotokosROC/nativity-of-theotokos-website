@@ -151,7 +151,8 @@
 		"imageSizeTooBig": "Image is too big ({size} MB). The image should be at most {max} MB",
 		"imageSizeTooSmall": "Image is too small ({size} KB). The image should be at least {min} KB",
 		"notImage": "The file provided is not an image",
-		"processingImage": "Processing article image",
+		"processingImage": "Processing image",
+		"processingSuccess": "Processing successful",
 		"processingImageFailure": "Could not process the image. Error: {message}"
 	},
 	"licenses_variable": {

@@ -19,6 +19,7 @@ import Button from "../../button/Button";
 import { BLANK_TRANSLATION } from "@/src/lib/utilities/constants";
 import { useConfirmationDialog } from "@/src/lib/model-implementations/confirmation-dialog";
 import ConfirmationDialog from "../../confirmation-dialog/ConfirmationDialog";
+import ButtonBar from "../../button-bar/ButtonBar";
 
 const ArticleAuthor = function ({ model }) {
 	const { modelView, interact } = model;
@@ -73,13 +74,13 @@ const ArticleAuthor = function ({ model }) {
 							<input
 								{...register("name.russian")}
 								lang="ru"
-								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.name?.english ? "border-red-800" : "border-gray-400"}`}
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.name?.russian ? "border-red-800" : "border-gray-400"}`}
 								placeholder={`${t("nameField")} (${tMisc("russian")})`}
 								autoCapitalize="words"
 							/>
-							{errors.name?.english && (
+							{errors.name?.russian && (
 								<span className="text-sm text-red-800">
-									{errors.name.english.message}
+									{errors.name.russian.message}
 								</span>
 							)}
 						</>
@@ -97,26 +98,117 @@ const ArticleAuthor = function ({ model }) {
 							)}
 						</>
 						<hr className="mt-10 w-full" />
-						<Button
-							model={newReadonlyModel({
-								type: "submit",
-								disabled: isSubmitting,
-							})}
-							className="min-w-[8em]"
-						>
-							{isSubmitting ? (
-								<Spinner
-									model={newReadonlyModel({
-										color: "white",
-										size: 20,
-									})}
-								/>
-							) : modelView?.author ? (
-								t("updateAuthor")
-							) : (
-								t("addAuthor")
+						<>
+							<textarea
+								{...register("profile.description.english")}
+								lang="en"
+								className={`w-full resize-none rounded-lg border bg-white p-4 ${errors.profile?.description?.english ? "border-red-800" : "border-gray-400"}`}
+								placeholder={t("descriptionField")}
+								rows={5}
+							/>
+							{errors.profile?.description?.english && (
+								<span className="text-sm text-red-800">
+									{errors.profile.description.english.message}
+								</span>
 							)}
-						</Button>
+						</>
+						<>
+							<textarea
+								{...register("profile.description.russian")}
+								lang="ru"
+								className={`w-full resize-none rounded-lg border bg-white p-4 ${errors.profile?.description?.russian ? "border-red-800" : "border-gray-400"}`}
+								placeholder={`${t("descriptionField")} (${tMisc("russian")})`}
+								rows={5}
+							/>
+							{errors.profile?.description?.russian && (
+								<span className="text-sm text-red-800">
+									{errors.profile.description.russian.message}
+								</span>
+							)}
+						</>
+						<>
+							<input
+								{...register("profile.contactEmail")}
+								className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.profile?.contactEmail ? "border-red-800" : "border-gray-400"}`}
+								placeholder={`${t("contactEmailField")} (${tMisc("optional")})`}
+								type="email"
+							/>
+							{errors.profile?.contactEmail && (
+								<span className="text-sm text-red-800">
+									{errors.profile.contactEmail.message}
+								</span>
+							)}
+						</>
+						<hr className="mt-10 w-full" />
+						<ButtonBar
+							model={newReadonlyModel({
+								arrangement: "start",
+								orientation: "horizontal",
+							})}
+						>
+							<Button
+								model={newReadonlyModel({
+									type: "button",
+									disabled: isSubmitting,
+									action: () => {
+										if (modelView?.author) {
+											const author = modelView.author;
+											confirmationDialog.interact({
+												type: "OPEN",
+												input: {
+													message: t(
+														"deleteProfileConfirmation",
+													),
+													proceedCallback: () =>
+														handleSubmit(() =>
+															interact({
+																type: "DELETE_PROFILE",
+																input: {
+																	id: author.id,
+																	successCallback() {
+																		reset(
+																			getDefaultValues(
+																				{
+																					...author,
+																					profile:
+																						undefined,
+																				},
+																			),
+																		);
+																	},
+																},
+															}),
+														),
+												},
+											});
+										}
+									},
+								})}
+								className="min-w-[8em]"
+							>
+								{t("deleteProfile")}
+							</Button>
+							<Button
+								model={newReadonlyModel({
+									type: "submit",
+									disabled: isSubmitting,
+								})}
+								className="min-w-[8em]"
+							>
+								{isSubmitting ? (
+									<Spinner
+										model={newReadonlyModel({
+											color: "white",
+											size: 20,
+										})}
+									/>
+								) : modelView?.author ? (
+									t("updateAuthor")
+								) : (
+									t("addAuthor")
+								)}
+							</Button>
+						</ButtonBar>
 					</div>
 				</form>
 			</PageView>

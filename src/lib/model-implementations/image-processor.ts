@@ -159,6 +159,7 @@ export function useImageProcessor(
 								input: {
 									notification: {
 										type: "processing_success",
+										message: t("processingSuccess"),
 									},
 								},
 							}),

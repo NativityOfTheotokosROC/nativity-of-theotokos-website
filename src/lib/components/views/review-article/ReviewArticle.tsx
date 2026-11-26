@@ -39,6 +39,7 @@ import FileSelectorButton from "../../file-selector-button/FileSelectorButton";
 import InformationView from "../../information-view/InformationView";
 import PageView from "../../page-view/PageView";
 import Spinner from "../../spinner/Spinner";
+import { useImageUploader } from "@/src/lib/model-implementations/image-uploader";
 
 const ReviewArticle = function ({ model }) {
 	const { modelView, interact } = model;
@@ -100,8 +101,7 @@ const ReviewArticle = function ({ model }) {
 			});
 		}),
 	);
-	const fileUploader = useFileUploader();
-	const imageProcessor = useImageProcessor();
+	const imageUploader = useImageUploader();
 	const imageSelector = useFileSelector({
 		type: "image",
 		async selectCallback(file) {
@@ -111,50 +111,17 @@ const ReviewArticle = function ({ model }) {
 					notification?.type === "submit_success"
 				)
 			)
-				await imageProcessor.interact({
-					type: "PROCESS",
+				await imageUploader.interact({
+					type: "UPLOAD",
 					input: {
 						file,
-						async successCallback(processedImage, extension) {
-							const presignedUrl = await getPresignedUrl(
-								`${generateUniqueName()}${extension ? `.${extension}` : ""}`,
-								"news",
-								processedImage.type,
-							);
-							await fileUploader.interact({
-								type: "UPLOAD",
-								input: {
-									file: processedImage,
-									presignedUrl,
-									successCallback(imageUrl) {
-										setValue("image.url", imageUrl);
-									},
-								},
-							});
+						successCallback(imageUrl) {
+							setValue("image.url", imageUrl);
 						},
 					},
 				});
 		},
 	});
-	// TODO: Combine both into their own component I think
-	const imageStatus =
-		imageProcessor.modelView.notification === null &&
-		fileUploader.modelView.notification === null
-			? null
-			: imageProcessor.modelView.notification?.type === "processing" ||
-				  fileUploader.modelView.notification?.type === "uploading"
-				? "processing"
-				: imageProcessor.modelView.notification?.type ===
-							"processing_failed" ||
-					  fileUploader.modelView.notification?.type ===
-							"upload_fail"
-					? "error"
-					: "success";
-	const imageStatusMessage =
-		imageProcessor.modelView.notification?.type === "processing" ||
-		imageProcessor.modelView.notification?.type === "processing_failed"
-			? imageProcessor.modelView.notification.message
-			: (fileUploader.modelView.notification?.message ?? null);
 
 	useCloseWarning(
 		() => !(notification?.type === "submit_success") && isDirty,
@@ -306,7 +273,7 @@ const ReviewArticle = function ({ model }) {
 												<Image
 													className="h-full w-full grow object-cover object-center"
 													src={
-														imageProcessor.modelView
+														imageUploader.modelView
 															.processedImage
 															?.blobURL ??
 														(value
@@ -346,9 +313,12 @@ const ReviewArticle = function ({ model }) {
 															t("changeImage"),
 													})}
 												/>
-												{imageStatus && (
+												{imageUploader.modelView
+													.notification && (
 													<div className="flex items-center gap-3">
-														{imageStatus ===
+														{imageUploader.modelView
+															.notification
+															.type ===
 															"processing" && (
 															<Spinner
 																model={newReadonlyModel(
@@ -359,20 +329,29 @@ const ReviewArticle = function ({ model }) {
 																)}
 															/>
 														)}
-														{imageStatus ===
+														{imageUploader.modelView
+															.notification
+															.type ===
 															"success" && (
 															<Check className="size-8 stroke-black" />
 														)}
-														{imageStatus ===
+														{imageUploader.modelView
+															.notification
+															.type ===
 															"error" && (
 															<X className="size-8 stroke-red-800 text-red-800" />
 														)}
-														{imageStatusMessage && (
+														{imageUploader.modelView
+															.notification
+															.message && (
 															<span
-																className={`text-sm ${imageStatus === "error" ? "text-red-800" : "text-black"}`}
+																className={`text-sm ${imageUploader.modelView.notification.type === "error" ? "text-red-800" : "text-black"}`}
 															>
 																{
-																	imageStatusMessage
+																	imageUploader
+																		.modelView
+																		.notification
+																		.message
 																}
 															</span>
 														)}

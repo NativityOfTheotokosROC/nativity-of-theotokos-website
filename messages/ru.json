@@ -152,6 +152,7 @@
 		"imageSizeTooSmall": "Изображение слишком маленькое ({size} КБ). Размер изображения должен быть не менее {min} КБ",
 		"notImage": "Предоставленный файл не является изображением",
 		"processingImage": "Обработка изображения",
+		"processingSuccess": "Обработка успешно завершена",
 		"processingImageFailure": "Не удалось обработать изображение. Ошибка: {message}"
 	},
 	"licenses_variable": {
