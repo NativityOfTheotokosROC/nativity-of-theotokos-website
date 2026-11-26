@@ -182,7 +182,7 @@ const ArticleAuthor = function ({ model }) {
 								)}
 							/>
 						</>
-						<div className="flex flex-col gap-3">
+						<div className="flex flex-1 flex-col gap-3">
 							<>
 								<input
 									{...register("name.english")}
@@ -274,7 +274,7 @@ const ArticleAuthor = function ({ model }) {
 							</>
 						</div>
 					</div>
-					<hr className="mt-10 w-full" />
+					<hr className="mt-14 mb-10 w-full" />
 					<ButtonBar
 						model={newReadonlyModel({
 							arrangement: "start",
