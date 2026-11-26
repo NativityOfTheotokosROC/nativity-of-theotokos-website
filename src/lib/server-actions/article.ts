@@ -1341,11 +1341,17 @@ export async function updateArticleAuthor(
 											update: {
 												link: profile.picture,
 												placeholder: {
-													update: {
-														imageLink:
-															profile.picture,
-														placeholder:
-															profilePicturePlaceholder!,
+													connectOrCreate: {
+														create: {
+															imageLink:
+																profile.picture,
+															placeholder:
+																profilePicturePlaceholder!,
+														},
+														where: {
+															imageLink:
+																profile.picture,
+														},
 													},
 												},
 											},

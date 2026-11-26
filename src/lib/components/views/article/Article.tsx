@@ -17,7 +17,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ViewTransition } from "react";
 import ArticleInteractiveLink from "../../article-interactive-link/ArticleInteractiveLink";
-import Ornament from "@/public/assets/ornament_1.svg";
+import Ornament from "@/public/assets/ornament_6.svg";
 import AuthorProfileCard from "../../author-profile-card/AuthorProfileCard";
 
 const Article = function ({ model }) {
@@ -156,7 +156,10 @@ const Article = function ({ model }) {
 				/>
 
 				<div className="flex flex-col items-center gap-6 self-center">
-					<Ornament className="h-[6em] max-w-9/10" fill="#88815899" />
+					<Ornament
+						className="max-h-[6em] w-full max-w-9/10"
+						fill="#88815899"
+					/>
 					{typeof author !== "string" &&
 						author.profile?.description && (
 							<AuthorProfileCard

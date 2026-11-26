@@ -6,6 +6,7 @@ import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 import { AuthorProfileCardModel } from "../../models/author-profile-card";
 import { georgia } from "../../third-party/fonts";
+import Ornament from "@/public/assets/ornament_11.svg";
 
 const AuthorProfileCard = function ({ model, className, style }) {
 	const {
@@ -20,6 +21,7 @@ const AuthorProfileCard = function ({ model, className, style }) {
 				className,
 			)}
 		>
+			<Ornament className="w-full self-center fill-[#ffdc4f] md:w-8/10" />
 			{profilePicture && (
 				<Image
 					src={profilePicture.source}

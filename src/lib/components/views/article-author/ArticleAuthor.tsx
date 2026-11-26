@@ -294,8 +294,8 @@ const ArticleAuthor = function ({ model }) {
 												message: t(
 													"deleteProfileConfirmation",
 												),
-												proceedCallback: () =>
-													handleSubmit(() =>
+												proceedCallback: handleSubmit(
+													() =>
 														interact({
 															type: "DELETE_PROFILE",
 															input: {
@@ -313,7 +313,7 @@ const ArticleAuthor = function ({ model }) {
 																},
 															},
 														}),
-													),
+												),
 											},
 										});
 									}
