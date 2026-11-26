@@ -15,10 +15,10 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">) {
 }
 
 export default async function Page({ searchParams }: PageProps<"/[locale]">) {
-	const { uri } = await searchParams;
+	const { id } = await searchParams;
 	let author = undefined;
-	if (typeof uri === "string")
-		author = getArticleAuthorWithTranslations({ uri });
+	if (typeof id === "string")
+		author = getArticleAuthorWithTranslations({ uri: id });
 
 	return (
 		<ProtectedComponent model={newReadonlyModel({ roles: ["editor"] })}>

@@ -28,7 +28,6 @@ export function useImageUploader(
 					: "success";
 	const notificationMessage =
 		imageProcessor.modelView.notification?.type === "processing" ||
-		imageProcessor.modelView.notification?.type === "processing_success" ||
 		imageProcessor.modelView.notification?.type === "processing_failed"
 			? imageProcessor.modelView.notification.message
 			: (fileUploader.modelView.notification?.message ?? null);

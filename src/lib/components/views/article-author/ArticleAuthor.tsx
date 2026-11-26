@@ -80,6 +80,7 @@ const ArticleAuthor = function ({ model }) {
 						await interact({
 							type: "ADD_AUTHOR",
 							input: {
+								id: modelView?.author?.id,
 								author: form,
 								successCallback(newAuthor) {
 									reset(getDefaultValues(newAuthor));
@@ -97,9 +98,9 @@ const ArticleAuthor = function ({ model }) {
 									field: { value, ref },
 									fieldState: { error },
 								}) => (
-									<>
+									<div className="flex flex-col gap-3">
 										<div
-											className="flex size-[8em] w-full items-stretch justify-stretch overflow-clip rounded-lg md:size-[10em]"
+											className="flex size-[8em] items-stretch justify-stretch overflow-clip rounded-lg md:size-[10em]"
 											ref={ref}
 											tabIndex={0}
 										>
@@ -130,7 +131,7 @@ const ArticleAuthor = function ({ model }) {
 												{error.message}
 											</span>
 										)}
-										<div className="flex flex-col items-center gap-3">
+										<div className="flex flex-col gap-3">
 											<FileSelectorButton
 												model={newReadonlyModel({
 													fileSelector: imageSelector,
@@ -177,7 +178,7 @@ const ArticleAuthor = function ({ model }) {
 												</div>
 											)}
 										</div>
-									</>
+									</div>
 								)}
 							/>
 						</>
