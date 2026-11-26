@@ -33,7 +33,6 @@ export const _FULL_ARTICLE_INCLUDES = {
 
 export async function getArticle(articleId: string, language: Language) {
 	"use cache: remote";
-	cacheTag(`article_${articleId}`);
 
 	const locale = language;
 	try {
@@ -74,6 +73,8 @@ export async function getArticle(articleId: string, language: Language) {
 		const body = pickTranslation(article.body, locale);
 		const snippet = pickTranslation(article.snippet, locale);
 		const imageCaption = pickTranslation(article.image.caption, locale);
+
+		cacheTag(`article_${articleId}`, `article_author_${author.id}`);
 
 		return {
 			uri: articleId,

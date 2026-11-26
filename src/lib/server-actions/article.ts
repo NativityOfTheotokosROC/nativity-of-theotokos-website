@@ -1364,8 +1364,9 @@ export async function updateArticleAuthor(
 			where: { id },
 		});
 	});
-	return record;
 	revalidateTag("article_authors", "max");
+	revalidateTag(`article_author_${id}`, "max");
+	return record;
 }
 
 export async function deleteAuthorProfile(id: number) {
@@ -1394,6 +1395,7 @@ export async function deleteAuthorProfile(id: number) {
 			},
 		});
 	revalidateTag("article_authors", "max");
+	revalidateTag(`article_author_${id}`, "max");
 }
 
 export async function deleteAuthor(id: number) {
@@ -1416,6 +1418,7 @@ export async function deleteAuthor(id: number) {
 		},
 	});
 	revalidateTag("article_authors", "max");
+	revalidateTag(`article_author_${id}`, "max");
 }
 
 async function _validateNewArticle(newArticle: NewArticle, locale?: Language) {

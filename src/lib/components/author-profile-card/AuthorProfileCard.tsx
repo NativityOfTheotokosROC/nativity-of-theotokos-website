@@ -24,9 +24,9 @@ const AuthorProfileCard = function ({ model, className, style }) {
 				<Image
 					src={profilePicture.source}
 					alt={name}
-					className="h-30 w-30 object-cover object-center brightness-150 grayscale"
-					width={120}
-					height={120}
+					className="h-40 w-40 object-cover object-center brightness-135 grayscale"
+					width={160}
+					height={160}
 					blurDataURL={profilePicture.placeholder}
 					placeholder="blur"
 				/>
@@ -34,7 +34,7 @@ const AuthorProfileCard = function ({ model, className, style }) {
 			<span className={`text-xl font-semibold ${georgia.className}`}>
 				{name}
 			</span>
-			<p>{description}</p>
+			<p className="text-sm">{description}</p>
 			{contactEmail && (
 				<span className="inline-flex gap-3 text-sm wrap-break-word hyphens-auto">
 					<AtSignIcon />
