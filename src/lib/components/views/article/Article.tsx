@@ -157,7 +157,7 @@ const Article = function ({ model }) {
 
 				<div className="flex flex-col items-center gap-6 self-center">
 					<Ornament
-						className="max-h-[6em] w-full max-w-9/10"
+						className="h-auto max-h-[6em] w-full md:w-xl md:max-w-9/10"
 						fill="#88815899"
 					/>
 					{typeof author !== "string" &&
