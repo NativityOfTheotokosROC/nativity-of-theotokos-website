@@ -274,7 +274,7 @@ const ArticleAuthor = function ({ model }) {
 							</>
 						</div>
 					</div>
-					<hr className="mt-14 mb-10 w-full" />
+					<hr className="mt-14 mb-6 w-full" />
 					<ButtonBar
 						model={newReadonlyModel({
 							arrangement: "start",

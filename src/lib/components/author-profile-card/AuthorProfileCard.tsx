@@ -1,23 +1,30 @@
-import { ModeledVoidComponent } from "@mvc-react/components";
+import { StyledModeledComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
-import { AuthorProfileCardModel } from "../../models/author-profile-card";
-import Image from "next/image";
-import { georgia } from "../../third-party/fonts";
 import { AtSignIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { twMerge } from "tailwind-merge";
+import { AuthorProfileCardModel } from "../../models/author-profile-card";
+import { georgia } from "../../third-party/fonts";
 
-const AuthorProfileCard = function ({ model }) {
+const AuthorProfileCard = function ({ model, className, style }) {
 	const {
 		modelView: { name, description, profilePicture, contactEmail },
 	} = model;
 
 	return (
-		<div className="flex w-2xl max-w-full flex-col gap-6 overflow-clip rounded-lg bg-gray-900 text-white not-only:p-6">
+		<div
+			style={style}
+			className={twMerge(
+				"flex w-full max-w-full flex-col gap-6 overflow-clip rounded-lg bg-gray-900 p-6 text-white md:w-xl",
+				className,
+			)}
+		>
 			{profilePicture && (
 				<Image
 					src={profilePicture.source}
 					alt={name}
-					className="h-30 w-30 object-cover object-center brightness-120 grayscale"
+					className="h-30 w-30 object-cover object-center brightness-150 grayscale"
 					width={120}
 					height={120}
 					blurDataURL={profilePicture.placeholder}
@@ -38,6 +45,6 @@ const AuthorProfileCard = function ({ model }) {
 			)}
 		</div>
 	);
-} satisfies ModeledVoidComponent<InitializedModel<AuthorProfileCardModel>>;
+} satisfies StyledModeledComponent<InitializedModel<AuthorProfileCardModel>>;
 
 export default AuthorProfileCard;

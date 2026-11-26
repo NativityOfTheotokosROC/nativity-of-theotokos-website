@@ -155,11 +155,8 @@ const Article = function ({ model }) {
 					dangerouslySetInnerHTML={{ __html: body }}
 				/>
 
-				<div className="flex flex-col gap-6 self-center">
-					<Ornament
-						className="h-[6em] max-w-9/10 self-center"
-						fill="#88815899"
-					/>
+				<div className="flex flex-col items-center gap-6 self-center">
+					<Ornament className="h-[6em] max-w-9/10" fill="#88815899" />
 					{typeof author !== "string" &&
 						author.profile?.description && (
 							<AuthorProfileCard
