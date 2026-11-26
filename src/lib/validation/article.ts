@@ -41,6 +41,7 @@ export function getArticleAuthorSchema(t?: Translator) {
 					t &&
 					t("validation.maxCharacters", {
 						field: t("articleAuthor.descriptionField"),
+						max: MAX_AUTHOR_DESCRIPTION,
 					}),
 			},
 		},
@@ -52,6 +53,7 @@ export function getArticleAuthorSchema(t?: Translator) {
 					t &&
 					t("validation.maxCharacters", {
 						field: t("articleAuthor.descriptionField"),
+						max: MAX_AUTHOR_DESCRIPTION,
 					}),
 			},
 		},

@@ -1175,10 +1175,15 @@ export async function addArticleAuthor(author: NewArticleAuthor) {
 								create: {
 									link: profile.picture,
 									placeholder: {
-										create: {
-											imageLink: profile.picture,
-											placeholder:
-												profilePicturePlaceholder!,
+										connectOrCreate: {
+											create: {
+												imageLink: profile.picture,
+												placeholder:
+													profilePicturePlaceholder!,
+											},
+											where: {
+												imageLink: profile.picture,
+											},
 										},
 									},
 								},
@@ -1266,11 +1271,17 @@ export async function updateArticleAuthor(
 											create: {
 												link: profile.picture,
 												placeholder: {
-													create: {
-														imageLink:
-															profile.picture,
-														placeholder:
-															profilePicturePlaceholder!,
+													connectOrCreate: {
+														create: {
+															imageLink:
+																profile.picture,
+															placeholder:
+																profilePicturePlaceholder!,
+														},
+														where: {
+															imageLink:
+																profile.picture,
+														},
 													},
 												},
 											},
@@ -1313,11 +1324,17 @@ export async function updateArticleAuthor(
 											create: {
 												link: profile.picture,
 												placeholder: {
-													create: {
-														imageLink:
-															profile.picture,
-														placeholder:
-															profilePicturePlaceholder!,
+													connectOrCreate: {
+														create: {
+															imageLink:
+																profile.picture,
+															placeholder:
+																profilePicturePlaceholder!,
+														},
+														where: {
+															imageLink:
+																profile.picture,
+														},
 													},
 												},
 											},

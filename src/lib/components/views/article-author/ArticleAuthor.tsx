@@ -273,77 +273,77 @@ const ArticleAuthor = function ({ model }) {
 								)}
 							</>
 						</div>
-						<hr className="mt-10 w-full" />
-						<ButtonBar
-							model={newReadonlyModel({
-								arrangement: "start",
-								orientation: "horizontal",
-							})}
-						>
-							<Button
-								model={newReadonlyModel({
-									type: "button",
-									disabled: isSubmitting,
-									action: () => {
-										if (modelView?.author) {
-											const author = modelView.author;
-											confirmationDialog.interact({
-												type: "OPEN",
-												input: {
-													message: t(
-														"deleteProfileConfirmation",
-													),
-													proceedCallback: () =>
-														handleSubmit(() =>
-															interact({
-																type: "DELETE_PROFILE",
-																input: {
-																	id: author.id,
-																	successCallback() {
-																		reset(
-																			getDefaultValues(
-																				{
-																					...author,
-																					profile:
-																						undefined,
-																				},
-																			),
-																		);
-																	},
-																},
-															}),
-														),
-												},
-											});
-										}
-									},
-								})}
-								className="min-w-[8em]"
-							>
-								{t("deleteProfile")}
-							</Button>
-							<Button
-								model={newReadonlyModel({
-									type: "submit",
-									disabled: isSubmitting,
-								})}
-								className="min-w-[8em]"
-							>
-								{isSubmitting ? (
-									<Spinner
-										model={newReadonlyModel({
-											color: "white",
-											size: 20,
-										})}
-									/>
-								) : modelView?.author ? (
-									t("updateAuthor")
-								) : (
-									t("addAuthor")
-								)}
-							</Button>
-						</ButtonBar>
 					</div>
+					<hr className="mt-10 w-full" />
+					<ButtonBar
+						model={newReadonlyModel({
+							arrangement: "start",
+							orientation: "horizontal",
+						})}
+					>
+						<Button
+							model={newReadonlyModel({
+								type: "button",
+								disabled: isSubmitting,
+								action: () => {
+									if (modelView?.author) {
+										const author = modelView.author;
+										confirmationDialog.interact({
+											type: "OPEN",
+											input: {
+												message: t(
+													"deleteProfileConfirmation",
+												),
+												proceedCallback: () =>
+													handleSubmit(() =>
+														interact({
+															type: "DELETE_PROFILE",
+															input: {
+																id: author.id,
+																successCallback() {
+																	reset(
+																		getDefaultValues(
+																			{
+																				...author,
+																				profile:
+																					undefined,
+																			},
+																		),
+																	);
+																},
+															},
+														}),
+													),
+											},
+										});
+									}
+								},
+							})}
+							className="min-w-[8em]"
+						>
+							{t("deleteProfile")}
+						</Button>
+						<Button
+							model={newReadonlyModel({
+								type: "submit",
+								disabled: isSubmitting,
+							})}
+							className="min-w-[8em]"
+						>
+							{isSubmitting ? (
+								<Spinner
+									model={newReadonlyModel({
+										color: "white",
+										size: 20,
+									})}
+								/>
+							) : modelView?.author ? (
+								t("updateAuthor")
+							) : (
+								t("addAuthor")
+							)}
+						</Button>
+					</ButtonBar>
 				</form>
 			</PageView>
 		</>
