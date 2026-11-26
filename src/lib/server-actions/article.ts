@@ -1189,7 +1189,7 @@ export async function addArticleAuthor(author: NewArticleAuthor) {
 			},
 		},
 	});
-	revalidateTag("article_authors", "max")
+	revalidateTag("article_authors", "max");
 	return newAuthor;
 }
 
@@ -1240,137 +1240,122 @@ export async function updateArticleAuthor(
 				},
 				profile: {
 					upsert: {
-						create: {description: profile?.description.english
-							? {
-									upsert: {
-										create: {
-											...profile.description,
-											english:
-												profile.description.english,
-											englishHash: getMd5Hash(
-												profile.description.english,
-											),
-										},
-										update: {
-											...profile.description,
-											english:
-												profile.description.english,
-											englishHash: getMd5Hash(
-												profile.description.english,
-											),
-										},
-									},
-								}
-							: existingAuthor.profile?.description
-								? { delete: true }
-								: undefined,
-						picture: profile?.picture
-							? {
-									upsert: {
-										create: {
-											link: profile.picture,
-											placeholder: {
-												create: {
-													imageLink: profile.picture,
-													placeholder:
-														profilePicturePlaceholder!,
-												},
+						create: {
+							description: profile?.description.english
+								? {
+										connectOrCreate: {
+											create: {
+												...profile.description,
+												english:
+													profile.description.english,
+												englishHash: getMd5Hash(
+													profile.description.english,
+												),
+											},
+											where: {
+												englishHash: getMd5Hash(
+													profile.description.english,
+												),
 											},
 										},
-										update: {
-											link: profile.picture,
-											placeholder: {
-												upsert: {
+									}
+								: undefined,
+							picture: profile?.picture
+								? {
+										connectOrCreate: {
+											create: {
+												link: profile.picture,
+												placeholder: {
 													create: {
 														imageLink:
 															profile.picture,
 														placeholder:
 															profilePicturePlaceholder!,
 													},
-													update: {
-														imageLink:
-															profile.picture,
-														placeholder:
-															profilePicturePlaceholder!,
-													},
 												},
 											},
-										},
-									},
-								}
-							: existingAuthor.profile?.picture
-								? { delete: true }
-								: undefined,
-						contactEmail: profile?.contactEmail,
-								}, update: {description: profile?.description.english
-							? {
-									upsert: {
-										create: {
-											...profile.description,
-											english:
-												profile.description.english,
-											englishHash: getMd5Hash(
-												profile.description.english,
-											),
-										},
-										update: {
-											...profile.description,
-											english:
-												profile.description.english,
-											englishHash: getMd5Hash(
-												profile.description.english,
-											),
-										},
-									},
-								}
-							: existingAuthor.profile?.description
-								? { delete: true }
-								: undefined,
-						picture: profile?.picture
-							? {
-									upsert: {
-										create: {
-											link: profile.picture,
-											placeholder: {
-												create: {
-													imageLink: profile.picture,
-													placeholder:
-														profilePicturePlaceholder!,
-												},
+											where: {
+												link: profile.picture,
 											},
 										},
-										update: {
-											link: profile.picture,
-											placeholder: {
-												upsert: {
+									}
+								: undefined,
+							contactEmail: profile?.contactEmail,
+						},
+						update: {
+							description: profile?.description.english
+								? {
+										upsert: {
+											create: {
+												...profile.description,
+												english:
+													profile.description.english,
+												englishHash: getMd5Hash(
+													profile.description.english,
+												),
+											},
+											update: {
+												...profile.description,
+												english:
+													profile.description.english,
+												englishHash: getMd5Hash(
+													profile.description.english,
+												),
+											},
+										},
+									}
+								: existingAuthor.profile?.description
+									? { delete: true }
+									: undefined,
+							picture: profile?.picture
+								? {
+										upsert: {
+											create: {
+												link: profile.picture,
+												placeholder: {
 													create: {
 														imageLink:
 															profile.picture,
 														placeholder:
 															profilePicturePlaceholder!,
 													},
-													update: {
-														imageLink:
-															profile.picture,
-														placeholder:
-															profilePicturePlaceholder!,
+												},
+											},
+											update: {
+												link: profile.picture,
+												placeholder: {
+													upsert: {
+														create: {
+															imageLink:
+																profile.picture,
+															placeholder:
+																profilePicturePlaceholder!,
+														},
+														update: {
+															imageLink:
+																profile.picture,
+															placeholder:
+																profilePicturePlaceholder!,
+														},
 													},
 												},
 											},
 										},
-									},
-								}
-							: existingAuthor.profile?.picture
-								? { delete: true }
-								: undefined,
-						contactEmail: profile?.contactEmail,}, where: {articleAuthorId: id}},
+									}
+								: existingAuthor.profile?.picture
+									? { delete: true }
+									: undefined,
+							contactEmail: profile?.contactEmail,
+						},
+						where: { articleAuthorId: id },
+					},
 				},
 			},
 			where: { id },
 		});
 	});
 	return record;
-	revalidateTag("article_authors", "max")
+	revalidateTag("article_authors", "max");
 }
 
 export async function deleteAuthorProfile(id: number) {
@@ -1398,7 +1383,7 @@ export async function deleteAuthorProfile(id: number) {
 				id,
 			},
 		});
-	revalidateTag("article_authors", "max")
+	revalidateTag("article_authors", "max");
 }
 
 export async function deleteAuthor(id: number) {
@@ -1420,7 +1405,7 @@ export async function deleteAuthor(id: number) {
 			id,
 		},
 	});
-	revalidateTag("article_authors", "max")
+	revalidateTag("article_authors", "max");
 }
 
 async function _validateNewArticle(newArticle: NewArticle, locale?: Language) {

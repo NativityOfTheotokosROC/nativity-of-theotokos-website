@@ -89,7 +89,7 @@ const ArticleAuthor = function ({ model }) {
 						});
 					})}
 				>
-					<div className="flex flex-col gap-x-10 gap-y-4 lg:flex-row @max-xl:w-full">
+					<div className="flex flex-col gap-x-10 gap-y-4 md:flex-row @max-xl:w-full">
 						<>
 							<Controller
 								control={control}
@@ -100,7 +100,7 @@ const ArticleAuthor = function ({ model }) {
 								}) => (
 									<div className="flex flex-col gap-3">
 										<div
-											className="flex size-[8em] items-stretch justify-stretch overflow-clip rounded-lg md:size-[10em]"
+											className="flex size-[15em] items-stretch justify-stretch overflow-clip rounded-lg"
 											ref={ref}
 											tabIndex={0}
 										>

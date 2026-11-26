@@ -40,7 +40,7 @@ export function getArticleAuthorSchema(t?: Translator) {
 				invalidMessage:
 					t &&
 					t("validation.maxCharacters", {
-						field: t("authorProfile.descriptionField"),
+						field: t("articleAuthor.descriptionField"),
 					}),
 			},
 		},
@@ -51,7 +51,7 @@ export function getArticleAuthorSchema(t?: Translator) {
 				invalidMessage:
 					t &&
 					t("validation.maxCharacters", {
-						field: t("authorProfile.descriptionField"),
+						field: t("articleAuthor.descriptionField"),
 					}),
 			},
 		},
@@ -91,7 +91,7 @@ export function getArticleAuthorSchema(t?: Translator) {
 								t &&
 								t("validation.invalidUrl", {
 									field: t(
-										"authorProfile.profilePictureUrlField",
+										"articleAuthor.profilePictureUrlField",
 									),
 								}),
 						})
@@ -107,7 +107,7 @@ export function getArticleAuthorSchema(t?: Translator) {
 							error:
 								t &&
 								t("validation.invalidEmail", {
-									field: t("authorProfile.contactEmailField"),
+									field: t("articleAuthor.contactEmailField"),
 								}),
 						})
 						.nullable(),
