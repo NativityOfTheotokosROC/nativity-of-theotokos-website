@@ -5,6 +5,7 @@ import { Path } from "./types";
 export function getProtectedRoutes() {
 	const protectedRoutes = [
 		"/admin",
+		"/article-author",
 		"/notifications",
 		"/quotes/new",
 		"/quotes/manage",

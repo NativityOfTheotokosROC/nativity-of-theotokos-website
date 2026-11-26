@@ -122,6 +122,7 @@ const ReviewArticle = function ({ model }) {
 				});
 		},
 	});
+	const imageUploaderNotification = imageUploader.modelView.notification;
 
 	useCloseWarning(
 		() => !(notification?.type === "submit_success") && isDirty,
@@ -313,12 +314,9 @@ const ReviewArticle = function ({ model }) {
 															t("changeImage"),
 													})}
 												/>
-												{imageUploader.modelView
-													.notification && (
+												{imageUploaderNotification && (
 													<div className="flex items-center gap-3">
-														{imageUploader.modelView
-															.notification
-															.type ===
+														{imageUploaderNotification.type ===
 															"processing" && (
 															<Spinner
 																model={newReadonlyModel(
@@ -329,29 +327,20 @@ const ReviewArticle = function ({ model }) {
 																)}
 															/>
 														)}
-														{imageUploader.modelView
-															.notification
-															.type ===
+														{imageUploaderNotification.type ===
 															"success" && (
 															<Check className="size-8 stroke-black" />
 														)}
-														{imageUploader.modelView
-															.notification
-															.type ===
+														{imageUploaderNotification.type ===
 															"error" && (
 															<X className="size-8 stroke-red-800 text-red-800" />
 														)}
-														{imageUploader.modelView
-															.notification
-															.message && (
+														{imageUploaderNotification.message && (
 															<span
-																className={`text-sm ${imageUploader.modelView.notification.type === "error" ? "text-red-800" : "text-black"}`}
+																className={`text-sm ${imageUploaderNotification.type === "error" ? "text-red-800" : "text-black"}`}
 															>
 																{
-																	imageUploader
-																		.modelView
-																		.notification
-																		.message
+																	imageUploaderNotification.message
 																}
 															</span>
 														)}
