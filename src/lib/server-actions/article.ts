@@ -1304,7 +1304,7 @@ export async function updateArticleAuthor(
 											},
 										},
 									}
-								: existingAuthor.profile?.description
+								: existingAuthor.profile?.description === null
 									? { delete: true }
 									: undefined,
 							picture: profile?.picture
@@ -1324,25 +1324,18 @@ export async function updateArticleAuthor(
 											update: {
 												link: profile.picture,
 												placeholder: {
-													upsert: {
-														create: {
-															imageLink:
-																profile.picture,
-															placeholder:
-																profilePicturePlaceholder!,
-														},
-														update: {
-															imageLink:
-																profile.picture,
-															placeholder:
-																profilePicturePlaceholder!,
-														},
+													update: {
+														imageLink:
+															profile.picture,
+														placeholder:
+															profilePicturePlaceholder!,
 													},
 												},
 											},
 										},
 									}
-								: existingAuthor.profile?.picture
+								: profile?.picture === null &&
+									  existingAuthor.profile?.picture
 									? { delete: true }
 									: undefined,
 							contactEmail: profile?.contactEmail,
