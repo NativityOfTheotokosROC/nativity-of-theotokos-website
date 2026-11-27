@@ -8,6 +8,7 @@ import database from "../third-party/prisma";
 import {
 	isRemotePath,
 	pickTranslation,
+	removeMarkup,
 	snippetify,
 } from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
@@ -62,7 +63,10 @@ export async function getLatestArticles(
 	return {
 		featuredArticle: {
 			...featuredArticle,
-			previewText: snippetify(featuredArticle.body, MAX_SNIPPET),
+			previewText: snippetify(
+				removeMarkup(featuredArticle.body),
+				MAX_SNIPPET,
+			),
 		},
 		otherNewsArticles: otherArticleRecords.map(article => {
 			const title = pickTranslation(article.title, language);
@@ -77,7 +81,7 @@ export async function getLatestArticles(
 				title,
 				author,
 				previewText: snippetify(
-					pickTranslation(article.body, language),
+					pickTranslation(removeMarkup(article.body), language),
 					MAX_SNIPPET,
 				),
 				uri: article.link,
