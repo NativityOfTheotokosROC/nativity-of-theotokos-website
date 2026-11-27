@@ -1102,7 +1102,11 @@ export async function updateExistingArticle({
 	});
 	revalidateTag("latest-articles", "max");
 	revalidateTag(`article_${articleId}`, "max");
-	if (publishingDate)
+	if (
+		publishingDate &&
+		new Date(publishingDate).getTime() !==
+			existingArticle.datePublished.getTime()
+	)
 		after(async () => {
 			const recipientEmail = existingArticle.author.email;
 			const contact = await resend.contacts.get({
