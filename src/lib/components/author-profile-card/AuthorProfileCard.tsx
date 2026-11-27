@@ -21,7 +21,7 @@ const AuthorProfileCard = function ({ model, className, style }) {
 				className,
 			)}
 		>
-			<Ornament className="h-auto max-h-[4em] w-full self-center fill-[#ffdc4f] md:w-8/10 md:w-auto" />
+			<Ornament className="h-auto max-h-[4em] w-full self-center fill-[#ffdc4f] opacity-90 md:w-8/10 md:w-auto" />
 			{profilePicture && (
 				<Image
 					src={profilePicture.source}
