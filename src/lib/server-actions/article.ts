@@ -1243,129 +1243,143 @@ export async function updateArticleAuthor(
 						englishHash: nameHash,
 					},
 				},
-				profile: {
-					upsert: {
-						create: {
-							description: profile?.description.english
-								? {
-										connectOrCreate: {
-											create: {
-												...profile.description,
-												english:
-													profile.description.english,
-												englishHash: getMd5Hash(
-													profile.description.english,
-												),
-											},
-											where: {
-												englishHash: getMd5Hash(
-													profile.description.english,
-												),
-											},
-										},
-									}
-								: undefined,
-							picture: profile?.picture
-								? {
-										connectOrCreate: {
-											create: {
-												link: profile.picture,
-												placeholder: {
-													connectOrCreate: {
-														create: {
-															imageLink:
-																profile.picture,
-															placeholder:
-																profilePicturePlaceholder!,
+				profile: profile
+					? {
+							upsert: {
+								create: {
+									description: profile.description.english
+										? {
+												connectOrCreate: {
+													create: {
+														...profile.description,
+														english:
+															profile.description
+																.english,
+														englishHash: getMd5Hash(
+															profile.description
+																.english,
+														),
+													},
+													where: {
+														englishHash: getMd5Hash(
+															profile.description
+																.english,
+														),
+													},
+												},
+											}
+										: undefined,
+									picture: profile.picture
+										? {
+												connectOrCreate: {
+													create: {
+														link: profile.picture,
+														placeholder: {
+															connectOrCreate: {
+																create: {
+																	imageLink:
+																		profile.picture,
+																	placeholder:
+																		profilePicturePlaceholder!,
+																},
+																where: {
+																	imageLink:
+																		profile.picture,
+																},
+															},
 														},
-														where: {
-															imageLink:
-																profile.picture,
+													},
+													where: {
+														link: profile.picture,
+													},
+												},
+											}
+										: undefined,
+									contactEmail: profile.contactEmail,
+								},
+								update: {
+									description: profile.description.english
+										? {
+												upsert: {
+													create: {
+														...profile.description,
+														english:
+															profile.description
+																.english,
+														englishHash: getMd5Hash(
+															profile.description
+																.english,
+														),
+													},
+													update: {
+														...profile.description,
+														english:
+															profile.description
+																.english,
+														englishHash: getMd5Hash(
+															profile.description
+																.english,
+														),
+													},
+												},
+											}
+										: profile.description.english ===
+													null &&
+											  existingAuthor.profile
+													?.description
+											? { delete: true }
+											: undefined,
+									picture: profile.picture
+										? {
+												upsert: {
+													create: {
+														link: profile.picture,
+														placeholder: {
+															connectOrCreate: {
+																create: {
+																	imageLink:
+																		profile.picture,
+																	placeholder:
+																		profilePicturePlaceholder!,
+																},
+																where: {
+																	imageLink:
+																		profile.picture,
+																},
+															},
+														},
+													},
+													update: {
+														link: profile.picture,
+														placeholder: {
+															connectOrCreate: {
+																create: {
+																	imageLink:
+																		profile.picture,
+																	placeholder:
+																		profilePicturePlaceholder!,
+																},
+																where: {
+																	imageLink:
+																		profile.picture,
+																},
+															},
 														},
 													},
 												},
-											},
-											where: {
-												link: profile.picture,
-											},
-										},
-									}
-								: undefined,
-							contactEmail: profile?.contactEmail,
-						},
-						update: {
-							description: profile?.description.english
-								? {
-										upsert: {
-											create: {
-												...profile.description,
-												english:
-													profile.description.english,
-												englishHash: getMd5Hash(
-													profile.description.english,
-												),
-											},
-											update: {
-												...profile.description,
-												english:
-													profile.description.english,
-												englishHash: getMd5Hash(
-													profile.description.english,
-												),
-											},
-										},
-									}
-								: existingAuthor.profile?.description === null
-									? { delete: true }
-									: undefined,
-							picture: profile?.picture
-								? {
-										upsert: {
-											create: {
-												link: profile.picture,
-												placeholder: {
-													connectOrCreate: {
-														create: {
-															imageLink:
-																profile.picture,
-															placeholder:
-																profilePicturePlaceholder!,
-														},
-														where: {
-															imageLink:
-																profile.picture,
-														},
-													},
-												},
-											},
-											update: {
-												link: profile.picture,
-												placeholder: {
-													connectOrCreate: {
-														create: {
-															imageLink:
-																profile.picture,
-															placeholder:
-																profilePicturePlaceholder!,
-														},
-														where: {
-															imageLink:
-																profile.picture,
-														},
-													},
-												},
-											},
-										},
-									}
-								: profile?.picture === null &&
-									  existingAuthor.profile?.picture
-									? { delete: true }
-									: undefined,
-							contactEmail: profile?.contactEmail,
-						},
-						where: { articleAuthorId: id },
-					},
-				},
+											}
+										: profile.picture === null &&
+											  existingAuthor.profile?.picture
+											? { delete: true }
+											: undefined,
+									contactEmail: profile?.contactEmail,
+								},
+								where: { articleAuthorId: id },
+							},
+						}
+					: profile === null && existingAuthor.profile
+						? { delete: true }
+						: undefined,
 			},
 			where: { id },
 		});
