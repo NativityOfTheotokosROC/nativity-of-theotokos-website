@@ -179,26 +179,52 @@ export function getArticleSchema(t?: Translator) {
 
 	return getArticleSubmissionSchema(t).extend({
 		snippet: getTranslationSchema().extend({
-			english: getNullableStringSchema({
-				max: {
-					value: maxSnippet,
-					invalidMessage:
-						t &&
-						t("validation.maxCharacters", {
-							field: t("reviewArticle.snippetField"),
-							max: maxSnippet,
-						}),
+			english: getNullableStringSchema(
+				{
+					max: {
+						value: maxSnippet,
+						invalidMessage:
+							t &&
+							t("validation.maxCharacters", {
+								field: t("reviewArticle.snippetField"),
+								max: maxSnippet,
+							}),
+					},
+					min: {
+						value: minSnippet,
+						invalidMessage:
+							t &&
+							t("validation.minCharacters", {
+								field: t("reviewArticle.snippetField"),
+								min: minSnippet,
+							}),
+					},
 				},
-				min: {
-					value: minSnippet,
-					invalidMessage:
-						t &&
-						t("validation.minCharacters", {
-							field: t("reviewArticle.snippetField"),
-							min: minSnippet,
-						}),
+				null,
+			),
+			russian: getNullableStringSchema(
+				{
+					max: {
+						value: maxSnippet,
+						invalidMessage:
+							t &&
+							t("validation.maxCharacters", {
+								field: t("reviewArticle.snippetField"),
+								max: maxSnippet,
+							}),
+					},
+					min: {
+						value: minSnippet,
+						invalidMessage:
+							t &&
+							t("validation.minCharacters", {
+								field: t("reviewArticle.snippetField"),
+								min: minSnippet,
+							}),
+					},
 				},
-			}),
+				null,
+			),
 		}),
 		image: z.object({
 			url: z.httpUrl({
