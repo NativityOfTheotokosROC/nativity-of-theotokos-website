@@ -36,6 +36,8 @@ const Modal = function ({ model, children }) {
 			onSubmit={
 				interceptSubmit
 					? e => {
+							console.log("Intercepted!");
+							e.preventDefault();
 							e.stopPropagation();
 						}
 					: undefined

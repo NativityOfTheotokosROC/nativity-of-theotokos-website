@@ -1,6 +1,6 @@
 import { StyledModeledComponent } from "@mvc-react/components";
 import { InitializedModel } from "@mvc-react/mvc";
-import { AtSignIcon } from "lucide-react";
+import { MailIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
@@ -39,7 +39,7 @@ const AuthorProfileCard = function ({ model, className, style }) {
 			<p className="text-sm">{description}</p>
 			{contactEmail && (
 				<span className="inline-flex gap-3 text-sm wrap-break-word hyphens-auto">
-					<AtSignIcon />
+					<MailIcon size={16} strokeWidth={1} />
 					<Link href={`mailto:${contactEmail}`} className="underline">
 						{contactEmail}
 					</Link>
