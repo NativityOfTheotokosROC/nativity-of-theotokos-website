@@ -1,23 +1,24 @@
 "use client";
 
+import { usePathname } from "@/src/i18n/navigation";
 import ShareButton from "@/src/lib/components/share-button/ShareButton";
 import SocialLink from "@/src/lib/components/social-link/SocialLink";
 import { ArticleModel } from "@/src/lib/models/article";
 import "@/src/lib/styles/document.css";
 import { georgia } from "@/src/lib/third-party/fonts";
+import { useCanUserEditArticle } from "@/src/lib/utilities/article";
 import { getNewsArticleDateString } from "@/src/lib/utilities/date-time";
 import { getEncodedShareData } from "@/src/lib/utilities/miscellaneous";
-import { useUserInformation } from "@/src/lib/utilities/user";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
+import { EditIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { ViewTransition } from "react";
 import ArticleInteractiveLink from "../../article-interactive-link/ArticleInteractiveLink";
-import { EditIcon } from "lucide-react";
-import { usePathname } from "@/src/i18n/navigation";
-import { useCanUserEditArticle } from "@/src/lib/utilities/article";
+import Ornament from "@/public/assets/ornament_6.svg";
+import AuthorProfileCard from "../../author-profile-card/AuthorProfileCard";
 
 const Article = function ({ model }) {
 	const { article, permalink, options } = model.modelView;
@@ -25,10 +26,11 @@ const Article = function ({ model }) {
 		title,
 		author,
 		articleImage,
-		datePublished: datePublished,
+		datePublished,
 		dateUpdated,
 		body,
 		uri,
+		snippet,
 	} = article;
 	const { url: imageUrl, caption, placeholder } = articleImage;
 	const t = useTranslations("news");
@@ -56,6 +58,9 @@ const Article = function ({ model }) {
 								{title}
 							</span>
 						</ViewTransition>
+						{snippet && (
+							<p className="text-base italic">{snippet}</p>
+						)}
 						<div className="byline flex flex-col gap-1">
 							<div className="md:max-[50vw] -ml-8 flex w-fit max-w-[80vw] min-w-3/4 items-center gap-2 bg-gray-900/80 p-2 pr-4 pl-8 text-white md:-ml-12 md:pl-12">
 								<span className="author text-base md:text-xl">{`${t("byline")} ${typeof author === "string" ? author : author.name}`}</span>
@@ -153,6 +158,24 @@ const Article = function ({ model }) {
 					className={`body document self-center text-lg/relaxed md:w-55/100 md:min-w-lg md:text-xl/relaxed`}
 					dangerouslySetInnerHTML={{ __html: body }}
 				/>
+
+				<div className="flex flex-col items-center gap-6 self-center">
+					{typeof author !== "string" &&
+						author.profile?.description && (
+							<AuthorProfileCard
+								model={newReadonlyModel({
+									name: author.name,
+									description: author.profile.description,
+									profilePicture: author.profile.picture,
+									contactEmail: author.profile.contactEmail,
+								})}
+							/>
+						)}
+					<Ornament
+						className="h-auto max-h-[6em] w-full md:w-xl md:max-w-9/10"
+						fill="#88815899"
+					/>
+				</div>
 			</div>
 		</main>
 	);

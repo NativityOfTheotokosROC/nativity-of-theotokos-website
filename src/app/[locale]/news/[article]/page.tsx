@@ -14,6 +14,7 @@ import { cacheTag } from "next/cache";
 import { connection } from "next/server";
 import { getUser, protect } from "@/src/lib/server-actions/auth";
 import { PHASE_PRODUCTION_BUILD } from "next/dist/shared/lib/constants";
+import { ArticleAuthor } from "@/src/lib/utilities/types";
 
 // const CACHE_TAG = "article";
 type ArticleMetadata = Awaited<ReturnType<typeof getArticleMetadata>>;
@@ -91,10 +92,13 @@ export default async function Page({
 	const { article: articleId, locale } = await params;
 	const language = hasLocale(routing.locales, locale) ? locale : "en";
 	const article = await getArticle(articleId, language);
-	const processedArticle = { ...article, author: article.author.name };
+	const processedArticle = {
+		...article,
+		author: { ...article.author, email: undefined } satisfies ArticleAuthor,
+	};
 	const baseUrl = `${BASE_URL}${language == "ru" ? "/ru" : ""}`;
 	const permalink = `${baseUrl}/news/${article.uri.toString()}`;
-	const jsonLd = articleJsonLd(processedArticle);
+	const jsonLd = articleJsonLd({ ...article, author: article.author.name });
 
 	if (
 		process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD &&

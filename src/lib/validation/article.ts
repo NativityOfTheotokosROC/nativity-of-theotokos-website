@@ -1,17 +1,21 @@
 import z from "zod";
+import {
+	emptyStringAsNullable,
+	removeMarkup,
+} from "../utilities/miscellaneous";
 import { Translator } from "../utilities/types";
 import {
-	getOptionalStringSchema,
+	getNullableStringSchema,
 	getTranslationSchema,
 	useLocalizedSchema,
 } from "./utilities";
-import { removeMarkup } from "../utilities/miscellaneous";
 
 export const MAX_TITLE = 100;
 export const MIN_BODY = 100;
 export const MIN_SNIPPET = 100;
 export const MAX_SNIPPET = 300;
 export const MAX_IMAGE_CAPTION = 200;
+export const MAX_AUTHOR_DESCRIPTION = 1000;
 
 export type NewArticleAuthor = z.infer<
 	ReturnType<typeof getArticleAuthorSchema>
@@ -22,6 +26,39 @@ export type NewArticleSubmission = z.infer<
 >;
 
 export function getArticleAuthorSchema(t?: Translator) {
+	const originalDescriptionSchema = getTranslationSchema({
+		...(t
+			? {
+					t,
+					fieldName: t("articleAuthor.descriptionField"),
+				}
+			: {}),
+		englishValidationOptions: {
+			trim: true,
+			max: {
+				value: MAX_AUTHOR_DESCRIPTION,
+				invalidMessage:
+					t &&
+					t("validation.maxCharacters", {
+						field: t("articleAuthor.descriptionField"),
+						max: MAX_AUTHOR_DESCRIPTION,
+					}),
+			},
+		},
+		russianValidationOptions: {
+			trim: true,
+			max: {
+				value: MAX_AUTHOR_DESCRIPTION,
+				invalidMessage:
+					t &&
+					t("validation.maxCharacters", {
+						field: t("articleAuthor.descriptionField"),
+						max: MAX_AUTHOR_DESCRIPTION,
+					}),
+			},
+		},
+	});
+
 	return z.object({
 		//TODO: assign to new translation field
 		name: getTranslationSchema(
@@ -34,6 +71,51 @@ export function getArticleAuthorSchema(t?: Translator) {
 					field: t("assignArticle.emailField"),
 				}),
 		}),
+		profile: z
+			.object({
+				description: originalDescriptionSchema.extend({
+					english: z.preprocess(
+						value =>
+							typeof value === "string"
+								? emptyStringAsNullable(value, null)
+								: value,
+						originalDescriptionSchema.shape.english.nullable(),
+					),
+				}),
+				picture: z.preprocess(
+					value =>
+						typeof value === "string"
+							? emptyStringAsNullable(value, null)
+							: value,
+					z
+						.httpUrl({
+							error:
+								t &&
+								t("validation.invalidUrl", {
+									field: t(
+										"articleAuthor.profilePictureUrlField",
+									),
+								}),
+						})
+						.nullable(),
+				),
+				contactEmail: z.preprocess(
+					value =>
+						typeof value === "string"
+							? emptyStringAsNullable(value, null)
+							: value,
+					z
+						.email({
+							error:
+								t &&
+								t("validation.invalidEmail", {
+									field: t("articleAuthor.contactEmailField"),
+								}),
+						})
+						.nullable(),
+				),
+			})
+			.optional(),
 	});
 }
 
@@ -96,11 +178,8 @@ export function getArticleSchema(t?: Translator) {
 	const maxImageCaption = MAX_IMAGE_CAPTION;
 
 	return getArticleSubmissionSchema(t).extend({
-		authorName: getTranslationSchema(
-			t && { t, fieldName: t("reviewArticle.authorNameField") },
-		),
 		snippet: getTranslationSchema().extend({
-			english: getOptionalStringSchema({
+			english: getNullableStringSchema({
 				max: {
 					value: maxSnippet,
 					invalidMessage:

@@ -5,14 +5,14 @@ import {
 } from "@mvc-react/mvc";
 import { DetailedQuote } from "../utilities/quote";
 import { Translation } from "../utilities/types";
-import { NewQuote } from "../validation/quote";
-import { WriteQuoteModelView } from "./write-quote";
+import { WriteQuoteModelInteraction, WriteQuoteModelView } from "./write-quote";
 
-export type WriteQuoteModalModelView = {
+export type WriteQuoteModalModelView = WriteQuoteModelView & {
 	isOpen: boolean;
-} & WriteQuoteModelView;
+};
 
 export type WriteQuoteModalModelInteraction =
+	| WriteQuoteModelInteraction
 	| ModelInteraction<"OPEN">
 	| InputModelInteraction<
 			"OPEN",
@@ -21,8 +21,7 @@ export type WriteQuoteModalModelInteraction =
 				autoCompleteInfo?: WriteQuoteModalModelView["autoCompleteInfo"];
 			}
 	  >
-	| ModelInteraction<"CLOSE">
-	| InputModelInteraction<"ADD_QUOTE", { newQuote: NewQuote; id?: number }>;
+	| ModelInteraction<"CLOSE">;
 
 export type WriteQuoteModalModel = InteractiveModel<
 	WriteQuoteModalModelView,

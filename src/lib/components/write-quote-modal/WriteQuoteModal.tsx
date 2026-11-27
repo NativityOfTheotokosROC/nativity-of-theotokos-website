@@ -40,6 +40,10 @@ const WriteQuoteModal = function ({ model }) {
 											},
 										});
 										await interact({ type: "CLOSE" });
+										break;
+									}
+									default: {
+										interaction.type satisfies never;
 									}
 								}
 							},

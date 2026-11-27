@@ -50,9 +50,12 @@ export function getSegmentIndex(path: string, segment: string) {
 	return segmentIndex === -1 ? null : segmentIndex;
 }
 
-export const emptyStringAsUndefined = (value: string) => {
-	return value && value.length > 0 ? value : undefined;
-};
+export function emptyStringAsNullable(
+	value: string,
+	nullable: undefined | null = undefined,
+) {
+	return value && value.length > 0 ? value : nullable;
+}
 
 export function getMd5Hash(text: string) {
 	return createHash("md5").update(text).digest("hex");

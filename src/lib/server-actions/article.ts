@@ -14,6 +14,7 @@ import AuthorInvite from "../components/email-templates/author-invite/AuthorInvi
 import { ArticleDraft, NewArticleDraft } from "../models/write-article";
 import {
 	_FULL_ARTICLE_INCLUDES,
+	_FULL_AUTHOR_INCLUDES,
 	getArticle,
 	getFeaturedArticle,
 } from "../server-only/article";
@@ -35,6 +36,7 @@ import {
 } from "../utilities/miscellaneous";
 import { BASE_URL, SENDER_EMAIL } from "../utilities/server-constants";
 import {
+	ArticleAuthor,
 	ArticleAuthorWithTranslations,
 	ArticleTicket,
 	ArticleWithTranslations,
@@ -48,6 +50,7 @@ import {
 	getArticleSubmissionSchema,
 	MAX_SNIPPET,
 	NewArticle,
+	NewArticleAuthor,
 	NewArticleSubmission,
 } from "../validation/article";
 import { NewTranslation } from "../validation/utilities";
@@ -395,9 +398,13 @@ export async function makeArticleEdit(articleId: string) {
 		canDeleteTicket: true,
 		currentArticle: {
 			title: article.title,
-			author: { name: article.author.name },
+			author: {
+				id: article.author.id,
+				uri: article.author.uri,
+				name: article.author.name,
+			},
 			body: article.body,
-			snippet: article.snippet,
+			snippet: article.snippet ?? undefined,
 			datePublished: article.datePublished,
 			uri: article.link,
 			articleImage: {
@@ -480,10 +487,13 @@ export async function getLatestUnsubmittedArticle() {
 				? {
 						title: unsubmittedDraftTicket.article.title,
 						author: {
+							id: unsubmittedDraftTicket.article.author.id,
+							uri: unsubmittedDraftTicket.article.author.uri,
 							name: unsubmittedDraftTicket.article.author.name,
 						},
 						body: unsubmittedDraftTicket.article.body,
-						snippet: unsubmittedDraftTicket.article.snippet,
+						snippet:
+							unsubmittedDraftTicket.article.snippet ?? undefined,
 						datePublished:
 							unsubmittedDraftTicket.article.datePublished,
 						uri: unsubmittedDraftTicket.article.link,
@@ -526,9 +536,13 @@ export async function getLatestUnsubmittedArticle() {
 	const article = unusedTicket.article
 		? ({
 				title: unusedTicket.article.title,
-				author: { name: unusedTicket.article.author.name },
+				author: {
+					id: unusedTicket.article.author.id,
+					uri: unusedTicket.article.author.uri,
+					name: unusedTicket.article.author.name,
+				},
 				body: unusedTicket.article.body,
-				snippet: unusedTicket.article.snippet,
+				snippet: unusedTicket.article.snippet ?? undefined,
 				datePublished: unusedTicket.article.datePublished,
 				uri: unusedTicket.article.link,
 				articleImage: {
@@ -560,7 +574,7 @@ export async function getPendingArticleSubmission() {
 	const user = await protect({ roles: ["editor"] });
 	const ticketData = await database.articleTicket.findFirst({
 		include: {
-			assignee: { include: { name: true } },
+			assignee: { include: _FULL_AUTHOR_INCLUDES },
 			article: { include: _FULL_ARTICLE_INCLUDES },
 			articleDraft: { include: { pendingArticleSubmission: true } },
 		},
@@ -592,11 +606,36 @@ export async function getPendingArticleSubmission() {
 	type ArticleTicketWithAssigneeTranslations = ReplacePropertyType<
 		ArticleTicket,
 		"assignee",
-		ArticleAuthorWithTranslations
+		ArticleAuthor<Translation>
 	>;
 	const ticket = {
 		ticketId: ticketData.id,
-		assignee: { email: ticketData.assigneeEmail, name: assigneeName },
+		// TODO: Stinky. Address later
+		assignee: {
+			id: ticketData.assignee.id,
+			uri: ticketData.assignee.uri,
+			email: ticketData.assigneeEmail,
+			name: assigneeName,
+			profile: ticketData.assignee.profile
+				? {
+						description:
+							ticketData.assignee.profile.description ??
+							undefined,
+						picture: ticketData.assignee.profile.picture
+							? {
+									source: ticketData.assignee.profile.picture
+										.link,
+									placeholder: ticketData.assignee.profile
+										.picture.placeholder
+										.placeholder as ImagePlaceholder,
+								}
+							: undefined,
+						contactEmail:
+							ticketData.assignee.profile.contactEmail ??
+							undefined,
+					}
+				: undefined,
+		},
 	} satisfies ArticleTicketWithAssigneeTranslations;
 	const draft = {
 		title: { english: ticketData.articleDraft!.title, russian: null },
@@ -605,9 +644,13 @@ export async function getPendingArticleSubmission() {
 	const currentArticle = ticketData.article
 		? ({
 				title: ticketData.article.title,
-				author: { name: ticketData.article.author.name },
+				author: {
+					id: ticketData.article.author.id,
+					uri: ticketData.article.author.uri,
+					name: ticketData.article.author.name,
+				},
 				body: ticketData.article.body,
-				snippet: ticketData.article.snippet,
+				snippet: ticketData.article.snippet ?? undefined,
 				datePublished: ticketData.article.datePublished,
 				uri: ticketData.article.link,
 				articleImage: {
@@ -704,17 +747,20 @@ export async function publishNewArticle({
 						},
 					},
 				},
-				snippet: {
-					connectOrCreate: {
-						create: {
-							...snippet,
-							englishHash: getMd5Hash(snippet.english),
-						},
-						where: {
-							englishHash: getMd5Hash(snippet.english),
-						},
-					},
-				},
+				snippet: snippet?.english
+					? {
+							connectOrCreate: {
+								create: {
+									...snippet,
+									english: snippet.english,
+									englishHash: getMd5Hash(snippet.english),
+								},
+								where: {
+									englishHash: getMd5Hash(snippet.english),
+								},
+							},
+						}
+					: undefined,
 				image: {
 					connectOrCreate: {
 						create: {
@@ -813,9 +859,9 @@ export async function publishNewArticle({
 									preferredLanguage,
 								),
 								image: image.url,
-								snippet: pickTranslation(
-									snippet,
-									preferredLanguage,
+								snippet: snippetify(
+									pickTranslation(body, preferredLanguage),
+									MAX_SNIPPET,
 								),
 								link: `${BASE_URL}/news/${link}`,
 							},
@@ -834,9 +880,9 @@ export async function publishNewArticle({
 									preferredLanguage,
 								),
 								image: image.url,
-								snippet: pickTranslation(
-									snippet,
-									preferredLanguage,
+								snippet: snippetify(
+									pickTranslation(body, preferredLanguage),
+									MAX_SNIPPET,
 								),
 								link: `${BASE_URL}/news/${link}`,
 							},
@@ -888,15 +934,8 @@ export async function updateExistingArticle({
 			forbidden();
 	}
 
-	const {
-		title,
-		body,
-		snippet,
-		authorName,
-		image,
-		isArticleFeatured,
-		publishingDate,
-	} = await _validateNewArticle(incomingArticle, locale);
+	const { title, body, snippet, image, isArticleFeatured, publishingDate } =
+		await _validateNewArticle(incomingArticle, locale);
 	const currentDate = new Date();
 	if (
 		publishingDate &&
@@ -922,27 +961,6 @@ export async function updateExistingArticle({
 						},
 					},
 				},
-				author: authorName
-					? {
-							update: {
-								name: {
-									connectOrCreate: {
-										create: {
-											...authorName,
-											englishHash: getMd5Hash(
-												authorName.english,
-											),
-										},
-										where: {
-											englishHash: getMd5Hash(
-												authorName.english,
-											),
-										},
-									},
-								},
-							},
-						}
-					: undefined,
 				body: {
 					connectOrCreate: {
 						create: {
@@ -954,17 +972,23 @@ export async function updateExistingArticle({
 						},
 					},
 				},
-				snippet: {
-					connectOrCreate: {
-						create: {
-							...snippet,
-							englishHash: getMd5Hash(snippet.english),
-						},
-						where: {
-							englishHash: getMd5Hash(snippet.english),
-						},
-					},
-				},
+				snippet: snippet?.english
+					? {
+							connectOrCreate: {
+								create: {
+									...snippet,
+									english: snippet.english,
+									englishHash: getMd5Hash(snippet.english),
+								},
+								where: {
+									englishHash: getMd5Hash(snippet.english),
+								},
+							},
+						}
+					: (snippet === null || snippet?.english === null) &&
+						  existingArticle.snippet
+						? { delete: true }
+						: undefined,
 				image: {
 					upsert: {
 						create: {
@@ -1033,7 +1057,11 @@ export async function updateExistingArticle({
 					hasArticleChanged(
 						{
 							title: existingArticle.title,
-							author: { name: existingArticle.author.name },
+							author: {
+								...existingArticle.author,
+								name: existingArticle.author.name,
+								profile: undefined,
+							},
 							body: existingArticle.body,
 							articleImage: {
 								url: existingArticle.image.link,
@@ -1112,23 +1140,313 @@ export async function canUserEditArticle(articleUri: string) {
 	return user.email === (await articlePromise).author.email;
 }
 
+export async function addArticleAuthor(author: NewArticleAuthor) {
+	await protect({ roles: ["editor"] });
+	const { email, name, profile } = getArticleAuthorSchema().parse(author);
+
+	const nameHash = getMd5Hash(name.english);
+	const profilePicturePlaceholder =
+		profile?.picture && (await getPlaceholder(profile.picture));
+
+	const newAuthor = await database.articleAuthor.create({
+		data: {
+			email,
+			name: {
+				connectOrCreate: {
+					create: { ...name, englishHash: nameHash },
+					where: {
+						englishHash: nameHash,
+					},
+				},
+			},
+			profile: profile && {
+				create: {
+					description: profile.description.english
+						? {
+								create: {
+									...profile.description,
+									english: profile.description.english,
+									englishHash: getMd5Hash(
+										profile.description.english,
+									),
+								},
+							}
+						: undefined,
+					picture: profile.picture
+						? {
+								create: {
+									link: profile.picture,
+									placeholder: {
+										connectOrCreate: {
+											create: {
+												imageLink: profile.picture,
+												placeholder:
+													profilePicturePlaceholder!,
+											},
+											where: {
+												imageLink: profile.picture,
+											},
+										},
+									},
+								},
+							}
+						: undefined,
+					contactEmail: profile.contactEmail ?? undefined,
+				},
+			},
+		},
+	});
+	revalidateTag("article_authors", "max");
+	return newAuthor;
+}
+
+export async function updateArticleAuthor(
+	id: number,
+	author: NewArticleAuthor,
+) {
+	await protect({ roles: ["editor"] });
+	const { email, name, profile } = getArticleAuthorSchema().parse(author);
+
+	const existingAuthor = await database.articleAuthor.findUnique({
+		include: {
+			name: true,
+			profile: {
+				include: {
+					description: true,
+					picture: { include: { placeholder: true } },
+				},
+			},
+		},
+		where: {
+			id,
+		},
+	});
+
+	if (!existingAuthor) notFound();
+
+	const nameHash =
+		existingAuthor.name.english !== name.english
+			? getMd5Hash(name.english)
+			: existingAuthor.name.englishHash;
+	const profilePicturePlaceholder =
+		profile?.picture &&
+		((profile.picture !== existingAuthor.profile?.picture?.link
+			? await getPlaceholder(profile.picture)
+			: existingAuthor.profile.picture.placeholder.placeholder) ??
+			(await getPlaceholder(profile.picture)));
+
+	const record = await database.$transaction(async transaction => {
+		return await transaction.articleAuthor.update({
+			data: {
+				email,
+				name: {
+					update: {
+						...name,
+						englishHash: nameHash,
+					},
+				},
+				profile: profile
+					? {
+							upsert: {
+								create: {
+									description: profile.description.english
+										? {
+												connectOrCreate: {
+													create: {
+														...profile.description,
+														english:
+															profile.description
+																.english,
+														englishHash: getMd5Hash(
+															profile.description
+																.english,
+														),
+													},
+													where: {
+														englishHash: getMd5Hash(
+															profile.description
+																.english,
+														),
+													},
+												},
+											}
+										: undefined,
+									picture: profile.picture
+										? {
+												connectOrCreate: {
+													create: {
+														link: profile.picture,
+														placeholder: {
+															connectOrCreate: {
+																create: {
+																	imageLink:
+																		profile.picture,
+																	placeholder:
+																		profilePicturePlaceholder!,
+																},
+																where: {
+																	imageLink:
+																		profile.picture,
+																},
+															},
+														},
+													},
+													where: {
+														link: profile.picture,
+													},
+												},
+											}
+										: undefined,
+									contactEmail: profile.contactEmail,
+								},
+								update: {
+									description: profile.description.english
+										? {
+												upsert: {
+													create: {
+														...profile.description,
+														english:
+															profile.description
+																.english,
+														englishHash: getMd5Hash(
+															profile.description
+																.english,
+														),
+													},
+													update: {
+														...profile.description,
+														english:
+															profile.description
+																.english,
+														englishHash: getMd5Hash(
+															profile.description
+																.english,
+														),
+													},
+												},
+											}
+										: profile.description.english ===
+													null &&
+											  existingAuthor.profile
+													?.description
+											? { delete: true }
+											: undefined,
+									picture: profile.picture
+										? {
+												upsert: {
+													create: {
+														link: profile.picture,
+														placeholder: {
+															connectOrCreate: {
+																create: {
+																	imageLink:
+																		profile.picture,
+																	placeholder:
+																		profilePicturePlaceholder!,
+																},
+																where: {
+																	imageLink:
+																		profile.picture,
+																},
+															},
+														},
+													},
+													update: {
+														link: profile.picture,
+														placeholder: {
+															connectOrCreate: {
+																create: {
+																	imageLink:
+																		profile.picture,
+																	placeholder:
+																		profilePicturePlaceholder!,
+																},
+																where: {
+																	imageLink:
+																		profile.picture,
+																},
+															},
+														},
+													},
+												},
+											}
+										: profile.picture === null &&
+											  existingAuthor.profile?.picture
+											? { delete: true }
+											: undefined,
+									contactEmail: profile?.contactEmail,
+								},
+								where: { articleAuthorId: id },
+							},
+						}
+					: profile === null && existingAuthor.profile
+						? { delete: true }
+						: undefined,
+			},
+			where: { id },
+		});
+	});
+	revalidateTag("article_authors", "max");
+	revalidateTag(`article_author_${id}`, "max");
+	return record;
+}
+
+export async function deleteAuthorProfile(id: number) {
+	await protect({ roles: ["editor"] });
+
+	const author = await database.articleAuthor.findUnique({
+		include: {
+			profile: true,
+		},
+		where: {
+			id,
+		},
+	});
+
+	if (!author) notFound();
+
+	if (author.profile)
+		await database.articleAuthor.update({
+			data: {
+				profile: {
+					delete: true,
+				},
+			},
+			where: {
+				id,
+			},
+		});
+	revalidateTag("article_authors", "max");
+	revalidateTag(`article_author_${id}`, "max");
+}
+
+export async function deleteAuthor(id: number) {
+	await protect({ roles: ["editor"] });
+
+	const author = await database.articleAuthor.findUnique({
+		include: {
+			profile: true,
+		},
+		where: {
+			id,
+		},
+	});
+
+	if (!author) notFound();
+
+	await database.articleAuthor.delete({
+		where: {
+			id,
+		},
+	});
+	revalidateTag("article_authors", "max");
+	revalidateTag(`article_author_${id}`, "max");
+}
+
 async function _validateNewArticle(newArticle: NewArticle, locale?: Language) {
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const articleSchema = getArticleSchema(t).transform(newArticle => ({
 		...newArticle,
-		snippet: {
-			english:
-				newArticle.snippet.english ??
-				snippetify(removeMarkup(newArticle.body.english), MAX_SNIPPET),
-			russian:
-				newArticle.snippet.russian ??
-				(newArticle.body.russian
-					? snippetify(
-							removeMarkup(newArticle.body.russian),
-							MAX_SNIPPET,
-						)
-					: undefined),
-		} satisfies Translation,
 		link: z.string().slugify().parse(newArticle.title.english),
 	}));
 

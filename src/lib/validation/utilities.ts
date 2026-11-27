@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import z from "zod";
-import { emptyStringAsUndefined } from "../utilities/miscellaneous";
+import { emptyStringAsNullable } from "../utilities/miscellaneous";
 import { Translator } from "../utilities/types";
 
 export type ValidationOption<T> = { value: T; invalidMessage?: string };
@@ -45,14 +45,14 @@ export function getTranslationSchema(
 				});
 	return z.object({
 		english: englishSchema,
-		russian: z.nullable(getOptionalStringSchema(russianValidationOptions)),
+		russian: z.nullable(getNullableStringSchema(russianValidationOptions)),
 	});
 }
 
 export function getStringSchema(options?: StringValidationOptions) {
 	let expression = z.string({ error: options?.invalidStringMessage });
 	if (options?.trim) expression = expression.trim();
-	if (options?.nonEmpty)
+	if (options?.nonEmpty && typeof options.nonEmpty !== "string")
 		expression = expression.nonempty({
 			error: options.nonEmpty.invalidMessage,
 		});
@@ -76,20 +76,24 @@ export function getStringSchema(options?: StringValidationOptions) {
 	}
 	return options?.preprocess
 		? (z.preprocess(options.preprocess!, expression) as z.ZodPipe<
-				z.ZodTransform<string, string>,
+				z.ZodTransform<unknown, string>,
 				typeof expression
 			>) // HACK
 		: expression;
 }
 
-export function getOptionalStringSchema(
+export function getNullableStringSchema(
 	options?: Omit<StringValidationOptions, "nonEmpty"> | z.ZodStringFormat, // Works ig
+	nullable: null | undefined = undefined,
 ) {
 	return z.preprocess(
-		emptyStringAsUndefined,
+		value =>
+			typeof value === "string"
+				? emptyStringAsNullable(value, nullable)
+				: value,
 		options && "_zod" in options
-			? options.optional()
-			: getStringSchema(options).optional(),
+			? options.nullish()
+			: getStringSchema(options).nullish(),
 	);
 }
 

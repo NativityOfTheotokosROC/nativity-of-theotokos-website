@@ -121,10 +121,10 @@ export type SelectByDiscriminator<
 	U extends string,
 > = U extends T[K] ? Unravel<Extract<T, Record<K, U>>> : never;
 
-export type Image = {
+export type Image<T extends Text = string> = {
 	source: string;
 	placeholder: ImagePlaceholder;
-	about?: string;
+	about?: T;
 };
 
 export type ArticleTicket = {
@@ -132,9 +132,16 @@ export type ArticleTicket = {
 	assignee: ArticleAuthor;
 };
 
-export type ArticleAuthor = {
-	name: string;
+export type ArticleAuthor<T extends Text = string> = {
+	id: number;
+	name: T;
 	email?: string;
+	profile?: Partial<{
+		description: T;
+		picture: Image;
+		contactEmail: string;
+	}>;
+	uri: string;
 };
 
 export type Unravel<T> = { [K in keyof T]: T[K] };
@@ -145,10 +152,10 @@ export type RenameProperty<
 	N extends string,
 > = Omit<T, O> & { [K in N]: T[O] };
 
-export type RenameProperties<
-	T extends Record<string, unknown>,
-	N extends [keyof T, string][],
-> = Omit<T, N[number][0]> & { [K in N[number][1]]: T[N[number][0]] };
+// export type RenameProperties<
+// 	T extends Record<string, unknown>,
+// 	N extends [keyof T, string][],
+// > = Omit<T, N[number][0]> & { [K in N[number][1]]: T[N[number][0]] };
 
 export type ReplacePropertyType<
 	T extends Record<string, unknown>,
@@ -163,18 +170,23 @@ export type ReplacePropertyTypes<
 	[P in N[number][0]]: N[number][1];
 };
 
-export type Article = {
+export type Article<T extends Text = string> = {
 	uri: string;
-	title: string;
-	author: ArticleAuthor | string;
-	body: string;
+	title: T;
+	author: ArticleAuthor<T> | string;
+	body: T;
 	datePublished: Date;
 	dateUpdated?: Date;
-	snippet: string;
-	articleImage: RenameProperties<
-		Required<Pick<Image, "source" | "about">> &
-			Partial<Pick<Image, "placeholder"> & {}>,
-		[["source", "url"], ["about", "caption"]]
+	snippet?: T;
+	articleImage: RenameProperty<
+		RenameProperty<
+			Required<Pick<Image<T>, "source" | "about">> &
+				Partial<Pick<Image<T>, "placeholder">>,
+			"source",
+			"url"
+		>,
+		"about",
+		"caption"
 	>;
 	isArticleFeatured: boolean;
 };

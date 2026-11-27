@@ -39,11 +39,19 @@ import FileSelectorButton from "../../file-selector-button/FileSelectorButton";
 import InformationView from "../../information-view/InformationView";
 import PageView from "../../page-view/PageView";
 import Spinner from "../../spinner/Spinner";
+import { useImageUploader } from "@/src/lib/model-implementations/image-uploader";
+import { useArticleAuthor } from "@/src/lib/model-implementations/article-author";
+import { useArticleAuthorModal } from "@/src/lib/model-implementations/article-author-modal";
+import ArticleAuthorModal from "../../article-author-modal/ArticleAuthorModal";
 
 const ReviewArticle = function ({ model }) {
 	const { modelView, interact } = model;
-	const { draftAssigneeName, draft, currentArticle, notification } =
-		modelView;
+	const {
+		articleAuthor: initialArticleAuthor,
+		draft,
+		currentArticle,
+		notification,
+	} = modelView;
 	const t = useTranslations("reviewArticle");
 	const tMisc = useTranslations("miscellaneous");
 	const locale = useLocale();
@@ -68,7 +76,6 @@ const ReviewArticle = function ({ model }) {
 		defaultValues: {
 			title: draft.title,
 			body: draft.body,
-			authorName: draftAssigneeName,
 			snippet: currentArticle?.snippet ?? BLANK_TRANSLATION,
 			image: {
 				url: currentArticle?.articleImage.url,
@@ -83,6 +90,22 @@ const ReviewArticle = function ({ model }) {
 				: getDateTimeString(currentDate),
 		},
 		shouldUnregister: true,
+	});
+	const articleAuthor = useArticleAuthor({
+		initialModelView: { author: initialArticleAuthor },
+		notifier: "default",
+	});
+	const articleAuthorModal = useArticleAuthorModal({
+		addAuthorCallback: async (author, id, successCallback) =>
+			await articleAuthor.interact({
+				type: "ADD_AUTHOR",
+				input: { author, id, successCallback },
+			}),
+		deleteProfileCallback: async (id, successCallback) =>
+			await articleAuthor.interact({
+				type: "DELETE_PROFILE",
+				input: { id, successCallback },
+			}),
 	});
 	const articlePreviewModal = useArticlePreviewModal(
 		handleSubmit(async form => {
@@ -100,8 +123,7 @@ const ReviewArticle = function ({ model }) {
 			});
 		}),
 	);
-	const fileUploader = useFileUploader();
-	const imageProcessor = useImageProcessor();
+	const imageUploader = useImageUploader();
 	const imageSelector = useFileSelector({
 		type: "image",
 		async selectCallback(file) {
@@ -111,50 +133,18 @@ const ReviewArticle = function ({ model }) {
 					notification?.type === "submit_success"
 				)
 			)
-				await imageProcessor.interact({
-					type: "PROCESS",
+				await imageUploader.interact({
+					type: "UPLOAD",
 					input: {
 						file,
-						async successCallback(processedImage, extension) {
-							const presignedUrl = await getPresignedUrl(
-								`${generateUniqueName()}${extension ? `.${extension}` : ""}`,
-								"news",
-								processedImage.type,
-							);
-							await fileUploader.interact({
-								type: "UPLOAD",
-								input: {
-									file: processedImage,
-									presignedUrl,
-									successCallback(imageUrl) {
-										setValue("image.url", imageUrl);
-									},
-								},
-							});
+						successCallback(imageUrl) {
+							setValue("image.url", imageUrl);
 						},
 					},
 				});
 		},
 	});
-	// TODO: Combine both into their own component I think
-	const imageStatus =
-		imageProcessor.modelView.notification === null &&
-		fileUploader.modelView.notification === null
-			? null
-			: imageProcessor.modelView.notification?.type === "processing" ||
-				  fileUploader.modelView.notification?.type === "uploading"
-				? "processing"
-				: imageProcessor.modelView.notification?.type ===
-							"processing_failed" ||
-					  fileUploader.modelView.notification?.type ===
-							"upload_fail"
-					? "error"
-					: "success";
-	const imageStatusMessage =
-		imageProcessor.modelView.notification?.type === "processing" ||
-		imageProcessor.modelView.notification?.type === "processing_failed"
-			? imageProcessor.modelView.notification.message
-			: (fileUploader.modelView.notification?.message ?? null);
+	const imageUploaderNotification = imageUploader.modelView.notification;
 
 	useCloseWarning(
 		() => !(notification?.type === "submit_success") && isDirty,
@@ -200,6 +190,7 @@ const ReviewArticle = function ({ model }) {
 
 	return (
 		<>
+			<ArticleAuthorModal model={articleAuthorModal} />
 			<ArticlePreviewModal model={articlePreviewModal} />
 			<PageView model={newReadonlyModel({ title: t("title") })}>
 				<form
@@ -209,12 +200,18 @@ const ReviewArticle = function ({ model }) {
 							input: {
 								title: form.title,
 								body: form.body,
-								authorName: form.authorName,
+								authorName:
+									articleAuthor.modelView.author!.name,
 								datePublished: form.publishingDate
 									? new Date(form.publishingDate)
 									: (currentArticle?.datePublished ??
 										new Date()),
-								snippet: form.snippet,
+								snippet: form.snippet?.english
+									? {
+											english: form.snippet.english,
+											russian: form.snippet.russian,
+										}
+									: undefined,
 								image: form.image,
 							},
 						}),
@@ -234,20 +231,6 @@ const ReviewArticle = function ({ model }) {
 								{errors.title?.english && (
 									<span className="text-sm text-red-800">
 										{errors.title.english.message}
-									</span>
-								)}
-								<input
-									{...register("authorName.english")}
-									lang="en"
-									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorName?.english ? "border-red-800" : "border-gray-400"}`}
-									placeholder={t("authorNameField")}
-									autoComplete="name"
-									autoCapitalize="words"
-									disabled={!currentArticle}
-								/>
-								{errors.authorName?.english && (
-									<span className="text-sm text-red-800">
-										{errors.authorName.english.message}
 									</span>
 								)}
 								<Controller
@@ -288,6 +271,23 @@ const ReviewArticle = function ({ model }) {
 										{errors.snippet?.english?.message}
 									</span>
 								)}
+
+								<Button
+									model={newReadonlyModel({
+										action() {
+											articleAuthorModal.interact({
+												type: "OPEN",
+												input: {
+													author: articleAuthor
+														.modelView.author,
+												},
+											});
+										},
+									})}
+									className="w-full"
+								>
+									{t("modifyAuthor")}
+								</Button>
 							</div>
 							<div className="flex flex-1 flex-col gap-3 md:max-w-[33em]">
 								<Controller
@@ -306,7 +306,7 @@ const ReviewArticle = function ({ model }) {
 												<Image
 													className="h-full w-full grow object-cover object-center"
 													src={
-														imageProcessor.modelView
+														imageUploader.modelView
 															.processedImage
 															?.blobURL ??
 														(value
@@ -346,9 +346,9 @@ const ReviewArticle = function ({ model }) {
 															t("changeImage"),
 													})}
 												/>
-												{imageStatus && (
+												{imageUploaderNotification && (
 													<div className="flex items-center gap-3">
-														{imageStatus ===
+														{imageUploaderNotification.type ===
 															"processing" && (
 															<Spinner
 																model={newReadonlyModel(
@@ -359,20 +359,20 @@ const ReviewArticle = function ({ model }) {
 																)}
 															/>
 														)}
-														{imageStatus ===
+														{imageUploaderNotification.type ===
 															"success" && (
 															<Check className="size-8 stroke-black" />
 														)}
-														{imageStatus ===
+														{imageUploaderNotification.type ===
 															"error" && (
 															<X className="size-8 stroke-red-800 text-red-800" />
 														)}
-														{imageStatusMessage && (
+														{imageUploaderNotification.message && (
 															<span
-																className={`text-sm ${imageStatus === "error" ? "text-red-800" : "text-black"}`}
+																className={`text-sm ${imageUploaderNotification.type === "error" ? "text-red-800" : "text-black"}`}
 															>
 																{
-																	imageStatusMessage
+																	imageUploaderNotification.message
 																}
 															</span>
 														)}

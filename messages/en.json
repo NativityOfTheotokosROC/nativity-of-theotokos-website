@@ -2,12 +2,50 @@
 	"aboutUs": {
 		"metaTitle": "About Us"
 	},
+	"articleAuthor": {
+		"addAuthor": "Add Author",
+		"addFailureMessage": "Could not add author. Error: {message}",
+		"addSuccessMessage": "Author successfully added.",
+		"contactEmailField": "Contact Email",
+		"deleteFailureMessage": "Could not delete profile. Error: {message}",
+		"deleteProfile": "Delete Profile",
+		"deleteProfileConfirmation": "Are you sure you want to delete the profile (note: deleting the profile will reset the profile but not delete the author)?",
+		"deleteSuccessMessage": "Profile successfully deleted.",
+		"descriptionField": "Description",
+		"email": "Email",
+		"nameField": "Name",
+		"profilePicture": "Profile Picture",
+		"profilePictureUrlField": "Profile Picture URL",
+		"submit": "Submit",
+		"title": "Article Author",
+		"updateAuthor": "Update Author",
+		"updateFailureMessage": "Could not modify author. Error: {message}",
+		"updateSuccessMessage": "Author successfully modified."
+	},
 	"articlePreview": {
 		"authorPlaceholder": "Your Name",
 		"continueEdit": "Continue Editing",
 		"imagePlaceholder": "The article image will be placed here",
 		"submit": "Submit",
 		"title": "Article Preview"
+	},
+	"articlePublished": {
+		"continue": "View full article",
+		"message": "Good day {name}! We just wanted to inform you that we have reviewed your article and have published it to our website. Thank you so much for writing for our website, we really appreciate you taking time out of your schedule to do this for us. We are hopeful that our relationship continues to flourish, and that God-willing, we will work on more joint endeavors in the future.",
+		"snippet": "Snippet of the article",
+		"subject": "Your article has been published!",
+		"title": "Your article is now live"
+	},
+	"articleRescheduled": {
+		"message": "Good day {name}! We just thought we would update you on some changes regarding your scheduled article <emphasis>''{title}''</emphasis>. We have shifted your article's publishing date from {oldDate} to <emphasis>{newDate}</emphasis>. If there are any more changes we will be sure to let you know; and if you have any inquiries, do not hesitate to reach out us. That's it! Thank you and enjoy the rest of your day.",
+		"subject": "Your article's publishing date has been rescheduled",
+		"title": "We've made some changes"
+	},
+	"articleScheduledEmail": {
+		"message": "Good day {name}! We just wanted to inform you that we have reviewed and processed your article, and it will be published on {date} at {time} -- notwithstanding any potential changes (in which case, we would notify you beforehand). Thank you so much for writing for our website, we really appreciate you taking time out of your schedule to do this for us. We are hopeful that our relationship continues to flourish, and that God-willing, we will work on more joint endeavors in the future.",
+		"snippet": "Snippet of the article",
+		"subject": "Your article is slated for publishing!",
+		"title": "We have reviewed and processed your article"
 	},
 	"assignArticle": {
 		"assignArticle": "Assign Article",
@@ -20,6 +58,12 @@
 	},
 	"attribution": {
 		"title": "Attribution"
+	},
+	"authorInvite": {
+		"alternativeTitle": "You have been invited",
+		"message": "Hello {author}! You have been invited to author an article for our church website. Click the link below to start writing!",
+		"title": "Author an article for us",
+		"writeArticleButton": "Write Article"
 	},
 	"commemoration": {
 		"oldCalendar": "Julian Calendar",
@@ -43,18 +87,18 @@
 		"bold": "Bold",
 		"bulletList": "Bullet List",
 		"heading": "Heading",
+		"insertLink": "Insert Link",
 		"italic": "Italic",
 		"link": "Link",
 		"numberedList": "Numbered List",
 		"quote": "Quote",
 		"redo": "Redo",
+		"removeLink": "Remove Link",
 		"rule": "Horizontal Rule",
 		"sub": "Subscript",
 		"super": "Superscript",
 		"underline": "Underline",
-		"undo": "Undo",
-		"insertLink": "Insert Link",
-		"removeLink": "Remove Link"
+		"undo": "Undo"
 	},
 	"editPanel": {
 		"delete": "Delete",
@@ -69,6 +113,24 @@
 		"enable": "Enable",
 		"reinstate": "Reinstate",
 		"remove": "Remove"
+	},
+	"emailFooter": {
+		"broadcastDisclaimer": "You received this email because you subscribed for updates from our website. You may <unsub>Unsubscribe</unsub> or <pref>Manage your Preferences</pref>.",
+		"copyright": "2026 Nativity of the Theotokos Parish. All Rights Reserved.",
+		"ignoreMessage": "If this email was a mistake or it was wrongfully addressed, you may ignore it."
+	},
+	"emailPrefs": {
+		"description": "Preferences for {email}",
+		"firstName": "First Name",
+		"lastName": "Last Name",
+		"nameSection": "Name",
+		"preferredLanguage": "Preferred Language",
+		"savePreferences": "Save Preferences",
+		"savePreferencesFailure": "Could not update your preferences. Error: {message}",
+		"savePreferencesSuccess": "Preferences successfully updated",
+		"subscribe": "Subscribe",
+		"title": "Manage Preferences",
+		"unsubscribe": "Unsubscribe"
 	},
 	"emptyNotifications": {
 		"detailedMessage": "You have no notifications. Check back later.",
@@ -151,8 +213,22 @@
 		"imageSizeTooBig": "Image is too big ({size} MB). The image should be at most {max} MB",
 		"imageSizeTooSmall": "Image is too small ({size} KB). The image should be at least {min} KB",
 		"notImage": "The file provided is not an image",
-		"processingImage": "Processing article image",
-		"processingImageFailure": "Could not process the image. Error: {message}"
+		"processingImage": "Processing image",
+		"processingImageFailure": "Could not process the image. Error: {message}",
+		"processingSuccess": "Processing successful"
+	},
+	"imageSelector": {
+		"changeImage": "Change Image",
+		"selectImage": "Select Image"
+	},
+	"insertLinkModal": {
+		"cancel": "Cancel",
+		"insertLink": "Insert Link",
+		"labelField": "Label",
+		"labelFieldAlt": "Link Label",
+		"linkField": "URL",
+		"linkFieldAlt": "Link",
+		"title": "Insert Link"
 	},
 	"licenses_variable": {
 		"dailyReadingsLicense": "Daily readings, commemorations, and hymns sourced from",
@@ -187,6 +263,50 @@
 		"goHome": "Go Home",
 		"title": "We're working on it..."
 	},
+	"manageQuotes": {
+		"all": "All",
+		"allQuotes": "All Quotes",
+		"author": "Author",
+		"byAuthor": "By Author",
+		"cancel": "Cancel",
+		"confirmDeleteQuote": "Are you sure you want to delete this quote by {author}?",
+		"confirmDeleteScheduledQuote": "Are you sure you want to delete the quote scheduled for {date}?",
+		"delete": "Delete",
+		"deleteFailure": "Could not delete the quote. Error: {message}",
+		"deleteScheduledSuccess": "Scheduled quote successfully deleted.",
+		"deleteScheduleFailure": "Could not delete the scheduled quote. Error: {message}",
+		"deleteSuccess": "Quote successfully deleted",
+		"download": "Download",
+		"edit": "Edit",
+		"highlightedQuote": "Today's Quote",
+		"highlightedQuoteAlt": "Highlighted Quote",
+		"modifyFailure": "Could not modify the quote. Error: {message}",
+		"modifyQuote": "Modify Quote",
+		"modifySuccess": "Quote successfully modified",
+		"moreQuotes": "More Quotes",
+		"newQuote": "New Quote",
+		"nextPage": "Next Page",
+		"none": "None",
+		"paginationOf": "of",
+		"pickDate": "Pick a date",
+		"previousPage": "Previous Page",
+		"quote": "Quote",
+		"rescheduleFailure": "Could not reschedule the quote. Error: {message}",
+		"rescheduleSuccess": "Quote successfully rescheduled",
+		"schedule": "Schedule",
+		"scheduledQuotes": "Scheduled Quotes",
+		"scheduleFailure": "Could not schedule the quote. Error: {message}",
+		"scheduleNew": "Schedule New",
+		"scheduleQuote": "Schedule Quote",
+		"scheduleSuccess": "Quote successfully scheduled",
+		"searchQuotes": "Search quotes",
+		"share": "Share",
+		"sortBy": "Sort By",
+		"sortedBy": "Sorted by {field}",
+		"source": "Source",
+		"title": "Manage Quotes",
+		"unsorted": "Unsorted"
+	},
 	"metadata": {
 		"description": "Official website of the Nativity of the Theotokos parish of the Russian Orthodox Church in Zimbabwe. (est. 2025)",
 		"home": "Home",
@@ -194,6 +314,7 @@
 		"templateTitle": "Nativity of the Theotokos Church"
 	},
 	"miscellaneous": {
+		"churchName": "Nativity of the Theotokos Church",
 		"closeButton": "Close",
 		"continue": "Continue",
 		"english": "English",
@@ -201,8 +322,7 @@
 		"goHome": "Go Home",
 		"modelInitError": "The model is not initialized",
 		"optional": "optional",
-		"russian": "Russian",
-		"churchName": "Nativity of the Theotokos Church"
+		"russian": "Russian"
 	},
 	"navMenu": {
 		"aboutUs": "About Us",
@@ -236,6 +356,10 @@
 		"byline": "By",
 		"editArticle": "Edit Article",
 		"metaTitle": "News"
+	},
+	"newSubscriber": {
+		"message": "Hello there! Thank you for subscribing to our website. Stay tuned for the latest news articles, updates, digests, announcements and more.",
+		"title": "Thank you for subscribing!"
 	},
 	"nonDescriptive": {
 		"close": "Close",
@@ -279,8 +403,13 @@
 		"modifyDraft": "Modify Draft",
 		"nextButton": "Continue",
 		"publish": "Publish",
+		"publishingDateField": "Publishing Date",
+		"scheduledPublishDetailedMessage": "The article has been successfully submitted and is slated for publishing on <mkp>{date}</mkp> at <mkp>{time}</mkp>.",
+		"scheduledPublishMainMessage": "Article Submitted",
+		"schedulePublish": "Schedule publishing date",
 		"selectImage": "Select Image",
 		"snippetField": "Snippet",
+		"submit": "Submit",
 		"submitFailure": "Could not publish the article. Error: {message}",
 		"submitSuccess": "Article successfully published",
 		"title": "Review Article",
@@ -288,11 +417,7 @@
 		"uploadImageFailure": "Could not upload the article image. Error: {message}",
 		"uploadImageSuccess": "Article image successfully uploaded",
 		"uploadingImage": "Uploading article image",
-		"schedulePublish": "Schedule publishing date",
-		"scheduledPublishMainMessage": "Article Submitted",
-		"scheduledPublishDetailedMessage": "The article has been successfully submitted and is slated for publishing on <mkp>{date}</mkp> at <mkp>{time}</mkp>.",
-		"publishingDateField": "Publishing Date",
-		"submit": "Submit"
+		"modifyAuthor": "Modify Author"
 	},
 	"scheduleItem": {
 		"catechism": "Catechism",
@@ -313,6 +438,14 @@
 		"typika": "Typika",
 		"typikaService": "Typika Service",
 		"venueField": "Venue"
+	},
+	"scheduleQuoteModal": {
+		"cancel": "Cancel",
+		"description": "Pick a date to schedule the quote, “{quote}” by {author}.",
+		"reschedule": "Reschedule",
+		"rescheduleQuoteTitle": "Reschedule Quote",
+		"schedule": "Schedule",
+		"scheduleQuoteTitle": "Schedule Quote"
 	},
 	"scheduler": {
 		"addTime": "Add Time",
@@ -397,10 +530,14 @@
 		"signOut": "Sign Out",
 		"title": "Unauthorized"
 	},
+	"unsubscribe": {
+		"message": "Your email <email>{emailText}</email> has been unsubscribed from all notifications and updates.",
+		"title": "Unsubscribed"
+	},
 	"userAction": {
 		"assignArticle": "Assign Article",
-		"newQuote": "New Quote",
 		"manageQuotes": "Manage Quotes",
+		"newQuote": "New Quote",
 		"notifications": "Notifications",
 		"reviewArticle": "Review Article",
 		"scheduler": "Scheduler",
@@ -413,9 +550,9 @@
 	},
 	"validation": {
 		"emptyFieldSet": "You must provide at least one {field}",
-		"invalidEmail": "Invalid email provided for {field}",
+		"invalidEmail": "Invalid email provided for ''{field}''",
 		"invalidField": "{field} is invalid",
-		"invalidUrl": "You did not provide a valid URL for {field}",
+		"invalidUrl": "You did not provide a valid URL for ''{field}''",
 		"maxCharacters": "{field} is too long (maximum of {max} characters)",
 		"minCharacters": "{field} is too short (minimum of {min} characters)",
 		"nonEmpty": "{field} cannot be empty"
@@ -447,116 +584,5 @@
 		"title": "Write Article",
 		"titleField": "Article Title",
 		"unknownAuthor": "Your Name"
-	},
-	"manageQuotes": {
-		"title": "Manage Quotes",
-		"highlightedQuote": "Today's Quote",
-		"highlightedQuoteAlt": "Highlighted Quote",
-		"moreQuotes": "More Quotes",
-		"byAuthor": "By Author",
-		"allQuotes": "All Quotes",
-		"sortBy": "Sort By",
-		"unsorted": "Unsorted",
-		"searchQuotes": "Search quotes",
-		"none": "None",
-		"author": "Author",
-		"source": "Source",
-		"quote": "Quote",
-		"newQuote": "New Quote",
-		"nextPage": "Next Page",
-		"previousPage": "Previous Page",
-		"paginationOf": "of",
-		"scheduledQuotes": "Scheduled Quotes",
-		"all": "All",
-		"scheduleNew": "Schedule New",
-		"edit": "Edit",
-		"delete": "Delete",
-		"schedule": "Schedule",
-		"sortedBy": "Sorted by {field}",
-		"share": "Share",
-		"download": "Download",
-		"confirmDeleteQuote": "Are you sure you want to delete this quote by {author}?",
-		"confirmDeleteScheduledQuote": "Are you sure you want to delete the quote scheduled for {date}?",
-		"modifyQuote": "Modify Quote",
-		"cancel": "Cancel",
-		"scheduleQuote": "Schedule Quote",
-		"pickDate": "Pick a date",
-		"modifySuccess": "Quote successfully modified",
-		"modifyFailure": "Could not modify the quote. Error: {message}",
-		"scheduleSuccess": "Quote successfully scheduled",
-		"scheduleFailure": "Could not schedule the quote. Error: {message}",
-		"deleteScheduledSuccess": "Scheduled quote successfully deleted.",
-		"deleteScheduleFailure": "Could not delete the scheduled quote. Error: {message}",
-		"rescheduleSuccess": "Quote successfully rescheduled",
-		"rescheduleFailure": "Could not reschedule the quote. Error: {message}",
-		"deleteSuccess": "Quote successfully deleted",
-		"deleteFailure": "Could not delete the quote. Error: {message}"
-	},
-	"scheduleQuoteModal": {
-		"scheduleQuoteTitle": "Schedule Quote",
-		"rescheduleQuoteTitle": "Reschedule Quote",
-		"description": "Pick a date to schedule the quote, “{quote}” by {author}.",
-		"schedule": "Schedule",
-		"reschedule": "Reschedule",
-		"cancel": "Cancel"
-	},
-	"emailFooter": {
-		"ignoreMessage": "If this email was a mistake or it was wrongfully addressed, you may ignore it.",
-		"copyright": "2026 Nativity of the Theotokos Parish. All Rights Reserved.",
-		"broadcastDisclaimer": "You received this email because you subscribed for updates from our website. You may <unsub>Unsubscribe</unsub> or <pref>Manage your Preferences</pref>."
-	},
-	"authorInvite": {
-		"title": "Author an article for us",
-		"alternativeTitle": "You have been invited",
-		"message": "Hello {author}! You have been invited to author an article for our church website. Click the link below to start writing!",
-		"writeArticleButton": "Write Article"
-	},
-	"newSubscriber": {
-		"title": "Thank you for subscribing!",
-		"message": "Hello there! Thank you for subscribing to our website. Stay tuned for the latest news articles, updates, digests, announcements and more."
-	},
-	"unsubscribe": {
-		"title": "Unsubscribed",
-		"message": "Your email <email>{emailText}</email> has been unsubscribed from all notifications and updates."
-	},
-	"emailPrefs": {
-		"title": "Manage Preferences",
-		"nameSection": "Name",
-		"firstName": "First Name",
-		"lastName": "Last Name",
-		"preferredLanguage": "Preferred Language",
-		"description": "Preferences for {email}",
-		"savePreferences": "Save Preferences",
-		"savePreferencesSuccess": "Preferences successfully updated",
-		"savePreferencesFailure": "Could not update your preferences. Error: {message}",
-		"subscribe": "Subscribe",
-		"unsubscribe": "Unsubscribe"
-	},
-	"articleScheduledEmail": {
-		"subject": "Your article is slated for publishing!",
-		"title": "We have reviewed and processed your article",
-		"message": "Good day {name}! We just wanted to inform you that we have reviewed and processed your article, and it will be published on {date} at {time} -- notwithstanding any potential changes (in which case, we would notify you beforehand). Thank you so much for writing for our website, we really appreciate you taking time out of your schedule to do this for us. We are hopeful that our relationship continues to flourish, and that God-willing, we will work on more joint endeavors in the future.",
-		"snippet": "Snippet of the article"
-	},
-	"articlePublished": {
-		"subject": "Your article has been published!",
-		"title": "Your article is now live",
-		"message": "Good day {name}! We just wanted to inform you that we have reviewed your article and have published it to our website. Thank you so much for writing for our website, we really appreciate you taking time out of your schedule to do this for us. We are hopeful that our relationship continues to flourish, and that God-willing, we will work on more joint endeavors in the future.",
-		"snippet": "Snippet of the article",
-		"continue": "View full article"
-	},
-	"articleRescheduled": {
-		"subject": "Your article's publishing date has been rescheduled",
-		"title": "We've made some changes",
-		"message": "Good day {name}! We just thought we would update you on some changes regarding your scheduled article <emphasis>''{title}''</emphasis>. We have shifted your article's publishing date from {oldDate} to <emphasis>{newDate}</emphasis>. If there are any more changes we will be sure to let you know; and if you have any inquiries, do not hesitate to reach out us. That's it! Thank you and enjoy the rest of your day."
-	},
-	"insertLinkModal": {
-		"title": "Insert Link",
-		"linkField": "URL",
-		"linkFieldAlt": "Link",
-		"labelField": "Label",
-		"labelFieldAlt": "Link Label",
-		"cancel": "Cancel",
-		"insertLink": "Insert Link"
 	}
 }

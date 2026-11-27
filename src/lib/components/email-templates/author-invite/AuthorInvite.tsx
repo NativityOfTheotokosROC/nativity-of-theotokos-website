@@ -61,7 +61,7 @@ const AuthorInvite = async function ({ model }) {
 } satisfies ModeledVoidComponent<
 	ReadonlyModel<{
 		language: Language;
-		author: ArticleAuthor;
+		author: Pick<ArticleAuthor, "name" | "email">;
 		articleLink: string;
 	}>
 >;

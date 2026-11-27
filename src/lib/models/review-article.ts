@@ -1,6 +1,7 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 import {
-	ArticleWithTranslations,
+	Article,
+	ArticleAuthor,
 	Notification,
 	Translation,
 } from "../utilities/types";
@@ -19,8 +20,8 @@ export type ReviewArticleNotification =
 
 export type ReviewArticleModelView = {
 	draft: ArticleDraft;
-	draftAssigneeName: Translation;
-	currentArticle?: ArticleWithTranslations;
+	articleAuthor: ArticleAuthor<Translation>;
+	currentArticle?: Article<Translation>;
 	notification: ReviewArticleNotification | null;
 };
 
