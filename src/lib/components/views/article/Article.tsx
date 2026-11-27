@@ -101,9 +101,7 @@ const Article = function ({ model }) {
 							</Link>
 						</div>
 						{caption && (
-							<span className={`text-xs/relaxed uppercase`}>
-								{caption}
-							</span>
+							<span className={`text-xs/relaxed`}>{caption}</span>
 						)}
 					</div>
 				</div>

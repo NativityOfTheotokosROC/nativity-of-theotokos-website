@@ -881,7 +881,12 @@ export async function publishNewArticle({
 								),
 								image: image.url,
 								snippet: snippetify(
-									pickTranslation(body, preferredLanguage),
+									removeMarkup(
+										pickTranslation(
+											body,
+											preferredLanguage,
+										),
+									),
 									MAX_SNIPPET,
 								),
 								link: `${BASE_URL}/news/${link}`,
