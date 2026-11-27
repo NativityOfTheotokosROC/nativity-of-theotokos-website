@@ -2,6 +2,7 @@ import {
 	useNewStatefulInteractiveModel,
 	ViewInteractionInterface,
 } from "@mvc-react/stateful";
+import { toZonedTime } from "date-fns-tz";
 import { useLocale, useTranslations } from "next-intl";
 import {
 	NotifierModel,
@@ -16,13 +17,11 @@ import {
 import { ToastNotification } from "../models/toast";
 import { ArticleDraft } from "../models/write-article";
 import {
-	updateExistingArticle,
 	publishNewArticle,
+	updateExistingArticle,
 } from "../server-actions/article";
-import { Translation } from "../utilities/types";
-import { useRouter } from "@/src/i18n/navigation";
 import { NATIVE_TIMEZONE } from "../utilities/date-time";
-import { toZonedTime } from "date-fns-tz";
+import { ArticleAuthor, Translation } from "../utilities/types";
 
 export function reviewArticleNotifierVIInterface(
 	toastNotifier?: NotifierModel<ToastNotification>,
@@ -58,7 +57,7 @@ export function reviewArticleNotifierVIInterface(
 
 export function useReviewArticle(
 	draft: ArticleDraft,
-	draftAssigneeName: Translation,
+	articleAuthor: ArticleAuthor<Translation>,
 	ticketId?: string,
 	currentArticle?: ReviewArticleModelView["currentArticle"],
 	options?: Partial<{ toastNotifier: NotifierModel<ToastNotification> }>,
@@ -73,10 +72,9 @@ export function useReviewArticle(
 	);
 	const notification = notifier.modelView?.notification ?? null;
 	const locale = useLocale();
-	const router = useRouter();
 	return {
 		modelView: {
-			draftAssigneeName,
+			articleAuthor,
 			draft,
 			currentArticle,
 			notification,

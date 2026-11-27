@@ -14,6 +14,7 @@ import AuthorInvite from "../components/email-templates/author-invite/AuthorInvi
 import { ArticleDraft, NewArticleDraft } from "../models/write-article";
 import {
 	_FULL_ARTICLE_INCLUDES,
+	_FULL_AUTHOR_INCLUDES,
 	getArticle,
 	getFeaturedArticle,
 } from "../server-only/article";
@@ -572,7 +573,7 @@ export async function getPendingArticleSubmission() {
 	const user = await protect({ roles: ["editor"] });
 	const ticketData = await database.articleTicket.findFirst({
 		include: {
-			assignee: { include: { name: true } },
+			assignee: { include: _FULL_AUTHOR_INCLUDES },
 			article: { include: _FULL_ARTICLE_INCLUDES },
 			articleDraft: { include: { pendingArticleSubmission: true } },
 		},
@@ -614,6 +615,25 @@ export async function getPendingArticleSubmission() {
 			uri: ticketData.assignee.uri,
 			email: ticketData.assigneeEmail,
 			name: assigneeName,
+			profile: ticketData.assignee.profile
+				? {
+						description:
+							ticketData.assignee.profile.description ??
+							undefined,
+						picture: ticketData.assignee.profile.picture
+							? {
+									source: ticketData.assignee.profile.picture
+										.link,
+									placeholder: ticketData.assignee.profile
+										.picture.placeholder
+										.placeholder as ImagePlaceholder,
+								}
+							: undefined,
+						contactEmail:
+							ticketData.assignee.profile.contactEmail ??
+							undefined,
+					}
+				: undefined,
 		},
 	} satisfies ArticleTicketWithAssigneeTranslations;
 	const draft = {
@@ -910,15 +930,8 @@ export async function updateExistingArticle({
 			forbidden();
 	}
 
-	const {
-		title,
-		body,
-		snippet,
-		authorName,
-		image,
-		isArticleFeatured,
-		publishingDate,
-	} = await _validateNewArticle(incomingArticle, locale);
+	const { title, body, snippet, image, isArticleFeatured, publishingDate } =
+		await _validateNewArticle(incomingArticle, locale);
 	const currentDate = new Date();
 	if (
 		publishingDate &&
@@ -944,27 +957,6 @@ export async function updateExistingArticle({
 						},
 					},
 				},
-				author: authorName
-					? {
-							update: {
-								name: {
-									connectOrCreate: {
-										create: {
-											...authorName,
-											englishHash: getMd5Hash(
-												authorName.english,
-											),
-										},
-										where: {
-											englishHash: getMd5Hash(
-												authorName.english,
-											),
-										},
-									},
-								},
-							},
-						}
-					: undefined,
 				body: {
 					connectOrCreate: {
 						create: {

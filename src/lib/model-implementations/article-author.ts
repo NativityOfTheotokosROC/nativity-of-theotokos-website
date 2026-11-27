@@ -6,7 +6,7 @@ import {
 	ArticleAuthorModelView,
 	ArticleAuthorModelInteraction,
 } from "../models/article-author";
-import { ToastNotifierModel } from "./notifier";
+import { ToastNotifierModel, useToastNotifier } from "./notifier";
 import {
 	addArticleAuthor,
 	deleteAuthorProfile,
@@ -157,11 +157,15 @@ export function useArticleAuthor({
 	notifier,
 }: {
 	initialModelView: ArticleAuthorModelView;
-	notifier?: ToastNotifierModel;
+	notifier?: ToastNotifierModel | "default";
 }) {
 	const t = useTranslations();
+	const defaultNotifier = useToastNotifier();
+	const finalNotifier = notifier !== "default" ? notifier : defaultNotifier;
 	return useInitializedStatefulInteractiveModel(
-		articleAuthorVIInterface({ notification: notifier && { notifier, t } }),
+		articleAuthorVIInterface({
+			notification: finalNotifier && { notifier: finalNotifier, t },
+		}),
 		initialModelView,
 	);
 }

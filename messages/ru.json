@@ -416,7 +416,8 @@
 		"titleField": "Название статьи",
 		"uploadImageFailure": "Не удалось загрузить изображение статьи. Ошибка: {message}",
 		"uploadImageSuccess": "Изображение статьи успешно загружено",
-		"uploadingImage": "Загрузка изображения статьи"
+		"uploadingImage": "Загрузка изображения статьи",
+		"modifyAuthor": "Изменить данные автора"
 	},
 	"scheduleItem": {
 		"catechism": "Катехизация",

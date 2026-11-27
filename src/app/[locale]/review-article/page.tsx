@@ -27,7 +27,7 @@ export default async function Page() {
 		<ProtectedComponent model={newReadonlyModel({ roles: ["editor"] })}>
 			<ReviewArticleClient
 				model={newReadonlyModel({
-					draftAssigneeName: ticket.assignee.name,
+					articleAuthor: ticket.assignee,
 					articleDraft: draft,
 					ticketId: ticket.ticketId,
 					article: currentArticle,

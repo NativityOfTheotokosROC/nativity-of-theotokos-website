@@ -40,11 +40,18 @@ import InformationView from "../../information-view/InformationView";
 import PageView from "../../page-view/PageView";
 import Spinner from "../../spinner/Spinner";
 import { useImageUploader } from "@/src/lib/model-implementations/image-uploader";
+import { useArticleAuthor } from "@/src/lib/model-implementations/article-author";
+import { useArticleAuthorModal } from "@/src/lib/model-implementations/article-author-modal";
+import ArticleAuthorModal from "../../article-author-modal/ArticleAuthorModal";
 
 const ReviewArticle = function ({ model }) {
 	const { modelView, interact } = model;
-	const { draftAssigneeName, draft, currentArticle, notification } =
-		modelView;
+	const {
+		articleAuthor: initialArticleAuthor,
+		draft,
+		currentArticle,
+		notification,
+	} = modelView;
 	const t = useTranslations("reviewArticle");
 	const tMisc = useTranslations("miscellaneous");
 	const locale = useLocale();
@@ -69,7 +76,6 @@ const ReviewArticle = function ({ model }) {
 		defaultValues: {
 			title: draft.title,
 			body: draft.body,
-			authorName: draftAssigneeName,
 			snippet: currentArticle?.snippet ?? BLANK_TRANSLATION,
 			image: {
 				url: currentArticle?.articleImage.url,
@@ -84,6 +90,22 @@ const ReviewArticle = function ({ model }) {
 				: getDateTimeString(currentDate),
 		},
 		shouldUnregister: true,
+	});
+	const articleAuthor = useArticleAuthor({
+		initialModelView: { author: initialArticleAuthor },
+		notifier: "default",
+	});
+	const articleAuthorModal = useArticleAuthorModal({
+		addAuthorCallback: async (author, id, successCallback) =>
+			await articleAuthor.interact({
+				type: "ADD_AUTHOR",
+				input: { author, id, successCallback },
+			}),
+		deleteProfileCallback: async (id, successCallback) =>
+			await articleAuthor.interact({
+				type: "DELETE_PROFILE",
+				input: { id, successCallback },
+			}),
 	});
 	const articlePreviewModal = useArticlePreviewModal(
 		handleSubmit(async form => {
@@ -168,6 +190,7 @@ const ReviewArticle = function ({ model }) {
 
 	return (
 		<>
+			<ArticleAuthorModal model={articleAuthorModal} />
 			<ArticlePreviewModal model={articlePreviewModal} />
 			<PageView model={newReadonlyModel({ title: t("title") })}>
 				<form
@@ -177,7 +200,8 @@ const ReviewArticle = function ({ model }) {
 							input: {
 								title: form.title,
 								body: form.body,
-								authorName: form.authorName,
+								authorName:
+									articleAuthor.modelView.author!.name,
 								datePublished: form.publishingDate
 									? new Date(form.publishingDate)
 									: (currentArticle?.datePublished ??
@@ -202,20 +226,6 @@ const ReviewArticle = function ({ model }) {
 								{errors.title?.english && (
 									<span className="text-sm text-red-800">
 										{errors.title.english.message}
-									</span>
-								)}
-								<input
-									{...register("authorName.english")}
-									lang="en"
-									className={`w-full overflow-clip rounded-lg border bg-white p-4 ${errors.authorName?.english ? "border-red-800" : "border-gray-400"}`}
-									placeholder={t("authorNameField")}
-									autoComplete="name"
-									autoCapitalize="words"
-									disabled={!currentArticle}
-								/>
-								{errors.authorName?.english && (
-									<span className="text-sm text-red-800">
-										{errors.authorName.english.message}
 									</span>
 								)}
 								<Controller
@@ -362,6 +372,22 @@ const ReviewArticle = function ({ model }) {
 										{errors.image.caption?.english.message}
 									</span>
 								)}
+								<Button
+									model={newReadonlyModel({
+										action() {
+											articleAuthorModal.interact({
+												type: "OPEN",
+												input: {
+													author: articleAuthor
+														.modelView.author,
+												},
+											});
+										},
+									})}
+									className="w-full"
+								>
+									{t("modifyAuthor")}
+								</Button>
 							</div>
 						</div>
 						<Controller

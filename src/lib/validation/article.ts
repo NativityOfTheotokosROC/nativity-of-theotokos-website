@@ -30,7 +30,7 @@ export function getArticleAuthorSchema(t?: Translator) {
 		...(t
 			? {
 					t,
-					fieldName: t("assignArticle.authorNameField"),
+					fieldName: t("articleAuthor.descriptionField"),
 				}
 			: {}),
 		englishValidationOptions: {
@@ -178,9 +178,6 @@ export function getArticleSchema(t?: Translator) {
 	const maxImageCaption = MAX_IMAGE_CAPTION;
 
 	return getArticleSubmissionSchema(t).extend({
-		authorName: getTranslationSchema(
-			t && { t, fieldName: t("reviewArticle.authorNameField") },
-		),
 		snippet: getTranslationSchema().extend({
 			english: getOptionalStringSchema({
 				max: {

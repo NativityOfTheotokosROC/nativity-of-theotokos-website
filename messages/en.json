@@ -416,7 +416,8 @@
 		"titleField": "Article Title",
 		"uploadImageFailure": "Could not upload the article image. Error: {message}",
 		"uploadImageSuccess": "Article image successfully uploaded",
-		"uploadingImage": "Uploading article image"
+		"uploadingImage": "Uploading article image",
+		"modifyAuthor": "Modify Author"
 	},
 	"scheduleItem": {
 		"catechism": "Catechism",
