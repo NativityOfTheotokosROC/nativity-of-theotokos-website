@@ -58,7 +58,7 @@ const ScheduleItem = function ({ model }) {
 						eventType === "feast"
 							? "bg-red-950"
 							: eventType === "special"
-								? "bg-green-950"
+								? "bg-[#260b36]"
 								: undefined,
 					)}
 				>
