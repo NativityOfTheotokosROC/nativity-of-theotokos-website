@@ -85,7 +85,7 @@ const ArticleAuthor = function ({ model }) {
 					});
 				})}
 			>
-				<div className="flex gap-x-10 gap-y-4 md:flex-row lg:w-3/4 @max-xl:w-full @max-xl:flex-col">
+				<div className="flex flex-col gap-x-10 gap-y-4 md:flex-row lg:w-3/4 @max-xl:w-full @max-xl:flex-col">
 					<>
 						<Controller
 							control={control}
