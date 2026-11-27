@@ -113,7 +113,7 @@ model Article {
   link            String           @unique
   title           Translation      @relation("ArticleTitleTranslation", fields: [titleTranslationId], references: [id])
   body            Translation      @relation("ArticleBodyTranslation", fields: [bodyTranslationId], references: [id])
-  snippet         Translation      @relation("ArticleSnippetTranslation", fields: [snippetTranslationId], references: [id])
+  snippet         Translation?     @relation("ArticleSnippetTranslation", fields: [snippetTranslationId], references: [id])
   author          ArticleAuthor    @relation(fields: [authorId], references: [id])
   image           ArticleImage     @relation(fields: [imageId], references: [id])
   datePublished   DateTime         @default(now()) @db.Timestamptz
@@ -124,7 +124,7 @@ model Article {
 
   titleTranslationId   Int
   bodyTranslationId    Int
-  snippetTranslationId Int
+  snippetTranslationId Int?
   authorId             Int
   imageId              Int
 }

@@ -15,15 +15,7 @@ import { XIcon } from "lucide-react";
 
 const Modal = function ({ model, children }) {
 	const {
-		modelView: {
-			isOpen,
-			title,
-			onClose,
-			size,
-			position,
-			variant,
-			interceptSubmit = true,
-		},
+		modelView: { isOpen, title, onClose, size, position, variant },
 	} = model;
 	const tNonDescriptive = useTranslations("nonDescriptive");
 
@@ -44,15 +36,6 @@ const Modal = function ({ model, children }) {
 				<DialogPanel
 					className={`@container z-22 flex h-fit max-h-full w-full overflow-y-auto ${size === "smallest" ? "md:w-100" : size === "small" ? "md:w-md" : size === "medium" ? "md:w-lg" : size === "large" ? "md:w-full" : ""} flex-col gap-0 overflow-clip rounded-lg border border-[#868686] bg-[#FEF8F3] text-black duration-300 ease-out data-closed:transform-[scale(92%)] data-closed:opacity-0 md:max-w-2xl lg:max-w-5xl`}
 					transition
-					onSubmit={
-						() => console.log("handler called")
-						// interceptSubmit
-						// 	? e => {
-						// 			console.log("Intercepted!");
-						// 			e.stopPropagation();
-						// 		}
-						// 	: undefined
-					}
 				>
 					<DialogTitle className="sr-only">{title}</DialogTitle>
 					{(variant === "titled" ||

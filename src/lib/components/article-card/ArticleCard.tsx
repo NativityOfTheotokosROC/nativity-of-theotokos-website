@@ -15,7 +15,7 @@ const ArticleCard = function ({ model }) {
 		title,
 		author: unparsedAuthor,
 		datePublished: datePublished,
-		snippet,
+		previewText,
 		articleImage,
 		uri,
 	} = article;
@@ -57,7 +57,7 @@ const ArticleCard = function ({ model }) {
 						{author} — {dateString}
 					</span>
 					<p className="line-clamp-4 text-base md:line-clamp-5">
-						{snippet}
+						{previewText}
 					</p>
 				</div>
 			</div>

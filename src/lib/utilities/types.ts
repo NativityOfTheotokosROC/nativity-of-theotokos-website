@@ -177,7 +177,7 @@ export type Article<T extends Text = string> = {
 	body: T;
 	datePublished: Date;
 	dateUpdated?: Date;
-	snippet: T;
+	snippet?: T;
 	articleImage: RenameProperty<
 		RenameProperty<
 			Required<Pick<Image<T>, "source" | "about">> &

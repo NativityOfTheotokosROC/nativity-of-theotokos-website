@@ -7,7 +7,6 @@ export type ModalModelView = {
 	size: "smallest" | "small" | "medium" | "large";
 	variant?: "titled" | "titled-with-close" | "blank";
 	position?: "top" | "center";
-	interceptSubmit?: boolean;
 };
 
 export type ModalModel = Model<ModalModelView>;

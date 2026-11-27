@@ -2,7 +2,7 @@ import z from "zod";
 import { getDateString } from "../utilities/date-time";
 import { Translator } from "../utilities/types";
 import {
-	getOptionalStringSchema,
+	getNullableStringSchema,
 	getTranslationSchema,
 	useLocalizedSchema,
 } from "./utilities";
@@ -37,7 +37,9 @@ export function getQuoteSchema(t?: Translator) {
 						}),
 				},
 				preprocess(value) {
-					return typeof value === "string" ? value.replace(/\n+/gm, " ") : ""
+					return typeof value === "string"
+						? value.replace(/\n+/gm, " ")
+						: "";
 				},
 			},
 			russianValidationOptions: {
@@ -52,14 +54,16 @@ export function getQuoteSchema(t?: Translator) {
 						}),
 				},
 				preprocess(value) {
-					return typeof value === "string" ? value.replace(/\n+/gm, " ") : "";
+					return typeof value === "string"
+						? value.replace(/\n+/gm, " ")
+						: "";
 				},
 			},
 		}),
 		source: getTranslationSchema().extend({
-			english: getOptionalStringSchema(),
+			english: getNullableStringSchema(),
 		}),
-		scheduledDate: getOptionalStringSchema(
+		scheduledDate: getNullableStringSchema(
 			z.iso
 				.date()
 				.refine(

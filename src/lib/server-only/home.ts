@@ -5,11 +5,16 @@ import "server-only";
 import { LatestArticles } from "../server-actions/home";
 import { dailyReadings } from "../third-party/holytrinityorthodox";
 import database from "../third-party/prisma";
-import { isRemotePath, pickTranslation } from "../utilities/miscellaneous";
+import {
+	isRemotePath,
+	pickTranslation,
+	snippetify,
+} from "../utilities/miscellaneous";
 import { BASE_URL } from "../utilities/server-constants";
 import { ArticleAuthor, GalleryImage, Language } from "../utilities/types";
 import { _FULL_ARTICLE_INCLUDES, getFeaturedArticle } from "./article";
 import { getGalleryImages } from "./gallery";
+import { MAX_SNIPPET } from "../validation/article";
 
 export async function getDailyReadings(currentDate: Date, language: Language) {
 	"use cache: remote";
@@ -55,7 +60,10 @@ export async function getLatestArticles(
 	});
 
 	return {
-		featuredArticle,
+		featuredArticle: {
+			...featuredArticle,
+			previewText: snippetify(featuredArticle.body, MAX_SNIPPET),
+		},
 		otherNewsArticles: otherArticleRecords.map(article => {
 			const title = pickTranslation(article.title, language);
 			const author = {
@@ -64,12 +72,14 @@ export async function getLatestArticles(
 				name: pickTranslation(article.author.name, language),
 				email: article.author.email ?? undefined,
 			} satisfies ArticleAuthor;
-			const snippet = pickTranslation(article.snippet, language);
 			return {
 				...article,
 				title,
 				author,
-				snippet,
+				previewText: snippetify(
+					pickTranslation(article.body, language),
+					MAX_SNIPPET,
+				),
 				uri: article.link,
 				articleImage: {
 					url: article.image.link,

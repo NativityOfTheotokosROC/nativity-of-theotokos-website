@@ -1,6 +1,6 @@
 import z from "@/node_modules/zod/v4/classic/external.cjs";
 import { Translator } from "../utilities/types";
-import { getOptionalStringSchema } from "./utilities";
+import { getNullableStringSchema } from "./utilities";
 
 export function getInsertLinkSchema(t?: Translator) {
 	return z.object({
@@ -11,6 +11,6 @@ export function getInsertLinkSchema(t?: Translator) {
 					field: t("insertLinkModal.linkFieldAlt"),
 				}),
 		}),
-		label: getOptionalStringSchema({ trim: true }),
+		label: getNullableStringSchema({ trim: true }),
 	});
 }

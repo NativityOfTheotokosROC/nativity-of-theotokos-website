@@ -45,13 +45,16 @@ const InsertLinkModal = function ({ model }) {
 				{modelView && (
 					<form
 						className="flex w-full flex-1 flex-col gap-4 p-6"
-						onSubmit={handleSubmit(async form => {
-							await interact({
-								type: "INSERT_LINK",
-								input: form,
-							});
-							await interact({ type: "CLOSE" });
-						})}
+						onSubmit={e => {
+							e.stopPropagation();
+							handleSubmit(async form => {
+								await interact({
+									type: "INSERT_LINK",
+									input: form,
+								});
+								await interact({ type: "CLOSE" });
+							})(e);
+						}}
 					>
 						{!modelView.initialLinkDetails?.selectionExists && (
 							<input

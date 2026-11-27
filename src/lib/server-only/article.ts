@@ -71,7 +71,9 @@ export async function getArticle(articleId: string, language: Language) {
 				: undefined,
 		} satisfies ArticleAuthor;
 		const body = pickTranslation(article.body, locale);
-		const snippet = pickTranslation(article.snippet, locale);
+		const snippet = article.snippet
+			? pickTranslation(article.snippet, locale)
+			: undefined;
 		const imageCaption = pickTranslation(article.image.caption, locale);
 
 		cacheTag(`article_${articleId}`, `article_author_${author.id}`);
@@ -147,7 +149,7 @@ export async function getArticleWithTranslations(articleId: string) {
 			datePublished,
 			dateUpdated: dateUpdated ?? undefined,
 			body,
-			snippet,
+			snippet: snippet ?? undefined,
 			articleImage: {
 				url: image.link,
 				caption: image.caption ?? undefined,
@@ -221,7 +223,9 @@ export async function getAllArticles(language: Language) {
 						body: pickTranslation(body, language),
 						datePublished: datePublished,
 						dateUpdated: dateUpdated ?? undefined,
-						snippet: pickTranslation(snippet, language),
+						snippet: snippet
+							? pickTranslation(snippet, language)
+							: undefined,
 						articleImage: {
 							url: image.link,
 							caption: pickTranslation(image.caption, language),
@@ -248,7 +252,9 @@ export async function getArticleMetadata(
 		});
 		const title = pickTranslation(article.title, language);
 		const author = pickTranslation(article.author.name, language);
-		const snippet = pickTranslation(article.snippet, language);
+		const snippet = article.snippet
+			? pickTranslation(article.snippet, language)
+			: undefined;
 		const caption = pickTranslation(article.image.caption, language);
 		return {
 			uri: article.link,
@@ -345,7 +351,7 @@ export async function getFeaturedArticle(
 		body: pickTranslation(body, language),
 		datePublished,
 		dateUpdated: dateUpdated ?? undefined,
-		snippet: pickTranslation(snippet, language),
+		snippet: snippet ? pickTranslation(snippet, language) : undefined,
 		articleImage: {
 			url: image.link,
 			caption: pickTranslation(image.caption, language),

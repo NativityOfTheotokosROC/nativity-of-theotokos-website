@@ -404,7 +404,7 @@ export async function makeArticleEdit(articleId: string) {
 				name: article.author.name,
 			},
 			body: article.body,
-			snippet: article.snippet,
+			snippet: article.snippet ?? undefined,
 			datePublished: article.datePublished,
 			uri: article.link,
 			articleImage: {
@@ -492,7 +492,8 @@ export async function getLatestUnsubmittedArticle() {
 							name: unsubmittedDraftTicket.article.author.name,
 						},
 						body: unsubmittedDraftTicket.article.body,
-						snippet: unsubmittedDraftTicket.article.snippet,
+						snippet:
+							unsubmittedDraftTicket.article.snippet ?? undefined,
 						datePublished:
 							unsubmittedDraftTicket.article.datePublished,
 						uri: unsubmittedDraftTicket.article.link,
@@ -541,7 +542,7 @@ export async function getLatestUnsubmittedArticle() {
 					name: unusedTicket.article.author.name,
 				},
 				body: unusedTicket.article.body,
-				snippet: unusedTicket.article.snippet,
+				snippet: unusedTicket.article.snippet ?? undefined,
 				datePublished: unusedTicket.article.datePublished,
 				uri: unusedTicket.article.link,
 				articleImage: {
@@ -649,7 +650,7 @@ export async function getPendingArticleSubmission() {
 					name: ticketData.article.author.name,
 				},
 				body: ticketData.article.body,
-				snippet: ticketData.article.snippet,
+				snippet: ticketData.article.snippet ?? undefined,
 				datePublished: ticketData.article.datePublished,
 				uri: ticketData.article.link,
 				articleImage: {
@@ -746,17 +747,20 @@ export async function publishNewArticle({
 						},
 					},
 				},
-				snippet: {
-					connectOrCreate: {
-						create: {
-							...snippet,
-							englishHash: getMd5Hash(snippet.english),
-						},
-						where: {
-							englishHash: getMd5Hash(snippet.english),
-						},
-					},
-				},
+				snippet: snippet?.english
+					? {
+							connectOrCreate: {
+								create: {
+									...snippet,
+									english: snippet.english,
+									englishHash: getMd5Hash(snippet.english),
+								},
+								where: {
+									englishHash: getMd5Hash(snippet.english),
+								},
+							},
+						}
+					: undefined,
 				image: {
 					connectOrCreate: {
 						create: {
@@ -855,9 +859,9 @@ export async function publishNewArticle({
 									preferredLanguage,
 								),
 								image: image.url,
-								snippet: pickTranslation(
-									snippet,
-									preferredLanguage,
+								snippet: snippetify(
+									pickTranslation(body, preferredLanguage),
+									MAX_SNIPPET,
 								),
 								link: `${BASE_URL}/news/${link}`,
 							},
@@ -876,9 +880,9 @@ export async function publishNewArticle({
 									preferredLanguage,
 								),
 								image: image.url,
-								snippet: pickTranslation(
-									snippet,
-									preferredLanguage,
+								snippet: snippetify(
+									pickTranslation(body, preferredLanguage),
+									MAX_SNIPPET,
 								),
 								link: `${BASE_URL}/news/${link}`,
 							},
@@ -968,17 +972,23 @@ export async function updateExistingArticle({
 						},
 					},
 				},
-				snippet: {
-					connectOrCreate: {
-						create: {
-							...snippet,
-							englishHash: getMd5Hash(snippet.english),
-						},
-						where: {
-							englishHash: getMd5Hash(snippet.english),
-						},
-					},
-				},
+				snippet: snippet?.english
+					? {
+							connectOrCreate: {
+								create: {
+									...snippet,
+									english: snippet.english,
+									englishHash: getMd5Hash(snippet.english),
+								},
+								where: {
+									englishHash: getMd5Hash(snippet.english),
+								},
+							},
+						}
+					: (snippet === null || snippet?.english === null) &&
+						  existingArticle.snippet
+						? { delete: true }
+						: undefined,
 				image: {
 					upsert: {
 						create: {
@@ -1437,19 +1447,6 @@ async function _validateNewArticle(newArticle: NewArticle, locale?: Language) {
 	const t = await getTranslations({ locale: locale ?? "en" });
 	const articleSchema = getArticleSchema(t).transform(newArticle => ({
 		...newArticle,
-		snippet: {
-			english:
-				newArticle.snippet.english ??
-				snippetify(removeMarkup(newArticle.body.english), MAX_SNIPPET),
-			russian:
-				newArticle.snippet.russian ??
-				(newArticle.body.russian
-					? snippetify(
-							removeMarkup(newArticle.body.russian),
-							MAX_SNIPPET,
-						)
-					: undefined),
-		} satisfies Translation,
 		link: z.string().slugify().parse(newArticle.title.english),
 	}));
 

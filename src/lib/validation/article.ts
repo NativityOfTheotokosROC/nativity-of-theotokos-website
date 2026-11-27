@@ -5,7 +5,7 @@ import {
 } from "../utilities/miscellaneous";
 import { Translator } from "../utilities/types";
 import {
-	getOptionalStringSchema,
+	getNullableStringSchema,
 	getTranslationSchema,
 	useLocalizedSchema,
 } from "./utilities";
@@ -179,7 +179,7 @@ export function getArticleSchema(t?: Translator) {
 
 	return getArticleSubmissionSchema(t).extend({
 		snippet: getTranslationSchema().extend({
-			english: getOptionalStringSchema({
+			english: getNullableStringSchema({
 				max: {
 					value: maxSnippet,
 					invalidMessage:

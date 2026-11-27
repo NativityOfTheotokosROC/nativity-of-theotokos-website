@@ -7,7 +7,7 @@ import { Translator } from "../utilities/types";
 export type ValidationOption<T> = { value: T; invalidMessage?: string };
 export type StringValidationOptions = Partial<{
 	trim: boolean;
-	nonEmpty: ValidationOption<true> | "empty_undefined" | "empty_null";
+	nonEmpty: ValidationOption<true>;
 	invalidStringMessage: string;
 	min: ValidationOption<number>;
 	max: ValidationOption<number>;
@@ -45,7 +45,7 @@ export function getTranslationSchema(
 				});
 	return z.object({
 		english: englishSchema,
-		russian: z.nullable(getOptionalStringSchema(russianValidationOptions)),
+		russian: z.nullable(getNullableStringSchema(russianValidationOptions)),
 	});
 }
 
@@ -82,15 +82,18 @@ export function getStringSchema(options?: StringValidationOptions) {
 		: expression;
 }
 
-export function getOptionalStringSchema(
+export function getNullableStringSchema(
 	options?: Omit<StringValidationOptions, "nonEmpty"> | z.ZodStringFormat, // Works ig
+	nullable: null | undefined = undefined,
 ) {
 	return z.preprocess(
 		value =>
-			typeof value === "string" ? emptyStringAsNullable(value) : value,
+			typeof value === "string"
+				? emptyStringAsNullable(value, nullable)
+				: value,
 		options && "_zod" in options
-			? options.optional()
-			: getStringSchema(options).optional(),
+			? options.nullish()
+			: getStringSchema(options).nullish(),
 	);
 }
 
