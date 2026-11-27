@@ -206,7 +206,12 @@ const ReviewArticle = function ({ model }) {
 									? new Date(form.publishingDate)
 									: (currentArticle?.datePublished ??
 										new Date()),
-								snippet: form.snippet ?? undefined,
+								snippet: form.snippet?.english
+									? {
+											english: form.snippet.english,
+											russian: form.snippet.russian,
+										}
+									: undefined,
 								image: form.image,
 							},
 						}),
