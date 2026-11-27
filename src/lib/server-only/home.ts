@@ -81,7 +81,7 @@ export async function getLatestArticles(
 				title,
 				author,
 				previewText: snippetify(
-					pickTranslation(removeMarkup(article.body), language),
+					removeMarkup(pickTranslation(article.body, language)),
 					MAX_SNIPPET,
 				),
 				uri: article.link,
