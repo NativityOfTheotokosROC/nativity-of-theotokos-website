@@ -266,6 +266,23 @@ const ReviewArticle = function ({ model }) {
 										{errors.snippet?.english?.message}
 									</span>
 								)}
+
+								<Button
+									model={newReadonlyModel({
+										action() {
+											articleAuthorModal.interact({
+												type: "OPEN",
+												input: {
+													author: articleAuthor
+														.modelView.author,
+												},
+											});
+										},
+									})}
+									className="w-full"
+								>
+									{t("modifyAuthor")}
+								</Button>
 							</div>
 							<div className="flex flex-1 flex-col gap-3 md:max-w-[33em]">
 								<Controller
@@ -372,22 +389,6 @@ const ReviewArticle = function ({ model }) {
 										{errors.image.caption?.english.message}
 									</span>
 								)}
-								<Button
-									model={newReadonlyModel({
-										action() {
-											articleAuthorModal.interact({
-												type: "OPEN",
-												input: {
-													author: articleAuthor
-														.modelView.author,
-												},
-											});
-										},
-									})}
-									className="w-full"
-								>
-									{t("modifyAuthor")}
-								</Button>
 							</div>
 						</div>
 						<Controller

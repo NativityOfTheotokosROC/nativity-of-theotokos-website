@@ -15,7 +15,15 @@ import { XIcon } from "lucide-react";
 
 const Modal = function ({ model, children }) {
 	const {
-		modelView: { isOpen, title, onClose, size, position, variant },
+		modelView: {
+			isOpen,
+			title,
+			onClose,
+			size,
+			position,
+			variant,
+			interceptSubmit = true,
+		},
 	} = model;
 	const tNonDescriptive = useTranslations("nonDescriptive");
 
@@ -25,6 +33,13 @@ const Modal = function ({ model, children }) {
 			onClose={onClose}
 			className="relative z-20"
 			as="div"
+			onSubmit={
+				interceptSubmit
+					? e => {
+							e.stopPropagation();
+						}
+					: undefined
+			}
 		>
 			<div
 				className={`fixed inset-0 z-21 flex w-screen ${position ?? "items-center"} ${position === "center" ? "items-center" : position === "top" ? "items-start" : ""} justify-center p-4`}
