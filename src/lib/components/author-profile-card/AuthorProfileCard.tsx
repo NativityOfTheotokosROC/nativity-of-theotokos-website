@@ -38,8 +38,8 @@ const AuthorProfileCard = function ({ model, className, style }) {
 			</span>
 			<p className="text-sm">{description}</p>
 			{contactEmail && (
-				<span className="inline-flex gap-3 text-sm wrap-break-word hyphens-auto">
-					<MailIcon size={16} strokeWidth={1} />
+				<span className="inline-flex items-center gap-3 text-sm wrap-break-word hyphens-auto">
+					<MailIcon size={18} strokeWidth={1.3} />
 					<Link href={`mailto:${contactEmail}`} className="underline">
 						{contactEmail}
 					</Link>
